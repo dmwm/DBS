@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.3 2010/01/12 16:00:24 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.4 2010/01/14 16:53:24 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import os
 import unittest
@@ -47,7 +47,15 @@ class DBSWriterModel_t(unittest.TestCase):
                 'dataset':self.dataset}
         self.api.insert('datasets', data)
 	
-
+    def test03(self):
+	"""web.DBSReaderModel.insertPrimaryDataset: missing 'primary_ds_name, must throw exception"""
+	data = {'primary_ds_type':'TEST'}
+	try:
+	    self.api.insert('primarydatasets', data)
+	except:
+	     pass
+	else:
+	     self.fail("Exception was expected and was not raised.")
 
      
 if __name__ == "__main__":
