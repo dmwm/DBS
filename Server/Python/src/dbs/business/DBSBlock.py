@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 """
-This module provides business object class to interact with Primary Dataset. 
+This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.2 2009/10/27 17:24:47 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSBlock.py,v 1.1 2009/10/27 17:24:47 akhukhun Exp $"
+__version__ = "$Revision: 1.1 $"
 
 from WMCore.DAOFactory import DAOFactory
 
-class DBSPrimaryDataset:
+class DBSBlock:
     """
     Primary Dataset business object class
     """
@@ -17,27 +17,28 @@ class DBSPrimaryDataset:
         self.logger = logger
         self.dbi = dbi
 
-    def listPrimaryDatasets(self, primdsname=""):
+    def listBlocks(self, primdsname=""):
         """
         Returns all primary datasets if primdsname is not passed.
         """
-        primdslist = self.daofactory(classname="PrimaryDataset.List")
+        primdslist = self.daofactory(classname="Block.List")
         result = primdslist.execute(primdsname)
         return result
 
-    def insertPrimaryDataset(self, businput):
+    def insertBlock(self, businput):
         """
         Input dictionary has to have the following keys:
-        primarydsname, primarydstype, creationdate, createby
+        blockname, dataset, openforwriting, sitename, blocksize,
+        filecount, creationdate, createby, lastmodificationdate, lastmodifiedby
         it builds the correct dictionary for dao input and executes the dao
         """
-        primdstplist = self.daofactory(classname="PrimaryDSType.List")
+         = self.daofactory(classname="PrimaryDSType.List")
         primdsinsert = self.daofactory(classname="PrimaryDataset.Insert")
         seqmanager = self.daofactory(classname="SequenceManager")
 
-        primdsname = businput["primarydsname"]
-        primdstype = businput["primarydstype"]
-        primdsObj = businput
+        primdsname = primdsObject["primarydsname"]
+        primdstype = primdsObject["primarydstype"]
+        primdsObj = primdsObject
         primdsObj.pop("primarydstype")
         conn = self.dbi.connection()
         tran = conn.begin()

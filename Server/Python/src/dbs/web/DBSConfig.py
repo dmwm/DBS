@@ -2,8 +2,8 @@
 DBS Server  configuration file
 """
 
-__revision__ = "$Id: DBSConfig.py,v 1.1 2009/10/15 19:28:56 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSConfig.py,v 1.3 2009/10/27 17:24:47 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 
 import os, logging
@@ -14,8 +14,8 @@ config = Configuration()
 config.component_('Webtools')
 config.Webtools.port = 8585
 config.Webtools.host = '::' 
-config.Webtools.access_log_file = os.environ['DBS3_SERVER_ROOT'] +"/dbs/log/access.log"
-config.Webtools.error_log_file = os.environ['DBS3_SERVER_ROOT'] +"/dbs/log/error.log"
+config.Webtools.access_log_file = os.environ['DBS3_SERVER_ROOT'] +"/logs/access.log"
+config.Webtools.error_log_file = os.environ['DBS3_SERVER_ROOT'] +"/logs/error.log"
 config.Webtools.log_screen = False
 config.Webtools.application = 'DBSServer'
 
