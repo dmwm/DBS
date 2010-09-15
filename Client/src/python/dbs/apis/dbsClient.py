@@ -1,9 +1,9 @@
 # 
-# $Revision: 1.12 $"
-# $Id: dbsClient.py,v 1.12 2009/12/04 19:45:02 afaq Exp $"
+# $Revision: 1.13 $"
+# $Id: dbsClient.py,v 1.13 2009/12/08 19:50:27 afaq Exp $"
 # @author anzar
 #
-import os, sys
+import os, sys, socket
 import urllib, urllib2
 from httplib import HTTPConnection
 from StringIO import StringIO
@@ -31,27 +31,16 @@ class DbsApi:
         	* params: parameters to server, includes api name to be invoked
 
 		"""
-		UserID="anzar"	
-		#headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain/application/x-json/json",
-                #                                        "UserID": UserID}
-		
-		#headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain/application/x-json",
-                #                                        "UserID": UserID}
+		UserID=os.environ['USER']+'@'+socket.gethostname()
+		headers =  {"Content-type": "application/json", "Accept": "application/json", "UserID": UserID }
 
-		headers =  {"Content-type": "application/json", "Accept": "application/json"}
-
-
-        	#headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain",
-        	#                                                "UserID": UserID}
-
-		#print "How to set out the USER ID here ??"
 		res='{"FAILED":"TRUE"}'
 		try:
 			calling=self.url+urlplus
-			proxies={}
+			proxies = {}
 			if self.proxy not in (None, ""):
 				proxies = { 'http': self.proxy }
-			print calling
+			#print calling
 			if params == {} :
 				data = urllib.urlopen(calling, proxies=proxies)
 			else:
@@ -59,18 +48,13 @@ class DbsApi:
 				params = cjson.encode(params)
 				req = urllib2.Request(url=calling, data=params, headers = headers)
 				req.get_method = lambda: 'POST'
-				#req.add_data(params)
-				#print req
-				#data = urllib2.urlopen(req)
 				data = self.opener.open(req)
 			res = data.read()
 		except urllib2.HTTPError, httperror:
 			print httperror
 			#HTTPError(req.get_full_url(), code, msg, hdrs, fp)
-
 		except urllib2.URLError, urlerror:
 			print urlerror
-
 		return res
 
 		#FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
@@ -136,10 +120,16 @@ class DbsApi:
                 * API to list A block in DBS 
                 * name : name of the block
                 """
-		#return self.callServer("/blocks?block=%s" %block)
 		parts=block.split('#')
 		black_name=parts[0]+urllib.quote_plus('#')+parts[1]
                 return self.callServer("/blocks?block=%s" %black_name )
+
+        def listBlocks(self, dataset):
+                """
+                * API to list blocks in a dataset
+                * dataset : name of the dataset
+                """
+                return self.callServer("/blocks?dataset=%s" %dataset)
 
         def listFile(self, lfn="", dataset="", block=""):
                 """
@@ -148,8 +138,6 @@ class DbsApi:
                 """
                 if lfn not in (None, "") : return self.callServer("/files?lfn=%s" %lfn)
                 if dataset not in (None, "") : return self.callServer("/files?dataset=%s" %dataset)
-                #if block not in (None, "") : return self.callServer("/files?block=%s" %block)
-
                 if block not in (None, "") : 
 			parts=block.split('#')
 			black_name=parts[0]+urllib.quote_plus('#')+parts[1]
@@ -164,26 +152,11 @@ class DbsApi:
 
 
 if __name__ == "__main__":
-	# JAVA Service URL
-	url="http://cmssrv48.fnal.gov:8989/DBSServlet"
-	# API Object	
-	#api = DbsApi(url=url)
-	# Is service Alive
-	#print api.ping()
-	# List ALL primary datasets
-	#print api.listPrimaryDatasets()
-	# List the dataset whoes name is TEST9
-	#print api.listPrimaryDataset("TEST9")
-	#
-	#print "Caling insert primary dataset..."
-	#prdsobj = {"PRIMARY_DS_NAME":"ANZAR001", "PRIMARY_DS_TYPE":"test"}
-	#api.insertPrimaryDataset(prdsobj)
-	
-	# Python Service URL
-	url="http://cmssrv18.fnal.gov:8585/dbs3"
+	# DBS Service URL
+	url="http://cmssrv18.fnal.gov:8586/dbs3"
 	read_proxy="http://cmst0frontier1.cern.ch:3128"
 	read_proxy="http://cmsfrontier1.fnal.gov:3128"
-	read_proxy={}
-	api = DbsApi(url=url, read_proxy)
+	read_proxy=""
+	api = DbsApi(url=url, proxy=read_proxy)
 	print api.listPrimaryDatasets()
 
