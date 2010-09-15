@@ -1,14 +1,20 @@
-# DAO Object for DatasetOutputMod_config table
-# $Revision: 1.1 $
-# $Id: Insert.py,v 1.1 2009/10/12 16:48:25 afaq Exp $
+#!/usr/bin/env python
+""" DAO Object for DatasetOutputMod_configs table """ 
+
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2009/10/20 02:19:19 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
 class Insert(DBFormatter):
 
-    sql = """INSERT INTO DATASET_OUTPUT_MOD_CONFIGS(DS_OUTPUT_MOD_CONF_ID, DATASET_ID, OUTPUT_MOD_CONFIG_ID) VALUES (:dsoutputmodconfid, :datasetid, :outputmodconfigid);"""
+    def __init__(self, logger, dbi):
+            DBFormatter.__init__(self, logger, dbi)
+            self.owner = "%s." % self.dbi.engine.url.username
 
-    def getBinds( self, dataset_output_mod_configsObj ):
+            self.sql = """INSERT INTO %sDATASET_OUTPUT_MOD_CONFIGS ( DS_OUTPUT_MOD_CONF_ID, DATASET_ID, OUTPUT_MOD_CONFIG_ID) VALUES (:dsoutputmodconfid, :datasetid, :outputmodconfigid) % (self.owner) ;"""
+
+    def getBinds_delme( self, dataset_output_mod_configsObj ):
             binds = {}
             if type(dataset_output_mod_configsObj) == type ('object'):
             	binds = {
@@ -28,7 +34,9 @@ class Insert(DBFormatter):
                return binds
 
 
-    def execute( self, dataset_output_mod_configsObj ):
-            binds = self.getBinds(dataset_output_mod_configsObj )
-            result = self.dbi.processData(self.sql, binds, conn = conn, transaction = transaction)
+    def execute( self, dataset_output_mod_configsObj, conn=None, transaction=False ):
+            ##binds = self.getBinds( dataset_output_mod_configsObj )
+            result = self.dbi.processData(self.sql, binds, conn, transaction)
             return
+
+
