@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.3 $"
-# $Id: dbsClient.py,v 1.3 2009/11/04 22:35:00 afaq Exp $"
+# $Revision: 1.4 $"
+# $Id: dbsClient.py,v 1.4 2009/11/06 22:34:48 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -8,6 +8,7 @@ import urllib, urllib2
 from httplib import HTTPConnection
 from StringIO import StringIO
 from exceptions import Exception
+
 
 try:
 	# Python 2.6
@@ -36,18 +37,27 @@ class DbsApi:
         	#                                                "UserID": UserID}
 
 		#print "How to set out the USER ID here ??"
+		res='{"FAILED":"TRUE"}'
+		try:
+			calling=self.url+urlplus
+			#print calling
+			if params == {} :
+				data = urllib2.urlopen(calling)
+			else:
+				params = json.dumps(dict(params))
+				print params
+				req = urllib2.Request(url=calling)
+				req.add_data(params)
+				data = urllib2.urlopen(req)
 
-		calling=self.url+urlplus
-		#print calling
-		if params == {} :
-			data = urllib2.urlopen(calling)
-		else:
-			params = json.dumps(dict(params))
-			req = urllib2.Request(url=calling)
-			req.add_data(params)
-			data = urllib2.urlopen(req)
+			res = data.read()
+		except urllib2.HTTPError, httperror:
+			print httperror
+			#HTTPError(req.get_full_url(), code, msg, hdrs, fp)
 
-		res = data.read()
+		except urllib2.URLError, urlerror:
+			print urlerror
+
 		return res
 
 		#FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
@@ -101,6 +111,15 @@ class DbsApi:
                 """
                 return self.callServer("/Datasets/", params = datasetObj )
 
+        def listBlock(self, name):
+                """
+                * API to list A block in DBS 
+                * name : name of the block
+                """
+		return self.callServer("/Blocks/%s" %name[1:])
+		#parts=name.split('#')
+		#black_name=parts[0]+urllib.quote_plus('#')+parts[1]
+                #return self.callServer("/Blocks/%s" %black_name[1:] )
 
 
 if __name__ == "__main__":

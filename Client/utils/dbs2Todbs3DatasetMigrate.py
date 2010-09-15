@@ -55,7 +55,7 @@ try:
 				self.primary_dataset=attrs.get('primary_name')
 				self.prdsobj = { "PRIMARY_DS_NAME" : str(self.primary_dataset), "PRIMARY_DS_TYPE": "test" }
 			if name == 'processed_dataset':
-				self.dataset={"IS_DATASET_VALID": 1 , "PRIMARY_DS_NAME": self.primary_dataset, "PRIMARY_DS_TYPE": "test", "DATASET_TYPE":"PRODUCTION",
+				self.dataset={"IS_DATASET_VALID": 1 , "PRIMARY_DST_NAME": self.primary_dataset, "PRIMARY_DS_TYPE": "test", "DATASET_TYPE":"PRODUCTION",
 						"GLOBAL_TAG": attrs.get('global_tag'),"XTCROSSSECTION":123,"PHYSICS_GROUP_NAME": "Tracker", 
 						"PROCESSING_VERSION" : "1",
 						"PROCESSED_DATASET_NAME": attrs.get('processed_datatset_name'), "ACQUISITION_ERA_NAME" : attrs.get('acquisition_era') }
@@ -136,7 +136,7 @@ try:
         			print dbs3api.ping()
         			print self.prdsobj
         			print dbs3api.insertPrimaryDataset(self.prdsobj)
-				print self.dataset
+				#print self.dataset
         			print dbs3api.insertDataset(self.dataset)
 
   	xml.sax.parseString (data, Handler ())
