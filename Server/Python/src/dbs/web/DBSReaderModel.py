@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.12 2010/01/12 22:55:36 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.13 2010/01/25 23:22:04 afaq Exp $"
+__version__ = "$Revision: 1.13 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -40,7 +40,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block_name', 'site_name'])
         self.addService('GET', 'files', self.listFiles, ['dataset', 'block_name', 'logical_file_name'])
         self.addService('GET', 'datasetparents', self.listDatasetParents, ['dataset'])
-        self.addService('GET', 'outputconfigurations', self.listOutputConfigs, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
+        self.addService('GET', 'outputconfigs', self.listOutputConfigs, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'fileparents', self.listFileParents, ['logical_file_name'])
         self.addService('GET', 'filelumis', self.listFileLumis, ['logical_file_name', 'block_name'])
         
