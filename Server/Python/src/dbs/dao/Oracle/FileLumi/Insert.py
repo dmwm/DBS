@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileLumis table """ 
 
-__revision__ = "$Revision: 1.2 $"
-__version__  = "$Id: Insert.py,v 1.2 2009/10/20 02:19:20 afaq Exp $ "
+__revision__ = "$Revision: 1.3 $"
+__version__  = "$Id: Insert.py,v 1.3 2009/11/16 20:29:06 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -12,7 +12,9 @@ class Insert(DBFormatter):
             DBFormatter.__init__(self, logger, dbi)
             self.owner = "%s." % self.dbi.engine.url.username
 
-            self.sql = """INSERT INTO %sFILE_LUMIS ( FILE_LUMI_ID, RUN_NUM, LUMI_SECTION_NUM, FILE_ID) VALUES (:filelumiid, :runnum, :lumisectionnum, :fileid) % (self.owner) ;"""
+            self.sql = """INSERT INTO %sFILE_LUMIS ( FILE_LUMI_ID, RUN_NUM,
+	    LUMI_SECTION_NUM, FILE_ID) VALUES (:FILE_LUMI_ID, :RUN_NUM,
+	    :LUMI_SECTION_NUM, :FILE_ID) % (self.owner) ;"""
 
     def getBinds_delme( self, file_lumisObj ):
             binds = {}

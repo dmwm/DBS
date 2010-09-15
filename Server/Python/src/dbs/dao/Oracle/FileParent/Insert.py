@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileParents table """ 
 
-__revision__ = "$Revision: 1.2 $"
-__version__  = "$Id: Insert.py,v 1.2 2009/10/20 02:19:21 afaq Exp $ "
+__revision__ = "$Revision: 1.3 $"
+__version__  = "$Id: Insert.py,v 1.3 2009/11/16 20:29:06 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -12,7 +12,8 @@ class Insert(DBFormatter):
             DBFormatter.__init__(self, logger, dbi)
             self.owner = "%s." % self.dbi.engine.url.username
 
-            self.sql = """INSERT INTO %sFILE_PARENTS ( FILE_PARENT_ID, THIS_FILE_ID, PARENT_FILE_ID) VALUES (:fileparentid, :thisfileid, :parentfileid) % (self.owner) ;"""
+            self.sql = """INSERT INTO %sFILE_PARENTS ( FILE_PARENT_ID, THIS_FILE_ID, PARENT_FILE_ID) 
+	     VALUES (:FILE_PARENT_ID, :THIS_FILE_ID, :FILE_PARENT_LFN) % (self.owner) ;"""
 
     def getBinds_delme( self, file_parentsObj ):
             binds = {}
