@@ -2,15 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.5 2009/11/29 11:24:18 akhukhun Exp $"
-__version__ = "$Revision: 1.5 $"
-
-def op(pattern):
-    """ returns 'like' if pattern includes '%' and '=' otherwise"""
-    if pattern.find("%") == -1:
-        return '='
-    else:
-        return 'like'
+__revision__ = "$Id: List.py,v 1.6 2009/11/29 18:49:35 akhukhun Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -64,11 +57,11 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
             binds.update({"dataset":dataset})
         
             if not block == "":
-                sql += " AND B.BLOCK_NAME %s :block" % op(block)
+                sql += " AND B.BLOCK_NAME %s :block" % ("=", "like")["%" in block]
                 binds.update({"block":block})
                 
         elif not block == "":
-            sql += "WHERE B.BLOCK_NAME %s :block" % op(block)
+            sql += "WHERE B.BLOCK_NAME %s :block" % ("=", "like")["%" in block]
             binds.update({"block":block})
         
         else: 
