@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDSType.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.5 2009/12/23 17:52:34 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: List.py,v 1.6 2010/01/12 15:09:27 yuyi Exp $"
+__version__ = "$Revision: 1.6 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -16,7 +16,8 @@ class List(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
+        #self.owner = "%s." % self.dbi.engine.url.username
+	self.owner = "%s." %owner
         self.sql = \
 """
 SELECT PT.PRIMARY_DS_TYPE_ID, PT.PRIMARY_DS_TYPE
