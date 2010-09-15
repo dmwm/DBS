@@ -3,19 +3,21 @@ As the number of tests increase we will probably repackage these tests
 to separate package/modules for each DAO object
 """
 
-__revision__ = "$Id: TestDAO.py,v 1.1 2009/10/27 17:28:05 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: TestDAO.py,v 1.2 2009/10/30 16:56:30 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
+
+INSERTCOUNT = "1023"
 
 import unittest
 import logging
 from WMCore.Database.DBFactory import DBFactory
 
-
 class TestDAO(unittest.TestCase):
     """DAO unittests class"""
     def setUp(self):
         """setup all necessary variables"""
-        url = "oracle://cms_dbs_afaq:anzpw03062009@oradev10.cern.ch:10520/D10"
+        #url = "oracle://cms_dbs_afaq:anzpw03062009@oradev10.cern.ch:10520/D10"
+        url = "oracle://CMS_DBS3_OWNER:new4_dbs3@uscmsdb03.fnal.gov:1521/cmscald"
         self.logger = logging.getLogger("dbs test logger")
         self.dbi = DBFactory(self.logger, url).connect()
         
@@ -31,8 +33,8 @@ class TestDAO(unittest.TestCase):
         """PrimaryDataset.Insert"""
         from dbs.dao.Oracle.PrimaryDataset.Insert import Insert as PrimaryDatasetInsert
         dao = PrimaryDatasetInsert(self.logger, self.dbi)
-        dinput = {"primarydsid":407,
-                 "primarydsname":"QCD_100_407",
+        dinput = {"primarydsid":INSERTCOUNT,
+                 "primarydsname":"QCD_100_" + INSERTCOUNT,
                  "primarydstypeid":1,
                  "creationdate":1234,
                  "createby":"akhukhunATcern.ch"}
@@ -45,15 +47,14 @@ class TestDAO(unittest.TestCase):
         dao.execute()
         result = dao.execute("ThisDoesNotExist")
         self.assertEqual(len(result), 0)
-
-
+    
     def test04(self):
         """Block.Insert"""
         from dbs.dao.Oracle.Block.Insert import Insert as BlockInsert
         dao = BlockInsert(self.logger, self.dbi)
-        dinput = {"blockid":15,
-                 "blockname":"115",
-                 "datasetid":1,
+        dinput = {"blockid":int(INSERTCOUNT),
+                 "blockname":INSERTCOUNT,
+                 "dataset":1,
                  "openforwriting":True,
                  "originsite":1,
                  "blocksize":1024,
@@ -81,18 +82,58 @@ class TestDAO(unittest.TestCase):
         dao.execute("a")
         dao.execute("a", "b%", "c")
         
+    def test07(self):
+        """AcquisitionEra.Insert"""
+        from dbs.dao.Oracle.AcquisitionEra.Insert import Insert as AcqusitionEraInsert
+        dao = AcqusitionEraInsert(self.logger, self.dbi)
+        dinput = {"acquisitioneraid":int(INSERTCOUNT),
+                  "acquisitioneraname":"Ihavenoideahowitshouldlooklike" + INSERTCOUNT,
+                  "creationdate":1234,
+                  "createby":"me",
+                  "description":"nodescription"
+                  }
+        dao.execute(dinput)
         
+    def test08(self):
+        """ProcessedDataset.Insert"""
+        from dbs.dao.Oracle.ProcessedDataset.Insert import Insert as ProcessedDatasetInsert
+        dao = ProcessedDatasetInsert(self.logger, self.dbi)
+        dinput = {"processeddsid":int(INSERTCOUNT),
+                  "processeddsname":"ProcessedDSName" + INSERTCOUNT}
+        dao.execute(dinput)
         
+    def test09(self):
+        """Dataset.Insert""" 
+        from dbs.dao.Oracle.Dataset.Insert import Insert as DatasetInsert
+        dao = DatasetInsert(self.logger, self.dbi)
+        dinput = {"datasetid":int(INSERTCOUNT),
+                 "dataset":"/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v%s/GEN-SIM-RECO" % INSERTCOUNT,
+                 "isdatasetvalid":1,
+                 "primaryds":48,
+                 "processedds":1,
+                 "datatier":23,
+                 "datasettype":1,
+                 "acquisitionera":1,
+                 "processingversion":1,
+                 "physicsgroup":1,
+                 "xtcrosssection":999.,
+                 "globaltag":"DaoTESTGlobalTag",
+                 "creationdate":1234,
+                 "createby":"me",
+                 "lastmodificationdate":1235,
+                 "lastmodifiedby":"alsome"}
+       
+        dao.execute(dinput)
         
+    def test10(self):
+        """Block.List"""
+        from dbs.dao.Oracle.Block.List import List as BlockList
+        dao = BlockList(self.logger, self.dbi)
+        dao.execute("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO")
+        dao.execute("/a/b/c/", "/a/b/c#d")
+       
 if __name__ == "__main__":
     
-    #unittest.main()
-
-    SUITE = unittest.TestSuite()
-    SUITE.addTest(TestDAO("test01"))
-    #SUITE.addTest(TestDAO("test02"))
-    SUITE.addTest(TestDAO("test03"))
-    #SUITE.addTest(TestDAO("test04"))
-    SUITE.addTest(TestDAO("test05"))
-    SUITE.addTest(TestDAO("test06"))
+    SUITE = unittest.TestLoader().loadTestsFromTestCase(TestDAO)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
+
