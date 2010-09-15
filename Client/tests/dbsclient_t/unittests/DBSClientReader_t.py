@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.2 2010/01/25 19:49:00 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.3 2010/01/25 20:54:00 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import os
 import json
@@ -24,7 +24,6 @@ def importCode(code,name,add_to_sys_modules=0):
 
 infofile=open("info.dict","r")    
 testparams=importCode(infofile, "testparams", 0).info
-print testparams.keys()
 #['release_version', 'primary_ds_name', 'app_name', 'output_module_label', 'tier', 'pset_hash', 'procdataset', 'site', 'block', 'dataset']    
 
 class DBSClientReader_t(unittest.TestCase):
@@ -33,14 +32,23 @@ class DBSClientReader_t(unittest.TestCase):
         """unittestDBSClientReader_t.listPrimaryDatasets: basic test"""
         api.listPrimaryDatasets()
         api.listPrimaryDatasets('*')
-        api.listPrimaryDatasets('unittest*')
 	api.listPrimaryDatasets(testparams['primary_ds_name'])
+	api.listPrimaryDatasets(testparams['primary_ds_name']+"*")
 
     def test02(self):
 	"""unittestDBSClientReader_t.listDatasets: basic test"""
 	api.listDatasets()
-	api.listDatasets(dataset="/unit*")
-	# listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label=""):
+	api.listDatasets(testparams['dataset'])
+	api.listDatasets(testparams['dataset']+"*")
+	api.listDatasets(release_version=testparams['release_version'])
+	api.listDatasets(pset_hash=testparams['pset_hash'])
+	api.listDatasets(app_name=testparams['app_name'])
+	api.listDatasets(output_module_label=testparams['output_module_label'])
+	api.listDatasets(release_version=testparams['release_version'], pset_hash=testparams['pset_hash'], \
+		app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
+	api.listDatasets(dataset=testparams['dataset'], release_version=testparams['release_version'], \
+		pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
+	api.listDatasets(dataset=testparams['dataset'], release_version=testparams['release_version'])
 
 #def test03(self):
 
