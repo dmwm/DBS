@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.10 2010/01/26 15:57:48 yuyi Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: List.py,v 1.11 2010/01/29 19:59:28 afaq Exp $"
+__version__ = "$Revision: 1.11 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -18,7 +18,10 @@ class List(DBFormatter):
         self.owner = "%s." % owner
         self.sql = \
 	"""
-	SELECT O.OUTPUT_MOD_CONFIG_ID
+	SELECT R.RELEASE_VERSION,
+	    P.PSET_HASH,
+	    A.APP_NAME,
+	    O.OUTPUT_MODULE_LABEL 
 	    from %sOUTPUT_MODULE_CONFIGS O 
 	        JOIN %sRELEASE_VERSIONS R
 	           ON O.RELEASE_VERSION_ID=R.RELEASE_VERSION_ID
