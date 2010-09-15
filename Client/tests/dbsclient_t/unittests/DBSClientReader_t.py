@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.4 2010/01/25 23:20:30 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.5 2010/01/26 21:02:12 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 import os
 import json
@@ -29,16 +29,16 @@ testparams=importCode(infofile, "testparams", 0).info
 class DBSClientReader_t(unittest.TestCase):
     
     def test01(self):
-        """unittestDBSClientReader_t.listPrimaryDatasets: basic test"""
 	return
+        """unittestDBSClientReader_t.listPrimaryDatasets: basic test"""
         api.listPrimaryDatasets()
         api.listPrimaryDatasets('*')
 	api.listPrimaryDatasets(testparams['primary_ds_name'])
 	api.listPrimaryDatasets(testparams['primary_ds_name']+"*")
 
     def test02(self):
-	"""unittestDBSClientReader_t.listDatasets: basic test"""
 	return
+	"""unittestDBSClientReader_t.listDatasets: basic test"""
 	api.listDatasets()
 	api.listDatasets(dataset=testparams['dataset'])
 	api.listDatasets(dataset=testparams['dataset']+"*")
@@ -54,9 +54,9 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test03(self):
 	"""unittestDBSClientReader_t.listOutputModules: basic test"""
-	print api.listOutputConfigs(dataset=testparams['dataset'])
 	return
-	api.listOutputConfigs(logical_file_name="/store/mc/9.root")
+	api.listOutputConfigs(dataset=testparams['dataset'])
+	api.listOutputConfigs(logical_file_name=testparams['files'][0])
 	api.listOutputConfigs()
 	api.listOutputConfigs(release_version=testparams['release_version'])
 	api.listOutputConfigs(pset_hash=testparams['pset_hash'])
@@ -67,8 +67,23 @@ class DBSClientReader_t(unittest.TestCase):
 	api.listOutputConfigs(dataset=testparams['dataset'], release_version=testparams['release_version'], \
 		pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
 	api.listOutputConfigs(dataset=testparams['dataset'], release_version=testparams['release_version'])
+
+    def test04(self):
+	"""unittestDBSClientReader_t.listBlocks: basic test"""
+	api.listBlocks(block_name=testparams['block'])
+	api.listBlocks(dataset=testparams['dataset'])
+	api.listBlocks(block_name=testparams['block'], site_name=testparams['site'])
+	api.listBlocks(dataset=testparams['dataset'], site_name=testparams['site'])
+	api.listBlocks(dataset=testparams['dataset'], block_name=testparams['block'], site_name=testparams['site'])
+	try: 
+	    api.listBlocks(site_name=testparams['site'])
+	except:
+	    pass
+	else: 
+	    self.fail("exception was excepted, was not raised")
 	
-#dataset="", logical_file_name="", release_version="", pset_hash="", app_name="", output_module_label=""
+	
+	#block_name="", dataset="", site_name=""
 
 	
 if __name__ == "__main__":
