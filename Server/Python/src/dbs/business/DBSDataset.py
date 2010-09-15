@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.18 2010/01/13 22:34:20 afaq Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: DBSDataset.py,v 1.19 2010/01/19 22:26:03 afaq Exp $"
+__version__ = "$Revision: 1.19 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -89,7 +89,7 @@ class DBSDataset:
 
             # we are better off separating out what we need for the dataset DAO
             dsdaoinput.update({ 
-                               "dataset" : businput["dataset"],
+                               "dataset" : "/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"]),
                                "is_dataset_valid" : businput["is_dataset_valid"],
                                "creation_date" : businput["creation_date"],
                                "xtcrosssection" : businput["xtcrosssection"],
@@ -113,7 +113,7 @@ class DBSDataset:
                     # dataset already exists, lets fetch the ID
                     self.logger.warning("Unique constraint violation being ignored...")
                     self.logger.warning("%s" % ex)
-                    dsdaoinput["dataset_id"] = self.datasetid.execute(businput["dataset"], conn, True)
+                    dsdaoinput["dataset_id"] = self.datasetid.execute("/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"]) , conn, True)
                 else:
                     raise	
 
