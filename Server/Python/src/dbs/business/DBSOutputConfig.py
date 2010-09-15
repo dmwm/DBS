@@ -3,10 +3,11 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.4 2010/01/07 17:30:42 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.5 2010/01/11 22:56:41 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.DAOFactory import DAOFactory
+from sqlalchemy import exceptions
 
 class DBSOutputConfig:
     """
@@ -101,9 +102,15 @@ class DBSOutputConfig:
             self.outmodin.execute(omcdaoinput, conn, True)
             tran.commit()
 
+	except exceptions.IntegrityError, ex:
+	    if str(ex).find("unique constraint") != -1 :
+		pass
+	    else: 
+	        raise
+		
         except Exception, e:
-            tran.rollback()
-            self.logger.exception(e)
-            raise
+		tran.rollback()
+		self.logger.exception(e)
+		raise
         finally:
             conn.close()
