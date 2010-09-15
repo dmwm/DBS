@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.13 2010/01/07 17:30:43 afaq Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.14 2010/01/12 19:36:36 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 import re
 import cjson
@@ -144,29 +144,29 @@ class DBSWriterModel(DBSReaderModel):
         KEYS: required/optional : default = ...
         ...
         """
-
         body = request.body.read()
         indata = cjson.decode(body)
 
         # Proper validation needed
         vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
-                      indata["BLOCK_NAME"])
-        assert vblock, "Invalid block name %s" % indata["BLOCK_NAME"]
+                      indata["block_name"])
+        assert vblock, "Invalid block name %s" % indata["block_name"]
         block={} 
         block.update({
                       "dataset":vblock.groups()[0],
-                      "creationdate": indata.get("CREATION_DATE", 123456),
-                      "createby":indata.get("CREATE_BY","me"),
-                      "lastmodificationdate":indata.get("LAST_MODIFICATION_DATE", 12345),
-                      "lastmodifiedby":indata.get("LAST_MODIFIED_BY","me"),
-                      "blockname":indata["BLOCK_NAME"],
-                      "filecount":indata.get("FILE_COUNT", 0),
-                      "blocksize":indata.get("BLOCK_SIZE", 0),
-                      "originsite":"TEST",
-                      "openforwriting":1
+                      "creation_date": indata.get("creation_date", dbsUtils().getTime()),
+                      "create_by" : indata.get("create_by", dbsUtils().getCreateBy()),
+                      "last_modification_date" : dbsUtils().getTime(),
+                      "last_modified_by" : dbsUtils().getCreateBy(),
+                      "block_name":indata["block_name"],
+                      "file_count":indata.get("file_count", 0),
+                      "block_size":indata.get("block_size", 0),
+                      "origin_site": indata.get("origin_site"),
+                      "open_for_writing": indata.get("open_for_writing", 1)
                       })
-        self.dbsBlock.insertBlock(block)
 
+	self.logger.warning(block)
+        self.dbsBlock.insertBlock(block)
 
     def insertFile(self):
         """

@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.13 2010/01/01 19:00:36 akhukhun Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSBlock.py,v 1.14 2010/01/12 19:36:35 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -48,21 +48,30 @@ class DBSBlock:
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            businput["dataset_id"] = self.datasetid.execute((businput["block_name"]).split('#')[0], conn, True)
-            businput["block_id"] =  self.sm.increment("SEQ_BK", conn, True)
-            businput["last_modification_date"]=  dbsUtils().getTime()
-            businput["last_modified_by"] = dbsUtils().getModifiedBy()
+	    blkinput = {
+		"last_modification_date":businput["last_modification_date"],
+		"last_modified_by":businput["last_modified_by"],
+		"create_by":businput["create_by"],
+		"creation_date":businput["creation_date"],
+		"open_for_writing":businput["open_for_writing"],
+		"block_size":businput["block_size"],
+		"file_count":businput["file_count"],
+		"block_name":businput["block_name"]
+	    }
+            blkinput["dataset_id"] = self.datasetid.execute((businput["block_name"]).split('#')[0], conn, True)
+            blkinput["block_id"] =  self.sm.increment("SEQ_BK", conn, True)
             if(businput.has_key("origin_site")):
-                businput["origin_site"] = self.siteid.execute(businput["origin_site"], conn, True)
-            if("create_by" not in businput):
-                businput["create_by"] = dbsUtils().getCreateBy()
-            if("creation_date" not in businput):
-                businput["creation_date"] = dbsUtils().getTime()
-            self.blockin.execute(businput, conn, True)
+                blkinput["origin_site"] = self.siteid.execute(businput["origin_site"], conn, True)
+            self.blockin.execute(blkinput, conn, True)
             tran.commit()
+    
         except Exception, e:
-            tran.rollback()
-            self.logger.exception(e)
-            raise
+	    if str(e).lower().find("unique constraint") != -1 :
+		pass
+	    else:
+		tran.rollback()
+		self.logger.exception(e)
+		raise
+		
         finally:
             conn.close()

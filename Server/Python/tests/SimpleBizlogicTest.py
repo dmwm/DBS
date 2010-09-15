@@ -4,6 +4,7 @@ from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSOutputConfig import DBSOutputConfig
 from dbs.business.DBSAcquisitionEra import DBSAcquisitionEra
 from dbs.business.DBSProcessingEra import DBSProcessingEra
+from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
 
 class Test:
@@ -69,6 +70,17 @@ class Test:
 		         }
 		bo.insertProcessingEra(binput)
 
+    def testBlock(self):
+		"""
+		This method is used for testing Block insert Bi logic
+		"""
+		
+		bo = DBSBlock(self.logger, self.dbi, "anzar")
+		binput = {'block_name': u'/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW#f930d82a-f72b-4f9e-8351-8a3cb0c43b79', 'file_count': u'100', 
+			    'origin_site': u'cmssrm.fnal.gov', 'last_modification_date': u'1263231733', 
+			    'create_by': u'/DC=org/DC=doegrids/OU=People/CN=Ajit Kumar Mohapatra 867118', 'block_size': u'228054411650', 
+			    'open_for_writing': 1, 'last_modified_by': u'anzar@cmssrv49.fnal.gov', 'creation_date': u'1228050132'}
+		bo.insertBlock(binput)
 
     def testFiles(self):
 		"""
@@ -104,8 +116,9 @@ class Test:
 
 test=Test()
 #test.testOutputConfig()
-test.testDatasetInsert()
+#test.testDatasetInsert()
 #test.testAcquisitionEra()
 #test.testProcessingEra()
+test.testBlock()
 #test.testFiles()
     
