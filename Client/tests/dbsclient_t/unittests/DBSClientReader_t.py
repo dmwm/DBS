@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.8 2010/01/27 17:25:54 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.9 2010/02/01 17:38:42 afaq Exp $"
+__version__ = "$Revision: 1.9 $"
 
 import os
 import json
@@ -12,7 +12,8 @@ import sys,imp
 
 from dbs.apis.dbsClient import *
 
-url="http://cmssrv18.fnal.gov:8585/dbs3"
+url=os.environ['DBS_READER_URL'] 
+#url="http://cmssrv18.fnal.gov:8585/dbs3"
 api = DbsApi(url=url)
 
 def importCode(code,name,add_to_sys_modules=0):
