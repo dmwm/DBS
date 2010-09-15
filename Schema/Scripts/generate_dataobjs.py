@@ -36,68 +36,77 @@ def makeVarName(str):
 
 
 
+# ==========START >>>>>>>>>>>>>
+
 typ_map={'String':'String', 'Integer':'int', 'CLOB':'String', 'Float' : 'float'}
+typ_val_map={'String':'null', 'Integer': '0', 'Float' : '0', 'CLOB':'null'}
 
 lines=open("../DDL/DBS3-Oracle.sql", "r").readlines()
 tablefound=0
 table=""
 col_list=[]
 
+# Start processing the lines from teh DDL
 for aline in lines:
 	if aline.strip().startswith("CREATE TABLE"):
 		table=aline.strip().split()[2]
 		tablefound=1
 		continue
-
 	if tablefound==1 and aline.strip().startswith(");"):
-		
 		if table.find('_') != -1:
-			
-			classname=table[0].upper()+table[1:].split('_')[0].lower()+table[table.find("_")+1].upper()+table[table.find("_")+2:].lower()
+			classname=table[0].upper()+table[1:].split('_')[0].lower()+ \
+						table[table.find("_")+1].upper()+table[table.find("_")+2:].lower()
 		else : classname=table[0].upper()+table[1:].lower()
-
 		if classname.find('_') != -1:
 			if classname.split('_')[0] == 'PrimaryDs':
-				classname='PrimaryDS'+classname[classname.find("_")+1].upper()+classname[classname.find("_")+2:].lower() 
+				classname='PrimaryDS'+classname[classname.find("_")+1].upper()+\
+								classname[classname.find("_")+2:].lower() 
 			else:
-				classname=classname.split('_')[0]+classname[classname.find("_")+1].upper()+classname[classname.find("_")+2:].lower()
-
+				classname=classname.split('_')[0]+classname[classname.find("_")+1].upper()+ \
+								classname[classname.find("_")+2:].lower()
 		classname=classname[:len(classname)-1]
+
+		####Write down class header
 
 		header= """/**
  * 
- $Revision: 1.3 $"
- $Id: generate_dataobjs.py,v 1.3 2009/09/04 20:25:48 afaq Exp $"
+ $Revision: 1.4 $"
+ $Id: generate_dataobjs.py,v 1.4 2009/10/01 18:47:33 afaq Exp $"
  *
  * Data Object from table : %s
 */
 
 package cms.dbs.dataobjs;
 
-public class %s extends JSONObject {
+import org.json.JSONObject;
+
+public class %s extends JSONObject  {
 
 	public %s ( ) {
 
 	}
-""" % (table, classname, classname)
+		""" % (table, classname, classname)
+
+
+		#### Write down CTOR and getter methods
+			
 
 		k=0
 		ctor=''
 		putonce=''
 		getmthd=''
 		for (acol, typ) in col_list:
-
 			mthd=makeMethodName(acol)
 			var=makeVarName(acol)
 			getmthd+="""
-	%s get%s ( ) {
-		%s %s = null;
+	%s get%s ( )  throws Exception {
+		%s %s = %s;
                	if (!JSONObject.NULL.equals(this.get("%s"))) {
                        	%s = (%s) this.get("%s");
                	}
                 return %s;
         }
-	""" % (typ_map[typ], mthd, typ_map[typ], var, acol, var, typ, acol, var)		
+	""" % (typ_map[typ], mthd, typ_map[typ], var, typ_val_map[typ], acol, var, typ, acol, var)		
 			# Prepare CTOR line
 			if k==0 : 
 				ctor += typ_map[typ]+' '+var
@@ -107,7 +116,7 @@ public class %s extends JSONObject {
 
 
 		ctor_stmt="""
-        public %s ( %s )  {
+        public %s ( %s ) throws Exception  {
 		%s
         }
 """ % ( classname , ctor, putonce )
@@ -126,6 +135,7 @@ public class %s extends JSONObject {
 	#if aline.strip().startswith('CONSTRAINT') and  aline.strip().find("PRIMARY KEY") !=-1:
 	#	continue
 
+	####This if block is collecting columns and types
 	if tablefound == 1 and not aline.strip().startswith("("):
 		if aline.strip().startswith(');') : continue
 		if aline.strip().startswith('GRANT') : continue
@@ -138,6 +148,7 @@ public class %s extends JSONObject {
 		if aline.strip() in ('') : continue
 		col=aline.split()[0]
 		typ=aline.split()[1]
+		if typ.startswith('CLOB'): typ="String"
 		if typ.startswith('INTEGER') : typ="Integer"
 		if typ.startswith('VARCHAR') : typ="String"
 		if typ.startswith('NUMBER') : typ="Integer"
