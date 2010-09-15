@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.2 $"
-# $Id: dbsClient.py,v 1.2 2009/10/21 17:49:51 afaq Exp $"
+# $Revision: 1.3 $"
+# $Id: dbsClient.py,v 1.3 2009/11/04 22:35:00 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -38,12 +38,14 @@ class DbsApi:
 		#print "How to set out the USER ID here ??"
 
 		calling=self.url+urlplus
-		print calling
+		#print calling
 		if params == {} :
 			data = urllib2.urlopen(calling)
 		else:
 			params = json.dumps(dict(params))
-			data = urllib2.urlopen(calling, params)
+			req = urllib2.Request(url=calling)
+			req.add_data(params)
+			data = urllib2.urlopen(req)
 
 		res = data.read()
 		return res
@@ -74,10 +76,32 @@ class DbsApi:
 
         def insertPrimaryDataset(self, primaryDSObj={}):
                 """
-                * API to list A primary dataset in DBS 
-                * name : name of the primary dataset
+                * API to insert A primary dataset in DBS 
+                * primaryDSObj : primary dataset object of type {}
                 """
                 return self.callServer("/PrimaryDatasets/", params = primaryDSObj )
+
+        def listDatasets(self):
+                """
+                * API to list ALL datasets in DBS
+                """
+                return self.callServer("/Datasets/")
+
+        def listDataset(self, dataset):
+                """
+                * API to list A primary dataset in DBS 
+                * Dataset : Full dataset (path) of the dataset
+                """
+                return self.callServer("/Datasets/%s" % dataset[1:] )
+
+        def insertDataset(self, datasetObj={}):
+                """
+                * API to list A primary dataset in DBS 
+                * datasetObj : dataset object of type {}
+                """
+                return self.callServer("/Datasets/", params = datasetObj )
+
+
 
 if __name__ == "__main__":
 	# Service URL
@@ -87,12 +111,12 @@ if __name__ == "__main__":
 	# Is service Alive
 	print api.ping()
 	# List ALL primary datasets
-	print api.listPrimaryDatasets()
+	#print api.listPrimaryDatasets()
 	# List the dataset whoes name is TEST9
-	print api.listPrimaryDataset("TEST9")
+	#print api.listPrimaryDataset("TEST9")
 	#
-	print "Caling insert primary dataset..."
-	prdsobj = {"PRIMARY_DS_NAME":"ANZAR001", "PRIMARY_DS_TYPE":"test"}
-	api.insertPrimaryDataset(prdsobj)
+	#print "Caling insert primary dataset..."
+	#prdsobj = {"PRIMARY_DS_NAME":"ANZAR001", "PRIMARY_DS_TYPE":"test"}
+	#api.insertPrimaryDataset(prdsobj)
 
 
