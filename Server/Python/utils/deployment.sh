@@ -77,7 +77,7 @@ python setup.py install
 cd $DBS3_ROOT/EXTERNAL
 }
 echo "Installing openid 2.2.4"
-#install_openid > $dlogs/openid.log
+install_openid > $dlogs/openid.log
 
 
 
@@ -179,7 +179,7 @@ fi
 dbs3start(){
 if [ -z "\$1" ]                           # Is parameter #1 zero length? or no parameter passed
    then
-       echo "Please use: vssh <hostname of machine> "
+       dbs3_start1 1>/dev/null 2>&1 &
    else
        dbs3_start1 \$1 1>/dev/null 2>&1 &
 fi
