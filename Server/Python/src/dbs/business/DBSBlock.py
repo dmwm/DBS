@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.1 2009/10/27 17:24:47 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSBlock.py,v 1.2 2009/10/28 09:53:24 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -32,23 +32,25 @@ class DBSBlock:
         filecount, creationdate, createby, lastmodificationdate, lastmodifiedby
         it builds the correct dictionary for dao input and executes the dao
         """
-         = self.daofactory(classname="PrimaryDSType.List")
-        primdsinsert = self.daofactory(classname="PrimaryDataset.Insert")
+        datasetgetid = self.daofactory(classname="Dataset.GetID")
+        sitegetid = self.daofactory(classname="Site.GetID")
+        blockinsert = self.daofactory(classname="Block.Insert")
         seqmanager = self.daofactory(classname="SequenceManager")
 
-        primdsname = primdsObject["primarydsname"]
-        primdstype = primdsObject["primarydstype"]
-        primdsObj = primdsObject
-        primdsObj.pop("primarydstype")
+        dataset = businput["dataset"]
+        businput.pop("dataset")
+        sitename = businput["sitename"]
+        businput.pop("sitename")
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            primarydstypeslist = primdstplist.execute(primdstype, conn, True)
-            assert len(primarydstypeslist) == 1, "PrimaryDSType %s does not exist" % (primdstype)
-            primdstypeid = primarydstypeslist[0]["primary_ds_type_id"]
-            primdsid = seqmanager.increment("SEQ_PDS", conn, True)
-            primdsObj.update({"primarydstypeid":primdstypeid, "primarydsid":primdsid})
-            primdsinsert.execute(primdsObj, conn, True)
+            datasetid = datasetgetid.execute(dataset, conn, True)
+            siteid = sitegetid.execute(sitename, conn, True)
+            blockid = seqmanager.increment("SEQ_BK", conn, True)
+            businput.update({"datasetid":datasetid,
+                             "originsite":siteid,
+                             "blockid":blockid})
+            blockinsert.execute(businput, conn, True)
             tran.commit()
         except Exception, e:
             tran.rollback()
