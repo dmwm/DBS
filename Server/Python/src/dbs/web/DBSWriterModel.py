@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.10 2009/12/28 17:49:37 afaq Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.11 2009/12/29 20:45:08 afaq Exp $"
+__version__ = "$Revision: 1.11 $"
 
 import re
 import cjson
@@ -169,19 +169,21 @@ class DBSWriterModel(DBSReaderModel):
         """
         gets the input from cherrypy request body
         input must be a (list of) dictionary with the following keys: <br />
-        LOGICAL_FILE_NAME (required) : string  <br />
-        IS_FILE_VALID: (optional, default = 1): 1/0 <br />
-        BLOCK, required: /a/b/c#d <br />
-        DATASET, required: /a/b/c <br />
-        FILE_TYPE (optional, default = EDM): one of the predefined types, <br />
-        CHECK_SUM (optional, default = '-1'): string <br />
-        EVENT_COUNT (optional, default = -1): int <br />
-        FILE_SIZE (optional, default = -1.): float <br />
-        ADLER32 (optional, default = ''): string <br />
-        MD5 (optional, default = ''): string <br />
-        AUTO_CROSS_SECTION (optional, default = -1.): float <br />
-	    FILE_LUMI_LIST (optional, default = []): [{"RUN_NUM": 123, "LUMI_SECTION_NUM": 12},{}....] <br />
-	    FILE_PARENT_LIST(optional, default = []) :[{"FILE_PARENT_LFN": "mylfn"},{}....] <br />
+        logical_file_name (required) : string  <br />
+        is_file_valid: (optional, default = 1): 1/0 <br />
+        block, required: /a/b/c#d <br />
+        dataset, required: /a/b/c <br />
+        file_type (optional, default = EDM): one of the predefined types, <br />
+        check_sum (optional, default = '-1'): string <br />
+        event_count (optional, default = -1): int <br />
+        file_size (optional, default = -1.): float <br />
+        adler32 (optional, default = ''): string <br />
+        md5 (optional, default = ''): string <br />
+        auto_cross_section (optional, default = -1.): float <br />
+	    file_lumi_list (optional, default = []): [{"run_num": 123, "lumi_section_num": 12},{}....] <br />
+	    file_parent_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
+	    file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
+	    file_output_config_list(optional, default = []) :[{"app_name":..., "version":..., "hash":...., output_module_label":...},{}.....] <br />
         """
         body = request.body.read()
         indata = cjson.decode(body)["files"]
@@ -191,15 +193,19 @@ class DBSWriterModel(DBSReaderModel):
         assert type(indata) in (list, dict)
         if type(indata) == dict:
             indata = [indata]
-            
+        
         for f in indata:
-            f.update({"DATASET":f["DATASET"],
-                     "CREATION_DATE":12345,
-                     "CREATE_BY":"aleko",
-                     "LAST_MODIFICATION_DATE":12345,
-                     "LAST_MODIFIED_BY":"alsoaleko",
-                     "FILE_LUMI_LIST":f.get("FILE_LUMI_LIST",[]),
-                     "FILE_PARENT_LIST":f.get("FILE_PARENT_LIST",[])})
+            f.update({
+		     #"dataset":f["dataset"],
+                     "creation_date": indata.get("creation_date", dbsUtils().getTime()),
+                     "create_by" : indata.get("create_by" , dbsUtils().getCreateBy()),
+                     "last_modification_date": indata.get("last_modification_date", dbsUtils().getTime()),
+                     "last_modified_by": indata.get("last_modified_by" , dbsUtils().getCreateBy()),
+                     "file_lumi_list":f.get("file_lumi_list",[]),
+                     "file_parent_list":f.get("file_parent_list",[]),
+		     "file_assoc_list":f.get("assoc_list",[]),
+                     "file_output_config_list":f.get("output_config_list",[])})
             businput.append(f)
             
         self.dbsFile.insertFile(businput)
+    

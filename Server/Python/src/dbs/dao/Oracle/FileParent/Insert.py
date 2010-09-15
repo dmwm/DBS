@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileParents table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2009/11/24 14:31:10 akhukhun Exp $ "
+__revision__ = "$Revision: 1.8 $"
+__version__  = "$Id: Insert.py,v 1.8 2009/12/29 20:45:08 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -16,13 +16,13 @@ class Insert(DBFormatter):
 """
 INSERT INTO %sFILE_PARENTS 
 (FILE_PARENT_ID, THIS_FILE_ID, PARENT_FILE_ID) 
-VALUES (:FILE_PARENT_ID, :THIS_FILE_ID, :FILE_PARENT_LFN)
+VALUES (:file_parent_id, :this_file_id, :parent_file_id)
 """ % (self.owner)
 
     def execute( self, daoinput, conn = None, transaction = False ):
         """
         daoinput must be validated to have the following keys:
-        FILE_PARENT_ID, THIS_FILE_ID, FILE_PARENT_LFN(ID)
+        file_parent_id, this_file_id, parent_file_id
         """
         try:
             self.dbi.processData(self.sql, daoinput, conn, transaction)
