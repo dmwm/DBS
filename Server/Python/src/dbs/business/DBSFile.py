@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.17 2010/01/12 21:06:39 afaq Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: DBSFile.py,v 1.18 2010/01/25 18:05:57 yuyi Exp $"
+__version__ = "$Revision: 1.18 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -40,7 +40,15 @@ class DBSFile:
         """
         either dataset(and lfn pattern) or block(and lfn pattern) must be specified.
         """
-        return self.filelist.execute(dataset, block_name, logical_file_name)
+	if (not dataset and not block_name and not logical_file_name):
+	    raise Exception ("We cannot list all the files in DBS with listFiles API")
+	if (not dataset and not block_name and logical_file_name == '%'):
+	    raise Exception ("We cannot list all the files in DBS with listFiles API")
+	if ('*' in dataset):
+	    raise Exception("You must specify exact dataset name not pattern")  
+        if ('*' in block_name):
+	    raise Exception("You must specify exact block name not pattern")
+	return self.filelist.execute(dataset, block_name, logical_file_name)
 
     def insertFile(self, businput):
 	"""
