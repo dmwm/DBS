@@ -6,8 +6,8 @@ Given the ID of a File, returns a LIST of the dicts containing IDs
 [{block_id, dataset_id},....] of the Parent BLOCK of the 
 Block containing THIS file.
 """
-__revision__ = "$Id: List.py,v 1.3 2010/01/12 21:06:39 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: List.py,v 1.4 2010/01/19 19:44:38 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -39,9 +39,6 @@ class List(DBFormatter):
 	    sql += ")"
 	else :
 	    raise Exception("this_file_id not provided")
-	print sql
-	print binds
-
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
 	return plist
