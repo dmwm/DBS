@@ -245,6 +245,7 @@ config.component_('$instance')
 config.$instance.templates = os.environ['WTBASE'] + '/templates/WMCore/WebTools'
 config.$instance.title = 'DBS Server'
 config.$instance.description = 'CMS DBS Service'
+config.$instance.admin='cmsdbs'
 
 config.$instance.section_('views')
 
@@ -282,8 +283,8 @@ config.component_('$instance')
 config.$instance.templates = os.environ['WTBASE'] + '/templates/WMCore/WebTools'
 config.$instance.title = 'DBS Server'
 config.$instance.description = 'CMS DBS Service'
-
 config.$instance.section_('views')
+config.$instance.admin='cmsdbs'
 
 active=config.$instance.views.section_('active')
 active.section_('$service')
