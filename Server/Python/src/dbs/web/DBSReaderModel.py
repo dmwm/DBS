@@ -3,14 +3,15 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.11 2010/01/07 17:30:43 afaq Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.12 2010/01/12 22:55:36 afaq Exp $"
+__version__ = "$Revision: 1.12 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
+from dbs.business.DBSSite import DBSSite
 from dbs.business.DBSFile import DBSFile
 from dbs.business.DBSAcquisitionEra import DBSAcquisitionEra
 from dbs.business.DBSOutputConfig import DBSOutputConfig
@@ -53,7 +54,8 @@ class DBSReaderModel(RESTModel):
         self.dbsFileParent = DBSFileParent(self.logger, self.dbi, config.dbowner)
         self.dbsFileLumi = DBSFileLumi(self.logger, self.dbi, config.dbowner)
         self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi, config.dbowner)
-        
+        self.dbsSite = DBSSite(self.logger, self.dbi, config.dbowner)
+    
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
         method that adds services to the DBS rest model

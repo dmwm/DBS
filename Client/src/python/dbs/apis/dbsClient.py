@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.17 $"
-# $Id: dbsClient.py,v 1.17 2010/01/07 17:00:31 afaq Exp $"
+# $Revision: 1.18 $"
+# $Id: dbsClient.py,v 1.18 2010/01/12 22:53:10 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -217,6 +217,13 @@ class DbsApi:
                 * datasetObj : dataset object of type {}
                 """
                 return self.callServer("/datasets", params = datasetObj )
+
+	def insertSite(self, siteObj={}):
+                """
+                * API to insert a site in DBS 
+                * siteObj : Site object of type {}
+                """
+                return self.callServer("/sites", params = siteObj )
 
         def insertBlock(self, blockObj={}):
                 """
