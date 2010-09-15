@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.4 2010/01/22 18:48:27 yuyi Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.5 2010/01/25 18:07:10 yuyi Exp $"
+__version__ = "$Revision: 1.5 $"
 
 import os
 import json
@@ -68,7 +68,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test11(self):
         """Test11 web.DBSReaderModel.listBlocks: basic test"""
 	try:
-	    self.api.list('blocks', dataset='%')
+	    self.api.list('blocks', dataset='*')
         except:
 	    pass
 	else:
@@ -128,32 +128,32 @@ class DBSReaderModel_t(unittest.TestCase):
             
     def test17(self):
         """Test17 web.DBSReaderModel.listFiles: basic test"""
-        self.api.list('files', dataset='*')
+	try:
+	    self.api.list('files', dataset='*')
+	except:
+	    pass
+	else:
+	    self.fail("Exception was expected and was not raised.")
 
     def test18(self):
         """Test18 web.DBSReaderModel.listFiles: basic test"""
-        self.api.list('files', block_name='*')
+	try:
+	    self.api.list('files', block_name='*')
+	except:
+            pass
+        else:
+            self.fail("Exception was expected and was not raised.")
+
 
     def test19(self):
         """Test19 web.DBSReaderModel.listFiles: basic test"""
-        self.api.list('files', logical_file_name='*')
-
-        
-    def test20(self):
-        """Test20 web.DBSReaderModel.listFiles: Takes exact dataset, block_name or logical_file_name, not pattern."""
-        result = self.api.list('files', dataset='*')
-        result = json.loads(result)
-        self.assertTrue(type(result) == list)
-        self.assertEqual(len(result),0)
-        result = self.api.list('files', block_name='*')
-        result = json.loads(result)
-        self.assertTrue(type(result) == list)
-        self.assertEqual(len(result),0)
-        result = self.api.list('files', logical_file_name='*')
-        result = json.loads(result)
-        self.assertTrue(type(result) == list)
-        self.assertEqual(len(result),0)
-        
+	try:
+	    self.api.list('files', logical_file_name='*')
+	except:
+            pass
+        else:
+            self.fail("Exception was expected and was not raised.")
+       
     def test21(self):
         """Test21 web.DBSReaderModel.listFiles: Must raise an exception if no parameter is passed."""
         try: self.api.list('files')
