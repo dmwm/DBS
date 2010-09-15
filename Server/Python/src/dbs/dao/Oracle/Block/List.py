@@ -2,8 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.2 2009/11/03 16:41:27 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: List.py,v 1.3 2009/11/12 15:19:36 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -35,7 +35,7 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
 """ % ((self.owner,)*3)
 	
     
-    def execute(self, dataset, block = "",  \
+    def execute(self, dataset = "", block = "",  \
                 conn = None, transaction = False):
         """
         dataset: /a/b/c
@@ -43,13 +43,20 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
         """	
         sql = self.sql
         binds = {}
+        if not dataset == "":
+            sql += "WHERE DS.DATASET = :dataset"
+            binds.update({"dataset":dataset})
         
-        sql += "WHERE DS.DATASET = :datasetname"
-        binds.update({"datasetname":dataset})
+            if not block == "":
+                sql += " AND B.BLOCK_NAME %s :block" % op(block)
+                binds.update({"block":block})
+                
+        elif not block == "":
+            sql += "WHERE B.BLOCK_NAME %s :block" % op(block)
+            binds.update({"block":block})
         
-        if not block == "":
-            sql += " AND B.BLOCK_NAME %s :blockname" % op(block)
-            binds.update({"blockname":block})
+        else: 
+            raise Exception("Either dataset or block must be provided")
         
         result = self.dbi.processData(sql, binds, conn, transaction)
         ldict = self.formatDict(result)
@@ -65,10 +72,9 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
             idict.update({"dataset_do":datasetdo, 
                           "originsitedo":originsitedo})
             
-            idict.pop("origin_site") 
-            idict.pop("site_name") 
-            idict.pop("dataset_id") 
-            idict.pop("dataset") 
+            for k in ("origin_site", "site_name",
+                      "dataset_id", "dataset"):
+                idict.pop(k)
             output.append(idict)
            
         return output 

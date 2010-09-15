@@ -3,11 +3,11 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.8 2009/11/03 16:41:27 akhukhun Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSModel.py,v 1.9 2009/11/12 15:19:35 akhukhun Exp $"
+__version__ = "$Revision: 1.9 $"
 
-
-import re, json
+import re
+import json, cjson
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
@@ -26,21 +26,16 @@ class DBSModel(RESTModel):
         """
         RESTModel.__init__(self, config)
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
-        self.addService('GET', 'primds', self.listPrimaryDatasets, \
-                        ['primds'])
-        self.addService('GET', 'datasets', self.listDatasets, \
-                        ['primds', 'procds', 'tier'])
-        self.addService('GET', 'blocks', self.listBlocks, \
-                        ['primds', 'procds', 'tier', 'block'])
-        self.addService('GET', 'files', self.listFiles, \
-                        ['primds', 'procds', 'tier', 'block', "lfn"])
-        self.addService('PUT', 'primds', self.insertPrimaryDataset)
+        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primds'])
+        self.addService('GET', 'datasets', self.listDatasets, ['dataset'])
+        self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block'])
+        self.addService('GET', 'files', self.listFiles, ['dataset', 'block', 'lfn'])
+        self.addService('PUT', 'primarydatasets', self.insertPrimaryDataset)
         self.addService('PUT', 'datasets', self.insertDataset)
         self.addService('PUT', 'blocks', self.insertBlock)
         self.addService('PUT', 'files', self.insertFile)
         self.addService('POST', 'post', self.donothing)
         self.addService('DELETE', 'delete', self.donothing)
-
 
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
@@ -64,53 +59,39 @@ class DBSModel(RESTModel):
         data.update({'result':bo.listPrimaryDatasets(primds)})
         return data
     
-    def listDatasets(self, primds = "", procds = "", tier = ""):
+    def listDatasets(self, dataset = ""):
         """
         Example url's:
         http://dbs3/datasets
         http://dbs3/datasets/RelVal*
-        http://dbs3/datasets/RelVal*/*/*RECO
+        http://dbs3/datasets?dataset=/RelVal*/*/*RECO
         """
-        primds = primds.replace("*", "%")
-        procds = procds.replace("*", "%")
-        tier = tier.replace("*", "%")
+        dataset = dataset.replace("*", "%")
         bo = DBSDataset(self.logger, self.dbi)
-        return {'result':bo.listDatasets(primds, procds, tier)}
+        return {'result':bo.listDatasets(dataset = dataset)}
     
-    def listBlocks(self, primds, procds, tier, block=""):
+    def listBlocks(self, dataset = "", block = ""):
         """
         Example url's:
-        http://dbs3/blocks/a/b/c
-        http://dbs3/blocks/a/b/c/s*df
+        http://dbs3/blocks?dataset=/a/b/c
+        http://dbs3/blocks?block=/a/b/c%23*d
         """
         block = block.replace("*","%")
+        dataset = dataset.replace("*","%")
         bo = DBSBlock(self.logger, self.dbi)
-        dataset = "/%s/%s/%s" % (primds, procds, tier)
-        if not block == "": 
-            block = "#".join((dataset, block))
-        return {"result":bo.listBlocks(dataset, block)}
+        return {"result":bo.listBlocks(dataset=dataset, block=block)}
     
-    def listFiles(self, primds = "", procds = "", tier = "", block = "", lfn = ""):
+    def listFiles(self, dataset = "", block = "", lfn = ""):
         """
         Example url's:
-        http://dbs3/files/a/b/c/
-        http://dbs3/files/a/b/c/d
-        http://dbs3/files/a/b/c/d/l*fn
-        http://dbs3/files/a/b/c?lfn=l*fn
+        http://dbs3/files?dataset=/a/b/c/
+        http://dbs3/files?block=a/b/c#d
+        http://dbs3/files?dataset=/a/b/c&lfn=/store/*
+        http://dbs3/files?block=/a/b/c%23d&lfn=/store/*
         """
         bo = DBSFile(self.logger, self.dbi)
         lfn = lfn.replace("*", "%")
-        if not primds == procds == tier == "":
-            dataset = "/%s/%s/%s" % (primds, procds, tier)
-            if not block == "":
-                block = "#".join((dataset, block))
-                result = bo.listFiles(block = block, lfn = lfn)
-            else:
-                result = bo.listFiles(dataset = dataset, lfn = lfn)
-        elif not lfn =="": 
-            result = bo.listFiles(lfn = lfn)
-        else:
-            raise Exception("Either dataset, block or lfn must be provided")
+        result = bo.listFiles(dataset = dataset, block = block, lfn = lfn)
         return {"result":result}
             
     def insertPrimaryDataset(self):
@@ -220,9 +201,8 @@ class DBSModel(RESTModel):
         autocrosssection: float
         """
         body = request.body.read()
-        indata = json.loads(body)
+        indata = cjson.decode(body)
         
-        # lot of validation goes here:
         businput = []
         vblock = re.compile(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$")
         assert type(indata) in (list, dict)
@@ -250,10 +230,9 @@ class DBSModel(RESTModel):
                      "lastmodificationdate":1234,
                      "lastmodifiedby":"alsoaleko"})
             businput.append(f)
-            
         bo = DBSFile(self.logger, self.dbi)
         bo.insertFile(businput)
-        
+
         
     def donothing(self, *args, **kwargs):
         """

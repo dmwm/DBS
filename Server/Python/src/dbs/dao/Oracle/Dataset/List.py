@@ -2,8 +2,8 @@
 """
 This module provides Dataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.6 2009/11/11 18:00:36 yuyi Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: List.py,v 1.7 2009/11/12 15:19:35 akhukhun Exp $"
+__version__ = "$Revision: 1.7 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -41,51 +41,26 @@ FROM %sDATASETS D
 JOIN %sPRIMARY_DATASETS PR ON  PR.PRIMARY_DS_ID = D.PRIMARY_DS_ID 
 JOIN %sPROCESSED_DATASETS PS ON PS.PROCESSED_DS_ID = D.PROCESSED_DS_ID  
 JOIN %sDATA_TIERS DT ON DT.DATA_TIER_ID = D.DATA_TIER_ID
-LEFT OUT JOIN %sPHYSICS_GROUPS PH ON PH.PHYSICS_GROUP_ID = D.PHYSICS_GROUP_ID
+LEFT OUTER JOIN %sPHYSICS_GROUPS PH ON PH.PHYSICS_GROUP_ID = D.PHYSICS_GROUP_ID
 JOIN %sDATASET_TYPES DP on DP.DATASET_TYPE_ID = D.DATASET_TYPE_ID
-LEFT OUT JOIN %sACQUISITION_ERAS AE on AE.ACQUISITION_ERA_ID = D.ACQUISITION_ERA_ID
-LEFT OUT JOIN %sPROCESSING_ERAS PE on PE.PROCESSING_ERA_ID = D.PROCESSING_ERA_ID
+LEFT OUTER JOIN %sACQUISITION_ERAS AE on AE.ACQUISITION_ERA_ID = D.ACQUISITION_ERA_ID
+LEFT OUTER JOIN %sPROCESSING_ERAS PE on PE.PROCESSING_ERA_ID = D.PROCESSING_ERA_ID
 """ % ((self.owner,)*8)
         
 	
-    def execute(self, primdsname = "", procdsname = "", datatiername = "", \
-                conn = None, transaction = False):
+    def execute(self, dataset="", conn = None, transaction = False):
         """
-        Lists all datasets if none of the parameters are passed.
-        Each parameter can include %.
+        dataset key must be of /a/b/c pattern
         """	
         sql = self.sql
-        if primdsname == "" and procdsname == "" and datatiername == "":
+        if dataset == "":
             result = self.dbi.processData(sql, conn=conn, transaction=transaction)
         else:
-            binds = {}    
-            if not primdsname == "":    
-                sql += "WHERE PR.PRIMARY_DS_NAME %s :primarydsname" % op(primdsname)
-                binds.update({"primarydsname":primdsname})
-                
-                if not procdsname == "":
-                    sql += " AND PS.PROCESSED_DS_NAME %s :processeddsname" % op(procdsname)
-                    binds.update({"processeddsname":procdsname})
-                
-                if not datatiername == "":
-                    sql += " AND DT.DATA_TIER_NAME %s :datatiername" % op(datatiername)
-                    binds.update({"datatiername":datatiername})
-                    
-            elif not procdsname == "":
-                sql += " WHERE PS.PROCESSED_DS_NAME %s :processeddsname" % op(procdsname)
-                binds.update({"processeddsname":procdsname})
-                
-                if not datatiername == "":
-                    sql += " AND DT.DATA_TIER_NAME %s :datatiername" % op(datatiername)
-                    binds.update({"datatiername":datatiername})
-                    
-            elif not datatiername == "":
-                sql += " WHERE DT.DATA_TIER_NAME %s :datatiername" % op(datatiername)
-                binds.update({"datatiername":datatiername})
-                    
+            sql += " WHERE D.DATASET %s :dataset" % op(dataset)
+            binds = {"dataset":dataset}
             result = self.dbi.processData(sql, binds, conn, transaction)
+            
         ldict = self.formatDict(result)
-        
         output = []
         
         for idict in ldict:
@@ -112,20 +87,14 @@ LEFT OUT JOIN %sPROCESSING_ERAS PE on PE.PROCESSING_ERA_ID = D.PROCESSING_ERA_ID
                                "acquisition_era_do":acquisitionerado,
                                "processing_era_do":processingerado})
             
-            idict.pop("primary_ds_id") 
-            idict.pop("primary_ds_name") 
-            idict.pop("processed_ds_id") 
-            idict.pop("processed_ds_name") 
-            idict.pop("data_tier_id") 
-            idict.pop("data_tier_name") 
-            idict.pop("physics_group_id") 
-            idict.pop("physics_group_name") 
-            idict.pop("dataset_type_id") 
-            idict.pop("dataset_type") 
-            idict.pop("acquisition_era_id") 
-            idict.pop("acquisition_era_name")
-            idict.pop("processing_era_id")
-            idict.pop("processing_version")
+            for k in ("primary_ds_id", "primary_ds_name",
+                      "processed_ds_id", "processed_ds_name",
+                      "data_tier_id", "data_tier_name",
+                      "physics_group_id", "physics_group_name",
+                      "dataset_type_id", "dataset_type",
+                      "acquisition_era_id", "acquisition_era_name",
+                      "processing_era_id", "processing_version"):
+                idict.pop(k)
             output.append(idict)
            
         return output 
