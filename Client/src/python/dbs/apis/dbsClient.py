@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.4 $"
-# $Id: dbsClient.py,v 1.4 2009/11/06 22:34:48 afaq Exp $"
+# $Revision: 1.5 $"
+# $Id: dbsClient.py,v 1.5 2009/11/09 21:15:17 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -75,48 +75,48 @@ class DbsApi:
 		"""
 		* API to list ALL primary datasets in DBS 
 		"""
-		return self.callServer("/PrimaryDatasets/")
+		return self.callServer("/primarydatasets")
 
         def listPrimaryDataset(self, name):
                 """
                 * API to list A primary dataset in DBS 
 		* name : name of the primary dataset
                 """
-                return self.callServer("/PrimaryDatasets/%s" %name )
+                return self.callServer("/primarydatasets?primarydataset=%s" %name )
 
         def insertPrimaryDataset(self, primaryDSObj={}):
                 """
                 * API to insert A primary dataset in DBS 
                 * primaryDSObj : primary dataset object of type {}
                 """
-                return self.callServer("/PrimaryDatasets/", params = primaryDSObj )
+                return self.callServer("/primarydatasets", params = primaryDSObj )
 
         def listDatasets(self):
                 """
                 * API to list ALL datasets in DBS
                 """
-                return self.callServer("/Datasets/")
+                return self.callServer("/datasets")
 
         def listDataset(self, dataset):
                 """
                 * API to list A primary dataset in DBS 
                 * Dataset : Full dataset (path) of the dataset
                 """
-                return self.callServer("/Datasets/%s" % dataset[1:] )
+                return self.callServer("/datasets?dataset=%s" % dataset )
 
         def insertDataset(self, datasetObj={}):
                 """
                 * API to list A primary dataset in DBS 
                 * datasetObj : dataset object of type {}
                 """
-                return self.callServer("/Datasets/", params = datasetObj )
+                return self.callServer("/datasets", params = datasetObj )
 
         def listBlock(self, name):
                 """
                 * API to list A block in DBS 
                 * name : name of the block
                 """
-		return self.callServer("/Blocks/%s" %name[1:])
+		return self.callServer("/blocks?block=%s" %name)
 		#parts=name.split('#')
 		#black_name=parts[0]+urllib.quote_plus('#')+parts[1]
                 #return self.callServer("/Blocks/%s" %black_name[1:] )
