@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.13 2009/12/22 14:23:32 akhukhun Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: List.py,v 1.14 2009/12/27 13:40:46 akhukhun Exp $"
+__version__ = "$Revision: 1.14 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -36,52 +36,33 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 """ % ((self.owner,)*4)
 
 
-    def formatCursor(self, cursor):
-        """
-        Tested only with cx_Oracle cursor. 
-        I suspect it will not work with MySQLdb
-        cursor must be already executed.
-        use fetchmany(size=arraysize=50)
-        """
-        keys = [d[0].lower() for d in cursor.description]
-        result = []
-        rapp = result.append
-        while True:
-            rows = cursor.fetchmany()
-            if not rows: 
-                cursor.close()
-                break
-            for r in rows:
-                rapp(dict(zip(keys, r)))
-        return result
-
-
-    def execute(self, dataset = "", block = "", lfn = "", conn = None):
+    def execute(self, dataset="", block_name="", logical_file_name="", conn=None):
         """
         dataset: /a/b/c
-        block: /a/b/c#d
-        lfn: /store/ .....root
+        block_name: /a/b/c#d
+        logical_file_name: string
         """	
         if not conn:
             conn = self.dbi.connection()
         sql = self.sql
         binds = {}
+        op = ("=","like")["%" in logical_file_name]
             
-        if block:
-            sql += "WHERE B.BLOCK_NAME = :block"
-            binds.update({"block":block})
-            if lfn:
-                sql += " AND F.LOGICAL_FILE_NAME %s :lfn" % ("=","like")["%" in lfn]
-                binds.update({"lfn":lfn})
+        if block_name:
+            sql += "WHERE B.BLOCK_NAME = :block_name"
+            binds.update({"block_name":block_name})
+            if logical_file_name:
+                sql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name" % op
+                binds.update({"logical_file_name":logical_file_name})
         elif dataset: 
             sql += "WHERE D.DATASET = :dataset"
             binds.update({"dataset":dataset})
-            if lfn:
-                sql += " AND F.LOGICAL_FILE_NAME %s :lfn" % ("=","like")["%" in lfn]
-                binds.update({"lfn":lfn})
-        elif lfn:
-            sql += "WHERE F.LOGICAL_FILE_NAME = :lfn" 
-            binds.update({"lfn":lfn})
+            if logical_file_name:
+                sql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name" % op
+                binds.update({"logical_file_name":logical_file_name})
+        elif logical_file_name:
+            sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_name" 
+            binds.update({"logical_file_name":logical_file_name})
         else:
             raise Exception("Either dataset or block must be provided")
         
