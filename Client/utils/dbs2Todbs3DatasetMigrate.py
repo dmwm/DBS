@@ -168,7 +168,7 @@ try:
 					pdb.set_trace()
         				#print dbs3api.insertDataset(self.dataset)
 
-					#print self.block
+					print self.block
 					#print dbs3api.insertBlock(self.block)
 				
 					for file in self.files:
