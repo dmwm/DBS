@@ -2,7 +2,7 @@
 CREATE OR REPLACE TRIGGER AE_TRIG before insert on APPLICATION_EXECUTABLES for each row begin if :NEW.APP_EXEC_ID is null then select SEQ_AE.nextval into :NEW.APP_EXEC_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER RVV_TRIG before insert on RELEASE_VERSIONS for each row begin if :NEW.RELEASE_VERSION_ID is null then select SEQ_RVV.nextval into :NEW.RELEASE_VERSION_ID from dual; end if; end;
+CREATE OR REPLACE TRIGGER RV_TRIG before insert on RELEASE_VERSIONS for each row begin if :NEW.RELEASE_VERSION_ID is null then select SEQ_RV.nextval into :NEW.RELEASE_VERSION_ID from dual; end if; end;
  /
 
 CREATE OR REPLACE TRIGGER PSDS_TRIG before insert on PROCESSED_DATASETS for each row begin if :NEW.PROCESSED_DS_ID is null then select SEQ_PSDS.nextval into :NEW.PROCESSED_DS_ID from dual; end if; end;
