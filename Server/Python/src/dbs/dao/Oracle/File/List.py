@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.15 2010/01/27 17:27:21 afaq Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: List.py,v 1.16 2010/02/08 22:47:31 afaq Exp $"
+__version__ = "$Revision: 1.16 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -67,13 +67,16 @@ WHERE F.IS_FILE_VALID = 1
             sql += " AND D.DATASET = :dataset"
             binds.update({"dataset":dataset})
         if release_version:
-            sql += " AND RV.RELEASE_VERSION = :release_version"
+	    op = ("=", "like")["%" in release_version]
+            sql += " AND RV.RELEASE_VERSION %s :release_version" % op
             binds.update({"release_version":release_version})
         if pset_hash:
-            sql += " AND PSH.PSET_HASH = :pset_hash"
+	    op = ("=", "like")["%" in pset_hash]
+            sql += " AND PSH.PSET_HASH %s :pset_hash" % op
             binds.update({"pset_hash" :pset_hash})
         if app_name:
-            sql += " AND AEX.APP_NAME = :app_name"
+	    op = ("=", "like")["%" in app_name]
+            sql += " AND AEX.APP_NAME %s :app_name" % op
             binds.update({"app_name":  app_name})
         if output_module_label:
             sql += " AND OMC.OUTPUT_MODULE_LABEL  = :output_module_label" 

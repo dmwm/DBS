@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.21 2010/01/29 22:21:53 afaq Exp $"
-__version__ = "$Revision: 1.21 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.22 2010/02/08 22:43:30 afaq Exp $"
+__version__ = "$Revision: 1.22 $"
 
 import re
 import cjson
@@ -44,6 +44,16 @@ class DBSWriterModel(DBSReaderModel):
         input must be a dictionary with the following two keys:
         primary_ds_name, primary_ds_type
         """
+
+
+	userDN = request.headers.get('Ssl-Client-S-Dn', None)
+	access = request.headers.get('Ssl-Client-Verify', None)
+	if userDN != '(null)' and access == 'SUCCESS':
+	    self.logger.warning("<<<<<<<<<<<<<<<<<<<<<<<<<NO USER DN specified>>>>>>>>>>>>>>>>>>>>>>>")
+	    # Means that the user certificate was authenticated by the frontend
+	else:
+	    self.logger.warning("<<<<<<<<<<<<<<<<<<<<<<<<<USER DN %s specified>>>>>>>>>>>>>>>>>>>>>>>" %userDN)
+
 	
 	try :
         	body = request.body.read()

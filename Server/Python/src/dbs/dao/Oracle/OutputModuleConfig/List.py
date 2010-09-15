@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.11 2010/01/29 19:59:28 afaq Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: List.py,v 1.12 2010/02/08 22:43:27 afaq Exp $"
+__version__ = "$Revision: 1.12 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -45,25 +45,29 @@ class List(DBFormatter):
 		sql += " JOIN %sFILE_OUTPUT_MOD_CONFIGS FC ON FC.OUTPUT_MOD_CONFIG_ID=O.OUTPUT_MOD_CONFIG_ID" % self.owner
 		sql += " JOIN %sFILES FS ON FS.FILE_ID=FC.FILE_ID" % self.owner
 	if not app == "":
-		sql += " WHERE A.APP_NAME=:app_name"
+		op = ("=", "like")["%" in app]
+		sql += " WHERE A.APP_NAME %s :app_name" % op
         	binds["app_name"]=app
 		setAnd=True
 	if not release_version == "":
-		if setAnd : sql += " AND "
+		op = ("=", "like")["%" in release_version]
+		if setAnd : sql += " AND " 
 		else : sql += " WHERE "
-		sql += " R.RELEASE_VERSION=:release_version"
+		sql += " R.RELEASE_VERSION %s :release_version" % op
 		binds["release_version"]=release_version
 		setAnd=True
 	if not pset_hash == "":
+		op = ("=", "like")["%" in pset_hash]
 		if setAnd : sql += " AND "
 		else : sql += " WHERE "
-		sql += " P.PSET_HASH=:pset_hash"
+		sql += " P.PSET_HASH %s :pset_hash" % op
 		binds["pset_hash"]=pset_hash
 		setAnd=True
 	if not output_label == "":
+		op = ("=", "like")["%" in output_label]
                 if setAnd : sql += " AND "
 		else : sql += " WHERE "
-	        sql += " O.OUTPUT_MODULE_LABEL=:output_module_label"
+	        sql += " O.OUTPUT_MODULE_LABEL %s :output_module_label" % op
 	        binds["output_module_label"]=output_label
 		setAnd=True
 	if dataset:
@@ -72,7 +76,6 @@ class List(DBFormatter):
 		sql += "DS.DATASET=:dataset"
 		binds["dataset"]=dataset
 		setAnd=True
-	    
 	if logical_file_name:
 		if setAnd : sql += " AND "
 		else : sql += " WHERE "
