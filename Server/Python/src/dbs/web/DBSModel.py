@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.11 2009/11/13 21:07:50 yuyi Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSModel.py,v 1.12 2009/11/16 17:46:24 afaq Exp $"
+__version__ = "$Revision: 1.12 $"
 
 import re
 import json, cjson
@@ -93,13 +93,14 @@ class DBSModel(RESTModel):
         lfn = lfn.replace("*", "%")
         result = bo.listFiles(dataset = dataset, block = block, lfn = lfn)
         return {"result":result}
-            
-    def insertPrimaryDataset(self):
+       
+    def insertPrimaryDataset(self, **kw):
         """
         gets the input from cherrypy request body.
         input must be a dictionary with the following two keys:
-        primarydsname, primarydstype
+	PRIMARY_DS_NAME, PRIMARY_DS_TYPE
         """
+
         body = request.body.read()
         indata = json.loads(body)
 
@@ -107,15 +108,19 @@ class DBSModel(RESTModel):
         valid = re.compile("^[\w\d_-]+$")
         assert type(indata) == dict
         assert len(indata.keys()) == 2, "Invalid input, %s" %(str(indata))
-        assert valid.match(indata["primarydsname"]), \
-            "Invalid character(s) in primarydsname: %s" % indata["primarydsname"]
-        assert valid.match(indata["primarydstype"]), \
-            "Invalid character(s) in primarydstype: %s" % indata["primarydstype"]
-        
+        assert valid.match(indata["PRIMARY_DS_NAME"]), \
+            "Invalid character(s) in PRIMARY_DS_TYPE: %s" % indata["PRIMARY_DS_NAME"]
+        assert valid.match(indata["PRIMARY_DS_TYPE"]), \
+            "Invalid character(s) in PRIMARY_DS_TYPE: %s" % indata["PRIMARY_DS_TYPE"]
+
         indata.update({"creationdate":123456, "createby":"me"})
+        data={}
+        data.update({"creationdate":123456, "createby":"me"})
+        data["primarydsname"]=indata["PRIMARY_DS_NAME"]
+        data["primarydstype"]=indata["PRIMARY_DS_TYPE"]
         bo = DBSPrimaryDataset(self.logger, self.dbi)
-        bo.insertPrimaryDataset(indata)
-    
+        bo.insertPrimaryDataset(data)
+     
     def insertDataset(self):
         """
         gets the input from cherrypy request body.
