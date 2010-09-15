@@ -1,12 +1,12 @@
 /* ---------------------------------------------------------------------- */
 /* Script generated with: DeZign for Databases v5.2.3                     */
 /* Target DBMS:           Oracle 10g                                      */
-/* Project file:          DBS3-20091001.dez                               */
+/* Project file:          DBS3.dez                                        */
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database drop script                            */
-/* Created on:            2009-10-02 11:51                                */
-/* Model version:         Version 2009-10-02                              */
+/* Created on:            2009-10-08 08:27                                */
+/* Model version:         Version 2009-10-08                              */
 /* ---------------------------------------------------------------------- */
 
 
@@ -362,7 +362,7 @@ ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_PROCESSED_DS_ID;
 
 ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_DATA_TIER_ID;
 
-ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_PATH_TYPE_ID;
+ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_DATASET_TYPE_ID;
 
 ALTER TABLE DATASETS DROP CONSTRAINT PK_DS;
 
@@ -428,7 +428,7 @@ ALTER TABLE FILES DROP CONSTRAINT NN_FL_IS_FILE_VALID;
 
 ALTER TABLE FILES DROP CONSTRAINT CC_FL_IS_FILE_VALID;
 
-ALTER TABLE FILES DROP CONSTRAINT NN_FL_PATH_ID;
+ALTER TABLE FILES DROP CONSTRAINT NN_FL_DATASET_ID;
 
 ALTER TABLE FILES DROP CONSTRAINT NN_FL_BLOCK_ID;
 
@@ -490,7 +490,7 @@ DROP TABLE DATASET_PARENTS;
 
 /* Drop constraints */
 
-ALTER TABLE DATASET_RUNS DROP CONSTRAINT NN_DR_PATH_RUN_ID;
+ALTER TABLE DATASET_RUNS DROP CONSTRAINT NN_DR_DATASET_RUN_ID;
 
 ALTER TABLE DATASET_RUNS DROP CONSTRAINT NN_DR_DATASET_ID;
 
