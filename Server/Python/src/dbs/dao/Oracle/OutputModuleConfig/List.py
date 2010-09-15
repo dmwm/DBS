@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.8 2010/01/25 22:16:28 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: List.py,v 1.9 2010/01/25 23:20:57 afaq Exp $"
+__version__ = "$Revision: 1.9 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -35,6 +35,12 @@ class List(DBFormatter):
 	sql=self.sql	
         binds = {}
 	setAnd=False
+	if dataset:
+		sql += " JOIN %sDATASET_OUTPUT_MOD_CONFIGS DC ON DC.OUTPUT_MOD_CONFIG_ID=O.OUTPUT_MOD_CONFIG_ID" % self.owner
+		sql += " JOIN %sDATASETS DS ON DS.DATASET_ID=DC.DATASET_ID" % self.owner
+	if logical_file_name:
+		sql += " JOIN %sFILE_OUTPUT_MOD_CONFIGS FC ON FC.OUTPUT_MOD_CONFIG_ID=O.OUTPUT_MOD_CONFIG_ID" % self.owner
+		sql += " JOIN %sFILES FS ON FS.FILE_ID=FC.FILE_ID" % self.owner
 	if not app == "":
 		sql += " WHERE A.APP_NAME=:app_name"
         	binds["app_name"]=app
@@ -48,7 +54,7 @@ class List(DBFormatter):
 	if not pset_hash == "":
 		if setAnd : sql += " AND "
 		else : sql += " WHERE "
-		sql += " P.HASH=:pset_hash"
+		sql += " P.PSET_HASH=:pset_hash"
 		binds["pset_hash"]=pset_hash
 		setAnd=True
 	if not output_label == "":
@@ -56,6 +62,22 @@ class List(DBFormatter):
 		else : sql += " WHERE "
 	        sql += " O.OUTPUT_MODULE_LABEL=:output_module_label"
 	        binds["output_module_label"]=output_label
+		setAnd=True
+	if dataset:
+		if setAnd : sql += " AND "
+		else : sql += " WHERE "
+		sql += "DS.DATASET=:dataset"
+		binds["dataset"]=dataset
+		setAnd=True
+	    
+	if logical_file_name:
+		if setAnd : sql += " AND "
+		else : sql += " WHERE "
+		sql += "FS.LOGICAL_FILE_NAME=:logical_file_name"
+		binds["logical_file_name"]=logical_file_name
+		setAnd=True
+	print sql
+	print binds
 	#if app == release_version == pset_hash  == "":
 	#    raise Exception("Either app_name, release_version or pset_hash must be provided")	
 
