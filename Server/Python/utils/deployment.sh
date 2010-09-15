@@ -5,9 +5,7 @@
 dburl='oracle://user:passwd@db'
 dbowner='schemaowner'
 service="DBS"
-instance='cms_dbs_default'
-access='access.log'
-error='error.log'
+instance='cms_dbs'
 version='DBS_3_0_0'
 
 externaldir='External'
@@ -212,15 +210,13 @@ fi
 
 
 dbs3start(){
-if [ -z "\$1" ]                           # Is parameter #1 zero length? or no parameter passed
+if [ -z "\$1" ]   
    then
        dbs3_start1 1>/dev/null 2>&1 &
    else
        dbs3_start1 \$1 1>/dev/null 2>&1 &
 fi
 }
-
-alias dbs3='python \$DBS3_SERVER_ROOT/tests/DBS3SimpleClient.py '
 
 EOA
 
@@ -236,8 +232,8 @@ config = Configuration()
 config.component_('Webtools')
 config.Webtools.port = 8585
 config.Webtools.host = '::'
-config.Webtools.access_log_file = os.environ['DBS3_ROOT'] +"/$serverlogsdir/$access"
-config.Webtools.error_log_file = os.environ['DBS3_ROOT'] +"/$serverlogsdir/$error"
+config.Webtools.access_log_file = os.environ['DBS3_ROOT'] +"/$serverlogsdir/$instance.log"
+config.Webtools.error_log_file = os.environ['DBS3_ROOT'] +"/$serverlogsdir/$instance.log"
 config.Webtools.log_screen = True
 config.Webtools.application = '$instance'
 
@@ -254,12 +250,50 @@ active.$service.object = 'WMCore.WebTools.RESTApi'
 active.$service.section_('model')
 active.$service.model.object = 'dbs.web.DBSReaderModel'
 active.$service.section_('formatter')
-active.$service.formatter.object = 'WMCore.WebTools.DASRESTFormatter'
+active.$service.formatter.object = 'WMCore.WebTools.RESTFormatter'
 
 active.$service.database = '$dburl'
 active.$service.dbowner = '$dbowner'
 active.$service.version = '$version'
 EOA
+
+cat > $dConfig/${instance}_writer.py << EOA
+"""
+DBS Server  configuration file
+"""
+import os, logging
+from WMCore.Configuration import Configuration
+
+config = Configuration()
+
+config.component_('Webtools')
+config.Webtools.port = 8585
+config.Webtools.host = '::'
+config.Webtools.access_log_file = os.environ['DBS3_ROOT'] +"/$serverlogsdir/${instance}_writer.log"
+config.Webtools.error_log_file = os.environ['DBS3_ROOT'] +"/$serverlogsdir/${instance}_writer.log"
+config.Webtools.log_screen = True
+config.Webtools.application = '$instance'
+
+config.component_('$instance')
+config.$instance.templates = os.environ['WTBASE'] + '/templates/WMCore/WebTools'
+config.$instance.title = 'DBS Server'
+config.$instance.description = 'CMS DBS Service'
+
+config.$instance.section_('views')
+
+active=config.$instance.views.section_('active')
+active.section_('$service')
+active.$service.object = 'WMCore.WebTools.RESTApi'
+active.$service.section_('model')
+active.$service.model.object = 'dbs.web.DBSWriterModel'
+active.$service.section_('formatter')
+active.$service.formatter.object = 'WMCore.WebTools.RESTFormatter'
+
+active.$service.database = '$dburl'
+active.$service.dbowner = '$dbowner'
+active.$service.version = '$version'
+EOA
+
 }
 gen_setup
 
