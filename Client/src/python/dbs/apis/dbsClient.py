@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.25 $"
-# $Id: dbsClient.py,v 1.25 2010/01/27 17:26:49 afaq Exp $"
+# $Revision: 1.26 $"
+# $Id: dbsClient.py,v 1.26 2010/01/28 17:51:30 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -51,10 +51,11 @@ class DbsApi:
 				data = self.opener.open(req)
 			res = data.read()
 		except urllib2.HTTPError, httperror:
-			print httperror
+			self.parseForException(json.loads(httperror.read()))
+			
 			#HTTPError(req.get_full_url(), code, msg, hdrs, fp)
 		except urllib2.URLError, urlerror:
-			print urlerror
+			raise urlerror
 		
 		#FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
 		json_ret=json.loads(res)
