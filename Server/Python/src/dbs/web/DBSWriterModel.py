@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.6 2009/12/17 23:13:53 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.7 2009/12/21 21:27:20 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 import re
 import cjson
@@ -49,6 +49,27 @@ class DBSWriterModel(DBSReaderModel):
 		
 	except Exception, ex:
        		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) ) 
+
+
+    def insertOutputConfig(self):
+        """
+        Insert an output configuration (formely known as algorithm config) in DBS
+        Gets the input from cherrypy request body.
+        input must be a dictionary with at least the following keys:
+        app_name, version (release_version), hash (pset_hash), output_module_label
+
+        """
+
+        try:
+                body = request.body.read()
+                indata = cjson.decode(body)
+                indata.update({"creation_date": dbsUtils().getTime(), \
+                                "create_by" : dbsUtils().getCreateBy() , "last_modified_by" : dbsUtils().getCreateBy() })
+                # need proper validation
+                self.dbsOutputConfig.insertOutputConfig(indata)
+
+        except Exception, ex:
+                raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
 
 
     def insertDataset(self):
