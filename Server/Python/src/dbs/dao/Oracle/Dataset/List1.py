@@ -3,8 +3,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List1.py,v 1.1 2010/01/01 18:57:14 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List1.py,v 1.2 2010/01/07 17:30:42 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -64,7 +64,7 @@ AND DP.DATASET_TYPE <> 'DELETED'
 """ % ((self.owner,)*15)
 
     def execute(self, dataset="", parent_dataset="", 
-                version="", hash="", app_name="", output_module_label="", 
+                release_version="", pset_hash="", app_name="", output_module_label="", 
                 conn=None):
         """
         dataset key is a wild card parameter
@@ -82,12 +82,12 @@ AND DP.DATASET_TYPE <> 'DELETED'
         if parent_dataset:
             sql += " AND PDS.DATASET = :parent_dataset"
             binds.update(parent_dataset = parent_dataset)
-        if version:
-            sql += " AND RV.VERSION = :version"
-            binds.update(version=version)
-        if hash:
-            sql += " AND PSH.HASH = :hash"
-            binds.update(hash = hash)
+        if release_version:
+            sql += " AND RV.VERSION = :release_version"
+            binds.update(release_version=release_version)
+        if pset_hash:
+            sql += " AND PSH.HASH = :pset_hash"
+            binds.update(pset_hash = pset_hash)
         if app_name:
             sql += " AND AEX.APP_NAME = :app_name"
             binds.update(app_name = app_name)

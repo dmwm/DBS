@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.14 2010/01/01 19:01:33 akhukhun Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSDataset.py,v 1.15 2010/01/07 17:30:42 afaq Exp $"
+__version__ = "$Revision: 1.15 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -39,19 +39,19 @@ class DBSDataset:
         self.proceraid= daofactory(classname='ProcessingEra.GetID')
         self.acqeraid = daofactory(classname='AcquisitionEra.GetID')
 
-    def listDatasets(self, dataset="", parent_dataset="", version="",
-                     hash="", app_name="", output_module_label=""):
+    def listDatasets(self, dataset="", parent_dataset="", release_version="",
+                     pset_hash="", app_name="", output_module_label=""):
         """
         lists all datasets if dataset parameter is not given.
         The parameter can include % character. 
         all other parameters are not wild card ones.
         """
-        if not (parent_dataset or version or hash or app_name or output_module_label):
+        if not (parent_dataset or release_version or pset_hash or app_name or output_module_label):
             return self.datasetlist.execute(dataset)
         else:
             return self.datasetlist1.execute(dataset, 
                                              parent_dataset, 
-                                             version, 
+                                             release_version, 
                                              app_name, 
                                              output_module_label)
             
@@ -124,7 +124,7 @@ class DBSDataset:
                     dsoutconfdaoin={}
                     dsoutconfdaoin["dataset_id"]=dsdaoinput["dataset_id"]
                     dsoutconfdaoin["output_mod_config_id"] = self.outconfigid.execute(anOutConfig["app_name"], \
-										anOutConfig["version"], anOutConfig["hash"], conn, True) 
+										anOutConfig["release_version"], anOutConfig["pset_hash"], conn, True) 
                     dsoutconfdaoin["ds_output_mod_conf_id"]=self.sm.increment("SEQ_DC", conn, True)
                 try:
                     self.datasetoutmodconfigin.execute(dsoutconfdaoin, conn, True)

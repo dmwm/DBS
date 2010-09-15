@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.12 2010/01/06 16:54:14 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.13 2010/01/07 17:30:43 afaq Exp $"
+__version__ = "$Revision: 1.13 $"
 
 import re
 import cjson
@@ -62,7 +62,7 @@ class DBSWriterModel(DBSReaderModel):
         Insert an output configuration (formely known as algorithm config) in DBS
         Gets the input from cherrypy request body.
         input must be a dictionary with at least the following keys:
-        app_name, version (release_version), hash (pset_hash), output_module_label
+        app_name, release_version, pset_hash , output_module_label
 
         """
 
@@ -186,7 +186,7 @@ class DBSWriterModel(DBSReaderModel):
 	    file_lumi_list (optional, default = []): [{"run_num": 123, "lumi_section_num": 12},{}....] <br />
 	    file_parent_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
 	    file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
-	    file_output_config_list(optional, default = []) :[{"app_name":..., "version":..., "hash":...., output_module_label":...},{}.....] <br />
+	    file_output_config_list(optional, default = []) :[{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] <br />
         """
         body = request.body.read()
         indata = cjson.decode(body)["files"]
