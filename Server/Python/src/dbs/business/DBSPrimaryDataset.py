@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.2 2009/10/27 17:24:47 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.3 2009/10/28 09:52:55 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -31,23 +31,21 @@ class DBSPrimaryDataset:
         primarydsname, primarydstype, creationdate, createby
         it builds the correct dictionary for dao input and executes the dao
         """
-        primdstplist = self.daofactory(classname="PrimaryDSType.List")
+        primdstpgetid = self.daofactory(classname="PrimaryDSType.GetID")
         primdsinsert = self.daofactory(classname="PrimaryDataset.Insert")
         seqmanager = self.daofactory(classname="SequenceManager")
 
         primdsname = businput["primarydsname"]
         primdstype = businput["primarydstype"]
-        primdsObj = businput
-        primdsObj.pop("primarydstype")
+        #primdsObj = businput
+        businput.pop("primarydstype")
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            primarydstypeslist = primdstplist.execute(primdstype, conn, True)
-            assert len(primarydstypeslist) == 1, "PrimaryDSType %s does not exist" % (primdstype)
-            primdstypeid = primarydstypeslist[0]["primary_ds_type_id"]
+            primdstypeid = primdstpgetid.execute(primdstype) 
             primdsid = seqmanager.increment("SEQ_PDS", conn, True)
-            primdsObj.update({"primarydstypeid":primdstypeid, "primarydsid":primdsid})
-            primdsinsert.execute(primdsObj, conn, True)
+            businput.update({"primarydstypeid":primdstypeid, "primarydsid":primdsid})
+            primdsinsert.execute(businput, conn, True)
             tran.commit()
         except Exception, e:
             tran.rollback()
