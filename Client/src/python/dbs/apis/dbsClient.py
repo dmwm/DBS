@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.10 $"
-# $Id: dbsClient.py,v 1.10 2009/11/16 20:36:19 afaq Exp $"
+# $Revision: 1.11 $"
+# $Id: dbsClient.py,v 1.11 2009/11/30 21:24:09 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -47,14 +47,14 @@ class DbsApi:
 		res='{"FAILED":"TRUE"}'
 		try:
 			calling=self.url+urlplus
-			print calling
+			#print calling
 			if params == {} :
 				data = urllib2.urlopen(calling)
 			else:
 				#params = json.dumps(dict(params))
 				params = cjson.encode(params)
 				req = urllib2.Request(url=calling, data=params, headers = headers)
-				req.get_method = lambda: 'PUT'
+				req.get_method = lambda: 'POST'
 				#req.add_data(params)
 				#print req
 				#data = urllib2.urlopen(req)
@@ -144,6 +144,8 @@ class DbsApi:
                 """
                 if lfn not in (None, "") : return self.callServer("/files?lfn=%s" %lfn)
                 if dataset not in (None, "") : return self.callServer("/files?dataset=%s" %dataset)
+                #if block not in (None, "") : return self.callServer("/files?block=%s" %block)
+
                 if block not in (None, "") : 
 			parts=block.split('#')
 			black_name=parts[0]+urllib.quote_plus('#')+parts[1]
