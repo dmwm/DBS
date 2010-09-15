@@ -5,7 +5,7 @@
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2009-10-08 08:27                                */
+/* Created on:            2009-10-08 13:23                                */
 /* Model version:         Version 2009-10-08                              */
 /* ---------------------------------------------------------------------- */
 
@@ -504,8 +504,8 @@ CREATE INDEX IDX_PDS_1 ON PRIMARY_DATASETS (PRIMARY_DS_TYPE_ID);
 
 CREATE TABLE DATASETS (
     DATASET_ID INTEGER CONSTRAINT NN_DS_DATASET_ID NOT NULL,
-    DATA_PATH VARCHAR2(500) CONSTRAINT NN_DS_DATA_PATH NOT NULL,
-    IS_PATH_VALID NUMBER(1) DEFAULT 1 CONSTRAINT NN_DS_IS_PATH_VALID NOT NULL,
+    DATASET VARCHAR2(500) CONSTRAINT NN_DS_DATASET NOT NULL,
+    IS_DATASET_VALID NUMBER(1) DEFAULT 1 CONSTRAINT NN_DS_IS_DATASET_VALID NOT NULL,
     PRIMARY_DS_ID INTEGER CONSTRAINT NN_DS_PRIMARY_DS_ID NOT NULL,
     PROCESSED_DS_ID INTEGER CONSTRAINT NN_DS_PROCESSED_DS_ID NOT NULL,
     DATA_TIER_ID INTEGER CONSTRAINT NN_DS_DATA_TIER_ID NOT NULL,
@@ -520,7 +520,7 @@ CREATE TABLE DATASETS (
     LAST_MODIFICATION_DATE INTEGER,
     LAST_MODIFIED_BY VARCHAR2(100),
     CONSTRAINT PK_DS PRIMARY KEY (DATASET_ID),
-    CONSTRAINT TUC_DS_DATA_PATH UNIQUE (DATA_PATH)
+    CONSTRAINT TUC_DS_DATASET UNIQUE (DATASET)
 );
 GRANT SELECT ON DATASETS TO CMS_DBS3_READ_ROLE;
 GRANT INSERT, UPDATE ON DATASETS TO CMS_DBS3_WRITE_ROLE;
@@ -544,8 +544,8 @@ CREATE INDEX ID_DS_8 ON DATASETS (CREATION_DATE);
 
 CREATE INDEX ID_DS_9 ON DATASETS (CREATE_BY);
 
-ALTER TABLE DATASETS ADD CONSTRAINT CC_DS_IS_PATH_VALID 
-    CHECK (IS_PATH_VALID in (1,0));
+ALTER TABLE DATASETS ADD CONSTRAINT CC_DS_IS_DATASET_VALID 
+    CHECK (IS_DATASET_VALID in (1,0));
 
 /* ---------------------------------------------------------------------- */
 /* Add table "BLOCKS"                                                     */
