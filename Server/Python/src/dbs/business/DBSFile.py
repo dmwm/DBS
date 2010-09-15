@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.3 2009/11/16 19:23:40 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSFile.py,v 1.4 2009/11/17 20:16:16 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -23,6 +23,7 @@ class DBSFile:
         are not specified
         """
         dao = self.daofactory(classname="File.List")
+	#should we use our own connection with transation=True ???
         return dao.execute(dataset, block, lfn)
 
     def insertFile(self, businput):
@@ -35,6 +36,8 @@ class DBSFile:
 	
 	We are trying to insert file lumi and filre parents. YG 11/16/09
         """
+	#self.logger.debug("*****THIS IS A insert File TEST*****")
+	#self.logger.error("*****THIS IS A TEST*****")
         seqmanager = self.daofactory(classname = "SequenceManager")
         #need to get the ID's of following keys
         classdict = {"DATASET":"Dataset.GetID",
@@ -54,18 +57,19 @@ class DBSFile:
                 dao = self.daofactory(classname = classdict[k])
                 firstfile[k] = dao.execute(firstfile[k], conn, True)
             fileids = seqmanager.incrementN("SEQ_FL", len(businput), conn, True)
+	    print len(businput)
             for i in range(len(businput)):
+		print i
                 f = businput[i]
                 f["FILE_ID"] = fileids[i] 
-                for k in classdict: f[k] = firstfile[k]
-		    """ 
-		    Talked with Steve F. It seems that WMCore cannot handle
-		    parameters binding with a dictionary that has more keys than
-		    what the sql request in the dao object. So one has to
-		    physically copy the input direction into a new one with exactly 
-		    same number of binding variables.
-		    """
-		    file2inster = f.copy()
+                for k in classdict: 
+		    f[k] = firstfile[k]
+		    #Talked with Steve F. It seems that WMCore cannot handle
+		    #parameters binding with a dictionary that has more keys than
+		    #what the sql request in the dao object. So one has to
+		    #physically copy the input direction into a new one with exactly 
+		    #same number of binding variables.
+		    file2insert = f.copy()
 		    file2insert.pop("FILE_LUMI_LIST")
 		    file2insert.pop("FILE_PARENT_LIST")
 		    fileinsert = self.daofactory(classname = "File.Insert")
@@ -73,29 +77,31 @@ class DBSFile:
 		    print  "Done insert file: " + file2insert["LOGICAL_FILE_NAME"];
 		    #
 		    lumi2insert = f["FILE_LUMI_LIST"]
-		    lumiIds = seqmanager.incrementN("SEQ_FLM", len(lumi2insert), conn,
+		    if(len(lumi2insert) > 0):
+			lumiIds = seqmanager.incrementN("SEQ_FLM", len(lumi2insert), conn,
 				    True)
-		    for j in range(len(lumi2insert)):
-			lumi2insert[j]["FILE_LUMI_ID"] = lumiIds[j]
-			lumi2insert[j]["FILE_ID"] = f["FILE_ID"]
-		    fileLumiDao = self.daofactory(classname = "FileLumi.Insert")
-		    fileLumiDao.execute(lumi2insert, conn, True)
-		    print "Done bulk insert for file lumi"
+			for j in range(len(lumi2insert)):
+			    lumi2insert[j]["FILE_LUMI_ID"] = lumiIds[j]
+			    lumi2insert[j]["FILE_ID"] = f["FILE_ID"]
+			fileLumiDao = self.daofactory(classname = "FileLumi.Insert")
+			fileLumiDao.execute(lumi2insert, conn, True)
+			print "Done bulk insert for file lumi"
 		    #
 		    parent2insert = f["FILE_PARENT_LIST"]
-		    fileParentIds = seqmanager.incrementN("SEQ_FP", len(parent2insert), conn,
+		    if(len(parent2insert) > 0):
+			fileParentIds = seqmanager.incrementN("SEQ_FP", len(parent2insert), conn,
 		                                        True)
-		    for m in range(len(parent2insert)):
-			parent2insert[m]["FILE_PARENT_ID"] = fileParentIds[m]
-			parent2insert[m]["THIS_FILE_ID"] = f["FILE_ID"]
-			fileDao = self.daofactory(classname ="File.List")
-			output=fileDao.execute(dataset = "", block = "",
-			    lfn=parent2insert[m][FILE_PARENT_LFN], conn, True)
-			parent2insert[m]["FILE_PARENT_LFN"] = output[0]["FILE_ID"]
-		    fileParentDao = self.daofactory(classname = "FileParent.Insert")
-		    fileParentDao.execute(parent2insert, conn, True)
-		    print "Done Bulk insert for file parentage"
+			for m in range(len(parent2insert)):
+			    parent2insert[m]["FILE_PARENT_ID"] = fileParentIds[m]
+			    parent2insert[m]["THIS_FILE_ID"] = f["FILE_ID"]
+			    result = self.listFiles(dataset = "", block = "", lfn=parent2insert[m]["FILE_PARENT_LFN"])
+			    #odd that in dao object, it convert everything in low case.
+			    parent2insert[m]["FILE_PARENT_LFN"] = result[0]["file_id"]
+			fileParentDao = self.daofactory(classname = "FileParent.Insert")
+			fileParentDao.execute(parent2insert, conn, True)
+			print "Done Bulk insert for file parentage"
 		    tran.commit()
+		    print "**** DONE****"
         except Exception, e:
             tran.rollback()
             self.logger.exception(e)
