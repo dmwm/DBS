@@ -1,14 +1,20 @@
-# DAO Object for DbsVersion table
-# $Revision: 1.1 $
-# $Id: Insert.py,v 1.1 2009/10/12 16:48:27 afaq Exp $
+#!/usr/bin/env python
+""" DAO Object for DbsVersions table """ 
+
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2009/10/20 02:19:20 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
 class Insert(DBFormatter):
 
-    sql = """INSERT INTO DBS_VERSIONS(DBS_VERSION_ID, SCHEMA_VERSION, DBS_RELEASE_VERSION, INSTANCE_NAME, INSTANCE_TYPE, CREATION_DATE, LAST_MODIFICATION_DATE) VALUES (:dbsversionid, :schemaversion, :dbsreleaseversion, :instancename, :instancetype, :creationdate, :lastmodificationdate);"""
+    def __init__(self, logger, dbi):
+            DBFormatter.__init__(self, logger, dbi)
+            self.owner = "%s." % self.dbi.engine.url.username
 
-    def getBinds( self, dbs_versionsObj ):
+            self.sql = """INSERT INTO %sDBS_VERSIONS ( DBS_VERSION_ID, SCHEMA_VERSION, DBS_RELEASE_VERSION, INSTANCE_NAME, INSTANCE_TYPE, CREATION_DATE, LAST_MODIFICATION_DATE) VALUES (:dbsversionid, :schemaversion, :dbsreleaseversion, :instancename, :instancetype, :creationdate, :lastmodificationdate) % (self.owner) ;"""
+
+    def getBinds_delme( self, dbs_versionsObj ):
             binds = {}
             if type(dbs_versionsObj) == type ('object'):
             	binds = {
@@ -36,7 +42,9 @@ class Insert(DBFormatter):
                return binds
 
 
-    def execute( self, dbs_versionsObj ):
-            binds = self.getBinds(dbs_versionsObj )
-            result = self.dbi.processData(self.sql, binds, conn = conn, transaction = transaction)
+    def execute( self, dbs_versionsObj, conn=None, transaction=False ):
+            ##binds = self.getBinds( dbs_versionsObj )
+            result = self.dbi.processData(self.sql, binds, conn, transaction)
             return
+
+

@@ -1,14 +1,20 @@
-# DAO Object for FileLumi table
-# $Revision: 1.1 $
-# $Id: Insert.py,v 1.1 2009/10/12 16:48:27 afaq Exp $
+#!/usr/bin/env python
+""" DAO Object for FileLumis table """ 
+
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2009/10/20 02:19:20 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
 class Insert(DBFormatter):
 
-    sql = """INSERT INTO FILE_LUMIS(FILE_LUMI_ID, RUN_NUM, LUMI_SECTION_NUM, FILE_ID) VALUES (:filelumiid, :runnum, :lumisectionnum, :fileid);"""
+    def __init__(self, logger, dbi):
+            DBFormatter.__init__(self, logger, dbi)
+            self.owner = "%s." % self.dbi.engine.url.username
 
-    def getBinds( self, file_lumisObj ):
+            self.sql = """INSERT INTO %sFILE_LUMIS ( FILE_LUMI_ID, RUN_NUM, LUMI_SECTION_NUM, FILE_ID) VALUES (:filelumiid, :runnum, :lumisectionnum, :fileid) % (self.owner) ;"""
+
+    def getBinds_delme( self, file_lumisObj ):
             binds = {}
             if type(file_lumisObj) == type ('object'):
             	binds = {
@@ -30,7 +36,9 @@ class Insert(DBFormatter):
                return binds
 
 
-    def execute( self, file_lumisObj ):
-            binds = self.getBinds(file_lumisObj )
-            result = self.dbi.processData(self.sql, binds, conn = conn, transaction = transaction)
+    def execute( self, file_lumisObj, conn=None, transaction=False ):
+            ##binds = self.getBinds( file_lumisObj )
+            result = self.dbi.processData(self.sql, binds, conn, transaction)
             return
+
+
