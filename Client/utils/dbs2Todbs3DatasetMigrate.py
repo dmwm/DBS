@@ -27,9 +27,10 @@ try:
 		"/Cosmics/CMSSW_3_2_7-CRAFT09_R_V4_CosmicsSeq-v1/RECO", 
 		"/Wmunu/Summer09-MC_31X_V3_7TeV_SD_L1_L2_Mu-v1/GEN-SIM-RECO", 
 		"/Wmunu/Summer09-MC_31X_V3_7TeV_SD_Mu9-v1/GEN-SIM-RECO",
-		"/ZeeJet_Pt230to300/Summer09-MC_31X_V3_7TeV-v1/GEN-SIM-RAW"
+		"/ZeeJet_Pt230to300/Summer09-MC_31X_V3_7TeV-v1/GEN-SIM-RAW",
+		"/TkCosmics38T/Summer09-STARTUP31X_V3_SuperPointing-v1/RAW-RECO"
 		]
-  datasets=["/Wmunu_Wplus-powheg/Summer09-MC_31X_V3_7TeV_MCDB-v1/USER"]
+  datasets=["/TkCosmics38T/Summer09-STARTUP31X_V3_SuperPointing-v1/RAW-RECO"]
 
   for dataset in datasets :
     blocks=api.listBlocks(dataset)
@@ -52,10 +53,11 @@ try:
         	def startElement(self, name, attrs):
 			if name == 'primary_dataset':
 				self.primary_dataset=attrs.get('primary_name')
-				self.prdsobj = {"PRIMARY_DS_NAME":self.primary_dataset, "PRIMARY_DS_TYPE": 'test'}
+				self.prdsobj = { "PRIMARY_DS_NAME" : str(self.primary_dataset), "PRIMARY_DS_TYPE": "test" }
 			if name == 'processed_dataset':
-				self.dataset={"IS_DATASET_VALID":1,"PRIMARY_DS_NAME":self.primary_dataset,"DATASET_TYPE":"PRODUCTION",
-						"GLOBAL_TAG": attrs.get('global_tag'),"XTCROSSSECTION":123,"PHYSICS_GROUP_NAME":attrs.get('physics_group_name'), 
+				self.dataset={"IS_DATASET_VALID": 1 , "PRIMARY_DS_NAME": self.primary_dataset, "PRIMARY_DS_TYPE": "test", "DATASET_TYPE":"PRODUCTION",
+						"GLOBAL_TAG": attrs.get('global_tag'),"XTCROSSSECTION":123,"PHYSICS_GROUP_NAME": "Tracker", 
+						"PROCESSING_VERSION" : "1",
 						"PROCESSED_DATASET_NAME": attrs.get('processed_datatset_name'), "ACQUISITION_ERA_NAME" : attrs.get('acquisition_era') }
 				self.processed_dataset=attrs.get('processed_datatset_name')
 
@@ -132,8 +134,6 @@ try:
         			dbs3api = DbsApi(url=url)
         			# Is service Alive
         			print dbs3api.ping()
-				import pdb
-				pdb.set_trace()
         			print self.prdsobj
         			print dbs3api.insertPrimaryDataset(self.prdsobj)
 				print self.dataset
