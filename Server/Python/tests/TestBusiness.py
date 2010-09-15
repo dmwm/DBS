@@ -1,13 +1,13 @@
 """This module provides all bascs tests for the business objects."""
 
-__revision__ = "$Id: TestBusiness.py,v 1.3 2009/10/30 16:56:01 akhukhun Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: TestBusiness.py,v 1.4 2009/11/03 16:42:25 akhukhun Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import unittest
 import logging
 from WMCore.Database.DBFactory import DBFactory
 
-INSERTCOUNT = "2023"
+INSERTCOUNT = "2027"
 
 class TestBusiness(unittest.TestCase):
     """Business layer unittests class"""
@@ -37,7 +37,7 @@ class TestBusiness(unittest.TestCase):
         self.assertEqual(len(result), 0)
         
     def test03(self):
-        """DBSDataset.Insert"""
+        """DBSDataset.insertDataset"""
         from dbs.business.DBSDataset import DBSDataset
         bo = DBSDataset(self.logger, self.dbi)
         binput = {"dataset":"/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v%s/GEN-SIM-RECO" % INSERTCOUNT,
@@ -68,7 +68,7 @@ class TestBusiness(unittest.TestCase):
         bo.listDatasets(primdsname = "a", datatiername = "c", procdsname = "vax")
 
     def test05(self):
-        """DBSBLock.Insert"""
+        """DBSBLock.insertBlock"""
         from dbs.business.DBSBlock import DBSBlock
         bo = DBSBlock(self.logger, self.dbi)
         binput = {"blockname":"/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO#" + INSERTCOUNT,
@@ -86,16 +86,52 @@ class TestBusiness(unittest.TestCase):
         
         
     def test06(self):
-        """DBSBlock.List"""
+        """DBSBlock.listBlocks"""
         from dbs.business.DBSBlock import DBSBlock
         bo = DBSBlock(self.logger, self.dbi)
         print bo.listBlocks("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO")
         print bo.listBlocks("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO",
                             "/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO#%20%")
         
+    def test07(self):
+        """DBSFile.listFiles"""
+        from dbs.business.DBSFile import DBSFile 
+        bo = DBSFile(self.logger, self.dbi)
+        bo.listFiles("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO")
+        bo.listFiles(block = "/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO#b110ad98-ab46-4f56-ad7c-ce762f2450c7")
+        
+    def test08(self):
+        """DBSFile.insertFile"""
+        from dbs.business.DBSFile import DBSFile
+        bo = DBSFile(self.logger, self.dbi)
+        binput = []
+        for k in range(100):
+            file = {"logicalfilename":"bfile_" + INSERTCOUNT + str(k) + ".root",
+                    "isfilevalid":True,
+                    "dataset":"/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO",
+                    "block":"/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO#2015",
+                    "filetype":"EDM",
+                    "checksum":"999",
+                    "eventcount":1000,
+                    "filesize":1024,
+                    "branchhash":"branchhash",
+                    "adler32":"adler32",
+                    "md5":"md5",
+                    "autocrosssection":12345.,
+                    "creationdate":1234,
+                    "createby":"aleko@cornell.edu",
+                    "lastmodificationdate":12345,
+                    "lastmodifiedby":"aleko@cornell.edu"}
+            binput.append(file)
+        bo.insertFile(binput)
+        
+        
         
 if __name__ == "__main__":
     
-    SUITE = unittest.TestLoader().loadTestsFromTestCase(TestBusiness)
+    #SUITE = unittest.TestLoader().loadTestsFromTestCase(TestBusiness)
+    SUITE = unittest.TestSuite()
+    SUITE.addTest(TestBusiness("test08"))
+    
     unittest.TextTestRunner(verbosity=2).run(SUITE)
 

@@ -1,9 +1,9 @@
 """This module provides all basic tests for the server"""
 
-__revision__ = "$Id: TestServer.py,v 1.3 2009/10/30 16:56:45 akhukhun Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: TestServer.py,v 1.4 2009/11/03 16:42:25 akhukhun Exp $"
+__version__ = "$Revision: 1.4 $"
 
-INSERTCOUNT = "24"
+INSERTCOUNT = "3005"
 
 import json
 import unittest
@@ -63,9 +63,34 @@ class TestServer(unittest.TestCase):
         "listBlocks"
         self.cli.get("blocks/a/b/c/d")
 
-
+    def test07(self):
+        "listFiles"
+        self.cli.get("files/a/b/c")
+        self.cli.get("files/a/b/c/d")
+        self.cli.get("files/a/b/c/d/*e")
+        self.cli.get("files?lfn=*")
+        
+    def test08(self):
+        "insertFile"
+        sinput = []
+        for k in range(100):
+            file = {"logicalfilename":"sfile_"+INSERTCOUNT+str(k) + ".root",
+                    "isfilevalid":True,
+                    "block":"/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO#2015",
+                    "filetype":"EDM",
+                    "checksum":"999",
+                    "eventcount":10000,
+                    "filesize":1024.,
+                    "branchhash":"branchhash",
+                    "adler32":"adler32",
+                    "md5":"md5",
+                    "autocrosssection":1234.}
+            sinput.append(file)
+        self.cli.put("files", sinput)
 
 if __name__ == "__main__":
     
-    SUITE = unittest.TestLoader().loadTestsFromTestCase(TestServer)
+    #SUITE = unittest.TestLoader().loadTestsFromTestCase(TestServer)
+    SUITE = unittest.TestSuite()
+    SUITE.addTest(TestServer("test08"))
     unittest.TextTestRunner(verbosity=2).run(SUITE)
