@@ -26,14 +26,17 @@ def makeVarName(str):
         for atok in toks:
                 if atok in ('Id', 'ID', 'id') : ret += 'ID'
                 elif atok in ('Ds', 'DS', 'ds') : ret += 'DS'
+                else: ret += atok[0].upper()+atok[1:].lower()
 		if k==0: # levale the first letter of first part as lowe case
 			k=1
 			ret = atok.lower()
 			continue
-                else: ret += atok[0].upper()+atok[1:].lower()
         if len(toks) <= 0: ret=str
         return ret 
 
+
+
+typ_map={'String':'String', 'Integer':'int', 'CLOB':'String', 'Float' : 'float'}
 
 lines=open("../DDL/DBS3-Oracle.sql", "r").readlines()
 tablefound=0
@@ -59,10 +62,12 @@ for aline in lines:
 			else:
 				classname=classname.split('_')[0]+classname[classname.find("_")+1].upper()+classname[classname.find("_")+2:].lower()
 
-		str= """/**
+		classname=classname[:len(classname)-1]
+
+		header= """/**
  * 
- $Revision: 1.1 $"
- $Id: generate_dataobjs.py,v 1.1 2009/09/04 18:58:21 afaq Exp $"
+ $Revision: 1.2 $"
+ $Id: generate_dataobjs.py,v 1.2 2009/09/04 20:21:16 afaq Exp $"
  *
  * Data Object from table : %s
 */
@@ -76,32 +81,28 @@ public class %s extends JSONObject {
 	}
 """ % (table, classname, classname)
 
-		f=open(classname+".java", "w")
-		f.write(str)
 		k=0
 		ctor=''
 		putonce=''
-		for acol in col_list:
+		for (acol, typ) in col_list:
 
 			mthd=makeMethodName(acol)
 			var=makeVarName(acol)
 			getmthd="""
-	String get%s() {
-		String %s = null;
+	%s get%s ( ) {
+		%s %s = null;
                	if (!JSONObject.NULL.equals(this.get("%s"))) {
-                       	%s = (String) this.get("%s");
+                       	%s = (%s) this.get("%s");
                	}
                 return %s;
         }
-	""" % (mthd, var, acol, var, acol, var)		
-			f.write(getmthd)
-				
+	""" % (typ_map[typ], mthd, typ, var, acol, var, typ, acol, var)		
 			# Prepare CTOR line
 			if k==0 : 
-				ctor += var
+				ctor += typ_map[typ]+' '+var
 				k=1
-			else : 	ctor += ', '+ var
-			putonce += '\n            this.putOnce("%s", (String) %s );' % ( acol, var )
+			else : 	ctor += ', '+ typ_map[typ]+' '+var
+			putonce += '\n                this.putOnce("%s", (%s) %s );' % ( acol, typ, var )
 
 
 		ctor_stmt="""
@@ -110,7 +111,10 @@ public class %s extends JSONObject {
         }
 """ % ( classname , ctor, putonce )
 
+		f=open(classname+".java", "w")
+		f.write(header)
 		f.write(ctor_stmt)
+		f.write(getmthd)
 		f.write("\n}") # close the class def
 		f.close()
 		table=""
@@ -132,5 +136,10 @@ public class %s extends JSONObject {
 
 		if aline.strip() in ('') : continue
 		col=aline.split()[0]
-		col_list.append(col)
+		typ=aline.split()[1]
+		if typ.startswith('INTEGER') : typ="Integer"
+		if typ.startswith('VARCHAR') : typ="String"
+		if typ.startswith('NUMBER') : typ="Integer"
+		if typ.startswith('FLOAT') : typ="Float"
+		col_list.append((col, typ))
 
