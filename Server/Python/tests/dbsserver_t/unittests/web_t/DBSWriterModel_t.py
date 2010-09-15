@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.11 2010/01/22 22:51:56 afaq Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.12 2010/01/26 17:30:32 yuyi Exp $"
+__version__ = "$Revision: 1.12 $"
 
 import os
 import sys
@@ -40,6 +40,23 @@ release_version='CMSSW_1_2_3'
 site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
 flist=[]
+
+outDict={
+"primary_ds_name" : primary_ds_name,
+"procdataset" : procdataset,
+"tier" : tier,
+"dataset" : dataset,
+"app_name" : app_name,
+"output_module_label" : output_module_label,
+"pset_hash" : pset_hash,
+"release_version" : release_version,
+"site" : site,
+"block" : block,
+"files" : []
+}
+
+
+
 
 class DBSWriterModel_t(unittest.TestCase):
 
@@ -263,8 +280,11 @@ class DBSWriterModel_t(unittest.TestCase):
 	    flist.append(f)
 	data={"files":flist}
 	api.insert('files', data)
- 
-   
+	
+    def test2000(self):
+	infoout=open("info.dict", "w")
+	infoout.write("info="+str(outDict))
+	infoout.close()
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSWriterModel_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
