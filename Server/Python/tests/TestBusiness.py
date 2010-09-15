@@ -1,7 +1,7 @@
 """This module provides all bascs tests for the business objects."""
 
-__revision__ = "$Id: TestBusiness.py,v 1.5 2009/11/12 15:21:43 akhukhun Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: TestBusiness.py,v 1.6 2009/11/29 11:37:55 akhukhun Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import unittest
 import logging
@@ -13,8 +13,7 @@ class TestBusiness(unittest.TestCase):
     """Business layer unittests class"""
     def setUp(self):
         """setup all necessary parameters"""
-        url = "oracle://cms_dbs_afaq:anzpw03062009@oradev10.cern.ch:10520/D10"
-        #url = "oracle://CMS_DBS3_OWNER:new4_dbs3@uscmsdb03.fnal.gov:1521/cmscald"
+        url = "oracle://user:password@host:port/sid"
         self.logger = logging.getLogger("dbs test logger")
         self.dbi = DBFactory(self.logger, url).connect()
         
