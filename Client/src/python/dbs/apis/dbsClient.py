@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.8 $"
-# $Id: dbsClient.py,v 1.8 2009/11/11 22:52:45 afaq Exp $"
+# $Revision: 1.9 $"
+# $Id: dbsClient.py,v 1.9 2009/11/12 22:47:17 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -40,12 +40,13 @@ class DbsApi:
 		res='{"FAILED":"TRUE"}'
 		try:
 			calling=self.url+urlplus
-			#print calling
+			print calling
 			if params == {} :
 				data = urllib2.urlopen(calling)
 			else:
 				params = json.dumps(dict(params))
-				req = urllib2.Request(url=calling)
+				req = urllib2.Request(url=calling, headers = header)
+				req.get_method = lambda: 'PUT'
 				req.add_data(params)
 				data = urllib2.urlopen(req)
 
@@ -122,17 +123,22 @@ class DbsApi:
                 * API to list A block in DBS 
                 * name : name of the block
                 """
-		return self.callServer("/blocks?block=%s" %block)
-		#parts=name.split('#')
-		#black_name=parts[0]+urllib.quote_plus('#')+parts[1]
-                #return self.callServer("/Blocks/%s" %black_name[1:] )
+		#return self.callServer("/blocks?block=%s" %block)
+		parts=block.split('#')
+		black_name=parts[0]+urllib.quote_plus('#')+parts[1]
+                return self.callServer("/blocks?block=%s" %black_name )
 
-        def listFile(self, lfn):
+        def listFile(self, lfn="", dataset="", block=""):
                 """
                 * API to list A file in DBS 
                 * lfn : lfn of file
                 """
-                return self.callServer("/files?lfn=%s" %lfn)
+                if lfn not in (None, "") : return self.callServer("/files?lfn=%s" %lfn)
+                if dataset not in (None, "") : return self.callServer("/files?dataset=%s" %dataset)
+                if block not in (None, "") : 
+			parts=block.split('#')
+			black_name=parts[0]+urllib.quote_plus('#')+parts[1]
+			return self.callServer("/files?block=%s" %black_name)
 
         def insertFiles(self, filesList=[]):
                 """
@@ -143,12 +149,12 @@ class DbsApi:
 
 
 if __name__ == "__main__":
-	# Service URL
+	# JAVA Service URL
 	url="http://cmssrv48.fnal.gov:8989/DBSServlet"
 	# API Object	
-	api = DbsApi(url=url)
+	#api = DbsApi(url=url)
 	# Is service Alive
-	print api.ping()
+	#print api.ping()
 	# List ALL primary datasets
 	#print api.listPrimaryDatasets()
 	# List the dataset whoes name is TEST9
@@ -157,5 +163,9 @@ if __name__ == "__main__":
 	#print "Caling insert primary dataset..."
 	#prdsobj = {"PRIMARY_DS_NAME":"ANZAR001", "PRIMARY_DS_TYPE":"test"}
 	#api.insertPrimaryDataset(prdsobj)
-
+	
+	# Python Service URL
+	url="http://cmssrv18.fnal.gov:8585/dbs3"
+	api = DbsApi(url=url)
+	print api.listPrimaryDatasets()
 
