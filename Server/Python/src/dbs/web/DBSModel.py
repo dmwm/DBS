@@ -3,14 +3,15 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.4 2009/10/27 17:24:47 akhukhun Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSModel.py,v 1.5 2009/10/28 14:53:48 akhukhun Exp $"
+__version__ = "$Revision: 1.5 $"
 
 
 import re, json
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
+from dbs.business.DBSBlock import DBSBlock
 
 from cherrypy import request
 
@@ -83,17 +84,55 @@ class DBSModel(RESTModel):
         indata = json.loads(body)
 
         #input validation
-        pattern = re.compile("^[\w\d_-]*$")
+        valid = re.compile("^[\w\d_-]*$")
+        assert type(indata) == dict
         assert len(indata.keys()) == 2, "Invalid input, %s" %(str(indata))
-        assert pattern.match(indata["primarydsname"]), \
+        assert valid.match(indata["primarydsname"]), \
             "Invalid character(s) in primarydsname: %s" % indata["primarydsname"]
-        assert pattern.match(indata["primarydstype"]), \
+        assert valid.match(indata["primarydstype"]), \
             "Invalid character(s) in primarydstype: %s" % indata["primarydstype"]
         
         indata.update({"creationdate":123456, "createby":"me"})
         bo = DBSPrimaryDataset(self.logger, self.dbi)
         bo.insertPrimaryDataset(indata)
     
+    def insertBlock(self):
+        """
+        gets the input from cherrypy request body.
+        input must be a dictionary with the following keys:
+        blockname:/string/string/string#string
+        openforwriting bool
+        sitename string
+        blocksize int
+        filecount int
+        """
+        body = request.body.read()
+        indata = json.loads(body)
+        
+        validblockname = re.compile("^/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+#[\w\d_-]+$")
+        
+        assert type(indata) == dict
+        assert len(indata.keys()) == 5
+        assert "blockname" in indata.keys()
+        assert valid.match(indata["blockname"]), \
+            "Invalid input format of %s, must be /a/b/c#d." % indata["blockname"] 
+        dlist = indata["blockname"].split("/")
+        dataset = "/" + dlist[1] + "/" + dlist[2] + "/" + dlist[3]
+        indata["dataset"] = dataset
+        indata["blocksize"] = int(indata["blocksize"])
+        indata["filecount"] = int(indata["filecount"])
+        indata.update({"creationdate":123456,
+                       "createby":"me",
+                       "lastmodificationdate":12345,
+                       "lastmodifiedby":"me"})
+        bo = DBSBlock(self.logger, self.dbi)
+        bo.insertBlock(indata)
+        
+        
+            
+            
+            
+        
     def donothing(self, *args, **kwargs):
         """
         doing nothing
