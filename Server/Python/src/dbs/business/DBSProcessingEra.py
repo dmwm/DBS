@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 """
-This module provides business object class to interact with DBSAcqusitionEra. 
+This module provides business object class to interact with DBSProcessingEra. 
 """
 
-__revision__ = "$Id: DBSAcquisitionEra.py,v 1.2 2009/12/28 16:55:29 afaq Exp $"
+__revision__ = "$Id: DBSProcessingEra.py,v 1.1 2009/12/28 16:55:29 afaq Exp $"
 __version__ = "$Revision $"
 
 from WMCore.DAOFactory import DAOFactory
 
-class DBSAcquisitionEra:
+class DBSProcessingEra:
     """
-    DBSAcqusition Era business object class
+    DBSProcessing Era business object class
     """
     def __init__(self, logger, dbi, owner):
         daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
@@ -18,36 +18,39 @@ class DBSAcquisitionEra:
         self.dbi = dbi
         self.owner = owner
 
-        #self.acqlist = daofactory(classname="AcquisitionEra.List")
-        self.acqin = daofactory(classname="AcquisitionEra.Insert")
+        #self.pelist = daofactory(classname="ProcessingEra.List")
+        self.pein = daofactory(classname="ProcessingEra.Insert")
         self.sm = daofactory(classname="SequenceManager")
 
 
-    def listAcquisitionEras(self):
+    def listProcessingEras(self):
         """
-        Returns all AcquisitionEras.
+        Returns all primary datasets if primdsname is not passed.
         """
-        return self.acqlist.execute()
+        return self.pelist.execute()
 
 
-    def insertAcquisitionEra(self, businput):
+    def insertProcessingEra(self, businput):
         """
         Input dictionary has to have the following keys:
-        acquisition_era_name, creation_date, create_by
+        processing_version, creation_date, create_by, description
         it builds the correct dictionary for dao input and executes the dao
         """
+	import pdb
+	pdb.set_trace()
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-	    businput["acquisition_era_id"] = self.sm.increment("SEQ_AQE", conn, True)
-	    assert businput["acquisition_era_name"]
+	    businput["processing_era_id"] = self.sm.increment("SEQ_PE", conn, True)
+	    assert businput["processing_version"]
+	    assert businput["description"]
 	    assert businput["creation_date"]
 	    assert businput["create_by"]
-            self.acqin.execute(businput, conn, True)
+            self.pein.execute(businput, conn, True)
             tran.commit()
         except Exception, ex:
                 if str(ex).lower().find("unique constraint") != -1 :
-                        # already exists
+                        # already exist
                         self.logger.warning("Unique constraint violation being ignored...")
                         self.logger.warning("%s" % ex)
 			pass
