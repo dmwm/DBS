@@ -1,5 +1,5 @@
 import os
-lines=open("../DDL/DBS3-Oracle.sql", "r").readlines()
+lines=open("../DDL/create-oracle-schema.sql", "r").readlines()
 tablefound=0
 table=""
 col_list=[]
@@ -19,21 +19,21 @@ trig_tbl_map = {"ACQUISITION_ERAS" : "AQE",
 "FILES": "FL" ,
 "FILE_LUMIS": "FLM" ,
 "FILE_PARENTS": "FP" ,
-"FILE_PROCESS_CONFIGS": "FPC" ,
+"FILE_OUTPUT_MOD_CONFIGS": "FC" ,
 "FILE_TYPES": "FT" ,
 "PARAMETER_SET_HASHES": "PSH" ,
-"PATHS": "PH" ,
-"PATH_PARENTS": "PP" ,
-"PATH_PROCESS_CONFIGS": "PPC" ,
-"PATH_RUNS": "PR" ,
-"PATH_TYPES": "PT" ,
+"DATASETS": "DS" ,
+"DATASET_PARENTS": "DP" ,
+"DATASET_OUTPUT_MOD_CONFIGS": "DC" ,
+"DATASET_RUNS": "DR" ,
+"DATASET_TYPES": "DTP" ,
 "PHYSICS_GROUPS": "PG" ,
 "PRIMARY_DATASETS": "PDS" ,
 "PRIMARY_DS_TYPES": "PDT" ,
 "PROCESSED_DATASETS": "PSDS" ,
 "PROCESSING_ERAS": "PE" ,
-"PROCESS_CONFIGURATIONS": "PC" ,
-"RELEASE_VERSIONS": "RV" ,
+"OUTPUT_MODULE_CONFIGS": "OMC" ,
+"RELEASE_VERSIONS": "RVV" ,
 "SITES": "SI" ,
 "STORAGE_ELEMENTS": "SE" ,
 }
