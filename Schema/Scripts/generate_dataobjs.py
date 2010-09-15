@@ -66,8 +66,8 @@ for aline in lines:
 
 		header= """/**
  * 
- $Revision: 1.2 $"
- $Id: generate_dataobjs.py,v 1.2 2009/09/04 20:21:16 afaq Exp $"
+ $Revision: 1.3 $"
+ $Id: generate_dataobjs.py,v 1.3 2009/09/04 20:25:48 afaq Exp $"
  *
  * Data Object from table : %s
 */
@@ -84,11 +84,12 @@ public class %s extends JSONObject {
 		k=0
 		ctor=''
 		putonce=''
+		getmthd=''
 		for (acol, typ) in col_list:
 
 			mthd=makeMethodName(acol)
 			var=makeVarName(acol)
-			getmthd="""
+			getmthd+="""
 	%s get%s ( ) {
 		%s %s = null;
                	if (!JSONObject.NULL.equals(this.get("%s"))) {
@@ -96,7 +97,7 @@ public class %s extends JSONObject {
                	}
                 return %s;
         }
-	""" % (typ_map[typ], mthd, typ, var, acol, var, typ, acol, var)		
+	""" % (typ_map[typ], mthd, typ_map[typ], var, acol, var, typ, acol, var)		
 			# Prepare CTOR line
 			if k==0 : 
 				ctor += typ_map[typ]+' '+var
