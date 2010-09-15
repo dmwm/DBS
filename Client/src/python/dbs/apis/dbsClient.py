@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.11 $"
-# $Id: dbsClient.py,v 1.11 2009/11/30 21:24:09 afaq Exp $"
+# $Revision: 1.12 $"
+# $Id: dbsClient.py,v 1.12 2009/12/04 19:45:02 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -18,8 +18,9 @@ except:
 	import simplejson as json
 
 class DbsApi:
-        def __init__(self, url=""):
+        def __init__(self, url="", proxy=""):
                 self.url=url
+		self.proxy=proxy
 		self.opener =  urllib2.build_opener()
 
 	def callServer(self, urlplus="", params={}):
@@ -47,9 +48,12 @@ class DbsApi:
 		res='{"FAILED":"TRUE"}'
 		try:
 			calling=self.url+urlplus
-			#print calling
+			proxies={}
+			if self.proxy not in (None, ""):
+				proxies = { 'http': self.proxy }
+			print calling
 			if params == {} :
-				data = urllib2.urlopen(calling)
+				data = urllib.urlopen(calling, proxies=proxies)
 			else:
 				#params = json.dumps(dict(params))
 				params = cjson.encode(params)
@@ -177,6 +181,9 @@ if __name__ == "__main__":
 	
 	# Python Service URL
 	url="http://cmssrv18.fnal.gov:8585/dbs3"
-	api = DbsApi(url=url)
+	read_proxy="http://cmst0frontier1.cern.ch:3128"
+	read_proxy="http://cmsfrontier1.fnal.gov:3128"
+	read_proxy={}
+	api = DbsApi(url=url, read_proxy)
 	print api.listPrimaryDatasets()
 
