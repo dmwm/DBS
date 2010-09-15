@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.5 2009/12/22 13:40:42 akhukhun Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.6 2009/12/23 15:47:14 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -12,6 +12,8 @@ from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
+
+__server__version__ = "$Name:  $"
 
 class DBSReaderModel(RESTModel):
     """
@@ -22,7 +24,7 @@ class DBSReaderModel(RESTModel):
         All parameters are provided through DBSConfig module
         """
         RESTModel.__init__(self, config)
-        self.version = config.version
+        self.version = self.getServerVersion()
         
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
         self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
@@ -45,6 +47,15 @@ class DBSReaderModel(RESTModel):
                                          'call': func,
                                          'validation': validation,
                                          'version': version}
+
+    def getServerVersion(self):
+        """
+        Reading from __version__ tag, determines the version of the DBS Server
+        """
+        version = __server__version__.replace("$Name: ", "")
+        version = version.replace("$", "")
+        version = version.strip()
+        return version
 
     def getServerInfo(self):
         """
