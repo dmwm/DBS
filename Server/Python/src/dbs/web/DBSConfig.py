@@ -2,8 +2,8 @@
 DBS Server  configuration file
 """
 
-__revision__ = "$Id: DBSConfig.py,v 1.5 2009/11/19 17:31:49 akhukhun Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSConfig.py,v 1.6 2009/11/19 18:58:10 akhukhun Exp $"
+__version__ = "$Revision: 1.6 $"
 
 
 import os, logging
@@ -31,8 +31,8 @@ active.section_('dbs3')
 active.dbs3.object = 'WMCore.WebTools.RESTApi'
 #active.dbs3.database = 'mysql://dbs:cmsdbs@localhost:3306/DBS_3_0_0'
 #active.dbs3.database = 'oracle://cms_dbs_afaq:anzpw03062009@devdb10'
-active.dbs3.database = 'oracle://cms_dbs_afaq:anzpw03062009@oradev10.cern.ch:10520/D10'
-#active.dbs3.database = 'oracle://CMS_DBS3_OWNER:new4_dbs3@uscmsdb03.fnal.gov:1521/cmscald'
+#active.dbs3.database = 'oracle://cms_dbs_afaq:anzpw03062009@oradev10.cern.ch:10520/D10'
+active.dbs3.database = 'oracle://CMS_DBS3_OWNER:new4_dbs3@uscmsdb03.fnal.gov:1521/cmscald'
 active.dbs3.section_('model')
 active.dbs3.model.object = 'dbs.web.DBSModel'
 active.dbs3.section_('formatter')
