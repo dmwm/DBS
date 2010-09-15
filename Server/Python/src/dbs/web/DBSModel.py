@@ -3,11 +3,18 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.1 2009/10/15 19:28:56 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSModel.py,v 1.2 2009/10/21 19:28:21 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 
-import re, json
+import re
+try:
+	# Python 2.6
+	import json
+except:
+	# Prior to 2.6 requires simplejson
+	import simplejson as json
+
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from cherrypy import request
