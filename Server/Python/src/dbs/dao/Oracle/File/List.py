@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.9 2009/11/30 09:53:44 akhukhun Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: List.py,v 1.10 2009/12/04 16:33:38 akhukhun Exp $"
+__version__ = "$Revision: 1.10 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -55,6 +55,17 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
         return {"result":dictOut} 
 
 
+    def ResultIter(self, cursor, size=100):
+        'An iterator that uses fetchmany to keep memory usage down'
+        done = False
+        while not done:
+            results = cursor.fetchmany(size)
+            if results == []:
+                done = True
+            for result in results:
+                yield result
+
+
     def execute(self, dataset = "", block = "", lfn = "",  \
                 conn = None, transaction = False):
         """
@@ -83,5 +94,22 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
         else:
             raise Exception("Either dataset or block must be provided")
         
-        result = self.dbi.processData(sql, binds, conn, transaction)
-        return self.formatDict(result)
+        #this was before
+        #result = self.dbi.processData(sql, binds, conn, transaction)
+        #return self.formatDict(result)
+        # let's forget about the nested output now and optimize without it.
+        #return [dict(r) for r in result[0].fetchall()]
+       
+        conn = self.dbi.connection()
+        result = conn.execute(sql, binds)
+
+        #return  [dict(r) for r in result] # same as fetchone
+
+        #return [dict(r) for r in result.fetchall()]
+
+        #I will leave this one for now. looks better... set the same arraysize in cx_Oracle
+        #return [dict(r) for r in self.ResultIter(result, 500)] #set the same arraysize for cx_Oracle
+
+        #return generator
+        return (dict(r) for r in self.ResultIter(result, 500)) #set the same arraysize for cx_Oracle
+
