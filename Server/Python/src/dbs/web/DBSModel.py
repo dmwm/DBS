@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.2 2009/10/21 19:28:21 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSModel.py,v 1.3 2009/10/21 21:24:52 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 
 import re
@@ -17,6 +17,7 @@ except:
 
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
+from dbs.business.DBSDataset import DBSDataset
 from cherrypy import request
 
 class DBSModel(RESTModel):
@@ -31,6 +32,7 @@ class DBSModel(RESTModel):
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
         self.addService('GET', 'listPrimaryDatasets', self.listPrimaryDatasets, ['primdsname'])
         self.addService('PUT', 'insertPrimaryDataset', self.insertPrimaryDataset)
+        self.addService('GET', 'listDatasets', self.listDatasets)
         self.addService('POST', 'post', self.donothing)
         self.addService('DELETE', 'delete', self.donothing)
 
@@ -56,6 +58,16 @@ class DBSModel(RESTModel):
         data.update({'result':result})
         return data
 
+    def listDatasets(self):
+        """
+        list dataset api.
+        """
+        data = {}
+        bo = DBSDataset(self.logger, self.dbi)
+        result = bo.listDatasets()
+        data.update({'result':result})
+        return data
+
     def insertPrimaryDataset(self):
         """
         gets the input from cherrypy request body.
@@ -77,6 +89,27 @@ class DBSModel(RESTModel):
         bo = DBSPrimaryDataset(self.logger, self.dbi)
         bo.insertPrimaryDataset(input)
     
+
+    def insertDataset(self):
+        """
+        gets the input from cherrypy request body.
+        """
+        body = request.body.read()
+        input = json.loads(body)
+
+        #input validation
+        pattern = re.compile("^[\w\d_-]*$")
+        assert len(input.keys()) == 2, "Invalid input, %s" %(str(input))
+        assert pattern.match(input["primarydsname"]), \
+            "Invalid character(s) in primarydsname: %s" % input["primarydsname"]
+        assert pattern.match(input["primarydstype"]), \
+            "Invalid character(s) in primarydstype: %s" % input["primarydstype"]
+
+        input.update({"creationdate":123456, "createby":"me"})
+        bo = DBSPrimaryDataset(self.logger, self.dbi)
+        bo.insertPrimaryDataset(input)
+
+
     def donothing(self, *args, **kwargs):
         """
         doing nothing
