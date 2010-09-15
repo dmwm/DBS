@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.10 2010/01/27 15:29:14 yuyi Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.11 2010/01/27 23:13:23 dsr Exp $"
+__version__ = "$Revision: 1.11 $"
 
 import os, sys, imp
 import json
@@ -273,104 +273,104 @@ class DBSReaderModel_t(unittest.TestCase):
             
     def test42(self):
         """Test42 web.DBSReaderModel.listOutputConfigs: basic test"""
-	api.list('outputconfigurations')
+	api.list('outputconfigs')
     
     def test43(self):
         """Test43 web.DBSReaderModel.listOutputConfigs: basic test"""
-	api.list('outputconfigurations', dataset="*")
+	api.list('outputconfigs', dataset="*")
 
     def test44(self):
         """Test44 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', dataset=testparams['dataset'])
+        api.list('outputconfigs', dataset=testparams['dataset'])
 
     def test45(self):
         """Test45 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', dataset=testparams['dataset']+"*")
+        api.list('outputconfigs', dataset=testparams['dataset']+"*")
 	
     def test46(self):
         """Test46 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', logical_file_name="*")
+        api.list('outputconfigs', logical_file_name="*")
 
     def test47(self):
         """Test47 web.DBSReaderModel.listOutputConfigs: basic test"""
 	#need to be updated with LFN
 	lfn= testparams['files'][1]['logical_file_name']
-        api.list('outputconfigurations', logical_file_name=lfn)
+        api.list('outputconfigs', logical_file_name=lfn)
 
     def test48(self):
         """Test48 web.DBSReaderModel.listOutputConfigs: basic test""" 
         #need to be updated with LFN 
 	lfn= testparams['files'][1]['logical_file_name']
-        api.list('outputconfigurations', logical_file_name=lfn+"*")
+        api.list('outputconfigs', logical_file_name=lfn+"*")
 
     def test49(self):
         """Test49 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', release_version="*")
+        api.list('outputconfigs', release_version="*")
 
     def test50(self):
         """Test50 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', release_version=testparams['release_version'])
+        api.list('outputconfigs', release_version=testparams['release_version'])
 
     def test51(self):
         """Test51 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', release_version=testparams['release_version']+'*')
+        api.list('outputconfigs', release_version=testparams['release_version']+'*')
 
     def test52(self):
         """Test52 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', pset_hash="*")
+        api.list('outputconfigs', pset_hash="*")
 
     def test53(self):
         """Test53 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', pset_hash=testparams['pset_hash'])
+        api.list('outputconfigs', pset_hash=testparams['pset_hash'])
 
     def test54(self):
 	"""Test54 web.DBSReaderModel.listOutputConfigs: basic test"""
-	api.list('outputconfigurations', app_name="*")
+	api.list('outputconfigs', app_name="*")
 
     def test55(self):
         """Test55 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', app_name=testparams['app_name'])
+        api.list('outputconfigs', app_name=testparams['app_name'])
 
     def test56(self):
         """Test56 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', app_name=testparams['app_name']+"*")
+        api.list('outputconfigs', app_name=testparams['app_name']+"*")
 
     def test56(self):
         """Test56 web.DBSReaderModel.listOutputConfigs: basic test"""
-	api.list('outputconfigurations', output_module_label="*")
+	api.list('outputconfigs', output_module_label="*")
  
     def test57(self):
         """Test57 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', output_module_label=testparams['output_module_label'])
+        api.list('outputconfigs', output_module_label=testparams['output_module_label'])
 
     def test58(self):
         """Test58 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', output_module_label=testparams['output_module_label']+'*')
+        api.list('outputconfigs', output_module_label=testparams['output_module_label']+'*')
 
     def test60(self):
         """Test60 web.DBSReaderModel.listOutputConfigs: basic test"""
-	api.list('outputconfigurations', dataset=testparams['dataset'],
-                                              logical_file_name="*",
-                                              release_version=testparams['release_version'],
-                                              pset_hash=testparams['pset_hash'],
-                                              app_name=testparams['app_name'],
-                                              output_module_label=testparams['output_module_label'])
+	api.list('outputconfigs', dataset=testparams['dataset'],
+                                  logical_file_name="*",
+                                  release_version=testparams['release_version'],
+                                  pset_hash=testparams['pset_hash'],
+                                  app_name=testparams['app_name'],
+                                  output_module_label=testparams['output_module_label'])
 
     def test61(self):
         """Test61 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', dataset=testparams['dataset'],
-                                              release_version=testparams['release_version'],
-                                              output_module_label=testparams['output_module_label'])
+        api.list('outputconfigs', dataset=testparams['dataset'],
+                                  release_version=testparams['release_version'],
+                                  output_module_label=testparams['output_module_label'])
 
     def test62(self):
         """Test62 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', logical_file_name="*",
-                                              app_name=testparams['app_name'],
-                                              output_module_label=testparams['output_module_label'])
+        api.list('outputconfigs', logical_file_name="*",
+                                  app_name=testparams['app_name'],
+                                  output_module_label=testparams['output_module_label'])
     def test63(self):
         """Test63 web.DBSReaderModel.listOutputConfigs: basic test"""
-        api.list('outputconfigurations', dataset=testparams['dataset'],
-                                              release_version=testparams['release_version'])
+        api.list('outputconfigs', dataset=testparams['dataset'],
+                                  release_version=testparams['release_version'])
 
     def test64(self):
         """Test64 web.DBSReaderModel.listFileParents: basic test"""
