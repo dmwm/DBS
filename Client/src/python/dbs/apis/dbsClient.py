@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.14 $"
-# $Id: dbsClient.py,v 1.14 2009/12/18 15:04:03 afaq Exp $"
+# $Revision: 1.15 $"
+# $Id: dbsClient.py,v 1.15 2010/01/06 16:53:08 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -96,6 +96,27 @@ class DbsApi:
                 * primaryDSObj : primary dataset object of type {}
                 """
                 return self.callServer("/primarydatasets", params = primaryDSObj )
+
+	def insertOutputConfig(self, outputConfigObj={}):
+                """
+                * API to insert An OutputConfig in DBS 
+                * outputConfigObj : Output Config object of type {}
+                """
+                return self.callServer("/outputconfigs", params = outputConfigObj )
+
+    	def insertAcquisitionEra(self, acqEraObj={}):
+                """
+                * API to insert An Acquisition Era in DBS 
+                * acqEraObj : Acquisition Era object of type {}
+                """
+                return self.callServer("/acquisitionras", params = acqEraObj )
+		
+	def insertProcessingEra(self, procEraObj={}):
+                """
+                * API to insert A Processing Era in DBS 
+                * procEraObj : Processing Era object of type {}
+                """
+                return self.callServer("/processingeras", params = procEraObj )
 
         def listDatasets(self):
                 """
