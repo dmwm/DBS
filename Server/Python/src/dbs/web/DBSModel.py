@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.15 2009/11/16 21:44:47 afaq Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: DBSModel.py,v 1.16 2009/11/16 22:18:26 afaq Exp $"
+__version__ = "$Revision: 1.16 $"
 
 import re
 import json, cjson
@@ -191,28 +191,48 @@ class DBSModel(RESTModel):
         blocksize int
         filecount int
         """
-        body = request.body.read()
-        indata = json.loads(body)
-        
-        #>>validation - will be moved to the separate method later.
-        assert type(indata) == dict
-        assert len(indata.keys()) == 5
-        assert "blockname" in indata.keys()
-        vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
-                          indata["blockname"])
-        assert vblock, "Invalid block name %s" % indata["blockname"]
-        assert type(indata["blocksize"]) == int
-        assert type(indata["filecount"]) == int
-        assert type(indata["openforwriting"]) == bool
-        
-        indata.update({"dataset":vblock.groups()[0],
-                       "creationdate":123456,
-                       "createby":"me",
-                       "lastmodificationdate":12345,
-                       "lastmodifiedby":"me"})
-        bo = DBSBlock(self.logger, self.dbi)
-        bo.insertBlock(indata)
-        
+
+	try:
+
+        	body = request.body.read()
+        	indata = json.loads(body)
+
+        	#>>validation - will be moved to the separate method later.
+        	assert type(indata) == dict
+        	#assert len(indata.keys()) == 5
+        	assert "BLOCK_NAME" in indata.keys()
+        	vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
+                          indata["BLOCK_NAME"])
+        	assert vblock, "Invalid block name %s" % indata["BLOCK_NAME"]
+       
+		block={} 
+        	block.update({
+			"dataset":vblock.groups()[0],
+                        "creationdate": indata.get("CREATION_DATE", 123456),
+                        "createby":indata.get("CREATE_BY","me"),
+                        "lastmodificationdate":indata.get("LAST_MODIFICATION_DATE", 12345),
+                        "lastmodifiedby":indata.get("LAST_MODIFIED_BY","me"),
+			"blockname":indata["BLOCK_NAME"],
+			"filecount":indata.get("FILE_COUNT", 0),
+			"blocksize":indata.get("BLOCK_SIZE", 0),
+			#"originsite":indata.get("ORIGIN_SITE", "TEST")
+			"originsite":"TEST",
+			"openforwriting":1
+			})
+	
+        	bo = DBSBlock(self.logger, self.dbi)
+        	bo.insertBlock(block)
+
+        except Exception, ex :
+                # ORA-00001: unique constraint
+                if str(ex).find("unique constraint") != -1 :
+                        self.debug("unique constraint violation being ignored")
+                else:
+                        self.debug(ex)
+                        self.debug(traceback.print_exc())
+                        raise ex
+                        #raise httplib.HTTPException(401, str(ex))        
+
     def insertFile(self):
         """
         gets the input from cherrypy request body
