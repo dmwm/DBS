@@ -17,7 +17,7 @@ from dbs.apis.dbsClient import *
 #
 import xml.sax, xml.sax.handler
 #
-print sys.argv
+#print sys.argv
 if len(sys.argv) < 2: 
 	print "Usage: python %s <url> <dataset>" %sys.argv[0]
 	sys.exit(1)
@@ -54,7 +54,7 @@ try:
 		fp.write(data)
 		fp.close()
   	#print data
-	print "Processing Dataset : %s and Block : %s " % (dataset, blockName)
+	#print "Processing Dataset : %s and Block : %s " % (dataset, blockName)
   	class Handler (xml.sax.handler.ContentHandler):
 
 		def __init__(self):
@@ -159,18 +159,18 @@ try:
 					# Lets populate this in DBS
         				# API Object  
 					if abc == "true" :
-        					print self.prdsobj
-        					print dbs3api.insertPrimaryDataset(self.prdsobj)
+        					#print self.prdsobj
+        					dbs3api.insertPrimaryDataset(self.prdsobj)
 
-						print self.dataset
-        					print dbs3api.insertDataset(self.dataset)
+						##print self.dataset
+        					dbs3api.insertDataset(self.dataset)
 						again="no"
-					print self.block
-					print dbs3api.insertBlock(self.block)
+					#print self.block
+					dbs3api.insertBlock(self.block)
 					start_time=time.time()
 					#for file in self.files:
 					#	print file
-					print dbs3api.insertFiles({"files" : self.files})
+					dbs3api.insertFiles({"files" : self.files})
 					end_time=time.time()
 					block_time['TimeSpent']=end_time-start_time
 					block_time['block_weight']=long(len(self.files))
@@ -190,12 +190,23 @@ try:
 					print ex
 				
   	xml.sax.parseString (data, Handler ())
-
-  print block_time_lst
+  print "dataset: %s" %dataset
+  print "-------------------------------------------------------------------------------------------------\n\n"
+  print "url: %s" % url
+  print "-------------------------------------------------------------------------------------------------\n\n"
+  print "RAW DATA: %s " % str(block_time_lst)
   print "\n"
+  total_t=0.0
+  total_b=0.0
   for item in block_time_lst:
-	print "Time Spent : %s (seconds) while Block Weightage is : %s [files: %s, avg lumis_per_file: %s, avg parent_per_file: %s]" % ( str(item['TimeSpent']), str(item['block_weight']), item['file_count'], str( item['file_lumi_section_count']/item['file_count'] ), str(item['file_parent_count']/item['file_count'] ) )
-
+	print "Time Spent : %s (seconds) while Block Weightage is : %s [files: %s, avg lumis_per_file: %s, avg parent_per_file: %s]" \
+				% ( str(item['TimeSpent']), str(item['block_weight']), item['file_count'], \
+						str( item['file_lumi_section_count']/item['file_count'] ), str(item['file_parent_count']/item['file_count'] ) )
+	total_t+=item['TimeSpent']
+	total_b+=item['block_weight']
+  print "-------------------------------------------------------------------------------------------------\n\n"
+  print "Total time spent: %s (seconds) for total block weightage of: %s " %( str(total_t), str(total_b) )
+  print "-------------------------------------------------------------------------------------------------\n\n"
 except DbsApiException, ex:
   print "Caught API Exception %s: %s "  % (ex.getClassName(), ex.getErrorMessage() )
   if ex.getErrorCode() not in (None, ""):
