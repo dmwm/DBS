@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.18 2010/01/19 19:41:28 afaq Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.19 2010/01/26 17:41:43 afaq Exp $"
+__version__ = "$Revision: 1.19 $"
 
 import re
 import cjson
@@ -225,7 +225,7 @@ class DBSWriterModel(DBSReaderModel):
                      "file_lumi_list":f.get("file_lumi_list",[]),
                      "file_parent_list":f.get("file_parent_list",[]),
 		     "file_assoc_list":f.get("assoc_list",[]),
-                     "file_output_config_list":f.get("output_config_list",[])})
+                     "file_output_config_list":f.get("file_output_config_list",[])})
             businput.append(f)
         self.logger.warning(businput) 
 	self.dbsFile.insertFile(businput)
