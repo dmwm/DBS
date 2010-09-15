@@ -1,27 +1,41 @@
 #!/bin/bash
 
+[ -z "$DBS3_ROOT" ] && {
+        echo "DBS3_ROOT not set"
+        exit 1
+}
+
 #setup initial test counter to construct unique insert data names
 export DBS_TEST_COUNTER=3
-export DBS_TEST_CONFIG_READER=$DBS3_ROOT/Config/cms_dbs.py
-export DBS_TEST_CONFIG_WRITER=$DBS3_ROOT/Config/cms_dbs_writer.py
+export DBS_TEST_CONFIG_READER=$DBS3_ROOT/Config/${1:-cms_dbs}.py
+export DBS_TEST_CONFIG_WRITER=$DBS3_ROOT/Config/${1:-cms_dbs}_writer.py
+
+[ -f $DBS_TEST_CONFIG_READER ] || {
+        echo "Reader config $DBS_TEST_CONFIG_READER not found"
+        exit 1
+}
+[ -f $DBS_TEST_CONFIG_WRITER ] || {
+        echo "Reader config $DBS_TEST_CONFIG_WRITER not found"
+        exit 1
+}
 
 export PYTHONPATH=$DBS3_SERVER_ROOT/tests:$PYTHONPATH
 export DBS_TEST_ROOT=$DBS3_SERVER_ROOT/tests/dbsserver_t
 
 #parse the config files to set correct database and dbowner variables
 parser=$DBS_TEST_ROOT/utils/ParseConfig.py
-export DBS_TEST_DBURL_READER=`python $parser $DBS_TEST_CONFIG_READER | head -1`
-export DBS_TEST_DBOWNER_READER=`python $parser $DBS_TEST_CONFIG_READER | tail -1`
-export DBS_TEST_DBURL_WRITER=`python $parser $DBS_TEST_CONFIG_WRITER | head -1`
-export DBS_TEST_DBOWNER_WRITER=`python $parser $DBS_TEST_CONFIG_WRITER | tail -1`
+export DBS_TEST_DBURL_READER=`python $parser $DBS_TEST_CONFIG_READER database`
+export DBS_TEST_DBOWNER_READER=`python $parser $DBS_TEST_CONFIG_READER dbowner`
+export DBS_TEST_DBURL_WRITER=`python $parser $DBS_TEST_CONFIG_WRITER database`
+export DBS_TEST_DBOWNER_WRITER=`python $parser $DBS_TEST_CONFIG_WRITER dbowner`
 
 dbstest(){
 
 if [ -z "$1" ]
     then
-	echo "Possible argumens: dao, business, web, all, or individual test files"
+	echo "Possible arguments: dao, business, web, all, or individual test files"
     else
-	export DBS_TEST_COUNTER=`expr $DBS_TEST_COUNTER + 1`
+	export DBS_TEST_COUNTER=$(( $DBS_TEST_COUNTER + 1 ))
 	echo "DBS TEST COUNTER IS: $DBS_TEST_COUNTER"
 
 	case "$1" in 
