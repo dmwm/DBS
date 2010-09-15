@@ -3,14 +3,14 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.1 2009/12/08 19:25:54 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.2 2009/12/09 17:08:44 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import re
 import cjson
 import time
 import hashlib
-
+import cherrypy
 from cherrypy import request, response, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -39,12 +39,19 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'files', self.listFiles, ['dataset', 'block', 'lfn'])
 
         cdict = self.config.dictionary_()
+	print cdict
         self.owner = cdict["dbowner"] 
 
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, self.owner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, self.owner)
         self.dbsBlock = DBSBlock(self.logger, self.dbi, self.owner)
         self.dbsFile = DBSFile(self.logger, self.dbi, self.owner)
+
+    def set_expire(self):
+            "We can add Cacche control here"
+            timestamp = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime())
+            cherrypy.response.headers['Expires'] = timestamp
+            #cherrypy.response.headers['Cache-control'] = 'no-cache'
 
     def getHash(self, instr):
 	m = hashlib.md5()
@@ -92,11 +99,12 @@ class DBSReaderModel(RESTModel):
         http://dbs3/primarydatasets/qcd_20_30
         http://dbs3/primarydatasets?primarydataset=qcd*
         """
+	self.set_expire()
 	intime=time.time()
         primds = primarydataset.replace("*","%")
         ret = self.dbsPrimaryDataset.listPrimaryDatasets(primds)
 	return self.returnDAS(intime, primds, "listPrimaryDatasets", ret)
-    
+		
     def listDatasets(self, dataset = ""):
         """
         Example url's:
