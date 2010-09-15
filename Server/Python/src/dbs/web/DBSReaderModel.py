@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.7 2009/12/23 20:41:34 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.8 2009/12/27 13:39:17 akhukhun Exp $"
+__version__ = "$Revision: 1.8 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -28,10 +28,10 @@ class DBSReaderModel(RESTModel):
         self.version = self.getServerVersion()
         
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
-        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
+        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primary_ds_name'])
         self.addService('GET', 'datasets', self.listDatasets, ['dataset'])
-        self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block'])
-        self.addService('GET', 'files', self.listFiles, ['dataset', 'block', 'lfn'])
+        self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block_name'])
+        self.addService('GET', 'files', self.listFiles, ['dataset', 'block_name', 'logical_file_name'])
         self.addService('GET', 'serverinfo', self.getServerInfo)
 
 
@@ -39,7 +39,7 @@ class DBSReaderModel(RESTModel):
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
         self.dbsBlock = DBSBlock(self.logger, self.dbi, config.dbowner)
         self.dbsFile = DBSFile(self.logger, self.dbi, config.dbowner)
-	self.dbsAcqEra = DBSAcquisitionEra(self.logger, self.dbi, config.dbowner)
+        self.dbsAcqEra = DBSAcquisitionEra(self.logger, self.dbi, config.dbowner)
         
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
@@ -58,7 +58,8 @@ class DBSReaderModel(RESTModel):
         version = version.replace("$", "")
         version = version.strip()
         return version
-
+    
+    
     def getServerInfo(self):
         """
         Method that provides information about DBS Server to the clients
@@ -68,48 +69,48 @@ class DBSReaderModel(RESTModel):
         * ETC - TBD
         """
         ret = {}
-        ret["version"] = self.version # needed by DAS so we can just use this from the config
+        ret["version"] = self.getServerVersion()
         ret["schema"] = "DBS_0_0_0"
         return ret
 
 
-    def listPrimaryDatasets(self, primarydataset = ""):
+    def listPrimaryDatasets(self, primary_ds_name = ""):
         """
         Example url's: <br />
         http://dbs3/primarydatasets/ <>
         http://dbs3/primarydatasets/qcd_20_30
-        http://dbs3/primarydatasets?primarydataset=qcd*
+        http://dbs3/primarydatasets?primary_ds_name=qcd*
         """
-        primarydataset = primarydataset.replace("*","%")
-        return self.dbsPrimaryDataset.listPrimaryDatasets(primarydataset)
+        primary_ds_name = primary_ds_name.replace("*","%")
+        return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name)
         
     def listDatasets(self, dataset = ""):
         """
-        Example url's:
-        http://dbs3/datasets
-        http://dbs3/datasets/RelVal*
-        http://dbs3/datasets?dataset=/RelVal*/*/*RECO
+        Example url's: <br />
+        http://dbs3/datasets <br />
+        http://dbs3/datasets/RelVal* <br />
+        http://dbs3/datasets?dataset=/RelVal*/*/*RECO <br />
         """
         dataset = dataset.replace("*", "%")
-        return self.dbsDataset.listDatasets(dataset = dataset)
+        return self.dbsDataset.listDatasets(dataset)
 
-    def listBlocks(self, dataset = "", block = ""):
+    def listBlocks(self, dataset = "", block_name = ""):
         """
         Example url's:
         http://dbs3/blocks?dataset=/a/b/c
-        http://dbs3/blocks?block=/a/b/c%23*d
+        http://dbs3/blocks?block_name=/a/b/c%23*d
         """
-        block = block.replace("*","%")
+        block_name = block_name.replace("*","%")
         dataset = dataset.replace("*","%")
-        return self.dbsBlock.listBlocks(dataset=dataset, block=block)
+        return self.dbsBlock.listBlocks(dataset, block_name)
     
-    def listFiles(self, dataset = "", block = "", lfn = ""):
+    def listFiles(self, dataset = "", block_name = "", logical_file_name = ""):
         """
         Example url's:
         http://dbs3/files?dataset=/a/b/c/
-        http://dbs3/files?block=a/b/c#d
+        http://dbs3/files?block_name=a/b/c#d
         http://dbs3/files?dataset=/a/b/c&lfn=/store/*
-        http://dbs3/files?block=/a/b/c%23d&lfn=/store/*
+        http://dbs3/files?block_name=/a/b/c%23d&logical_file_name=/store/*
         """
-        lfn = lfn.replace("*", "%")
-        return self.dbsFile.listFiles(dataset = dataset, block = block, lfn = lfn)
+        logical_file_name = logical_file_name.replace("*", "%")
+        return self.dbsFile.listFiles(dataset, block_name, logical_file_name)
