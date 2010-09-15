@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.3 2010/01/12 17:38:00 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: GetID.py,v 1.4 2010/01/20 22:02:54 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -28,7 +28,7 @@ class GetID(DBFormatter):
 		    ON O.PARAMETER_SET_HASH_ID=P.PARAMETER_SET_HASH_ID
 		WHERE """ % ( self.owner, self.owner, self.owner, self.owner )
         
-    def execute(self, app="", release_version="", pset_hash="", conn = None, transaction = False):
+    def execute(self, app="", release_version="", pset_hash="", output_label="", conn = None, transaction = False):
         """
         returns id for a given application
         """	
@@ -49,7 +49,10 @@ class GetID(DBFormatter):
 		sql += " P.HASH=:pset_hash"
 		binds["pset_hash"]=pset_hash
 		setAnd=True
-
+	if not output_label == "":
+		if setAnd : sql += " AND "
+		sql += " O.OUTPUT_MODULE_LABEL=:output_module_label"
+		binds["output_module_label"]=output_label
 	if app == release_version == pset_hash  == "":
             raise Exception("Either app_name, release_version or pset_hash must be provided")	
         result = self.dbi.processData(sql, binds, conn, transaction)
