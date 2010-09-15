@@ -1,6 +1,8 @@
 import logging
-from dbs.dao.Oracle.PrimaryDataset.Insert import Insert as PriInsert 
 from WMCore.Database.DBFactory import DBFactory
+
+from dbs.dao.Oracle.PrimaryDataset.Insert import Insert as PriInsert 
+from dbs.dao.Oracle.FileParentBlock import List as FPBList
 
 class Test:
 
@@ -19,6 +21,15 @@ class Test:
 	dinput = { "JUNK" : "XYZ" , "primary_ds_id":1001, "primary_ds_name": "TkCosmics38T", "primary_ds_type_id": 1, "creation_date": 1234, "create_by":"anzar"}
         dao.execute(dinput)
 
-test=Test()
-test.testPrimaryInsert()
+    def testFileParentBlock(self):
+	"""
+	Test listing of File Parent Blocks (and datasets) used by insertFiles API
+	"""
+	dao = FPBList.List(self.logger, self.dbi, "anzar")
+	ret=dao.execute(file_id=13841)
+	print ret
 
+    
+test=Test()
+#test.testPrimaryInsert()
+test.testFileParentBlock()
