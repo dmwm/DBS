@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.6 2009/11/24 10:58:12 akhukhun Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: DBSBlock.py,v 1.7 2009/11/27 09:55:02 akhukhun Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -17,13 +17,21 @@ class DBSBlock:
         self.logger = logger
         self.dbi = dbi
 
+        self.BlockList = self.daofactory(classname="Block.List")
+
+        self.SequenceManager = self.daofactory(classname = "SequenceManager")
+        self.DatasetGetID = self.daofactory(classname = "Dataset.GetID")
+        self.SiteGetID = self.daofactory(classname = "Site.GetID")
+        self.BlockInsert = self.daofactory(classname = "Block.Insert")
+
+
+
     def listBlocks(self, dataset="", block=""):
         """
         Returns all blocks in a dataset if block pattern ("can include %") 
         is not provided.
         """
-        dao = self.daofactory(classname="Block.List")
-        return dao.execute(dataset=dataset, block=block)
+        return self.BlockList.execute(dataset=dataset, block=block)
 
     def insertBlock(self, businput):
         """
@@ -32,18 +40,14 @@ class DBSBlock:
         filecount, creationdate, createby, lastmodificationdate, lastmodifiedby
         it builds the correct dictionary for dao input and executes the dao
         """
-        datasetgetid = self.daofactory(classname = "Dataset.GetID")
-        sitegetid = self.daofactory(classname = "Site.GetID")
-        blockinsert = self.daofactory(classname = "Block.Insert")
-        seqmanager = self.daofactory(classname = "SequenceManager")
 
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            businput["dataset"] = datasetgetid.execute(businput["dataset"], conn, True)
-            businput["originsite"] = sitegetid.execute(businput["originsite"], conn, True)
-            businput["blockid"] =  seqmanager.increment("SEQ_BK", conn, True)
-            blockinsert.execute(businput, conn, True)
+            businput["dataset"] = self.DatasetGetID.execute(businput["dataset"], conn, True)
+            businput["originsite"] = self.SiteGetID.execute(businput["originsite"], conn, True)
+            businput["blockid"] =  self.SequenceManager.increment("SEQ_BK", conn, True)
+            self.BlockInsert.execute(businput, conn, True)
             tran.commit()
         except Exception, e:
             tran.rollback()

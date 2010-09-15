@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.21 2009/11/24 14:31:09 akhukhun Exp $"
-__version__ = "$Revision: 1.21 $"
+__revision__ = "$Id: DBSModel.py,v 1.1 2009/11/27 09:55:03 akhukhun Exp $"
+__version__ = "$Revision: 1.1 $"
 
 import re
 import cjson
@@ -16,7 +16,6 @@ from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
-
 
 class DBSModel(RESTModel):
     """
@@ -41,6 +40,12 @@ class DBSModel(RESTModel):
         cdict = self.config.dictionary_()
         self.owner = cdict["dbowner"] 
 
+        self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, self.owner)
+        self.dbsDataset = DBSDataset(self.logger, self.dbi, self.owner)
+        self.dbsBlock = DBSBlock(self.logger, self.dbi, self.owner)
+        self.dbsFile = DBSFile(self.logger, self.dbi, self.owner)
+
+
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
         method that adds services to the DBS rest model
@@ -53,15 +58,12 @@ class DBSModel(RESTModel):
     def listPrimaryDatasets(self, primarydataset = ""):
         """
         Example url's:
-        http://dbs3/primds/
-        http://dbs3/primds/qcd_20_30
-        http://dbs3/primds/qcd*
+        http://dbs3/primarydatasets/
+        http://dbs3/primarydatasets/qcd_20_30
+        http://dbs3/primarydatasets?primarydataset=qcd*
         """
-        data = {}
         primds = primarydataset.replace("*","%")
-        bo = DBSPrimaryDataset(self.logger, self.dbi, self.owner)
-        data.update({'result':bo.listPrimaryDatasets(primds)})
-        return data
+        return self.dbsPrimaryDataset.listPrimaryDatasets(primds)
     
     def listDatasets(self, dataset = ""):
         """
@@ -71,9 +73,11 @@ class DBSModel(RESTModel):
         http://dbs3/datasets?dataset=/RelVal*/*/*RECO
         """
         dataset = dataset.replace("*", "%")
-        bo = DBSDataset(self.logger, self.dbi, self.owner)
-        return {'result':bo.listDatasets(dataset = dataset)}
-    
+        return self.dbsDataset.listDatasets(dataset = dataset)
+        #return {}
+
+
+
     def listBlocks(self, dataset = "", block = ""):
         """
         Example url's:
@@ -82,8 +86,7 @@ class DBSModel(RESTModel):
         """
         block = block.replace("*","%")
         dataset = dataset.replace("*","%")
-        bo = DBSBlock(self.logger, self.dbi, self.owner)
-        return {"result":bo.listBlocks(dataset=dataset, block=block)}
+        return self.dbsBlock.listBlocks(dataset=dataset, block=block)
     
     def listFiles(self, dataset = "", block = "", lfn = ""):
         """
@@ -93,10 +96,10 @@ class DBSModel(RESTModel):
         http://dbs3/files?dataset=/a/b/c&lfn=/store/*
         http://dbs3/files?block=/a/b/c%23d&lfn=/store/*
         """
-        bo = DBSFile(self, self.dbi, self.owner)
         lfn = lfn.replace("*", "%")
-        result = bo.listFiles(dataset = dataset, block = block, lfn = lfn)
-        return {"result":result}
+        return self.dbsFile.listFiles(dataset = dataset, block = block, lfn = lfn)
+
+
        
     def insertPrimaryDataset(self):
         """
@@ -104,20 +107,14 @@ class DBSModel(RESTModel):
         input must be a dictionary with the following two keys:
         PRIMARY_DS_NAME, PRIMARY_DS_TYPE
         """
-        try:
-            body = request.body.read()
-            indata = cjson.decode(body)
-            
-            data = {}
-            data.update({"creationdate":123456, "createby":"me"})
-            data["primarydsname"] = indata["PRIMARY_DS_NAME"]
-            data["primarydstype"] = indata["PRIMARY_DS_TYPE"]
-            bo = DBSPrimaryDataset(self.logger, self.dbi, self.owner)
-            bo.insertPrimaryDataset(data)
-
-        except Exception, ex:
-            self.logger.error(ex)
-            raise
+        body = request.body.read()
+        indata = cjson.decode(body)
+        
+        data = {}
+        data.update({"creationdate":123456, "createby":"me"})
+        data["primarydsname"] = indata["PRIMARY_DS_NAME"]
+        data["primarydstype"] = indata["PRIMARY_DS_TYPE"]
+        self.dbsPrimaryDataset.insertPrimaryDataset(data)
         
 
     def insertDataset(self):
@@ -128,33 +125,27 @@ class DBSModel(RESTModel):
         ...
         """
 
-        try :
-            body = request.body.read()
-            indata = cjson.decode(body)
-                
-            # need proper validation
-                
-            dataset={}
-            dataset['primaryds'] = indata['PRIMARY_DS_NAME']
-            dataset['processedds'] = indata['PROCESSED_DATASET_NAME']
-            dataset['datatier'] = indata['DATA_TIER_NAME']
-            dataset['globaltag'] = indata.get('GLOBAL_TAG', '')
-            dataset['physicsgroup'] = indata.get('PHYSICS_GROUP_NAME', '')
-            dataset['creationdate'] = 1234
-            dataset['createby'] = "me"
-            dataset['datasettype'] = indata.get('DATASET_TYPE', 'test')
-            dataset['lastmodificationdate'] = 1234
-            dataset['lastmodifiedby'] = "me"
-            dataset['isdatasetvalid'] = indata.get('IS_DATASET_VALID', '')
-            dataset['xtcrosssection'] = indata.get('XTCROSSSECTION', '')
-            dataset['dataset'] = indata["DATASET"]
+        body = request.body.read()
+        indata = cjson.decode(body)
+            
+        # need proper validation
+        dataset={}
+        dataset['primaryds'] = indata['PRIMARY_DS_NAME']
+        dataset['processedds'] = indata['PROCESSED_DATASET_NAME']
+        dataset['datatier'] = indata['DATA_TIER_NAME']
+        dataset['globaltag'] = indata.get('GLOBAL_TAG', '')
+        dataset['physicsgroup'] = indata.get('PHYSICS_GROUP_NAME', '')
+        dataset['creationdate'] = 1234
+        dataset['createby'] = "me"
+        dataset['datasettype'] = indata.get('DATASET_TYPE', 'test')
+        dataset['lastmodificationdate'] = 1234
+        dataset['lastmodifiedby'] = "me"
+        dataset['isdatasetvalid'] = indata.get('IS_DATASET_VALID', '')
+        dataset['xtcrosssection'] = indata.get('XTCROSSSECTION', '')
+        dataset['dataset'] = indata["DATASET"]
 
-            bo = DBSDataset(self.logger, self.dbi, self.owner)
-            bo.insertDataset(dataset)
+        self.dbsDataset.insertDataset(dataset)
 
-        except Exception, ex:
-            self.logger.error(ex)
-            raise 
         
     def insertBlock(self):
         """
@@ -164,39 +155,28 @@ class DBSModel(RESTModel):
         ...
         """
 
-        try:
+        body = request.body.read()
+        indata = cjson.decode(body)
 
-            body = request.body.read()
-            indata = cjson.decode(body)
+        # Proper validation needed
+        vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
+                      indata["BLOCK_NAME"])
+        assert vblock, "Invalid block name %s" % indata["BLOCK_NAME"]
+        block={} 
+        block.update({
+                      "dataset":vblock.groups()[0],
+                      "creationdate": indata.get("CREATION_DATE", 123456),
+                      "createby":indata.get("CREATE_BY","me"),
+                      "lastmodificationdate":indata.get("LAST_MODIFICATION_DATE", 12345),
+                      "lastmodifiedby":indata.get("LAST_MODIFIED_BY","me"),
+                      "blockname":indata["BLOCK_NAME"],
+                      "filecount":indata.get("FILE_COUNT", 0),
+                      "blocksize":indata.get("BLOCK_SIZE", 0),
+                      "originsite":"TEST",
+                      "openforwriting":1
+                      })
+        self.dbsBlock.insertBlock(block)
 
-            # Proper validation needed
-            # Some random validation
-            assert type(indata) == dict
-            vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
-                          indata["BLOCK_NAME"])
-            assert vblock, "Invalid block name %s" % indata["BLOCK_NAME"]
-       
-            block={} 
-            block.update({
-                          "dataset":vblock.groups()[0],
-                          "creationdate": indata.get("CREATION_DATE", 123456),
-                          "createby":indata.get("CREATE_BY","me"),
-                          "lastmodificationdate":indata.get("LAST_MODIFICATION_DATE", 12345),
-                          "lastmodifiedby":indata.get("LAST_MODIFIED_BY","me"),
-                          "blockname":indata["BLOCK_NAME"],
-                          "filecount":indata.get("FILE_COUNT", 0),
-                          "blocksize":indata.get("BLOCK_SIZE", 0),
-                          #"originsite":indata.get("ORIGIN_SITE", "TEST")
-                          "originsite":"TEST",
-                          "openforwriting":1
-                          })
-            
-            bo = DBSBlock(self.logger, self.dbi, self.owner)
-            bo.insertBlock(block)
-
-        except Exception, ex:
-            self.logger.error(ex)
-            raise 
 
     def insertFile(self):
         """
@@ -226,14 +206,6 @@ class DBSModel(RESTModel):
             indata = [indata]
             
         for f in indata:
-            #some random validation
-            conditions = ( "LOGICAL_FILE_NAME" in f.keys(),
-                          f["IS_FILE_VALID"] in (0,1),
-                          "BLOCK" in f.keys(),
-                          f["FILE_TYPE"] in ("EDM"))
-            for c in conditions:
-                assert c, "One of the input conditions is not satisfied" % conditions
-                
             f.update({"DATASET":f["DATASET"],
                      "CREATION_DATE":12345,
                      "CREATE_BY":"aleko",
@@ -243,11 +215,4 @@ class DBSModel(RESTModel):
                      "FILE_PARENT_LIST":f.get("FILE_PARENT_LIST",[])})
             businput.append(f)
             
-        bo = DBSFile(self.logger, self.dbi, self.owner)
-
-        try:
-            bo.insertFile(businput)
-
-        except Exception, ex:
-            self.logger.error(ex)
-            raise 
+        self.dbsFile.insertFile(businput)
