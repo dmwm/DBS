@@ -1,6 +1,6 @@
 #
-# $Revision: 1.1 $
-# $Id: dbsModel.py,v 1.1 2009/10/06 22:01:38 afaq Exp $
+# $Revision: 1.2 $
+# $Id: dbsModel.py,v 1.2 2009/10/14 21:52:45 afaq Exp $
 # 
 #  This is the class for primary dataset query objects.
 #  
@@ -23,22 +23,23 @@ class dbsModel(RESTModel):
                                          'validation': [],
                                          'version': version}
         
-        self.addService('GET', 'getwork', wq.getWork)
-        self.addService('PUT', 'gotwork', wq.gotWork)
-        self.addService('PUT', 'failwork', wq.failWork)
+        #self.addService('GET', 'getwork', wq.getWork)
+        #self.addService('PUT', 'gotwork', wq.gotWork)
+        #self.addService('PUT', 'failwork', wq.failWork)
 
 
     def __init__(self, config):
         RESTModel.__init__(self, config)
 
         self.methods['GET']['listPrimaryDatasets'] = {'args':['primdsname'],'call': self.listPrimaryDatasets }
+        self.methods['GET']['listDatasets'] = {'args':[],'call': self.listDatasets }
 
-        self.methods['POST'] = {'create':{'args':['database', 'query'],
-					'call':self.create}}
-        self.methods['PUT']={'replace':{'args':['database', 'query'],
-					'call':self.replace}}
-        self.methods['DELETE']={'delete':{'args':['database', 'query'],
-					  'call':self.delete}}
+        #self.methods['POST'] = {'create':{'args':['database', 'query'],
+ 	#				'call':self.create}}
+        #self.methods['PUT']={'replace':{'args':['database', 'query'],
+	#				'call':self.replace}}
+        #self.methods['DELETE']={'delete':{'args':['database', 'query'],
+	#				  'call':self.delete}}
 
     ###
     #  Following provide the API inetrface to the DBS 
@@ -47,13 +48,20 @@ class dbsModel(RESTModel):
     # So this architecture SUCKS !!
     ###
 
-    def listPrimaryDatasets(self, args, kwargs):
+    def listPrimaryDatasets(self):
+	return dbs.business.listPrimaryDatasets("")
+
+    def listPrimaryDatasetsT(self, args, kwargs):
 	input=self.sanitise_input(args, kwargs)  
 	return dbs.business.listPrimaryDatasets(input)
 
 
+    def listDatasets(self):
+	return business.Datasets.listDatasets()	
 
 
+
+    """ 
 
     def create(self, args, kwargs):
 	data={'server_method':'create'}
@@ -66,4 +74,4 @@ class dbsModel(RESTModel):
     def delete(self, args, kwargs):
 	data={'server_method':'replace'}
 	return data
-
+    """
