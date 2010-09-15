@@ -38,10 +38,10 @@ def makeVarName(str):
 
 # ==========START >>>>>>>>>>>>>
 
-typ_map={'String':'String', 'Integer':'int', 'CLOB':'String', 'Float' : 'float'}
-typ_val_map={'String':'null', 'Integer': '0', 'Float' : '0', 'CLOB':'null'}
+typ_map={'String':'String', 'int':'int', 'CLOB':'String', 'float' : 'float'}
+typ_val_map={'String':'null', 'int': '0', 'float' : '0', 'CLOB':'null'}
 
-lines=open("../DDL/DBS3-Oracle.sql", "r").readlines()
+lines=open("../DDL/create-oracle-schema.sql", "r").readlines()
 tablefound=0
 table=""
 col_list=[]
@@ -70,8 +70,8 @@ for aline in lines:
 
 		header= """/**
  * 
- $Revision: 1.4 $"
- $Id: generate_dataobjs.py,v 1.4 2009/10/01 18:47:33 afaq Exp $"
+ $Revision: 1.5 $"
+ $Id: generate_dataobjs.py,v 1.5 2009/10/06 21:54:51 afaq Exp $"
  *
  * Data Object from table : %s
 */
@@ -95,6 +95,7 @@ public class %s extends JSONObject  {
 		ctor=''
 		putonce=''
 		getmthd=''
+		setmthd=''
 		for (acol, typ) in col_list:
 			mthd=makeMethodName(acol)
 			var=makeVarName(acol)
@@ -102,18 +103,24 @@ public class %s extends JSONObject  {
 	%s get%s ( )  throws Exception {
 		%s %s = %s;
                	if (!JSONObject.NULL.equals(this.get("%s"))) {
-                       	%s = (%s) this.get("%s");
+                       	%s = this.get%s("%s");
                	}
                 return %s;
         }
-	""" % (typ_map[typ], mthd, typ_map[typ], var, typ_val_map[typ], acol, var, typ, acol, var)		
+	""" % (typ_map[typ], mthd, typ_map[typ], var, typ_val_map[typ], acol, var, typ[0].upper()+typ[1:], acol, var)		
+
+			setmthd+="""
+	public void set%s (%s %s) throws Exception {
+ 		this.put( "%s", %s );
+	}
+	""" % (mthd, typ_map[typ], var, acol, var )
+		
 			# Prepare CTOR line
 			if k==0 : 
 				ctor += typ_map[typ]+' '+var
 				k=1
 			else : 	ctor += ', '+ typ_map[typ]+' '+var
-			putonce += '\n                this.putOnce("%s", (%s) %s );' % ( acol, typ, var )
-
+			putonce += '\n                this.putOnce("%s", %s );' % ( acol, var )
 
 		ctor_stmt="""
         public %s ( %s ) throws Exception  {
@@ -124,6 +131,7 @@ public class %s extends JSONObject  {
 		f=open(classname+".java", "w")
 		f.write(header)
 		f.write(ctor_stmt)
+		f.write(setmthd)
 		f.write(getmthd)
 		f.write("\n}") # close the class def
 		f.close()
@@ -149,9 +157,9 @@ public class %s extends JSONObject  {
 		col=aline.split()[0]
 		typ=aline.split()[1]
 		if typ.startswith('CLOB'): typ="String"
-		if typ.startswith('INTEGER') : typ="Integer"
+		if typ.startswith('INTEGER') : typ="int"
 		if typ.startswith('VARCHAR') : typ="String"
-		if typ.startswith('NUMBER') : typ="Integer"
-		if typ.startswith('FLOAT') : typ="Float"
+		if typ.startswith('NUMBER') : typ="int"
+		if typ.startswith('FLOAT') : typ="float"
 		col_list.append((col, typ))
 
