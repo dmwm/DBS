@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2010/01/07 17:30:42 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: List.py,v 1.4 2010/01/12 17:38:00 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -26,21 +26,21 @@ class List(DBFormatter):
         """
         returns id for a given application
         """	
-	
+	sql=self.sql	
         binds = {}
 	setAnd=False
 	if not app == "":
-		self.sql += " A.APP_NAME=:app_name"
+		sql += " A.APP_NAME=:app_name"
         	binds["app_name"]=app
 		setAnd=True
 	if not release_version == "":
-		if setAnd : self.sql += " AND "
-		self.sql += " R.VERSION=:release_version"
+		if setAnd : sql += " AND "
+		sql += " R.VERSION=:release_version"
 		binds["release_version"]=release_version
 		setAnd=True
 	if not pset_hash == "":
-		if setAnd : self.sql += " AND "
-		self.sql += " P.HASH=:pset_hash"
+		if setAnd : sql += " AND "
+		sql += " P.HASH=:pset_hash"
 		binds["pset_hash"]=pset_hash
 		setAnd=True
 
