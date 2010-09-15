@@ -3,8 +3,8 @@ DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
 
-__revision__ = "$Id: DBSValitaion_t.py,v 1.3 2010/01/29 22:40:47 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSValitaion_t.py,v 1.4 2010/02/01 17:35:34 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import os
 import sys
@@ -17,8 +17,8 @@ def uuid():
     uuid = create_string_buffer(16)
     return lib.uuid_generate(byref(uuid))
 
-    
-url="http://cmssrv18.fnal.gov:8585/dbs3"
+url=os.environ['DBS_WRITER_URL']    
+#url="http://cmssrv18.fnal.gov:8585/dbs3"
 api = DbsApi(url=url)
 uid = uuid()
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
