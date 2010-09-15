@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.2 2009/12/09 17:08:44 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.3 2009/12/09 17:53:28 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import re
 import cjson
@@ -18,6 +18,8 @@ from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
+
+import traceback
 
 #DBS Api version, set from the CVS checkout tag, for HEAD version, set it in dbs.config
 __server__version__ = "$Name:  $"
@@ -47,11 +49,16 @@ class DBSReaderModel(RESTModel):
         self.dbsBlock = DBSBlock(self.logger, self.dbi, self.owner)
         self.dbsFile = DBSFile(self.logger, self.dbi, self.owner)
 
-    def set_expire(self):
-            "We can add Cacche control here"
-            timestamp = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime())
+    def set_expire(self, expiresin=300):
+            """
+		Return the time perid in which Cache will expire, also sets this value in HTTP header
+		expiresin : is the number of seconds from NOW, when this information will be considered expired
+				by default the information expires in 5 mins
+	    """
+            timestamp = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(time.time()+expiresin))
             cherrypy.response.headers['Expires'] = timestamp
             #cherrypy.response.headers['Cache-control'] = 'no-cache'
+	    return timestamp
 
     def getHash(self, instr):
 	m = hashlib.md5()
@@ -67,14 +74,14 @@ class DBSReaderModel(RESTModel):
     	version = version.strip()
     	return version
 
-    def returnDAS(self, intime, inparams, api, result):
+    def returnDAS(self, intime, inparams, api, result, expiresin=300):
 	ret={"DBS":{
 		"request_timestamp" : intime,
 		"request_url" : "http://host:port/path",
 		"request_method" : "GET",
 		"request_params" : inparams,
 		"response_version" : self.getServerVersion(),
-		"response_expires" : 300, 
+		"response_expires" : self.set_expire(expiresin), 
 		"response_checksum" : self.getHash(result),
 		"request_api" : api,
 		"call_time" : time.time()-intime,
@@ -99,11 +106,14 @@ class DBSReaderModel(RESTModel):
         http://dbs3/primarydatasets/qcd_20_30
         http://dbs3/primarydatasets?primarydataset=qcd*
         """
-	self.set_expire()
 	intime=time.time()
         primds = primarydataset.replace("*","%")
-        ret = self.dbsPrimaryDataset.listPrimaryDatasets(primds)
-	return self.returnDAS(intime, primds, "listPrimaryDatasets", ret)
+	try :
+		# Set the expiration for primary datasets
+        	ret = self.dbsPrimaryDataset.listPrimaryDatasets(primds)
+	except:
+		ret = {'exception':traceback.format_exc()}
+	return self.returnDAS(intime, primds, "listPrimaryDatasets", ret, 1000)
 		
     def listDatasets(self, dataset = ""):
         """
@@ -114,9 +124,12 @@ class DBSReaderModel(RESTModel):
         """
 	intime=time.time()
         dataset = dataset.replace("*", "%")
-	ret = self.dbsDataset.listDatasets(dataset = dataset)
-        return self.returnDAS(intime, dataset, "listDatasets", ret)
-        #return {}
+	try :
+                # Set the expiration for primary datasets
+		ret = self.dbsDataset.listDatasets(dataset = dataset)
+	except:
+                ret = {'exception':traceback.format_exc()}
+        return self.returnDAS(intime, dataset, "listDatasets", ret, 1000)
 
     def listBlocks(self, dataset = "", block = ""):
         """
@@ -127,9 +140,12 @@ class DBSReaderModel(RESTModel):
 	intime=time.time()
         block = block.replace("*","%")
         dataset = dataset.replace("*","%")
-        ret=self.dbsBlock.listBlocks(dataset=dataset, block=block)
+	try:
+        	ret=self.dbsBlock.listBlocks(dataset=dataset, block=block)
+	except:
+		ret = {'exception':traceback.format_exc()}
 	#FIXME Assuming user passed dataset for now
-	return self.returnDAS(intime, dataset, "listBlocks", ret)
+	return self.returnDAS(intime, dataset, "listBlocks", ret, 300)
     
     def listFiles(self, dataset = "", block = "", lfn = ""):
         """
@@ -141,9 +157,12 @@ class DBSReaderModel(RESTModel):
         """
 	intime=time.time()
         lfn = lfn.replace("*", "%")
-        ret = self.dbsFile.listFiles(dataset = dataset, block = block, lfn = lfn)
+	try:
+        	ret = self.dbsFile.listFiles(dataset = dataset, block = block, lfn = lfn)
+	except:
+		ret = {'exception':traceback.format_exc()}
 	#FIXME Assuming user passed dataset for now
-        return self.returnDAS(intime, dataset, "listFiles", ret)
+        return self.returnDAS(intime, dataset, "listFiles", ret, 0)
         #return [r for r in result]
         #for r in result:
         #    yield cjson.encode(r)
