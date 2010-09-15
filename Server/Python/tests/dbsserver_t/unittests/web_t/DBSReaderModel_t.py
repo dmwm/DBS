@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.11 2010/01/27 23:13:23 dsr Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.12 2010/01/28 15:54:23 afaq Exp $"
+__version__ = "$Revision: 1.12 $"
 
 import os, sys, imp
 import json
@@ -22,6 +22,7 @@ testparams=importCode(infofile, "testparams", 0).info
 config = os.environ["DBS_TEST_CONFIG_READER"]
 api = DBSRestApi(config)
 
+print testparams
 
 class DBSReaderModel_t(unittest.TestCase):
     
@@ -241,7 +242,8 @@ class DBSReaderModel_t(unittest.TestCase):
     def test36(self):
         """Test36 web.DBSReaderModel.listFiles: basic test"""
 	#need to be updated
-	lfn= testparams['files'][1]['logical_file_name']
+	print testparams['files']
+	lfn= testparams['files'][1]
 	api.list('files', logical_file_name=lfn)	
 
     def test37(self):
@@ -294,13 +296,13 @@ class DBSReaderModel_t(unittest.TestCase):
     def test47(self):
         """Test47 web.DBSReaderModel.listOutputConfigs: basic test"""
 	#need to be updated with LFN
-	lfn= testparams['files'][1]['logical_file_name']
+	lfn= testparams['files'][1]
         api.list('outputconfigs', logical_file_name=lfn)
 
     def test48(self):
         """Test48 web.DBSReaderModel.listOutputConfigs: basic test""" 
         #need to be updated with LFN 
-	lfn= testparams['files'][1]['logical_file_name']
+	lfn= testparams['files'][1]
         api.list('outputconfigs', logical_file_name=lfn+"*")
 
     def test49(self):
@@ -393,7 +395,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test67(self):
         """Test67 web.DBSReaderModel.listFileLumis: basic test"""
 	#need to update LFN
-	lfn= testparams['files'][1]['logical_file_name']
+	lfn= testparams['files'][1]
         api.list('filelumis', logical_file_name=lfn)
 
 
