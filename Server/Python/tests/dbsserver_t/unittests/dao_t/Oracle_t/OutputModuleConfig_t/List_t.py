@@ -2,8 +2,8 @@
 dao unittests
 """
 
-__revision__ = "$Id: List_t.py,v 1.1 2010/01/01 19:54:41 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List_t.py,v 1.2 2010/01/27 21:00:59 dsr Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import os
 import unittest
@@ -28,10 +28,10 @@ class List_t(unittest.TestCase):
         dao.execute()
         dao.execute(dataset = '%')
         dao.execute(logical_file_name = '%')
-        dao.execute(version = '%')
-        dao.execute(hash = '%')
-        dao.execute(app_name = '%')
-        dao.execute(output_module_label = '%')
+        dao.execute(release_version = '%')
+        dao.execute(pset_hash = '%')
+        dao.execute(app = '%')
+        dao.execute(output_label = '%')
         
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(List_t)
