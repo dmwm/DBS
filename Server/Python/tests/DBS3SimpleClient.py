@@ -3,8 +3,8 @@
 Very simple dbs3 client:
 """
 
-__revision__ = "$Id: DBS3SimpleClient.py,v 1.2 2009/10/28 14:52:48 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBS3SimpleClient.py,v 1.3 2009/10/30 16:55:15 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import sys
 import json
@@ -22,7 +22,7 @@ class DBS3Client:
         req = urllib2.Request(url = url, headers = self.header)
         data = self.opener.open(req)
         ddata = json.JSONDecoder().decode(data.read())
-        return json.dumps(ddata, sort_keys = True, indent = 2)
+        return json.dumps(ddata, sort_keys = True, indent = 4)
     
     def put(self, apiurl, indata):
         """method for PUT verb"""
