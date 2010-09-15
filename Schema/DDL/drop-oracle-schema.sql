@@ -5,7 +5,7 @@
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database drop script                            */
-/* Created on:            2009-10-08 08:27                                */
+/* Created on:            2009-10-08 13:23                                */
 /* Model version:         Version 2009-10-08                              */
 /* ---------------------------------------------------------------------- */
 
@@ -350,11 +350,11 @@ DROP TABLE PRIMARY_DATASETS;
 
 ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_DATASET_ID;
 
-ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_DATA_PATH;
+ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_DATASET;
 
-ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_IS_PATH_VALID;
+ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_IS_DATASET_VALID;
 
-ALTER TABLE DATASETS DROP CONSTRAINT CC_DS_IS_PATH_VALID;
+ALTER TABLE DATASETS DROP CONSTRAINT CC_DS_IS_DATASET_VALID;
 
 ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_PRIMARY_DS_ID;
 
@@ -366,7 +366,7 @@ ALTER TABLE DATASETS DROP CONSTRAINT NN_DS_DATASET_TYPE_ID;
 
 ALTER TABLE DATASETS DROP CONSTRAINT PK_DS;
 
-ALTER TABLE DATASETS DROP CONSTRAINT TUC_DS_DATA_PATH;
+ALTER TABLE DATASETS DROP CONSTRAINT TUC_DS_DATASET;
 
 /* Drop table */
 
