@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.5 $"
-# $Id: dbsClient.py,v 1.5 2009/11/09 21:15:17 afaq Exp $"
+# $Revision: 1.6 $"
+# $Id: dbsClient.py,v 1.6 2009/11/09 21:53:46 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -77,12 +77,12 @@ class DbsApi:
 		"""
 		return self.callServer("/primarydatasets")
 
-        def listPrimaryDataset(self, name):
+        def listPrimaryDataset(self, dataset):
                 """
                 * API to list A primary dataset in DBS 
 		* name : name of the primary dataset
                 """
-                return self.callServer("/primarydatasets?primarydataset=%s" %name )
+                return self.callServer("/primarydatasets?primarydataset=%s" %dataset )
 
         def insertPrimaryDataset(self, primaryDSObj={}):
                 """
@@ -111,16 +111,22 @@ class DbsApi:
                 """
                 return self.callServer("/datasets", params = datasetObj )
 
-        def listBlock(self, name):
+        def listBlock(self, block):
                 """
                 * API to list A block in DBS 
                 * name : name of the block
                 """
-		return self.callServer("/blocks?block=%s" %name)
+		return self.callServer("/blocks?block=%s" %block)
 		#parts=name.split('#')
 		#black_name=parts[0]+urllib.quote_plus('#')+parts[1]
                 #return self.callServer("/Blocks/%s" %black_name[1:] )
 
+        def listFile(self, lfn):
+                """
+                * API to list A file in DBS 
+                * lfn : lfn of file
+                """
+                return self.callServer("/files?lfn=%s" %lfn)
 
 if __name__ == "__main__":
 	# Service URL
