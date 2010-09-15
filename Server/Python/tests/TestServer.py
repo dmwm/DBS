@@ -1,9 +1,9 @@
 """This module provides all basic tests for the server"""
 
-__revision__ = "$Id: TestServer.py,v 1.1 2009/10/28 14:53:07 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: TestServer.py,v 1.2 2009/10/28 15:11:13 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
-INSERTCOUNT = "02"
+INSERTCOUNT = "08"
 
 import json
 import unittest
@@ -40,10 +40,11 @@ class TestServer(unittest.TestCase):
         """insertBlock"""
         dinput = {"blockname":"/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO#inertedbyserverunittest_" + INSERTCOUNT,
                   "openforwriting":1,
-                  "sitname":"alekossite",
+                  "sitename":"alekossite",
                   "blocksize":345,
                   "filecount":20
                   }
+        dinput = self.cli.put("blocks", dinput)
 
 if __name__ == "__main__":
     """    
