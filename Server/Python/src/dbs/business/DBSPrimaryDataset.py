@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.7 2009/12/16 12:04:41 akhukhun Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.8 2009/12/17 17:49:45 yuyi Exp $"
+__version__ = "$Revision: 1.8 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -37,14 +37,14 @@ class DBSPrimaryDataset:
     def insertPrimaryDataset(self, businput):
         """
         Input dictionary has to have the following keys:
-        primarydsname, primarydstype, creationdate, createby
+        primary_ds_name, primary_ds_type, creation_date, create_by
         it builds the correct dictionary for dao input and executes the dao
         """
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            businput["primarydstype"] = self.primdstypeid.execute(businput["primarydstype"]) 
-            businput["primarydsid"] = self.sm.increment("SEQ_PDS", conn, True)
+            businput["primary_ds_type"] = self.primdstypeid.execute(businput["primary_ds_type"]) 
+            businput["primary_ds_id"] = self.sm.increment("SEQ_PDS", conn, True)
             self.primdsin.execute(businput, conn, True)
             tran.commit()
         except Exception, e:
