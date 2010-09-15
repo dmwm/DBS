@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.18 $"
-# $Id: dbsClient.py,v 1.18 2010/01/12 22:53:10 afaq Exp $"
+# $Revision: 1.19 $"
+# $Id: dbsClient.py,v 1.19 2010/01/13 22:34:20 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -34,7 +34,6 @@ class DbsApi:
 		UserID=os.environ['USER']+'@'+socket.gethostname()
 		headers =  {"Content-type": "application/json", "Accept": "application/json", "UserID": UserID }
 
-		res='{"FAILED":"TRUE"}'
 		try:
 			calling=self.url+urlplus
 			proxies = {}
@@ -55,6 +54,7 @@ class DbsApi:
 			#HTTPError(req.get_full_url(), code, msg, hdrs, fp)
 		except urllib2.URLError, urlerror:
 			print urlerror
+		
 		return res
 
 		#FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
@@ -75,20 +75,13 @@ class DbsApi:
                 """
                 return self.callServer("/ping")
 
-	def listPrimaryDatasets(self):
+	def listPrimaryDatasets(self, dataset=""):
 		"""
 		* API to list ALL primary datasets in DBS 
 		"""
+		if dataset:
+		    return self.callServer("/primarydatasets?primary_ds_name=%s" %dataset )
 		return self.callServer("/primarydatasets")
-		#ret=self.callServer("/primarydatasets")
-		#return self.parseForException(ret['DBS']['listPrimaryDatasets'])
-
-        def listPrimaryDataset(self, dataset):
-                """
-                * API to list A primary dataset in DBS 
-		* name : name of the primary dataset
-                """
-                return self.callServer("/primarydatasets?primary_ds_name=%s" %dataset )
 
         def insertPrimaryDataset(self, primaryDSObj={}):
                 """
