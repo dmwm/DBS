@@ -2,8 +2,8 @@
 business unittests
 """
 
-__revision__ = "$Id: DBSOutputConfig_t.py,v 1.1 2010/01/01 19:54:37 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSOutputConfig_t.py,v 1.2 2010/01/07 17:38:52 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import os
 import unittest
@@ -29,12 +29,12 @@ class DBSOutputConfig_t(unittest.TestCase):
         bo.listOutputConfigs()
         bo.listOutputConfigs(dataset='%')
         bo.listOutputConfigs(logical_file_name='%')
-        bo.listOutputConfigs(version='%')
-        bo.listOutputConfigs(hash='%')
+        bo.listOutputConfigs(release_version='%')
+        bo.listOutputConfigs(pset_hash='%')
         bo.listOutputConfigs(app_name='%')
         bo.listOutputConfigs(output_module_label='%')
         
-        bo.listOutputConfigs(dataset='%', version='%')
+        bo.listOutputConfigs(dataset='%', release_version='%')
         
         
 if __name__ == "__main__":

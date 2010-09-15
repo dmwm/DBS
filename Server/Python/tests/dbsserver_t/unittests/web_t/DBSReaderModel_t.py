@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.1 2010/01/01 19:54:38 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.2 2010/01/07 17:38:52 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import os
 import json
@@ -27,14 +27,14 @@ class DBSReaderModel_t(unittest.TestCase):
         self.api.list('datasets')
         self.api.list('datasets', dataset='*')
         self.api.list('datasets', parent_dataset='*')
-        self.api.list('datasets', version='*')
-        self.api.list('datasets', hash='*')
+        self.api.list('datasets', release_version='*')
+        self.api.list('datasets', pset_hash='*')
         self.api.list('datasets', app_name='*')
         self.api.list('datasets', output_module_label='*')
         self.api.list('datasets', dataset='*', 
                                   parent_dataset='*',
-                                  version='*',
-                                  hash='*',
+                                  release_version='*',
+                                  pset_hash='*',
                                   app_name='*',
                                   output_module_label='*')
     
@@ -102,14 +102,14 @@ class DBSReaderModel_t(unittest.TestCase):
         self.api.list('outputconfigurations')
         self.api.list('outputconfigurations', dataset="*")
         self.api.list('outputconfigurations', logical_file_name="*")
-        self.api.list('outputconfigurations', version="*")
-        self.api.list('outputconfigurations', hash="*")
+        self.api.list('outputconfigurations', release_version="*")
+        self.api.list('outputconfigurations', pset_hash="*")
         self.api.list('outputconfigurations', app_name="*")
         self.api.list('outputconfigurations', output_module_label="*")
         self.api.list('outputconfigurations', dataset="*",
                                               logical_file_name="*",
-                                              version="*",
-                                              hash="*",
+                                              release_version="*",
+                                              pset_hash="*",
                                               app_name="*",
                                               output_module_label="*")
     
