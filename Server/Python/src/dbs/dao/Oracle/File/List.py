@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.4 2009/11/17 19:45:47 yuyi Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: List.py,v 1.5 2009/11/24 10:58:13 akhukhun Exp $"
+__version__ = "$Revision: 1.5 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -17,12 +17,12 @@ class List(DBFormatter):
     """
     File List DAO class.
     """
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         """
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
+        self.owner = "%s." % owner
         self.sql = \
 """
 SELECT F.FILE_ID, F.LOGICAL_FILE_NAME, F.IS_FILE_VALID, 

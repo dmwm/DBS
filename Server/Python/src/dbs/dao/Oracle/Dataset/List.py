@@ -2,8 +2,8 @@
 """
 This module provides Dataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.7 2009/11/12 15:19:35 akhukhun Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: List.py,v 1.8 2009/11/24 10:58:12 akhukhun Exp $"
+__version__ = "$Revision: 1.8 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -17,12 +17,12 @@ class List(DBFormatter):
     """
     Dataset List DAO class.
     """
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         """
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
+        self.owner = "%s." % owner
         self.sql = \
 """
 SELECT D.DATASET_ID, D.DATASET, D.IS_DATASET_VALID, 

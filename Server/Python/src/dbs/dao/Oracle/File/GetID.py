@@ -2,20 +2,20 @@
 """
 This module provides File.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.1 2009/11/19 17:33:08 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: GetID.py,v 1.2 2009/11/24 10:58:13 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
     """
     File GetID DAO class.
     """
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         """
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
+        self.owner = "%s." % owner
         self.sql = \
 """
 SELECT F.FILE_ID

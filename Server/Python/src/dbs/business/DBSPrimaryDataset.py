@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.3 2009/10/28 09:52:55 akhukhun Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.4 2009/11/24 10:58:12 akhukhun Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -12,10 +12,11 @@ class DBSPrimaryDataset:
     """
     Primary Dataset business object class
     """
-    def __init__(self, logger, dbi):
-        self.daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi)
+    def __init__(self, logger, dbi, owner):
+        self.daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
         self.logger = logger
         self.dbi = dbi
+        self.owner = owner
 
     def listPrimaryDatasets(self, primdsname=""):
         """

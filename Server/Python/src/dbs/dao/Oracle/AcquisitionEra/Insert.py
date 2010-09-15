@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 """ DAO Object for AcquisitionEras table """ 
 
-__revision__ = "$Revision: 1.3 $"
-__version__  = "$Id: Insert.py,v 1.3 2009/11/03 16:41:26 akhukhun Exp $ "
+__revision__ = "$Revision: 1.4 $"
+__version__  = "$Id: Insert.py,v 1.4 2009/11/24 10:58:12 akhukhun Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
 class Insert(DBFormatter):
     """AcquisitionEras Insert DAO Class"""
 
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
+        self.owner = "%s." % owner
 
         self.sql = \
 """INSERT INTO %sACQUISITION_ERAS 
