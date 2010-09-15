@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.19 2010/01/26 17:41:43 afaq Exp $"
-__version__ = "$Revision: 1.19 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.20 2010/01/28 17:15:52 afaq Exp $"
+__version__ = "$Revision: 1.20 $"
 
 import re
 import cjson
@@ -163,15 +163,18 @@ class DBSWriterModel(DBSReaderModel):
         KEYS: required/optional : default = ...
         ...
         """
-        body = request.body.read()
-        indata = cjson.decode(body)
+	
+	try:
+	
+	    body = request.body.read()
+	    indata = cjson.decode(body)
 
-        # Proper validation needed
-        vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
+	    # Proper validation needed
+	    vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
                       indata["block_name"])
-        assert vblock, "Invalid block name %s" % indata["block_name"]
-        block={} 
-        block.update({
+	    assert vblock, "Invalid block name %s" % indata["block_name"]
+	    block={} 
+	    block.update({
                       "dataset":vblock.groups()[0],
                       "creation_date": indata.get("creation_date", dbsUtils().getTime()),
                       "create_by" : indata.get("create_by", dbsUtils().getCreateBy()),
@@ -184,9 +187,12 @@ class DBSWriterModel(DBSReaderModel):
                       "open_for_writing": indata.get("open_for_writing", 1)
                       })
 
-	self.logger.warning(block)
-        self.dbsBlock.insertBlock(block)
-
+	    self.logger.warning(block)
+	    self.dbsBlock.insertBlock(block)
+    
+	except Exception, ex:
+	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+	    
     def insertFile(self):
         """
         gets the input from cherrypy request body
@@ -207,16 +213,19 @@ class DBSWriterModel(DBSReaderModel):
 	    file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
 	    file_output_config_list(optional, default = []) :[{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] <br />
         """
-        body = request.body.read()
-        indata = cjson.decode(body)["files"]
+
+	try:
+	
+	    body = request.body.read()
+	    indata = cjson.decode(body)["files"]
         
-        # proper validation needed
-        businput = []
-        assert type(indata) in (list, dict)
-        if type(indata) == dict:
-            indata = [indata]
-        for f in indata:
-            f.update({
+	    # proper validation needed
+	    businput = []
+	    assert type(indata) in (list, dict)
+	    if type(indata) == dict:
+		indata = [indata]
+	    for f in indata:
+		f.update({
 		     #"dataset":f["dataset"],
                      "creation_date": f.get("creation_date", dbsUtils().getTime()),
                      "create_by" : f.get("create_by" , dbsUtils().getCreateBy()),
@@ -226,7 +235,10 @@ class DBSWriterModel(DBSReaderModel):
                      "file_parent_list":f.get("file_parent_list",[]),
 		     "file_assoc_list":f.get("assoc_list",[]),
                      "file_output_config_list":f.get("file_output_config_list",[])})
-            businput.append(f)
-        self.logger.warning(businput) 
-	self.dbsFile.insertFile(businput)
+	    businput.append(f)
+	    self.logger.warning(businput) 
+	    self.dbsFile.insertFile(businput)
+    
+	except Exception, ex:
+	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
     
