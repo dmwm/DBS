@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2009/11/24 10:58:15 akhukhun Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: List.py,v 1.4 2009/11/29 11:24:17 akhukhun Exp $"
+__version__ = "$Revision: 1.4 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -27,6 +27,24 @@ JOIN %sPRIMARY_DS_TYPES PT
 ON PT.PRIMARY_DS_TYPE_ID=P.PRIMARY_DS_TYPE_ID
 """ % (self.owner, self.owner)
 
+        self.formatkeys = {"PRIMARY_DS_TYPE_DO":["PRIMARY_DS_TYPE_ID", "PRIMARY_DS_TYPE"]}
+        
+    def formatDict(self, result):
+        dictOut = []
+        r = result[0]
+        descriptions = [str(x) for x in r.keys]
+        for i in r.fetchall():
+            idict = dict(zip(descriptions, i))     
+
+            for k in self.formatkeys:
+                idict[k] = {}
+                for kk in self.formatkeys[k]:
+                    idict[k][kk] = idict[kk]
+                    del idict[kk]
+
+            dictOut.append(idict)     
+        return {"result":dictOut}         
+        
     def execute(self, pattern = "", conn = None, transaction = False):
         """
         Lists all primary datasets if pattern is not provided.
@@ -42,16 +60,4 @@ ON PT.PRIMARY_DS_TYPE_ID=P.PRIMARY_DS_TYPE_ID
             binds = {"primarydsname":pattern}
             result = self.dbi.processData(sql, binds, conn, transaction)
             
-        
-        ldict = self.formatDict(result)
-        output = []
-        for idict in ldict:
-            dnested = idict
-            primarydstypedo = {"primary_ds_type_id":idict["primary_ds_type_id"], 
-                               "primary_ds_type":idict["primary_ds_type"]}
-            dnested.update({"primary_ds_type_do":primarydstypedo})
-            dnested.pop("primary_ds_type_id")
-            dnested.pop("primary_ds_type")
-            output.append(dnested)
-        return output
-
+        return self.formatDict(result)

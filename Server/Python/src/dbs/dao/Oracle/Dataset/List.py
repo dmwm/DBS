@@ -2,8 +2,8 @@
 """
 This module provides Dataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.9 2009/11/27 09:55:03 akhukhun Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: List.py,v 1.10 2009/11/29 11:24:17 akhukhun Exp $"
+__version__ = "$Revision: 1.10 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -29,36 +29,32 @@ SELECT D.DATASET_ID, D.DATASET, D.IS_DATASET_VALID,
         D.XTCROSSSECTION, D.GLOBAL_TAG, 
         D.CREATION_DATE, D.CREATE_BY, 
         D.LAST_MODIFICATION_DATE,
-        D.DATASET_TYPE_ID, DP.DATASET_TYPE,  
-        D.PHYSICS_GROUP_ID, PH.PHYSICS_GROUP_NAME
+        D.DATASET_TYPE_ID, D.PHYSICS_GROUP_ID,
+        DP.DATASET_TYPE, PH.PHYSICS_GROUP_NAME
 FROM %sDATASETS D 
 LEFT OUTER JOIN %sPHYSICS_GROUPS PH ON PH.PHYSICS_GROUP_ID = D.PHYSICS_GROUP_ID
 JOIN %sDATASET_TYPES DP on DP.DATASET_TYPE_ID = D.DATASET_TYPE_ID
 """ % ((self.owner,)*3)
 
+        self.formatkeys = {"PHYSICS_GROUP_DO":["PHYSICS_GROUP_ID", "PHYSICS_GROUP_NAME"], 
+                          "DATASET_TYPE_DO":["DATASET_TYPE_ID","DATASET_TYPE"]}
+
     def formatDict(self, result):
         dictOut = []
-        for r in result:
-            #descriptions = map(lambda x: str(x).lower(), r.keys)
-            descriptions = map(lambda x: str(x), r.keys)
+        r = result[0]
+        descriptions = [str(x) for x in r.keys]
+        for i in r.fetchall():
+            idict = dict(zip(descriptions, i)) 
 
-            for i in r.fetchall():
-                idict = dict(zip(descriptions, i)) 
-                physicsgroupdo = {"PHYSICS_GROUP_ID":idict["PHYSICS_GROUP_ID"],
-                              "PHYSICS_GROUP_NAME":idict["PHYSICS_GROUP_NAME"]}
-                datasettypedo = {"DATASET_TYPE_ID":idict["DATASET_TYPE_ID"],
-                             "DATASET_TYPE":idict["DATASET_TYPE"]}
-                idict.update({
-                               "PHYSICS_GROUP_DO":physicsgroupdo,
-                               "DATASET_TYPE_DO":datasettypedo,
-                               })
-                idict.pop("PHYSICS_GROUP_ID")
-                idict.pop("PHYSICS_GROUP_NAME")
-                idict.pop("DATASET_TYPE_ID")
-                idict.pop("DATASET_TYPE")
-                dictOut.append(idict) 
-            r.close()
+            for k in self.formatkeys:
+                idict[k] = {}
+                for kk in self.formatkeys[k]:
+                    idict[k][kk] = idict[kk]
+                    del idict[kk]
+                    
+            dictOut.append(idict) 
         return {"result":dictOut} 
+
 
     def execute(self, dataset="", conn = None, transaction = False):
         """
@@ -71,6 +67,4 @@ JOIN %sDATASET_TYPES DP on DP.DATASET_TYPE_ID = D.DATASET_TYPE_ID
             sql += " WHERE D.DATASET %s :dataset" % op(dataset)
             binds = {"dataset":dataset}
             result = self.dbi.processData(sql, binds, conn, transaction)
-
         return self.formatDict(result)
-        #return [dict(r) for r in result[0].fetchall()]

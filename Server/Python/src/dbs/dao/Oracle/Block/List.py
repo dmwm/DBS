@@ -2,8 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.4 2009/11/24 10:58:14 akhukhun Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: List.py,v 1.5 2009/11/29 11:24:18 akhukhun Exp $"
+__version__ = "$Revision: 1.5 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -33,8 +33,24 @@ FROM %sBLOCKS B
 JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
 """ % ((self.owner,)*3)
-	
+
+        self.formatkeys = {"DATASET_DO":["DATASET_ID", "DATASET"],
+                           "SITE_DO":["ORIGIN_SITE", "SITE_NAME"]}
     
+    def formatDict(self, result):
+        dictOut = []
+        r = result[0]
+        descriptions = [str(x) for x in r.keys]
+        for i in r.fetchall():
+            idict = dict(zip(descriptions, i))     
+            for k in self.formatkeys:
+                idict[k] = {}
+                for kk in self.formatkeys[k]:
+                    idict[k][kk] = idict[kk]
+                    del idict[kk]
+            dictOut.append(idict)     
+        return {"result":dictOut} 
+
     def execute(self, dataset = "", block = "",  \
                 conn = None, transaction = False):
         """
@@ -59,23 +75,5 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
             raise Exception("Either dataset or block must be provided")
         
         result = self.dbi.processData(sql, binds, conn, transaction)
-        ldict = self.formatDict(result)
-        
-        output = []
-        
-        for idict in ldict:
-            datasetdo = {"dataset_id":idict["dataset_id"],
-                                "dataset":idict["dataset"]}
-            originsitedo = {"site_id":idict["origin_site"],
-                                  "site_name":idict["site_name"]}
-            
-            idict.update({"dataset_do":datasetdo, 
-                          "originsitedo":originsitedo})
-            
-            for k in ("origin_site", "site_name",
-                      "dataset_id", "dataset"):
-                idict.pop(k)
-            output.append(idict)
-           
-        return output 
+        return self.formatDict(result)
 
