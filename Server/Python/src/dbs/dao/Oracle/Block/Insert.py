@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for Blocks table """ 
 
-__revision__ = "$Revision: 1.5 $"
-__version__  = "$Id: Insert.py,v 1.5 2009/11/24 10:58:14 akhukhun Exp $ "
+__revision__ = "$Revision: 1.6 $"
+__version__  = "$Id: Insert.py,v 1.6 2009/11/24 14:31:10 akhukhun Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from sqlalchemy import exceptions
 
 class Insert(DBFormatter):
     """Block Insert DAO Class"""
@@ -26,5 +27,9 @@ VALUES(:blockid, :blockname, :dataset, :openforwriting, :originsite, :blocksize,
         blockid, blockname, dataset(id), openforwriting, originsite(id), blocksize,
         filecount, creationdate, createby, lastmodificationdate, lastmodifiedby
         """
-        self.dbi.processData(self.sql, daoinput, conn, transaction)
+        try:
+            self.dbi.processData(self.sql, daoinput, conn, transaction)
+        except exceptions.IntegrityError, ex:
+            self.logger.warning("Unique constraint violation being ignored...")
+            self.logger.warning("%s" % ex)
 
