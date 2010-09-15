@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDSType.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.1 2009/10/28 09:51:50 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: GetID.py,v 1.2 2009/10/30 16:51:18 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -23,15 +23,16 @@ SELECT PT.PRIMARY_DS_TYPE_ID, PT.PRIMARY_DS_TYPE
 FROM %sPRIMARY_DS_TYPES PT 
 """ % (self.owner)
 
-    def execute(self, primdstype, conn = None, transaction = False):
+    def execute(self, name, conn = None, transaction = False):
         """
         returns id for a give primdstype
         """
         sql = self.sql
         sql += "WHERE PT.PRIMARY_DS_TYPE = :primdstype" 
-        binds = {"primdstype":primdstype}
+        binds = {"primdstype":name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
         assert len(plist) == 1, \
-            "PrimaryDSType %s does not exist" % primdstype
+            "PrimaryDSType %s does not exist" % name
         return plist[0]["primary_ds_type_id"]
+
