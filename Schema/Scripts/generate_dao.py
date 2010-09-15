@@ -81,9 +81,10 @@ for aline in lines:
 		#ufile=open(dao_path+"/Update.py", "w")	
 		#dfile=open(dao_path+"/Delete.py", "w")	
 
-		header  = "# DAO Object for %s table" % classname 
-		header += "\n# $Revision: 1.2 $"
-		header += "\n# $Id: generate_dao.py,v 1.2 2009/10/12 16:20:54 afaq Exp $"
+		header  = "#!/usr/bin/env python"
+		header += "\n\"\"\" DAO Object for %ss table \"\"\" " % classname 
+		header += "\n\n__revision__ = \"$Revision: 1.3 $\""
+		header += "\n__version__  = \"$Id: generate_dao.py,v 1.3 2009/10/20 02:20:42 afaq Exp $ \""
 		header += "\n\nfrom WMCore.Database.DBFormatter import DBFormatter"
 
 		#lfile.write(header) 
@@ -91,7 +92,7 @@ for aline in lines:
 		#ufile.write(header) 
 		#dfile.write(header)
 
-                isql="INSERT INTO "+table.upper()+"("
+                isql="INSERT INTO %s"+table.upper()+" ( "
                 isqlvals=""
                 ssql="SELECT "
                 idx=0
@@ -109,12 +110,15 @@ for aline in lines:
                                 isqlvals+= ", :"+makeVarName(acol[0]).lower()
                                 ssql+=", "+acol[0]+" AS C"+acol[0]
 
-                isql+=") VALUES ("+isqlvals+");"
+                isql+=") VALUES ("+isqlvals+") % (self.owner) ;"
                 ssql+=" FROM "+table;
 		object=table.lower()+"Obj"
 		ifile.write("\n\nclass Insert(DBFormatter):")
-		ifile.write("\n\n    sql = \"\"\""+isql+"\"\"\"" )
-		ifile.write("\n\n    def getBinds( self, "+ object+ " ):" )
+		ifile.write("\n\n    def __init__(self, logger, dbi):")
+		ifile.write("\n            DBFormatter.__init__(self, logger, dbi)")
+		ifile.write("\n            self.owner = \"%s.\" % self.dbi.engine.url.username")
+		ifile.write("\n\n            self.sql = \"\"\""+isql+"\"\"\"" )
+		ifile.write("\n\n    def getBinds_delme( self, "+ object+ " ):" )
 		ifile.write("\n            binds = {}")
 		ifile.write("\n            if type("+ object+ ") == type ('object'):")
 		ifile.write("\n            	binds = {")
@@ -130,10 +134,10 @@ for aline in lines:
                 ifile.write("\n 	                })")
                 ifile.write("\n               return binds")
 
-		ifile.write("\n\n\n    def execute( self, "+object+ " ):" )
-                ifile.write("\n            binds = self.getBinds("+ object +" )")
-                ifile.write("\n            result = self.dbi.processData(self.sql, binds, conn = conn, transaction = transaction)")
-                ifile.write("\n            return")
+		ifile.write("\n\n\n    def execute( self, "+object+ ", conn=None, transaction=False ):" )
+                ifile.write("\n            ##binds = self.getBinds( "+ object +" )")
+                ifile.write("\n            result = self.dbi.processData(self.sql, binds, conn, transaction)")
+                ifile.write("\n            return\n\n\n")
 
                 #lfile.write(ssql)
 
