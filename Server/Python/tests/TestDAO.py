@@ -3,10 +3,10 @@ As the number of tests increase we will probably repackage these tests
 to separate package/modules for each DAO object
 """
 
-__revision__ = "$Id: TestDAO.py,v 1.2 2009/10/30 16:56:30 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: TestDAO.py,v 1.3 2009/11/03 16:42:25 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
-INSERTCOUNT = "1023"
+INSERTCOUNT = "1026"
 
 import unittest
 import logging
@@ -131,9 +131,45 @@ class TestDAO(unittest.TestCase):
         dao = BlockList(self.logger, self.dbi)
         dao.execute("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO")
         dao.execute("/a/b/c/", "/a/b/c#d")
-       
+        
+    def test11(self):
+        """File.List"""
+        from dbs.dao.Oracle.File.List import List as FileList
+        dao = FileList(self.logger, self.dbi)
+        dao.execute("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO")
+        dao.execute(block = "/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO#b110ad98-ab46-4f56-ad7c-ce762f2450c7")
+        
+    def test12(self):
+        """File.Insert"""
+        from dbs.dao.Oracle.File.Insert import Insert as FileInsert
+        dao = FileInsert(self.logger, self.dbi)
+        dinput = []
+        for k in range(10):
+            dinput.append({"fileid":int(INSERTCOUNT)*100 + k, 
+                     "logicalfilename":"file_" + INSERTCOUNT + str(k),
+                     "isfilevalid":True, 
+                     "dataset":60,
+                     "block":37,
+                     "filetype":1,
+                     "checksum":"9999",
+                     "eventcount":1000,
+                     "filesize":1024,
+                     "branchhash":1,
+                     "adler32":"adler32",
+                     "md5":"md5",
+                     "autocrosssection":234,
+                     "creationdate":1234,
+                     "createby":"aleko@cornell.edu",
+                     "lastmodificationdate":12345,
+                     "lastmodifiedby":"aleko@cornell.edu"})
+        dao.execute(dinput)
+        
+        
+        
 if __name__ == "__main__":
     
-    SUITE = unittest.TestLoader().loadTestsFromTestCase(TestDAO)
+    #SUITE = unittest.TestLoader().loadTestsFromTestCase(TestDAO)
+    SUITE = unittest.TestSuite()
+    SUITE.addTest(TestDAO("test12"))
     unittest.TextTestRunner(verbosity=2).run(SUITE)
 
