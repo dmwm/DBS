@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.7 2010/01/26 22:43:57 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.8 2010/01/27 17:25:54 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 import os
 import json
@@ -89,9 +89,14 @@ class DBSClientReader_t(unittest.TestCase):
 	api.listFiles(dataset=testparams['dataset'])
 	api.listFiles(block=testparams['block'])
 	api.listFiles(lfn=testparams['files'][0])	
+	api.listFiles(dataset=testparams['dataset'], release_version=testparams['release_version'])
+	api.listFiles(dataset=testparams['dataset'], release_version=testparams['release_version'], \
+		                pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
+	api.listFiles(lfn=testparams['files'][0], pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
 	api.listFiles(dataset="doesnotexist")
 	api.listFiles(block="doesnotexist#123")
 	api.listFiles(lfn="doesnotexist")
+#api.listFiles(
 
     def test07(self):
 	"""unittestDBSClientReader_t.listFileParents: basic test"""	
