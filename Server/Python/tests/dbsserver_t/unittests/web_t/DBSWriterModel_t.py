@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.2 2010/01/11 18:02:47 yuyi Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.3 2010/01/12 16:00:24 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import os
 import unittest
@@ -15,6 +15,10 @@ This is has to be change everytime running the test. So we need to make it using
 COUNTER = os.environ['DBS_TEST_COUNTER']
 """
 class DBSWriterModel_t(unittest.TestCase):
+
+    self.uid = self.uuid()
+    self.primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
+    self.dataset = 'unittest_web_dataset_%s' % uid 
     
     def uuid(self):
 	lib = CDLL("libuuid.so.1")
@@ -29,13 +33,23 @@ class DBSWriterModel_t(unittest.TestCase):
     def test01(self):
         """web.DBSReaderModel.insertPrimaryDataset: basic test"""
 	COUNTER = self.uuid()
-	import pdb
-	pdb.set_trace()
-        data = {'primary_ds_name':'unittest_web_primary_ds_name_%s' % COUNTER,
+	#import pdb
+	#pdb.set_trace()
+        data = {'primary_ds_name':self.primary_ds_name,
                 'primary_ds_type':'TEST'}
         self.api.insert('primarydatasets', data)
-        
-        
+
+    def test02(self):
+        """web.DBSReaderModel.insertDataset: basic test"""
+        #import pdb
+        #pdb.set_trace()
+        data = {'primary_ds_name':self.primary_ds_name,
+                'dataset':self.dataset}
+        self.api.insert('datasets', data)
+	
+
+
+     
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSWriterModel_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
