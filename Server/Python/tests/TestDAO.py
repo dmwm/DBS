@@ -3,10 +3,10 @@ As the number of tests increase we will probably repackage these tests
 to separate package/modules for each DAO object
 """
 
-__revision__ = "$Id: TestDAO.py,v 1.3 2009/11/03 16:42:25 akhukhun Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: TestDAO.py,v 1.4 2009/11/12 15:21:43 akhukhun Exp $"
+__version__ = "$Revision: 1.4 $"
 
-INSERTCOUNT = "1026"
+INSERTCOUNT = "1029"
 
 import unittest
 import logging
@@ -80,7 +80,7 @@ class TestDAO(unittest.TestCase):
         dao = DatasetList(self.logger, self.dbi)
         dao.execute()
         dao.execute("a")
-        dao.execute("a", "b%", "c")
+        dao.execute("%")
         
     def test07(self):
         """AcquisitionEra.Insert"""
@@ -131,12 +131,14 @@ class TestDAO(unittest.TestCase):
         dao = BlockList(self.logger, self.dbi)
         dao.execute("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO")
         dao.execute("/a/b/c/", "/a/b/c#d")
+        dao.execute("a/b/c#d")
         
     def test11(self):
         """File.List"""
         from dbs.dao.Oracle.File.List import List as FileList
         dao = FileList(self.logger, self.dbi)
-        dao.execute("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO")
+        print dao.execute("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO")
+        print dao.execute("/SUT_11/SUT_PROCESSED_DATASET_V11/GEN-SIM-RECO")
         dao.execute(block = "/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO#b110ad98-ab46-4f56-ad7c-ce762f2450c7")
         
     def test12(self):
@@ -170,6 +172,6 @@ if __name__ == "__main__":
     
     #SUITE = unittest.TestLoader().loadTestsFromTestCase(TestDAO)
     SUITE = unittest.TestSuite()
-    SUITE.addTest(TestDAO("test12"))
+    SUITE.addTest(TestDAO("test11"))
     unittest.TextTestRunner(verbosity=2).run(SUITE)
 
