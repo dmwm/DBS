@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.16 $"
-# $Id: dbsClient.py,v 1.16 2010/01/06 19:42:25 afaq Exp $"
+# $Revision: 1.17 $"
+# $Id: dbsClient.py,v 1.17 2010/01/07 17:00:31 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -104,13 +104,13 @@ class DbsApi:
                 """
                 return self.callServer("/outputconfigs", params = outputConfigObj )
 
-        def listOutputConfigs(self, dataset="", logical_file_name="", version="", hash="", app_name="", output_module_label=""):
+        def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="", output_module_label=""):
                 """
                 * API to list OutputConfigs in DBS 
                 * dataset : Full dataset (path) of the dataset
 		* parent_dataset : Full dataset (path) of the dataset
-		* version : cmssw version
-		* hash : pset hash
+		* release_version : cmssw version
+		* pset_hash : pset hash
 		* app_name : Application name (generally it is cmsRun)
 		* output_module_label : output_module_label
 		*
@@ -125,13 +125,13 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "logical_file_name=%s"%logical_file_name
 		    amp=True
-		if version:
+		if release_version:
 		    if amp: add_to_url += "&"
-		    add_to_url += "version=%s"%version
+		    add_to_url += "release_version=%s"%release_version
 		    amp=True
-		if hash:
+		if pset_hash:
 		    if amp: add_to_url += "&"
-		    add_to_url += "hash=%s"%hash
+		    add_to_url += "pset_hash=%s"%pset_hash
 		    amp=True
 		if app_name:
 		    if amp: add_to_url += "&"
@@ -161,13 +161,13 @@ class DbsApi:
                 """
                 return self.callServer("/processingeras", params = procEraObj )
 
-        def listDatasets(self, dataset="", parent_dataset="", version="", hash="", app_name="", output_module_label=""):
+        def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label=""):
                 """
                 * API to list dataset(s) in DBS 
                 * dataset : Full dataset (path) of the dataset
 		* parent_dataset : Full dataset (path) of the dataset
-		* version : cmssw version
-		* hash : pset hash
+		* release_version : cmssw version
+		* pset_hash : pset hash
 		* app_name : Application name (generally it is cmsRun)
 		* output_module_label : output_module_label
 		*
@@ -182,13 +182,13 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "parent_dataset=%s"%parent_dataset
 		    amp=True
-		if version:
+		if release_version:
 		    if amp: add_to_url += "&"
-		    add_to_url += "version=%s"%version
+		    add_to_url += "release_version=%s"%release_version
 		    amp=True
-		if hash:
+		if pset_hash:
 		    if amp: add_to_url += "&"
-		    add_to_url += "hash=%s"%hash
+		    add_to_url += "pset_hash=%s"%pset_hash
 		    amp=True
 		if app_name:
 		    if amp: add_to_url += "&"
