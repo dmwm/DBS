@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.4 2010/01/12 17:38:00 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: List.py,v 1.5 2010/01/12 17:41:17 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -19,8 +19,14 @@ class List(DBFormatter):
         self.sql = \
 	"""
 	SELECT O.OUTPUT_MOD_CONFIG_ID
-	FROM %sOUTPUT_MODULE_CONFIGS O, %sRELEASE_VERSIONS R, %sAPPLICATION_EXECUTABLES A, %sPARAMETER_SET_HASHES P
-	WHERE """ % ( self.owner, self.owner, self.owner, self.owner )
+	    from %sOUTPUT_MODULE_CONFIGS O 
+	        JOIN %sRELEASE_VERSIONS R
+	           ON O.RELEASE_VERSION_ID=R.RELEASE_VERSION_ID
+	        JOIN %sAPPLICATION_EXECUTABLES A
+	           ON O.APP_EXEC_ID=A.APP_EXEC_ID
+	        JOIN %sPARAMETER_SET_HASHES P 
+	           ON O.PARAMETER_SET_HASH_ID=P.PARAMETER_SET_HASH_ID
+	        WHERE """ % ( self.owner, self.owner, self.owner, self.owner )
         
     def execute(self, app="", release_version="", pset_hash="", conn = None, transaction = False):
         """
