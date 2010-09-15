@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.16 2010/01/25 17:05:54 yuyi Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: DBSBlock.py,v 1.17 2010/01/28 16:05:50 afaq Exp $"
+__version__ = "$Revision: 1.17 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -29,11 +29,12 @@ class DBSBlock:
         """
         dataset, block_name or site_name must be passed.
         """
-	if not dataset and not block_name:
-	    raise Exception("You must specify at least one parameter (dataset, block_name) with listBlocks api")
-	if block_name =='%':
-	    raise Exception("You cannot specify block_name ='*', cannot list all blocks of all datasets")
-	if dataset=='%':
+	if not dataset:
+	    if not block_name:
+		raise Exception("You must specify at least one parameter (dataset, block_name) with listBlocks api")
+	    if block_name =='%':
+		raise Exception("You cannot specify block_name ='*', cannot list all blocks of all datasets")
+	if dataset=='%' and not block_name and not site_name:
 	    raise Exception("You cannot specify dataset='*', cannot list all blocks of all datasets")
 	if dataset=='%' and block_name=='%':
 	    raise Exception("You cannot specify dataset='*', block_name='*' cannot list all blocks of all datasets")
