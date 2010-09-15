@@ -2,8 +2,8 @@
 """
 This module provides Dataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2009/10/27 17:24:48 akhukhun Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: List.py,v 1.4 2009/10/30 16:47:39 akhukhun Exp $"
+__version__ = "$Revision: 1.4 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -15,7 +15,7 @@ def op(pattern):
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
     """
-    PrimaryDataset List DAO class.
+    Dataset List DAO class.
     """
     def __init__(self, logger, dbi):
         """
@@ -96,8 +96,8 @@ JOIN %sPROCESSING_ERAS PE on PE.PROCESSING_ERA_ID = D.PROCESSING_ERA_ID
             datatierdo = {"data_tier_id":idict["data_tier_id"],
                           "data_tier_name":idict["data_tier_name"]}
             physicsgroupdo = {"physics_group_id":idict["physics_group_id"],
-                              "physics_group_name":idict["physics_group_id"]}
-            datasettypedo = {"dataset_type_id":idict["dataset_type"],
+                              "physics_group_name":idict["physics_group_name"]}
+            datasettypedo = {"dataset_type_id":idict["dataset_type_id"],
                              "dataset_type":idict["dataset_type"]}
             acquisitionerado = {"acquisition_era_id":idict["acquisition_era_id"],
                                 "acquisition_era_name":idict["acquisition_era_name"]}
