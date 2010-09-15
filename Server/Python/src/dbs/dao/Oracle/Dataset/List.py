@@ -2,8 +2,8 @@
 """
 This module provides Dataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.4 2009/10/30 16:47:39 akhukhun Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: List.py,v 1.5 2009/11/03 16:41:28 akhukhun Exp $"
+__version__ = "$Revision: 1.5 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -45,7 +45,7 @@ JOIN %sPHYSICS_GROUPS PH ON PH.PHYSICS_GROUP_ID = D.PHYSICS_GROUP_ID
 JOIN %sDATASET_TYPES DP on DP.DATASET_TYPE_ID = D.DATASET_TYPE_ID
 JOIN %sACQUISITION_ERAS AE on AE.ACQUISITION_ERA_ID = D.ACQUISITION_ERA_ID
 JOIN %sPROCESSING_ERAS PE on PE.PROCESSING_ERA_ID = D.PROCESSING_ERA_ID
-""" % ( self.owner, self.owner, self.owner, self.owner, self.owner, self.owner, self.owner, self.owner)
+""" % ((self.owner,)*8)
         
 	
     def execute(self, primdsname = "", procdsname = "", datatiername = "", \
