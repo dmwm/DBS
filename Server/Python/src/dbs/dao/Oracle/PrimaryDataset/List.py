@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.1 2009/10/17 18:00:16 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List.py,v 1.2 2009/10/27 17:24:48 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -34,10 +34,23 @@ ON PT.PRIMARY_DS_TYPE_ID=P.PRIMARY_DS_TYPE_ID
         if pattern == "":
             result = self.dbi.processData(sql, conn=conn, transaction=transaction)
         else:
-            if  pattern.find("%")==-1:
-                sql += "WHERE P.PRIMARY_DS_NAME = :primdsname"
+            if  pattern.find("%") == -1:
+                sql += "WHERE P.PRIMARY_DS_NAME = :primarydsname"
             else:
-                sql += "WHERE P.PRIMARY_DS_NAME like  :primdsname"
-            binds = {"primdsname":pattern}
+                sql += "WHERE P.PRIMARY_DS_NAME like  :primarydsname"
+            binds = {"primarydsname":pattern}
             result = self.dbi.processData(sql, binds, conn, transaction)
-        return self.formatDict(result)
+            
+        
+        ldict = self.formatDict(result)
+        output = []
+        for idict in ldict:
+            dnested = idict
+            primarydstypedo = {"primary_ds_type_id":idict["primary_ds_type_id"], 
+                               "primary_ds_type":idict["primary_ds_type"]}
+            dnested.update({"primary_ds_type_do":primarydstypedo})
+            dnested.pop("primary_ds_type_id")
+            dnested.pop("primary_ds_type")
+            output.append(dnested)
+        return output
+
