@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.13 2010/01/25 23:22:04 afaq Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.14 2010/01/27 17:27:22 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -38,7 +38,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primary_ds_name'])
         self.addService('GET', 'datasets', self.listDatasets, ['dataset', 'parent_dataset', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block_name', 'site_name'])
-        self.addService('GET', 'files', self.listFiles, ['dataset', 'block_name', 'logical_file_name'])
+        self.addService('GET', 'files', self.listFiles, ['dataset', 'block_name', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'datasetparents', self.listDatasetParents, ['dataset'])
         self.addService('GET', 'outputconfigs', self.listOutputConfigs, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'fileparents', self.listFileParents, ['logical_file_name'])
@@ -120,7 +120,7 @@ class DBSReaderModel(RESTModel):
         block_name = block_name.replace("*","%")
         return self.dbsBlock.listBlocks(dataset, block_name, site_name)
     
-    def listFiles(self, dataset = "", block_name = "", logical_file_name = ""):
+    def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", pset_hash="", app_name="", output_module_label=""):
         """
         Example url's: <br />
         http://dbs3/files?dataset=/a/b/c/ <br />
@@ -129,7 +129,7 @@ class DBSReaderModel(RESTModel):
         http://dbs3/files?block_name=/a/b/c%23d&logical_file_name=/store/* <br />
         """
         logical_file_name = logical_file_name.replace("*", "%")
-        return self.dbsFile.listFiles(dataset, block_name, logical_file_name)
+        return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, output_module_label)
     
     def listDatasetParents(self, dataset):
         """
