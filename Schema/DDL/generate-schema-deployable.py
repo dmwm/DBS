@@ -21,7 +21,7 @@ for line in fileinput.input("oracle-deployable.sql",inplace=1):
     if "CMS_DBS3_WRITE_ROLE" in line:
                 line=line.replace("CMS_DBS3_WRITE_ROLE", writer_role_name)
     if "CMS_DBS3_ADMIN_ROLE" in line:
-                line=line.replace("CMS_DBS3_READ_ROLE", admin_role_name)
+                line=line.replace("CMS_DBS3_ADMIN_ROLE", admin_role_name)
     if "CMS_DBS3_READER" in line:
 	line=line.replace("CMS_DBS3_READER", reader_account)
     if "CMS_DBS3_WRITER" in line:
