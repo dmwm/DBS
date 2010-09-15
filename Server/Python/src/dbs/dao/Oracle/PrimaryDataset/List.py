@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.4 2009/11/29 11:24:17 akhukhun Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: List.py,v 1.5 2009/11/30 09:53:44 akhukhun Exp $"
+__version__ = "$Revision: 1.5 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -35,13 +35,11 @@ ON PT.PRIMARY_DS_TYPE_ID=P.PRIMARY_DS_TYPE_ID
         descriptions = [str(x) for x in r.keys]
         for i in r.fetchall():
             idict = dict(zip(descriptions, i))     
-
             for k in self.formatkeys:
                 idict[k] = {}
                 for kk in self.formatkeys[k]:
                     idict[k][kk] = idict[kk]
                     del idict[kk]
-
             dictOut.append(idict)     
         return {"result":dictOut}         
         
@@ -53,11 +51,7 @@ ON PT.PRIMARY_DS_TYPE_ID=P.PRIMARY_DS_TYPE_ID
         if pattern == "":
             result = self.dbi.processData(sql, conn=conn, transaction=transaction)
         else:
-            if  pattern.find("%") == -1:
-                sql += "WHERE P.PRIMARY_DS_NAME = :primarydsname"
-            else:
-                sql += "WHERE P.PRIMARY_DS_NAME like  :primarydsname"
+            sql += "WHERE P.PRIMARY_DS_NAME %s :primarydsname" % ("=", "like")["%" in pattern]
             binds = {"primarydsname":pattern}
             result = self.dbi.processData(sql, binds, conn, transaction)
-            
         return self.formatDict(result)

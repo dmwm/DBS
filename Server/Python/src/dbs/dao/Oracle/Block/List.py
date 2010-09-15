@@ -2,10 +2,11 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.6 2009/11/29 18:49:35 akhukhun Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: List.py,v 1.7 2009/11/30 09:53:45 akhukhun Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+
 class List(DBFormatter):
     """
     Block List DAO class.

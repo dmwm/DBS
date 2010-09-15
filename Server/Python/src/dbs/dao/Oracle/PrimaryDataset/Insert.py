@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for PrimaryDatasets table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2009/11/24 14:31:10 akhukhun Exp $ "
+__revision__ = "$Revision: 1.8 $"
+__version__  = "$Id: Insert.py,v 1.8 2009/11/30 09:53:44 akhukhun Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -18,13 +18,13 @@ class Insert(DBFormatter):
 """
 INSERT INTO %sPRIMARY_DATASETS 
 (PRIMARY_DS_ID, PRIMARY_DS_NAME, PRIMARY_DS_TYPE_ID, CREATION_DATE, CREATE_BY) 
-VALUES(:primarydsid, :primarydsname, :primarydstypeid, :creationdate, :createby)
+VALUES(:primarydsid, :primarydsname, :primarydstype, :creationdate, :createby)
 """ % self.owner
 
     def execute(self, daoinput, conn = None, transaction = False):
         """
         inputdict must be validated to have the following keys:
-        primarydsid, primarydsname, primarydstypeid, creationdate, createby
+        primarydsid, primarydsname, primarydstype(id), creationdate, createby
         """
         
         try:
