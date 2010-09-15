@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.6 $"
-# $Id: dbsClient.py,v 1.6 2009/11/09 21:53:46 afaq Exp $"
+# $Revision: 1.7 $"
+# $Id: dbsClient.py,v 1.7 2009/11/10 19:48:33 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -127,6 +127,14 @@ class DbsApi:
                 * lfn : lfn of file
                 """
                 return self.callServer("/files?lfn=%s" %lfn)
+
+        def insertFiles(self, filesList=[]):
+                """
+                * API to insert a list of file into DBS in DBS 
+                * filesList : list of file objects
+                """
+                return self.callServer("/files", params = filesList )
+
 
 if __name__ == "__main__":
 	# Service URL

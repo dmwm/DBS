@@ -37,6 +37,9 @@ try:
     for ablock in blocks:
         # Collect information here			
 	data=api.listDatasetContents(dataset, ablock["Name"])
+	#fp=open("block.xml", "w")
+	#fp.write(data)
+	#fp.close()
   	#print data
 	print "Processing Dataset : %s and Block : %s " % (dataset, ablock["Name"])
   	class Handler (xml.sax.handler.ContentHandler):
@@ -49,16 +52,24 @@ try:
 			self.block_name=''
 			self.dataset=''
         		self.prdsobj={}
+			self.block={}
+			self.files=[]
+			self.currfile={}
+			self.currfilelumis=[]
+			self.currfileparents=[]
 
         	def startElement(self, name, attrs):
 			if name == 'primary_dataset':
 				self.primary_dataset=attrs.get('primary_name')
 				self.prdsobj = { "PRIMARY_DS_NAME" : str(self.primary_dataset), "PRIMARY_DS_TYPE": "test" }
 			if name == 'processed_dataset':
-				self.dataset={"IS_DATASET_VALID": 1 , "PRIMARY_DST_NAME": self.primary_dataset, "PRIMARY_DS_TYPE": "test", "DATASET_TYPE":"PRODUCTION",
+				self.dataset=	{
+						"IS_DATASET_VALID": 1 , "PRIMARY_DS_NAME": self.primary_dataset, "PRIMARY_DS_TYPE": "test", "DATASET_TYPE":"PRODUCTION",
 						"GLOBAL_TAG": attrs.get('global_tag'),"XTCROSSSECTION":123,"PHYSICS_GROUP_NAME": "Tracker", 
 						"PROCESSING_VERSION" : "1",
-						"PROCESSED_DATASET_NAME": attrs.get('processed_datatset_name'), "ACQUISITION_ERA_NAME" : attrs.get('acquisition_era') }
+						"PROCESSED_DATASET_NAME": attrs.get('processed_datatset_name'), "ACQUISITION_ERA_NAME" : attrs.get('acquisition_era') 
+						}
+					
 				self.processed_dataset=attrs.get('processed_datatset_name')
 
 			if name == 'path':
@@ -67,38 +78,44 @@ try:
 				self.dataset["DATA_TIER_NAME"]=self.data_tier 
 				self.dataset["DATASET"]=self.path
 
-			"""
+
 			if name == 'block':
-				print attrs
-                                return
+				self.block  = {
+						"BLOCK_NAME":attrs.get('name'), "OPEN_FOR_WRITING":1,"BLOCK_SIZE": attrs.get('size'), 
+						"FILE_COUNT":attrs.get('number_of_files'), "CREATION_DATE":attrs.get('creation_date'), 
+						"CREATE_BY":attrs.get('created_by'), "LAST_MODIFICATION_DATE":attrs.get('last_modification_date'), 
+						"LAST_MODIFIED_BY":attrs.get('last_modified_by')
+						}
 				self.block_name=attrs.get('name')
-				attrs.get('path')
-				attrs.get('size')
-				attrs.get('number_of_files')
-				attrs.get('creation_date')
-				attrs.get('created_by')
-				attrs.get('last_modification_date')
-				attrs.get('last_modified_by')	
 
 			if name == 'storage_element':
-				print attrs
-                                return
-				attrs.get('storage_element_name')
+				self.block["ORIGIN_SITE"]=attrs.get('storage_element_name')
 
 			if name == 'file':
-				print attrs
-                                return
-				self.sqls['lfn'].append(attrs.get('lfn'))
-				attrs.get('checksum')
-				attrs.get('number_of_events')
-				attrs.get('size')
-				attrs.get('adler32')
-				attrs.get('md5')
-				attrs.get('creation_date')
-				attrs.get('created_by')
-				attrs.get('last_modification_date')
-				attrs.get('last_modified_by')
+				self.currfile={
+					"LOGICAL_FILE_NAME":attrs.get('lfn'), "IS_FILE_VALID": 1, "DATASET": self.path, "BLOCK" : self.block_name,
+					"FILE_TYPE": "EDM",
+					"CHECK_SUM": attrs.get('checksum'), "EVENT_COUNT": attrs.get('number_of_events'), "FILE_SIZE": attrs.get('size'), 
+					"ADLER32": attrs.get('adler32'), "MD5": attrs.get('md5'), "AUTO_CROSS_SECTION": 0.0, 
+					"CREATE_BY":attrs.get('created_by'), "LAST_MODIFICATION_DATE":attrs.get('last_modification_date'),
+                                        "LAST_MODIFIED_BY":attrs.get('last_modified_by')
+				     }
 
+			if name == 'file_lumi_section':
+				filelumi={
+						"RUN_NUM":attrs.get('run_number'),
+						"LUMI_SECTION_NUM":attrs.get('lumi_section_number')
+					}
+				self.currfilelumis.append(filelumi)
+			
+			if name == 'file_parent':
+				fileparent = {
+						"FILE_PARENT_LFN":attrs.get('lfn')
+					}
+				self.currfileparents.append(fileparent)
+
+
+			"""
 			if name == 'algorithm':
 				print attrs
                                 return
@@ -112,19 +129,22 @@ try:
 			if name == 'file_algorithm':
 				pass
 
-			if name == 'file_lumi_section':
-				print attrs
-                                return
-				attrs.get('run_number')
-				attrs.get('lumi_section_number')
-
 			if name =='run':
 				attrs.get('run_number') 
 				pass
 			"""
 	
 		def endElement(self, name) :
-                        if name == 'dbs':	
+			
+			if name == 'file' : 
+				self.currfile["FILE_LUMI_LIST"]=self.currfilelumis
+				self.currfile["FILE_PARENT_LIST"]=self.currfileparents
+				self.currfilelumis=[]
+				self.currfileparents=[]
+				self.files.append(self.currfile)
+
+                        if name == 'dbs':
+
 				print "fin"
 				# Lets populate this in DBS
 				# Some calls may be redundant, who cares !
@@ -134,11 +154,19 @@ try:
         			dbs3api = DbsApi(url=url)
         			# Is service Alive
         			print dbs3api.ping()
+				"""	
         			print self.prdsobj
         			print dbs3api.insertPrimaryDataset(self.prdsobj)
-				#print self.dataset
+				print self.dataset
         			print dbs3api.insertDataset(self.dataset)
+				print self.block
+				print dbs3api.insertBlock(self.block)
+				"""
+				print dbs3api.insertFiles({"files" : self.files})
 
+				#for file in self.files:
+				#	print file
+				
   	xml.sax.parseString (data, Handler ())
 	break
 
