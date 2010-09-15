@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.1 $"
-# $Id: dbsClient.py,v 1.1 2009/10/21 15:42:12 afaq Exp $"
+# $Revision: 1.2 $"
+# $Id: dbsClient.py,v 1.2 2009/10/21 17:49:51 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -72,6 +72,13 @@ class DbsApi:
                 """
                 return self.callServer("/PrimaryDatasets/%s" %name )
 
+        def insertPrimaryDataset(self, primaryDSObj={}):
+                """
+                * API to list A primary dataset in DBS 
+                * name : name of the primary dataset
+                """
+                return self.callServer("/PrimaryDatasets/", params = primaryDSObj )
+
 if __name__ == "__main__":
 	# Service URL
 	url="http://cmssrv48.fnal.gov:8989/DBSServlet"
@@ -83,5 +90,9 @@ if __name__ == "__main__":
 	print api.listPrimaryDatasets()
 	# List the dataset whoes name is TEST9
 	print api.listPrimaryDataset("TEST9")
+	#
+	print "Caling insert primary dataset..."
+	prdsobj = {"PRIMARY_DS_NAME":"ANZAR001", "PRIMARY_DS_TYPE":"test"}
+	api.insertPrimaryDataset(prdsobj)
 
 
