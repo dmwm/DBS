@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.7 2009/10/30 16:54:26 akhukhun Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSModel.py,v 1.8 2009/11/03 16:41:27 akhukhun Exp $"
+__version__ = "$Revision: 1.8 $"
 
 
 import re, json
@@ -12,6 +12,7 @@ from WMCore.WebTools.RESTModel import RESTModel
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
+from dbs.business.DBSFile import DBSFile
 
 from cherrypy import request
 
@@ -31,9 +32,12 @@ class DBSModel(RESTModel):
                         ['primds', 'procds', 'tier'])
         self.addService('GET', 'blocks', self.listBlocks, \
                         ['primds', 'procds', 'tier', 'block'])
+        self.addService('GET', 'files', self.listFiles, \
+                        ['primds', 'procds', 'tier', 'block', "lfn"])
         self.addService('PUT', 'primds', self.insertPrimaryDataset)
         self.addService('PUT', 'datasets', self.insertDataset)
         self.addService('PUT', 'blocks', self.insertBlock)
+        self.addService('PUT', 'files', self.insertFile)
         self.addService('POST', 'post', self.donothing)
         self.addService('DELETE', 'delete', self.donothing)
 
@@ -57,8 +61,7 @@ class DBSModel(RESTModel):
         data = {}
         primds = primds.replace("*","%")
         bo = DBSPrimaryDataset(self.logger, self.dbi)
-        result = bo.listPrimaryDatasets(primds) 
-        data.update({'result':result})
+        data.update({'result':bo.listPrimaryDatasets(primds)})
         return data
     
     def listDatasets(self, primds = "", procds = "", tier = ""):
@@ -71,10 +74,8 @@ class DBSModel(RESTModel):
         primds = primds.replace("*", "%")
         procds = procds.replace("*", "%")
         tier = tier.replace("*", "%")
-        
         bo = DBSDataset(self.logger, self.dbi)
-        result = bo.listDatasets(primds, procds, tier)
-        return {'result':result}
+        return {'result':bo.listDatasets(primds, procds, tier)}
     
     def listBlocks(self, primds, procds, tier, block=""):
         """
@@ -84,12 +85,34 @@ class DBSModel(RESTModel):
         """
         block = block.replace("*","%")
         bo = DBSBlock(self.logger, self.dbi)
-        dataset = "/".join(("/%s", "%s", "%s"))%(primds, procds, tier)
+        dataset = "/%s/%s/%s" % (primds, procds, tier)
         if not block == "": 
-            block = dataset + "#" + block
-        result = bo.listBlocks(dataset, block)
+            block = "#".join((dataset, block))
+        return {"result":bo.listBlocks(dataset, block)}
+    
+    def listFiles(self, primds = "", procds = "", tier = "", block = "", lfn = ""):
+        """
+        Example url's:
+        http://dbs3/files/a/b/c/
+        http://dbs3/files/a/b/c/d
+        http://dbs3/files/a/b/c/d/l*fn
+        http://dbs3/files/a/b/c?lfn=l*fn
+        """
+        bo = DBSFile(self.logger, self.dbi)
+        lfn = lfn.replace("*", "%")
+        if not primds == procds == tier == "":
+            dataset = "/%s/%s/%s" % (primds, procds, tier)
+            if not block == "":
+                block = "#".join((dataset, block))
+                result = bo.listFiles(block = block, lfn = lfn)
+            else:
+                result = bo.listFiles(dataset = dataset, lfn = lfn)
+        elif not lfn =="": 
+            result = bo.listFiles(lfn = lfn)
+        else:
+            raise Exception("Either dataset, block or lfn must be provided")
         return {"result":result}
-
+            
     def insertPrimaryDataset(self):
         """
         gets the input from cherrypy request body.
@@ -164,22 +187,72 @@ class DBSModel(RESTModel):
         assert type(indata) == dict
         assert len(indata.keys()) == 5
         assert "blockname" in indata.keys()
-        validblockname = re.compile("^/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+#[\w\d_-]+$")
-        assert validblockname.match(indata["blockname"])
+        vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
+                          indata["blockname"])
+        assert vblock, "Invalid block name %s" % indata["blockname"]
         assert type(indata["blocksize"]) == int
         assert type(indata["filecount"]) == int
         assert type(indata["openforwriting"]) == bool
         
-        #<<end of validation
-        dlist = indata["blockname"].split("#")
-        indata.update({"dataset":dlist[0],
+        indata.update({"dataset":vblock.groups()[0],
                        "creationdate":123456,
                        "createby":"me",
                        "lastmodificationdate":12345,
                        "lastmodifiedby":"me"})
-        #<<possible end of the validation 
         bo = DBSBlock(self.logger, self.dbi)
         bo.insertBlock(indata)
+        
+    def insertFile(self):
+        """
+        gets the input from cherrypy request body
+        input must be a (list of) dictionary with the following keys:
+        logicalfilename: string
+        isfilevalid: bool
+        #dataset: /a/b/c I will get this from the block
+        block: /a/b/c#d
+        filetype: one of the predefined types, e.g. EDM,
+        checksum: string
+        eventcount: int
+        filesize: float
+        branchhash: string
+        adler32: string
+        md5: string
+        autocrosssection: float
+        """
+        body = request.body.read()
+        indata = json.loads(body)
+        
+        # lot of validation goes here:
+        businput = []
+        vblock = re.compile(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$")
+        assert type(indata) in (list, dict)
+        if type(indata) == dict:
+            indata = [indata]
+        for f  in indata:
+            block = vblock.match(f["block"])
+            conditions = (len(f.keys()) == 11,
+                          "logicalfilename" in f.keys(),
+                          type(f["isfilevalid"]) == bool,
+                          block,
+                          f["filetype"] in ("EDM"),
+                           "checksum" in f.keys(),
+                           type(f["eventcount"]) == int,
+                           type(f["filesize"]) == float,
+                           "branchhash" in f.keys(),
+                           "adler32" in f.keys(),
+                           "md5" in f.keys(),
+                           type(f["autocrosssection"]) == float)
+            for c in conditions:
+                assert c, "One of the input conditions is not satisfied" % conditions
+            f.update({"dataset":block.groups()[0],
+                     "creationdate":12345,
+                     "createby":"aleko",
+                     "lastmodificationdate":1234,
+                     "lastmodifiedby":"alsoaleko"})
+            businput.append(f)
+            
+        bo = DBSFile(self.logger, self.dbi)
+        bo.insertFile(businput)
         
         
     def donothing(self, *args, **kwargs):

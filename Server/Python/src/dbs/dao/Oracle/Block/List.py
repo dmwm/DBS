@@ -2,8 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.1 2009/10/30 16:45:10 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List.py,v 1.2 2009/11/03 16:41:27 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -32,7 +32,7 @@ SELECT B.BLOCK_ID, B.BLOCK_NAME, B.OPEN_FOR_WRITING,
 FROM %sBLOCKS B
 JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
-""" % (self.owner, self.owner, self.owner)
+""" % ((self.owner,)*3)
 	
     
     def execute(self, dataset, block = "",  \
