@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for Files table """ 
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: Insert.py,v 1.4 2009/11/16 19:24:37 yuyi Exp $ "
+__revision__ = "$Revision: 1.5 $"
+__version__  = "$Id: Insert.py,v 1.5 2009/11/19 17:33:08 akhukhun Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -28,15 +28,4 @@ VALUES (:FILE_ID, :LOGICAL_FILE_NAME, :IS_FILE_VALID, :DATASET,
 """ % self.owner
 
     def execute(self, daoinput, conn = None, transaction = False):
-        """
-        daoinput must be a (list of) dictionary(is) with the following keys:
-        fileid, logicalfilename, isfilevalid, dataset(id),
-        block(id), filetype(id), checksum, eventcount, filesize, 
-        branchhash(id), adler32, md5, autocrosssection, 
-        creationdate, createby, lastmodificationdate, lastmodifiedby
-        """
-
-	"""
-	really? Can you bin here so one don't have to have the exactly list?
-	"""
         self.dbi.processData(self.sql, daoinput, conn, transaction)
