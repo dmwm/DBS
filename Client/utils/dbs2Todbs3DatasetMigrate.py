@@ -2,52 +2,55 @@
 #
 import sys
 import time
-
 #DBS-2 imports
 from DBSAPI.dbsApi import DbsApi as Dbs2Api
 from DBSAPI.dbsException import *
 from DBSAPI.dbsApiException import *
 from DBSAPI.dbsOptions import DbsOptionParser
-
-from exceptions import Exception
-
 #DBS-3 imports
 from dbs.apis.dbsClient import *
-
 #
 import xml.sax, xml.sax.handler
+from exceptions import Exception
 #
-#print sys.argv
-if len(sys.argv) < 2: 
-	print "Usage: python %s <url> <dataset>" %sys.argv[0]
-	sys.exit(1)
 
-#url="http://vocms09.cern.ch:8585/dbs3"
-url=sys.argv[1]
-# DBS3 service 
-dbs3api = DbsApi(url=url)
-dataset=sys.argv[2]
-#primary/dataset are inserted only Once
+class migrateDBS2TODBS3:
 
-try:
-  optManager  = DbsOptionParser()
-  (opts,args) = optManager.getOpt()
-  api = Dbs2Api(opts.__dict__)
-  datasets=[dataset]
-  block_time_lst=[]
-  for dataset in datasets :
-    blocks=api.listBlocks(dataset)
-    for ablock in blocks:
+    def __init__(self, srcURL="", dstURL=""):
+	self.srcURL=srcURL
+	self.dstURL=dstURL
+	opts={}
+	opts['url']=srcURL
+	opts['version']='DBS_2_0_8'
+	self.dbs3api = DbsApi(url=dstURL)
+	self.dbs2api = Dbs2Api(opts)
+	self.block_time_lst=[]
+
+    def migrateWithParents(self, dataset):
+	#list all blocks in this dataset
+	blocks=self.dbs2api.listBlocks(dataset)
+	for ablock in blocks:
+	    self.migrateBlock(ablock)
+	    
+    def getStats(self):
+	return self.block_time_lst
+
+    def migrateBlock(self, ablock):
+	blockparents = self.dbs2api.listBlockParents(block_name=ablock['Name'])
+	for aparent_block in blockparents:
+	    self.migrateBlock(aparent_block)
+	print "NOW migrating : %s : from : %s TO : %s " % (ablock['Name'], self.srcURL, self.dstURL)    
 	block_time={}
         # Collect information here	
 	# Check if XML file already exists in loacl disk, use that
 	#	
 	blockName=ablock["Name"]
+	dataset=blockName.split('#')[0]
 	fileName = blockName.replace('/', '_').replace('#', '_') + ".xml"
 	if os.path.exists(fileName):
 		data = open(fileName, "r").read()
 	else:	
-		data=api.listDatasetContents(dataset, ablock["Name"])
+		data=self.dbs2api.listDatasetContents(dataset, blockName)
 		fp=open(fileName, "w")
 		fp.write(data)
 		fp.close()
@@ -55,7 +58,8 @@ try:
 	#print "Processing Dataset : %s and Block : %s " % (dataset, blockName)
   	class Handler (xml.sax.handler.ContentHandler):
 
-		def __init__(self):
+		def __init__(self, dbs3api):
+			self.dbs3api=dbs3api
 			self.primary_dataset=''
 			self.processed_dataset=''
 			self.creation_date=''
@@ -94,6 +98,10 @@ try:
 				self.dataset["data_tier_name"]=self.data_tier 
 				self.dataset["dataset"]=self.path
 
+			#if name == 'dataset':
+			#    self.block  = { "block_name": attrs.get("block_name"), "open_for_writing":1,"block_size": 0, "file_count": 0 }
+			#    self.block_name=attrs.get('block_name')
+				
 			if name == 'block':
 				self.block  = {
 						"block_name":attrs.get('name'), "open_for_writing":1,"block_size": attrs.get('size'), 
@@ -135,6 +143,7 @@ try:
 				    "app_name" : attrs.get('app_executable_name'),
 				    "release_version" : attrs.get('app_version'),
 				    "pset_hash" : attrs.get('ps_hash'),
+				    
 				    "output_module_label" : attrs.get('app_family_name')
 				}
 				self.outputconfs.append(outputconf)
@@ -166,24 +175,24 @@ try:
 					# Lets populate this in DBS
         				# API Object  
         				#print self.prdsobj
-        				dbs3api.insertPrimaryDataset(self.prdsobj)
+        				self.dbs3api.insertPrimaryDataset(self.prdsobj)
 
 					for anocfg in self.outputconfs:
-					    dbs3api.insertOutputConfig(anocfg)
+					    self.dbs3api.insertOutputConfig(anocfg)
 
 					##print self.dataset
 					self.dataset["output_configs"]=self.outputconfs
-        				dbs3api.insertDataset(self.dataset)
+        				self.dbs3api.insertDataset(self.dataset)
 
 					for asite in self.sitelist:
-					    dbs3api.insertSite(asite)
+					    self.dbs3api.insertSite(asite)
     
 					#print self.block
-					dbs3api.insertBlock(self.block)
+					self.dbs3api.insertBlock(self.block)
 					start_time=time.time()
 					#for file in self.files:
 					#	print file
-					dbs3api.insertFiles({"files" : self.files})
+					self.dbs3api.insertFiles({"files" : self.files})
 					end_time=time.time()
 					block_time['TimeSpent']=end_time-start_time
 					block_time['block_weight']=long(len(self.files))
@@ -197,32 +206,50 @@ try:
 						if file.has_key('file_parent_list'):
 							block_time['block_weight']+=long(len(file['file_parent_list']))
 							block_time['file_parent_count']+=long(len(file['file_parent_list']))
-					block_time_lst.append(block_time)
+					#block_time_lst.append(block_time)
 					#print "fin"
 				except Exception, ex:
 					print ex
 				
-  	xml.sax.parseString (data, Handler ())
-  print "dataset: %s" %dataset
-  print "-------------------------------------------------------------------------------------------------\n\n"
-  print "url: %s" % url
-  print "-------------------------------------------------------------------------------------------------\n\n"
-  print "RAW DATA: %s " % str(block_time_lst)
-  print "\n"
-  total_t=0.0
-  total_b=0.0
-  for item in block_time_lst:
-	print "Time Spent : %s (seconds) while Block Weightage is : %s [files: %s, avg lumis_per_file: %s, avg parent_per_file: %s]" \
+  	xml.sax.parseString (data, Handler (self.dbs3api))
+	return block_time
+
+if __name__=='__main__':
+    try:
+	#print sys.argv
+	if len(sys.argv) < 3: 
+	    print "Usage: python %s <dbs2url> <dbs3url> <dataset>" %sys.argv[0]
+	    sys.exit(1)
+	#url="http://vocms09.cern.ch:8585/dbs3"
+	dbs2url=sys.argv[1]
+	dbs3url=sys.argv[2]
+	dataset=sys.argv[3]
+	# DBS3 migration service 
+	mig_srvc=migrateDBS2TODBS3(dbs2url, dbs3url)
+	mig_srvc.migrateWithParents(dataset)
+	block_time_lst=mig_srvc.getStats()
+	print "-------------------------------------------------------------------------------------------------"
+	print "-------------------------------------------------------------------------------------------------"
+	print " MIGRATED : %s : from : %s TO : %s " % (dataset, dbs2url, dbs3url)
+	print "-------------------------------------------------------------------------------------------------"
+	print "-------------------------------------------------------------------------------------------------"
+	"""	
+	print "RAW DATA: %s " % str(block_time_lst)
+	print "\n"
+	total_t=0.0
+	total_b=0.0
+	for item in block_time_lst:
+		print "Time Spent : %s (seconds) while Block Weightage is : %s [files: %s, avg lumis_per_file: %s, avg parent_per_file: %s]" \
 				% ( str(item['TimeSpent']), str(item['block_weight']), item['file_count'], \
 						str( item['file_lumi_section_count']/item['file_count'] ), str(item['file_parent_count']/item['file_count'] ) )
-	total_t+=item['TimeSpent']
-	total_b+=item['block_weight']
-  print "-------------------------------------------------------------------------------------------------\n\n"
-  print "Total time spent: %s (seconds) for total block weightage of: %s " %( str(total_t), str(total_b) )
-  print "-------------------------------------------------------------------------------------------------\n\n"
-except DbsApiException, ex:
-  print "Caught API Exception %s: %s "  % (ex.getClassName(), ex.getErrorMessage() )
-  if ex.getErrorCode() not in (None, ""):
-    print "DBS Exception Error Code: ", ex.getErrorCode()
+		total_t+=item['TimeSpent']
+		total_b+=item['block_weight']
+	print "-------------------------------------------------------------------------------------------------\n\n"
+	print "Total time spent: %s (seconds) for total block weightage of: %s " %( str(total_t), str(total_b) )
+	"""
+
+    except Exception, ex:
+	print ex
+	print "-------------------------------------------------------------------------------------------------\n\n"
 
 
