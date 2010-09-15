@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.5 2009/10/28 14:53:48 akhukhun Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSModel.py,v 1.6 2009/10/28 15:10:30 akhukhun Exp $"
+__version__ = "$Revision: 1.6 $"
 
 
 import re, json
@@ -30,6 +30,7 @@ class DBSModel(RESTModel):
         self.addService('GET', 'datasets', self.listDatasets, \
                         ['primdsname', 'procdsname', 'datatiername'])
         self.addService('PUT', 'primds', self.insertPrimaryDataset)
+        self.addService('PUT', 'blocks', self.insertBlock)
         self.addService('POST', 'post', self.donothing)
         self.addService('DELETE', 'delete', self.donothing)
 
@@ -114,10 +115,10 @@ class DBSModel(RESTModel):
         assert type(indata) == dict
         assert len(indata.keys()) == 5
         assert "blockname" in indata.keys()
-        assert valid.match(indata["blockname"]), \
+        assert validblockname.match(indata["blockname"]), \
             "Invalid input format of %s, must be /a/b/c#d." % indata["blockname"] 
-        dlist = indata["blockname"].split("/")
-        dataset = "/" + dlist[1] + "/" + dlist[2] + "/" + dlist[3]
+        dlist = indata["blockname"].split("#")
+        dataset = dlist[0]
         indata["dataset"] = dataset
         indata["blocksize"] = int(indata["blocksize"])
         indata["filecount"] = int(indata["filecount"])
