@@ -59,7 +59,7 @@ CREATE OR REPLACE TRIGGER DC_TRIG before insert on DATASET_OUTPUT_MOD_CONFIGS fo
 CREATE OR REPLACE TRIGGER DP_TRIG before insert on DATASET_PARENTS for each row begin if :NEW.DATASET_PARENT_ID is null then select SEQ_DP.nextval into :NEW.DATASET_PARENT_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER DR_TRIG before insert on DATASET_RUNS for each row begin if :NEW.PATH_RUN_ID is null then select SEQ_DR.nextval into :NEW.PATH_RUN_ID from dual; end if; end;
+CREATE OR REPLACE TRIGGER DR_TRIG before insert on DATASET_RUNS for each row begin if :NEW.DATASET_RUN_ID is null then select SEQ_DR.nextval into :NEW.DATASET_RUN_ID from dual; end if; end;
  /
 
 CREATE OR REPLACE TRIGGER FC_TRIG before insert on FILE_OUTPUT_MOD_CONFIGS for each row begin if :NEW.FILE_OUTPUT_CONFIG_ID is null then select SEQ_FC.nextval into :NEW.FILE_OUTPUT_CONFIG_ID from dual; end if; end;
