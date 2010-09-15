@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.23 2009/11/30 22:11:39 afaq Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: DBSModel.py,v 1.24 2009/12/04 16:35:25 akhukhun Exp $"
+__version__ = "$Revision: 1.24 $"
 
 import re
 import cjson
@@ -97,7 +97,12 @@ class DBSModel(RESTModel):
         http://dbs3/files?block=/a/b/c%23d&lfn=/store/*
         """
         lfn = lfn.replace("*", "%")
-        return self.dbsFile.listFiles(dataset = dataset, block = block, lfn = lfn)
+        result = self.dbsFile.listFiles(dataset = dataset, block = block, lfn = lfn)
+        #return result
+        return [r for r in result]
+        #for r in result:
+        #    yield cjson.encode(r)
+
 
 
        
