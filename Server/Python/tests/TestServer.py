@@ -1,15 +1,14 @@
 """This module provides all basic tests for the server"""
 
-__revision__ = "$Id: TestServer.py,v 1.6 2009/11/19 17:38:57 akhukhun Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: TestServer.py,v 1.7 2009/11/26 16:49:42 akhukhun Exp $"
+__version__ = "$Revision: 1.7 $"
 
-IC = "23"
+IC = "28"
 NFILES = 100
 NLUMIS = 50
 
 
 
-import json
 import unittest
 from DBS3SimpleClient import DBS3Client
 
@@ -55,7 +54,8 @@ class TestServer(unittest.TestCase):
         sinput = []
         for k in range(NFILES):
             file = {"LOGICAL_FILE_NAME":"/store/sut_file_%s_%s.root" % (IC, str(k)),
-                    "IS_FILE_VALID":True,
+                    "IS_FILE_VALID":1,
+                    "DATASET":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (IC, IC),
                     "BLOCK":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (IC, IC, IC),
                     "FILE_TYPE":"EDM",
                     "CHECK_SUM":"999",
@@ -65,7 +65,7 @@ class TestServer(unittest.TestCase):
                     "MD5":"md5",
                     "AUTO_CROSS_SECTION":1234.}
             sinput.append(file)
-        self.cli.put("files", sinput)
+        self.cli.put("files", {"files":sinput})
         
     def test05(self):
         "insert one File with Lumi Sections and file parents"
@@ -78,7 +78,8 @@ class TestServer(unittest.TestCase):
             parentlist.append({"FILE_PARENT_LFN":"/store/sut_file_%s_%s.root" % (IC, str(p))})
         
         sinput = {"LOGICAL_FILE_NAME":"/store/sut_file_withlumisandparents_%s.root" % IC,
-                    "IS_FILE_VALID":True,
+                    "IS_FILE_VALID":1,
+                    "DATASET":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (IC, IC),
                     "BLOCK":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (IC, IC, IC),
                     "FILE_TYPE":"EDM",
                     "CHECK_SUM":"999",
@@ -89,7 +90,7 @@ class TestServer(unittest.TestCase):
                     "AUTO_CROSS_SECTION":1234.,
                     "FILE_LUMI_LIST":lumilist,
                     "FILE_PARENT_LIST":parentlist}
-        self.cli.put("files", sinput)
+        self.cli.put("files", {"files":sinput})
         
         
     def test10(self):
@@ -123,11 +124,11 @@ class TestServer(unittest.TestCase):
         
         params = {"block":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (IC, IC, IC)}
         res = self.cli.get("files", params)
-        self.assertEqual(len(res["result"]), NFILES+2)
+        self.assertEqual(len(res["result"]), NFILES+1)
         
 if __name__ == "__main__":
     
     SUITE = unittest.TestLoader().loadTestsFromTestCase(TestServer)
     #SUITE = unittest.TestSuite()
-    #SUITE.addTest(TestServer("test04"))
+    #SUITE.addTest(TestServer("test01"))
     unittest.TextTestRunner(verbosity=2).run(SUITE)
