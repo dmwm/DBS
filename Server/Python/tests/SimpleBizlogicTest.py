@@ -111,7 +111,60 @@ class Test:
 			    'block': '/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-DIGI-RAW#fc31bf9d-d44e-45a6-b87b-8fe6e2701062', 
 			    'is_file_valid': 1
 			}]
-
+		    
+		binput = [
+			 {  'adler32': u'NOTSET', 'file_type': 'EDM', 
+			    'file_output_config_list': [
+							{'release_version': u'CMSSW_2_1_7', 'pset_hash': u'NO_PSET_HASH', 
+							    'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
+							{'release_version': u'CMSSW_2_1_7', 'pset_hash': u'76e303993a1c2f842159dbfeeed9a0dd', 
+							    'app_name': u'cmsRun', 'output_module_label': u'output'}
+							], 
+			    'dataset': u'/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW', 
+			    'file_size': u'2012211901', 'last_modification_date': u'1263231727', 'auto_cross_section': 0.0, 'md5': u'NOTSET', 
+			    'check_sum': u'1504266448', 
+			    'file_lumi_list': [
+					{'lumi_section_num': u'27414', 'run_num': u'1'}, 
+					{'lumi_section_num': u'26422', 'run_num': u'1'}, 
+					{'lumi_section_num': u'29838', 'run_num': u'1'}
+					], 
+			    'file_parent_list': [ ], 
+			    'event_count': u'1619',
+			    'creation_date' : 1234, 
+			    'create_by': u'/DC=org/DC=doegrids/OU=People/CN=Ajit Kumar Mohapatra 867118', 
+			    'last_modified_by': u'anzar@cmssrv49.fnal.gov', 
+			    'logical_file_name': u'/1store/mc/Summer08/QCD_BCtoMu_Pt20/GEN-SIM-RAW/IDEAL_V9_v1/0013/4A31C2E6-E2BE-DD11-9FE1-001E680F64A2.root', 
+			    'block': u'/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW#f930d82a-f72b-4f9e-8351-8a3cb0c43b79', 
+			    'is_file_valid': 1
+			},
+			    {  'adler32': u'NOTSET', 'file_type': 'EDM', 
+			    'file_output_config_list': [
+							{'release_version': u'CMSSW_2_1_7', 'pset_hash': u'NO_PSET_HASH', 
+							    'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
+							{'release_version': u'CMSSW_2_1_7', 'pset_hash': u'76e303993a1c2f842159dbfeeed9a0dd', 
+							    'app_name': u'cmsRun', 'output_module_label': u'output'}
+							], 
+			    'dataset': u'/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW', 
+			    'file_size': u'2012211901', 'last_modification_date': u'1263231727', 'auto_cross_section': 0.0, 'md5': u'NOTSET', 
+			    'check_sum': u'1504266448', 
+			    'file_lumi_list': [
+					{'lumi_section_num': u'27414', 'run_num': u'1'}, 
+					{'lumi_section_num': u'26422', 'run_num': u'1'}, 
+					{'lumi_section_num': u'29838', 'run_num': u'1'}
+					], 
+			    'file_parent_list': [ ], 
+			    'event_count': u'1619',
+			    'creation_date' : 1234, 
+			    'create_by': u'/DC=org/DC=doegrids/OU=People/CN=Ajit Kumar Mohapatra 867118', 
+			    'last_modified_by': u'anzar@cmssrv49.fnal.gov', 
+			    'logical_file_name': u'/2store/mc/Summer08/QCD_BCtoMu_Pt20/GEN-SIM-RAW/IDEAL_V9_v1/0013/4A31C2E6-E2BE-DD11-9FE1-001E680F64A2.root', 
+			    'block': u'/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW#f930d82a-f72b-4f9e-8351-8a3cb0c43b79', 
+			    'is_file_valid': 1
+			},
+			
+		]
+		import pdb
+		pdb.set_trace()
 		bo.insertFile(binput)
 
 test=Test()
@@ -119,6 +172,6 @@ test=Test()
 #test.testDatasetInsert()
 #test.testAcquisitionEra()
 #test.testProcessingEra()
-test.testBlock()
-#test.testFiles()
+#test.testBlock()
+test.testFiles()
     

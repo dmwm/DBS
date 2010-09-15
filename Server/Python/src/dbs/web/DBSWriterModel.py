@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.14 2010/01/12 19:36:36 afaq Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.15 2010/01/12 21:06:39 afaq Exp $"
+__version__ = "$Revision: 1.15 $"
 
 import re
 import cjson
@@ -196,19 +196,18 @@ class DBSWriterModel(DBSReaderModel):
         assert type(indata) in (list, dict)
         if type(indata) == dict:
             indata = [indata]
-        
         for f in indata:
             f.update({
 		     #"dataset":f["dataset"],
-                     "creation_date": indata.get("creation_date", dbsUtils().getTime()),
-                     "create_by" : indata.get("create_by" , dbsUtils().getCreateBy()),
-                     "last_modification_date": indata.get("last_modification_date", dbsUtils().getTime()),
-                     "last_modified_by": indata.get("last_modified_by" , dbsUtils().getCreateBy()),
+                     "creation_date": f.get("creation_date", dbsUtils().getTime()),
+                     "create_by" : f.get("create_by" , dbsUtils().getCreateBy()),
+                     "last_modification_date": f.get("last_modification_date", dbsUtils().getTime()),
+                     "last_modified_by": f.get("last_modified_by" , dbsUtils().getCreateBy()),
                      "file_lumi_list":f.get("file_lumi_list",[]),
                      "file_parent_list":f.get("file_parent_list",[]),
 		     "file_assoc_list":f.get("assoc_list",[]),
                      "file_output_config_list":f.get("output_config_list",[])})
             businput.append(f)
-            
-        self.dbsFile.insertFile(businput)
+        self.logger.warning(businput) 
+	self.dbsFile.insertFile(businput)
     
