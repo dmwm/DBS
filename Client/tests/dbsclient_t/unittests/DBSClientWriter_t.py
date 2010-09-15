@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.2 2010/01/25 17:15:45 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.3 2010/01/25 19:47:21 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import os
 import sys
@@ -31,6 +31,23 @@ release_version='CMSSW_1_2_3'
 site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
 flist=[]
+
+outDict={
+"primary_ds_name" : primary_ds_name,
+"procdataset" : procdataset,
+"tier" : tier,
+"dataset" : dataset,
+"app_name" : app_name,
+"output_module_label" : output_module_label,
+"pset_hash" : pset_hash,
+"release_version" : release_version,
+"site" : site,
+"block" : block,
+}
+
+infoout=open("info.dict", "w")
+infoout.write(str(outDict))
+infoout.close()
 
 class DBSClientWriter_t(unittest.TestCase):
 
