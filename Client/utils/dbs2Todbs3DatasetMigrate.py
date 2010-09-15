@@ -74,13 +74,13 @@ try:
         	def startElement(self, name, attrs):
 			if name == 'primary_dataset':
 				self.primary_dataset=attrs.get('primary_name')
-				self.prdsobj = { "PRIMARY_DS_NAME" : str(self.primary_dataset), "PRIMARY_DS_TYPE": "test" }
+				self.prdsobj = { "primary_ds_name" : str(self.primary_dataset), "primary_ds_type": "test" }
 			if name == 'processed_dataset':
 				self.dataset=	{
-						"IS_DATASET_VALID": 1 , "PRIMARY_DS_NAME": self.primary_dataset, "PRIMARY_DS_TYPE": "test", "DATASET_TYPE":"PRODUCTION",
-						"GLOBAL_TAG": attrs.get('global_tag'),"XTCROSSSECTION":123,"PHYSICS_GROUP_NAME": "Tracker", 
-						"PROCESSING_VERSION" : "1",
-						"PROCESSED_DATASET_NAME": attrs.get('processed_datatset_name'), "ACQUISITION_ERA_NAME" : attrs.get('acquisition_era') 
+						"is_dataset_valid": 1 , "primary_ds_name": self.primary_dataset, "primary_ds_type": "test", "dataset_type":"PRODUCTION",
+						"global_tag": attrs.get('global_tag'),"xtcrosssection":123,"physics_group_name": "Tracker", 
+						"processing_version" : "1",
+						"processed_dataset_name": attrs.get('processed_datatset_name'), "acquisition_era_name" : attrs.get('acquisition_era') 
 						}
 					
 				self.processed_dataset=attrs.get('processed_datatset_name')
@@ -93,36 +93,36 @@ try:
 
 			if name == 'block':
 				self.block  = {
-						"BLOCK_NAME":attrs.get('name'), "OPEN_FOR_WRITING":1,"BLOCK_SIZE": attrs.get('size'), 
-						"FILE_COUNT":attrs.get('number_of_files'), "CREATION_DATE":attrs.get('creation_date'), 
-						"CREATE_BY":attrs.get('created_by'), "LAST_MODIFICATION_DATE":attrs.get('last_modification_date'), 
-						"LAST_MODIFIED_BY":attrs.get('last_modified_by')
+						"block_name":attrs.get('name'), "open_for_writing":1,"block_size": attrs.get('size'), 
+						"file_count":attrs.get('number_of_files'), "creation_date":attrs.get('creation_date'), 
+						"create_by":attrs.get('created_by'), "last_modification_date":attrs.get('last_modification_date'), 
+						"last_modified_by":attrs.get('last_modified_by')
 						}
 				self.block_name=attrs.get('name')
 
 			if name == 'storage_element':
-				self.block["ORIGIN_SITE"]=attrs.get('storage_element_name')
+				self.block["origin_site"]=attrs.get('storage_element_name')
 
 			if name == 'file':
 				self.currfile={
-					"LOGICAL_FILE_NAME":attrs.get('lfn'), "IS_FILE_VALID": 1, "DATASET": self.path, "BLOCK" : self.block_name,
-					"FILE_TYPE": "EDM",
-					"CHECK_SUM": attrs.get('checksum'), "EVENT_COUNT": attrs.get('number_of_events'), "FILE_SIZE": attrs.get('size'), 
-					"ADLER32": attrs.get('adler32'), "MD5": attrs.get('md5'), "AUTO_CROSS_SECTION": 0.0, 
-					"CREATE_BY":attrs.get('created_by'), "LAST_MODIFICATION_DATE":attrs.get('last_modification_date'),
-                                        "LAST_MODIFIED_BY":attrs.get('last_modified_by')
+					"logical_file_name":attrs.get('lfn'), "is_file_valid": 1, "dataset": self.path, "block" : self.block_name,
+					"file_type": "EDM",
+					"check_sum": attrs.get('checksum'), "event_count": attrs.get('number_of_events'), "file_size": attrs.get('size'), 
+					"adler32": attrs.get('adler32'), "md5": attrs.get('md5'), "auto_cross_section": 0.0, 
+					"create_by":attrs.get('created_by'), "last_modification_date":attrs.get('last_modification_date'),
+                                        "last_modified_by":attrs.get('last_modified_by')
 				     }
 
 			if name == 'file_lumi_section':
 				filelumi={
-						"RUN_NUM":attrs.get('run_number'),
-						"LUMI_SECTION_NUM":attrs.get('lumi_section_number')
+						"run_num":attrs.get('run_number'),
+						"lumi_section_num":attrs.get('lumi_section_number')
 					}
 				self.currfilelumis.append(filelumi)
 			
 			if name == 'file_parent':
 				fileparent = {
-						"FILE_PARENT_LFN":attrs.get('lfn')
+						"file_parent_lfn":attrs.get('lfn')
 					}
 				self.currfileparents.append(fileparent)
 
@@ -148,8 +148,8 @@ try:
 		def endElement(self, name) :
 			
 			if name == 'file' : 
-				self.currfile["FILE_LUMI_LIST"]=self.currfilelumis
-				self.currfile["FILE_PARENT_LIST"]=self.currfileparents
+				self.currfile["file_lumi_list"]=self.currfilelumis
+				self.currfile["file_parent_list"]=self.currfileparents
 				self.currfilelumis=[]
 				self.currfileparents=[]
 				self.files.append(self.currfile)
@@ -178,12 +178,12 @@ try:
 					block_time['file_lumi_section_count']=0
 					block_time['file_parent_count']=0
 					for file in self.files:
-						if file.has_key('FILE_LUMI_LIST'):
-							block_time['block_weight']+=long(len(file['FILE_LUMI_LIST']))
-							block_time['file_lumi_section_count']+=long(len(file['FILE_LUMI_LIST']))
-						if file.has_key('FILE_PARENT_LIST'):
-							block_time['block_weight']+=long(len(file['FILE_PARENT_LIST']))
-							block_time['file_parent_count']+=long(len(file['FILE_PARENT_LIST']))
+						if file.has_key('file_lumi_list'):
+							block_time['block_weight']+=long(len(file['file_lumi_list']))
+							block_time['file_lumi_section_count']+=long(len(file['file_lumi_list']))
+						if file.has_key('file_parent_list'):
+							block_time['block_weight']+=long(len(file['file_parent_list']))
+							block_time['file_parent_count']+=long(len(file['file_parent_list']))
 					block_time_lst.append(block_time)
 					#print "fin"
 				except Exception, ex:
