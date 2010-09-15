@@ -5,8 +5,8 @@
 # Project name:          DBS3                                            #
 # Author:                Yuyi Guo for DBS Group                          #
 # Script type:           Database drop script                            #
-# Created on:            2009-09-10 09:42                                #
-# Model version:         Version 2009-09-10                              #
+# Created on:            2010-02-08 10:21                                #
+# Model version:         Version 2010-02-08                              #
 # ---------------------------------------------------------------------- #
 
 
@@ -14,29 +14,29 @@
 # Drop foreign key constraints                                           #
 # ---------------------------------------------------------------------- #
 
-ALTER TABLE `PROCESS_CONFIGURATIONS` DROP FOREIGN KEY `AE_PC`;
+ALTER TABLE `OUTPUT_MODULE_CONFIGS` DROP FOREIGN KEY `AE_OMC`;
 
-ALTER TABLE `PROCESS_CONFIGURATIONS` DROP FOREIGN KEY `RV_PC`;
+ALTER TABLE `OUTPUT_MODULE_CONFIGS` DROP FOREIGN KEY `RV_OMC`;
 
-ALTER TABLE `PROCESS_CONFIGURATIONS` DROP FOREIGN KEY `PSH_PC`;
+ALTER TABLE `OUTPUT_MODULE_CONFIGS` DROP FOREIGN KEY `PSH_OMC`;
 
 ALTER TABLE `PRIMARY_DATASETS` DROP FOREIGN KEY `PDT_PDS`;
 
-ALTER TABLE `PATHS` DROP FOREIGN KEY `PDS_PH`;
+ALTER TABLE `DATASETS` DROP FOREIGN KEY `PDS_DS`;
 
-ALTER TABLE `PATHS` DROP FOREIGN KEY `DT_PH`;
+ALTER TABLE `DATASETS` DROP FOREIGN KEY `DT_DS`;
 
-ALTER TABLE `PATHS` DROP FOREIGN KEY `PSDS_PH`;
+ALTER TABLE `DATASETS` DROP FOREIGN KEY `PSDS_DS`;
 
-ALTER TABLE `PATHS` DROP FOREIGN KEY `PT_PH`;
+ALTER TABLE `DATASETS` DROP FOREIGN KEY `DTP_DS`;
 
-ALTER TABLE `PATHS` DROP FOREIGN KEY `PG_PH`;
+ALTER TABLE `DATASETS` DROP FOREIGN KEY `PG_DS`;
 
-ALTER TABLE `PATHS` DROP FOREIGN KEY `AQE_PH`;
+ALTER TABLE `DATASETS` DROP FOREIGN KEY `AQE_DS`;
 
-ALTER TABLE `PATHS` DROP FOREIGN KEY `PE_PH`;
+ALTER TABLE `DATASETS` DROP FOREIGN KEY `PE_DS`;
 
-ALTER TABLE `BLOCKS` DROP FOREIGN KEY `PH_BK`;
+ALTER TABLE `BLOCKS` DROP FOREIGN KEY `DS_BK`;
 
 ALTER TABLE `BLOCKS` DROP FOREIGN KEY `SI_BK`;
 
@@ -44,7 +44,7 @@ ALTER TABLE `BLOCK_PARENTS` DROP FOREIGN KEY `BK_BP`;
 
 ALTER TABLE `BLOCK_PARENTS` DROP FOREIGN KEY `BK_BP2`;
 
-ALTER TABLE `FILES` DROP FOREIGN KEY `PH_FL`;
+ALTER TABLE `FILES` DROP FOREIGN KEY `DS_FL`;
 
 ALTER TABLE `FILES` DROP FOREIGN KEY `BK_FL`;
 
@@ -52,19 +52,19 @@ ALTER TABLE `FILES` DROP FOREIGN KEY `FT_FL`;
 
 ALTER TABLE `FILES` DROP FOREIGN KEY `BH_FL`;
 
-ALTER TABLE `PATH_PROCESS_CONFIGS` DROP FOREIGN KEY `PH_PPC`;
+ALTER TABLE `DATASET_OUTPUT_MOD_CONFIGS` DROP FOREIGN KEY `DS_DC`;
 
-ALTER TABLE `PATH_PROCESS_CONFIGS` DROP FOREIGN KEY `PC_PPC`;
+ALTER TABLE `DATASET_OUTPUT_MOD_CONFIGS` DROP FOREIGN KEY `OMC_DC`;
 
-ALTER TABLE `PATH_PARENTS` DROP FOREIGN KEY `PH_PP`;
+ALTER TABLE `DATASET_PARENTS` DROP FOREIGN KEY `DS_DP`;
 
-ALTER TABLE `PATH_PARENTS` DROP FOREIGN KEY `PH_PP2`;
+ALTER TABLE `DATASET_PARENTS` DROP FOREIGN KEY `DS_DP2`;
 
-ALTER TABLE `PATH_RUNS` DROP FOREIGN KEY `PH_PR`;
+ALTER TABLE `DATASET_RUNS` DROP FOREIGN KEY `DS_DR`;
 
-ALTER TABLE `FILE_PROCESS_CONFIGS` DROP FOREIGN KEY `FL_FPC`;
+ALTER TABLE `FILE_OUTPUT_MOD_CONFIGS` DROP FOREIGN KEY `FL_FC`;
 
-ALTER TABLE `FILE_PROCESS_CONFIGS` DROP FOREIGN KEY `PC_FPC`;
+ALTER TABLE `FILE_OUTPUT_MOD_CONFIGS` DROP FOREIGN KEY `OMC_FC`;
 
 ALTER TABLE `ASSOCIATED_FILES` DROP FOREIGN KEY `FL_AF`;
 
@@ -102,7 +102,7 @@ DROP TABLE `APPLICATION_EXECUTABLES`;
 
 ALTER TABLE `RELEASE_VERSIONS` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_RV_VERSION` ON `RELEASE_VERSIONS`;
+DROP INDEX `TUC_RV_RELEASE_VERSION` ON `RELEASE_VERSIONS`;
 
 # Drop table #
 
@@ -177,18 +177,18 @@ DROP INDEX `TUC_PDT_PRIMARY_DS_TYPE` ON `PRIMARY_DS_TYPES`;
 DROP TABLE `PRIMARY_DS_TYPES`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "PATH_TYPES"                                                #
+# Drop table "DATASET_TYPES"                                             #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `PATH_TYPES` DROP PRIMARY KEY;
+ALTER TABLE `DATASET_TYPES` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_PT_PATH_TYPE` ON `PATH_TYPES`;
+DROP INDEX `TUC_DTP_DATASET_TYPE` ON `DATASET_TYPES`;
 
 # Drop table #
 
-DROP TABLE `PATH_TYPES`;
+DROP TABLE `DATASET_TYPES`;
 
 # ---------------------------------------------------------------------- #
 # Drop table "PARAMETER_SET_HASHES"                                      #
@@ -198,7 +198,7 @@ DROP TABLE `PATH_TYPES`;
 
 ALTER TABLE `PARAMETER_SET_HASHES` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_PSH_HASH` ON `PARAMETER_SET_HASHES`;
+DROP INDEX `TUC_PSH_PSET_HASH` ON `PARAMETER_SET_HASHES`;
 
 # Drop table #
 
@@ -231,20 +231,20 @@ DROP INDEX `TUC_SI_SITE_NAME` ON `SITES`;
 DROP TABLE `SITES`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "PROCESS_CONFIGURATIONS"                                    #
+# Drop table "OUTPUT_MODULE_CONFIGS"                                     #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `PROCESS_CONFIGURATIONS` ALTER COLUMN `OUTPUT_MODULE_LABEL` DROP DEFAULT;
+ALTER TABLE `OUTPUT_MODULE_CONFIGS` ALTER COLUMN `OUTPUT_MODULE_LABEL` DROP DEFAULT;
 
-ALTER TABLE `PROCESS_CONFIGURATIONS` DROP PRIMARY KEY;
+ALTER TABLE `OUTPUT_MODULE_CONFIGS` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_PC_1` ON `PROCESS_CONFIGURATIONS`;
+DROP INDEX `TUC_OMC_1` ON `OUTPUT_MODULE_CONFIGS`;
 
 # Drop table #
 
-DROP TABLE `PROCESS_CONFIGURATIONS`;
+DROP TABLE `OUTPUT_MODULE_CONFIGS`;
 
 # ---------------------------------------------------------------------- #
 # Drop table "DATA_TIERS"                                                #
@@ -275,20 +275,20 @@ DROP INDEX `TUC_PDS_PRIMARY_DS_NAME` ON `PRIMARY_DATASETS`;
 DROP TABLE `PRIMARY_DATASETS`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "PATHS"                                                     #
+# Drop table "DATASETS"                                                  #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `PATHS` ALTER COLUMN `IS_PATH_VALID` DROP DEFAULT;
+ALTER TABLE `DATASETS` ALTER COLUMN `IS_DATASET_VALID` DROP DEFAULT;
 
-ALTER TABLE `PATHS` DROP PRIMARY KEY;
+ALTER TABLE `DATASETS` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_PH_PATH_NAME` ON `PATHS`;
+DROP INDEX `TUC_DS_DATASET` ON `DATASETS`;
 
 # Drop table #
 
-DROP TABLE `PATHS`;
+DROP TABLE `DATASETS`;
 
 # ---------------------------------------------------------------------- #
 # Drop table "BLOCKS"                                                    #
@@ -313,6 +313,8 @@ DROP TABLE `BLOCKS`;
 # Drop constraints #
 
 ALTER TABLE `BLOCK_PARENTS` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_BP_1` ON `BLOCK_PARENTS`;
 
 # Drop table #
 
@@ -339,54 +341,60 @@ DROP INDEX `TUC_FL_LOGICAL_FILE_NAME` ON `FILES`;
 DROP TABLE `FILES`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "PATH_PROCESS_CONFIGS"                                      #
+# Drop table "DATASET_OUTPUT_MOD_CONFIGS"                                #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `PATH_PROCESS_CONFIGS` DROP PRIMARY KEY;
+ALTER TABLE `DATASET_OUTPUT_MOD_CONFIGS` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_DC_1` ON `DATASET_OUTPUT_MOD_CONFIGS`;
 
 # Drop table #
 
-DROP TABLE `PATH_PROCESS_CONFIGS`;
+DROP TABLE `DATASET_OUTPUT_MOD_CONFIGS`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "PATH_PARENTS"                                              #
+# Drop table "DATASET_PARENTS"                                           #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `PATH_PARENTS` DROP PRIMARY KEY;
+ALTER TABLE `DATASET_PARENTS` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_DP_1` ON `DATASET_PARENTS`;
 
 # Drop table #
 
-DROP TABLE `PATH_PARENTS`;
+DROP TABLE `DATASET_PARENTS`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "PATH_RUNS"                                                 #
+# Drop table "DATASET_RUNS"                                              #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `PATH_RUNS` ALTER COLUMN `COMPLETE` DROP DEFAULT;
+ALTER TABLE `DATASET_RUNS` ALTER COLUMN `COMPLETE` DROP DEFAULT;
 
-ALTER TABLE `PATH_RUNS` DROP PRIMARY KEY;
+ALTER TABLE `DATASET_RUNS` DROP PRIMARY KEY;
 
 # Drop table #
 
-DROP TABLE `PATH_RUNS`;
+DROP TABLE `DATASET_RUNS`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "FILE_PROCESS_CONFIGS"                                      #
+# Drop table "FILE_OUTPUT_MOD_CONFIGS"                                   #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `FILE_PROCESS_CONFIGS` DROP PRIMARY KEY;
+ALTER TABLE `FILE_OUTPUT_MOD_CONFIGS` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_FC_1` ON `FILE_OUTPUT_MOD_CONFIGS`;
 
 # Drop table #
 
-DROP TABLE `FILE_PROCESS_CONFIGS`;
+DROP TABLE `FILE_OUTPUT_MOD_CONFIGS`;
 
 # ---------------------------------------------------------------------- #
 # Drop table "ASSOCIATED_FILES"                                          #
@@ -395,6 +403,8 @@ DROP TABLE `FILE_PROCESS_CONFIGS`;
 # Drop constraints #
 
 ALTER TABLE `ASSOCIATED_FILES` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_AF_1` ON `ASSOCIATED_FILES`;
 
 # Drop table #
 
@@ -408,6 +418,8 @@ DROP TABLE `ASSOCIATED_FILES`;
 
 ALTER TABLE `FILE_PARENTS` DROP PRIMARY KEY;
 
+DROP INDEX `TUC_FP_1` ON `FILE_PARENTS`;
+
 # Drop table #
 
 DROP TABLE `FILE_PARENTS`;
@@ -419,6 +431,8 @@ DROP TABLE `FILE_PARENTS`;
 # Drop constraints #
 
 ALTER TABLE `FILE_LUMIS` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_FLM_1` ON `FILE_LUMIS`;
 
 # Drop table #
 
@@ -446,7 +460,7 @@ DROP TABLE `ACQUISITION_ERAS`;
 
 ALTER TABLE `PROCESSING_ERAS` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_PE_PROCESSING_ERA_NAME` ON `PROCESSING_ERAS`;
+DROP INDEX `TUC_PE_PROCESSING_VERSION` ON `PROCESSING_ERAS`;
 
 # Drop table #
 
@@ -473,6 +487,8 @@ DROP TABLE `STORAGE_ELEMENTS`;
 # Drop constraints #
 
 ALTER TABLE `BLOCK_STORAGE_ELEMENTS` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_BSE_1` ON `BLOCK_STORAGE_ELEMENTS`;
 
 # Drop table #
 
