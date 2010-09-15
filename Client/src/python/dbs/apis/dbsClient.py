@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.23 $"
-# $Id: dbsClient.py,v 1.23 2010/01/26 21:19:19 afaq Exp $"
+# $Revision: 1.24 $"
+# $Id: dbsClient.py,v 1.24 2010/01/26 21:22:14 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -257,7 +257,7 @@ class DbsApi:
                 if dataset : return self.callServer("/files?dataset=%s" %dataset)
                 if block : 
 			parts=block.split('#')
-			black_name=parts[0]+urllib.quote_plus('#')+parts[1]
+			block_name=parts[0]+urllib.quote_plus('#')+parts[1]
 			return self.callServer("/files?block_name=%s" %block_name)
 
 	def listFileParents(self, lfn=""):
