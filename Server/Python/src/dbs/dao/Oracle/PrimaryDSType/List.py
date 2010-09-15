@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDSType.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.1 2009/10/15 15:34:59 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List.py,v 1.2 2009/10/15 15:35:34 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -29,16 +29,3 @@ FROM PRIMARY_DS_TYPES PT
             binds = {"primdstype":pattern}
             result = self.dbi.processData(sql, binds, conn, transaction)
         return self.formatDict(result)
-            
-    
-if __name__ == "__main__":
-    import logging
-    from WMCore.Database.DBFactory import DBFactory
-    URL = "oracle://cms_dbs_afaq:anzpw03062009@oradev10.cern.ch:10520/D10"
-    LOGGER = logging.getLogger("dbs logger")
-    DBI = DBFactory(LOGGER, URL).connect()
-    DAO = List(LOGGER, DBI)
-    print DAO.execute()
-    print DAO.execute("mc") 
-    print DAO.execute("blabla")
-
