@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2009/11/16 19:24:37 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: List.py,v 1.4 2009/11/17 19:45:47 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -72,7 +72,8 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
         result = self.dbi.processData(sql, binds, conn, transaction)
         ldict = self.formatDict(result)
         
-        output = [{"size":len(ldict)}]
+        #output = [{"size":len(ldict)}]
+	output = []
         for idict in ldict:
             datasetdo = {"dataset_id":idict["dataset_id"],
                          "dataset":idict["dataset"]}
