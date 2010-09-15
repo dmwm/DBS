@@ -76,59 +76,71 @@ for aline in lines:
 			if str(e).find ('File exists') != -1 : pass
 			else : raise e
 
-		lfile=open(dao_path+"/List.py", "w")
+		#lfile=open(dao_path+"/List.py", "w")
 		ifile=open(dao_path+"/Insert.py", "w")	
-		ufile=open(dao_path+"/Update.py", "w")	
-		dfile=open(dao_path+"/Delete.py", "w")	
+		#ufile=open(dao_path+"/Update.py", "w")	
+		#dfile=open(dao_path+"/Delete.py", "w")	
 
 		header  = "# DAO Object for %s table" % classname 
-		header += "\n# $Revision: 1.1 $"
-		header += "\n# $Id: generate_dao.py,v 1.1 2009/10/07 20:14:33 afaq Exp $"
+		header += "\n# $Revision: 1.2 $"
+		header += "\n# $Id: generate_dao.py,v 1.2 2009/10/12 16:20:54 afaq Exp $"
 		header += "\n\nfrom WMCore.Database.DBFormatter import DBFormatter"
 
-		lfile.write(header) 
+		#lfile.write(header) 
 		ifile.write(header) 
-		ufile.write(header) 
-		dfile.write(header)
+		#ufile.write(header) 
+		#dfile.write(header)
 
                 isql="INSERT INTO "+table.upper()+"("
                 isqlvals=""
                 ssql="SELECT "
                 idx=0
-		binds=""
+		binds=[]
                 for acol in col_list:
-			binds+= ", "+ makeVarName(acol[0]) + " = " + "0"
+			binds.append( makeVarName(acol[0]).lower() )
 			
                         if idx==0:
                                 isql+= acol[0]
-                                isqlvals+= "?"
+                                isqlvals+= ":"+makeVarName(acol[0]).lower()
                                 ssql+=acol[0]+" AS C"+acol[0]
                                 idx=1
                         else:
                                 isql+= ", "+acol[0]
-                                isqlvals+= ", ?"
+                                isqlvals+= ", :"+makeVarName(acol[0]).lower()
                                 ssql+=", "+acol[0]+" AS C"+acol[0]
 
                 isql+=") VALUES ("+isqlvals+");"
                 ssql+=" FROM "+table;
-
-		ifile.write("\nclass List(DBFormatter):")
+		object=table.lower()+"Obj"
+		ifile.write("\n\nclass Insert(DBFormatter):")
 		ifile.write("\n\n    sql = \"\"\""+isql+"\"\"\"" )
-		ifile.write("\n    def getBinds(self"+binds+ " ):" )
-		ifile.write("\n    	binds = {}")
-		ifile.write("\n    def execute(self"+binds+ " ):" )
-                ifile.write("\n            binds = self.getBinds("+binds+")")
-                ifile.write("\n            result = self.dbi.processData(self.sql, binds,")
-                ifile.write("\n                             conn = conn, transaction = transaction)")
+		ifile.write("\n\n    def getBinds( self, "+ object+ " ):" )
+		ifile.write("\n            binds = {}")
+		ifile.write("\n            if type("+ object+ ") == type ('object'):")
+		ifile.write("\n            	binds = {")
+		for bind in binds:
+			ifile.write("\n			'"+bind+"' : " +object+ "['"+bind+"'],")
+		ifile.write("\n                 }")
+                ifile.write("\n\n            elif type("+object+") == type([]):")
+                ifile.write("\n               binds = []")
+                ifile.write("\n               for item in "+object+":")
+                ifile.write("\n                   binds.append({")
+		for bind in binds:
+			ifile.write("\n 	                '"+bind+"' : " + "item['"+bind+"'],")	
+                ifile.write("\n 	                })")
+                ifile.write("\n               return binds")
+
+		ifile.write("\n\n\n    def execute( self, "+object+ " ):" )
+                ifile.write("\n            binds = self.getBinds("+ object +" )")
+                ifile.write("\n            result = self.dbi.processData(self.sql, binds, conn = conn, transaction = transaction)")
                 ifile.write("\n            return")
 
-                #ifile.write(isql)
-                lfile.write(ssql)
+                #lfile.write(ssql)
 
-		lfile.close()
+		#lfile.close()
 		ifile.close()
-		ufile.close()
-		dfile.close()	
+		#ufile.close()
+		#dfile.close()	
 
 		table=""
 		col_list=[]
