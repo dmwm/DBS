@@ -2,8 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.7 2009/11/30 09:53:45 akhukhun Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: List.py,v 1.8 2009/12/08 19:30:43 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -42,8 +42,9 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
                 for kk in self.formatkeys[k]:
                     idict[k][kk] = idict[kk]
                     del idict[kk]
-            dictOut.append(idict)     
-        return {"result":dictOut} 
+            dictOut.append(idict) 
+	return dictOut    
+        #return {"result":dictOut} 
 
     def execute(self, dataset = "", block = "",  \
                 conn = None, transaction = False):
