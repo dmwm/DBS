@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.1 2009/12/08 19:28:52 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.2 2009/12/15 17:29:58 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import re
 import cjson
@@ -17,7 +17,9 @@ from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
 
-class DBSWriterModel(RESTModel):
+from dbs.web.DBSReaderModel import DBSReaderModel
+
+class DBSWriterModel(DBSReaderModel):
     """
     DBS3 Server API Documentation 
     """
@@ -25,85 +27,14 @@ class DBSWriterModel(RESTModel):
         """
         All parameters are provided through DBSConfig module
         """
-        RESTModel.__init__(self, config)
 
-        self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
-        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
-        self.addService('GET', 'datasets', self.listDatasets, ['dataset'])
-        self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block'])
-        self.addService('GET', 'files', self.listFiles, ['dataset', 'block', 'lfn'])
+        DBSReaderModel.__init__(self, config)
+
         self.addService('POST', 'primarydatasets', self.insertPrimaryDataset)
         self.addService('POST', 'datasets', self.insertDataset)
         self.addService('POST', 'blocks', self.insertBlock)
         self.addService('POST', 'files', self.insertFile)
 
-        cdict = self.config.dictionary_()
-        self.owner = cdict["dbowner"] 
-
-        self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, self.owner)
-        self.dbsDataset = DBSDataset(self.logger, self.dbi, self.owner)
-        self.dbsBlock = DBSBlock(self.logger, self.dbi, self.owner)
-        self.dbsFile = DBSFile(self.logger, self.dbi, self.owner)
-
-
-    def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
-        """
-        method that adds services to the DBS rest model
-        """
-        self.methods[verb][methodKey] = {'args': args,
-                                         'call': func,
-                                         'validation': validation,
-                                         'version': version}
- 
-    def listPrimaryDatasets(self, primarydataset = ""):
-        """
-        Example url's:
-        http://dbs3/primarydatasets/
-        http://dbs3/primarydatasets/qcd_20_30
-        http://dbs3/primarydatasets?primarydataset=qcd*
-        """
-        primds = primarydataset.replace("*","%")
-        return self.dbsPrimaryDataset.listPrimaryDatasets(primds)
-    
-    def listDatasets(self, dataset = ""):
-        """
-        Example url's:
-        http://dbs3/datasets
-        http://dbs3/datasets/RelVal*
-        http://dbs3/datasets?dataset=/RelVal*/*/*RECO
-        """
-        dataset = dataset.replace("*", "%")
-        return self.dbsDataset.listDatasets(dataset = dataset)
-        #return {}
-
-
-
-    def listBlocks(self, dataset = "", block = ""):
-        """
-        Example url's:
-        http://dbs3/blocks?dataset=/a/b/c
-        http://dbs3/blocks?block=/a/b/c%23*d
-        """
-        block = block.replace("*","%")
-        dataset = dataset.replace("*","%")
-        return self.dbsBlock.listBlocks(dataset=dataset, block=block)
-    
-    def listFiles(self, dataset = "", block = "", lfn = ""):
-        """
-        Example url's:
-        http://dbs3/files?dataset=/a/b/c/
-        http://dbs3/files?block=a/b/c#d
-        http://dbs3/files?dataset=/a/b/c&lfn=/store/*
-        http://dbs3/files?block=/a/b/c%23d&lfn=/store/*
-        """
-        lfn = lfn.replace("*", "%")
-        result = self.dbsFile.listFiles(dataset = dataset, block = block, lfn = lfn)
-        return result
-        #return [r for r in result]
-        #for r in result:
-        #    yield cjson.encode(r)
-
-       
     def insertPrimaryDataset(self):
         """
         gets the input from cherrypy request body.
