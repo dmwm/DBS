@@ -2,8 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.23 2010/07/30 12:00:55 akhukhun Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: List.py,v 1.24 2010/08/09 20:02:46 yuyi Exp $"
+__version__ = "$Revision: 1.24 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from WMCore.Database.MySQLCore import  MySQLInterface
@@ -23,7 +23,7 @@ class List(DBFormatter):
 SELECT B.BLOCK_ID, B.BLOCK_NAME, B.OPEN_FOR_WRITING, 
         B.BLOCK_SIZE, B.FILE_COUNT,
         B.DATASET_ID, DS.DATASET,
-        B.ORIGIN_SITE_NAME
+        B.ORIGIN_SITE_NAME, B.CREATION_DATE, B.CREATE_BY
 FROM %sBLOCKS B
 JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
     """ % ((self.owner,)*2)
