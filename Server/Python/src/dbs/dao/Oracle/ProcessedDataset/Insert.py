@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ProcessedDatasets table """ 
 
-__revision__ = "$Revision: 1.9 $"
-__version__  = "$Id: Insert.py,v 1.9 2010/06/23 21:21:26 afaq Exp $ "
+__revision__ = "$Revision: 1.10 $"
+__version__  = "$Id: Insert.py,v 1.10 2010/08/20 15:55:57 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -25,10 +25,10 @@ class Insert(DBFormatter):
         daoinput must be validated to have the following keys:
         processeddsid, processeddsname
 	"""
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/ProcessedDataset/Insert expects db connection from upper layer.")
-        try:
-            self.dbi.processData(self.sql, daoinput, conn, transaction)
-        except exceptions.IntegrityError, ex:
-            self.logger.warning("Unique constraint violation being ignored...")
-            self.logger.warning("%s" % ex)
+	#if not conn:
+	    #raise Exception("dbs/dao/Oracle/ProcessedDataset/Insert expects db connection from upper layer.")
+        #try:
+	self.dbi.processData(self.sql, daoinput, conn, transaction)
+        #except exceptions.IntegrityError, ex:
+            #self.logger.warning("Unique constraint violation being ignored...")
+            #self.logger.warning("%s" % ex)
