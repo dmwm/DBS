@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.40 2010/05/28 21:20:32 afaq Exp $"
-__version__ = "$Revision: 1.40 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.41 2010/06/04 15:27:01 afaq Exp $"
+__version__ = "$Revision: 1.41 $"
 
 import re
 import cjson
@@ -39,7 +39,7 @@ class DBSWriterModel(DBSReaderModel):
         self.addService('POST', 'datasets', self.insertDataset)
         self.addService('POST', 'sites', self.insertSite)
         self.addService('POST', 'blocks', self.insertBlock)
-        self.addService('POST', 'files', self.insertFile)
+        self.addMethod('POST', 'files', self.insertFile)
 	self.addService('PUT', 'files', self.updateFile)
 	self.addService('PUT', 'datasets', self.updateDataset)
 	self.addService('PUT', 'blocks', self.updateBlock)
@@ -232,7 +232,7 @@ class DBSWriterModel(DBSReaderModel):
 	except Exception, ex:
 	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
 	    
-    def insertFile(self):
+    def insertFile(self, qInserts=True):
         """
         gets the input from cherrypy request body
         input must be a (list of) dictionary with the following keys: <br />
@@ -252,13 +252,8 @@ class DBSWriterModel(DBSReaderModel):
 	    file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
 	    file_output_config_list(optional, default = []) :[{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] <br />
         """
-
+		
 	try:
-	    # AA, this falg is for testing at the moment, we can do something about tis later
-	    # qInserts == True; Use the automated queuing
-	    #             False; DO NOT use the queing
-	    qInserts=True
-	    
 	    body = request.body.read()
 	    indata = cjson.decode(body)["files"]
         
