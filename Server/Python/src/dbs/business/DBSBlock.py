@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.25 2010/04/16 21:57:30 afaq Exp $"
-__version__ = "$Revision: 1.25 $"
+__revision__ = "$Id: DBSBlock.py,v 1.26 2010/04/19 15:41:19 afaq Exp $"
+__version__ = "$Revision: 1.26 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -25,6 +25,7 @@ class DBSBlock:
         self.blockin = daofactory(classname = "Block.Insert")
 	self.updatestatus = daofactory(classname='Block.UpdateStatus')
         self.blockparentlist = daofactory(classname="BlockParent.List")
+        self.blockchildlist = daofactory(classname="BlockParent.ListChild")
 	
     def updateStatus(self, block_name="", open_for_writing=0):
 	"""
@@ -63,6 +64,22 @@ class DBSBlock:
 	finally:
 	    conn.close()
 
+    def listBlockChildren(self, block_name=""):
+	"""
+	list parents of a block
+	"""
+	try:
+	    conn = self.dbi.connection()
+	    results = self.blockchildlist.execute(conn, block_name)
+	    conn.close()
+	    return results
+	except Exception, ex:
+	    raise ex
+	finally:
+	    conn.close()
+
+
+    
     def listBlocks(self, dataset="", block_name="", site_name=""):
         """
         dataset, block_name or site_name must be passed.

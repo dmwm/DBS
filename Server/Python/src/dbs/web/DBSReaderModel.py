@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.27 2010/04/16 21:57:31 afaq Exp $"
-__version__ = "$Revision: 1.27 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.28 2010/04/19 15:41:20 afaq Exp $"
+__version__ = "$Revision: 1.28 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -52,6 +52,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'datatypes', self.listDataTypes)#, ['block_name', 'se_name'])
         self.addService('GET', 'datatiers', self.listDataTiers)#, ['block_name', 'se_name'])
         self.addService('GET', 'blockparents', self.listBlockParents)#, ['block_name', 'se_name'])
+        self.addService('GET', 'blockchildren', self.listBlockChildren)#, ['block_name', 'se_name'])
         
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
@@ -150,11 +151,19 @@ class DBSReaderModel(RESTModel):
     def listBlockParents(self, block_name=""):
         """
         Example url's:
-        http://dbs3/blockparentss?block_name=/a/b/c%23*d <br />
+        http://dbs3/blockparents?block_name=/a/b/c%23*d <br />
         """
         block_name = block_name.replace("*","%")
         return self.dbsBlock.listBlockParents(block_name)
-   
+  
+    def listBlockChildren(self, block_name=""):
+        """
+        Example url's:
+        http://dbs3/blockchildren?block_name=/a/b/c%23*d <br />
+        """
+        block_name = block_name.replace("*","%")
+        return self.dbsBlock.listBlockChildren(block_name)
+ 
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", 
 	pset_hash="", app_name="", output_module_label="", minrun=-1, maxrun=-1,
 	origin_site=""):
