@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.7 2010/02/11 22:54:21 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.8 2010/02/12 22:25:33 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -54,7 +54,8 @@ class DBSOutputConfig:
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            try:
+
+	    try:
                 businput["app_exec_id"] = self.appid.execute(businput["app_name"], conn, True)	
             except Exception, e:
                 if str(e).find('does not exist') != -1:
@@ -70,12 +71,15 @@ class DBSOutputConfig:
             except Exception, e:
                 if str(e).find('does not exist') != -1:
                     businput["release_version_id"] = self.sm.increment("SEQ_RV", conn, True)
-                    verdaoinput = { "release_version_id" : businput["release_version_id"], 
-                                    "release_version" : businput["release_version"]}
+                    verdaoinput = { 
+                                    "release_version" : businput["release_version"],
+				    "release_version_id" : businput["release_version_id"]
+				}
                     self.verin.execute(verdaoinput, conn, True)
                 else : 
                     raise
-                
+ 
+              
             try:
                 businput["parameter_set_hash_id"] = self.hashid.execute(businput["pset_hash"], conn, True)
             except Exception, e:

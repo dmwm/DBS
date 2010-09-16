@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ApplicationExecutables table """ 
 
-__revision__ = "$Revision: 1.6 $"
-__version__  = "$Id: Insert.py,v 1.6 2010/02/11 22:51:59 afaq Exp $ "
+__revision__ = "$Revision: 1.7 $"
+__version__  = "$Id: Insert.py,v 1.7 2010/02/12 22:25:33 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -16,6 +16,8 @@ class Insert(DBFormatter):
 
     def execute( self, appExeObj, conn=None, transaction=False ):
 	try:
+	    print self.sql
+	    print appExeObj
             result = self.dbi.processData(self.sql, appExeObj, conn, transaction)
  	except Exception, e:
 	    if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:

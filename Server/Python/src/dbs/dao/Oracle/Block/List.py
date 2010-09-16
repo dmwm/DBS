@@ -2,8 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.12 2010/02/11 18:03:23 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: List.py,v 1.13 2010/02/12 22:25:34 afaq Exp $"
+__version__ = "$Revision: 1.13 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -63,7 +63,8 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
             
         else: 
             raise Exception("dataset, block_name or site_name must be provided")
-        
+#self.logger.warning("QUERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR %s" % sql) 
+#	self.logger.warning("BINDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD %s" % str(binds) )
         cursor = conn.connection.cursor()
         cursor.execute(sql, binds)
         result = self.formatCursor(cursor)
