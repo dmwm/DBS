@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.17 2010/02/11 18:03:25 afaq Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: List.py,v 1.18 2010/02/18 19:56:50 yuyi Exp $"
+__version__ = "$Revision: 1.18 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -84,10 +84,14 @@ WHERE F.IS_FILE_VALID = 1
 	if not dataset and not block_name and not logical_file_name and not release_version \
 				    and not pset_hash and not app_name and not output_module_label:
             raise Exception("Either dataset or block must be provided")
-        
+        """
         cursor = conn.connection.cursor()
         cursor.execute(sql, binds)
-        result = self.formatCursor(cursor)
+	"""
+	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	assert len(cursors) == 1, "File does not exist"
+		
+        result = self.formatCursor(cursors[0])
         conn.close()
         return result 
 
