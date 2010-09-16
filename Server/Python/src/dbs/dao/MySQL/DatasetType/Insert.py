@@ -1,40 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for DatasetTypes table """ 
 
-__revision__ = "$Revision: 1.1 $"
-__version__  = "$Id: Insert.py,v 1.1 2010/02/05 21:00:42 afaq Exp $ "
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2010/02/11 19:39:31 afaq Exp $ "
 
-from WMCore.Database.DBFormatter import DBFormatter
+from dbs.dao.Oracle.DatasetType.Insert import Insert as OraDatasetTypeInsert
 
-class Insert(DBFormatter):
-
-    def __init__(self, logger, dbi):
-            DBFormatter.__init__(self, logger, dbi)
-	    self.owner = "%s." % owner
-
-            self.sql = """INSERT INTO %sDATASET_TYPES ( DATASET_TYPE_ID, DATASET_TYPE) VALUES (:datasettypeid, :datasettype)""" % (self.owner)
-
-    def getBinds_delme( self, dataset_typesObj ):
-            binds = {}
-            if type(dataset_typesObj) == type ('object'):
-            	binds = {
-			'datasettypeid' : dataset_typesObj['datasettypeid'],
-			'datasettype' : dataset_typesObj['datasettype'],
-                 }
-
-            elif type(dataset_typesObj) == type([]):
-               binds = []
-               for item in dataset_typesObj:
-                   binds.append({
- 	                'datasettypeid' : item['datasettypeid'],
- 	                'datasettype' : item['datasettype'],
- 	                })
-               return binds
-
-
-    def execute( self, dataset_typesObj, conn=None, transaction=False ):
-            ##binds = self.getBinds( dataset_typesObj )
-            result = self.dbi.processData(self.sql, binds, conn, transaction)
-            return
-
+class Insert(OraDatasetTypeInsert):
+            pass
 

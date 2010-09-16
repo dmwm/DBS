@@ -1,23 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for FileOutputMod_configs table """ 
 
-__revision__ = "$Revision: 1.1 $"
-__version__  = "$Id: Insert.py,v 1.1 2010/02/05 21:00:44 afaq Exp $ "
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2010/02/11 19:39:32 afaq Exp $ "
 
-from WMCore.Database.DBFormatter import DBFormatter
-from sqlalchemy import exceptions
+from dbs.dao.Oracle.FileLumi.Insert import Insert as OraFileLumiInsert
 
-class Insert(DBFormatter):
+class Insert(OraFileLumiInsert):
+            pass
 
-    def __init__(self, logger, dbi, owner):
-            DBFormatter.__init__(self, logger, dbi)
-            self.owner = "%s." %owner
-	    self.logger = logger
-            self.sql = """INSERT INTO %sFILE_OUTPUT_MOD_CONFIGS ( FILE_OUTPUT_CONFIG_ID, FILE_ID, OUTPUT_MOD_CONFIG_ID) VALUES (:file_output_config_id, :file_id, :output_mod_config_id)""" % (self.owner)
-
-    def execute( self, binds, conn=None, transaction=False ):
-	try:
-            result = self.dbi.processData(self.sql, binds, conn, transaction)
-        except exceptions.IntegrityError, ex:
-	    self.logger.warning("Unique constraint violation being ignored...")
-	    self.logger.warning("%s" % ex)

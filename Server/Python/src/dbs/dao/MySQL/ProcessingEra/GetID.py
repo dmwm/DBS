@@ -2,35 +2,11 @@
 """
 This module provides ProcessingEra.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.1 2010/02/05 21:00:48 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: GetID.py,v 1.2 2010/02/11 19:39:34 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
-from WMCore.Database.DBFormatter import DBFormatter
+from dbs.dao.Oracle.ProcessingEra.GetID import GetID as OraProcessingEraGetID
 
-class GetID(DBFormatter):
-    """
-    ProcessingEra GetID DAO class.
-    """
-    def __init__(self, logger, dbi, owner):
-        """
-        Add schema owner and sql.
-        """
-        DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
-        self.sql = \
-	"""
-	SELECT PE.PROCESSING_ERA_ID, PE.PROCESSING_VERSION
-	FROM %sPROCESSING_ERAS PE
-	WHERE PE.PROCESSING_VERSION = :processing_version 
-	""" % (self.owner)
+class GetID(OraProcessingEraGetID):
+            pass
 
-    def execute(self, name, conn = None, transaction = False):
-        """
-        returns id for a given processing version name
-        """
-        binds = {"processing_version":name}
-        result = self.dbi.processData(self.sql, binds, conn, transaction)
-        plist = self.formatDict(result)
-        assert len(plist) == 1, \
-            "ProcessingVersion %s does not exist" % name
-        return plist[0]["processing_era_id"]

@@ -1,50 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for DatasetRuns table """ 
 
-__revision__ = "$Revision: 1.1 $"
-__version__  = "$Id: Insert.py,v 1.1 2010/02/05 21:00:42 afaq Exp $ "
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2010/02/11 19:39:31 afaq Exp $ "
 
-from WMCore.Database.DBFormatter import DBFormatter
+from dbs.dao.Oracle.DatasetRun.Insert import Insert as OraDatasetRunInsert
 
-class Insert(DBFormatter):
-
-    def __init__(self, logger, dbi):
-            DBFormatter.__init__(self, logger, dbi)
-	    self.owner = "%s." % owner
-
-            self.sql = """INSERT INTO %sDATASET_RUNS ( DATASET_RUN_ID, DATASET_ID, RUN_NUMBER, COMPLETE, LUMI_SECTION_COUNT, CREATION_DATE, CREATE_BY) VALUES (:datasetrunid, :datasetid, :runnumber, :complete, :lumisectioncount, :creationdate, :createby)""" % (self.owner) 
-
-    def getBinds_delme( self, dataset_runsObj ):
-            binds = {}
-            if type(dataset_runsObj) == type ('object'):
-            	binds = {
-			'datasetrunid' : dataset_runsObj['datasetrunid'],
-			'datasetid' : dataset_runsObj['datasetid'],
-			'runnumber' : dataset_runsObj['runnumber'],
-			'complete' : dataset_runsObj['complete'],
-			'lumisectioncount' : dataset_runsObj['lumisectioncount'],
-			'creationdate' : dataset_runsObj['creationdate'],
-			'createby' : dataset_runsObj['createby'],
-                 }
-
-            elif type(dataset_runsObj) == type([]):
-               binds = []
-               for item in dataset_runsObj:
-                   binds.append({
- 	                'datasetrunid' : item['datasetrunid'],
- 	                'datasetid' : item['datasetid'],
- 	                'runnumber' : item['runnumber'],
- 	                'complete' : item['complete'],
- 	                'lumisectioncount' : item['lumisectioncount'],
- 	                'creationdate' : item['creationdate'],
- 	                'createby' : item['createby'],
- 	                })
-               return binds
-
-
-    def execute( self, dataset_runsObj, conn=None, transaction=False ):
-            ##binds = self.getBinds( dataset_runsObj )
-            result = self.dbi.processData(self.sql, binds, conn, transaction)
-            return
-
+class Insert(OraDatasetRunInsert):
+            pass
 

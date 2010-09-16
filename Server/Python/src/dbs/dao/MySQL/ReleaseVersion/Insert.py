@@ -1,25 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for ReleaseVersions table """ 
 
-__revision__ = "$Revision: 1.1 $"
-__version__  = "$Id: Insert.py,v 1.1 2010/02/05 21:00:51 afaq Exp $ "
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2010/02/11 19:39:35 afaq Exp $ "
 
-from WMCore.Database.DBFormatter import DBFormatter
+from dbs.dao.Oracle.ReleaseVersion.Insert import Insert as OraReleaseVersionInsert
 
-class Insert(DBFormatter):
-
-    def __init__(self, logger, dbi, owner):
-            DBFormatter.__init__(self, logger, dbi)
-	    self.owner = "%s." % owner
-
-            self.sql = """INSERT INTO %sRELEASE_VERSIONS ( RELEASE_VERSION_ID, RELEASE_VERSION) VALUES (:release_version_id, :release_version)""" % (self.owner)
-
-    def execute( self, relVerObj, conn=None, transaction=False ):
-	try:
-            result = self.dbi.processData(self.sql, relVerObj, conn, transaction)
- 	except Exception, ex:
-	    if str(ex).lower().find("unique constraint") != -1 :
-		pass
-	    else:
-		raise
-
+class Insert(OraReleaseVersionInsert):
+            pass
+	   

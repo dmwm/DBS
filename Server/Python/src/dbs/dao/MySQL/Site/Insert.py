@@ -1,19 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for Sites table """ 
 
-__revision__ = "$Revision: 1.1 $"
-__version__  = "$Id: Insert.py,v 1.1 2010/02/05 21:00:51 afaq Exp $ "
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2010/02/11 19:39:35 afaq Exp $ "
 
-from WMCore.Database.DBFormatter import DBFormatter
-from sqlalchemy import exceptions
-from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
+from dbs.dao.Oracle.Site.Insert import Insert as OraSiteInsert
 
-class Insert(InsertSingle):
-    """ DAO for Insert Site """
-    def execute( self, daoinput, conn=None, transaction=False ):
-	try:
-            self.executeSingle(daoinput, "SITES", conn, transaction)
-        except Exception:
-            raise
-
-
+class Insert(OraSiteInsert):
+            pass
+	   
