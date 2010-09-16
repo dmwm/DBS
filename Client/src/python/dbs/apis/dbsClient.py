@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.15 $"
-# $Id: dbsClient.py,v 1.15 2010/01/06 16:53:08 afaq Exp $"
+# $Revision: 1.16 $"
+# $Id: dbsClient.py,v 1.16 2010/01/06 19:42:25 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -88,7 +88,7 @@ class DbsApi:
                 * API to list A primary dataset in DBS 
 		* name : name of the primary dataset
                 """
-                return self.callServer("/primarydatasets?primarydataset=%s" %dataset )
+                return self.callServer("/primarydatasets?primary_ds_name=%s" %dataset )
 
         def insertPrimaryDataset(self, primaryDSObj={}):
                 """
@@ -104,6 +104,49 @@ class DbsApi:
                 """
                 return self.callServer("/outputconfigs", params = outputConfigObj )
 
+        def listOutputConfigs(self, dataset="", logical_file_name="", version="", hash="", app_name="", output_module_label=""):
+                """
+                * API to list OutputConfigs in DBS 
+                * dataset : Full dataset (path) of the dataset
+		* parent_dataset : Full dataset (path) of the dataset
+		* version : cmssw version
+		* hash : pset hash
+		* app_name : Application name (generally it is cmsRun)
+		* output_module_label : output_module_label
+		*
+		* You can use ANY combination of these parameters in this API
+                """
+		add_to_url=""
+		amp=False
+		if dataset: 
+		    add_to_url += "dataset=%s"%dataset
+		    amp=True
+		if parent_dataset: 
+		    if amp: add_to_url += "&"
+		    add_to_url += "logical_file_name=%s"%logical_file_name
+		    amp=True
+		if version:
+		    if amp: add_to_url += "&"
+		    add_to_url += "version=%s"%version
+		    amp=True
+		if hash:
+		    if amp: add_to_url += "&"
+		    add_to_url += "hash=%s"%hash
+		    amp=True
+		if app_name:
+		    if amp: add_to_url += "&"
+		    add_to_url += "app_name=%s"%app_name
+		    amp=True
+		if  output_module_label:
+		    if amp: add_to_url += "&"
+		    add_to_url += "output_module_label=%s"%output_module_label
+		    amp=True
+		
+		if add_to_url:
+		    return self.callServer("/outputconfigs?%s" % add_to_url )
+		# Default, list all datasets
+                return self.callServer("/outputconfigs")
+
     	def insertAcquisitionEra(self, acqEraObj={}):
                 """
                 * API to insert An Acquisition Era in DBS 
@@ -118,18 +161,55 @@ class DbsApi:
                 """
                 return self.callServer("/processingeras", params = procEraObj )
 
-        def listDatasets(self):
+        def listDatasets(self, dataset="", parent_dataset="", version="", hash="", app_name="", output_module_label=""):
                 """
-                * API to list ALL datasets in DBS
+                * API to list dataset(s) in DBS 
+                * dataset : Full dataset (path) of the dataset
+		* parent_dataset : Full dataset (path) of the dataset
+		* version : cmssw version
+		* hash : pset hash
+		* app_name : Application name (generally it is cmsRun)
+		* output_module_label : output_module_label
+		*
+		* You can use ANY combination of these parameters in this API
                 """
+		add_to_url=""
+		amp=False
+		if dataset: 
+		    add_to_url += "dataset=%s"%dataset
+		    amp=True
+		if parent_dataset: 
+		    if amp: add_to_url += "&"
+		    add_to_url += "parent_dataset=%s"%parent_dataset
+		    amp=True
+		if version:
+		    if amp: add_to_url += "&"
+		    add_to_url += "version=%s"%version
+		    amp=True
+		if hash:
+		    if amp: add_to_url += "&"
+		    add_to_url += "hash=%s"%hash
+		    amp=True
+		if app_name:
+		    if amp: add_to_url += "&"
+		    add_to_url += "app_name=%s"%app_name
+		    amp=True
+		if  output_module_label:
+		    if amp: add_to_url += "&"
+		    add_to_url += "output_module_label=%s"%output_module_label
+		    amp=True
+		
+		if add_to_url:
+		    return self.callServer("/datasets?%s" % add_to_url )
+		# Default, list all datasets
                 return self.callServer("/datasets")
-
-        def listDataset(self, dataset):
+    
+	def listDatasetParents(self, dataset):
                 """
-                * API to list A primary dataset in DBS 
-                * Dataset : Full dataset (path) of the dataset
+                * API to list A datasets parents in DBS 
+		* dataset : dataset
                 """
-                return self.callServer("/datasets?dataset=%s" % dataset )
+                return self.callServer("/datasetparents?dataset=%s" %dataset )
 
         def insertDataset(self, datasetObj={}):
                 """
@@ -145,33 +225,46 @@ class DbsApi:
                 """
                 return self.callServer("/blocks", params = blockObj )
 
-        def listBlock(self, block):
+        def listBlocks(self, block_name="", dataset="", site_name=""):
                 """
                 * API to list A block in DBS 
                 * name : name of the block
                 """
-		parts=block.split('#')
-		black_name=parts[0]+urllib.quote_plus('#')+parts[1]
-                return self.callServer("/blocks?block=%s" %black_name )
-
-        def listBlocks(self, dataset):
-                """
-                * API to list blocks in a dataset
-                * dataset : name of the dataset
-                """
-                return self.callServer("/blocks?dataset=%s" %dataset)
-
+		if block_name:
+		    parts=block_name.split('#')
+		    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+		    url_param="block_name=%s" %block_name
+		    if site_name:
+			url_param += url_param+"&site_name=%s"%site_name
+		    return self.callServer("/blocks?%s" %url_param )
+		if dataset:
+		    return self.callServer("/blocks?dataset=%s" %dataset)
+		    
         def listFile(self, lfn="", dataset="", block=""):
                 """
                 * API to list A file in DBS 
                 * lfn : lfn of file
                 """
-                if lfn not in (None, "") : return self.callServer("/files?lfn=%s" %lfn)
-                if dataset not in (None, "") : return self.callServer("/files?dataset=%s" %dataset)
-                if block not in (None, "") : 
+                if lfn : return self.callServer("/files?logical_file_name=%s" %lfn)
+                if dataset : return self.callServer("/files?dataset=%s" %dataset)
+                if block : 
 			parts=block.split('#')
 			black_name=parts[0]+urllib.quote_plus('#')+parts[1]
-			return self.callServer("/files?block=%s" %black_name)
+			return self.callServer("/files?block_name=%s" %block_name)
+
+	def listFileParents(self, lfn=""):
+	    """
+	    * API to list file parents
+	    * lfn : lfn of file
+	    """
+	    return self.callServer("/fileparents?logical_file_name=%s" %lfn)
+
+	def listFileLumis(self, lfn=""):#, block_name):
+	    """
+	    * API to list Lumi for files
+	    * lfn : lfn of file
+	    """
+	    return self.callServer("/filelumis?logical_file_name=%s" %lfn)
 
         def insertFiles(self, filesList=[]):
                 """
