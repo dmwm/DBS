@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDSType.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.2 2010/01/12 22:55:36 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: List.py,v 1.3 2010/02/11 18:03:29 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -16,7 +16,7 @@ class List(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
 SELECT S.SITE_ID, S.SITE_NAME

@@ -3,8 +3,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List1.py,v 1.6 2010/02/08 22:43:27 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: List1.py,v 1.7 2010/02/11 18:03:24 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -20,7 +20,7 @@ class List1(DBFormatter):
         We might need to pass these parameters from outside later
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = ("", "%s." % owner)[bool(owner)]
+	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
 SELECT D.DATASET_ID, D.DATASET, D.IS_DATASET_VALID, 

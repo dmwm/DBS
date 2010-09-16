@@ -2,8 +2,8 @@
 """
 This module provides ReleaseVersion.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.3 2010/01/21 20:04:25 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: GetID.py,v 1.4 2010/02/11 18:03:28 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -16,7 +16,7 @@ class GetID(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 	"""
 	SELECT R.RELEASE_VERSION_ID

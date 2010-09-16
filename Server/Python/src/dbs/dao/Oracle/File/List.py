@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.16 2010/02/08 22:47:31 afaq Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: List.py,v 1.17 2010/02/11 18:03:25 afaq Exp $"
+__version__ = "$Revision: 1.17 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -17,7 +17,7 @@ class List(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = ("","%s." % owner)[bool(owner)]
+	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
         self.sql = \
 """
 SELECT F.FILE_ID, F.LOGICAL_FILE_NAME, F.IS_FILE_VALID, 

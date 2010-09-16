@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileParents table """ 
 
-__revision__ = "$Revision: 1.9 $"
-__version__  = "$Id: Insert.py,v 1.9 2010/01/05 00:24:58 afaq Exp $ "
+__revision__ = "$Revision: 1.10 $"
+__version__  = "$Id: Insert.py,v 1.10 2010/02/11 18:03:26 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -11,7 +11,7 @@ class Insert(DBFormatter):
 
     def __init__(self, logger, dbi, owner):
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
+	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
 INSERT INTO %sFILE_LUMIS 

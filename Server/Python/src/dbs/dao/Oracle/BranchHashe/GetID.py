@@ -3,8 +3,8 @@
 This module provides BranchHashe.GetID data access object.
 Light dao object to get the id for a given BranchHash
 """
-__revision__ = "$Id: GetID.py,v 1.3 2010/01/07 17:30:42 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: GetID.py,v 1.4 2010/02/11 18:03:24 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -16,7 +16,7 @@ class GetID(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
 SELECT BH.BRANCH_HASH_ID, BH.HASH

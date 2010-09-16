@@ -3,8 +3,8 @@
 This module provides Dataset.GetID data access object.
 Light dao object to get the id for a give /primds/procds/tier
 """
-__revision__ = "$Id: GetID.py,v 1.5 2009/12/22 21:52:26 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: GetID.py,v 1.6 2010/02/11 18:03:24 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -16,7 +16,7 @@ class GetID(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
 SELECT D.DATASET_ID
