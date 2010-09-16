@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.4 2010/08/17 16:28:34 yuyi Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.5 2010/08/20 16:19:35 yuyi Exp $"
+__version__ = "$Revision: 1.5 $"
 
 import threading
 import logging
@@ -72,7 +72,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
         #self.sm		    = daofactory(classname="SequenceManager")
 	self.fpr = daofactory(classname="MigrationRequests.FindPendingRequest")
 	self.urs = daofactory(classname="MigrationRequests.UpdateRequestStatus")
-	self.fmb = daofactory(classname="MigrationBlock.FindMigrateableBlock")
+	self.fmb = daofactory(classname="MigrationBlock.FindMigrateableBlocks")
 	#self.reqlist = daofactory(classname="MigrationRequests.List")
 	#self.minreqlist = daofactory(classname="MigrationRequests.ListOldest")
 	#self.requestup   = daofactory(classname="MigrationRequests.Update")
@@ -138,7 +138,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 
 
 	# Report that service has started
-	self.insertStatus("STARTED")
+	#self.insertStatus("STARTED")
 
     # This is the actual poll method, called over and over by the frwk
     def algorithm(self, parameters):
@@ -146,6 +146,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	Performs the handleMigration method, called by frwk over and over (until terminate is called)
 	"""
 	logging.debug("Running dbs migration algorithm")
+	print "Running dbs migration algorithm"
 	
 	#here is the excitment starting.
 	self.handleMigration()	
@@ -163,24 +164,34 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	6. Change the block status to 'COMPLETED' (?remove from the list?)
 	7. Pick the next block, go to 4.
 	8. After no more blocks can be migrated, mark the request as DONE (move to history table!!!!)
+
+	Migration request has four status: 0=pending, 1=running, 3=Completed and 4=failed.
+	Migration block has three status: 0=pending, 3=completed and 4=failed
 	"""
 	
 	request={}
 	requestID=-1
 	try :
 	    #1 get a migration request in 0 (PENDING) STATUS & Change its status to 1 (RUNNING)
+	    print "get a migration request in 0 (PENDING) STATUS & Change its status to 1 (RUNNING)"
 	    conn = self.dbi.connection()
-	    request = getMigrationRequest(conn)
+	    request = self.getMigrationRequest(conn)
+	    print "request = %s" %request
 	    if not request:
 		return 
 	    
 	    #2 find the highest order pending block		    
+	    print "find the highest order pending block"
 	    requestID=request["migration_request_id"]
+	    #import pdb
+	    #pdb.set_trace()
 	    blocks = self.fmb.execute(conn, requestID)
 	    for ablock in blocks:
+		print "migrate block by block!"
 	        self.migrateBlock(conn, ablock['migration_block_name'], request["migration_url"])
 	    
 	    #Finally mark the request as 3=Completed
+	    print "Finally mark the request as 3=Completed"
 	    tran = conn.begin()
 	    self.urs.execute(conn, requestID, 3, self.threadID, dbsUtils().getTime())
 	    tran.commit();
@@ -188,11 +199,12 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    self.logger.exception("DBS Migration Service failed to perform migration %s" %str(ex))
 	    #FAILED=4
 	    tran = conn.begin()
-	    self.urs.execute(conn, requestID, 4, self.threadID, dbsUtils().getTime()))
+	    self.urs.execute(conn, requestID, 4, self.threadID, dbsUtils().getTime())
 	    tran.commit()
 	    raise
 	finally:
-	    conn.close()
+	    if conn:
+		conn.close()
 
     def getMigrationRequest(self, conn):
 	"""
@@ -200,16 +212,18 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	--atomic operation
 	"""
 	request=[]
+	#import pdb
+	#pdb.set_trace()
 	try:
 	    tran = conn.begin()
-	    #get the pending request
+	    #get the pending request(status=0)
 	    request = self.fpr.execute(conn,tran)
-	    if len(request) <= 1:
+	    if len(request) <= 0:
 		#not found request, goodby.
 		tran.rollback()
 		return {}
 	    else:	    
-		requestID=request[0]["MIGRATION_REQUEST_ID"]
+		requestID=request[0]["migration_request_id"]
 		migration_status = 1
 		#update the request to 1 (running)
 		self.urs.execute(conn, requestID, 1, self.threadID, dbsUtils().getTime(),tran)
@@ -217,17 +231,21 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		return request[0]
 	except Exception, ex:
 	    self.logger.exception("DBS Migrate Service Failed to find migration requests")
-	    raise Exception("DBS Migrate Service Failed to find migration requests: %s", %ex)
+	    raise Exception("DBS Migrate Service Failed to find migration requests: %s" %ex)
 	
 		
     def updateBlockStatus(self, conn, block_name, status):
-            try:
-	        blkupst = dict(migration_status=status, migration_block_name=block_name)
-		print "TEMPORARY : commented out"
-		#self.blkup.execute(conn, blkupst)
-	        self.reportStatus(conn, "WORKING FINE")
-            except:
-	        raise
+	#Migration block has three status: 0=pending, 3=completed and 4=failed
+	try:
+	    tran=conn.begin()
+	    blkupst = dict(migration_status=status, migration_block_name=block_name)
+	    #print "TEMPORARY : commented out"
+	    self.blkup.execute(conn, blkupst, tran)
+	    #self.reportStatus(conn, "WORKING FINE")
+	    tran.commit()
+	except:
+	    tran.rollback()
+	    raise
 
     def migrateBlock(self, conn, block_name, url):
 	"""
@@ -237,10 +255,12 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	try:
 	    blockcontent = self.getRemoteBlock(url, block_name)
 	    #the mover is putBlock
-	    self.putBlock(conn, blockcontent)
-	    self.updateBlockStatus(conn, block_name, 'COMPLETED')
+	    self.putBlock(conn, blockcontent, url)
+	    #3='COMPLETED'
+	    self.updateBlockStatus(conn, block_name, 3)
 	except Exception, ex:
-	    self.updateBlockStatus(conn, block_name, 'FAILED')
+	    #4='FAILED'
+	    self.updateBlockStatus(conn, block_name, 4)
 	    raise Exception ("Migration of Block %s from DBS %s has failed, Exception trace: \n %s " % (url, block_name, ex ))
 
     def getRemoteBlock(self, url, block_name):
@@ -260,7 +280,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
     def getRemoteData(self, url, verb, searchingName, searchingVal):
         """Client type call to get content from the remote server"""
         try:
-            resturl = "%s/%s?%s=%s" % (url, verb, searchingname, searchingVal)
+            resturl = "%s/%s?%s=%s" % (url, verb, searchingName, searchingVal)
             req = urllib2.Request(url = resturl)
             data = urllib2.urlopen(req)
             #Now it is depending on the remote server's calls.
@@ -275,14 +295,19 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	Insert the data in sereral steps and commit when each step finishes or rollback if there is a problem.
 	"""
 	#1 insert configuration
+	print "insert configuration"
 	configList = self.insertOutputModuleConfig(conn, blockcontent['dataset']['dataset'], url)
 	#2 insert dataset
+	print "insert dataset"
 	datasetId = self.insertDataset(conn, blockcontent, configList,  url)
 	#3 Insert Block
+	print "insert Block"
 	blockId = self.insertBlock(conn, blockcontent)
 	#4 inser files
+	print "insert files"
+	self.insertFile(conn,blockcontent,blockId,datasetId)
     
-    def insertFile(self, conn, blockcontent, blockId, datasetId)
+    def insertFile(self, conn, blockcontent, blockId, datasetId):
         fileLumiList = []
 	fileTypeObjs = []
 	fileConfObjs = []
@@ -301,8 +326,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		if(i%intval==0):
 		    id = self.sm.increment(conn,"SEQ_FL")
 		fileList[i]['file_id'] = id
-		logicalFileName{fileList[i]['logical_file_name']} = id
-		id += 1
+		logicalFileName[fileList[i]['logical_file_name']] = id
 		fileList[i]['block_id'] = blockId
 		fileList[i]['dataset_id'] = datasetId
 		#get file type id
@@ -316,6 +340,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		#get lumi info
 		lumi = fileList[i]['file_lumi_list']
                 nlumi = len(lumi)
+		#import pdb
+		#pdb.set_trace()
 		for j in range(nlumi):
 		    lumi[j]['file_id'] = id
 		    if((i*nlumi+j)%intvalum==0):
@@ -325,10 +351,10 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		fileLumiList[len(fileLumiList):] = lumi
 		#remove the lumi list from the file 
 		del fileList[i]['file_lumi_list']
-		#get file parents
+		id += 1
 	except Exception, ex:
             self.logger.exception("DBS file and lumi section exception: %s" %ex)
-	   raise
+	    raise
 	try:	
 	    #deal with file parentage
 	    nfileparent = len(fileParentList)
@@ -358,7 +384,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    raise
 	try:
 	    #now we build everything to insert the files.
-	    tran = conn.being()
+	    tran = conn.begin()
 	    #insert the file type
 	    if fileTypeObjs:
 		self.filetypein.execute(conn, fileTypeObjs, tran)
@@ -381,7 +407,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    raise
 
 
-    def insertBlock(self, conn, blockcontent)
+    def insertBlock(self, conn, blockcontent):
 	"""
 	Block is very simple to insert
 
@@ -392,7 +418,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	try:
 	    tran = conn.begin()
 	    block['block_id'] = self.sm.increment(conn,"SEQ_BK")
-	    block['dataset_id'] =  blockcontent['dataset']['datset_id']
+	    block['dataset_id'] =  blockcontent['dataset']['dataset_id']
 	    self.blockin.execute(conn, block, tran)
 	    newBlock = True
 	except exceptions.IntegrityError:
@@ -429,7 +455,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    raise
 	return block['block_id']
 
-    def insertOutputModuleConfig(self, conn, dataset, url)
+    def insertOutputModuleConfig(self, conn, dataset, url):
         """
         Insert Release version, application, parameter set hashes and the map(output module config).
 
@@ -443,7 +469,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		   c["output_module_label"])
 		if cfgid > 0:
 		    otptIdList.append(cfgid)
-		    self.datasetCache['conf']={c["app_name"]+':'+c["release_version"]+':'c["pset_hash"] : cfgid}
+		    self.datasetCache['conf'][c["app_name"]+':'+c["release_version"]+':'+c["pset_hash"]] = cfgid
 		if cfgid <=0 :
 		    missingList.append(c)
 	except Exception, ex:
@@ -465,7 +491,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 			#not found release version in db, insert it now
 			reId = self.sm.increment(conn, "SEQ_RV")
 			reobj={"release_version": m["release_version"], "release_version_id": reId}
-			self.releaseVin(conn, reobj, tran)
+			self.releaseVin.execute(conn, reobj, tran)
 		    #cached it
 		    self.datasetCache['relVer'][m["release_version"]] = reId
 		#find pset hash id
@@ -473,12 +499,12 @@ class DBSMigrationEngine(BaseWorkerThread) :
                     #found in cache
                     pHId = self.datasetCache['pHash'][m["pset_hash"]]
                 else:
-                    pHId = self.psetHashid.execute(conn, m["release_version"])
+                    pHId = self.psetHashid.execute(conn, m["pset_hash"])
                     if pHId <= 0:
                         #not found p set hash in db, insert it now
                         pHId = self.sm.increment(conn, "SEQ_PSH")
-                        pHobj={"pset_hash": m["pset_hash"], "parameter_set_hash_id": pHId}
-                        self.psetHashin(conn, pHobj, tran)
+                        pHobj={"pset_hash": m["pset_hash"], "parameter_set_hash_id": pHIdi, 'name':m['name']}
+                        self.psetHashin.execute(conn, pHobj, tran)
                     #cached it
                     self.datasetCache['pHash'][m["pset_hash"]] = pHId
 		#find application id
@@ -491,16 +517,16 @@ class DBSMigrationEngine(BaseWorkerThread) :
                         #not found application in db, insert it now
                         appId = self.sm.increment(conn, "SEQ_AE")
                         appobj={"app_name": m["app_name"], "app_exec_id": appId}
-                        self.appin(conn, appobj, tran)
+                        self.appin.execute(conn, appobj, tran)
                     #cached it
                     self.datasetCache['appExe'][m["app_name"]] = pHId	
 		#Now insert the config
 		configObj = {'output_mod_config_id':cfgid , 'app_exec_id':appId,  'release_version_id':reId,  \
                              'parameter_set_hash_id':pHId , 'output_module_label':m['output_module_label'],   \
-                             'creation_date':, 'create_by': }
-		self.otptModCfgin(conn,	configObj, tran)
+                             'creation_date':None, 'create_by':''}
+		self.otptModCfgin.execute(conn,	configObj, tran)
 		otptIdList.append(cfgid)
-		self.datasetCache['conf']={m["app_name"]+':'+m["release_version"]+':'m["pset_hash"] : cfgid}
+		self.datasetCache['conf'][m["app_name"]+':'+m["release_version"]+':'+m["pset_hash"]] = cfgid
 	    tran.commit()
 	except Exception, ex:
 	    self.logger.exception("DBS output module configure inseration exception: %s" %ex)
@@ -509,11 +535,14 @@ class DBSMigrationEngine(BaseWorkerThread) :
         return otptIdList
 
 
-    def insertDataset(self, conn, blockcontent, otptIdList, sourceurl)
+    def insertDataset(self, conn, blockcontent, otptIdList, sourceurl):
 	"""
 	This method insert a datsset from a block object into dest dbs. When data is not completed in
 	the block object. It will reterive data from the source url. 
 	"""
+	#import pdb
+	#pdb.set_trace()
+	dataset = blockcontent['dataset']
 	#Check if dataset in the cache
 	if dataset["dataset"] in (self.datasetCache['dataset']).keys():
 	    dataset['dataset_id'] = self.datasetCache['dataset'][dataset["dataset"]]
@@ -532,33 +561,42 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    tran = conn.begin()
 	    #1. Deal with primary dataset. Most primary datasets are perinstalled in db  
 	    primds = blockcontent["primds"]
+	    #import pdb
+	    #pdb.set_trace()
 	    #First, search in the cache
 	    if primds["primary_ds_name"] in (self.datasetCache['primDs']).keys():
 		#found it, update the ID with local ID 
 		primds["primary_ds_id"] = self.datasetCache['primDs'][primds["primary_ds_name"]]
 	    else:   
 		#Second, seach in the local db
+		#import pdb
+		#pdb.set_trace()
 		primds["primary_ds_id"] = self.primdsid.execute(conn, primds["primary_ds_name"])
-		    if primds["primary_ds_id"] <= 0:
-			#primary dataset is not in db yet. We need to check if the primary_ds_type before insert primary ds
-			if primds["primary_ds_type"] in (self.datasetCache['primDsTp']).keys(): 
-			    primds["primary_ds_type_id"] = self.datasetCache['primDsTp'][primds["primary_ds_type"]]
-			else:
-			    primds["primary_ds_type_id"] = self.primdstpid.execute(conn, primds["primary_ds_type"]))
-			    if primds["primary_ds_type_id"] <= 0:
-				#primary ds type is not in db yet. Insert it now
-				primds["primary_ds_type_id"] = self.sm.increment(conn,"SEQ_PDT")
-				self.primdstpin(conn, primds["primary_ds_type_id"], primds["primary_ds_type"],tran)
-			    #register to cache. Done with primary ds type    
-			    self.datasetCache['primDsTp']["primary_ds_type"]=primds["primary_ds_type_id"]
-			#Now inserting primary ds. Clean up dao object befer inserting
-			del primds["primary_ds_type"]
-			primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS"))
-			self.primdsin(conn, primds, tran) 
+		if primds["primary_ds_id"] <= 0:
+		    #primary dataset is not in db yet. We need to check if the primary_ds_type before insert primary ds
+		    if primds["primary_ds_type"] in (self.datasetCache['primDsTp']).keys(): 
+			primds["primary_ds_type_id"] = self.datasetCache['primDsTp'][primds["primary_ds_type"]]
+		    else:
+			primds["primary_ds_type_id"] = self.primdstpid.execute(conn, primds["primary_ds_type"])
+			if primds["primary_ds_type_id"] <= 0:
+			    #primary ds type is not in db yet. Insert it now
+			    primds["primary_ds_type_id"] = self.sm.increment(conn,"SEQ_PDT")
+			    obj={'primary_ds_type_id':primds["primary_ds_type_id"], 'primary_ds_type':primds["primary_ds_type"]}
+			    self.primdstpin.execute(conn, obj, tran)
+			#register to cache. Done with primary ds type    
+			self.datasetCache['primDsTp']["primary_ds_type"]=primds["primary_ds_type_id"]
+		    #Now inserting primary ds. Clean up dao object befer inserting
+		    del primds["primary_ds_type"]
+		    primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS")
+		    self.primdsin.execute(conn, primds, tran) 
 		#register to cache. Done with primary ds     
 		self.datasetCache['primDs']["primary_ds_name"] = primds["primary_ds_id"]
+		dataset['primary_ds_id'] = primds["primary_ds_id"]
+		#del primds["primary_ds_name"]
 	    #2 Deal with processed ds
 	    #Check if processed ds in the cache
+	    #import pdb
+	    #pdb.set_trace()
 	    if dataset["processed_ds_name"] in (self.datasetCache['processedDs']).keys():
 		dataset['processed_ds_id'] = self.datasetCache['processedDs'][dataset["processed_ds_name"]]
 	    else:
@@ -572,7 +610,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		    dataset['processed_ds_id'] = daoproc['processed_ds_id']
 		except exceptions.IntegrityError:
 		    #Ok, it is in db already. Get the ID
-		    dataset['processed_ds_id'] = self.procdsid.execute(conn, dataset['processed_ds_name']))
+		    dataset['processed_ds_id'] = self.procdsid.execute(conn, dataset['processed_ds_name'])
 		    #regist to cache
 		    self.datasetCache['processedDs']['processed_ds_name'] = dataset['processed_ds_id']
 		    pass
@@ -580,6 +618,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		    self.logger.exception("DBS processed ds inseration exception: %s" %ex)
 		    tran.rollback
 		    raise
+	    #
+	    del dataset["processed_ds_name"]
 	    #3 Deal with Acquisition era
 	    aq = blockcontent['acquisition_era']
 	    #is there acquisition?
@@ -588,7 +628,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		if aq['acquisition_era_name'] in (self.datasetCache['acquisitionEra']).keys():
 		    dataset['acquisition_era_id'] = self.datasetCache['acquisitionEra'][aq['acquisition_era_name']]
 		else:
-		    try;
+		    try:
 			#insert acquisition era into db
 			aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
 			self.acqin.execute(conn, aq, tran)
@@ -614,7 +654,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		if pera['processing_version'] in (self.datasetCache['processingVersion']).keys():
 		    dataset['processing_era_id'] = self.datasetCache['processingVersion'][aq['processing_version']]
 		else:
-		    try;
+		    try:
 			#insert processing era into db
 			pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE")
 			self.procsingin.execute(conn, pera, tran)
@@ -639,7 +679,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	
 	#Continue for the rest.
 	try:
-	    tran=conn.begnin()
+	    tran=conn.begin()
 	    #5 Deal with physics gruop
 	    phg = dataset['physics_group_name']
 	    if phg:
@@ -667,7 +707,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		dataset['data_tier_id'] = self.datasetCache['dataTier'][dataT]
 	    else:
 		#not in cache, check if in db
-		dataTId = sef.tierid.execute(conn, dataT)
+		dataTId = self.tierid.execute(conn, dataT)
 		if dataTId <= 0 :
 		    #not in db. Insert the tier
 		    #get the rest data from remote db
@@ -682,25 +722,25 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    dsTp = dataset['dataset_access_type']
 	    #check cache
             if dsTp in (self.datasetCache['datasetAccTp']).keys():
-                dataset['dataset_access_type_id'] = self.datasetCache['datasetAccTp'][dataT]
+                dataset['dataset_access_type_id'] = self.datasetCache['datasetAccTp'][dsTp]
             else:
                 #not in cache, check if in db
-                dsTpId = sef.datatypeid.execute(conn, dsTp)
+                dsTpId = self.datatypeid.execute(conn, dsTp)
                 if dsTpId <= 0 :
                     #not in db. Insert the type
                     dsTpId = self.sm.increment(conn,"SEQ_DTP")
                     theType={'dataset_access_type':dsTp, 'dataset_access_type_id':dsTpId}
                     self.datatypein.execute(conn, theType, tran)
                 dataset['dataset_access_type_id'] = dsTpId
-		self.datasetCache['datasetAccTp'][dataT] = dsTpId
-            del dataset['data_access_type_id']
+		self.datasetCache['datasetAccTp'][dsTp] = dsTpId
+            del dataset['dataset_access_type']
             tran.commit()
 	except Exception, ex:
 	    self.logger.exception("DBS pre-dataset inseration exception: %s" %ex)
             tran.rollback()
             raise
 	try:
-	    tran.conn.begin()
+	    tran = conn.begin()
 	    #8 Finally, we have everything to insert a dataset
 	    dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
 	    self.datasetin.execute(conn, dataset, tran)
@@ -711,7 +751,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		    dcId = self.sm.increment(conn,"SEQ_DC")
 		    dcObj ={'ds_output_mod_conf_id': self.sm.increment(conn,"SEQ_DC"), \
                          'dataset_id':dataset['dataset_id'] , 'output_mod_config_id':c }
-		    self.dcin.execute(conn, dcobj, tran)
+		    self.dcin.execute(conn, dcObj, tran)
 		except exceptions.IntegrityError:
 		    #ok, already in db
 		    pass
@@ -723,7 +763,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    dsParentObjList=[]
 	    for p in dsPList:
 		dsParentObj={'dataset_parent_id': self.sm.increment(conn,"SEQ_DP"), 'this_dataset_id': dataset['dataset_id']\
-                              'parent_dataset_id' : self.datasetid(conn, p['parent_dataset']}
+                             , 'parent_dataset_id' : self.datasetid(conn, p['parent_dataset'])}
 		dsParentObjList.append(dsParentObj)
 	    #insert dataset parentage in bulk
 	    self.dsparentin(conn, dsParentObjList, tran)	    
@@ -779,6 +819,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	"""
 	logging.debug("Terminating DBS Migration Service")
 
+
+
 if __name__ == '__main__':
 #----------------
 # This section is just for testing
@@ -790,58 +832,21 @@ if __name__ == '__main__':
     from sqlalchemy import create_engine
     import logging
 
-    def configure(configfile):
-        config = loadConfigurationFile(configfile)
-	
-	"""
-        wconfig = cfg.section_("Webtools")
-        app = wconfig.application
-        appconfig = cfg.section_(app)
-        service = list(appconfig.views.active._internal_children)[0]
-        dbsconfig = getattr(appconfig.views.active, service)
-        dbsconfig.formatter.object="WMCore.WebTools.RESTFormatter"
-        config = Configuration()
-        config.component_('DBS')
-        config.DBS.application = app
-        config.DBS.model       = dbsconfig.model
-        config.DBS.formatter   = dbsconfig.formatter
-        config.DBS.database    = dbsconfig.database
-        config.DBS.dbowner     = dbsconfig.dbowner
-        config.DBS.version     = dbsconfig.version
-        config.DBS.default_expires = 300
-        config = config.section_("DBS")
-	"""
-
-        print config
-        return config
-
     def setupDB(config):
-	
 	logger = logging.getLogger()
 	_engineMap = {}
 	myThread = threading.currentThread()
-	print config
-	"""
-	_defaultEngineParams = {"convert_unicode" : True,
-                            "strategy": "threadlocal",
-                            "pool_recycle": 7200}
-	engine = _engineMap.setdefault(config.database.connectUrl,
-                                         create_engine(config.database.connectUrl,
-                                                       connect_args = {},
-                                                       **_defaultEngineParams)
-                                                  )
-	"""
-
 	myThread.logger=logger
 	myThread.dbFactory = DBFactory(myThread.logger, config.CoreDatabase.connectUrl, options={})
         myThread.dbi = myThread.dbFactory.connect()
-    	#dbInterface =  DBInterface(logger, engine)
-        #myThread.dbi=dbInterface
+
 #Run the test
 
-    config=configure(os.environ['WMAGENT_CONFIG'])
+    config=loadConfigurationFile(os.environ['WMAGENT_CONFIG'])
+    print config
     setupDB(config)
 
-    migrator=DBSMigrationServicePoller(config)
+    migrator=DBSMigrationEngine(config)
     migrator.setup("NONE")
     migrator.algorithm("NONE")
+    print "All Done"
