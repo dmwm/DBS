@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.3 2010/06/25 18:50:47 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.4 2010/06/25 21:18:02 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -13,6 +13,7 @@ import json, cjson
 import urllib, urllib2
 from sqlalchemy import exceptions
 from sqlalchemy.exceptions import IntegrityError
+from dbs.utils.dbsUtils import dbsUtils
 
 def pprint(a):
     print json.dumps(a, sort_keys=True, indent=4)
@@ -30,6 +31,7 @@ class DBSMigrate:
 	self.mgrlist = daofactory(classname="MigrationRequests.List")
 	self.mgrin   = daofactory(classname="MigrationRequests.Insert")
 	self.mgrup   = daofactory(classname="MigrationRequests.Update")
+	self.mgrblkin   = daofactory(classname="MigrationBlock.Insert")
 	self.blocklist = daofactory(classname="Block.List")
 
     def prepareDatasetMigrationList(self, conn, request):
@@ -159,13 +161,13 @@ class DBSMigrate:
 	    		
     def insertMigrationRequest(self, request):
 	"""request kyes: migration_url, migration_input, migration_block, migration_user"""
-	
+    
 	conn = self.dbi.connection()
 	# chek if already queued
 	try:
 	    alreadyqueued=self.mgrlist.execute(conn, migration_url=request["migration_url"], migration_input=request["migration_input"])
 	    if len(alreadyqueued) > 0:
-		return {"migration_status" : "ALREADY_QUEUED", "migration_details" : alreadyqueued[0] }
+		return {"migration_report" : "REQUEST ALREADY QUEUED", "migration_details" : alreadyqueued[0] }
 	except Exception, ex:
 	    conn.close()
 	    raise Exception("ENQUEUEING_FAILED reason may be ( %s ) " %ex)
@@ -188,19 +190,26 @@ class DBSMigrate:
 	    request['migration_request_id'] = self.sm.increment(conn, "SEQ_MR", tran)
 	    self.mgrin.execute(conn, request, tran)
 	    # INSERT the ordered_list
-	     
+	    totalQueued=0
+	    for iter in reversed(range(len(ordered_list))):
+		if len(ordered_list[iter]) > 0:
+		    daoinput = [ {"migration_block_id" : self.sm.increment(conn, "SEQ_MB", tran), "migration_request_id" : request["migration_request_id"], \
+				"migration_block" : blk, "migration_order" : iter, "migration_status" : "PENDING", "creation_date": dbsUtils().getTime(), \
+				"last_modification_date" : dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() , \
+				"last_modified_by" : dbsUtils().getCreateBy() } \
+						for blk in ordered_list[iter] ]  
+		    self.mgrblkin.execute(conn, daoinput, tran)	
+		    totalQueued+=len(ordered_list[iter])
 	    # all good ?, commit the transaction
 	    tran.commit()
 	    # return things like (X blocks queued for migration)
-	    return {"migration_status" : "PENDING", "migration_details" : request }
-
+	    return {"migration_report" : "REQUEST QUEUED with total %d blocks to be migrated" %totalQueued, "migration_details" : request }
 	except exceptions.IntegrityError, ex:
 	    tran.rollback()
 	    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 		self.logger.warning("Migration request already exists in DBS")
-		request["migration_status"] = "ALREADY_QUEUED"
 		request["migration_request_id"] = ""
-		return {"migration_status" : "ALREADY_QUEUED", "migration_details" : request }
+		return {"migration_report" : "REQUEST ALREADY QUEUED", "migration_details" : request }
 	    else:
 		self.logger.exception(ex)
 	        raise Exception("ENQUEUEING_FAILED reason may be ( %s ) " %ex)  
@@ -210,11 +219,19 @@ class DBSMigrate:
 	finally:
 	    conn.close()
     
-    def listMigrationRequests(self, migration_dataset):
-	"""get the status of the dataset migration"""
+    def listMigrationRequests(self, migration_id, block_name, dataset, user):
+	"""
+	get the status of the migration
+	migratee : can be dataset or block_name
+	"""
+	
 	conn = self.dbi.connection()
 	try:
-	   result = self.mgrlist.execute(conn, migration_dataset)
+	    if block:
+		migratee=block_name
+	    elif dataset:
+		migratee=dataset
+	   result = self.mgrlist.execute(conn, url="", migration_input=migratee, create_by=user)
 	   conn.close()
 	   return result
 	except:
