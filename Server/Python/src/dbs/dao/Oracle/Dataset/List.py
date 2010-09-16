@@ -4,8 +4,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.32 2010/05/28 21:20:32 afaq Exp $"
-__version__ = "$Revision: 1.32 $"
+__revision__ = "$Id: List.py,v 1.33 2010/06/03 15:58:56 yuyi Exp $"
+__version__ = "$Revision: 1.33 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -95,7 +95,7 @@ class List(DBFormatter):
            binds.update(data_tier_name=data_tier_name)
         if dataset_access_type and dataset_access_type !="%":
            op = ("=", "like")["%" in dataset_access_type]
-           wheresql += " AND DP.DATASET_ACCESS_TYPE %s : dataset_access_type" %op
+           wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type" %op
            binds.update(dataset_access_type=dataset_access_type)
         if primary_ds_type and  primary_ds_type !="%":
            op = ("=", "like")["%" in primary_ds_type]
@@ -153,7 +153,9 @@ class List(DBFormatter):
 			sql += "JOIN %sFILES FL on FL.DATASET_ID = D.DATASET_ID" % self.owner
 			wheresql += " AND FL.LOGICAL_FILE_NAME = :logical_file_name"
 			binds.update(logical_file_name = logical_file_name)
-		sql += "JOIN %sFILE_LUMIS FLLU on FLLU.FILE_ID=FL.FILE_ID" % self.owner
+		else:
+		    sql += " JOIN %sFILES FL on FL.DATASET_ID = D.DATASET_ID" % (self.owner)
+		sql += " JOIN %sFILE_LUMIS FLLU on FLLU.FILE_ID=FL.FILE_ID" % (self.owner)
 		wheresql += " AND FLLU.RUN_NUM = :run_num"
 		binds.update(run_num = run_num)
 		sql += wheresql
