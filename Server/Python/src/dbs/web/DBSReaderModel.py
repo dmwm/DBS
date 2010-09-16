@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.40 2010/05/24 19:27:49 yuyi Exp $"
-__version__ = "$Revision: 1.40 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.41 2010/05/27 21:24:39 afaq Exp $"
+__version__ = "$Revision: 1.41 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -156,21 +156,21 @@ class DBSReaderModel(RESTModel):
 	data_tier_name = data_tier_name.replace("*","%")
 	return self.dbsDataTier.listDataTiers(data_tier_name)
 	
-    def listBlocks(self, dataset="", block_name="", original_site_name="", logical_file_name="",run_num=-1):
+    def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num=-1):
         """
         Example url's:
-        http://dbs3/blocks?dataset=myDataset ||?original_site_name=mySite <br />
-        http://dbs3/blocks?block_name=myBlock ||?original_site_name=mySite <br />
-	http://dbs3/blocks?logical_file_name=my_lfn ||?original_site_name=mySite<br />
-	http://dbs3/blocks?logical_file_name=my_lfn*?dataset=myDataset*?block_name=myBlock ||?original_site_name=mySite<br />
+        http://dbs3/blocks?dataset=myDataset ||?origin_site_name=mySite <br />
+        http://dbs3/blocks?block_name=myBlock ||?origin_site_name=mySite <br />
+	http://dbs3/blocks?logical_file_name=my_lfn ||?origin_site_name=mySite<br />
+	http://dbs3/blocks?logical_file_name=my_lfn*?dataset=myDataset*?block_name=myBlock ||?origin_site_name=mySite<br />
         """
 	#site_name is ORIGIN_SITE_NAME. We need to change the name and add REAL site_name
         dataset = dataset.replace("*","%")
         block_name = block_name.replace("*","%")
 	logical_file_name = logical_file_name.replace("*","%")
-	original_site_name = original_site_name.replace("*","%")
+	origin_site_name = origin_site_name.replace("*","%")
 	run_num = int(run_num)
-        return self.dbsBlock.listBlocks(dataset, block_name, original_site_name, logical_file_name,run_num)
+        return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num)
 
     def listBlockParents(self, block_name=""):
         """

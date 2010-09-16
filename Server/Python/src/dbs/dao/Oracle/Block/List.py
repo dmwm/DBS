@@ -2,8 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.20 2010/05/24 19:12:02 yuyi Exp $"
-__version__ = "$Revision: 1.20 $"
+__revision__ = "$Id: List.py,v 1.21 2010/05/27 21:24:39 afaq Exp $"
+__version__ = "$Revision: 1.21 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from WMCore.Database.MySQLCore import  MySQLInterface
@@ -28,7 +28,7 @@ FROM %sBLOCKS B
 JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
     """ % ((self.owner,)*2)
 #
-    def execute(self, conn, dataset="", block_name="", original_site_name="", logical_file_name="", run_num=-1, transaction = False):
+    def execute(self, conn, dataset="", block_name="", origin_site_name="", logical_file_name="", run_num=-1, transaction = False):
 	"""
 	dataset: /a/b/c
 	block: /a/b/c#d
@@ -55,22 +55,22 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 		    op = ("=", "like")["%" in dataset]
 		    sql1 += " AND DS.DATASET %s :dataset" %op
 		    binds.update(dataset=dataset)
-		if original_site_name and  original_site_name != "%":
-		    op = ("=", "like")["%" in original_site_name]
-		    sql1 += " AND B.ORIGIN_SITE_NAME %s :original_site_name" %op
-		    binds.update(original_site_name = original_site_name)	
+		if origin_site_name and  origin_site_name != "%":
+		    op = ("=", "like")["%" in origin_site_name]
+		    sql1 += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		    binds.update(origin_site_name = origin_site_name)	
 	    elif dataset and dataset !="%": 
 		op = ("=", "like")["%" in dataset]
 		sql1 += " AND DS.DATASET %s :dataset" %op
 		binds.update(dataset=dataset)
-		if original_site_name and  original_site_name != "%":
-		    op = ("=", "like")["%" in original_site_name]
-		    sql1 += " AND B.ORIGIN_SITE_NAME %s :original_site_name" %op
-		    binds.update(original_site_name = original_site_name)
-	    elif original_site_name and  original_site_name != "%": 
-		op = ("=", "like")["%" in original_site_name] 
-		sql1 += " AND B.ORIGIN_SITE_NAME %s :original_site_name" %op
-		binds.update(original_site_name = original_site_name)
+		if origin_site_name and  origin_site_name != "%":
+		    op = ("=", "like")["%" in origin_site_name]
+		    sql1 += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		    binds.update(origin_site_name = origin_site_name)
+	    elif origin_site_name and  origin_site_name != "%": 
+		op = ("=", "like")["%" in origin_site_name] 
+		sql1 += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		binds.update(origin_site_name = origin_site_name)
 	elif block_name and  block_name !="%":
 	    if run_num and run_num !=-1:
 		sql1 += """ JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID
@@ -86,10 +86,10 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 		op = ("=", "like")["%" in dataset]
 		sql1 += " AND DS.DATASET %s :dataset" %op
 		binds.update(dataset=dataset)
-	    if original_site_name and  original_site_name != "%":
-		op = ("=", "like")["%" in original_site_name]
-		sql1 += " AND B.ORIGIN_SITE_NAME %s :original_site_name" %op
-		binds.update(original_site_name = original_site_name)	
+	    if origin_site_name and  origin_site_name != "%":
+		op = ("=", "like")["%" in origin_site_name]
+		sql1 += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		binds.update(origin_site_name = origin_site_name)	
 	elif dataset and dataset !="%":
 	    if run_num and run_num !=-1:
                 sql1 += """ JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID 
@@ -101,10 +101,10 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 	    if run_num and run_num !=-1:
 		sql1 += " AND RUN_NUM = :run_num"
                 binds.update(run_num = run_num)
-	    if original_site_name and  original_site_name != "%": 
-		op = ("=", "like")["%" in original_site_name] 
-		sql1 += " AND B.ORIGIN_SITE_NAME %s :original_site_name" %op
-		binds.update(original_site_name = original_site_name)
+	    if origin_site_name and  origin_site_name != "%": 
+		op = ("=", "like")["%" in origin_site_name] 
+		sql1 += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		binds.update(origin_site_name = origin_site_name)
 	#print "sql1=%s" %sql1
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql1, binds, conn, transaction, returnCursor=True)
