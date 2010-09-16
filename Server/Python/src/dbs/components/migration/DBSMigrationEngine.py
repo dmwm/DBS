@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.15 2010/08/27 16:49:58 afaq Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.16 2010/08/27 19:03:19 afaq Exp $"
+__version__ = "$Revision: 1.16 $"
 
 import threading
 import logging
@@ -344,6 +344,9 @@ class DBSMigrationEngine(BaseWorkerThread) :
         intvalum = 1000
         intvalfileparent = 120
         intvalfileconf = 1
+
+	donelumi=0
+	
         try:
             for i in range(len(fileList)):
                 if(i%intval==0):
@@ -366,12 +369,11 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 #get lumi info
                 lumi = fileList[i]['file_lumi_list']
                 nlumi = len(lumi)
-                #import pdb
-                #pdb.set_trace()
                 for j in range(nlumi):
                     lumi[j]['file_id'] = id
-                    if((i*nlumi+j)%intvalum==0):
+		    if (donelumi%intvalum==0):
                         idlumi = self.sm.increment(connx,"SEQ_FLM", False, intvalum)
+		    donelumi += 1
                     lumi[j]['file_lumi_id'] = idlumi
                     idlumi += 1;
                 fileLumiList[len(fileLumiList):] = lumi
@@ -423,6 +425,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 self.fparentin.execute(conn, fileParentList, tran)
             #insert file lumi
             if fileLumiList:
+		lumiIDs = [l['file_lumi_id'] for l in fileLumiList]
                 self.flumiin.execute(conn, fileLumiList, tran)
             #insert file configration
             if fileConfObjs:
