@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.1 2010/01/07 16:25:02 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List.py,v 1.2 2010/01/07 16:27:41 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -47,9 +47,10 @@ class List(DBFormatter):
 	if app == version == hash  == "":
             raise Exception("Either app_name, version or hash must be provided")	
 
-        result = self.dbi.processData(self.sql, binds, conn, transaction)
-        plist = self.formatDict(result)
-	return plist
-	#assert len(plist) == 1, "output module does not exist"
-	#return plist[0]["output_mod_config_id"]
+        cursor = conn.connection.cursor()
+        cursor.execute(sql, binds)
+        result = self.formatCursor(cursor)
+        conn.close()
+        return result
+	    
 
