@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.25 2010/08/23 18:14:51 afaq Exp $"
-__version__ = "$Revision: 1.25 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.26 2010/08/24 19:23:12 yuyi Exp $"
+__version__ = "$Revision: 1.26 $"
 
 import os
 import sys
@@ -34,14 +34,14 @@ primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
 tier = 'GEN-SIM-RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
-parent_dataset="/%s/parent_%s/%s" % (primary_ds_name, procdataset, tier)
+child_dataset="/%s/child_%s/%s" % (primary_ds_name, procdataset, tier)
 app_name='cmsRun'
 output_module_label='Merged-%s' %uid
 pset_hash='76e303993a1c2f842159dbfeeed9a0dd' 
 release_version='CMSSW_1_2_%s' % uid
 site="cmssrm-%s.fnal.gov" %uid
 block="%s#%s" % (dataset, uid)
-parent_block="%s#%s" % (parent_dataset, uid)
+child_block="%s#%s" % (child_dataset, uid)
 acquisition_era_name="acq_era_%s" %uid
 processing_version="%s" %(uid if (uid<9999) else uid%9999)
 run_num=uid
@@ -55,14 +55,14 @@ outDict={
 "procdataset" : procdataset,
 "tier" : tier,
 "dataset" : dataset,
-"parent_dataset" : parent_dataset,
+"child_dataset" : child_dataset,
 "app_name" : app_name,
 "output_module_label" : output_module_label,
 "pset_hash" : pset_hash,
 "release_version" : release_version,
 "site" : site,
 "block" : block,
-"parent_block" : parent_block,
+"child_block" : child_block,
 "files" : [],
 "parent_files" : [],
 "run_num":run_num,
@@ -158,9 +158,9 @@ class DBSWriterModel_t(unittest.TestCase):
 	#import pdb
 	#pdb.set_trace()
 	api.insert('datasets', data)
-	parentdata = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
+	childdata = {
+		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': child_dataset,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "child_"+procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
 		    'output_module_label': output_module_label},
@@ -168,7 +168,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
-	api.insert('datasets', parentdata)
+	api.insert('datasets', childdata)
 
 	
     def test10(self):
@@ -261,8 +261,8 @@ class DBSWriterModel_t(unittest.TestCase):
 		'origin_site_name': site }
 		
 	api.insert('blocks', data)
-	# insert the parent block as well
-	data = {'block_name': parent_block, 'origin_site_name': site }
+	# insert the child block as well
+	data = {'block_name': child_block, 'origin_site_name': site }
 	api.insert('blocks', data)
 
     def test17(self):
@@ -301,7 +301,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	    flist.append(f)
 	data={"files":flist}
 	api.insert('files', data)
-	#time.sleep(5)
+	time.sleep(10)
 
     def test19(self):
 	"""test19 web.DBSWriterModel.insertFiles: duplicate insert file shuld not raise any errors"""
@@ -338,6 +338,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	"""test20 web.DBSWriterModel.insertFiles: with parents"""
 	#import pdb
 	#pdb.set_trace()
+
         data={}
         flist=[]
         for i in range(10):
@@ -348,7 +349,7 @@ class DBSWriterModel_t(unittest.TestCase):
                         {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                         'output_module_label': output_module_label},
                     ],
-                'dataset': dataset,
+                'dataset': child_dataset,
                 'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
@@ -359,7 +360,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'file_parent_list': [{"file_parent_lfn": "/store/mc/%s/%i.root" %(uid, i)}],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/%s-child/%i.root" %(uid, i),
-                'block_name': block
+                'block_name': child_block
                             #'is_file_valid': 1
                 }
             flist.append(f)
