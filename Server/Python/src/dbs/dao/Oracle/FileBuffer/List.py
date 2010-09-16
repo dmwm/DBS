@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2010/07/09 14:41:00 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: List.py,v 1.4 2010/07/23 18:47:31 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -25,6 +25,7 @@ class List(DBFormatter):
         """
 	simple execute
         """	
+	sql = self.sql
         if not conn:
             raise Exception("dbs/dao/Oracle/FileBuffer/List expects db connection from upper layer.")
         binds = { "block_id" : block_id}
