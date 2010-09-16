@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.12 2009/12/22 12:58:13 akhukhun Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSDataset.py,v 1.13 2009/12/22 21:50:14 afaq Exp $"
+__version__ = "$Revision: 1.13 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -24,6 +24,7 @@ class DBSDataset:
         self.dbi = dbi
         
         self.datasetlist = daofactory(classname="Dataset.List")
+        self.datasetid = daofactory(classname="Dataset.GetID")
         self.sm = daofactory(classname="SequenceManager")
         self.primdsid = daofactory(classname='PrimaryDataset.GetID')
         self.tierid = daofactory(classname='DataTier.GetID')
@@ -32,7 +33,10 @@ class DBSDataset:
         self.procdsid = daofactory(classname='ProcessedDataset.GetID')
         self.procdsin = daofactory(classname='ProcessedDataset.Insert')
         self.datasetin = daofactory(classname='Dataset.Insert')
-
+	self.outconfigid = daofactory(classname='OutputModuleConfig.GetID')
+	self.datasetoutmodconfigin = daofactory(classname='DatasetOutputMod_config.Insert')
+	self.proceraid= daofactory(classname='ProcessingEra.GetID')
+	self.acqeraid = daofactory(classname='AcquisitionEra.GetID')
 
     def listDatasets(self, dataset=""):
         """
@@ -41,35 +45,86 @@ class DBSDataset:
         """
         return self.datasetlist.execute(dataset=dataset)
     
-    
     def insertDataset(self, businput):
         """
         input dictionary must have the following keys:
-        dataset, isdatasetvalid, primaryds(name), processedds(name), datatier(name),
-        datasettype(name), acquisitionera(name), processingversion(name), 
-        physicsgroup(name), xtcrosssection, globaltag, creationdate, createby, 
-        lastmodificationdate, lastmodifiedby
+        dataset, is_dataset_valid, primary_ds_name(name), processed_ds(name), data_tier(name),
+        dataset_type(name), acquisition_era(name), processing_version(name), 
+        physics_group(name), xtcrosssection, global_tag, creation_date, create_by, 
+        last_modification_date, last_modified_by
         """ 
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            businput["primaryds"] = self.primdsid.execute(businput["primaryds"], conn, True)
-            businput["datatier"] = self.tierid.execute(businput["datatier"], conn, True)
-            businput["datasettype"] = self.datatypeid.execute(businput["datasettype"], conn, True)
-            businput["physicsgroup"] = self.phygrpid.execute(businput["physicsgroup"], conn, True)
 
-            procid = self.procdsid.execute(businput["processedds"])
+	    dsdaoinput={}
+            dsdaoinput["primary_ds_id"] = self.primdsid.execute(businput["primary_ds_name"], conn, True)
+            dsdaoinput["data_tier_id"] = self.tierid.execute(businput["data_tier_name"], conn, True)
+            dsdaoinput["dataset_type_id"] = self.datatypeid.execute(businput["dataset_type"], conn, True)
+            dsdaoinput["physics_group_id"] = self.phygrpid.execute(businput["physics_group_name"], conn, True)
+
+	    # See if processed dataset exists, if not, add one
+            procid = self.procdsid.execute(businput["processed_ds_name"])
             if procid > 0:
-                businput["processedds"] = procid
+                dsdaoinput["processed_ds_id"] = procid
             else:
                 procid = self.sm.increment("SEQ_PSDS", conn, True)
-                procdaoinput = {"processeddsname":businput["processedds"],
-                                    "processeddsid":procid}
+                procdaoinput = {"processed_ds_name":businput["processed_ds_name"],
+                                    "processed_ds_id":procid}
                 self.procdsin.execute(procdaoinput, conn, True)
-                businput["processedds"] = procid
-        
-            businput["datasetid"] = self.sm.increment("SEQ_DS", conn, True) 
-            self.datasetin.execute(businput, conn, True)
+                dsdaoinput["processed_ds_id"] = procid
+
+            dsdaoinput["dataset_id"] = self.sm.increment("SEQ_DS", conn, True) 
+
+	    # we are better off separating out what we need for the dataset DAO
+	    dsdaoinput.update({ 
+			"dataset" : businput["dataset"],
+			"is_dataset_valid" : businput["is_dataset_valid"],
+			"creation_date" : businput["creation_date"],
+			"xtcrosssection" : businput["xtcrosssection"],
+			"global_tag" : businput["global_tag"],
+                        "create_by" : businput["create_by"],
+			"last_modification_date" : businput["last_modification_date"] ,
+			"last_modified_by" : businput["last_modified_by"]
+			})
+
+            # See if Processing Era exists
+            if businput.has_key("processing_version"):
+                dsdaoinput["processing_version"] = self.proceraid.execute(businput["processing_version"], conn, True)
+            # See if Acquisition Era exists
+            if businput.has_key("acquisition_era_name"):
+                dsdaoinput["acquisition_era_name"] = self.acqeraid.execute(businput["acquisition_era_name"], conn, True)
+                 
+	    try:
+		# insert the dataset
+            	self.datasetin.execute(dsdaoinput, conn, True)
+	    except Exception, ex:
+                if str(ex).lower().find("unique constraint") != -1 :
+			# dataset already exists, lets fetch the ID
+                        self.logger.warning("Unique constraint violation being ignored...")
+                        self.logger.warning("%s" % ex)
+			dsdaoinput["dataset_id"] = self.datasetid.execute(businput["dataset"], conn, True)
+                else:
+                        raise	
+
+	    #FIXME : What about the READ-only status of the dataset
+	    # Create dataset_output_mod_mod_configs mapping
+	    if businput.has_key("output_configs"):
+	    	for anOutConfig in businput["output_configs"]:
+			dsoutconfdaoin={}
+			dsoutconfdaoin["dataset_id"]=dsdaoinput["dataset_id"]
+			dsoutconfdaoin["output_mod_config_id"] = self.outconfigid.execute(anOutConfig["app_name"], \
+										anOutConfig["version"], anOutConfig["hash"], conn, True) 
+			dsoutconfdaoin["ds_output_mod_conf_id"]=self.sm.increment("SEQ_DC", conn, True)
+			try:
+				self.datasetoutmodconfigin.execute(dsoutconfdaoin, conn, True)
+			except Exception, ex:
+				if str(ex).lower().find("unique constraint") != -1 :
+					pass
+				else:
+					raise
+	    # Dataset parentage will NOT be added by this API it will be set by insertFiles()--deduced by insertFiles
+	    # Dataset  runs will NOT be added by this API they will be set by insertFiles()--deduced by insertFiles OR insertRun API call
             tran.commit()
         except Exception, e:
             tran.rollback()
@@ -77,5 +132,3 @@ class DBSDataset:
             raise
         finally:
             conn.close()
-            
-            
