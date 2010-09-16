@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.39 2010/05/24 19:12:45 yuyi Exp $"
-__version__ = "$Revision: 1.39 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.40 2010/05/24 19:27:49 yuyi Exp $"
+__version__ = "$Revision: 1.40 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -267,16 +267,12 @@ class DBSReaderModel(RESTModel):
         """
         return self.dbsFile.listFileLumis(logical_file_name, block_name)
          
-    def listRuns(self, dataset="", block_name="", logical_file_name="", minrun=-1, maxrun=-1):
+    def listRuns(self, minrun=-1, maxrun=-1):
         """
-        Example url's <br />
         http://dbs3/runs?runmin=1&runmax=10
         http://dbs3/runs
-	http://dbs3/runs?logical_file_name=lfn
-	http://dbs3/runs?block_name=block_name
-	http://dbs3/runs?dataset=dataset
         """
-        return self.dbsRun.listRuns(dataset, block_name, logical_file_name , minrun, maxrun)
+        return self.dbsRun.listRuns(minrun, maxrun)
    
     def listSites(self, block_name="", site_name=""):
         """

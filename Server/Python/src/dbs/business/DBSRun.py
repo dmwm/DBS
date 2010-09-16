@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset Run table. 
 """
 
-__revision__ = "$Id: DBSRun.py,v 1.9 2010/03/18 19:48:12 afaq Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSRun.py,v 1.10 2010/05/24 19:27:10 yuyi Exp $"
+__version__ = "$Revision: 1.10 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -19,27 +19,16 @@ class DBSRun:
         self.dbi = dbi
         self.owner = owner
 
-        self.dsrunlist = daofactory(classname="DatasetRun.ListDSRuns")
-        self.blkrunlist = daofactory(classname="DatasetRun.ListBlockRuns")
-        self.flrunlist = daofactory(classname="DatasetRun.ListFileRuns")
         self.runlist = daofactory(classname="DatasetRun.List")
 
-    def listRuns(self, dataset="", block_name="", logical_file_name="", minrun=-1, maxrun=-1):
+    def listRuns(self, minrun=-1, maxrun=-1):
         """
         List run known to DBS.
         """
 	try:
 		conn = self.dbi.connection()
 		tran=False
-
-		if dataset:
-			ret=self.dsrunlist.execute(conn, dataset, minrun, maxrun, tran)
-		elif block_name:
-			ret=self.blkrunlist.execute(conn, block_name, minrun, maxrun, tran)
-		elif logical_file_name:
-			ret=self.flrunlist.execute(conn, logical_file_name, minrun, maxrun, tran)
-		else:
-        		ret=self.runlist.execute(conn, minrun, maxrun, tran)
+		ret=self.runlist.execute(conn, minrun, maxrun, tran)
 		return ret
 
 	except Exception, ex:
