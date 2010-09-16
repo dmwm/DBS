@@ -3,10 +3,11 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.14 2010/01/05 00:24:57 afaq Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSFile.py,v 1.15 2010/01/05 22:34:31 afaq Exp $"
+__version__ = "$Revision: 1.15 $"
 
 from WMCore.DAOFactory import DAOFactory
+from sqlalchemy import exceptions
 
 class DBSFile:
     """
@@ -33,13 +34,13 @@ class DBSFile:
 	self.blkstats = daofactory(classname = "Block.ListStats")
 	self.blkstatsin = daofactory(classname = "Block.UpdateStats")
 	self.outconfigid = daofactory(classname='OutputModuleConfig.GetID')
-
+	self.fconfigin = daofactory(classname='FileOutputMod_config.Insert')
+	
     def listFiles(self, dataset="", block_name="", logical_file_name=""):
         """
         either dataset(and lfn pattern) or block(and lfn pattern) must be specified.
         """
         return self.filelist.execute(dataset, block_name, logical_file_name)
-
 
     def insertFile(self, businput):
 	"""
@@ -65,14 +66,16 @@ class DBSFile:
 	"""
 	conn = self.dbi.connection()
 	tran = conn.begin()
+
 	try:
-	    # We can easily make it work file-by-file also, if it comes to that !
+	    # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
 	    files2insert = []
             fparents2insert = []
             flumis2insert = []
 	    fconfigs2insert = []
 	    fidl=[]
-
+	    fileInserted=False
+	    
 	    firstfile = businput[0]
 	    # first check if the dataset exists
 	    # and block exists that files are suppose to be going to and is OPEN for writing
@@ -115,12 +118,27 @@ class DBSFile:
 		filein["dataset_id"]=dataset_id
 		filein["block_id"]=block_id
 		filein["file_type_id"]=file_type_id
-		#FIXME: Add this later if f.get("branch_hash", "") not in ("", None): filein["branch_hash"]=self.fbranchid.execute( f.get("branch_hash"), conn, True)
-		# filein will be what goes into database, we will collect them for bulk insert in files2insert
-		files2insert.append(filein)
-		# Saving the id for later use
-		fidl.append(filein["file_id"])
-	    
+		#FIXME: Add this later if f.get("branch_hash", "") not in ("", None): 
+		#filein["branch_hash"]=self.fbranchid.execute( f.get("branch_hash"), conn, True)
+
+		# insert file  -- as decided, one file at a time
+		# filein will be what goes into database
+		try:
+		    self.filein.execute(filein, conn, True)
+		    fileInserted=True
+		except exceptions.IntegrityError, ex:
+		    if str(ex).find("unique constraint") != -1 :
+			#refresh the file_id from database
+			#filein["file_id"]=self.fileid.execute(filein["logical_file_name"], conn, True)
+			# Lets move on to NEXT file, we do not want to continue processing this file
+			self.logger.warning("File already exists in DBS, not touching it: %s" %filein["logical_file_name"])
+			continue
+		    else:
+			raise	
+	        # Saving the id for later use
+	        files2insert.append(filein)
+	        fidl.append(filein["file_id"])
+
 		#Now let us process, file parents, file lumi, file outputmodconfigs, association 
 
 		#file lumi sections
@@ -163,9 +181,6 @@ class DBSFile:
 			    fpdao["parent_file_id"] = self.fileid.execute(lfn, conn, True)
 			    fparents2insert.append(fpdao)
 
-	        import pdb
-	        pdb.set_trace()
-    
 		if f.has_key("file_output_config_list"):
 		    #file output config modules
 		    foutconfigs = f["file_output_config_list"]
@@ -186,81 +201,89 @@ class DBSFile:
 			    fconfigs2insert.append(fcdao)
 			
 		#FIXME: file associations?-- in a later release
-		
-	    # insert files
-	    self.filein.execute(files2insert, conn, True)
-	    # insert file lumi sections
-            if flumis2insert:
-                self.flumiin.execute(flumis2insert, conn, True)
-	    # insert file parent mapping
-            if fparents2insert:
-                self.fparentin.execute(fparents2insert, conn, True)
-	    # insert output module config mapping
-	    if fconfigs2insert:
-		self.fconfigin.execute(fconfigs2insert, conn, True)
-	
+		#
+		# insert file - lumi   
+		if flumis2insert:
+		    self.flumiin.execute(flumis2insert, conn, True)
+		# insert file parent mapping
+		if fparents2insert:
+		    self.fparentin.execute(fparents2insert, conn, True)
+		# insert output module config mapping
+		if fconfigs2insert:
+		    self.fconfigin.execute(fconfigs2insert, conn, True)    
+
 	    # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
 	    # fpbdlist, returns a dict of {block_id, dataset_id} combination
-	    fpblks=[]
-	    fpds=[]
-	    fileParentBlocksDatasets = self.fpbdlist.execute(fidl, conn, True)
-	    for adict in fileParentBlocksDatasets:
-		if adict["block_id"] not in fpblks:
-		    fpblks.append(adict["block_id"])
-	        if adict["dataset_id"] not in fpds:
-			fpds.append(adict["dataset_id"])
-    
-	    # Update Block parentage
-	    if len(fpblks) > 0 :
-		# we need to bulk this, number of parents can get big in rare cases
-		bpdaolist=[]
-		iPblk = 0
-		fpblkInc = 10
-		bpID = self.sm.increment("SEQ_BP", conn, True)
-		for ablk in fpblks:
-		    if iPblk == fpblkInc:
-			bpID = self.sm.increment("SEQ_BP", conn, True)
-			iPblk = 0
-		    bpdao={ "this_block_id": block_id }
-		    bpdao["parent_block_id"] = ablk
-		    bpdao["block_parent_id"] = bpID
-		    bpdaolist.append(bpdao)
-		# insert them all
-		self.blkparentin.execute(bpdaolist, conn, True)
+	    if fileInserted:
+		fpblks=[]
+		fpds=[]
+		fileParentBlocksDatasets = self.fpbdlist.execute(fidl, conn, True)
+		for adict in fileParentBlocksDatasets:
+		    if adict["block_id"] not in fpblks:
+			fpblks.append(adict["block_id"])
+		    if adict["dataset_id"] not in fpds:
+		    	fpds.append(adict["dataset_id"])
+		# Update Block parentage
+		if len(fpblks) > 0 :
+		    # we need to bulk this, number of parents can get big in rare cases
+		    bpdaolist=[]
+		    iPblk = 0
+		    fpblkInc = 10
+		    bpID = self.sm.increment("SEQ_BP", conn, True)
+		    for ablk in fpblks:
+			if iPblk == fpblkInc:
+			    bpID = self.sm.increment("SEQ_BP", conn, True)
+			    iPblk = 0
+			bpdao={ "this_block_id": block_id }
+			bpdao["parent_block_id"] = ablk
+			bpdao["block_parent_id"] = bpID
+			bpdaolist.append(bpdao)
+		    # insert them all
+		    # Do this one by one, as its sure to have duplicate in dest table
+		    for abp in bpdaolist:
+			try:
+			    self.blkparentin.execute(abp, conn, True)
+			except exceptions.IntegrityError, ex:
+			    if str(ex).find("unique constraint") != -1 :
+				pass
+			    else:
+				raise
+		# Update dataset parentage
+		if len(fpds) > 0 :
+		    dsdaolist=[]
+		    iPds = 0
+		    fpdsInc = 10
+		    pdsID = self.sm.increment("SEQ_DP", conn, True)
+		    for ads in fpds:
+			if iPds == fpdsInc:
+			    pdsID = self.sm.increment("SEQ_DP", conn, True)
+			    iPds = 0
+			dsdao={ "this_dataset_id": dataset_id }
+			dsdao["parent_dataset_id"] = ads
+			dsdao["dataset_parent_id"] = pdsID # PK of table 
+			dsdaolist.append(dsdao)
+		    # Do this one by one, as its sure to have duplicate in dest table
+		    for adsp in dsdaolist:
+			try:
+			    self.dsparentin.execute(adsp, conn, True)
+			except exceptions.IntegrityError, ex:
+			    if str(ex).find("unique constraint") != -1 :
+				pass
+			    else:
+				raise
 
-	    # Update dataset parentage
-	    if len(fpds) > 0 :
-                dsdaolist=[]
-                iPds = 0
-                fpdsInc = 10
-                pdsID = self.sm.increment("SEQ_DP", conn, True)
-                for ads in fpds:
-                    if iPds == fpdsInc:
-                        pdsID = self.sm.increment("SEQ_DP", conn, True)
-                        iPds = 0
-                    dsdao={ "this_dataset_id": dataset_id }
-                    dsdao["parent_dataset_id"] = ads
-                    dsdao["dataset_parent_id"] = pdsID # PK of table 
-                    dsdaolist.append(dsdao)
-		# insert them all
-                self.dsparentin.execute(dsdaolist, conn, True)
-	    
-	    # Update block parameters, file_count, block_size
-	    blkParams=self.blkstats.execute(block_id, conn, True)
-	    self.blkstatsin.execute(blkParams, conn, True)
+		# Update block parameters, file_count, block_size
+		blkParams=self.blkstats.execute(block_id, conn, True)
+		self.blkstatsin.execute(blkParams, conn, True)
 
 	    # All good ?. 
             tran.commit()
 
-#except exceptions.IntegrityError, ex:
-#	            self.logger.warning("Unique constraint violation being ignored...")
-#		                self.logger.warning("%s" % ex)
-	
-        except Exception, e:
-            tran.rollback()
-            self.logger.exception(e)
-            raise
-        finally:
-            conn.close()
+	except Exception, e:
+	    tran.rollback()
+	    self.logger.exception(e)
+	    raise
 
-   
+	finally:
+	    conn.close()
+ 
