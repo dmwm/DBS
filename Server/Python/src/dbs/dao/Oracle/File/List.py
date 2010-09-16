@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.28 2010/05/21 16:15:39 yuyi Exp $"
-__version__ = "$Revision: 1.28 $"
+__revision__ = "$Id: List.py,v 1.29 2010/05/24 15:20:44 yuyi Exp $"
+__version__ = "$Revision: 1.29 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -38,7 +38,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 
     def execute(self, conn, dataset="", block_name="", logical_file_name="",
             release_version="", pset_hash="", app_name="", output_module_label="",
-	    maxrun=-1, minrun=-1, origin_site_name="", transaction=False):
+	    maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[], transaction=False):
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/File/List expects db connection from up layer.")
 	sql = self.sql 
@@ -86,6 +86,9 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	    sql += " AND FL.RUN_NUM between :minrun and :maxrun " 
 	    binds.update({"minrun":minrun})
 	    binds.update({"maxrun":maxrun})
+	if (lumi_list and len(lumi_list) != 0):
+	    sql += "AND FL.LUMI_SECTION_NUM in :lumi_list"
+	    binds.update({"lumi_list":lumi_list})
 	if (origin_site_name):
 	    op = ("=","like")["%" in origin_site_name]
     	    sql += "AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 

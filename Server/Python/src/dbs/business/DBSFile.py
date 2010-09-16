@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.45 2010/05/21 16:15:48 yuyi Exp $"
-__version__ = "$Revision: 1.45 $"
+__revision__ = "$Id: DBSFile.py,v 1.46 2010/05/24 15:21:09 yuyi Exp $"
+__version__ = "$Revision: 1.46 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -109,7 +109,7 @@ class DBSFile:
 	    conn.close()
 
     def listFiles(self, dataset="", block_name="", logical_file_name="", release_version="", 
-	    pset_hash="", app_name="", output_module_label="",  maxrun=-1, minrun=-1, origin_site_name=""):
+	    pset_hash="", app_name="", output_module_label="",  maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[]):
         """
         One of below parameter groups must be presented: 
         non-parttened dataset, non-parttened block , non-parttened dataset with lfn ,  non-parttened block with lfn , 
@@ -123,6 +123,9 @@ class DBSFile:
 	    raise Exception ("""You must specify one of the parameter groups:  non-parttened dataset, 
 				non-parttened block , non-parttened dataset with lfn ,  
 				non-parttened block with lfn or  no-patterned lfn. """)
+	elif (lumi_list and len(lumi_list) != 0):
+	    if (not maxrun or maxrun ==-1) and(not minrun or minrun == -1) and (minrun==maxrun):
+		raise Exception(" lumi list must be companied by A run_num that is minrun==maxrun")
 	else:
 	    pass
 	try:
