@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.7 2010/08/24 18:07:27 yuyi Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.8 2010/08/24 21:36:14 yuyi Exp $"
+__version__ = "$Revision: 1.8 $"
 
 import threading
 import logging
@@ -327,6 +327,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
         try:
             for i in range(len(fileList)):
                 if(i%intval==0):
+                    #FIXME : transaction=Fales?
                     id = self.sm.increment(conn,"SEQ_FL", False, intval)
                 fileList[i]['file_id'] = id
                 logicalFileName[fileList[i]['logical_file_name']] = id
@@ -336,10 +337,12 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 fType = fileList[i]['file_type']
                 fTypeid = self.filetypeid.execute(conn, fType)
                 if fTypeid <=0 :
+                    #FIXME
                     fTypeid =  self.sm.increment(conn,"SEQ_FT")
                     ftypeO = {'file_type':fType, 'file_type_id':fTypeid}
                     fileTypeObjs.append(ftypeO)
                 fileList[i]['file_type_id'] = fTypeid
+                del fileList[i]['file_type']
                 #get lumi info
                 lumi = fileList[i]['file_lumi_list']
                 nlumi = len(lumi)
@@ -529,7 +532,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                              'creation_date':None, 'create_by':''}
                 self.otptModCfgin.execute(conn,        configObj, tran)
                 otptIdList.append(cfgid)
-                self.datasetCache['conf'][m["app_name"]+':'+m["release_version"]+':'+m["pset_hash"]+':'+['output_module_label']] = cfgid
+                self.datasetCache['conf'][m["app_name"]+':'+m["release_version"]+':'+m["pset_hash"]+':'+m['output_module_label']] = cfgid
             tran.commit()
         except Exception, ex:
             self.logger.exception("DBS output module configure inseration exception: %s" %ex)
