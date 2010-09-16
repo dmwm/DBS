@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.10 2009/12/22 14:33:52 yuyi Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.11 2009/12/23 17:51:37 afaq Exp $"
+__version__ = "$Revision: 1.11 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -51,8 +51,14 @@ class DBSPrimaryDataset:
 	    #self.logger.error( "Index error raised")
 	    raise 
         except Exception, e:
-            tran.rollback()
-            self.logger.exception(e)
-            raise
+                if str(ex).lower().find("unique constraint") != -1 :
+                        # dataset already exists, lets fetch the ID
+                        self.logger.warning("Unique constraint violation being ignored...")
+                        self.logger.warning("%s" % ex)
+                        pass
+                else:
+                        tran.rollback()
+                        self.logger.exception(e)
+                        raise
         finally:
             conn.close()
