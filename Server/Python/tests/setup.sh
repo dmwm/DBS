@@ -51,10 +51,14 @@ if [ -z "$1" ]
 	"web")
 	    python $DBS_TEST_ROOT/unittests/web_t/__init__.py
 	;;
+	"migration")
+	    python $DBS_TEST_ROOT/unittests/migration_t/__init__.py
+	;;
 	"all")
 	    python $DBS_TEST_ROOT/unittests/dao_t/Oracle_t/__init__.py
 	    python $DBS_TEST_ROOT/unittests/business_t/__init__.py
 	    python $DBS_TEST_ROOT/unittests/web_t/__init__.py
+	    python $DBS_TEST_ROOT/unittests/migration_t/__init__.py
 	;;
 	*)
 	    python $1
