@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.3 2009/12/15 22:22:25 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.4 2009/12/16 20:43:11 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import re
 import cjson
@@ -12,11 +12,7 @@ import cjson
 from cherrypy import request, response, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
 
-from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
-from dbs.business.DBSDataset import DBSDataset
-from dbs.business.DBSBlock import DBSBlock
-from dbs.business.DBSFile import DBSFile
-
+from dbs.utils.dbsUtils import dbsUtils
 from dbs.web.DBSReaderModel import DBSReaderModel
 
 import traceback
@@ -37,15 +33,6 @@ class DBSWriterModel(DBSReaderModel):
         self.addService('POST', 'blocks', self.insertBlock)
         self.addService('POST', 'files', self.insertFile)
 
-
-
-    #----- These methods will move to an appropriate class in util
-    def getDate(self):
-	return time.time() 	
-
-    def getUser(self):
-	return "ANZAR"
-
     def insertPrimaryDataset(self):
         """
 	Inserts a Primary Dataset in DBS
@@ -57,7 +44,7 @@ class DBSWriterModel(DBSReaderModel):
 	try :
         	body = request.body.read()
         	indata = cjson.decode(body)
-        	indata.update({"creationdate": self.getDate(), "createby": self.getUser() })
+        	indata.update({"creation_date": dbsUtils.getTime(), "create_by": dbsUtils.getCreateBy() })
         	self.dbsPrimaryDataset.insertPrimaryDataset(data)
 		
 	except Exception, ex:
