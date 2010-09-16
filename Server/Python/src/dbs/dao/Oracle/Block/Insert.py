@@ -1,35 +1,26 @@
 #!/usr/bin/env python
 """ DAO Object for Blocks table """ 
 
-__revision__ = "$Revision: 1.6 $"
-__version__  = "$Id: Insert.py,v 1.6 2009/11/24 14:31:10 akhukhun Exp $ "
+__revision__ = "$Revision: 1.7 $"
+__version__  = "$Id: Insert.py,v 1.7 2009/12/23 20:38:11 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
+from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
 
-class Insert(DBFormatter):
+class Insert(InsertSingle):
     """Block Insert DAO Class"""
-
-    def __init__(self, logger, dbi, owner):
-        DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
-        self.sql = \
-"""
-INSERT INTO %sBLOCKS 
-(BLOCK_ID, BLOCK_NAME, DATASET_ID, OPEN_FOR_WRITING, ORIGIN_SITE, BLOCK_SIZE, 
-FILE_COUNT, CREATION_DATE, CREATE_BY, LAST_MODIFICATION_DATE, LAST_MODIFIED_BY) 
-VALUES(:blockid, :blockname, :dataset, :openforwriting, :originsite, :blocksize, 
-:filecount, :creationdate, :createby, :lastmodificationdate, :lastmodifiedby)
-""" % (self.owner)
 
     def execute( self, daoinput, conn = None, transaction = False):
         """daoinput must be validated to have the following keys:
-        blockid, blockname, dataset(id), openforwriting, originsite(id), blocksize,
-        filecount, creationdate, createby, lastmodificationdate, lastmodifiedby
+        block_id, block_name, dataset_id
+	It May have the following keys:
+	open_for_writing, origin_site(id), block_size,
+        file_count, creation_date, create_by, lastmodification_date, lastmodified_by
         """
         try:
-            self.dbi.processData(self.sql, daoinput, conn, transaction)
-        except exceptions.IntegrityError, ex:
-            self.logger.warning("Unique constraint violation being ignored...")
-            self.logger.warning("%s" % ex)
+            self.executeSingle(daoinput, "BLOCKS", conn, transaction)
+        except Exception:
+            raise
+            
 
