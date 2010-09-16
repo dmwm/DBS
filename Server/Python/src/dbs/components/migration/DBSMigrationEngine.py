@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.5 2010/08/20 16:19:35 yuyi Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.6 2010/08/20 20:11:06 yuyi Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import threading
 import logging
@@ -193,13 +193,13 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    #Finally mark the request as 3=Completed
 	    print "Finally mark the request as 3=Completed"
 	    tran = conn.begin()
-	    self.urs.execute(conn, requestID, 3, self.threadID, dbsUtils().getTime())
+	    self.urs.execute(conn, requestID, 3, self.threadID, dbsUtils().getTime(), transaction=tran)
 	    tran.commit();
 	except Exception, ex:
 	    self.logger.exception("DBS Migration Service failed to perform migration %s" %str(ex))
 	    #FAILED=4
 	    tran = conn.begin()
-	    self.urs.execute(conn, requestID, 4, self.threadID, dbsUtils().getTime())
+	    self.urs.execute(conn, requestID, 4, self.threadID, dbsUtils().getTime(), transaction=tran)
 	    tran.commit()
 	    raise
 	finally:
@@ -294,18 +294,21 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	"""
 	Insert the data in sereral steps and commit when each step finishes or rollback if there is a problem.
 	"""
-	#1 insert configuration
-	print "insert configuration"
-	configList = self.insertOutputModuleConfig(conn, blockcontent['dataset']['dataset'], url)
-	#2 insert dataset
-	print "insert dataset"
-	datasetId = self.insertDataset(conn, blockcontent, configList,  url)
-	#3 Insert Block
-	print "insert Block"
-	blockId = self.insertBlock(conn, blockcontent)
-	#4 inser files
-	print "insert files"
-	self.insertFile(conn,blockcontent,blockId,datasetId)
+	try:
+	    #1 insert configuration
+	    print "insert configuration"
+	    configList = self.insertOutputModuleConfig(conn, blockcontent['dataset']['dataset'], url)
+	    #2 insert dataset
+	    print "insert dataset"
+	    datasetId = self.insertDataset(conn, blockcontent, configList,  url)
+	    #3 Insert Block
+	    print "insert Block"
+	    blockId = self.insertBlock(conn, blockcontent)
+	    #4 inser files
+	    print "insert files"
+	    self.insertFile(conn,blockcontent,blockId,datasetId)
+	except Exception, ex:
+	    raise
     
     def insertFile(self, conn, blockcontent, blockId, datasetId):
         fileLumiList = []
@@ -324,7 +327,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	try:
 	    for i in range(len(fileList)):
 		if(i%intval==0):
-		    id = self.sm.increment(conn,"SEQ_FL")
+		    id = self.sm.increment(conn,"SEQ_FL", False, intval)
 		fileList[i]['file_id'] = id
 		logicalFileName[fileList[i]['logical_file_name']] = id
 		fileList[i]['block_id'] = blockId
@@ -345,7 +348,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		for j in range(nlumi):
 		    lumi[j]['file_id'] = id
 		    if((i*nlumi+j)%intvalum==0):
-			idlumi = self.sm.increment(conn,"SEQ_FLM")
+			idlumi = self.sm.increment(conn,"SEQ_FLM", False, intvalum)
 		    lumi[j]['file_lumi_id'] = idlumi
 		    idlumi += 1;
 		fileLumiList[len(fileLumiList):] = lumi
@@ -360,7 +363,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    nfileparent = len(fileParentList)
 	    for k in range(nfileparent):
 		if(k%intvalfileparent==0):
-		    idfp = self.sm.increment(conn,"SEQ_FP")
+		    idfp = self.sm.increment(conn,"SEQ_FP", False, intvalfileparent)
 		fileParentList[k]['file_parent_id'] = idfp 
 		idfp += 1
 		fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
@@ -371,7 +374,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		del fileParentList[k]['parent_logical_file_name']
 	    #deal with file config
 	    for fc in fileConfigList:
-		key=fc['app_name']+':'+fc['release_version']+':'+fc['pset_hash']
+		key=fc['app_name']+':'+fc['release_version']+':'+fc['pset_hash']+':'+fc['output_module_label']
 		if not key in (self.datasetCache['conf']).keys():
 		    #we expect the config is inserted when the dataset is in.
 		    raise Exception("Configuration application name, release version and pset hash: %s, %s ,%s not found" \
@@ -417,13 +420,13 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	#Insert the block
 	try:
 	    tran = conn.begin()
-	    block['block_id'] = self.sm.increment(conn,"SEQ_BK")
+	    block['block_id'] = self.sm.increment(conn,"SEQ_BK", transaction=tran)
 	    block['dataset_id'] =  blockcontent['dataset']['dataset_id']
 	    self.blockin.execute(conn, block, tran)
 	    newBlock = True
 	except exceptions.IntegrityError:
 	    #ok, already in db
-	    block['block_id'] = self.blockid.execute(conn, block['block_name'])
+	    block['block_id'] = self.blockid.execute(conn, block['block_name'], transaction=tran)
 	except Exception, ex:
 	    self.logger.exception("DBS block inseration exception: %s" %ex)
 	    tran.rollback()
@@ -435,7 +438,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    try:
 		for i in range(len(bpList)):
 		    if(i%intavl==0):
-			id = self.sm.increment(conn,"SEQ_BP")
+			id = self.sm.increment(conn,"SEQ_BP", False, intval)
 		    bpList[i]['block_parent_id'] = id
 		    id += 1
 		    bpList[i]['this_block_id'] = block['block_id']
@@ -469,7 +472,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		   c["output_module_label"])
 		if cfgid > 0:
 		    otptIdList.append(cfgid)
-		    self.datasetCache['conf'][c["app_name"]+':'+c["release_version"]+':'+c["pset_hash"]] = cfgid
+		    self.datasetCache['conf'][c["app_name"]+':'+c["release_version"]+':'+c["pset_hash"]+':'+c['output_module_label']] = cfgid
 		if cfgid <=0 :
 		    missingList.append(c)
 	except Exception, ex:
@@ -480,7 +483,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    tran = conn.begin()
 	    for m in missingList:
 		#get output module config id
-		cfgid = self.sm.increment(conn, "SEQ_OMC")
+		cfgid = self.sm.increment(conn, "SEQ_OMC", transaction=tran)
 		#find release version id
 		if m["release_version"] in (self.datasetCache['relVer']).keys():
 		    #found in cache
@@ -489,7 +492,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		    reId = self.releaseVid.execute(conn, m["release_version"])
 		    if reId <= 0:
 			#not found release version in db, insert it now
-			reId = self.sm.increment(conn, "SEQ_RV")
+			reId = self.sm.increment(conn, "SEQ_RV",transaction=tran )
 			reobj={"release_version": m["release_version"], "release_version_id": reId}
 			self.releaseVin.execute(conn, reobj, tran)
 		    #cached it
@@ -499,10 +502,10 @@ class DBSMigrationEngine(BaseWorkerThread) :
                     #found in cache
                     pHId = self.datasetCache['pHash'][m["pset_hash"]]
                 else:
-                    pHId = self.psetHashid.execute(conn, m["pset_hash"])
+                    pHId = self.psetHashid.execute(conn, m["pset_hash"], transaction=tran)
                     if pHId <= 0:
                         #not found p set hash in db, insert it now
-                        pHId = self.sm.increment(conn, "SEQ_PSH")
+                        pHId = self.sm.increment(conn, "SEQ_PSH", transaction=tran)
                         pHobj={"pset_hash": m["pset_hash"], "parameter_set_hash_id": pHIdi, 'name':m['name']}
                         self.psetHashin.execute(conn, pHobj, tran)
                     #cached it
@@ -526,7 +529,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                              'creation_date':None, 'create_by':''}
 		self.otptModCfgin.execute(conn,	configObj, tran)
 		otptIdList.append(cfgid)
-		self.datasetCache['conf'][m["app_name"]+':'+m["release_version"]+':'+m["pset_hash"]] = cfgid
+		self.datasetCache['conf'][m["app_name"]+':'+m["release_version"]+':'+m["pset_hash"]+':'+['output_module_label']] = cfgid
 	    tran.commit()
 	except Exception, ex:
 	    self.logger.exception("DBS output module configure inseration exception: %s" %ex)
@@ -571,23 +574,23 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		#Second, seach in the local db
 		#import pdb
 		#pdb.set_trace()
-		primds["primary_ds_id"] = self.primdsid.execute(conn, primds["primary_ds_name"])
+		primds["primary_ds_id"] = self.primdsid.execute(conn, primds["primary_ds_name"], transaction=tran)
 		if primds["primary_ds_id"] <= 0:
 		    #primary dataset is not in db yet. We need to check if the primary_ds_type before insert primary ds
 		    if primds["primary_ds_type"] in (self.datasetCache['primDsTp']).keys(): 
 			primds["primary_ds_type_id"] = self.datasetCache['primDsTp'][primds["primary_ds_type"]]
 		    else:
-			primds["primary_ds_type_id"] = self.primdstpid.execute(conn, primds["primary_ds_type"])
+			primds["primary_ds_type_id"] = self.primdstpid.execute(conn, primds["primary_ds_type"], transaction=tran)
 			if primds["primary_ds_type_id"] <= 0:
 			    #primary ds type is not in db yet. Insert it now
-			    primds["primary_ds_type_id"] = self.sm.increment(conn,"SEQ_PDT")
+			    primds["primary_ds_type_id"] = self.sm.increment(conn,"SEQ_PDT", transaction=tran)
 			    obj={'primary_ds_type_id':primds["primary_ds_type_id"], 'primary_ds_type':primds["primary_ds_type"]}
 			    self.primdstpin.execute(conn, obj, tran)
 			#register to cache. Done with primary ds type    
 			self.datasetCache['primDsTp']["primary_ds_type"]=primds["primary_ds_type_id"]
 		    #Now inserting primary ds. Clean up dao object befer inserting
 		    del primds["primary_ds_type"]
-		    primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS")
+		    primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS", transaction=tran)
 		    self.primdsin.execute(conn, primds, tran) 
 		#register to cache. Done with primary ds     
 		self.datasetCache['primDs']["primary_ds_name"] = primds["primary_ds_id"]
@@ -630,7 +633,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		else:
 		    try:
 			#insert acquisition era into db
-			aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
+			aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE", transaction=tran)
 			self.acqin.execute(conn, aq, tran)
 			#regist to cache
 			self.datasetCache['acquisitionEra']['acquisition_era_name'] = aq['acquisition_era_id']
@@ -656,7 +659,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		else:
 		    try:
 			#insert processing era into db
-			pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE")
+			pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE", transaction=tran)
 			self.procsingin.execute(conn, pera, tran)
 			#regist to cache
 			self.datasetCache['processingVersion'][pera['processing_version']] = pera['processing_era_id']
@@ -688,7 +691,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		    dataset['physics_group_id'] = self.datasetCache['phyGrp'][phg]
 		else:
 		    #find in db since not find it in cache
-		    phgId = self.phygrpid.execute(conn, phg)
+		    phgId = self.phygrpid.execute(conn, phg, transaction=tran)
 		    if phgId <=0 :
 			#not in db yet, insert it
 			phygrp={'physics_group_id':self.sm.increment(conn,"SEQ_PG"), 'physics_group_name':phg}
@@ -707,7 +710,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		dataset['data_tier_id'] = self.datasetCache['dataTier'][dataT]
 	    else:
 		#not in cache, check if in db
-		dataTId = self.tierid.execute(conn, dataT)
+		dataTId = self.tierid.execute(conn, dataT, transaction=tran)
 		if dataTId <= 0 :
 		    #not in db. Insert the tier
 		    #get the rest data from remote db
@@ -725,7 +728,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 dataset['dataset_access_type_id'] = self.datasetCache['datasetAccTp'][dsTp]
             else:
                 #not in cache, check if in db
-                dsTpId = self.datatypeid.execute(conn, dsTp)
+                dsTpId = self.datatypeid.execute(conn, dsTp, transaction=tran)
                 if dsTpId <= 0 :
                     #not in db. Insert the type
                     dsTpId = self.sm.increment(conn,"SEQ_DTP")
@@ -742,14 +745,16 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	try:
 	    tran = conn.begin()
 	    #8 Finally, we have everything to insert a dataset
-	    dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
+	    dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS", transaction=tran)
 	    self.datasetin.execute(conn, dataset, tran)
 	    self.datasetCache['dataset'][dataset['dataset']]=dataset['dataset_id']
 	    #9 Before we commit, make dataset and output module configure mapping	
+	    import pdb
+	    pdb.set_trace()
 	    for c in otptIdList:
 		try:
-		    dcId = self.sm.increment(conn,"SEQ_DC")
-		    dcObj ={'ds_output_mod_conf_id': self.sm.increment(conn,"SEQ_DC"), \
+		    dcId = self.sm.increment(conn,"SEQ_DC", transaction=tran)
+		    dcObj ={'ds_output_mod_conf_id': dcId, \
                          'dataset_id':dataset['dataset_id'] , 'output_mod_config_id':c }
 		    self.dcin.execute(conn, dcObj, tran)
 		except exceptions.IntegrityError:
@@ -759,14 +764,15 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		    self.logger.exception("DBS dataset and output module mapping inseration exception: %s" %ex)
 		    raise 
 	    #10 Fill Dataset Parentage
-	    dsPList = blockcontent['blockcontent']
+	    dsPList = blockcontent['ds_parent_list']
 	    dsParentObjList=[]
 	    for p in dsPList:
-		dsParentObj={'dataset_parent_id': self.sm.increment(conn,"SEQ_DP"), 'this_dataset_id': dataset['dataset_id']\
+		dsParentObj={'dataset_parent_id': self.sm.increment(conn,"SEQ_DP", transaction=tran), 'this_dataset_id': dataset['dataset_id']\
                              , 'parent_dataset_id' : self.datasetid(conn, p['parent_dataset'])}
 		dsParentObjList.append(dsParentObj)
 	    #insert dataset parentage in bulk
-	    self.dsparentin(conn, dsParentObjList, tran)	    
+	    if dsParentObjList:
+		self.dsparentin(conn, dsParentObjList, tran)	    
 	    tran.commit()
 	except Exception, ex:
 	    self.logger.exception("DBS dataset inseration exception: %s" %ex)
