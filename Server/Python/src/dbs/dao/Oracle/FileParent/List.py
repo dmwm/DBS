@@ -2,8 +2,8 @@
 """
 This module provides FileParent.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.5 2010/03/05 18:56:04 yuyi Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: List.py,v 1.6 2010/03/25 16:37:59 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -35,7 +35,6 @@ JOIN %sFILES F ON  F.FILE_ID = FP.THIS_FILE_ID
         if not conn:
             raise Exception("dbs/dao/Oracle/FileParent/List expects db connection from up layer.")
         sql = self.sql
-        cursor = conn.connection.cursor()
         sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
         binds = {"logical_file_name":logical_file_name}
 	cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
