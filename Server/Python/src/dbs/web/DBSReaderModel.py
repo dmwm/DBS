@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.33 2010/04/22 07:46:29 akhukhun Exp $"
-__version__ = "$Revision: 1.33 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.34 2010/04/22 16:05:05 yuyi Exp $"
+__version__ = "$Revision: 1.34 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -146,6 +146,7 @@ class DBSReaderModel(RESTModel):
         http://dbs3/blocks?dataset=/a/b/c <br />
         http://dbs3/blocks?block_name=/a/b/c%23*d <br />
         """
+	#site_name is ORIGIN_SITE_NAME. We need to change the name and add REAL site_name
         dataset = dataset.replace("*","%")
         block_name = block_name.replace("*","%")
         return self.dbsBlock.listBlocks(dataset, block_name, site_name)
@@ -176,6 +177,7 @@ class DBSReaderModel(RESTModel):
         http://dbs3/files?dataset=/a/b/c&lfn=/store/* <br />
         http://dbs3/files?block_name=/a/b/c%23d&logical_file_name=/store/* <br />
         """
+	#FIXME add real site
         logical_file_name = logical_file_name.replace("*", "%")
 	release_version = release_version.replace("*", "%")
 	pset_hash = pset_hash.replace("*", "%")
