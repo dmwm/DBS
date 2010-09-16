@@ -3,8 +3,8 @@
 This module manages sequences.
 """
 
-__revision__ = "$Id: SequenceManager.py,v 1.5 2010/03/09 16:38:03 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: SequenceManager.py,v 1.6 2010/04/16 19:48:42 yuyi Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -22,8 +22,9 @@ class  SequenceManager(DBFormatter):
         and returns its value
         """
 	try:
-	    #seqTable = "%sS" %seqName
 	    seqTable = "%sS" %seqName
+	    tlock = "lock tables %s write" %seqTable
+	    self.dbi.processData(tlock, [], conn, transaction)
 	    sql = "select ID from %s" % seqTable
 	    result = self.dbi.processData(sql, [], conn, transaction)
 	    resultlist = self.formatDict(result)
@@ -31,6 +32,8 @@ class  SequenceManager(DBFormatter):
 	    sql = "UPDATE %s SET ID=:seq_count" % seqTable
 	    seqparms={"seq_count" : newSeq}
 	    self.dbi.processData(sql, seqparms, conn, transaction)
+	    tunlock = "unlock tables"
+	    self.dbi.processData(tunlock, [], conn, transaction)
 	    return newSeq
 	except:
 	    raise
