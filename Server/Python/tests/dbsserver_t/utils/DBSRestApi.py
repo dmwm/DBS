@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.5 2010/01/27 23:18:05 dsr Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.6 2010/03/17 19:00:30 yuyi Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import json
 import os, logging
@@ -31,7 +31,9 @@ class DBSRestApi:
     def __init__(self, configfile):
         log.error_log.setLevel(logging.ERROR)
         config = self.configure(configfile)
+	#print config
         config = config.section_("DBS")
+	#print config
         self.rest = RESTApi(config)
         self.config = config
 
@@ -65,6 +67,9 @@ class DBSRestApi:
         takes individual parameters
         Example: api.list('files',dataset='/a/b/c')
         """
+	#import pdb
+	#pdb.set_trace()
+	#print "List API call ....."
         request.method = 'GET'
         return self.parseForException(self.rest.default(*args, **kwargs))
 
@@ -74,11 +79,20 @@ class DBSRestApi:
 	ret=self.rest.default(*[call])
         return self.parseForException(ret)
 
+    def update(self, *args, **kwargs):
+        request.method = 'PUT'
+        ret=self.rest.default(*args, **kwargs)
+        return self.parseForException(ret)
+
+
     def parseForException(self, data):
 	if type(data)==type("abc"):
 	    data=json.loads(data)	
 	if type(data) == type({}) and data.has_key('exception'):
-	    raise Exception("DBS Server raised an exception: " + data['message']['message'])
+	    #raise Exception("DBS Server raised an exception: " + data['message']['message'])
+	    #import pdb
+	    #pdb.set_trace()
+	    raise Exception("DBS Server raised an exception: " + data['message'])
 	return data
 
 def options():
