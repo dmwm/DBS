@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.52 2010/06/23 21:21:17 afaq Exp $"
-__version__ = "$Revision: 1.52 $"
+__revision__ = "$Id: DBSFile.py,v 1.53 2010/07/23 19:16:57 afaq Exp $"
+__version__ = "$Revision: 1.53 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -203,7 +203,7 @@ class DBSFile:
 	    #looping over the files, everytime create a new object 'filein' as you never know 
 	    #whats in the original object and we do not want to know
 	    for f in businput:
-	    	file_blob = {}
+	    	file_clob = {}
 		fparents2insert = []
 		fparents2insert = []
 		flumis2insert = []
@@ -241,7 +241,7 @@ class DBSFile:
 			self.filein.execute(conn, filein, transaction=tran)
 			fileInserted=True
 		    else:
-			file_blob['file']=filein
+			file_clob['file']=filein
 		except exceptions.IntegrityError, ex:
 		    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			#refresh the file_id from database
@@ -321,12 +321,12 @@ class DBSFile:
 		#
 		# insert file - lumi   
 		if flumis2insert:
-		    file_blob['file_lumi_list']=flumis2insert
+		    file_clob['file_lumi_list']=flumis2insert
 		    if not qInserts:
 			self.flumiin.execute(conn, flumis2insert, transaction=tran)
 		# insert file parent mapping
 		if fparents2insert:
-		    file_blob['file_parent_list']=fparents2insert
+		    file_clob['file_parent_list']=fparents2insert
 		    if not qInserts:
 			self.fparentin.execute(conn, fparents2insert, transaction=tran)
 		# First check to see if these output configs are mapped to THIS dataset as well, if not raise an exception
@@ -335,13 +335,13 @@ class DBSFile:
 													  %(firstfile["dataset"], filein["logical_file_name"]))
 		# insert output module config mapping
 		if fconfigs2insert:
-		    file_blob['file_output_config_list']=fconfigs2insert
+		    file_clob['file_output_config_list']=fconfigs2insert
 		    if not qInserts:
 			self.fconfigin.execute(conn, fconfigs2insert, transaction=tran)  
 		if qInserts:
 		    try: 
-		        print file_blob
-			self.filebufin.execute(conn, filein['logical_file_name'], block_id, file_blob, transaction=tran)
+		        self.logger.warning(file_clob)
+			self.filebufin.execute(conn, filein['logical_file_name'], block_id, file_clob, transaction=tran)
 		    except exceptions.IntegrityError, ex:
 		        if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			    pass
