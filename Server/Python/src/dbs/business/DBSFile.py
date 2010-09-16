@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.33 2010/03/15 18:51:38 yuyi Exp $"
-__version__ = "$Revision: 1.33 $"
+__revision__ = "$Id: DBSFile.py,v 1.34 2010/03/18 19:48:12 afaq Exp $"
+__version__ = "$Revision: 1.34 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -75,35 +75,35 @@ class DBSFile:
 	conn.close()
 	return result
 
-    def listFilesByRun(self, maxrun, minrun=1,  blockName="", dataset=""):
+    def listFilesByRun(self, maxrun, minrun=1,  block_name="", dataset=""):
 	""" 
 	retuen a list of files that has run number between minrun and maxrun.
 	Either dataset or block_name has to be provided. If both dataset and block_name 
 	is provided, the block_name overwrite the dataset.
 	"""
 	assert (maxrun), "Maxrun has to be not null"
-	if(not blockName and not dataset):
+	if(not block_name and not dataset):
 	    raise Exception("You must provide block_name or dataset")
 	conn = self.dbi.connection()
-	if(blockName):
-	    result = self.filelist.executeByRun(conn, maxrun, minrun, blockName)
+	if(block_name):
+	    result = self.filelist.executeByRun(conn, maxrun, minrun, block_name=block_name)
 	if(dataset):
-	    result = self.filelist.executeByRun(conn, maxrun, minrun, dataset+'%')
+	    result = self.filelist.executeByRun(conn, maxrun, minrun, dataset=dataset+'%')
 	conn.close()
 	return result
 
-    def listFileBySite(self, originSite, blockName="", dataset=""):
+    def listFileBySite(self, originSite, block_name="", dataset=""):
 	"""	
 	Either dataset or block_name has to be provide with originSite always provided.
 	If both dataset and block_name is provided, the block_name overwrite the dataset
 	"""
 	
 	assert (originSite), "origin_sit has to be provided"
-	if(not blockName and not dataset):
+	if(not block_name and not dataset):
 	    raise Exception("You must provide block_name or dataset")
 	conn = self.dbi.connection()
-	if(blockName):
-	    result=self.filelist.executeBySite(conn, originSite, blockName)
+	if(block_name):
+	    result=self.filelist.executeBySite(conn, originSite, block_name)
 	if(dataset):
 	    result=self.filelist.executeBySite(conn, originSite, dataset+'%')
 	conn.close()

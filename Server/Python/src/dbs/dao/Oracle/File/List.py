@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.22 2010/03/10 17:11:17 akhukhun Exp $"
-__version__ = "$Revision: 1.22 $"
+__revision__ = "$Id: List.py,v 1.23 2010/03/18 19:48:12 afaq Exp $"
+__version__ = "$Revision: 1.23 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -91,40 +91,40 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
         result = self.formatCursor(cursors[0])
         return result 
 
-	def executeByRun(self, conn, maxrun, minrun, blockName, transaction=False):
+    def executeByRun(self, conn, maxrun, minrun, block_name="", dataset="", transaction=False):
 	    """
 	     Select a list of Files with in minrun and maxrun. The maxrun has to be defined. 
 	     conn has to be passed into the dao object.
 	    """
-	    if conn:
+	    if not conn:
 		raise Exception("No connection to DB")
 	    
 	    binds = {}
 	    sql = self.sql + "JOIN %sFILE_LUMIS FL on  FL.FILE_ID=F.FILE_ID \
 				WHERE F.IS_FILE_VALID = 1 \
 				and FL.RUN_NUM between :minrun and :maxrun \
-				and B.BLOCK_NAME like :blockName " %(self.owner)
+				and B.BLOCK_NAME like :block_name " %(self.owner)
 	    binds.update({"minrun":minrun})
 	    binds.update({"maxrun":maxrun})
-	    binds.update({"blockName":blockName})
+	    binds.update({"block_name":block_name})
 	    cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	    assert len(cursors) == 1, "File does not exist"
 	    result = self.formatCursor(cursors[0])
 	    return result
 
-	def executeBySite(self, conn, originSite, blockName, transaction=False):
+    def executeBySite(self, conn, originSite, block_name, transaction=False):
 	    """
 	    Select a list of Files from a dataset/block within the originSite. We treat dataset as 
              block by using like in the query since block_name=datset_name + #UUID.
 	    """ 
-	    if conn:
+	    if not conn:
 		raise Exception("No connection to DB")
 	    binds = {}
     	    sql = self.sql + " JOIN %sSITES ST on ST.SITE_ID = B.ORIGIN_SITE \
 	                       WHERE F.IS_FILE_VALID = 1 and \
-			       ST.SITE_NAME = :originSite and B.BLOCK_NAME like :blockName" %(self.owner)
+			       ST.SITE_NAME = :originSite and B.BLOCK_NAME like :block_name" %(self.owner)
 	    binds.update({"originSite":originSite})
-	    binds.update({"blockName":blockName})
+	    binds.update({"block_name":block_name})
 	    cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	    assert len(cursors) == 1, "File does not exist"
 
