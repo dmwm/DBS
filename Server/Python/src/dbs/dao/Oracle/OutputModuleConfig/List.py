@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.13 2010/02/11 18:03:27 afaq Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: List.py,v 1.14 2010/02/18 20:07:28 yuyi Exp $"
+__version__ = "$Revision: 1.14 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -89,10 +89,9 @@ class List(DBFormatter):
 
 	if not conn:
 	    conn = self.dbi.connection()
-		
-        cursor = conn.connection.cursor()
-        cursor.execute(sql, binds)
-        result = self.formatCursor(cursor)
+	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	assert len(cursors) == 1, "output module config does not exist"
+        result = self.formatCursor(cursors[0])
         conn.close()
         return result
 	    
