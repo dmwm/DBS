@@ -2,14 +2,14 @@
 """
 This module provides DataTier.List data access object.
 """
-__vision__ = "$Id: List.py,v 1.2 2010/08/12 19:47:55 afaq Exp $"
-__revision__ = "$Revision: 1.2 $"
+__vision__ = "$Id: List.py,v 1.3 2010/08/24 18:17:04 yuyi Exp $"
+__revision__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
 class List(DBFormatter):
     """
-    DataTier List DAO class.
+    Processing version List DAO class.
     """
     def __init__(self, logger, dbi, owner):
         """
