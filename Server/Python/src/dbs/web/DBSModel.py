@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.1 2009/11/27 09:55:03 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSModel.py,v 1.23 2009/11/30 22:11:39 afaq Exp $"
+__version__ = "$Revision: 1.23 $"
 
 import re
 import cjson
