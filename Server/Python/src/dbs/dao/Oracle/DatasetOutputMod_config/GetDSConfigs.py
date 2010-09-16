@@ -3,8 +3,8 @@
 This module provides Dataset.GetID data access object.
 Light dao object to get the id for a give /primds/procds/tier
 """
-__revision__ = "$Id: GetDSConfigs.py,v 1.2 2010/03/08 23:12:40 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: GetDSConfigs.py,v 1.3 2010/03/09 16:45:21 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -26,7 +26,7 @@ class GetDSConfigs(DBFormatter):
 	    JOIN %sPARAMETER_SET_HASHES PSH ON PSH.PARAMETER_SET_HASH_ID = OMC.PARAMETER_SET_HASH_ID
 	    JOIN %sAPPLICATION_EXECUTABLES AEX ON AEX.APP_EXEC_ID = OMC.APP_EXEC_ID
 	    JOIN %sDATASET_OUTPUT_MOD_CONFIGS DOMC ON  OMC.OUTPUT_MOD_CONFIG_ID = DOMC.OUTPUT_MOD_CONFIG_ID
-	    JOIN %sDATASET ON D.DATASET_ID = DOMC.DATASET_ID WHERE DATASET=:dataset""" % ( 6 * (self.owner,) )
+	    JOIN %sDATASETS D ON D.DATASET_ID = DOMC.DATASET_ID WHERE DATASET=:dataset""" % ( 6 * (self.owner,) )
         
     def execute(self, conn, dataset, transaction = False):
         """
