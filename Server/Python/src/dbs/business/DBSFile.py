@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.15 2010/01/05 22:34:31 afaq Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: DBSFile.py,v 1.16 2010/01/07 17:30:42 afaq Exp $"
+__version__ = "$Revision: 1.16 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -62,7 +62,7 @@ class DBSFile:
             file_lumi_list (optional, default = []): [{"run_num": 123, "lumi_section_num": 12},{}....] <br />
             file_parent_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
             file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
-            file_output_config_list(optional, default = []) :[{"app_name":..., "version":..., "hash":...., output_module_label":...},{}.....] <br />
+            file_output_config_list(optional, default = []) :[{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] <br />
 	"""
 	conn = self.dbi.connection()
 	tran = conn.begin()
@@ -197,7 +197,7 @@ class DBSFile:
 			    iConfig += 1
 			    fcdao["file_id"] = filein["file_id"]
 			    fcdao["output_mod_config_id"]= self.outconfigid.execute(fc["app_name"], \
-				                        fc["version"], fc["hash"], conn, True)
+				                        fc["release_version"], fc["pset_hash"], conn, True)
 			    fconfigs2insert.append(fcdao)
 			
 		#FIXME: file associations?-- in a later release

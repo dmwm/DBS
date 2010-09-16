@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.3 2010/01/01 19:03:07 akhukhun Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.4 2010/01/07 17:30:42 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -34,18 +34,18 @@ class DBSOutputConfig:
         self.outmodin = daofactory(classname='OutputModuleConfig.Insert')
         
     def listOutputConfigs(self, dataset="", logical_file_name="", 
-                         version="", hash="", app_name="", output_module_label=""):
+                         release_version="", pset_hash="", app_name="", output_module_label=""):
         return self.outputmoduleconfiglist.execute(dataset,
                                                    logical_file_name,
-                                                   version,
-                                                   hash,
+                                                   release_version,
+                                                   pset_hash,
                                                    app_name,
                                                    output_module_label)
 
     def insertOutputConfig(self, businput):
         """
         Method to insert the Output Config
-        It first checks if release, app, and hash exists, if not insert them,
+        It first checks if release, app, and pset_hash exists, if not insert them,
         and then insert the output module
 		
         """
@@ -66,23 +66,23 @@ class DBSOutputConfig:
                     raise
                 
             try:
-                businput["release_version_id"] = self.verid.execute(businput["version"], conn, True)
+                businput["release_version_id"] = self.verid.execute(businput["release_version"], conn, True)
             except Exception, e:
                 if str(e).find('does not exist') != -1:
                     businput["release_version_id"] = self.sm.increment("SEQ_RV", conn, True)
                     verdaoinput = { "release_version_id" : businput["release_version_id"], 
-                                    "version" : businput["version"]}
+                                    "release_version" : businput["release_version"]}
                     self.verin.execute(verdaoinput, conn, True)
                 else : 
                     raise
                 
             try:
-                businput["parameter_set_hash_id"] = self.hashid.execute(businput["hash"], conn, True)
+                businput["parameter_set_hash_id"] = self.hashid.execute(businput["pset_hash"], conn, True)
             except Exception, e:
                 if str(e).find('does not exist') != -1:
                     businput["parameter_set_hash_id"] = self.sm.increment("SEQ_PSH", conn, True)
                     pshdaoinput = {"parameter_set_hash_id" : businput["parameter_set_hash_id"], 
-                                   "hash" : businput["hash"], 
+                                   "pset_hash" : businput["pset_hash"], 
                                    "name" : "no_name" }
                     self.hashin.execute(pshdaoinput, conn, True)
                 else : 

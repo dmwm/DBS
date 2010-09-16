@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.10 2010/01/01 19:52:51 akhukhun Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.11 2010/01/07 17:30:43 afaq Exp $"
+__version__ = "$Revision: 1.11 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -35,11 +35,11 @@ class DBSReaderModel(RESTModel):
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
         self.addService('GET', 'serverinfo', self.getServerInfo)
         self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primary_ds_name'])
-        self.addService('GET', 'datasets', self.listDatasets, ['dataset', 'parent_dataset', 'version', 'hash', 'app_name', 'output_module_label'])
+        self.addService('GET', 'datasets', self.listDatasets, ['dataset', 'parent_dataset', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block_name', 'site_name'])
         self.addService('GET', 'files', self.listFiles, ['dataset', 'block_name', 'logical_file_name'])
         self.addService('GET', 'datasetparents', self.listDatasetParents, ['dataset'])
-        self.addService('GET', 'outputconfigurations', self.listOutputConfigs, ['dataset', 'logical_file_name', 'version', 'hash', 'app_name', 'output_module_label'])
+        self.addService('GET', 'outputconfigurations', self.listOutputConfigs, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'fileparents', self.listFileParents, ['logical_file_name'])
         self.addService('GET', 'filelumis', self.listFileLumis, ['logical_file_name', 'block_name'])
         
@@ -97,16 +97,16 @@ class DBSReaderModel(RESTModel):
         primary_ds_name = primary_ds_name.replace("*","%")
         return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name)
         
-    def listDatasets(self, dataset="", parent_dataset="", version="", hash="", app_name="", output_module_label=""):
+    def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label=""):
         """
         Example url's: <br />
         http://dbs3/datasets <br />
         http://dbs3/datasets/RelVal* <br />
         http://dbs3/datasets?dataset=/RelVal*/*/*RECO <br />
-        http://dbs3/datasets?dataset=/RelVal*/*/*RECO&version=CMSSW_3_0_0<br />
+        http://dbs3/datasets?dataset=/RelVal*/*/*RECO&release_version=CMSSW_3_0_0<br />
         """
         dataset = dataset.replace("*", "%")
-        return self.dbsDataset.listDatasets(dataset, parent_dataset, version, hash, app_name, output_module_label)
+        return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label)
 
     def listBlocks(self, dataset="", block_name="", site_name=""):
         """
@@ -136,18 +136,18 @@ class DBSReaderModel(RESTModel):
         """
         return self.dbsDatasetParent.listDatasetParents(dataset)
     
-    def listOutputConfigs(self, dataset="", logical_file_name="", version="", hash="", app_name="", output_module_label=""):
+    def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="", output_module_label=""):
         """
         Example url's: <br />
         http://dbs3/outputconfigurations <br />
         http://dbs3/outputconfigurations?dataset=a/b/c <br />
         http://dbs3/outputconfigurations?logical_file_name=lfn <br />
-        http://dbs3/outputconfigurations?version=version <br />
-        http://dbs3/outputconfigurations?hash=hash <br/>
+        http://dbs3/outputconfigurations?release_version=version <br />
+        http://dbs3/outputconfigurations?pset_hash=hash <br/>
         http://dbs3/outputconfigurations?app_name=app_name <br/>
         http://dbs3/outputconfigurations?output_module_label="output_module_label" <br/>
         """
-        return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, version, hash, app_name, output_module_label)
+        return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, release_version, pset_hash, app_name, output_module_label)
     
     def listFileParents(self, logical_file_name):
         """
