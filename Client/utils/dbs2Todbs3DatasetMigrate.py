@@ -160,7 +160,6 @@ try:
 				self.files.append(self.currfile)
 
                         if name == 'dbs':
-#				import pdb
 				try :
 					# Lets populate this in DBS
         				# API Object  
@@ -174,7 +173,6 @@ try:
 					self.dataset["output_configs"]=self.outputconfs
         				dbs3api.insertDataset(self.dataset)
 					#print self.block
-#pdb.set_trace()
 					dbs3api.insertBlock(self.block)
 					start_time=time.time()
 					#for file in self.files:
