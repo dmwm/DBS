@@ -1,3 +1,6 @@
+CREATE OR REPLACE TRIGGER BLST_TRIG before insert on BLOCK_SITES for each row begin if :NEW.BLOCK_SITE_ID is null then select SEQ_BLST.nextval into :NEW.BLOCK_SITE_ID from dual;
+end if; end;
+ /
 
 CREATE OR REPLACE TRIGGER AE_TRIG before insert on APPLICATION_EXECUTABLES for each row begin if :NEW.APP_EXEC_ID is null then select SEQ_AE.nextval into :NEW.APP_EXEC_ID from dual; end if; end;
  /
