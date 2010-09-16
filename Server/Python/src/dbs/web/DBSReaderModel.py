@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.31 2010/04/20 20:08:11 afaq Exp $"
-__version__ = "$Revision: 1.31 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.32 2010/04/21 19:50:02 afaq Exp $"
+__version__ = "$Revision: 1.32 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -17,7 +17,6 @@ from dbs.business.DBSAcquisitionEra import DBSAcquisitionEra
 from dbs.business.DBSOutputConfig import DBSOutputConfig
 from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
-from dbs.business.DBSStorageElement import DBSStorageElement
 from dbs.business.DBSDataType import DBSDataType
 from dbs.business.DBSDataTier import DBSDataTier
 
@@ -47,7 +46,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'filechildren', self.listFileChildren)#, ['logical_file_name'])
         self.addService('GET', 'filelumis', self.listFileLumis)#, ['logical_file_name', 'block_name'])
         self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minrun', 'maxrun'])
-        self.addService('GET', 'storage_elements', self.listStorageElements)#, ['block_name', 'se_name'])
+        self.addService('GET', 'sites', self.listSites)#, ['block_name', 'se_name'])
         self.addService('GET', 'datatypes', self.listDataTypes)#, ['block_name', 'se_name'])
         self.addService('GET', 'datatiers', self.listDataTiers)#, ['block_name', 'se_name'])
         self.addService('GET', 'blockparents', self.listBlockParents)#, ['block_name', 'se_name'])
@@ -62,7 +61,6 @@ class DBSReaderModel(RESTModel):
         self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi, config.dbowner)
         self.dbsSite = DBSSite(self.logger, self.dbi, config.dbowner)
 	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
-	self.dbsStorageElement = DBSStorageElement(self.logger, self.dbi, config.dbowner)
 	self.dbsDataType = DBSDataType(self.logger, self.dbi, config.dbowner)
 	self.dbsDataTier = DBSDataTier(self.logger, self.dbi, config.dbowner)
 
@@ -247,14 +245,14 @@ class DBSReaderModel(RESTModel):
         """
         return self.dbsRun.listRuns(dataset, block_name, logical_file_name , minrun, maxrun)
    
-    def listStorageElements(self, block_name="", se_name=""):
+    def listSites(self, block_name="", site_name=""):
         """
         Example url's <br />
-        http://dbs3/storage_elements
-	http://dbs3/storage_elements?block_name=block_name
-	http://dbs3/storage_elements?se_name
+        http://dbs3/sites
+	http://dbs3/sites?block_name=block_name
+	http://dbs3/sites?site_name=T1_FNAL
         """
-        return self.dbsStorageElements.listStorageElements(block_name, se_name)
+        return self.dbsSite.listSites(block_name, site_name)
   
     def listDataTypes(self, datatype="", dataset=""):
 	"""

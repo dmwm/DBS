@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSSite.py,v 1.5 2010/03/25 17:06:00 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSSite.py,v 1.6 2010/04/21 19:50:01 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -18,18 +18,21 @@ class DBSSite:
         self.dbi = dbi
         self.owner = owner
 
-        self.sitelist = daofactory(classname="Site.List")
         self.sm = daofactory(classname="SequenceManager")
         self.sitein = daofactory(classname="Site.Insert")
+        self.sitelist = daofactory(classname="Site.List")
+        self.blksitelist = daofactory(classname="Site.ListBlockSite")
 
-
-    def listSites(self):
+    def listSites(self, block_name="", site_name=""):
         """
-        Returns all sites.
+        Returns sites.
         """
 	try:
 	    conn = self.dbi.connection()
-	    result=self.sitelist.execute(conn)
+	    if block_name:
+		result=self.blksitelist.execute(conn, block_name)
+	    else:
+		result=self.sitelist.execute(conn, site_name)
 	    conn.close()
 	    return result
         except Exception, ex:
