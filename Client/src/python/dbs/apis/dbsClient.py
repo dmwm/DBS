@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.47 $"
-# $Id: dbsClient.py,v 1.47 2010/06/04 20:39:32 afaq Exp $"
+# $Revision: 1.48 $"
+# $Id: dbsClient.py,v 1.48 2010/06/04 20:43:50 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -197,7 +197,7 @@ class DbsApi:
 		* You can use ANY combination of these parameters in this API
 		* In absence of parameters, all datasets know to DBS instance will be returned
                 """
-		ADD_TO_Url=""
+		add_to_url=""
 		amp=False
 		if dataset: 
 		    add_to_url += "dataset=%s"%dataset
