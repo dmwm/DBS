@@ -69,7 +69,7 @@ class Test:
 		bo = DBSFile(self.logger, self.dbi, "anzar")
 		binput = [{ 
 			    'file_type': 'EDM', 
-			    'logical_file_name': '/store100077/mc/Summer09/TkCosmics38T/GEN-SIM-DIGI-RAW/STARTUP31X_V3-v1/0010/66EE7132-FFB3-DE11-9D33-001E682F1FA67.root', 
+			    'logical_file_name': '/store110078/mc/Summer09/TkCosmics38T/GEN-SIM-DIGI-RAW/STARTUP31X_V3-v1/0010/66EE7132-FFB3-11-9D33-001E682F1FA68.root', 
 			    'file_size': '2824329131', 
 			    'last_modification_date': '1255099729', 
 			    'file_parent_list': [
