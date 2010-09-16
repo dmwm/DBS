@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 """
 This module provides Dataset.List data access object.
+Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.18 2010/02/19 17:29:22 yuyi Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: List.py,v 1.19 2010/03/02 20:05:23 yuyi Exp $"
+__version__ = "$Revision: 1.19 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
-class List(DBFormatter):
+class List1(DBFormatter):
     """
     Dataset List DAO class.
     """
@@ -32,37 +33,82 @@ SELECT D.DATASET_ID, D.DATASET, D.IS_DATASET_VALID,
         DP.DATASET_TYPE,
         AE.ACQUISITION_ERA_NAME,
         PE.PROCESSING_VERSION,
-        PH.PHYSICS_GROUP_NAME
+        PH.PHYSICS_GROUP_NAME, 
+        PDS.DATASET parent_dataset,
+        OMC.OUTPUT_MODULE_LABEL,
+        RV.RELEASE_VERSION,
+        PSH.PSET_HASH,
+        AEX.APP_NAME
+        
 FROM %sDATASETS D
 JOIN %sPRIMARY_DATASETS P ON P.PRIMARY_DS_ID = D.PRIMARY_DS_ID
 JOIN %sPROCESSED_DATASETS PD ON PD.PROCESSED_DS_ID = D.PROCESSED_DS_ID
 JOIN %sDATA_TIERS DT ON DT.DATA_TIER_ID = D.DATA_TIER_ID
+
 JOIN %sDATASET_TYPES DP on DP.DATASET_TYPE_ID = D.DATASET_TYPE_ID
 LEFT OUTER JOIN %sACQUISITION_ERAS AE ON AE.ACQUISITION_ERA_ID = D.ACQUISITION_ERA_ID
 LEFT OUTER JOIN %sPROCESSING_ERAS PE ON PE.PROCESSING_ERA_ID = D.PROCESSING_ERA_ID
-LEFT OUTER JOIN %sPHYSICS_GROUPS PH ON PH.PHYSICS_GROUP_ID = D.PHYSICS_GROUP_ID
+JOIN %sPHYSICS_GROUPS PH ON PH.PHYSICS_GROUP_ID = D.PHYSICS_GROUP_ID
+
+LEFT OUTER JOIN %sDATASET_PARENTS DSP ON DSP.THIS_DATASET_ID = D.DATASET_ID
+LEFT OUTER JOIN %sDATASETS PDS ON PDS.DATASET_ID = DSP.PARENT_DATASET_ID
+
+LEFT OUTER JOIN %sDATASET_OUTPUT_MOD_CONFIGS DOMC ON DOMC.DATASET_ID = D.DATASET_ID
+LEFT OUTER JOIN %sOUTPUT_MODULE_CONFIGS OMC ON OMC.OUTPUT_MOD_CONFIG_ID = DOMC.OUTPUT_MOD_CONFIG_ID
+LEFT OUTER JOIN %sRELEASE_VERSIONS RV ON RV.RELEASE_VERSION_ID = OMC.RELEASE_VERSION_ID
+LEFT OUTER JOIN %sPARAMETER_SET_HASHES PSH ON PSH.PARAMETER_SET_HASH_ID = OMC.PARAMETER_SET_HASH_ID
+LEFT OUTER JOIN %sAPPLICATION_EXECUTABLES AEX ON AEX.APP_EXEC_ID = OMC.APP_EXEC_ID
+
 WHERE D.IS_DATASET_VALID = 1
 AND DP.DATASET_TYPE <> 'DELETED'
-""" % ((self.owner,)*8)
+""" % ((self.owner,)*15)
 
-    def execute(self, dataset="", conn=None):
+    def execute(self, dataset="", parent_dataset="", 
+                release_version="", pset_hash="", app_name="", output_module_label="", 
+                conn=None):
         """
-        dataset is a wild card parameter and can include % character
+        dataset key is a wild card parameter
         """	
         #if not conn:
         #    conn = self.dbi.connection()
             
         sql = self.sql
-        cursor = conn.connection.cursor()
+        binds = {}
         
-        if not dataset:
-            cursor.execute(sql)
-        else:
+        if dataset:
             op = ("=", "like")["%" in dataset]
             sql += " AND D.DATASET %s :dataset" % op 
-            binds = {"dataset":dataset}
-            cursor.execute(sql, binds)
-            
+            binds.update(dataset = dataset)
+        if parent_dataset:
+            sql += " AND PDS.DATASET = :parent_dataset"
+            binds.update(parent_dataset = parent_dataset)
+        if release_version:
+	    op = ("=", "like")["%" in release_version]
+            sql += " AND RV.RELEASE_VERSION %s :release_version" % op
+            binds.update(release_version=release_version)
+        if pset_hash:
+	    op = ("=", "like")["%" in pset_hash]
+            sql += " AND PSH.PSET_HASH %s :pset_hash" % op
+            binds.update(pset_hash = pset_hash)
+        if app_name:
+	    op = ("=", "like")["%" in app_name]
+            sql += " AND AEX.APP_NAME %s :app_name" % op
+            binds.update(app_name = app_name)
+        if output_module_label:
+	    op = ("=", "like")["%" in output_module_label]
+            sql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label" % op
+            binds.update(output_module_label=output_module_label)
+
+	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	#assert len(cursors) == 1, "block does not exist"
+	result = self.formatCursor(cursors[0])
+	return result
+	
+	"""
+	cursor = conn.connection.cursor()
+        cursor.execute(sql, binds)
         result = self.formatCursor(cursor)
-        #conn.close()
+        conn.close()
         return result
+	"""
+	
