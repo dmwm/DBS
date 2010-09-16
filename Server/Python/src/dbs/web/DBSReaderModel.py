@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.3 2009/12/09 17:53:28 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.4 2009/12/15 22:20:37 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import re
 import cjson
@@ -33,12 +33,13 @@ class DBSReaderModel(RESTModel):
         All parameters are provided through DBSConfig module
         """
         RESTModel.__init__(self, config)
-
+	self.version="$Revision: 1.4 $ "
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
         self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
         self.addService('GET', 'datasets', self.listDatasets, ['dataset'])
         self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block'])
         self.addService('GET', 'files', self.listFiles, ['dataset', 'block', 'lfn'])
+        self.addService('GET', 'serverinfo', self.getServerInfo)
 
         cdict = self.config.dictionary_()
 	print cdict
@@ -49,14 +50,24 @@ class DBSReaderModel(RESTModel):
         self.dbsBlock = DBSBlock(self.logger, self.dbi, self.owner)
         self.dbsFile = DBSFile(self.logger, self.dbi, self.owner)
 
+    def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
+        """
+        method that adds services to the DBS rest model
+        """
+        self.methods[verb][methodKey] = {'args': args,
+                                         'call': func,
+                                         'validation': validation,
+                                         'version': version}
+
     def set_expire(self, expiresin=300):
             """
 		Return the time perid in which Cache will expire, also sets this value in HTTP header
 		expiresin : is the number of seconds from NOW, when this information will be considered expired
 				by default the information expires in 5 mins
 	    """
-            timestamp = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(time.time()+expiresin))
-            cherrypy.response.headers['Expires'] = timestamp
+            timestamp = time.time()+expiresin
+            formatted = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(timestamp))
+            cherrypy.response.headers['Expires'] = formatted
             #cherrypy.response.headers['Cache-control'] = 'no-cache'
 	    return timestamp
 
@@ -87,18 +98,27 @@ class DBSReaderModel(RESTModel):
 		"call_time" : time.time()-intime,
 		}
 	}
-	ret["DBS"][api]=result
+	ret["DBS"]["results"]=result
 	return ret
 
-    def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
-        """
-        method that adds services to the DBS rest model
-        """
-        self.methods[verb][methodKey] = {'args': args,
-                                         'call': func,
-                                         'validation': validation,
-                                         'version': version}
- 
+    # -- GET calls start from here
+
+    def getServerInfo(self):
+	"""
+	Method that provides information about DBS Server to the clients
+	The information includes
+	* Server Version - CVS Tag
+	* Schema Version - Version of Schema this DBS instance is working with
+	* ETC - TBD
+	"""
+
+	ver = self.getServerVersion() 
+	if ver in ("", " "): ver = "HEAD"
+	ret = {}
+	ret["version"]=ver
+	ret["schema"]="DBS_0_0_0"
+	return ret
+
     def listPrimaryDatasets(self, primarydataset = ""):
         """
         Example url's:
@@ -113,8 +133,10 @@ class DBSReaderModel(RESTModel):
         	ret = self.dbsPrimaryDataset.listPrimaryDatasets(primds)
 	except:
 		ret = {'exception':traceback.format_exc()}
-	return self.returnDAS(intime, primds, "listPrimaryDatasets", ret, 1000)
-		
+	#return self.returnDAS(intime, primds, "listPrimaryDatasets", ret, 1000)
+	return ret		
+
+
     def listDatasets(self, dataset = ""):
         """
         Example url's:
@@ -163,8 +185,5 @@ class DBSReaderModel(RESTModel):
 		ret = {'exception':traceback.format_exc()}
 	#FIXME Assuming user passed dataset for now
         return self.returnDAS(intime, dataset, "listFiles", ret, 0)
-        #return [r for r in result]
-        #for r in result:
-        #    yield cjson.encode(r)
 
 
