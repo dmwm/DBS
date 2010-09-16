@@ -3,7 +3,7 @@
 This module provides business object class to interact with DBSAcqusitionEra. 
 """
 
-__revision__ = "$Id: DBSAcquisitionEra.py,v 1.3 2010/02/11 22:54:21 afaq Exp $"
+__revision__ = "$Id: DBSAcquisitionEra.py,v 1.4 2010/03/08 19:36:47 yuyi Exp $"
 __version__ = "$Revision $"
 
 from WMCore.DAOFactory import DAOFactory
@@ -18,17 +18,8 @@ class DBSAcquisitionEra:
         self.dbi = dbi
         self.owner = owner
 
-        #self.acqlist = daofactory(classname="AcquisitionEra.List")
         self.acqin = daofactory(classname="AcquisitionEra.Insert")
         self.sm = daofactory(classname="SequenceManager")
-
-
-    def listAcquisitionEras(self):
-        """
-        Returns all AcquisitionEras.
-        """
-        return self.acqlist.execute()
-
 
     def insertAcquisitionEra(self, businput):
         """
@@ -36,14 +27,14 @@ class DBSAcquisitionEra:
         acquisition_era_name, creation_date, create_by
         it builds the correct dictionary for dao input and executes the dao
         """
-        conn = self.dbi.connection()
+	conn = self.dbi.connection()
         tran = conn.begin()
         try:
-	    businput["acquisition_era_id"] = self.sm.increment("SEQ_AQE", conn, True)
+	    businput["acquisition_era_id"] = self.sm.increment(conn, "SEQ_AQE", True)
 	    assert businput["acquisition_era_name"]
 	    assert businput["creation_date"]
 	    assert businput["create_by"]
-            self.acqin.execute(businput, conn, True)
+            self.acqin.execute(conn, businput, True)
             tran.commit()
         except Exception, ex:
                 if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
