@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.11 2010/08/25 20:42:35 afaq Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.12 2010/08/26 15:45:00 yuyi Exp $"
+__version__ = "$Revision: 1.12 $"
 
 import threading
 import logging
@@ -44,7 +44,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
         self.config  = config
         dbconfig = config.section_("CoreDatabase")
         self.dbowner=dbconfig.dbowner
-        
+       
+        self.newBlock = False
         self.datasetCache = {}
         self.datasetCache['primDs']={}
         self.datasetCache['dataset']={}
@@ -300,19 +301,27 @@ class DBSMigrationEngine(BaseWorkerThread) :
         """
         Insert the data in sereral steps and commit when each step finishes or rollback if there is a problem.
         """
+        datasetInCache = False
         try:
-            #1 insert configuration
-            print "insert configuration"
-            configList = self.insertOutputModuleConfig(conn, connx, blockcontent['dataset']['dataset'], url)
-            #2 insert dataset
-            print "insert dataset"
-            datasetId = self.insertDataset(conn, connx, blockcontent, configList,  url)
-            #3 Insert Block
+            #if a dataset already in the cache, we will skip the #1 and #2.
+            thisDataset = blockcontent['dataset']['dataset']
+            if thisDataset in self.datasetCache['dataset'].keys():
+                datasetId = self.datasetCache['dataset'][thisDataset]
+                datasetInCache = True
+            if not datasetInCache:    
+                #1 insert configuration
+                print "insert configuration"
+                configList = self.insertOutputModuleConfig(conn, connx, blockcontent['dataset']['dataset'], url)
+                #2 insert dataset
+                print "insert dataset"
+                datasetId = self.insertDataset(conn, connx, blockcontent, configList,  url)
+            #3 Insert Block. 
             print "insert Block"
-            blockId = self.insertBlock(conn, connx, blockcontent)
-            #4 inser files
-            print "insert files"
-            self.insertFile(conn, connx, blockcontent,blockId,datasetId)
+            blockId = self.insertBlock(conn, connx, blockcontent, datasetId)
+            #4 inser files. If the block is already in db, then we stop inserting the file
+            if self.newBlock:
+                print "insert files"
+                self.insertFile(conn, connx, blockcontent,blockId,datasetId)
         except Exception, ex:
             #update status
             #if tran:
@@ -423,25 +432,28 @@ class DBSMigrationEngine(BaseWorkerThread) :
             raise
 
 
-    def insertBlock(self, conn, connx, blockcontent):
+    def insertBlock(self, conn, connx, blockcontent, datasetId):
         """
         Block is very simple to insert
 
         """
         block = blockcontent['block']
-        newBlock = False
+        self.newBlock = False
         #Insert the block
-        import pdb
-        pdb.set_trace()
+        #import pdb
+        #pdb.set_trace()
         try:
             tran = conn.begin()
             block['block_id'] = self.sm.increment(connx,"SEQ_BK",)
-            block['dataset_id'] =  blockcontent['dataset']['dataset_id']
+            block['dataset_id'] =  datasetId
             self.blockin.execute(conn, block, tran)
-            newBlock = True
+            self.newBlock = True
         except exceptions.IntegrityError:
-            #ok, already in db
+            #ok, already in db. We should stop the migration of this block now. Should not try to insert the files.
+            #Because we assuem that every migration should migrate all the files.
             block['block_id'] = self.blockid.execute(conn, block['block_name'], transaction=tran)
+            tran.rollback()
+            return block['block_id']
         except Exception, ex:
             self.logger.exception("DBS block inseration exception: %s" %ex)
             tran.rollback()
@@ -449,7 +461,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
         #Now handle Block Parenttage
         bpList = blockcontent['block_parent_list']
         intval = 10
-        if newBlock:
+        if self.newBlock:
             try:
                 for i in range(len(bpList)):
                     if(i%intval==0):
@@ -551,6 +563,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 otptIdList.append(cfgid)
                 self.datasetCache['conf'][m["app_name"]+':'+m["release_version"]+':'+m["pset_hash"]+':'+m['output_module_label']] = cfgid
             tran.commit()
+            #FIXME: duplicated entry.
         except Exception, ex:
             self.logger.exception("DBS output module configure inseration exception: %s" %ex)
             tran.rollback()
