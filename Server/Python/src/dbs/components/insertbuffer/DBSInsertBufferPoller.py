@@ -2,8 +2,8 @@
 """
 DBS Insert Buffer Polling Module
 """
-__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.4 2010/06/09 21:30:33 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.5 2010/06/10 21:46:48 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 
 """
@@ -14,6 +14,9 @@ import threading
 import logging
 import traceback
 import os
+import time
+
+from sqlalchemy import exceptions
 
 from WMCore.WorkerThreads.BaseWorkerThread import BaseWorkerThread
 from WMCore.DAOFactory import DAOFactory
@@ -64,8 +67,11 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	self.buflistblks = daofactory(classname="FileBuffer.ListBlocks")
 	self.buffinddups = daofactory(classname="FileBuffer.FindDuplicates")
 	self.bufdeletedups = daofactory(classname="FileBuffer.DeleteDuplicates")
-	self.compstatus = daofactory(classname="ComponentStatus.Insert")
+	self.compstatusin = daofactory(classname="ComponentStatus.Insert")
+	self.compstatusup = daofactory(classname="ComponentStatus.Update")
 
+	self.insertStatus("STARTED")
+	
     # called by frk at the termination time
     def terminate(self, params):
 	"""
@@ -97,10 +103,16 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 		    #self.logger.debug("run_inserts : %s" % afile['file_output_config_list'] )
 		if len(insertinput) > 0:
 		    self.insertBufferedFiles(businput=insertinput)
+	    # report status to database, a cycle has been completed, successfully
+	    self.reportStatus("WORKING FINE")
 	except Exception, ex:
 	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
+	    try:
+		self.reportStatus("ERROR: %s" %ex)
+	    except Exception, ex:
+		self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
 	
-    def reportStatus(self):
+    def insertStatus(self, status = "UNKNOWN" ):
 	"""
 	This is a local function, basically component reports its status to database
 	"""
@@ -108,15 +120,39 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	    conn = self.dbi.connection()
 	    tran = conn.begin()
 	    comp_status_id = self.sm.increment(conn, "SEQ_CS", transaction=tran)
-	    statusObj={comp_status_id : comp_status_id, "component_name" : "WRITER BUFFER", "last_contact_time" : time.time()}
-	    self.compstatus.execute(conn, statusObj, tran)
+	    statusObj={ "comp_status_id" : comp_status_id, "component_name" : "WRITER BUFFER", "component_status" : status, "last_contact_time" : str(int(time.time())) }
+	    self.compstatusin.execute(conn, statusObj, tran)
+	    tran.commit()
+	except exceptions.IntegrityError, ex:
+		    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+			self.logger.warning("Component Already Known to DBS, ignoring...")
+		    else:
+			tran.rollback()
+			self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
+			raise
+	except Exception, ex:
+	    tran.rollback()
+	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
+	    raise
+    	finally:
+	    conn.close()
+
+    def reportStatus(self, status = "UNKNOWN" ):
+	"""
+	This is a local function, basically component reports its status to database
+	"""
+	try:
+	    conn = self.dbi.connection()
+	    tran = conn.begin()
+	    statusObj={ "component_name" : "WRITER BUFFER", "component_status" : status, "last_contact_time" : str(int(time.time())) }
+	    self.compstatusup.execute(conn, statusObj, tran)
 	    tran.commit()
 	except Exception, ex:
-	    tran.rollabck()
+	    tran.rollback()
 	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
     	finally:
 	    conn.close()
-    
+ 
     def getBlocks(self):
 	"""
 	Get the blocks that need to be migrated

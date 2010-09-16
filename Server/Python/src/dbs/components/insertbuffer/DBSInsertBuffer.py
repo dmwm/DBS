@@ -2,8 +2,8 @@
 """
 DBS Insert Buffer Component Module
 """
-__revision__ = "$Id: DBSInsertBuffer.py,v 1.1 2010/05/26 21:27:08 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSInsertBuffer.py,v 1.2 2010/06/10 21:46:48 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 
 """
@@ -25,6 +25,7 @@ class DBSInsertBuffer(Harness):
 	Harness.__init__(self, config)
 	self.pollTime = 1
 	print "DBSUpload.__init__"
+	
 
     def preInitialization(self):
 	print "DBSUpload.preInitialization"
@@ -34,7 +35,7 @@ class DBSInsertBuffer(Harness):
 					    
 	# Add event loop to worker manager
 	myThread = threading.currentThread()
-	    
+
 	pollInterval = self.config.DBSInsertBuffer.pollInterval
 	logging.info("Setting poll interval to %s seconds" % pollInterval)
 	myThread.workerThreadManager.addWorker(DBSInsertBufferPoller(self.config), pollInterval)
