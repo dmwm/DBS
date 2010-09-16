@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.29 2010/03/18 14:39:59 afaq Exp $"
-__version__ = "$Revision: 1.29 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.30 2010/03/18 15:23:35 afaq Exp $"
+__version__ = "$Revision: 1.30 $"
 
 import re
 import cjson
@@ -36,9 +36,8 @@ class DBSWriterModel(DBSReaderModel):
         self.addService('POST', 'sites', self.insertSite)
         self.addService('POST', 'blocks', self.insertBlock)
         self.addService('POST', 'files', self.insertFile)
-	self.addService('PUT', 'files', self.updateFileStatus)
+	self.addService('PUT', 'files', self.updateFile)
 	self.addService('PUT', 'datasets', self.updateDataset)
-	self.addService('PUT', 'runs', self.updateDatasetRunStatus)
 
     def insertPrimaryDataset(self):
         """
@@ -253,7 +252,7 @@ class DBSWriterModel(DBSReaderModel):
 	except Exception, ex:
 	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
    
-    def updateFileStatus(self, logical_file_name="", is_file_valid=1):
+    def updateFile(self, logical_file_name="", is_file_valid=1):
 	"""
 	API to update file status
 	"""
@@ -275,14 +274,4 @@ class DBSWriterModel(DBSReaderModel):
 	except Exception, ex:
 	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
 
-    def updateDatasetRunStatus(self, dataset="", run_number=-1, complete=1):
-	"""
-	API to mark a run (for a dataset) complete
-	--basically working with the RUN verb/Dataset_Run entity
-	"""
-	try:
-	    self.dbsRun.updateStatus(dataset, run_number, complete)
-	except Exception, ex:
-	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-	
 
