@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.9 2010/08/06 19:39:38 yuyi Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.10 2010/08/10 21:49:25 yuyi Exp $"
+__version__ = "$Revision: 1.10 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -40,6 +40,7 @@ class DBSMigrate:
 	self.mgrup          = daofactory(classname="MigrationRequests.Update")
 	self.mgrblkin       = daofactory(classname="MigrationBlock.Insert")
 	self.blocklist      = daofactory(classname="Block.List")
+	self.bparentlist    = daofactory(classname="BlockParent.List")
 
     def prepareDatasetMigrationList(self, conn, request):
 	"""
@@ -269,6 +270,8 @@ class DBSMigrate:
 	block = self.blocklist.execute(conn, block_name=block_name)[0]
 	#a block only has one dataset and one primary dataset
 	dataset = self.datasetlist.execute(conn,dataset=block["dataset"])[0]
+	#get block parentage
+	bparent = self.bparentlist.execute(conn, block['block_name'])
 	acqEra = {}
 	prsEra = {}
 	if(dataset["acquisition_era_name"] != "" ):
@@ -282,7 +285,7 @@ class DBSMigrate:
 		     file_parent_list = self.fplist.execute(conn, logical_file_name=f['logical_file_name']))
 	del dataset["acquisition_era_name"], dataset["processing_version"]
 	del block["dataset"]
-        result= dict(block=block, dataset=dataset, primds=primds, files=files)
+        result= dict(block=block, dataset=dataset, primds=primds, files=files, block_parent_list=bparent)
         if acqEra:
 	    result["acquisition_era"]=acqEra
 	if prsEra:
