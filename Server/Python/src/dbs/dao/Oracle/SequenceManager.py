@@ -3,8 +3,8 @@
 This module manages sequences.
 """
 
-__revision__ = "$Id: SequenceManager.py,v 1.7 2010/03/05 20:03:56 yuyi Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: SequenceManager.py,v 1.8 2010/06/29 19:28:46 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -24,6 +24,9 @@ class  SequenceManager(DBFormatter):
         and returns its value
 	incCount: is UNUSED variable in Oracle implementation
         """
+
+	#FIXME: Do we need to lock the tables here?
+	
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/SequenceManager expects db connection from up layer.")
         sql = "select %s%s.nextval as val from dual" % (self.owner, seqName)

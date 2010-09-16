@@ -1,29 +1,12 @@
 #!/usr/bin/env python
 """
-This module provides Migration.Update data access object.
+This module provides MigrationRequests.Update data access object.
 """
-__revision__ = "$Id: Update.py,v 1.1 2010/04/22 08:05:21 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: Update.py,v 1.2 2010/06/29 19:28:46 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
-from WMCore.Database.DBFormatter import DBFormatter
-class Update(DBFormatter):
-    """
-    Migration Update DAO class.
-    """
-    def __init__(self, logger, dbi, owner):
-        """
-        Add schema owner and sql.
-        """
-        DBFormatter.__init__(self, logger, dbi)
-	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = \
-"""UPDATE %sMIGRATION_REQUESTS 
-SET MIGRATION_STATUS=:migration_status 
-WHERE MIGRATION_DATASET=:migration_dataset""" %  self.owner 
-        
-    def execute(self, conn, daoinput, transaction = False):
-        """
-	    daoinput keys:
-	    migration_status, migration_id
-        """	
-        result = self.dbi.processData(self.sql, daoinput, conn, transaction)
+from dbs.dao.Oracle.MigrationRequests.Update import Update as OraMigUpdate
+
+class Update(OraMigUpdate):
+    pass
+		   
