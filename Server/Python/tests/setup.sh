@@ -64,4 +64,4 @@ fi
 
 
 #standalone command line tool
-alias dbs='python $DBS3_SERVER_ROOT/tests/dbsserver_t/utils/DBSRestApi.py '
+alias dbst='python $DBS3_SERVER_ROOT/tests/dbsserver_t/utils/DBSRestApi.py '
