@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.37 2010/05/25 19:53:53 afaq Exp $"
-__version__ = "$Revision: 1.37 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.38 2010/05/26 21:34:51 afaq Exp $"
+__version__ = "$Revision: 1.38 $"
 
 import re
 import cjson
@@ -16,7 +16,7 @@ from WMCore.WebTools.RESTModel import RESTModel
 
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.web.DBSReaderModel import DBSReaderModel
-from dbs.business.DBSFileBuffer import DBSFileBuffer
+#from dbs.business.DBSFileBuffer import DBSFileBuffer
 
 import traceback
 
@@ -47,8 +47,9 @@ class DBSWriterModel(DBSReaderModel):
 
 	self.dbsFileBuffer = DBSFileBuffer(self.logger, self.dbi, config.dbowner)
     
+	#following chunk can be removed at a later point, when we are satisfied with the alternate/wmcore-component
+	"""
 	threading.Thread(target=self.handleBuffer).start()
-
     def handleBuffer(self):
 	while True:
 	    try :
@@ -64,7 +65,8 @@ class DBSWriterModel(DBSReaderModel):
 			self.dbsFileBuffer.insertBufferedFiles(businput=insertinput)
 	    except Exception, ex:
 	    	raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-	    
+    """
+    
     def insertPrimaryDataset(self):
         """
 	Inserts a Primary Dataset in DBS
@@ -252,7 +254,8 @@ class DBSWriterModel(DBSReaderModel):
         """
 
 	try:
-	
+	    # qInserts == True; use the automated queuing, False; DO NOT use the queing
+	    qInserts=False	
 	    body = request.body.read()
 	    indata = cjson.decode(body)["files"]
         
@@ -273,7 +276,7 @@ class DBSWriterModel(DBSReaderModel):
 		     "file_assoc_list":f.get("assoc_list",[]),
                      "file_output_config_list":f.get("file_output_config_list",[])})
 		businput.append(f)
-	    self.dbsFile.insertFile(businput)
+	    self.dbsFile.insertFile(businput, qInserts)
     
 	except Exception, ex:
 	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
