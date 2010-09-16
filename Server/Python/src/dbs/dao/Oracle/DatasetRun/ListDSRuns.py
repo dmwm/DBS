@@ -2,14 +2,14 @@
 """
 This module provides DatasetRun.List data access object.
 """
-__revision__ = "$Id: ListDSRuns.py,v 1.1 2010/03/01 21:59:15 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: ListDSRuns.py,v 1.2 2010/03/01 22:15:31 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
-class List(DBFormatter):
+class ListDSRuns(DBFormatter):
     """
-    DatasetRun List DAO class.
+    DatasetRun ListDSRuns DAO class.
     """
     def __init__(self, logger, dbi, owner=""):
         """

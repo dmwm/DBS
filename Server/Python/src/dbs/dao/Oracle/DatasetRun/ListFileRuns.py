@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 """
-This module provides DatasetRun.List data access object.
+This module provides DatasetRun.ListFileRuns data access object.
 """
-__revision__ = "$Id: ListFileRuns.py,v 1.1 2010/03/01 21:59:15 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: ListFileRuns.py,v 1.2 2010/03/01 22:15:31 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
-class List(DBFormatter):
+class ListFileRuns(DBFormatter):
     """
-    DatasetRun List DAO class.
+    DatasetRun ListFileRuns DAO class.
     """
     def __init__(self, logger, dbi, owner=""):
         """
@@ -37,7 +37,7 @@ class List(DBFormatter):
 		sql += " AND FL.RUN_NUM >= :min_run"
 		binds["min_run"] = minRun
 	if maxRun > 0:
-			sql += " AND FL.RUN_NUM <= :max_run"
+		sql += " AND FL.RUN_NUM <= :max_run"
 		binds["max_run"] = maxRun
 
 	cursors = self.dbi.processData(sql, binds, conn, transaction=trans, returnCursor=True)

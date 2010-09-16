@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 """
-This module provides DatasetRun.List data access object.
+This module provides DatasetRun.ListBlockRuns data access object.
 """
-__revision__ = "$Id: ListBlockRuns.py,v 1.1 2010/03/01 21:59:15 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: ListBlockRuns.py,v 1.2 2010/03/01 22:15:31 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
-class List(DBFormatter):
+class ListBlockRuns(DBFormatter):
     """
-    DatasetRun List DAO class.
+    DatasetRun ListBlockRuns DAO class.
     """
     def __init__(self, logger, dbi, owner=""):
         """
@@ -23,7 +23,7 @@ class List(DBFormatter):
 	FROM %sDATASET_RUNS DR
 	JOIN %sDATASET DS ON DR.DATASET_ID = DS.DATASET_ID
 	JOIN %sBLOCK B ON B.DATASET_ID = DS.DATASET_ID
-	WHERE B.BLOCK_NAME = :block_name"""% ((self.owner,) *2 )
+	WHERE B.BLOCK_NAME = :block_name"""% ((self.owner,) *3 )
 	
     def execute(self, block_name="", minRun=-1, maxRun=-1, conn=None, trans=False):
         """
