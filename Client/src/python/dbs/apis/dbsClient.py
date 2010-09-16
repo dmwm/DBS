@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.21 $"
-# $Id: dbsClient.py,v 1.21 2010/01/25 23:20:00 afaq Exp $"
+# $Revision: 1.22 $"
+# $Id: dbsClient.py,v 1.22 2010/01/26 21:03:22 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -231,16 +231,22 @@ class DbsApi:
                 * API to list A block in DBS 
                 * name : name of the block
                 """
+		url_param=""
+		addAnd=False
 		if block_name:
 		    parts=block_name.split('#')
 		    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
-		    url_param="block_name=%s" %block_name
-		    if site_name:
-			url_param += url_param+"&site_name=%s"%site_name
-		    return self.callServer("/blocks?%s" %url_param )
+		    url_param+="block_name=%s" %block_name
+		    addAnd=True
 		if dataset:
-		    return self.callServer("/blocks?dataset=%s" %dataset)
+		    if addAnd: url_param+="&"
+		    url_param="dataset=%s" %dataset
+		    addAnd=True
+		if site_name:
+		    if addAnd: url_param+="&"
+		    url_param += "site_name=%s"%site_name
 		    
+		return self.callServer("/blocks?%s" %url_param)
         def listFile(self, lfn="", dataset="", block=""):
                 """
                 * API to list A file in DBS 
