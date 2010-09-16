@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.17 2010/08/13 16:13:25 yuyi Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: List.py,v 1.18 2010/08/16 18:50:16 yuyi Exp $"
+__version__ = "$Revision: 1.18 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -93,7 +93,7 @@ class List(DBFormatter):
 		setAnd=True
 	else:
 	    #select by block id and return config along with LFN
-	    sql=  self.sql1 + "FS.LOGICAL_FILE_NAME LFN " +  self.sql2 \
+	    sql=  self.sql1 + " , FS.LOGICAL_FILE_NAME LFN " +  self.sql2 \
 	          + " JOIN %sFILE_OUTPUT_MOD_CONFIGS FC ON FC.OUTPUT_MOD_CONFIG_ID=O.OUTPUT_MOD_CONFIG_ID" % self.owner \
 		  +  " JOIN %sFILES FS ON FS.FILE_ID=FC.FILE_ID" % self.owner \
 		  +  "  WHERE FS.BLOCK_ID = :block_id "
