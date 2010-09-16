@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.14 2010/08/24 21:35:27 yuyi Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.15 2010/08/26 15:29:36 afaq Exp $"
+__version__ = "$Revision: 1.15 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -268,50 +268,56 @@ class DBSMigrate:
 	    information on a single block that is being migrated.
 	    Try to return in a format to be ready for insert calls"""
         conn = self.dbi.connection()
-        #block name is unique
-	block1 = self.blocklist.execute(conn, block_name=block_name)
-	if not block1:
-	    return {}
-	block = block1[0]
-	#a block only has one dataset and one primary dataset
-	#in order to reduce the number of dao objects, we will not write a special
-	#migration one. However, we will have to remove the extrals
-	dataset = self.datasetlist.execute(conn,dataset=block["dataset"])[0]
-	#get block parentage
-	bparent = self.bparentlist.execute(conn, block['block_name'])
-	#get dataset parentage
-	dsparent = self.dsparentlist.execute(conn, dataset['dataset'])
-	for p in dsparent:
-	    del p['parent_dataset_id'], p['dataset']
-	fparent_list = self.fplist.execute(conn, block_id=block['block_id'])
-	fconfig_list = self.outputCoflist.execute(conn, block_id=block['block_id'])
-	acqEra = {}
-	prsEra = {}
-	if(dataset["acquisition_era_name"] != "" ):
-	    acqEra  = self.aelist.execute(conn, acquisitionEra=dataset["acquisition_era_name"])[0] 
-	if(dataset["processing_version"] != "" ):
-            prsEra  = self.pelist.execute(conn, processingV=dataset["processing_version"])[0]
-	primds = self.primdslist.execute(conn, primary_ds_name=dataset["primary_ds_name"])[0]
-	del dataset["primary_ds_name"], dataset['primary_ds_type']
-	files = self.filelist.execute(conn, block_name=block_name)
-	#import pdb
-	#pdb.set_trace()
-	for f in files:
-	    #There are a trade off between json sorting and db query. We keep lumi sec in a file,
-	    #but the file parentage seperate from file
-	    f.update(file_lumi_list = self.fllist.execute(conn, logical_file_name=f['logical_file_name']))
-		     #file_parent_list = self.fplist.execute(conn, logical_file_name=f['logical_file_name']))
-	del dataset["acquisition_era_name"], dataset["processing_version"]
-	del block["dataset"]
-        del f['branch_hash_id']
-        result= dict(block=block, dataset=dataset, primds=primds, files=files, \
+	try :
+	    #block name is unique
+	    block1 = self.blocklist.execute(conn, block_name=block_name)
+	    if not block1:
+		return {}
+	    block = block1[0]
+	    #a block only has one dataset and one primary dataset
+	    #in order to reduce the number of dao objects, we will not write a special
+	    #migration one. However, we will have to remove the extrals
+	    dataset = self.datasetlist.execute(conn,dataset=block["dataset"])[0]
+	    #get block parentage
+	    bparent = self.bparentlist.execute(conn, block['block_name'])
+	    #get dataset parentage
+	    dsparent = self.dsparentlist.execute(conn, dataset['dataset'])
+	    for p in dsparent:
+		del p['parent_dataset_id'], p['dataset']
+	    fparent_list = self.fplist.execute(conn, block_id=block['block_id'])
+	    fconfig_list = self.outputCoflist.execute(conn, block_id=block['block_id'])
+	    acqEra = {}
+	    prsEra = {}
+	    if(dataset["acquisition_era_name"] != "" ):
+		acqEra  = self.aelist.execute(conn, acquisitionEra=dataset["acquisition_era_name"])[0] 
+	    if(dataset["processing_version"] != "" ):
+		prsEra  = self.pelist.execute(conn, processingV=dataset["processing_version"])[0]
+	    primds = self.primdslist.execute(conn, primary_ds_name=dataset["primary_ds_name"])[0]
+	    del dataset["primary_ds_name"], dataset['primary_ds_type']
+	    files = self.filelist.execute(conn, block_name=block_name)
+	    #import pdb
+	    #pdb.set_trace()
+	    for f in files:
+		#There are a trade off between json sorting and db query. We keep lumi sec in a file,
+		#but the file parentage seperate from file
+		f.update(file_lumi_list = self.fllist.execute(conn, logical_file_name=f['logical_file_name']))
+		         #file_parent_list = self.fplist.execute(conn, logical_file_name=f['logical_file_name']))
+	    del dataset["acquisition_era_name"], dataset["processing_version"]
+	    del block["dataset"]
+	    del f['branch_hash_id']
+	    result= dict(block=block, dataset=dataset, primds=primds, files=files, \
 	             block_parent_list=bparent, ds_parent_list=dsparent, \
 		     file_conf_list=fconfig_list,   file_parent_list=fparent_list)
-        if acqEra:
-	    result["acquisition_era"]=acqEra
-	if prsEra:
-	    result["processing_era"]=prsEra
-	return result
+	    if acqEra:
+		result["acquisition_era"]=acqEra
+	    if prsEra:
+		result["processing_era"]=prsEra
+	    return result
+	except:
+	    raise
+	finally:
+	    conn.close()
+	
     def callDBSService(self, resturl):
 	req = urllib2.Request(url = resturl)
 	data = urllib2.urlopen(req)
