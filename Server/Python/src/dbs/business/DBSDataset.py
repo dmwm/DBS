@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.35 2010/04/20 20:08:11 afaq Exp $"
-__version__ = "$Revision: 1.35 $"
+__revision__ = "$Id: DBSDataset.py,v 1.36 2010/05/05 20:09:42 afaq Exp $"
+__version__ = "$Revision: 1.36 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -143,8 +143,6 @@ class DBSDataset:
         """ 
         conn = self.dbi.connection()
         tran = conn.begin()
-	#import pdb
-	#pdb.set_trace()
         try:
 
             dsdaoinput={}
