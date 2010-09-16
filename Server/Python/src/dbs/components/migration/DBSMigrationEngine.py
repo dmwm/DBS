@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.16 2010/08/27 19:03:19 afaq Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.17 2010/08/31 18:27:35 yuyi Exp $"
+__version__ = "$Revision: 1.17 $"
 
 import threading
 import logging
@@ -192,17 +192,21 @@ class DBSMigrationEngine(BaseWorkerThread) :
             for ablock in blocks:
                 print "migrate block by block!"
                 self.migrateBlock(conn, connx, ablock['migration_block_name'], request["migration_url"])
-            
             #Finally mark the request as 3=Completed
             print "Finally mark the request as 3=Completed"
             tran = conn.begin()
             self.urs.execute(conn, requestID, 3, self.threadID, dbsUtils().getTime(), transaction=tran)
             tran.commit();
         except Exception, ex:
-            self.logger.exception("DBS Migration Service failed to perform migration %s" %str(ex))
-            #FAILED=4
+            status = 0
+            if ("Source Server is down !") in str(ex):
+                self.logger.exception("DBS Migration Service failed to perform migration %s due to the source server is down" %str(ex))
+            else:
+                self.logger.exception("DBS Migration Service failed to perform migration %s" %str(ex))
+                #FAILED=4
+                status = 4
             tran = conn.begin()
-            self.urs.execute(conn, requestID, 4, self.threadID, dbsUtils().getTime(), transaction=tran)
+            self.urs.execute(conn, requestID, status, self.threadID, dbsUtils().getTime(), transaction=tran)
             tran.commit()
             raise
         finally:
@@ -266,11 +270,12 @@ class DBSMigrationEngine(BaseWorkerThread) :
             #3='COMPLETED'
             self.updateBlockStatus(conn, block_name, 3)
         except Exception, ex:
-            #4='FAILED'
-            #if tran:
-                #tran.rollback()
-            self.updateBlockStatus(conn, block_name, 4)
-            raise Exception ("Migration of Block %s from DBS %s has failed, Exception trace: \n %s " % (url, block_name, ex ))
+            if not ("Source Server is down !") in str(ex):
+                #4='FAILED'
+                self.updateBlockStatus(conn, block_name, 4)
+                raise Exception ("Migration of Block %s from DBS %s has failed, Exception trace: \n %s " % (url, block_name, ex ))
+            else:
+                raise Exception ("Source Server is down ! Migration of Block %s from DBS %s has failed, Exception trace: \n %s " % (url, block_name, ex ))
 
     def getRemoteBlock(self, url, block_name):
         """Client type call to get the block content from the remote server"""
@@ -283,7 +288,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
             ddata = cjson.decode(data.read())
         except Exception, ex:
             #print ex
-            raise Exception ("Unable to get information from src dbs : %s for block : %s" %(url, block_name))
+            raise Exception ("Source Server is down ! Unable to get information from src dbs : %s for block : %s" %(url, block_name))
         return ddata
 
     def getRemoteData(self, url, verb, searchingName, searchingVal):
@@ -350,7 +355,6 @@ class DBSMigrationEngine(BaseWorkerThread) :
         try:
             for i in range(len(fileList)):
                 if(i%intval==0):
-                    #FIXME : transaction=Fales?
                     id = self.sm.increment(connx,"SEQ_FL", False, intval)
                 fileList[i]['file_id'] = id
                 logicalFileName[fileList[i]['logical_file_name']] = id
@@ -360,7 +364,6 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 fType = fileList[i]['file_type']
                 fTypeid = self.filetypeid.execute(conn, fType)
                 if fTypeid <=0 :
-                    #FIXME
                     fTypeid =  self.sm.increment(connx,"SEQ_FT")
                     ftypeO = {'file_type':fType, 'file_type_id':fTypeid}
                     fileTypeObjs.append(ftypeO)
@@ -500,6 +503,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
         Insert Release version, application, parameter set hashes and the map(output module config).
 
         """
+        #FIXME: When remote source site is done, what to do?
         remoteConfig = self.getRemoteData(url,'outputconfigs', 'dataset', dataset)
         otptIdList = []
         missingList = []
@@ -569,7 +573,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 otptIdList.append(cfgid)
                 self.datasetCache['conf'][m["app_name"]+':'+m["release_version"]+':'+m["pset_hash"]+':'+m['output_module_label']] = cfgid
             tran.commit()
-            #FIXME: duplicated entry.
+            #Duplicated entries? No, unless another thread insert it ( very small possiblity). It should not because this is the missing list.
+            #If this happends, I'd rather it raises exception.
         except Exception, ex:
             self.logger.exception("DBS output module configure inseration exception: %s" %ex)
             tran.rollback()
