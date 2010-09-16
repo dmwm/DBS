@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.24 $"
-# $Id: dbsClient.py,v 1.24 2010/01/26 21:22:14 afaq Exp $"
+# $Revision: 1.25 $"
+# $Id: dbsClient.py,v 1.25 2010/01/27 17:26:49 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -248,18 +248,49 @@ class DbsApi:
 		    
 		return self.callServer("/blocks?%s" %url_param)
 
-        def listFiles(self, lfn="", dataset="", block=""):
+        def listFiles(self, lfn="", dataset="", block="", release_version="", pset_hash="", app_name="", output_module_label=""):
                 """
                 * API to list A file in DBS 
                 * lfn : lfn of file
                 """
-                if lfn : return self.callServer("/files?logical_file_name=%s" %lfn)
-                if dataset : return self.callServer("/files?dataset=%s" %dataset)
-                if block : 
-			parts=block.split('#')
-			block_name=parts[0]+urllib.quote_plus('#')+parts[1]
-			return self.callServer("/files?block_name=%s" %block_name)
 
+		add_to_url=""
+		amp=False
+		if dataset: 
+		    add_to_url += "dataset=%s"%dataset
+		    amp=True
+		if release_version:
+		    if amp: add_to_url += "&"
+		    add_to_url += "release_version=%s"%release_version
+		    amp=True
+		if pset_hash:
+		    if amp: add_to_url += "&"
+		    add_to_url += "pset_hash=%s"%pset_hash
+		    amp=True
+		if app_name:
+		    if amp: add_to_url += "&"
+		    add_to_url += "app_name=%s"%app_name
+		    amp=True
+		if  output_module_label:
+		    if amp: add_to_url += "&"
+		    add_to_url += "output_module_label=%s"%output_module_label
+		    amp=True
+		if block :
+		    parts=block.split('#')
+		    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+		    if amp: add_to_url += "&"
+		    add_to_url += "block_name=%s" %block_name	
+		    amp=True    
+		if lfn : 
+		    if amp: add_to_url += "&"
+		    add_to_url += "logical_file_name=%s" %lfn
+		    amp=True
+		    
+		if add_to_url:
+		    return self.callServer("/files?%s" % add_to_url )
+		else:
+		    raise Exception("You must supply parameters to listFiles calls")
+		    
 	def listFileParents(self, lfn=""):
 	    """
 	    * API to list file parents
