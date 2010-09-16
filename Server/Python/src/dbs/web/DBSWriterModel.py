@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.24 2010/03/03 22:35:54 afaq Exp $"
-__version__ = "$Revision: 1.24 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.25 2010/03/04 22:11:54 afaq Exp $"
+__version__ = "$Revision: 1.25 $"
 
 import re
 import cjson
@@ -37,6 +37,7 @@ class DBSWriterModel(DBSReaderModel):
         self.addService('POST', 'blocks', self.insertBlock)
         self.addService('POST', 'files', self.insertFile)
 	self.addService('PUT', 'files', self.updateFileStatus)
+	self.addService('PUT', 'datasets', self.updateDatasetStatus)
 
     def insertPrimaryDataset(self):
         """
@@ -251,19 +252,26 @@ class DBSWriterModel(DBSReaderModel):
 	except Exception, ex:
 	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
    
-    def updateFileStatus(self, logical_file_name="", is_file_valid=-1):
+    def updateFileStatus(self, logical_file_name="", is_file_valid=1):
 	"""
-	API to update fil status
+	API to update file status
 	"""
 
-        import pdb
-	pdb.set_trace()
-    
 	try:
 	    self.dbsFile.updateStatus(logical_file_name, is_file_valid)
 	except Exception, ex:
 	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
 
+
+    def updateDatasetStatus(self, dataset="", is_dataset_valid=1):
+	"""
+	API to update dataset status
+	"""
+
+	try:
+	    self.dbsDataset.updateStatus(dataset, is_dataset_valid)
+	except Exception, ex:
+	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
 
 
 
