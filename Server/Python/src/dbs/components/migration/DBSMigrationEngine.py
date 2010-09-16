@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.12 2010/08/26 15:45:00 yuyi Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.13 2010/08/26 19:23:05 yuyi Exp $"
+__version__ = "$Revision: 1.13 $"
 
 import threading
 import logging
@@ -208,6 +208,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
         finally:
             if conn:
                 conn.close()
+            if connx:
+                connx.close()
 
     def getMigrationRequest(self, conn):
         """
@@ -475,7 +477,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                             tran.rollback()
                         raise Exception("Parent block: %s not found in db" %bpList[i]['block_name'])
                     del bpList[i]['block_name']
-                if bpList and newBlock:
+                if bpList and self.newBlock:
                     self.blkparentin.execute(conn, bpList, tran)
             except Exception, ex:
                 self.logger.exception("DBS block parentage inseration exception: %s" %ex)
@@ -787,6 +789,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
         try:
             tran = conn.begin()
             if not datasetIn:
+                #import pdb
+                #pdb.set_trace()
                 #8 Finally, we have everything to insert a dataset
                 dataset['dataset_id'] = self.sm.increment(connx,"SEQ_DS")
                 self.datasetin.execute(conn, dataset, tran)
