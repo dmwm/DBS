@@ -20,7 +20,7 @@ ALTER TABLE `SEQ_DPS` ENGINE = InnoDB;
 
 ALTER TABLE `SEQ_DSS` ENGINE = InnoDB; 
 
-ALTER TABLE `SEQ_PSDS` ENGINE = InnoDB; 
+ALTER TABLE `SEQ_PSDSS` ENGINE = InnoDB; 
 
 ALTER TABLE `SEQ_AQES` ENGINE = InnoDB; 
 
@@ -54,4 +54,64 @@ ALTER TABLE `SEQ_AFS` ENGINE = InnoDB;
 
 ALTER TABLE `SEQ_BHS` ENGINE = InnoDB; 
 
-ALTER TABLE `SEQ_DVS` ENGINE = InnoDB; 
+ALTER TABLE `SEQ_DVS` ENGINE = InnoDB;
+
+#
+insert into SEQ_RVS(ID) values(1); 
+
+insert into SEQ_PSHS(ID) values(1);
+
+insert into SEQ_DRS(ID) values(1);
+
+insert into SEQ_PGS(ID) values(1);
+
+insert into SEQ_DTS(ID) values(1);
+
+insert into SEQ_PDSS(ID) values(1);
+
+insert into SEQ_PDTS(ID) values(1);
+
+insert into SEQ_OMCS(ID) values(1);
+
+insert into SEQ_DCS(ID) values(1);
+
+insert into SEQ_DPS(ID) values(1);
+
+insert into SEQ_DSS(ID) values(1);
+
+insert into SEQ_PSDSS(ID) values(1);
+
+insert into SEQ_AQES(ID) values(1);
+
+insert into SEQ_AES(ID) values(1);
+
+insert into SEQ_BPS(ID) values(1);
+
+insert into SEQ_DTPS(ID) values(1);
+
+insert into SEQ_PES(ID) values(1);
+
+insert into SEQ_FLMS(ID) values(1);
+
+insert into SEQ_SIS(ID) values(1);
+
+insert into SEQ_BKS(ID) values(1);
+
+insert into SEQ_FLS(ID) values(1);
+
+insert into SEQ_FPS(ID) values(1);
+
+insert into SEQ_FTS(ID) values(1);
+
+insert into SEQ_SES(ID) values(1);
+
+insert into SEQ_BSES(ID) values(1);
+
+insert into SEQ_FCS(ID) values(1);
+
+insert into SEQ_AFS(ID) values(1);
+
+insert into SEQ_BHS(ID) values(1);
+
+insert into SEQ_DVS(ID) values(1);
+
