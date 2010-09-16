@@ -114,12 +114,12 @@ CREATE TABLE `SEQ_DSS` (
 );
 
 # ---------------------------------------------------------------------- #
-# Add table "SEQ_PSDS"                                                   #
+# Add table "SEQ_PSDSS"                                                   #
 # ---------------------------------------------------------------------- #
 
-CREATE TABLE `SEQ_PSDS` (
+CREATE TABLE `SEQ_PSDSS` (
     `ID` BIGINT NOT NULL,
-    CONSTRAINT `PK_SEQ_PSDS` PRIMARY KEY (`ID`)
+    CONSTRAINT `PK_SEQ_PSDSS` PRIMARY KEY (`ID`)
 );
 
 # ---------------------------------------------------------------------- #
