@@ -13,7 +13,8 @@ from dbs.apis.dbsClient import *
 import xml.sax, xml.sax.handler
 from exceptions import Exception
 #
-
+import hashlib
+#
 class migrateDBS2TODBS3:
 
     def __init__(self, srcURL="", dstURL=""):
@@ -25,9 +26,10 @@ class migrateDBS2TODBS3:
 	self.dbs3api = DbsApi(url=dstURL)
 	self.dbs2api = Dbs2Api(opts)
 	self.block_time_lst=[]
-
     def migrateWithParents(self, dataset):
 	#list all blocks in this dataset
+	#self.dirName="migratelog_"+str(time.time()).split('.')[0]
+	self.dirName=hashlib.md5(dataset).hexdigest()
 	blocks=self.dbs2api.listBlocks(dataset)
 	for ablock in blocks:
 	    block_time=self.migrateBlock(ablock)
@@ -47,10 +49,9 @@ class migrateDBS2TODBS3:
 	#	
 	blockName=ablock["Name"]
 	dataset=blockName.split('#')[0]
-	dirName=blockName.split('#')[1]
-	if not os.path.exists(dirName):
-	    os.mkdir(dirName)
-	fileName = os.path.join(dirName, blockName.replace('/', '_').replace('#', '_') + ".xml")
+	if not os.path.exists(self.dirName):
+	    os.mkdir(self.dirName)
+	fileName = os.path.join(self.dirName, blockName.replace('/', '_').replace('#', '_') + ".xml")
 	if os.path.exists(fileName):
 		data = open(fileName, "r").read()
 	else:	
