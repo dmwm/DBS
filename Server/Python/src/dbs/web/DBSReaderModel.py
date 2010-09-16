@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.25 2010/03/19 17:59:03 yuyi Exp $"
-__version__ = "$Revision: 1.25 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.26 2010/04/16 21:14:03 afaq Exp $"
+__version__ = "$Revision: 1.26 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -22,6 +22,7 @@ from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
 from dbs.business.DBSStorageElement import DBSStorageElement
 from dbs.business.DBSDataType import DBSDataType
+from dbs.business.DBSDataTier import DBSDataTier
 
 __server__version__ = "$Name:  $"
 
@@ -49,6 +50,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minrun', 'maxrun'])
         self.addService('GET', 'storage_elements', self.listStorageElements)#, ['block_name', 'se_name'])
         self.addService('GET', 'datatypes', self.listDataTypes)#, ['block_name', 'se_name'])
+        self.addService('GET', 'datatiers', self.listDataTiers)#, ['block_name', 'se_name'])
         
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
@@ -64,6 +66,7 @@ class DBSReaderModel(RESTModel):
 	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
 	self.dbsStorageElement = DBSStorageElement(self.logger, self.dbi, config.dbowner)
 	self.dbsDataType = DBSDataType(self.logger, self.dbi, config.dbowner)
+	self.dbsDataTier = DBSDataTier(self.logger, self.dbi, config.dbowner)
 
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
@@ -124,6 +127,15 @@ class DBSReaderModel(RESTModel):
 	output_module_label = output_module_label.replace("*", "%")
         return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, processing_version, acquisition_era)
 
+    def listDataTiers(self, data_tier_name=""):
+	"""
+	Example url's:
+	    http://dbs3/datatiers
+	    http://dbs3/datatiers?data_tier_name=...
+	"""
+	data_tier_name = data_tier_name.replace("*","%")
+	return self.dbsDataTier.listDataTiers(data_tier_name)
+	
     def listBlocks(self, dataset="", block_name="", site_name=""):
         """
         Example url's:
