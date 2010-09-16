@@ -5,8 +5,9 @@
 # Project name:          DBS3                                            #
 # Author:                Yuyi Guo for DBS Group                          #
 # Script type:           Database creation script                        #
-# Created on:            2010-04-19 14:19                                #
+# Created on:            2010-05-06 12:08                                #
 # ---------------------------------------------------------------------- #
+
 
 drop database if exists CMS_DBS3;
 create database CMS_DBS3;
@@ -205,7 +206,7 @@ CREATE INDEX `IDX_PDS_1` ON `PRIMARY_DATASETS` (`PRIMARY_DS_TYPE_ID`);
 CREATE TABLE `DATASETS` (
     `DATASET_ID` INTEGER NOT NULL,
     `DATASET` VARCHAR(700) NOT NULL,
-    `IS_DATASET_VALID` NUMERIC(1) NOT NULL DEFAULT 1,
+    `IS_DATASET_VALID` INTEGER NOT NULL DEFAULT 1,
     `PRIMARY_DS_ID` INTEGER NOT NULL,
     `PROCESSED_DS_ID` INTEGER NOT NULL,
     `DATA_TIER_ID` INTEGER NOT NULL,
@@ -253,7 +254,7 @@ CREATE TABLE `BLOCKS` (
     `BLOCK_ID` INTEGER NOT NULL,
     `BLOCK_NAME` VARCHAR(500) NOT NULL,
     `DATASET_ID` INTEGER NOT NULL,
-    `OPEN_FOR_WRITING` NUMERIC(1) NOT NULL DEFAULT 1,
+    `OPEN_FOR_WRITING` INTEGER NOT NULL DEFAULT 1,
     `ORIGIN_SITE_NAME` VARCHAR(100) NOT NULL,
     `BLOCK_SIZE` INTEGER,
     `FILE_COUNT` INTEGER,
@@ -301,7 +302,7 @@ CREATE INDEX `IDX_BP_2` ON `BLOCK_PARENTS` (`PARENT_BLOCK_ID`);
 CREATE TABLE `FILES` (
     `FILE_ID` INTEGER NOT NULL,
     `LOGICAL_FILE_NAME` VARCHAR(500) NOT NULL,
-    `IS_FILE_VALID` NUMERIC(1) NOT NULL DEFAULT 1,
+    `IS_FILE_VALID` INTEGER NOT NULL DEFAULT 1,
     `DATASET_ID` INTEGER NOT NULL,
     `BLOCK_ID` INTEGER NOT NULL,
     `FILE_TYPE_ID` INTEGER NOT NULL,
@@ -591,4 +592,3 @@ ALTER TABLE `BLOCK_SITES` ADD CONSTRAINT `BK_BLST`
 
 ALTER TABLE `BLOCK_SITES` ADD CONSTRAINT `SI_BLST` 
     FOREIGN KEY (`SITE_ID`) REFERENCES `SITES` (`SITE_ID`);
-
