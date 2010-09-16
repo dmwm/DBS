@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset Run table. 
 """
 
-__revision__ = "$Id: DBSRun.py,v 1.2 2010/03/08 20:22:23 yuyi Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSRun.py,v 1.3 2010/03/08 20:32:03 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -12,6 +12,7 @@ class DBSRun:
     """
     Site business object class
     """
+
     def __init__(self, logger, dbi, owner):
         daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
         self.logger = logger
@@ -22,7 +23,8 @@ class DBSRun:
         self.blkrunlist = daofactory(classname="DatasetRun.ListBlockRuns")
         self.flrunlist = daofactory(classname="DatasetRun.ListFileRuns")
         self.runlist = daofactory(classname="DatasetRun.List")
-
+	self.updatestatus = daofactory(classname='DatasetRun.UpdateStatus')
+	
     def listRuns(self, dataset="", block_name="", logical_file_name="", minRun=-1, maxRun=-1):
         """
         List run known to DBS.
@@ -47,5 +49,19 @@ class DBSRun:
 	finally:
 		conn.close()
 
-    
+    def updateStatus(self, dataset="", run_number=-1, complete=1):
+        """
+        Used to toggle the status of a dataset run complete flag 1/0
+        """
+        conn = self.dbi.connection()
+        trans = conn.begin()
 
+        try :
+             self.updatestatus.execute(conn, trans, dataset, run_number, complete)
+        except Exception, ex:
+             trans.rollback()
+             raise ex
+        finally:
+               trans.close()
+               conn.close()
+    
