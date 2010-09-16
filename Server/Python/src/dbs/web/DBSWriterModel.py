@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.4 2009/12/16 20:43:11 yuyi Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.5 2009/12/17 17:48:31 yuyi Exp $"
+__version__ = "$Revision: 1.5 $"
 
 import re
 import cjson
@@ -44,8 +44,8 @@ class DBSWriterModel(DBSReaderModel):
 	try :
         	body = request.body.read()
         	indata = cjson.decode(body)
-        	indata.update({"creation_date": dbsUtils.getTime(), "create_by": dbsUtils.getCreateBy() })
-        	self.dbsPrimaryDataset.insertPrimaryDataset(data)
+        	indata.update({"creation_date": dbsUtils().getTime(), "create_by": dbsUtils().getCreateBy() })
+        	self.dbsPrimaryDataset.insertPrimaryDataset(indata)
 		
 	except Exception, ex:
        		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) ) 
