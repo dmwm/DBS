@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for ProcessedDatasets table """ 
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: Insert.py,v 1.4 2009/11/24 10:58:16 akhukhun Exp $ "
+__revision__ = "$Revision: 1.5 $"
+__version__  = "$Id: Insert.py,v 1.5 2009/11/24 14:31:11 akhukhun Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from sqlalchemy import exceptions
 
 class Insert(DBFormatter):
     """ProcessedDataset Insert DAO class"""
@@ -23,5 +24,9 @@ VALUES (:processeddsid, :processeddsname)
         """
         daoinput must be validated to have the following keys:
         processeddsid, processeddsname"""
-        
-        self.dbi.processData(self.sql, daoinput, conn, transaction)
+
+        try:
+            self.dbi.processData(self.sql, daoinput, conn, transaction)
+        except exceptions.IntegrityError, ex:
+            self.logger.warning("Unique constraint violation being ignored...")
+            self.logger.warning("%s" % ex)

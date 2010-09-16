@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for FileParents table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2009/11/24 10:58:16 akhukhun Exp $ "
+__revision__ = "$Revision: 1.8 $"
+__version__  = "$Id: Insert.py,v 1.8 2009/11/24 14:31:10 akhukhun Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from sqlalchemy import exceptions
 
 class Insert(DBFormatter):
 
@@ -19,4 +20,8 @@ VALUES (:FILE_LUMI_ID, :RUN_NUM, :LUMI_SECTION_NUM, :FILE_ID)
 """ % (self.owner)
 
     def execute( self, daoinput, conn = None, transaction = False ):
-        self.dbi.processData(self.sql, daoinput, conn, transaction)
+        try:
+            self.dbi.processData(self.sql, daoinput, conn, transaction)
+        except exceptions.IntegrityError, ex:
+            self.logger.warning("Unique constraint violation being ignored...")
+            self.logger.warning("%s" % ex)

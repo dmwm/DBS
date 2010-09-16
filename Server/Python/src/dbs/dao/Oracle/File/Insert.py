@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for Files table """ 
 
-__revision__ = "$Revision: 1.6 $"
-__version__  = "$Id: Insert.py,v 1.6 2009/11/24 10:58:13 akhukhun Exp $ "
+__revision__ = "$Revision: 1.7 $"
+__version__  = "$Id: Insert.py,v 1.7 2009/11/24 14:31:11 akhukhun Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from sqlalchemy import exceptions
 
 class Insert(DBFormatter):
     """File Insert DAO Class."""
@@ -27,4 +28,8 @@ VALUES (:FILE_ID, :LOGICAL_FILE_NAME, :IS_FILE_VALID, :DATASET,
 """ % self.owner
 
     def execute(self, daoinput, conn = None, transaction = False):
-        self.dbi.processData(self.sql, daoinput, conn, transaction)
+        try:
+            self.dbi.processData(self.sql, daoinput, conn, transaction)
+        except exceptions.IntegrityError, ex:
+            self.logger.warning("Unique constraint violation being ignored...")
+            self.logger.warning("%s" % ex)

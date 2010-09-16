@@ -3,17 +3,20 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.20 2009/11/24 10:58:14 akhukhun Exp $"
-__version__ = "$Revision: 1.20 $"
+__revision__ = "$Id: DBSModel.py,v 1.21 2009/11/24 14:31:09 akhukhun Exp $"
+__version__ = "$Revision: 1.21 $"
 
 import re
 import cjson
+
+from cherrypy import request, response, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
+
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
-from cherrypy import request
+
 
 class DBSModel(RESTModel):
     """
@@ -113,13 +116,9 @@ class DBSModel(RESTModel):
             bo.insertPrimaryDataset(data)
 
         except Exception, ex:
-            # Need to return this to the client
-            # ORA-00001: unique constraint
-            if str(ex).find("unique constraint") != -1 :
-                self.logger.warning("unique constraint violation being ignored")
-            else:	
-                self.logger.error(ex)
-                raise 
+            self.logger.error(ex)
+            raise
+        
 
     def insertDataset(self):
         """
@@ -153,14 +152,9 @@ class DBSModel(RESTModel):
             bo = DBSDataset(self.logger, self.dbi, self.owner)
             bo.insertDataset(dataset)
 
-        except Exception, ex:   
-            #Need to return this to the client
-            # ORA-00001: unique constraint
-            if str(ex).find("unique constraint") != -1 :
-                self.logger.warning("unique constraint violation being ignored")
-            else:
-                self.logger.error(ex)
-                raise 
+        except Exception, ex:
+            self.logger.error(ex)
+            raise 
         
     def insertBlock(self):
         """
@@ -200,14 +194,9 @@ class DBSModel(RESTModel):
             bo = DBSBlock(self.logger, self.dbi, self.owner)
             bo.insertBlock(block)
 
-        except Exception, ex :
-            # Need to return this to the client
-            # ORA-00001: unique constraint
-            if str(ex).find("unique constraint") != -1 :
-                self.logger.warning("unique constraint violation being ignored")
-            else:
-                self.logger.error(ex)
-                raise 
+        except Exception, ex:
+            self.logger.error(ex)
+            raise 
 
     def insertFile(self):
         """
@@ -258,11 +247,7 @@ class DBSModel(RESTModel):
 
         try:
             bo.insertFile(businput)
+
         except Exception, ex:
-            # Need to return this to the client
-            # ORA-00001: unique constraint
-            if str(ex).find("unique constraint") != -1 :
-                self.logger.warning("unique constraint violation being ignored")
-            else:
-                self.logger.error(ex)
-                raise
+            self.logger.error(ex)
+            raise 
