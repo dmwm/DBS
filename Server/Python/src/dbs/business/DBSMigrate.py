@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.12 2010/08/16 18:39:59 yuyi Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.13 2010/08/20 14:56:16 yuyi Exp $"
+__version__ = "$Revision: 1.13 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -274,6 +274,8 @@ class DBSMigrate:
 	    return {}
 	block = block1[0]
 	#a block only has one dataset and one primary dataset
+	#in order to reduce the number of dao objects, we will not write a special
+	#migration one. However, we will have to remove the extrals
 	dataset = self.datasetlist.execute(conn,dataset=block["dataset"])[0]
 	#get block parentage
 	bparent = self.bparentlist.execute(conn, block['block_name'])
@@ -290,7 +292,10 @@ class DBSMigrate:
 	if(dataset["processing_version"] != "" ):
             prsEra  = self.pelist.execute(conn, processingV=dataset["processing_version"])[0]
 	primds = self.primdslist.execute(conn, primary_ds_name=dataset["primary_ds_name"])[0]
+	del dataset["primary_ds_name"], dataset['primary_ds_type']
 	files = self.filelist.execute(conn, block_name=block_name)
+	#import pdb
+	#pdb.set_trace()
 	for f in files:
 	    #There are a trade off between json sorting and db query. We keep lumi sec in a file,
 	    #but the file parentage seperate from file
