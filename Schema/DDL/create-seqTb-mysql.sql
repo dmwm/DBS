@@ -225,8 +225,8 @@ CREATE TABLE `SEQ_FTS` (
 # ---------------------------------------------------------------------- #
 
 CREATE TABLE `SEQ_SES` (
-    `SE_ID` BIGINT NOT NULL,
-    CONSTRAINT `PK_SEQ_SES` PRIMARY KEY (`SE_ID`)
+    `ID` BIGINT NOT NULL,
+    CONSTRAINT `PK_SEQ_SES` PRIMARY KEY (`ID`)
 );
 
 # ---------------------------------------------------------------------- #
