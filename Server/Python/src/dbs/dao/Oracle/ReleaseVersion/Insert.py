@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ReleaseVersions table """ 
 
-__revision__ = "$Revision: 1.5 $"
-__version__  = "$Id: Insert.py,v 1.5 2010/01/11 22:56:45 afaq Exp $ "
+__revision__ = "$Revision: 1.6 $"
+__version__  = "$Id: Insert.py,v 1.6 2010/01/21 20:08:09 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -17,7 +17,7 @@ class Insert(DBFormatter):
     def execute( self, relVerObj, conn=None, transaction=False ):
 	try:
             result = self.dbi.processData(self.sql, relVerObj, conn, transaction)
- 	except Exception, e:
+ 	except Exception, ex:
 	    if str(ex).lower().find("unique constraint") != -1 :
 		pass
 	    else:

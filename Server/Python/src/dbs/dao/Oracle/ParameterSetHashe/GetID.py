@@ -2,8 +2,8 @@
 """
 This module provides ParameterSetHashes.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.2 2010/01/07 17:30:43 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: GetID.py,v 1.3 2010/01/21 20:04:25 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -20,7 +20,7 @@ class GetID(DBFormatter):
         self.sql = \
 	"""
 	SELECT P.PARAMETER_SET_HASH_ID
-	FROM %sPARAMETER_SET_HASHES P WHERE HASH = :pset_hash
+	FROM %sPARAMETER_SET_HASHES P WHERE PSET_HASH = :pset_hash
 	""" % ( self.owner )
         
     def execute(self, pset_hash, conn = None, transaction = False):
