@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.20 2010/03/25 17:06:00 afaq Exp $"
-__version__ = "$Revision: 1.20 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.21 2010/05/19 16:21:05 yuyi Exp $"
+__version__ = "$Revision: 1.21 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -25,13 +25,13 @@ class DBSPrimaryDataset:
         self.primdsin = daofactory(classname="PrimaryDataset.Insert")
 
 
-    def listPrimaryDatasets(self, primary_ds_name=""):
+    def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
-        Returns all primary datasets if primary_ds_name is not passed.
+        Returns all primary datasets if primary_ds_name or primary_ds_type are not passed.
         """
 	try:
 	    conn=self.dbi.connection()
-	    result= self.primdslist.execute(conn, primary_ds_name)
+	    result= self.primdslist.execute(conn, primary_ds_name, primary_ds_type)
 	    conn.close()
 	    return result
         except Exception, ex:

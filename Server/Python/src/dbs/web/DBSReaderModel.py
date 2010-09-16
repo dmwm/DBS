@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.36 2010/05/05 20:16:11 afaq Exp $"
-__version__ = "$Revision: 1.36 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.37 2010/05/19 16:20:44 yuyi Exp $"
+__version__ = "$Revision: 1.37 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -40,17 +40,17 @@ class DBSReaderModel(RESTModel):
     
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 	self.addService('GET', 'serverinfo', self.getServerInfo)
-        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets)#, ['primary_ds_name'])
-        self.addService('GET', 'datasets', self.listDatasets)#, ['dataset', 'parent_dataset', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
-        self.addService('GET', 'blocks', self.listBlocks)#, ['dataset', 'block_name', 'site_name'])
-        self.addService('GET', 'files', self.listFiles)#, ['dataset', 'block_name', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
+        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets)#, ['primary_ds_name', 'primary_ds_type'])
+        self.addService('GET', 'datasets', self.listDatasets)#, ['dataset', 'parent_dataset', 'release_version', 'pset_hash', 'app_name', 'output_module_label', 'primary_ds_name', 'logical_file_name', 'run_num?', 'dataset_type?'])
+        self.addService('GET', 'blocks', self.listBlocks)#, ['dataset', 'block_name', 'site_name', 'release_version', 'logical_file_name'])
+        self.addService('GET', 'files', self.listFiles)#, ['dataset', 'block_name', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num'])
         self.addService('GET', 'datasetparents', self.listDatasetParents)#, ['dataset'])
         self.addService('GET', 'datasetchildren', self.listDatasetChildren)#, ['dataset'])
         self.addService('GET', 'outputconfigs', self.listOutputConfigs)#, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'fileparents', self.listFileParents)#, ['logical_file_name'])
         self.addService('GET', 'filechildren', self.listFileChildren)#, ['logical_file_name'])
-        self.addService('GET', 'filelumis', self.listFileLumis)#, ['logical_file_name', 'block_name'])
-        self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minrun', 'maxrun'])
+        self.addService('GET', 'filelumis', self.listFileLumis)#, ['logical_file_name', 'block_name', 'run_list'?])
+        self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minrun', 'maxrun']/['lumi_section_list[]?'])
         self.addService('GET', 'sites', self.listSites)#, ['block_name', 'se_name'])
         self.addService('GET', 'datatypes', self.listDataTypes)#, ['block_name', 'se_name'])
         self.addService('GET', 'datatiers', self.listDataTiers)#, ['block_name', 'se_name'])
@@ -108,17 +108,21 @@ class DBSReaderModel(RESTModel):
         return ret
 
 
-    def listPrimaryDatasets(self, primary_ds_name=""):
+    def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
         Example url's: <br />
         http://dbs3/primarydatasets <br />
         http://dbs3/primarydatasets/qcd_20_30 <br />
         http://dbs3/primarydatasets?primary_ds_name=qcd* <br />
+	http://dbs3/primarydatasets?primary_ds_type=qcd* <br />
         """
         primary_ds_name = primary_ds_name.replace("*","%")
-        return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name)
+	primary_ds_type = primary_ds_type.replace("*","%")
+        return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name, primary_ds_type)
         
-    def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", processing_version="", acquisition_era=""):
+    def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", 
+			processing_version="", acquisition_era="", run_num=0, physics_group_name="", logical_file_name="", primary_ds_name="",
+			primary_ds_type="", data_tier_name="", dataset_access_type=""):
         """
         Example url's: <br />
         http://dbs3/datasets <br />
@@ -132,7 +136,16 @@ class DBSReaderModel(RESTModel):
 	pset_hash = pset_hash.replace("*", "%")
 	app_name = app_name.replace("*", "%")
 	output_module_label = output_module_label.replace("*", "%")
-	return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, processing_version, acquisition_era)
+	logical_file_name = logical_file_name.replace("*", "%")
+	physics_group_name = physics_group_name.replace("*", "%")
+	primary_ds_name = primary_ds_name.replace("*", "%")
+	primary_ds_type = primary_ds_type.replace("*", "%")
+	data_tier_name = data_tier_name.replace("*", "%")
+	dataset_access_type = dataset_access_type.replace("*", "%")
+	if(run_num):
+	    run_num = int(run_num)
+	return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, processing_version, acquisition_era,
+	    run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, data_tier_name, dataset_access_type)
 
     def listDataTiers(self, data_tier_name=""):
 	"""
@@ -143,16 +156,20 @@ class DBSReaderModel(RESTModel):
 	data_tier_name = data_tier_name.replace("*","%")
 	return self.dbsDataTier.listDataTiers(data_tier_name)
 	
-    def listBlocks(self, dataset="", block_name="", site_name=""):
+    def listBlocks(self, dataset="", block_name="", original_site_name="", logical_file_name=""):
         """
         Example url's:
-        http://dbs3/blocks?dataset=/a/b/c <br />
-        http://dbs3/blocks?block_name=/a/b/c%23*d <br />
+        http://dbs3/blocks?dataset=myDataset ||?original_site_name=mySite <br />
+        http://dbs3/blocks?block_name=myBlock ||?original_site_name=mySite <br />
+	http://dbs3/blocks?logical_file_name=my_lfn ||?original_site_name=mySite<br />
+	http://dbs3/blocks?logical_file_name=my_lfn*?dataset=myDataset*?block_name=myBlock ||?original_site_name=mySite<br />
         """
 	#site_name is ORIGIN_SITE_NAME. We need to change the name and add REAL site_name
         dataset = dataset.replace("*","%")
         block_name = block_name.replace("*","%")
-        return self.dbsBlock.listBlocks(dataset, block_name, site_name)
+	logical_file_name = logical_file_name.replace("*","%")
+	original_site_name = original_site_name.replace("*","%")
+        return self.dbsBlock.listBlocks(dataset, block_name, original_site_name, logical_file_name)
 
     def listBlockParents(self, block_name=""):
         """
