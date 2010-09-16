@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.2 2009/11/12 15:19:36 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: List.py,v 1.3 2009/11/16 19:24:37 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 def op(pattern):
     """ returns 'like' if pattern includes '%' and '=' otherwise"""
@@ -63,9 +63,9 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
             if not lfn == "":
                 sql += " AND F.LOGICAL_FILE_NAME %s :lfn" % op(lfn)
                 binds.update({"lfn":lfn})
-        #elif not lfn == "":
-        #    sql += "WHERE F.LOGICAL_FILE_NAME %s :lfn" % op(lfn)
-        #    binds.update({"lfn":lfn})
+        elif not lfn == "":
+            sql += "WHERE F.LOGICAL_FILE_NAME = :lfn" 
+            binds.update({"lfn":lfn})
         else:
             raise Exception("Either dataset or block must be provided")
         
