@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.16 2009/11/16 22:18:26 afaq Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: DBSModel.py,v 1.17 2009/11/17 16:42:34 afaq Exp $"
+__version__ = "$Revision: 1.17 $"
 
 import re
 import json, cjson
@@ -33,10 +33,10 @@ class DBSModel(RESTModel):
         self.addService('GET', 'datasets', self.listDatasets, ['dataset'])
         self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block'])
         self.addService('GET', 'files', self.listFiles, ['dataset', 'block', 'lfn'])
-        self.addService('PUT', 'primarydatasets', self.insertPrimaryDataset)
-        self.addService('PUT', 'datasets', self.insertDataset)
-        self.addService('PUT', 'blocks', self.insertBlock)
-        self.addService('PUT', 'files', self.insertFile)
+        self.addService('POST', 'primarydatasets', self.insertPrimaryDataset)
+        self.addService('POST', 'datasets', self.insertDataset)
+        self.addService('POST', 'blocks', self.insertBlock)
+        self.addService('POST', 'files', self.insertFile)
         self.addService('POST', 'post', self.donothing)
         self.addService('DELETE', 'delete', self.donothing)
 
