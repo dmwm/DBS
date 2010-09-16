@@ -3,5 +3,5 @@
 DBS3 server source libraries.
 
 """
-__all__ = ['List_t', 'List1_t']
+__all__ = ['List_t']
 
