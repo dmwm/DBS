@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for Files table """ 
 
-__revision__ = "$Revision: 1.12 $"
-__version__  = "$Id: Insert.py,v 1.12 2010/03/05 17:12:24 yuyi Exp $ "
+__revision__ = "$Revision: 1.13 $"
+__version__  = "$Id: Insert.py,v 1.13 2010/03/08 23:12:44 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -31,7 +31,4 @@ VALUES (:file_id, :logical_file_name, :is_file_valid, :dataset_id,
     def execute(self, conn, daoinput, transaction = False):
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/File/Insert expects db connection from up layer.")
-	try:
-	    self.dbi.processData(self.sql, daoinput, conn, transaction)
-	except Exception, ex:
-	#print ex
+	self.dbi.processData(self.sql, daoinput, conn, transaction)

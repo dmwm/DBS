@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.16 2010/03/08 20:13:49 yuyi Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.17 2010/03/08 23:12:34 afaq Exp $"
+__version__ = "$Revision: 1.17 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -46,7 +46,7 @@ class DBSPrimaryDataset:
 	    #import threading
 	    #a = threading.currentThread()
 	    #self.logger.warning("\n####### %s #######\n" %str(a.dialect))
-            businput["primary_ds_type_id"] = (self.primdstypeList.execute(businput["primary_ds_type"]))[0]["primary_ds_type_id"] 
+            businput["primary_ds_type_id"] = (self.primdstypeList.execute(conn, businput["primary_ds_type"], transaction=tran))[0]["primary_ds_type_id"] 
             del businput["primary_ds_type"]
             businput["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS", True)
             self.primdsin.execute(conn, businput, True)
