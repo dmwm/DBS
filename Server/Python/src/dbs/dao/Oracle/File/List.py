@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.24 2010/03/19 18:29:32 afaq Exp $"
-__version__ = "$Revision: 1.24 $"
+__revision__ = "$Id: List.py,v 1.25 2010/04/16 16:23:15 afaq Exp $"
+__version__ = "$Revision: 1.25 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -53,7 +53,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
         op = ("=","like")["%" in logical_file_name]
             
 	if release_version or pset_hash or app_name or output_module_label :
-	    sql += """LEFT OUTER JOIN %sFILE_OUTPUT_MOD_CONFIGS FOMC ON FOMC.FILE_ID = D.DATASET_ID
+	    sql += """LEFT OUTER JOIN %sFILE_OUTPUT_MOD_CONFIGS FOMC ON FOMC.FILE_ID = F.FILE_ID
 			LEFT OUTER JOIN %sOUTPUT_MODULE_CONFIGS OMC ON OMC.OUTPUT_MOD_CONFIG_ID = FOMC.OUTPUT_MOD_CONFIG_ID
 			LEFT OUTER JOIN %sRELEASE_VERSIONS RV ON RV.RELEASE_VERSION_ID = OMC.RELEASE_VERSION_ID
 			LEFT OUTER JOIN %sPARAMETER_SET_HASHES PSH ON PSH.PARAMETER_SET_HASH_ID = OMC.PARAMETER_SET_HASH_ID
