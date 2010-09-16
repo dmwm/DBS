@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.17 2010/04/23 19:55:52 afaq Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.18 2010/06/03 16:08:50 yuyi Exp $"
+__version__ = "$Revision: 1.18 $"
 
 import os, sys, imp
 import json
@@ -18,7 +18,8 @@ def importCode(code,name,add_to_sys_modules=0):
         sys.modules[name] = module
     return module
 
-config = os.environ["DBS_TEST_CONFIG_READER"]
+#config = os.environ["DBS_TEST_CONFIG_READER"]
+config = os.environ["DBS_TEST_CONFIG_WRITER"]
 api = DBSRestApi(config)
 
 class DBSReaderModel_t(unittest.TestCase):
@@ -54,9 +55,21 @@ class DBSReaderModel_t(unittest.TestCase):
         print "\n Test06 web.DBSReaderModel.listDatasets: basic test"
         api.list('datasets', dataset='*')
 
+    def test106(self):
+        print "\n Test106 web.DBSReaderModel.listDatasets: basic test"
+        api.list('datasets', run_num=testparams['run_num'])
+
     def test07(self):
         print "\n Test07 web.DBSReaderModel.listDatasets: basic test"
         api.list('datasets', dataset=testparams['dataset'])
+
+    def test107(self):
+        print "\n Test107 web.DBSReaderModel.listDatasets: basic test"
+        api.list('datasets', primary_ds_type=testparams['primary_ds_type'])
+
+    def test108(self):
+        print "\n Test108 web.DBSReaderModel.listDatasets: basic test"
+        api.list('datasets',  primary_ds_name=testparams['primary_ds_name'])
 
     def test08(self):
         print "\n Test08 web.DBSReaderModel.listDatasets: basic test"
@@ -65,18 +78,34 @@ class DBSReaderModel_t(unittest.TestCase):
     def test09(self):
         print "\n Test09 web.DBSReaderModel.listDatasets: basic test"
         api.list('datasets', parent_dataset='*')
-    
+
+    def test109(self):
+        print "\n Test109 web.DBSReaderModel.listDatasets: basic test"
+        api.list('datasets', data_tier_name='*RAW*')   
+ 
     def test10(self):
         print "\n Test10 web.DBSReaderModel.listDatasets: basic test"
         api.list('datasets', release_version='*')
+
+    def test110(self):
+        print "\n Test110 web.DBSReaderModel.listDatasets: basic test"
+        api.list('datasets', physics_group_name='QCD')
 
     def test11(self):
         print "\n Test11 web.DBSReaderModel.listDatasets: basic test"
         api.list('datasets', release_version=testparams['release_version'])
 
+    def test111(self):
+        print "\n Test111 web.DBSReaderModel.listDatasets: basic test"
+        api.list('datasets', dataset_access_type='READONLY')
+
     def test12(self):
         print "\n Test12 web.DBSReaderModel.listDatasets: basic test"
         api.list('datasets', release_version=testparams['release_version']+'*')
+
+    def test112(self):
+        print "\n Test112 web.DBSReaderModel.listDatasets: basic test"
+        api.list('datasets', logical_file_name=testparams['files'][0])
 
     def test13(self):
         print "\n Test13 web.DBSReaderModel.listDatasets: basic test"
@@ -133,8 +162,8 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('datasets', dataset=testparams['dataset'],
                                   app_name=testparams['app_name'],
                                   output_module_label=testparams['output_module_label'])
-    def test00(self):
-        print "\n Test24 web.DBSReaderModel.listBlocks: basic test"
+    def test24(self):
+        print "\n Test24 web.DBSReaderModel.listBlocks: basic negative test"
 	try:
 	    api.list('blocks', dataset='*')
         except:
@@ -151,16 +180,21 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('blocks', block_name=testparams['block'])
 
     def test27(self):
-        print "\n Test27 web.DBSReaderModel.listBlocks: basic test"
+        print "\n Test27 web.DBSReaderModel.listBlocks: basic negative test"
 	try:
-	    api.list('blocks', site_name=testparams['site'])
+	    api.list('blocks', origin_site_name=testparams['site'])
 	except:
 	    pass
 	else:
 	    self.fail("Exception was expected and was not raised.")
+    
+    def test127(self):
+	print "\n Test127 web.DBSReaderModel.listBlocks: basic test"
+	api.list('blocks', run_num=testparams['run_num'], block_name=testparams['block'])
+	
 
     def test28(self):
-        print "\n Test28 web.DBSReaderModel.listBlocks: basic test"
+        print "\n Test28 web.DBSReaderModel.listBlocks: basic negative test"
         try:
             api.list('blocks', block_name='*')
         except:
@@ -169,19 +203,29 @@ class DBSReaderModel_t(unittest.TestCase):
             self.fail("Exception was expected and was not raised.")
 
     def test29(self):
-        print "\n Test29 web.DBSReaderModel.listBlocks: basic test"
+        print "\n Test29 web.DBSReaderModel.listBlocks: basic negative test"
         try:
-            api.list('blocks', site_name='*')
+            api.list('blocks', origin_site_name='*')
         except:
             pass
         else:
             self.fail("Exception was expected and was not raised.")
+    
+    def test129(self):
+	 print "\n Test129 web.DBSReaderModel.listBlocks: basic test"
+	 api.list('blocks', dataset=testparams['dataset'],
+	           origin_site_name=testparams['site'])
+		   
+    def test130(self):
+	print "\n Test130 web.DBSReaderModel.listBlocks: basic test"
+	api.list('blocks', dataset=testparams['dataset'],
+		origin_site_name=testparams['site'])
 
     def test30(self):
         print "\n Test30 web.DBSReaderModel.listBlocks: basic test"
         api.list('blocks', dataset=testparams['dataset'],
                                 block_name=testparams['block'],
-                                site_name=testparams['site'])
+                                origin_site_name=testparams['site'])
         
     def test31(self):
         print "\n Test31 web.DBSReaderModel.listBlocks: Must raise an exception if no parameter is passed."
@@ -194,20 +238,29 @@ class DBSReaderModel_t(unittest.TestCase):
 	    self.fail("Exception was expected and was not raised.")
             
     def test32(self):
-        print "\n Test32 web.DBSReaderModel.listFiles: basic test"
+        print "\n Test32 web.DBSReaderModel.listFiles: basic negative test"
 	try:
 	    api.list('files', dataset='*')
 	except:
 	    pass
 	else:
 	    self.fail("Exception was expected and was not raised.")
+	    
+    def test132(self):
+	print "\n Test132 web.DBSReaderModel.listFiles: basic test"
+	api.list('files', dataset=testparams['dataset'], minrun=1, maxrun=testparams['run_num'])
     
     def test33(self):
         print "\n Test33 web.DBSReaderModel.listFiles: basic test"
 	api.list('files', dataset=testparams['dataset'])
 
+    def test133(self):
+        print "\n Test133 web.DBSReaderModel.listFiles: basic test"
+        api.list('files', dataset=testparams['dataset'], lumi_list=[1,2,3], maxrun=testparams['run_num'], 
+		  minrun=testparams['run_num'])
+
     def test34(self):
-        print "\n Test34 web.DBSReaderModel.listFiles: basic test"
+        print "\n Test34 web.DBSReaderModel.listFiles: basic negative test"
 	try:
 	    api.list('files', dataset=testparams['dataset']+'*')
 	except:
@@ -215,8 +268,13 @@ class DBSReaderModel_t(unittest.TestCase):
 	else:
 	    self.fail("Exception was expected and was not raised.")
 
+    def test134(self):
+        print "\n Test134 web.DBSReaderModel.listFiles: basic test"
+        api.list('files', dataset=testparams['dataset'], origin_site_name=testparams['site'])
+
+
     def test35(self):
-        print "\n Test35 web.DBSReaderModel.listFiles: basic test"
+        print "\n Test35 web.DBSReaderModel.listFiles: basic negative test"
 	try:
 	    api.list('files', block_name='*')
 	except:
@@ -229,7 +287,7 @@ class DBSReaderModel_t(unittest.TestCase):
 	api.list('files', block_name=testparams['block'])
 
     def test72(self):
-        print "\n Test72 web.DBSReaderModel.listFiles: basic test"
+        print "\n Test72 web.DBSReaderModel.listFiles: basic negative test"
 	try:
 	    api.list('files', logical_file_name='*')
 	except:
@@ -425,11 +483,11 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test74(self):
         print '\n Test74 web.DBSReaderModel.listFile with original site: basic '
-        api.list('files', origin_site=testparams['site'], dataset=testparams['dataset'])
+        api.list('files', origin_site_name=testparams['site'], dataset=testparams['dataset'])
 
     def test75(self):
         print '\n Test75 web.DBSReaderModel.listFile with original site: basic '
-        api.list('files', origin_site=testparams['site'], block_name=testparams['block'])
+        api.list('files', origin_site_name=testparams['site'], block_name=testparams['block'])
 
     def test76(self):
         print '\n Test76 web.DBSReaderModel.listFile with config info: basic '
@@ -464,16 +522,8 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('datatypes', datatype=testparams['primary_ds_type'] )
 
     def test83(self):
-         print'\n Test83 test for dataset run. Coming after the dao moved to right place' 
-
-    def test84(self):
-         print '\n Test84 test for dataset run. Coming after the dao moved to right place' 
-
-    def test85(self):
-	print '\n Test84 test for dataset run. Coming after the dao moved to right place'
-
-    def test86(self):
-	print '\n Test84 test for dataset run. Coming after the dao moved to right place'
+	print'\n Test83 test for listRun: basic' 
+	api.list('runs', minrun=0, maxrun=testparams['run_num'])
  	
     def test87(self):
         """list dataset parents"""
