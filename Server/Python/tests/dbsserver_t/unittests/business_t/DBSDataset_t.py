@@ -2,8 +2,8 @@
 business unittests
 """
 
-__revision__ = "$Id: DBSDataset_t.py,v 1.1 2010/01/01 19:54:37 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSDataset_t.py,v 1.2 2010/01/07 17:38:52 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import os
 import unittest
@@ -33,7 +33,7 @@ class DBSDataset_t(unittest.TestCase):
         self.assertEqual(len(result), 0)
     
     def test03(self):
-        """business.DBSDataset.listDatasets: with parent_dataset, version, hash, app_name, output_module_label"""
+        """business.DBSDataset.listDatasets: with parent_dataset, release_version, pset_hash, app_name, output_module_label"""
         dburl = os.environ["DBS_TEST_DBURL_READER"] 
         dbowner = os.environ["DBS_TEST_DBOWNER_READER"]
         dbi = DBFactory(self.logger, dburl).connect()
@@ -41,8 +41,8 @@ class DBSDataset_t(unittest.TestCase):
 
         bo.listDatasets()
         bo.listDatasets(dataset='%')
-        bo.listDatasets(dataset='%', version='%')
-        bo.listDatasets(hash='%')
+        bo.listDatasets(dataset='%', release_version='%')
+        bo.listDatasets(pset_hash='%')
         bo.listDatasets(app_name='%')
         bo.listDatasets(output_module_label='%')
         result = bo.listDatasets("ThisDoesNotExist")
