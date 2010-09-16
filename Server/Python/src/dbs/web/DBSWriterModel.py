@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.45 2010/08/12 18:51:02 afaq Exp $"
-__version__ = "$Revision: 1.45 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.46 2010/08/12 19:00:01 afaq Exp $"
+__version__ = "$Revision: 1.46 $"
 
 import re
 import cjson
@@ -237,7 +237,7 @@ class DBSWriterModel(DBSReaderModel):
         input must be a (list of) dictionary with the following keys: <br />
         logical_file_name (required) : string  <br />
         is_file_valid: (optional, default = 1): 1/0 <br />
-        block, required: /a/b/c#d <br />
+        block_name, required: /a/b/c#d <br />
         dataset, required: /a/b/c <br />
         file_type (optional, default = EDM): one of the predefined types, <br />
         check_sum (optional, default = '-1'): string <br />

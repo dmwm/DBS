@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.56 2010/08/03 21:06:23 afaq Exp $"
-__version__ = "$Revision: 1.56 $"
+__revision__ = "$Id: DBSFile.py,v 1.57 2010/08/12 19:01:05 afaq Exp $"
+__version__ = "$Revision: 1.57 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -193,7 +193,7 @@ class DBSFile:
 	    # get the list of configs in for this dataset
 	    dsconfigs = [x['output_mod_config_id'] for x in self.dsconfigids.execute(conn, dataset=firstfile["dataset"], transaction=tran)]
 	    fileconfigs=[] # this will hold file configs that we will list in the insert file logic below	
-	    block_info = self.blocklist.execute(conn, block_name=firstfile["block"], transaction=tran)
+	    block_info = self.blocklist.execute(conn, block_name=firstfile["block_name"], transaction=tran)
 	    assert len(block_info)==1
 	    block_info=block_info[0]
 	    assert block_info["block_id"] 
