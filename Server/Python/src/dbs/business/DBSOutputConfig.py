@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.8 2010/02/12 22:25:33 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.9 2010/03/08 20:10:06 yuyi Exp $"
+__version__ = "$Revision: 1.9 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -36,12 +36,15 @@ class DBSOutputConfig:
         
     def listOutputConfigs(self, dataset="", logical_file_name="", 
                          release_version="", pset_hash="", app_name="", output_module_label=""):
-        return self.outputmoduleconfiglist.execute(dataset,
+	conn=self.dbi.connection()
+        result = self.outputmoduleconfiglist.execute(conn, dataset,
                                                    logical_file_name,
                                                    app_name,
                                                    release_version,
                                                    pset_hash,
                                                    output_module_label)
+	conn.close()
+	return result
 
     def insertOutputConfig(self, businput):
         """
@@ -56,13 +59,13 @@ class DBSOutputConfig:
         try:
 
 	    try:
-                businput["app_exec_id"] = self.appid.execute(businput["app_name"], conn, True)	
+                businput["app_exec_id"] = self.appid.execute(conn, businput["app_name"], True)	
             except Exception, e:
                 if str(e).find('does not exist') != -1:
-                    businput["app_exec_id"] = self.sm.increment("SEQ_AE", conn, True)
+                    businput["app_exec_id"] = self.sm.increment(conn, "SEQ_AE",True)
                     appdaoinput = { "app_name" : businput["app_name"], 
                                     "app_exec_id" : businput["app_exec_id"] }
-                    self.appin.execute(appdaoinput, conn, True)
+                    self.appin.execute(conn, appdaoinput, True)
                 else : 
                     raise
                 
@@ -75,7 +78,7 @@ class DBSOutputConfig:
                                     "release_version" : businput["release_version"],
 				    "release_version_id" : businput["release_version_id"]
 				}
-                    self.verin.execute(verdaoinput, conn, True)
+                    self.verin.execute(conn, verdaoinput, True)
                 else : 
                     raise
  
@@ -88,7 +91,7 @@ class DBSOutputConfig:
                     pshdaoinput = {"parameter_set_hash_id" : businput["parameter_set_hash_id"], 
                                    "pset_hash" : businput["pset_hash"], 
                                    "name" : "no_name" }
-                    self.hashin.execute(pshdaoinput, conn, True)
+                    self.hashin.execute(conn, pshdaoinput, True)
                 else : 
                     raise
                 
@@ -101,8 +104,8 @@ class DBSOutputConfig:
 				"creation_date" : businput["creation_date"] , 
 				"create_by" : businput["create_by"]
 				}
-            omcdaoinput["output_mod_config_id"] = self.sm.increment("SEQ_OMC", conn, True)
-            self.outmodin.execute(omcdaoinput, conn, True)
+            omcdaoinput["output_mod_config_id"] = self.sm.increment(conn, "SEQ_OMC", True)
+            self.outmodin.execute(conn, omcdaoinput, True)
             tran.commit()
 
 	except exceptions.IntegrityError, ex:

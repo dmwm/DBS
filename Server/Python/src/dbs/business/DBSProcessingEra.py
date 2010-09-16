@@ -3,7 +3,7 @@
 This module provides business object class to interact with DBSProcessingEra. 
 """
 
-__revision__ = "$Id: DBSProcessingEra.py,v 1.3 2010/02/11 22:54:21 afaq Exp $"
+__revision__ = "$Id: DBSProcessingEra.py,v 1.4 2010/03/08 20:16:52 yuyi Exp $"
 __version__ = "$Revision $"
 
 from WMCore.DAOFactory import DAOFactory
@@ -18,17 +18,8 @@ class DBSProcessingEra:
         self.dbi = dbi
         self.owner = owner
 
-        #self.pelist = daofactory(classname="ProcessingEra.List")
         self.pein = daofactory(classname="ProcessingEra.Insert")
         self.sm = daofactory(classname="SequenceManager")
-
-
-    def listProcessingEras(self):
-        """
-        Returns all primary datasets if primdsname is not passed.
-        """
-        return self.pelist.execute()
-
 
     def insertProcessingEra(self, businput):
         """
@@ -36,15 +27,15 @@ class DBSProcessingEra:
         processing_version, creation_date, create_by, description
         it builds the correct dictionary for dao input and executes the dao
         """
-        conn = self.dbi.connection()
+	conn = self.dbi.connection()
         tran = conn.begin()
         try:
-	    businput["processing_era_id"] = self.sm.increment("SEQ_PE", conn, True)
+	    businput["processing_era_id"] = self.sm.increment(conn, "SEQ_PE", True)
 	    assert businput["processing_version"]
 	    assert businput["description"]
 	    assert businput["creation_date"]
 	    assert businput["create_by"]
-            self.pein.execute(businput, conn, True)
+            self.pein.execute(conn, businput, True)
             tran.commit()
         except Exception, ex:
                 if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:

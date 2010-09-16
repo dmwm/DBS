@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.15 2010/02/11 22:54:21 afaq Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.16 2010/03/08 20:13:49 yuyi Exp $"
+__version__ = "$Revision: 1.16 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -29,8 +29,10 @@ class DBSPrimaryDataset:
         """
         Returns all primary datasets if primary_ds_name is not passed.
         """
-        return self.primdslist.execute(primary_ds_name)
-
+	conn=self.dbi.connection()
+        result= self.primdslist.execute(conn, primary_ds_name)
+	conn.close()
+	return result
 
     def insertPrimaryDataset(self, businput):
         """
@@ -46,23 +48,21 @@ class DBSPrimaryDataset:
 	    #self.logger.warning("\n####### %s #######\n" %str(a.dialect))
             businput["primary_ds_type_id"] = (self.primdstypeList.execute(businput["primary_ds_type"]))[0]["primary_ds_type_id"] 
             del businput["primary_ds_type"]
-            businput["primary_ds_id"] = self.sm.increment("SEQ_PDS", conn, True)
-            self.primdsin.execute(businput, conn, True)
+            businput["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS", True)
+            self.primdsin.execute(conn, businput, True)
             tran.commit()
         except IndexError:
             self.logger.exception( "DBS Error: Index error raised")
-            #self.logger.error( "Index error raised")
             raise 
         except Exception, ex:
             if str(ex).lower().find("unique constraint") != -1 \
 			    or str(ex).lower().find("duplicate") != -1:
-                # dataset already exists, lets fetch the ID
                 self.logger.warning("Unique constraint violation being ignored...")
                 self.logger.warning("%s" % ex)
                 pass
             else:
                 tran.rollback()
                 self.logger.exception(ex)
-                raise
+                raise 
         finally:
             conn.close()
