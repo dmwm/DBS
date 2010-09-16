@@ -2,10 +2,11 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.13 2010/02/12 22:25:34 afaq Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: List.py,v 1.14 2010/02/17 22:31:32 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from WMCore.Database.MySQLCore import  MySQLInterface
 
 class List(DBFormatter):
     """
@@ -63,10 +64,12 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
             
         else: 
             raise Exception("dataset, block_name or site_name must be provided")
-#self.logger.warning("QUERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR %s" % sql) 
-#	self.logger.warning("BINDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD %s" % str(binds) )
-        cursor = conn.connection.cursor()
-        cursor.execute(sql, binds)
-        result = self.formatCursor(cursor)
+	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	assert len(cursors) == 1, "block does not exist"
+#if self.dbi.engine.dialect.name == 'mysql' :
+#	    sql, binds = self.dbi.substitute( sql, binds ) 
+	#cursor = conn.connection.cursor()
+	#cursor.execute(sql, binds)
+        result = self.formatCursor(cursors[0])
         conn.close()
         return result

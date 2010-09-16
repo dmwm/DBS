@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 """ DAO Object for BlockParents table """ 
 
-__revision__ = "$Revision: 1.2 $"
-__version__  = "$Id: Insert.py,v 1.2 2010/02/11 19:39:29 afaq Exp $ "
+__revision__ = "$Revision: 1.3 $"
+__version__  = "$Id: Insert.py,v 1.3 2010/02/17 22:31:31 afaq Exp $ "
 
-from dbs.dao.Oracle.Block.Insert import Insert as OraBlockInsert
+from dbs.dao.Oracle.BlockParent.Insert import Insert as OraBlockParentInsert
 
-class Insert(OraBlockInsert):
+class Insert(OraBlockParentInsert):
             pass
 

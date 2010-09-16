@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileOutputMod_configs table """ 
 
-__revision__ = "$Revision: 1.5 $"
-__version__  = "$Id: Insert.py,v 1.5 2010/02/11 18:03:26 afaq Exp $ "
+__revision__ = "$Revision: 1.6 $"
+__version__  = "$Id: Insert.py,v 1.6 2010/02/17 22:31:32 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -17,6 +17,7 @@ class Insert(DBFormatter):
 
     def execute( self, binds, conn=None, transaction=False ):
 	try:
+	    
             result = self.dbi.processData(self.sql, binds, conn, transaction)
         except exceptions.IntegrityError, ex:
 	    self.logger.warning("Unique constraint violation being ignored...")

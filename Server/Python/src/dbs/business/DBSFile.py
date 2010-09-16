@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.21 2010/02/11 22:54:21 afaq Exp $"
-__version__ = "$Revision: 1.21 $"
+__revision__ = "$Id: DBSFile.py,v 1.22 2010/02/17 22:31:31 afaq Exp $"
+__version__ = "$Revision: 1.22 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -75,7 +75,8 @@ class DBSFile:
 	"""
 	conn = self.dbi.connection()
 	tran = conn.begin()
- 
+
+
 	try:
 	    # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
 	    #files2insert = []
@@ -209,7 +210,6 @@ class DBSFile:
 			    fcdao["output_mod_config_id"]= self.outconfigid.execute(fc["app_name"], \
 				                        fc["release_version"], fc["pset_hash"], fc["output_module_label"], conn, True)
 			    fconfigs2insert.append(fcdao)
-			
 		#FIXME: file associations?-- in a later release
 		#
 		# insert file - lumi   
@@ -250,6 +250,7 @@ class DBSFile:
 			bpdaolist.append(bpdao)
 		    # insert them all
 		    # Do this one by one, as its sure to have duplicate in dest table
+
 		    for abp in bpdaolist:
 			try:
 			    self.blkparentin.execute(abp, conn, True)
