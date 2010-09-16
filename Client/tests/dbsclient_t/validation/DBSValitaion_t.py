@@ -3,8 +3,8 @@ DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
 
-__revision__ = "$Id: DBSValitaion_t.py,v 1.5 2010/02/24 16:50:30 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSValitaion_t.py,v 1.6 2010/03/19 16:33:56 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import os
 import sys
@@ -31,6 +31,8 @@ pset_hash='76e303993a1c2f842159dbfeeed9a0dd'
 release_version='CMSSW_1_2_3'
 site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
+acquisition_era_name="acq_era_%s" %uid
+processing_version="%s" %(uid if (uid<9999) else uid%9999)
 flist=[]
 
 class DBSValitaion_t(unittest.TestCase):
@@ -63,6 +65,16 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(confInDBS['output_module_label'], output_module_label)
 
     def test03(self):
+	"""test06: web.DBSWriterModel.insertAcquisitionEra: Basic test """
+	data={'acquisition_era_name': acquisition_era_name}
+	api.insertAcquisitionEra(data)
+
+    def test04(self):
+	"""test07: web.DBSWriterModel.insertProcessingEra: Basic test """
+        data={'processing_version': processing_version, 'description':'this is a test'}
+	api.insertProcessingEra(data)
+           
+    def test05(self):
 	"""test03: web.DBSClientWriter.Dataset: validation test"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
@@ -72,7 +84,7 @@ class DBSValitaion_t(unittest.TestCase):
 		    ],
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
-		#'processing_version': '1',  'acquisition_era_name': u'',
+		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insertDataset(datasetObj=data)
 	dsList = api.listDatasets(dataset=dataset)
@@ -89,8 +101,10 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(dsInDBS['app_name'], app_name)
 	self.assertEqual(dsInDBS['output_module_label'], output_module_label)
 	self.assertEqual(dsInDBS['xtcrosssection'], 123)
+	self.assertEqual(dsInDBS['processing_version'], processing_version)
+	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name)
 
-    def test04(self):
+    def test06(self):
 	"""test04 web.DBSClientWriter.Block: validation test"""
 	data = {'block_name': block,
 		'origin_site': site }
@@ -107,7 +121,7 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(blkInDBS['block_size'], 0)
 
 
-    def test05(self):
+    def test07(self):
 	"""test05 web.DBSClientWriter.Files: validation test"""
 	#
 	#    --- NOTICE    _parent    at multiple places below
@@ -124,7 +138,7 @@ class DBSValitaion_t(unittest.TestCase):
 		    ],
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
-		#'processing_version': '1',  'acquisition_era_name': u'',
+		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insertDataset(datasetObj=data)
 
