@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.41 $"
-# $Id: dbsClient.py,v 1.41 2010/04/19 15:39:58 afaq Exp $"
+# $Revision: 1.42 $"
+# $Id: dbsClient.py,v 1.42 2010/04/20 20:06:13 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -216,6 +216,13 @@ class DbsApi:
                 """
                 return self.callServer("/datasetparents?dataset=%s" %dataset )
 
+	def listDatasetChildren(self, dataset):
+                """
+                * API to list A datasets children in DBS 
+		* dataset : dataset
+                """
+                return self.callServer("/datasetchildren?dataset=%s" %dataset )
+
         def insertDataset(self, datasetObj={}):
                 """
                 * API to list A primary dataset in DBS 
@@ -328,6 +335,13 @@ class DbsApi:
 	    * lfn : lfn of file
 	    """
 	    return self.callServer("/fileparents?logical_file_name=%s" %lfn)
+
+        def listFileChildren(self, lfn=""):
+	    """
+	    * API to list file children
+	    * lfn : lfn of file
+	    """
+	    return self.callServer("/filechildren?logical_file_name=%s" %lfn)
 
 	def listFileLumis(self, lfn=""):#, block_name):
 	    """
