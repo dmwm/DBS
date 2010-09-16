@@ -20,7 +20,7 @@ class Test:
 
 	"""
         bo = DBSOutputConfig(self.logger, self.dbi, "anzar")
-	binput = {'app_name': 'Repacker', 'version': 'CMSSW_2_1_7',  'hash': 'NO_PSET_HASH', 'output_module_label' : 'outmod_test_label', 'creation_date' : 1234, 'create_by' : 'anzar' }
+	binput = {'app_name': 'Repacker', 'release_version': 'CMSSW_2_1_7',  'pset_hash': 'NO_PSET_HASH', 'output_module_label' : 'outmod_test_label', 'creation_date' : 1234, 'create_by' : 'anzar' }
         bo.insertOutputConfig(binput)
 
 
@@ -35,7 +35,7 @@ class Test:
                         'processed_ds_name': 'Summer09-STARTUP31X_V3-v2', 'dataset': '/TkCosmics38T/Summer09-STARTUP31X_V3-v2/GEN-SIM-DIGI-RAW',
                         'dataset_type': 'PRODUCTION', 'xtcrosssection': 123, 'data_tier_name': 'GEN-SIM-DIGI-RAW',
 			'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
-                        'output_configs' : [  {'app_name': 'Repacker', 'version': 'CMSSW_2_1_7',  'hash': 'NO_PSET_HASH'}  ] 
+                        'output_configs' : [  {'app_name': 'Repacker', 'release_version': 'CMSSW_2_1_7',  'pset_hash': 'NO_PSET_HASH'}  ] 
 		}
 
         bo.insertDataset(binput)
@@ -80,7 +80,7 @@ class Test:
 			    'md5': 'NOTSET', 
 			    'check_sum': '862355611', 
 			    'file_lumi_list': [{'lumi_section_num': 10018, 'run_num': 1}], 
-			    'file_output_config_list' : [  {'app_name': 'Repacker', 'version': 'CMSSW_2_1_7',  'hash': 'NO_PSET_HASH'}  ],
+			    'file_output_config_list' : [  {'app_name': 'Repacker', 'release_version': 'CMSSW_2_1_7',  'pset_hash': 'NO_PSET_HASH'}  ],
 			    'adler32': 'NOTSET', 
 			    'event_count': '2041', 
 			    'creation_date' : 1234,
