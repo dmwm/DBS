@@ -2,8 +2,8 @@
 """
 DBS Migration Service Polling Module
 """
-__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.5 2010/06/29 21:40:45 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.6 2010/07/01 21:25:45 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import threading
 import logging
@@ -41,7 +41,12 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
         self.config  = config
 	dbconfig = config.section_("CoreDatabase")
 	self.dbowner=dbconfig.dbowner
+	
+	self.alreadydone = {}
+	self.alreadydone['primds']=[]
+	self.alreadydone['dataset']=[]
 
+	
     # This is only called once by the frwk
     def setup(self, parameters):
         """
@@ -138,6 +143,7 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	        self.reportStatus(conn, "WORKING FINE")
 	    #Mark the request as done
 	    self.updateRequestStatus(conn, request_id, "COMPLETED")
+	    
 	    #FIXME: What do we do to the blocks, once all the blocks are DONE (clean up service)
 	except Exception, ex:
 	    self.logger.exception("DBS Migration Service failed to perform migration %s" %str(ex))
@@ -171,7 +177,8 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
     def updateRequestStatus(self, conn, request_id, status):
             try:
 	        upst = dict(migration_status=status, migration_request_id=request_id)
-                self.requestup.execute(conn, upst)
+		print "TEMPORARY : commented out"
+		#self.requestup.execute(conn, upst)
 	        self.reportStatus(conn, "WORKING FINE")
             except:
 	        raise
@@ -179,7 +186,8 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
     def updateBlockStatus(self, conn, block_name, status):
             try:
 	        blkupst = dict(migration_status=status, migration_block=block_name)
-                self.blkup.execute(conn, blkupst)
+		print "TEMPORARY : commented out"
+		#self.blkup.execute(conn, blkupst)
 	        self.reportStatus(conn, "WORKING FINE")
             except:
 	        raise
@@ -207,7 +215,7 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	    self.updateBlockStatus(conn, block_name, 'COMPLETED')
 	except Exception, ex:
 	    self.updateBlockStatus(conn, block_name, 'FAILED')
-	    raise Exception ("Migration of Block % from DBS %s has failed, Exception trace: \n %s " % (url, block_name, ex ))
+	    raise Exception ("Migration of Block %s from DBS %s has failed, Exception trace: \n %s " % (url, block_name, ex ))
 
     def getBlock(self, url, block_name):
 	"""Client type call to get the block content from the server"""
@@ -225,55 +233,75 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	"""Huge method that inserts everything.
 	   Want to do it in one transaction, so that if there is problem it rolls back.
 	   Inserts all data into corresponding tables"""
+
+
+
+        """
+
+        We can make good use of temporary caching here, everything we insert before can be used in next cycle in following order:
+
+        1. Get from cache
+        2. Get from database (and put in cache)
+        3. Insert it (and put in cache)
+
+
+	"""
+
+	   
+	#start a new transaction and use this, if ONE block fails out of all, only this transaction should be affected.
 	tran = conn.begin()
-	
 	#insert primary dataset
 	d = blockcontent["primds"]
-	primds = {}
-	try:
-	    primds["primary_ds_type_id"] = self.primdstpid.execute(conn, d["primary_ds_type"])
-	    primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS", tran)
-	    for k in ("primary_ds_name", "creation_date", "create_by"):
-		primds[k] = d[k]
-
-	    self.primdsin.execute(conn, primds, tran)
-	except IntegrityError:
-	    pass
-	except:
-	    tran.rollback()
-	    conn.close()
-	    raise
+	if d["primary_ds_name"] not in self.alreadydone['primds']:
+	    primds = {}
+	    try:
+		primds["primary_ds_type_id"] = self.primdstpid.execute(conn, d["primary_ds_type"])
+		primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS", tran)
+		for k in ("primary_ds_name", "creation_date", "create_by"):
+		    primds[k] = d[k]
+		self.primdsin.execute(conn, primds, tran)
+		self.alreadydone['primds'].append(primds["primary_ds_name"])
+	    except exceptions.IntegrityError:
+		#add to already done list, next cycle we will not even check existence in database
+		self.alreadydone['primds'].append(primds["primary_ds_name"])
+		pass
+	    except:
+		tran.rollback()
+		raise
 
 	#insert dataset (and processed dataset if it is not already inserted)
 	d = blockcontent["dataset"]
-	dataset = {}
-	dataset["primary_ds_id"]    = primds["primary_ds_id"]
-	dataset["data_tier_id"]     = self.tierid.execute(conn, d["data_tier_name"])
-	dataset["dataset_type_id"]  = self.datatypeid.execute(conn, d["dataset_type"])
-	dataset["physics_group_id"] = self.phygrpid.execute(conn, d["physics_group_name"])
+	if d['dataset'] not in self.alreadydone['dataset']:
+	    dataset = {}
+	    dataset["primary_ds_id"]    = primds["primary_ds_id"]
+	    dataset["data_tier_id"]     = self.tierid.execute(conn, d["data_tier_name"])
+	    dataset["dataset_type_id"]  = self.datatypeid.execute(conn, d["dataset_access_type"])
+	    dataset["physics_group_id"] = self.phygrpid.execute(conn, d["physics_group_name"])
 
-	procid = self.procdsid.execute(conn, d["processed_ds_name"])
-	if procid>0:
-	    dataset["processed_ds_id"] = procid
-	else:
-	    procid = self.sm.increment(conn, "SEQ_PSDS", tran)
-	    procdaoinput = {"processed_ds_name":d["processed_ds_name"],
+	    procid = self.procdsid.execute(conn, d["processed_ds_name"])
+	    if procid>0:
+		dataset["processed_ds_id"] = procid
+	    else:
+		procid = self.sm.increment(conn, "SEQ_PSDS", tran)
+		procdaoinput = {"processed_ds_name":d["processed_ds_name"],
                             "processed_ds_id":procid}
-	    self.procdsin.execute(conn, procdaoinput, tran)
-	    dataset["processed_ds_id"] = procid
-        dataset["dataset_id"] = self.sm.increment(conn, "SEQ_DS", tran) 
-	for k in ("dataset", "is_dataset_valid", "global_tag", "xtcrosssection",
+		self.procdsin.execute(conn, procdaoinput, tran)
+		dataset["processed_ds_id"] = procid
+	    dataset["dataset_id"] = self.sm.increment(conn, "SEQ_DS", tran) 
+	    for k in ("dataset", "is_dataset_valid", "global_tag", "xtcrosssection",
 		  "creation_date", "create_by", "last_modification_date", "last_modified_by"):
-	    print "DO SOMETHING EHRE............"
-	    dataset[k] = d[k]
-	try:
-	    self.datasetin.execute(conn, dataset, tran)
-	except IntegrityError: 
-	    pass
-	except:
-	    tran.rollback()
-	    conn.close()
-	    raise
+		dataset[k] = d[k]
+	    try:
+		self.datasetin.execute(conn, dataset, tran)
+		self.alreadydone['dataset'].append(dataset['dataset'])
+	    except exceptions.IntegrityError: 
+		#add to already done list, next cycle we will not even check existence in database
+		self.alreadydone['dataset'].append(dataset['dataset'])
+		pass
+	    except:
+		tran.rollback()
+		raise
+	tran.commit()
     
     def insertStatus(self, status = "UNKNOWN" ):
 	"""
