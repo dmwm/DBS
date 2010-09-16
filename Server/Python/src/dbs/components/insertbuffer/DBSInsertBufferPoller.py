@@ -2,8 +2,8 @@
 """
 DBS Insert Buffer Polling Module
 """
-__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.6 2010/07/09 18:55:40 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.7 2010/07/23 18:49:30 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 
 """
@@ -171,10 +171,12 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
         """
         Get some files from the insert buffer
         """
-	    
+	   
 	try:
 	    conn = self.dbi.connection()
 	    result = self.buflist.execute(conn, block_id)
+	    print result
+	    
             conn.close()
             return result
 	except Exception, ex:
@@ -320,4 +322,71 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 
 	finally:
 	    conn.close()
+
+
+if __name__ == '__main__':
+#----------------
+# This section is just for testing
+#---------------
+
+    from WMCore.Configuration import Configuration, loadConfigurationFile
+    from WMCore.Database.DBCore import DBInterface
+    from WMCore.Database.DBFactory import DBFactory
+    from sqlalchemy import create_engine
+    import logging
+
+    def configure(configfile):
+        config = loadConfigurationFile(configfile)
 	
+	"""
+        wconfig = cfg.section_("Webtools")
+        app = wconfig.application
+        appconfig = cfg.section_(app)
+        service = list(appconfig.views.active._internal_children)[0]
+        dbsconfig = getattr(appconfig.views.active, service)
+        dbsconfig.formatter.object="WMCore.WebTools.RESTFormatter"
+        config = Configuration()
+        config.component_('DBS')
+        config.DBS.application = app
+        config.DBS.model       = dbsconfig.model
+        config.DBS.formatter   = dbsconfig.formatter
+        config.DBS.database    = dbsconfig.database
+        config.DBS.dbowner     = dbsconfig.dbowner
+        config.DBS.version     = dbsconfig.version
+        config.DBS.default_expires = 300
+        config = config.section_("DBS")
+	"""
+
+        print config
+        return config
+
+    def setupDB(config):
+	
+	logger = logging.getLogger()
+	_engineMap = {}
+	myThread = threading.currentThread()
+	print config
+	"""
+	_defaultEngineParams = {"convert_unicode" : True,
+                            "strategy": "threadlocal",
+                            "pool_recycle": 7200}
+	engine = _engineMap.setdefault(config.database.connectUrl,
+                                         create_engine(config.database.connectUrl,
+                                                       connect_args = {},
+                                                       **_defaultEngineParams)
+                                                  )
+	"""
+
+	myThread.logger=logger
+	myThread.dbFactory = DBFactory(myThread.logger, config.CoreDatabase.connectUrl, options={})
+        myThread.dbi = myThread.dbFactory.connect()
+    	#dbInterface =  DBInterface(logger, engine)
+        #myThread.dbi=dbInterface
+#Run the test
+
+    config=configure("DefaultConfig.py")
+    setupDB(config)
+
+    migrator=DBSInsertBufferPoller(config)
+    migrator.setup("NONE")
+    migrator.algorithm("NONE")
