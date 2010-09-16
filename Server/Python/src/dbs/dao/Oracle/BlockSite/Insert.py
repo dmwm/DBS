@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 """ DAO Object for BlockSites table """ 
 
-__revision__ = "$Revision: 1.1 $"
-__version__  = "$Id: Insert.py,v 1.1 2010/04/21 19:50:02 afaq Exp $ "
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2010/04/21 21:48:01 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
 class Insert(DBFormatter):
 
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
             DBFormatter.__init__(self, logger, dbi)
 	    self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
             self.sql = """INSERT INTO %sBLOCK_SITES ( BLOCK_SITE_ID, SITE_ID, BLOCK_ID) VALUES (:blocksiteid, (SELECT SITE_ID FROM SITES WHERE SITE_NAME=:sitename), :blockid)""" % (self.owner)
 
-    def execute( self, conn, block_id, site_name, transaction=False ):
+    def execute( self, conn, block_site_id="", block_id="", site_name="", transaction=False ):
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/BlockSite/Insert expects db connection from up layer.")
 	binds={}
