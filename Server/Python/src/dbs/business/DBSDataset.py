@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.26 2010/03/04 21:02:31 afaq Exp $"
-__version__ = "$Revision: 1.26 $"
+__revision__ = "$Id: DBSDataset.py,v 1.27 2010/03/09 16:38:02 afaq Exp $"
+__version__ = "$Revision: 1.27 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -100,23 +100,23 @@ class DBSDataset:
         try:
 
             dsdaoinput={}
-            dsdaoinput["primary_ds_id"] = self.primdsid.execute(businput["primary_ds_name"], conn, True)
-            dsdaoinput["data_tier_id"] = self.tierid.execute(businput["data_tier_name"], conn, True)
-            dsdaoinput["dataset_type_id"] = self.datatypeid.execute(businput["dataset_type"], conn, True)
-            dsdaoinput["physics_group_id"] = self.phygrpid.execute(businput["physics_group_name"], conn, True)
+            dsdaoinput["primary_ds_id"] = self.primdsid.execute(conn, businput["primary_ds_name"], tran)
+            dsdaoinput["data_tier_id"] = self.tierid.execute(conn, businput["data_tier_name"], tran)
+            dsdaoinput["dataset_type_id"] = self.datatypeid.execute(conn, businput["dataset_type"], tran)
+            dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
 
             # See if processed dataset exists, if not, add one
-            procid = self.procdsid.execute(businput["processed_ds_name"])
+            procid = self.procdsid.execute(conn, businput["processed_ds_name"], tran)
             if procid > 0:
                 dsdaoinput["processed_ds_id"] = procid
             else:
-                procid = self.sm.increment("SEQ_PSDS", conn, True)
+                procid = self.sm.increment(conn, "SEQ_PSDS", tran)
                 procdaoinput = {"processed_ds_name":businput["processed_ds_name"],
                                     "processed_ds_id":procid}
-                self.procdsin.execute(procdaoinput, conn, True)
+                self.procdsin.execute(conn, procdaoinput, tran)
                 dsdaoinput["processed_ds_id"] = procid
 
-            dsdaoinput["dataset_id"] = self.sm.increment("SEQ_DS", conn, True) 
+            dsdaoinput["dataset_id"] = self.sm.increment(conn, "SEQ_DS", tran) 
 
             # we are better off separating out what we need for the dataset DAO
             dsdaoinput.update({ 
@@ -131,20 +131,20 @@ class DBSDataset:
 
             # See if Processing Era exists
             if businput.has_key("processing_version"):
-                dsdaoinput["processing_version"] = self.proceraid.execute(businput["processing_version"], conn, True)
+                dsdaoinput["processing_version"] = self.proceraid.execute(conn, businput["processing_version"], tran)
             # See if Acquisition Era exists
             if businput.has_key("acquisition_era_name"):
-                dsdaoinput["acquisition_era_name"] = self.acqeraid.execute(businput["acquisition_era_name"], conn, True)
+                dsdaoinput["acquisition_era_name"] = self.acqeraid.execute(conn, businput["acquisition_era_name"], tran)
                  
             try:
                 # insert the dataset
-                self.datasetin.execute(dsdaoinput, conn, True)
+                self.datasetin.execute(conn, dsdaoinput, tran)
             except Exception, ex:
                 if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                     # dataset already exists, lets fetch the ID
                     self.logger.warning("Unique constraint violation being ignored...")
                     self.logger.warning("%s" % ex)
-                    dsdaoinput["dataset_id"] = self.datasetid.execute("/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"]) , conn, True)
+                    dsdaoinput["dataset_id"] = self.datasetid.execute(conn, "/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"]) , tran)
                 else:
                     raise	
 
@@ -154,14 +154,14 @@ class DBSDataset:
                 for anOutConfig in businput["output_configs"]:
                     dsoutconfdaoin={}
                     dsoutconfdaoin["dataset_id"]=dsdaoinput["dataset_id"]
-                    dsoutconfdaoin["output_mod_config_id"] = self.outconfigid.execute(anOutConfig["app_name"], \
+                    dsoutconfdaoin["output_mod_config_id"] = self.outconfigid.execute(conn, anOutConfig["app_name"], \
 										anOutConfig["release_version"], \
 										anOutConfig["pset_hash"], \
-										anOutConfig["output_module_label"], conn, True) 
-		    dsoutconfdaoin["ds_output_mod_conf_id"] = self.sm.increment("SEQ_DC", conn, True)
+										anOutConfig["output_module_label"], tran) 
+		    dsoutconfdaoin["ds_output_mod_conf_id"] = self.sm.increment(conn, "SEQ_DC", tran)
 		    print "INSERTING output_mod_config_id :::::: %s" %str(dsoutconfdaoin["output_mod_config_id"])
                 try:
-                    self.datasetoutmodconfigin.execute(dsoutconfdaoin, conn, True)
+                    self.datasetoutmodconfigin.execute(conn, dsoutconfdaoin, tran)
                 except Exception, ex:
                     if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                         pass

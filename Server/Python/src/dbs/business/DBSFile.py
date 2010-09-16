@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.28 2010/03/08 23:12:34 afaq Exp $"
-__version__ = "$Revision: 1.28 $"
+__revision__ = "$Id: DBSFile.py,v 1.29 2010/03/09 16:38:03 afaq Exp $"
+__version__ = "$Revision: 1.29 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -145,9 +145,9 @@ class DBSFile:
 	    firstfile = businput[0]
 	    # first check if the dataset exists
 	    # and block exists that files are suppose to be going to and is OPEN for writing
-	    dataset_id = self.datasetid.execute(conn, dataset=firstfile["dataset"], transaction=True)
+	    dataset_id = self.datasetid.execute(conn, dataset=firstfile["dataset"], transaction=tran)
 	    # get the list of configs in for this dataset
-	    dsconfigs = self.dsconfigids.execute(conn, dataset=firstfile["dataset"], transaction=True)
+	    dsconfigs = self.dsconfigids.execute(conn, dataset=firstfile["dataset"], transaction=tran)
 	
 	    block_info = self.blocklist.execute(block_name=firstfile["block"])
 	    assert len(block_info)==1
@@ -156,10 +156,10 @@ class DBSFile:
 	    assert block_info["open_for_writing"]==1
 	    block_id = block_info["block_id"]
 	    
-	    file_type_id = self.ftypeid.execute( conn, firstfile.get("file_type", "EDM"), transaction=True)
+	    file_type_id = self.ftypeid.execute( conn, firstfile.get("file_type", "EDM"), transaction=tran)
 	    iFile = 0
 	    fileIncrement = 40
-	    fID = self.sm.increment(conn, "SEQ_FL", transaction=True, incCount=fileIncrement)
+	    fID = self.sm.increment(conn, "SEQ_FL", transaction=tran, incCount=fileIncrement)
 	    #looping over the files, everytime create a new object 'filein' as you never know 
 	    #whats in the original object and we do not want to know
 	    for f in businput:
@@ -184,7 +184,7 @@ class DBSFile:
 		    "last_modified_by" : f["last_modified_by"] 
 		}
 		if iFile == fileIncrement:
-		    fID = self.sm.increment(conn, "SEQ_FL", transaction=True, incCount=fileIncrement)
+		    fID = self.sm.increment(conn, "SEQ_FL", transaction=tran, incCount=fileIncrement)
 		    iFile = 0
 		filein["file_id"] = fID + iFile
 		iFile += 1
@@ -192,17 +192,17 @@ class DBSFile:
 		filein["block_id"]=block_id
 		filein["file_type_id"]=file_type_id
 		#FIXME: Add this later if f.get("branch_hash", "") not in ("", None): 
-		#filein["branch_hash"]=self.fbranchid.execute( f.get("branch_hash"), conn, transaction=True)
+		#filein["branch_hash"]=self.fbranchid.execute( f.get("branch_hash"), conn, transaction=tran)
 
 		# insert file  -- as decided, one file at a time
 		# filein will be what goes into database
 		try:
-		    self.filein.execute(conn, filein, transaction=True)
+		    self.filein.execute(conn, filein, transaction=tran)
 		    fileInserted=True
 		except exceptions.IntegrityError, ex:
 		    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			#refresh the file_id from database
-			#filein["file_id"]=self.fileid.execute(filein["logical_file_name"], conn, transaction=True)
+			#filein["file_id"]=self.fileid.execute(filein["logical_file_name"], conn, transaction=tran)
 			# Lets move on to NEXT file, we do not want to continue processing this file
 			self.logger.warning("File already exists in DBS, not touching it: %s" %filein["logical_file_name"])
 			continue
@@ -220,10 +220,10 @@ class DBSFile:
 		    if(len(fllist) > 0):
 			iLumi = 0
 			flIncrement = 100
-			flID = self.sm.increment(conn, "SEQ_FLM", transaction=True, incCount=flIncrement)
+			flID = self.sm.increment(conn, "SEQ_FLM", transaction=tran, incCount=flIncrement)
 			for fl in fllist:
 			    if iLumi == flIncrement:
-				flID =  self.sm.increment(conn, "SEQ_FLM", transaction=True, incCount=flIncrement)
+				flID =  self.sm.increment(conn, "SEQ_FLM", transaction=tran, incCount=flIncrement)
 				iLumi = 0
 			    fldao={ 
 				"run_num" : fl["run_num"],
@@ -240,18 +240,18 @@ class DBSFile:
 		    if(len(fplist) > 0):
 			iParent = 0
 			fpIncrement = 100
-			fpID = self.sm.increment(conn, "SEQ_FP", transaction=True, incCount=fpIncrement)
+			fpID = self.sm.increment(conn, "SEQ_FP", transaction=tran, incCount=fpIncrement)
                     
 			for fp in fplist:
 			    if iParent == fpIncrement:
-				fpID = self.sm.increment(conn, "SEQ_FP", transaction=True, incCount=fpIncrement)
+				fpID = self.sm.increment(conn, "SEQ_FP", transaction=tran, incCount=fpIncrement)
 				iParent  = 0
 			    fpdao={}
 			    fpdao["file_parent_id"] = fpID + iParent
 			    iParent += 1 
 			    fpdao["this_file_id"] = filein["file_id"]
 			    lfn = fp["file_parent_lfn"]
-			    fpdao["parent_file_id"] = self.fileid.execute(conn, lfn, transaction=True)
+			    fpdao["parent_file_id"] = self.fileid.execute(conn, lfn, transaction=tran)
 			    fparents2insert.append(fpdao)
 
 		if f.has_key("file_output_config_list"):
@@ -260,41 +260,41 @@ class DBSFile:
 		    if(len(foutconfigs) > 0):
 			iConfig = 0
 			fconfigInc = 5
-			fcID = self.sm.increment(conn, "SEQ_FC", transaction=True, incCount=fconfigInc)
+			fcID = self.sm.increment(conn, "SEQ_FC", transaction=tran, incCount=fconfigInc)
 			for fc in foutconfigs:
 			    if iConfig == fconfigInc:
-				fcID = self.sm.increment(conn, "SEQ_FC", transaction=True, incCount=fconfigInc)
+				fcID = self.sm.increment(conn, "SEQ_FC", transaction=tran, incCount=fconfigInc)
 				iConfig = 0
 			    fcdao={}
 			    fcdao["file_output_config_id"] = fcID + iConfig
 			    iConfig += 1
 			    fcdao["file_id"] = filein["file_id"]
 			    fcdao["output_mod_config_id"]= self.outconfigid.execute(conn, fc["app_name"], \
-				                        fc["release_version"], fc["pset_hash"], fc["output_module_label"], transaction=True)
+				                        fc["release_version"], fc["pset_hash"], fc["output_module_label"], transaction=tran)
 			    fileconfigs.append(fcdao["output_mod_config_id"])
 			    fconfigs2insert.append(fcdao)
 		#FIXME: file associations?-- in a later release
 		#
 		# insert file - lumi   
 		if flumis2insert:
-		    self.flumiin.execute(conn, flumis2insert, transaction=True)
+		    self.flumiin.execute(conn, flumis2insert, transaction=tran)
 		# insert file parent mapping
 		if fparents2insert:
-		    self.fparentin.execute(conn, fparents2insert, transaction=True)
+		    self.fparentin.execute(conn, fparents2insert, transaction=tran)
 		# First check to see if these output configs are mapped to THIS dataset as well, if not raise an exception
 		if not set(fileconfigs).issubset(set(dsconfigs)) :
 		    raise Exception("output configs mismatch, output configs known to dataset: %s are different from what are being mapped to file : %s " \
 													  %(firstfile["dataset"], filein["logical_file_name"]))
 		# insert output module config mapping
 		if fconfigs2insert:
-		    self.fconfigin.execute(conn, fconfigs2insert, transaction=True)    
+		    self.fconfigin.execute(conn, fconfigs2insert, transaction=tran)    
 
 	    # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
 	    # fpbdlist, returns a dict of {block_id, dataset_id} combination
 	    if fileInserted:
 		fpblks=[]
 		fpds=[]
-		fileParentBlocksDatasets = self.fpbdlist.execute(conn, fidl, transaction=True)
+		fileParentBlocksDatasets = self.fpbdlist.execute(conn, fidl, transaction=tran)
 		for adict in fileParentBlocksDatasets:
 		    if adict["block_id"] not in fpblks:
 			fpblks.append(adict["block_id"])
@@ -306,10 +306,10 @@ class DBSFile:
 		    bpdaolist=[]
 		    iPblk = 0
 		    fpblkInc = 10
-		    bpID = self.sm.increment(conn, "SEQ_BP", transaction=True, incCount=fpblkInc)
+		    bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
 		    for ablk in fpblks:
 			if iPblk == fpblkInc:
-			    bpID = self.sm.increment(conn, "SEQ_BP", transaction=True, incCount=fpblkInc)
+			    bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
 			    iPblk = 0
 			bpdao={ "this_block_id": block_id }
 			bpdao["parent_block_id"] = ablk
@@ -320,7 +320,7 @@ class DBSFile:
 
 		    for abp in bpdaolist:
 			try:
-			    self.blkparentin.execute(conn, abp, transaction=True)
+			    self.blkparentin.execute(conn, abp, transaction=tran)
 			except exceptions.IntegrityError, ex:
 			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 				pass
@@ -331,10 +331,10 @@ class DBSFile:
 		    dsdaolist=[]
 		    iPds = 0
 		    fpdsInc = 10
-		    pdsID = self.sm.increment(conn, "SEQ_DP", transaction=True, incCount=fpdsInc)
+		    pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
 		    for ads in fpds:
 			if iPds == fpdsInc:
-			    pdsID = self.sm.increment(conn, "SEQ_DP", transaction=True, incCount=fpdsInc)
+			    pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
 			    iPds = 0
 			dsdao={ "this_dataset_id": dataset_id }
 			dsdao["parent_dataset_id"] = ads
@@ -343,7 +343,7 @@ class DBSFile:
 		    # Do this one by one, as its sure to have duplicate in dest table
 		    for adsp in dsdaolist:
 			try:
-			    self.dsparentin.execute(conn, adsp, transaction=True)
+			    self.dsparentin.execute(conn, adsp, transaction=tran)
 			except exceptions.IntegrityError, ex:
 			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 				pass
@@ -351,9 +351,9 @@ class DBSFile:
 				raise
 
 		# Update block parameters, file_count, block_size
-		blkParams=self.blkstats.execute(conn, block_id, transaction=True)
+		blkParams=self.blkstats.execute(conn, block_id, transaction=tran)
 		blkParams['block_size']=long(blkParams['block_size'])
-		self.blkstatsin.execute(conn, blkParams, transaction=True)
+		self.blkstatsin.execute(conn, blkParams, transaction=tran)
 
 	    # All good ?. 
             tran.commit()

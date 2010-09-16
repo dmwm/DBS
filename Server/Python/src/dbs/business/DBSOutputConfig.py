@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.9 2010/03/08 20:10:06 yuyi Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.10 2010/03/09 16:38:03 afaq Exp $"
+__version__ = "$Revision: 1.10 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -59,39 +59,39 @@ class DBSOutputConfig:
         try:
 
 	    try:
-                businput["app_exec_id"] = self.appid.execute(conn, businput["app_name"], True)	
+                businput["app_exec_id"] = self.appid.execute(conn, businput["app_name"], tran)	
             except Exception, e:
                 if str(e).find('does not exist') != -1:
-                    businput["app_exec_id"] = self.sm.increment(conn, "SEQ_AE",True)
+                    businput["app_exec_id"] = self.sm.increment(conn, "SEQ_AE",tran)
                     appdaoinput = { "app_name" : businput["app_name"], 
                                     "app_exec_id" : businput["app_exec_id"] }
-                    self.appin.execute(conn, appdaoinput, True)
+                    self.appin.execute(conn, appdaoinput, tran)
                 else : 
                     raise
                 
             try:
-                businput["release_version_id"] = self.verid.execute(businput["release_version"], conn, True)
+                businput["release_version_id"] = self.verid.execute(conn, businput["release_version"], tran)
             except Exception, e:
                 if str(e).find('does not exist') != -1:
-                    businput["release_version_id"] = self.sm.increment("SEQ_RV", conn, True)
+                    businput["release_version_id"] = self.sm.increment("SEQ_RV", conn, tran)
                     verdaoinput = { 
                                     "release_version" : businput["release_version"],
 				    "release_version_id" : businput["release_version_id"]
 				}
-                    self.verin.execute(conn, verdaoinput, True)
+                    self.verin.execute(conn, verdaoinput, tran)
                 else : 
                     raise
  
               
             try:
-                businput["parameter_set_hash_id"] = self.hashid.execute(businput["pset_hash"], conn, True)
+                businput["parameter_set_hash_id"] = self.hashid.execute(conn, businput["pset_hash"], tran)
             except Exception, e:
                 if str(e).find('does not exist') != -1:
-                    businput["parameter_set_hash_id"] = self.sm.increment("SEQ_PSH", conn, True)
+                    businput["parameter_set_hash_id"] = self.sm.increment(conn, "SEQ_PSH", tran)
                     pshdaoinput = {"parameter_set_hash_id" : businput["parameter_set_hash_id"], 
                                    "pset_hash" : businput["pset_hash"], 
                                    "name" : "no_name" }
-                    self.hashin.execute(conn, pshdaoinput, True)
+                    self.hashin.execute(conn, pshdaoinput, tran)
                 else : 
                     raise
                 
@@ -104,8 +104,8 @@ class DBSOutputConfig:
 				"creation_date" : businput["creation_date"] , 
 				"create_by" : businput["create_by"]
 				}
-            omcdaoinput["output_mod_config_id"] = self.sm.increment(conn, "SEQ_OMC", True)
-            self.outmodin.execute(conn, omcdaoinput, True)
+            omcdaoinput["output_mod_config_id"] = self.sm.increment(conn, "SEQ_OMC", tran)
+            self.outmodin.execute(conn, omcdaoinput, tran)
             tran.commit()
 
 	except exceptions.IntegrityError, ex:

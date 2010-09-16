@@ -3,7 +3,7 @@
 This module provides business object class to interact with DBSProcessingEra. 
 """
 
-__revision__ = "$Id: DBSProcessingEra.py,v 1.4 2010/03/08 20:16:52 yuyi Exp $"
+__revision__ = "$Id: DBSProcessingEra.py,v 1.5 2010/03/09 16:38:03 afaq Exp $"
 __version__ = "$Revision $"
 
 from WMCore.DAOFactory import DAOFactory
@@ -30,12 +30,12 @@ class DBSProcessingEra:
 	conn = self.dbi.connection()
         tran = conn.begin()
         try:
-	    businput["processing_era_id"] = self.sm.increment(conn, "SEQ_PE", True)
+	    businput["processing_era_id"] = self.sm.increment(conn, "SEQ_PE", tran)
 	    assert businput["processing_version"]
 	    assert businput["description"]
 	    assert businput["creation_date"]
 	    assert businput["create_by"]
-            self.pein.execute(conn, businput, True)
+            self.pein.execute(conn, businput, tran)
             tran.commit()
         except Exception, ex:
                 if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:

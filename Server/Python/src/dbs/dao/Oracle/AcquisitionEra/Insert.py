@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ACQUISITION_ERAS table """
 
-__revision__ = "$Revision: 1.8 $"
-__version__  = "$Id: Insert.py,v 1.8 2010/03/08 19:35:51 yuyi Exp $ "
+__revision__ = "$Revision: 1.9 $"
+__version__  = "$Id: Insert.py,v 1.9 2010/03/09 16:38:03 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -14,7 +14,7 @@ class Insert(InsertSingle):
 	if not conn:
 	    raise Exception("dbs/dao/Oarcle?AcquisitionEra/Insert expects db connection from up layer.")
         try:
-            self.executeSingle(daoinput, "ACQUISITION_ERAS", conn, transaction)
+            self.executeSingle(conn, daoinput, "ACQUISITION_ERAS", transaction)
         except Exception:
             raise
 
