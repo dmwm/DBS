@@ -2,8 +2,8 @@
 """
 DBS Migration Service Polling Module
 """
-__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.6 2010/07/01 21:25:45 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.7 2010/07/02 20:56:22 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 import threading
 import logging
@@ -245,9 +245,22 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
         3. Insert it (and put in cache)
 
 
+	Order of insertions ---
+	1. primary
+	2. outpot configs
+	3. acquisition era 
+	4. processing era 
+	5. processed dataset
+	6. data tier
+	7. dataset
+	8. origin _site
+	9. block
+	10. file(s) (BULK) -- 10/20 at a time
+	11. file lumis (BULK) -- 10/20 at a time
+	
+    
 	"""
 
-	   
 	#start a new transaction and use this, if ONE block fails out of all, only this transaction should be affected.
 	tran = conn.begin()
 	#insert primary dataset
