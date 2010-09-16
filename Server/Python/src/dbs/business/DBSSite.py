@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSSite.py,v 1.2 2010/02/11 22:54:21 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSSite.py,v 1.3 2010/03/08 20:25:13 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -27,8 +27,10 @@ class DBSSite:
         """
         Returns all sites.
         """
-        return self.sitelist.execute()
-
+	conn = self.dbi.connection()
+        result=self.sitelist.execute(conn)
+	conn.close()
+	return result
 
     def insertSite(self, businput):
         """
@@ -43,7 +45,7 @@ class DBSSite:
 		"site_name" : businput["site_name"]
 	    }
             businput["site_id"] = self.sm.increment("SEQ_SI", conn, True)
-            self.sitein.execute(businput, conn, True)
+            self.sitein.execute(conn, businput, True)
             tran.commit()
         except Exception, ex:
             if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
