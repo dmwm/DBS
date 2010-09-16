@@ -3,8 +3,8 @@ DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
 
-__revision__ = "$Id: DBSValitaion_t.py,v 1.9 2010/07/09 19:38:09 afaq Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSValitaion_t.py,v 1.10 2010/08/19 21:00:17 afaq Exp $"
+__version__ = "$Revision: 1.10 $"
 
 import os
 import sys
@@ -88,7 +88,7 @@ class DBSValitaion_t(unittest.TestCase):
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insertDataset(datasetObj=data)
-	dsList = api.listDatasets(dataset=dataset)
+	dsList = api.listDatasets(dataset=dataset, detail=True)
 	self.assertEqual(len(dsList), 1)
 	dsInDBS=dsList[0]
 	self.assertEqual(dsInDBS['dataset'], dataset)
@@ -111,7 +111,7 @@ class DBSValitaion_t(unittest.TestCase):
 		'origin_site_name': site }
 		
 	api.insertBlock(blockObj=data)
-	blkList = api.listBlocks(block)
+	blkList = api.listBlocks(block, detail=True)
 	self.assertEqual(len(blkList), 1)
 	blkInDBS=blkList[0]
 	self.assertEqual(blkInDBS['origin_site_name'], site )
@@ -122,7 +122,7 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(blkInDBS['block_size'], 0)
 
     def test07(self):
-	"""test05 web.DBSClientWriter.Files: validation test"""
+	"""test07 web.DBSClientWriter.Files: validation test"""
 	#
 	#    --- NOTICE    _parent    at multiple places below
 	# This first part just inserts a parent primary, dataset and block, with parent files
@@ -156,7 +156,7 @@ class DBSValitaion_t(unittest.TestCase):
                 'check_sum': u'1504266448',
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/parent_%s/%i.root" %(uid, i),
-                'block': block_parent,
+                'block_name': block_parent,
 		'file_lumi_list': [
 		                                          {'lumi_section_num': u'27414', 'run_num': u'1'},
 		                                      {'lumi_section_num': u'26422', 'run_num': u'1'},
@@ -184,14 +184,14 @@ class DBSValitaion_t(unittest.TestCase):
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/%s/%i.root" %(uid, i),
-                'block': block
+                'block_name': block
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
 	api.insertFiles(filesList={"files":flist}, qInserts=False)
 	### Lets begin the validation now
 	# our block, 'block' now has these 10 files, and that is basis of our validation
-	flList=api.listFiles(block=block)
+	flList=api.listFiles(block=block, detail=True)
 	self.assertEqual(len(flList), 10)
 	for afileInDBS in flList:
 	    self.assertEqual(afileInDBS['block_name'], block)
@@ -207,7 +207,7 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(len(dsParentList), 1)
 	self.assertEqual(dsParentList[0]['parent_dataset'], "/%s/%s/%s" % (primary_ds_name+"_parent", procdataset+"_parent", tier) )
 	# block parameters, such as file_count must also be updated, lets validate
-    	blkList = api.listBlocks(block)
+    	blkList = api.listBlocks(block, detail=True)
 	self.assertEqual(len(blkList), 1)
 	blkInDBS=blkList[0]
 	self.assertEqual(blkInDBS['origin_site_name'], site )
@@ -225,21 +225,21 @@ class DBSValitaion_t(unittest.TestCase):
 	#print "WARNING : DBS cannot list INVALID file, so for now this test is commented out"
 	api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
 	#listfile
-	filesInDBS=api.listFiles(logical_file_name=logical_file_name)
+	filesInDBS=api.listFiles(logical_file_name=logical_file_name, detail=True)
 	self.assertEqual(len(filesInDBS) ,1)
 	self.assertEqual(filesInDBS[0]['is_file_valid'], 0)
 	
     def test09(self):
 	"""test09 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status and validate it"""
 	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=1)
-	dsInDBS=api.listDatasets(dataset=dataset)
+	dsInDBS=api.listDatasets(dataset=dataset, detail=True)
 	self.assertEqual(len(dsInDBS), 1)
 	self.assertEqual(dsInDBS[0]['is_dataset_valid'], 1)
 	
     def test10(self):
 	"""test10 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
 	api.updateDatasetType(dataset=dataset, dataset_access_type="PRODUCTION")
-	dsInDBS=api.listDatasets(dataset=dataset)
+	dsInDBS=api.listDatasets(dataset=dataset, detail=True)
 	self.assertEqual(len(dsInDBS), 1)
 	self.assertEqual(dsInDBS[0]['dataset_access_type'], "PRODUCTION")
 
