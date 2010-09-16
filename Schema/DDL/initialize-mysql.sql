@@ -1,4 +1,4 @@
--- use CMS_DBS3;
+use CMS_DBS3;
 
 -- ### PRIMARY_DS_TYPES
 
