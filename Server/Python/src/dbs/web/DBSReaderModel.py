@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.20 2010/03/18 16:28:59 afaq Exp $"
-__version__ = "$Revision: 1.20 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.21 2010/03/18 18:50:13 afaq Exp $"
+__version__ = "$Revision: 1.21 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -45,7 +45,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'outputconfigs', self.listOutputConfigs)#, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'fileparents', self.listFileParents)#, ['logical_file_name'])
         self.addService('GET', 'filelumis', self.listFileLumis)#, ['logical_file_name', 'block_name'])
-        self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minRun', 'maxRun'])
+        self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minrun', 'maxrun'])
         self.addService('GET', 'storage_elements', self.listStorageElements)#, ['block_name', 'se_name'])
         
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
@@ -185,7 +185,7 @@ class DBSReaderModel(RESTModel):
         """
         return self.dbsFileLumi.listFileLumis(logical_file_name, block_name)
          
-    def listRuns(self, dataset="", block_name="", logical_file_name="", minRun=-1, maxRun=-1):
+    def listRuns(self, dataset="", block_name="", logical_file_name="", minrun=-1, maxrun=-1):
         """
         Example url's <br />
         http://dbs3/runs?runmin=1&runmax=10
@@ -194,7 +194,7 @@ class DBSReaderModel(RESTModel):
 	http://dbs3/runs?block_name=block_name
 	http://dbs3/runs?dataset=dataset
         """
-        return self.dbsRun.listRuns(dataset, block_name, logical_file_name , minRun, maxRun)
+        return self.dbsRun.listRuns(dataset, block_name, logical_file_name , minrun, maxrun)
    
     def listStorageElements(self, block_name="", se_name=""):
         """
