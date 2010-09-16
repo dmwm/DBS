@@ -2,15 +2,8 @@
 """
 This module provides Dataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.10 2009/11/29 11:24:17 akhukhun Exp $"
-__version__ = "$Revision: 1.10 $"
-
-def op(pattern):
-    """ returns 'like' if pattern includes '%' and '=' otherwise"""
-    if pattern.find("%") == -1:
-        return '='
-    else:
-        return 'like'
+__revision__ = "$Id: List.py,v 1.11 2009/11/29 18:49:40 akhukhun Exp $"
+__version__ = "$Revision: 1.11 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -64,7 +57,7 @@ JOIN %sDATASET_TYPES DP on DP.DATASET_TYPE_ID = D.DATASET_TYPE_ID
         if not dataset:
             result = self.dbi.processData(sql, conn=conn, transaction=transaction)
         else:
-            sql += " WHERE D.DATASET %s :dataset" % op(dataset)
+            sql += " WHERE D.DATASET %s :dataset" % ("=", "like")["%" in dataset]
             binds = {"dataset":dataset}
             result = self.dbi.processData(sql, binds, conn, transaction)
         return self.formatDict(result)
