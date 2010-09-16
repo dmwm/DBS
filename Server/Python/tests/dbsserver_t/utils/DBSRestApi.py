@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.11 2010/05/05 21:45:26 afaq Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.12 2010/05/06 14:56:00 afaq Exp $"
+__version__ = "$Revision: 1.12 $"
 
 import json
 import os, logging
@@ -44,16 +44,13 @@ class DBSRestApi:
         appconfig = cfg.section_(app)
         service = list(appconfig.views.active._internal_children)[0]
         dbsconfig = getattr(appconfig.views.active, service)
-
+	# Eitehr we change formatter 
+	# OR change the 'Accept' type to application/json (which we don't know how to do at thi moment)	
+	dbsconfig.formatter.object="WMCore.WebTools.RESTFormatter"
         config = Configuration()
         config.component_('DBS')
         config.DBS.application = app
 	config.DBS.model       = dbsconfig.model
-	#FIXME
-	# Eitehr we change formatter 
-	# OR change the 'Accept' type to application/json (which we don't know how to do at thi moment)	
-	config.DBS.section_("formatter")
-	config.DBS.formatter.object   = "WMCore.WebTools.RESTFormatter"
 	config.DBS.formatter   = dbsconfig.formatter
         config.DBS.database    = dbsconfig.database
         config.DBS.dbowner     = dbsconfig.dbowner
