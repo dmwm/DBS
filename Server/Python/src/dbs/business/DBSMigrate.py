@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.13 2010/08/20 14:56:16 yuyi Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.14 2010/08/24 21:35:27 yuyi Exp $"
+__version__ = "$Revision: 1.14 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -303,6 +303,7 @@ class DBSMigrate:
 		     #file_parent_list = self.fplist.execute(conn, logical_file_name=f['logical_file_name']))
 	del dataset["acquisition_era_name"], dataset["processing_version"]
 	del block["dataset"]
+        del f['branch_hash_id']
         result= dict(block=block, dataset=dataset, primds=primds, files=files, \
 	             block_parent_list=bparent, ds_parent_list=dsparent, \
 		     file_conf_list=fconfig_list,   file_parent_list=fparent_list)
