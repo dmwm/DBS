@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.26 2010/05/05 15:03:05 yuyi Exp $"
-__version__ = "$Revision: 1.26 $"
+__revision__ = "$Id: List.py,v 1.27 2010/05/05 16:15:28 afaq Exp $"
+__version__ = "$Revision: 1.27 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -124,7 +124,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	    if not conn:
 		raise Exception("No connection to DB")
 	    binds = {}
-    	    sql = self.sql + " JOIN %sSITES ST on ST.SITE_ID = B.ORIGIN_SITE \
+    	    sql = self.sql + " JOIN %sSITES ST on ST.SITE_ID = B.ORIGIN_SITE_NAME \
 	                       WHERE F.IS_FILE_VALID = 1 and \
 			       ST.SITE_NAME = :originSite and B.BLOCK_NAME like :block_name" %(self.owner)
 	    binds.update({"originSite":originSite})
