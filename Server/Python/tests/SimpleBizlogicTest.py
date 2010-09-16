@@ -47,6 +47,16 @@ class Test:
 		    'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		    #'processing_version': '1',  'acquisition_era_name': u'',
 		}
+	binput = {'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': u'/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-DIGI-RAW', 
+		    'dataset_type': 'PRODUCTION', 'processed_ds_name': u'Summer09-STARTUP31X_V3-v1', 'primary_ds_name': u'TkCosmics38T', 
+		    'data_tier_name': 'GEN-SIM-DIGI-RAW', 'global_tag': u'STARTUP31X_V3::All', 'xtcrosssection': 123, 'primary_ds_type': 'test', 
+		    'output_configs': [
+			    {'release_version': u'CMSSW_3_1_2', 'pset_hash': u'4847ed25a7e108a7b1e704a26f345aa8', 'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
+			    {'release_version': u'CMSSW_3_1_2', 'pset_hash': u'NO_PSET_HASH', 'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
+			    {'release_version': u'CMSSW_3_1_2', 'pset_hash': u'4847ed25a7e108a7b1e704a26f345aa8', 'app_name': u'cmsRun', 'output_module_label': u'output'}
+			],
+		    'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+		}
 
         bo.insertDataset(binput)
 
@@ -167,9 +177,11 @@ class Test:
 
 test=Test()
 #test.testOutputConfig()
-#test.testDatasetInsert()
+import pdb
+pdb.set_trace()
+test.testDatasetInsert()
 #test.testAcquisitionEra()
 #test.testProcessingEra()
 #test.testBlock()
-test.testFiles()
+#test.testFiles()
     
