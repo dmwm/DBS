@@ -38,6 +38,15 @@ class Test:
                         'output_configs' : [  {'app_name': 'Repacker', 'release_version': 'CMSSW_2_1_7',  'pset_hash': 'NO_PSET_HASH'}  ] 
 		}
 
+	binput = {'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': u'/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW', 
+		    'dataset_type': 'PRODUCTION', 'processed_ds_name': u'Summer08_IDEAL_V9_v1', 'primary_ds_name': u'QCD_BCtoMu_Pt20', 
+		    'output_configs': [{'release_version': u'CMSSW_2_1_7', 'pset_hash': u'NO_PSET_HASH', 'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
+		    {'release_version': u'CMSSW_2_1_7', 'pset_hash': u'76e303993a1c2f842159dbfeeed9a0dd', 'app_name': u'cmsRun', 'output_module_label': u'output'}], 
+		    'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': 'GEN-SIM-RAW',
+		    'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+		    #'processing_version': '1',  'acquisition_era_name': u'',
+		}
+
         bo.insertDataset(binput)
 
     def testAcquisitionEra(self):
@@ -95,8 +104,8 @@ class Test:
 
 test=Test()
 #test.testOutputConfig()
-#test.testDatasetInsert()
+test.testDatasetInsert()
 #test.testAcquisitionEra()
 #test.testProcessingEra()
-test.testFiles()
+#test.testFiles()
     
