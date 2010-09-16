@@ -88,8 +88,9 @@ INSERT INTO FILE_TYPES (FILE_TYPE) VALUES ('EDM');
 
 
 
-
-
+--SCHEMA_VERSION etc. (we should have something proper here
+	
+INSERT INTO DBS_VERSIONS (DBS_VERSION_ID, SCHEMA_VERSION, DBS_RELEASE_VERSION , INSTANCE_NAME , INSTANCE_TYPE , CREATION_DATE, LAST_MODIFICATION_DATE) VALUES (1, 'DBS_3_S5_PRE1', 'HEAD', 'DBSTEST', 'TEST', (select (sysdate - to_date('19700101','YYYYMMDD')) * 86400 from dual), (select (sysdate - to_date('19700101','YYYYMMDD')) * 86400 from dual) );
 
 
 
