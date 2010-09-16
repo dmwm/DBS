@@ -3,8 +3,8 @@ DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
 
-__revision__ = "$Id: DBSValitaion_t.py,v 1.6 2010/03/19 16:33:56 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: DBSValitaion_t.py,v 1.7 2010/03/19 18:30:50 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 import os
 import sys
@@ -65,17 +65,17 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(confInDBS['output_module_label'], output_module_label)
 
     def test03(self):
-	"""test06: web.DBSWriterModel.insertAcquisitionEra: Basic test """
+	"""test03: web.DBSWriterModel.insertAcquisitionEra: Basic test """
 	data={'acquisition_era_name': acquisition_era_name}
 	api.insertAcquisitionEra(data)
 
     def test04(self):
-	"""test07: web.DBSWriterModel.insertProcessingEra: Basic test """
+	"""test04: web.DBSWriterModel.insertProcessingEra: Basic test """
         data={'processing_version': processing_version, 'description':'this is a test'}
 	api.insertProcessingEra(data)
            
     def test05(self):
-	"""test03: web.DBSClientWriter.Dataset: validation test"""
+	"""test05: web.DBSClientWriter.Dataset: validation test"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
@@ -105,7 +105,7 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name)
 
     def test06(self):
-	"""test04 web.DBSClientWriter.Block: validation test"""
+	"""test06 web.DBSClientWriter.Block: validation test"""
 	data = {'block_name': block,
 		'origin_site': site }
 		
@@ -119,7 +119,6 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(blkInDBS['block_name'], block)
 	self.assertEqual(blkInDBS['file_count'], 0)
 	self.assertEqual(blkInDBS['block_size'], 0)
-
 
     def test07(self):
 	"""test05 web.DBSClientWriter.Files: validation test"""
@@ -166,7 +165,6 @@ class DBSValitaion_t(unittest.TestCase):
 	    pflist.append(f)
 	api.insertFiles(filesList={"files":pflist})
 	#### This next block of test will now actually insert the files in the "test 'block' in this module, using the upper files as parent
-	flist=[]
  	for i in range(10):
 	    f={  
 		'adler32': u'NOTSET', 'file_type': 'EDM',
@@ -220,6 +218,32 @@ class DBSValitaion_t(unittest.TestCase):
 	# size should be 10 X 2012211901 (file_size) = 2012211910
 	self.assertEqual(blkInDBS['block_size'], 2012211910)
 
+    def test08(self):
+	"""update file status and validate that it got updated"""
+	logical_file_name = "/store/mc/%s/%i.root" %(uid, 0)
+	#print "WARNING : DBS cannot list INVALID file, so for now this test is commented out"
+	api.updateFileStatus(lfn=logical_file_name, is_file_valid=0)
+	#listfile
+	filesInDBS=api.listFiles(lfn=logical_file_name)
+	self.assertEqual(len(filesInDBS) ,1)
+	self.assertEqual(filesInDBS[0]['is_file_valid'], 0)
+	
+    def test09(self):
+	"""test09 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status and validate it"""
+	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=1)
+	dsInDBS=api.listDatasets(dataset=dataset)
+	self.assertEqual(len(dsInDBS), 1)
+	self.assertEqual(dsInDBS[0]['is_dataset_valid'], 1)
+	
+    def test10(self):
+	"""test10 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
+	api.updateDatasetType(dataset=dataset, dataset_type="PRODUCTION")
+	dsInDBS=api.listDatasets(dataset=dataset)
+	self.assertEqual(len(dsInDBS), 1)
+	self.assertEqual(dsInDBS[0]['dataset_type'], "PRODUCTION")
+
+
+	
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSValitaion_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
