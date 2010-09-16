@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.15 2010/03/18 20:19:58 afaq Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.16 2010/03/23 16:47:37 afaq Exp $"
+__version__ = "$Revision: 1.16 $"
 
 import os
 import sys
@@ -89,7 +89,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	api.insertProcessingEra(data)
 					    
     def test08(self):
-	"""test07: web.DBSClientWriter.insertDataset: basic test"""
+	"""test08: web.DBSClientWriter.insertDataset: basic test"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
@@ -103,7 +103,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	api.insertDataset(datasetObj=data)
 	
     def test09(self):
-	"""test08: web.DBSClientWriter.insertDataset: duplicate insert should be ignored"""
+	"""test09: web.DBSClientWriter.insertDataset: duplicate insert should be ignored"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
@@ -151,15 +151,15 @@ class DBSClientWriter_t(unittest.TestCase):
 		
 	api.insertBlock(blockObj=data)
 
-    def test14(self):
-	"""test14 web.DBSClientWriter.insertBlock: duplicate insert should not raise exception"""
+    def test15(self):
+	"""test15 web.DBSClientWriter.insertBlock: duplicate insert should not raise exception"""
 	data = {'block_name': block,
 		'origin_site': site }
 		
 	api.insertBlock(blockObj=data)
 
-    def test15(self):
-	"""test15 web.DBSClientWriter.insertFiles: insert parent file for later use : basic test"""
+    def test16(self):
+	"""test16 web.DBSClientWriter.insertFiles: insert parent file for later use : basic test"""
 	
 	flist=[]
  	for i in range(10):
@@ -187,8 +187,8 @@ class DBSClientWriter_t(unittest.TestCase):
 	api.insertFiles(filesList={"files":flist})
 
 
-    def test16(self):
-	"""test15 web.DBSClientWriter.insertFiles: basic test"""
+    def test17(self):
+	"""test17 web.DBSClientWriter.insertFiles: basic test"""
 	
 	flist=[]
  	for i in range(10):
@@ -215,8 +215,8 @@ class DBSClientWriter_t(unittest.TestCase):
 	    flist.append(f)
 	api.insertFiles(filesList={"files":flist})
 
-    def test17(self):
-	"""test17 web.DBSClientWriter.insertFiles: duplicate insert file shuld not raise any errors"""
+    def test18(self):
+	"""test18 web.DBSClientWriter.insertFiles: duplicate insert file shuld not raise any errors"""
 	flist=[]
  	for i in range(10):
 	    f={  
@@ -243,21 +243,21 @@ class DBSClientWriter_t(unittest.TestCase):
 	    outDict['files'].append(f['logical_file_name'])
 	api.insertFiles(filesList={"files":flist})
 	
-    def test18(self):
-	"""test18 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
+    def test19(self):
+	"""test19 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
 	logical_file_name = "/store/mc/%s/%i.root" %(uid, 1)
 	api.updateFileStatus(lfn=logical_file_name, is_file_valid=0)
 
-    def test19(self):
-	"""test19 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status"""
+    def test20(self):
+	"""test20 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status"""
 	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=1)
 
-    def test20(self):
-	    """test20 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-	    api.updateDatasetType(dataset=dataset, dataset_type="production")	 
+    def test21(self):
+	    """test21 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
+	    api.updateDatasetType(dataset=dataset, dataset_type="PRODUCTION")	 
 	
     def test208(self):
-	"""test18 generating the output file for reader test"""
+	"""test208 generating the output file for reader test"""
 	infoout=open("info.dict", "w")
 	infoout.write("info="+str(outDict))
 	infoout.close()
