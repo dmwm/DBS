@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.24 2010/02/11 22:54:21 afaq Exp $"
-__version__ = "$Revision: 1.24 $"
+__revision__ = "$Id: DBSDataset.py,v 1.25 2010/03/03 16:47:03 yuyi Exp $"
+__version__ = "$Revision: 1.25 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -24,7 +24,6 @@ class DBSDataset:
         self.dbi = dbi
         
         self.datasetlist = daofactory(classname="Dataset.List")
-        self.datasetlist1 = daofactory(classname="Dataset.List1")
         self.datasetid = daofactory(classname="Dataset.GetID")
         self.sm = daofactory(classname="SequenceManager")
         self.primdsid = daofactory(classname='PrimaryDataset.GetID')
@@ -40,18 +39,25 @@ class DBSDataset:
         self.acqeraid = daofactory(classname='AcquisitionEra.GetID')
 
     def listDatasets(self, dataset="", parent_dataset="", release_version="",
-                     pset_hash="", app_name="", output_module_label=""):
+                     pset_hash="", app_name="", output_module_label="",
+		     processing_era="", acquisition_era=""):
         """
         lists all datasets if dataset parameter is not given.
         The parameter can include % character. 
         all other parameters are not wild card ones.
         """
-	return self.datasetlist1.execute(dataset, 
+	conn = self.dbi.connection()
+	
+	result = self.datasetlist.execute(conn, dataset, 
                                              parent_dataset, 
                                              release_version, 
 					     pset_hash,
                                              app_name, 
-                                             output_module_label)
+                                             output_module_label,
+					     processing_era
+					     ,acquisition_era)
+	conn.close()
+	return result
     
 	#FIXME: We need to add support for super user
 	#if not (parent_dataset or release_version or pset_hash or app_name or output_module_label):
