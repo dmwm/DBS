@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.26 2010/03/03 22:35:53 afaq Exp $"
-__version__ = "$Revision: 1.26 $"
+__revision__ = "$Id: DBSFile.py,v 1.27 2010/03/04 17:24:51 afaq Exp $"
+__version__ = "$Revision: 1.27 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -46,7 +46,7 @@ class DBSFile:
 	trans = conn.begin()
     
 	try :
-	    self.updatestatus.execute(logical_file_name, is_file_valid, conn, trans)
+	    self.updatestatus.execute(conn, trans, logical_file_name, is_file_valid)
 	except Exception, ex:
 	    trans.rollback()
 	    raise ex
