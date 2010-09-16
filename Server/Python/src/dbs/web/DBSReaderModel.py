@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.30 2010/04/19 16:32:24 afaq Exp $"
-__version__ = "$Revision: 1.30 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.31 2010/04/20 20:08:11 afaq Exp $"
+__version__ = "$Revision: 1.31 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -44,6 +44,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'datasetchildren', self.listDatasetChildren)#, ['dataset'])
         self.addService('GET', 'outputconfigs', self.listOutputConfigs)#, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'fileparents', self.listFileParents)#, ['logical_file_name'])
+        self.addService('GET', 'filechildren', self.listFileChildren)#, ['logical_file_name'])
         self.addService('GET', 'filelumis', self.listFileLumis)#, ['logical_file_name', 'block_name'])
         self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minrun', 'maxrun'])
         self.addService('GET', 'storage_elements', self.listStorageElements)#, ['block_name', 'se_name'])
@@ -218,7 +219,15 @@ class DBSReaderModel(RESTModel):
         http://dbs3/fileparents?logical_file_name=lfn
         """
         return self.dbsFile.listFileParents(logical_file_name)
-        
+
+    def listFileChildren(self, logical_file_name):
+        """
+        Example url's <br />
+        http://dbs3/filechildren?logical_file_name=lfn
+        """
+        return self.dbsFile.listFileChildren(logical_file_name)
+       
+
     def listFileLumis(self, logical_file_name="", block_name=""):
         """
         Example url's <br />
