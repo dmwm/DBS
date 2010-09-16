@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #
 import sys
+import time
 
 #DBS-2 imports
 from DBSAPI.dbsApi import DbsApi as Dbs2Api
@@ -16,37 +17,44 @@ from dbs.apis.dbsClient import *
 #
 import xml.sax, xml.sax.handler
 #
+print sys.argv
+if len(sys.argv) < 2: 
+	print "Usage: python %s <url> <dataset>" %sys.argv[0]
+	sys.exit(1)
+
+#url="http://vocms09.cern.ch:8585/dbs3"
+url=sys.argv[1]
+# DBS3 service 
+dbs3api = DbsApi(url=url)
+dataset=sys.argv[2]
+#primary/dataset are inserted only Once
+abc="true"
+
 try:
   optManager  = DbsOptionParser()
   (opts,args) = optManager.getOpt()
   api = Dbs2Api(opts.__dict__)
-  datasets=[	
-		#"/Cosmics/Commissioning08-v1/RAW", 
-		#"/TTbar/Summer09-MC_31X_V3-v1/GEN-SIM-RAW", 
-		"/TTbar/Summer09-MC_31X_V3-v1/GEN-SIM-RECO", 
-		"/BeamHalo/Summer09-STARTUP31X_V7_StreamMuAlBeamHaloOverlaps-v1/ALCARECO", 
-		"/InclusiveMu15/Summer09-MC_31X_V3_7TeV-v1/GEN-SIM-RAW", 
-		"/Cosmics/CMSSW_3_2_7-CRAFT09_R_V4_CosmicsSeq-v1/RECO", 
-		"/Wmunu/Summer09-MC_31X_V3_7TeV_SD_L1_L2_Mu-v1/GEN-SIM-RECO", 
-		"/Wmunu/Summer09-MC_31X_V3_7TeV_SD_Mu9-v1/GEN-SIM-RECO",
-		"/ZeeJet_Pt230to300/Summer09-MC_31X_V3_7TeV-v1/GEN-SIM-RAW",
-		"/TkCosmics38T/Summer09-STARTUP31X_V3_SuperPointing-v1/RAW-RECO",
-  		"/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-RECO"
-		]
-
-  datasets=["/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-DIGI-RAW"]
-
+  datasets=[dataset]
+  block_time_lst=[]
 
   for dataset in datasets :
     blocks=api.listBlocks(dataset)
     for ablock in blocks:
-        # Collect information here			
-	data=api.listDatasetContents(dataset, ablock["Name"])
-	#fp=open("block.xml", "w")
-	#fp.write(data)
-	#fp.close()
+	block_time={}
+        # Collect information here	
+	# Check if XML file already exists in loacl disk, use that
+	#	
+	blockName=ablock["Name"]
+	fileName = blockName.replace('/', '_').replace('#', '_') + ".xml"
+	if os.path.exists(fileName):
+		data = open(fileName, "r").read()
+	else:	
+		data=api.listDatasetContents(dataset, ablock["Name"])
+		fp=open(fileName, "w")
+		fp.write(data)
+		fp.close()
   	#print data
-	print "Processing Dataset : %s and Block : %s " % (dataset, ablock["Name"])
+	print "Processing Dataset : %s and Block : %s " % (dataset, blockName)
   	class Handler (xml.sax.handler.ContentHandler):
 
 		def __init__(self):
@@ -83,7 +91,6 @@ try:
 				self.dataset["DATA_TIER_NAME"]=self.data_tier 
 				self.dataset["DATASET"]=self.path
 
-
 			if name == 'block':
 				self.block  = {
 						"BLOCK_NAME":attrs.get('name'), "OPEN_FOR_WRITING":1,"BLOCK_SIZE": attrs.get('size'), 
@@ -119,7 +126,6 @@ try:
 					}
 				self.currfileparents.append(fileparent)
 
-
 			"""
 			if name == 'algorithm':
 				print attrs
@@ -151,35 +157,44 @@ try:
                         if name == 'dbs':
 				try :
 					# Lets populate this in DBS
-					# Some calls may be redundant, who cares !
-        				# DBS-3 Service URL
-				
-        				#url="http://cmssrv48.fnal.gov:8989/DBSServlet"
-					url="http://cmssrv18.fnal.gov:8585/dbs3"
-        				# API Object    
-        				dbs3api = DbsApi(url=url)
-        				# Is service Alive
-        				#print dbs3api.ping()
-        				#print self.prdsobj
+        				# API Object  
+					if abc == "true" :
+        					print self.prdsobj
+        					print dbs3api.insertPrimaryDataset(self.prdsobj)
 
-        				print dbs3api.insertPrimaryDataset(self.prdsobj)
-					print self.dataset
-					import pdb
-					pdb.set_trace()
-        				#print dbs3api.insertDataset(self.dataset)
-
+						print self.dataset
+        					print dbs3api.insertDataset(self.dataset)
+						again="no"
 					print self.block
-					#print dbs3api.insertBlock(self.block)
-				
+					print dbs3api.insertBlock(self.block)
+					start_time=time.time()
+					#for file in self.files:
+					#	print file
+					print dbs3api.insertFiles({"files" : self.files})
+					end_time=time.time()
+					block_time['TimeSpent']=end_time-start_time
+					block_time['block_weight']=long(len(self.files))
+					block_time['file_count']=long(len(self.files))
+					block_time['file_lumi_section_count']=0
+					block_time['file_parent_count']=0
 					for file in self.files:
-						print file
-					#print dbs3api.insertFiles({"files" : self.files})
+						if file.has_key('FILE_LUMI_LIST'):
+							block_time['block_weight']+=long(len(file['FILE_LUMI_LIST']))
+							block_time['file_lumi_section_count']+=long(len(file['FILE_LUMI_LIST']))
+						if file.has_key('FILE_PARENT_LIST'):
+							block_time['block_weight']+=long(len(file['FILE_PARENT_LIST']))
+							block_time['file_parent_count']+=long(len(file['FILE_PARENT_LIST']))
+					block_time_lst.append(block_time)
 					#print "fin"
 				except Exception, ex:
 					print ex
 				
   	xml.sax.parseString (data, Handler ())
-	break
+
+  print block_time_lst
+  print "\n"
+  for item in block_time_lst:
+	print "Time Spent : %s (seconds) while Block Weightage is : %s [files: %s, avg lumis_per_file: %s, avg parent_per_file: %s]" % ( str(item['TimeSpent']), str(item['block_weight']), item['file_count'], str( item['file_lumi_section_count']/item['file_count'] ), str(item['file_parent_count']/item['file_count'] ) )
 
 except DbsApiException, ex:
   print "Caught API Exception %s: %s "  % (ex.getClassName(), ex.getErrorMessage() )
