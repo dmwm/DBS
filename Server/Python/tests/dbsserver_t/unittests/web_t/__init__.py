@@ -2,7 +2,7 @@
 web unittests package.
 """
 
-__all__ = ['DBSReaderModel_t', 'DBSWriterModel_t']
+__all__ = ['DBSWriterModel_t', 'DBSReaderModel_t']
 
 import unittest
 
