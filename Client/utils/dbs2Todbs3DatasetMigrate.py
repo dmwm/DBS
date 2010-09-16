@@ -74,6 +74,7 @@ class migrateDBS2TODBS3:
 			self.currfileparents=[]
 			self.outputconfs=[]
 			self.sitelist=[]
+			self.sitelist.append({ "site_name" :  "cms.fnal.gov"})
 
         	def startElement(self, name, attrs):
 			if name == 'primary_dataset':
@@ -107,7 +108,7 @@ class migrateDBS2TODBS3:
 						"block_name":attrs.get('name'), "open_for_writing":1,"block_size": attrs.get('size'), 
 						"file_count":attrs.get('number_of_files'), "creation_date":attrs.get('creation_date'), 
 						"create_by":attrs.get('created_by'), "last_modification_date":attrs.get('last_modification_date'), 
-						"last_modified_by":attrs.get('last_modified_by')
+						"last_modified_by":attrs.get('last_modified_by'), "origin_site" : "cms.fnal.gov"
 						}
 				self.block_name=attrs.get('name')
 
