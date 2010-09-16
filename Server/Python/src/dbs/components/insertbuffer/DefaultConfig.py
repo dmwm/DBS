@@ -2,8 +2,8 @@
 DBS  insert buffer configuration file
 """
 
-__revision__ = "$Id: DefaultConfig.py,v 1.1 2010/05/26 21:27:08 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DefaultConfig.py,v 1.2 2010/05/27 19:36:11 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import os, logging
 from WMCore.Configuration import Configuration
@@ -22,7 +22,7 @@ config.section_("General")
 config.General.workDir = "/uscms/home/anzar/devDBS3/DBS3_ROOT"
 
 config.section_("CoreDatabase")
-config.CoreDatabase.connectUrl = "mysql://dbs3:XXXXXX@cmssrv49.fnal.gov:3306/CMS_DBS3_ANZ_3"
+config.CoreDatabase.connectUrl = "mysql://dbs3:dbs3_pass@cmssrv49.fnal.gov:3306/CMS_DBS3_ANZ_3"
 config.CoreDatabase.dialect = "mysql"
 config.CoreDatabase.dbowner = '__MYSQL__'
 #config.CoreDatabase.socket = os.getenv("DBSOCK")

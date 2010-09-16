@@ -2,8 +2,8 @@
 """
 DBS Insert Buffer Polling Module
 """
-__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.2 2010/05/26 21:44:33 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.3 2010/05/27 19:36:11 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 
 """
@@ -13,6 +13,7 @@ Polls FILE_BUFFER table and post entries to FILES (and related) tables
 import threading
 import logging
 import traceback
+import os
 
 from WMCore.WorkerThreads.BaseWorkerThread import BaseWorkerThread
 from WMCore.DAOFactory import DAOFactory
@@ -61,6 +62,8 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	self.bufdeletefiles = daofactory(classname="FileBuffer.DeleteFiles")
 	self.buflist = daofactory(classname="FileBuffer.List")
 	self.buflistblks = daofactory(classname="FileBuffer.ListBlocks")
+	self.buffinddups = daofactory(classname="FileBuffer.FindDuplicates")
+	self.bufdeletedups = daofactory(classname="FileBuffer.DeleteDuplicates")
 
     # called by frk at the termination time
     def terminate(self, params):
@@ -82,7 +85,8 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	The actual handle method for performing inserts from dbs buffer
 	"""
 	try :
-	    print " ENTERING....handleBuffer"
+	    # Remove the duplicate entries from the buffer
+	    self.removeDuplicates()
 	    blks = self.getBlocks()
 	    for ablk_id in blks:
 	        bufferedinput = self.getBufferedFiles(ablk_id["block_id"])
@@ -92,13 +96,9 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 		    #self.logger.debug("run_inserts : %s" % afile['file_output_config_list'] )
 		if len(insertinput) > 0:
 		    self.insertBufferedFiles(businput=insertinput)
-	    print " LEAVING....handleBuffer"
 	except Exception, ex:
-	    print "DBS Server Exception: %s" %ex
+	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
 	
-	    #raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-
-
     def getBlocks(self):
 	"""
 	Get the blocks that need to be migrated
@@ -127,7 +127,27 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	    raise ex
 	finally:
 	    conn.close()
-    
+   
+    def removeDuplicates(self):
+      """
+      Check to see if there are duplicate entries for a block in the buffer, remove them
+      """
+
+      try:
+	conn = self.dbi.connection()
+	dups = self.buffinddups.execute(conn)
+	if len(dups) > 0 :
+	    # If there are duplicates, delete them
+	    tran = conn.begin()
+	    self.bufdeletedups.execute(conn, dups, tran)
+	    tran.commit()
+      except Exception, ex:
+        tran.rollback()
+        self.logger.exception(ex)
+	raise ex
+      finally:
+        conn.close()
+	
     def insertBufferedFiles(self, businput):
 	"""
 
@@ -207,7 +227,6 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 				pass
 			    else:
 				raise
-
 		# Update dataset parentage
 		if len(fpds) > 0 :
 		    dsdaolist=[]
@@ -231,15 +250,12 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 				pass
 			    else:
 				raise
-
 		# Update block parameters, file_count, block_size
 		blkParams=self.blkstats.execute(conn, block_id, transaction=tran)
 		blkParams['block_size']=long(blkParams['block_size'])
 		self.blkstatsin.execute(conn, blkParams, transaction=tran)
-
 	    # Delete the just inserted files
 	    self.bufdeletefiles.execute(conn, flfnl, transaction=tran)
-	    
 	    # All good ?. 
             tran.commit()
 
