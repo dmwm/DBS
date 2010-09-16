@@ -30,7 +30,8 @@ class migrateDBS2TODBS3:
 	#list all blocks in this dataset
 	blocks=self.dbs2api.listBlocks(dataset)
 	for ablock in blocks:
-	    self.migrateBlock(ablock)
+	    block_time=self.migrateBlock(ablock)
+	    self.block_time_lst.append(block_time)
 	    
     def getStats(self):
 	return self.block_time_lst
@@ -46,7 +47,10 @@ class migrateDBS2TODBS3:
 	#	
 	blockName=ablock["Name"]
 	dataset=blockName.split('#')[0]
-	fileName = blockName.replace('/', '_').replace('#', '_') + ".xml"
+	dirName=blockName.split('#')[1]
+	if not os.path.exists(dirName):
+	    os.mkdir(dirName)
+	fileName = os.path.join(dirName, blockName.replace('/', '_').replace('#', '_') + ".xml")
 	if os.path.exists(fileName):
 		data = open(fileName, "r").read()
 	else:	
@@ -183,6 +187,7 @@ class migrateDBS2TODBS3:
 
 					##print self.dataset
 					self.dataset["output_configs"]=self.outputconfs
+					#print self.dataset
         				self.dbs3api.insertDataset(self.dataset)
 
 					for asite in self.sitelist:
@@ -207,7 +212,6 @@ class migrateDBS2TODBS3:
 						if file.has_key('file_parent_list'):
 							block_time['block_weight']+=long(len(file['file_parent_list']))
 							block_time['file_parent_count']+=long(len(file['file_parent_list']))
-					#block_time_lst.append(block_time)
 					#print "fin"
 				except Exception, ex:
 					print ex
@@ -234,7 +238,6 @@ if __name__=='__main__':
 	print " MIGRATED : %s : from : %s TO : %s " % (dataset, dbs2url, dbs3url)
 	print "-------------------------------------------------------------------------------------------------"
 	print "-------------------------------------------------------------------------------------------------"
-	"""	
 	print "RAW DATA: %s " % str(block_time_lst)
 	print "\n"
 	total_t=0.0
@@ -247,7 +250,6 @@ if __name__=='__main__':
 		total_b+=item['block_weight']
 	print "-------------------------------------------------------------------------------------------------\n\n"
 	print "Total time spent: %s (seconds) for total block weightage of: %s " %( str(total_t), str(total_b) )
-	"""
 
     except Exception, ex:
 	print ex
