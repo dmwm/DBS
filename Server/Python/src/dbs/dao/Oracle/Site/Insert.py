@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for Sites table """ 
 
-__revision__ = "$Revision: 1.3 $"
-__version__  = "$Id: Insert.py,v 1.3 2009/12/23 20:45:47 yuyi Exp $ "
+__revision__ = "$Revision: 1.4 $"
+__version__  = "$Id: Insert.py,v 1.4 2010/01/28 22:54:02 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -12,7 +12,7 @@ class Insert(InsertSingle):
     """ DAO for Insert Site """
     def execute( self, daoinput, conn=None, transaction=False ):
 	try:
-            self.executeSingle(daoinput, "SITES", conn = None, transaction = False)
+            self.executeSingle(daoinput, "SITES", conn, transaction)
         except Exception:
             raise
 
