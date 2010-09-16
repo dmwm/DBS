@@ -1,6 +1,3 @@
-CREATE OR REPLACE TRIGGER BLST_TRIG before insert on BLOCK_SITES for each row begin if :NEW.BLOCK_SITE_ID is null then select SEQ_BLST.nextval into :NEW.BLOCK_SITE_ID from dual;
-end if; end;
- /
 
 CREATE OR REPLACE TRIGGER AE_TRIG before insert on APPLICATION_EXECUTABLES for each row begin if :NEW.APP_EXEC_ID is null then select SEQ_AE.nextval into :NEW.APP_EXEC_ID from dual; end if; end;
  /
@@ -14,7 +11,7 @@ CREATE OR REPLACE TRIGGER PSDS_TRIG before insert on PROCESSED_DATASETS for each
 CREATE OR REPLACE TRIGGER BH_TRIG before insert on BRANCH_HASHES for each row begin if :NEW.BRANCH_HASH_ID is null then select SEQ_BH.nextval into :NEW.BRANCH_HASH_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER FT_TRIG before insert on FILE_TYPES for each row begin if :NEW.FILE_TYPE_ID is null then select SEQ_FT.nextval into :NEW.FILE_TYPE_ID from dual; end if; end;
+CREATE OR REPLACE TRIGGER FT_TRIG before insert on FILE_DATA_TYPES for each row begin if :NEW.FILE_TYPE_ID is null then select SEQ_FT.nextval into :NEW.FILE_TYPE_ID from dual; end if; end;
  /
 
 CREATE OR REPLACE TRIGGER PG_TRIG before insert on PHYSICS_GROUPS for each row begin if :NEW.PHYSICS_GROUP_ID is null then select SEQ_PG.nextval into :NEW.PHYSICS_GROUP_ID from dual; end if; end;
@@ -23,7 +20,7 @@ CREATE OR REPLACE TRIGGER PG_TRIG before insert on PHYSICS_GROUPS for each row b
 CREATE OR REPLACE TRIGGER PDT_TRIG before insert on PRIMARY_DS_TYPES for each row begin if :NEW.PRIMARY_DS_TYPE_ID is null then select SEQ_PDT.nextval into :NEW.PRIMARY_DS_TYPE_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER DTP_TRIG before insert on DATASET_TYPES for each row begin if :NEW.DATASET_TYPE_ID is null then select SEQ_DTP.nextval into :NEW.DATASET_TYPE_ID from dual; end if; end;
+CREATE OR REPLACE TRIGGER DTP_TRIG before insert on DATASET_ACCESS_TYPES for each row begin if :NEW.DATASET_TYPE_ID is null then select SEQ_DTP.nextval into :NEW.DATASET_TYPE_ID from dual; end if; end;
  /
 
 CREATE OR REPLACE TRIGGER PSH_TRIG before insert on PARAMETER_SET_HASHES for each row begin if :NEW.PARAMETER_SET_HASH_ID is null then select SEQ_PSH.nextval into :NEW.PARAMETER_SET_HASH_ID from dual; end if; end;
@@ -83,8 +80,17 @@ CREATE OR REPLACE TRIGGER AQE_TRIG before insert on ACQUISITION_ERAS for each ro
 CREATE OR REPLACE TRIGGER PE_TRIG before insert on PROCESSING_ERAS for each row begin if :NEW.PROCESSING_ERA_ID is null then select SEQ_PE.nextval into :NEW.PROCESSING_ERA_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER SE_TRIG before insert on STORAGE_ELEMENTS for each row begin if :NEW.SE_ID is null then select SEQ_SE.nextval into :NEW.SE_ID from dual; end if; end;
+CREATE OR REPLACE TRIGGER SI_TRIG before insert on BLOCK_SITES for each row begin if :NEW.BLOCK_SITE_ID is null then select SEQ_SI.nextval into :NEW.BLOCK_SITE_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER BSE_TRIG before insert on BLOCK_STORAGE_ELEMENTS for each row begin if :NEW.BLOCK_SE_ID is null then select SEQ_BSE.nextval into :NEW.BLOCK_SE_ID from dual; end if; end;
+CREATE OR REPLACE TRIGGER FB_TRIG before insert on FILE_BUFFERS for each row begin if :NEW.LOGICAL_FILE_NAME is null then select SEQ_FB.nextval into :NEW.LOGICAL_FILE_NAME from dual; end if; end;
+ /
+
+CREATE OR REPLACE TRIGGER MR_TRIG before insert on MIGRATION_REQUESTS for each row begin if :NEW.MIGRATION_REQUEST_ID is null then select SEQ_MR.nextval into :NEW.MIGRATION_REQUEST_ID from dual; end if; end;
+ /
+
+CREATE OR REPLACE TRIGGER MB_TRIG before insert on MIGRATION_BLOCKS for each row begin if :NEW.MIGRATION_BLOCK_ID is null then select SEQ_MB.nextval into :NEW.MIGRATION_BLOCK_ID from dual; end if; end;
+ /
+
+CREATE OR REPLACE TRIGGER CS_TRIG before insert on COMPONENT_STATUS for each row begin if :NEW.COMP_STATUS_ID is null then select SEQ_CS.nextval into :NEW.COMP_STATUS_ID from dual; end if; end;
  /
