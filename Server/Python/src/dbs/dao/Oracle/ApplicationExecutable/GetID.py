@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.3 2010/03/05 15:03:29 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: GetID.py,v 1.4 2010/03/08 20:05:04 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -22,7 +22,7 @@ class GetID(DBFormatter):
 	FROM %sAPPLICATION_EXECUTABLES A WHERE A.APP_NAME = :app_name
 	""" % ( self.owner )
         
-    def execute(self, name, conn, transaction = False):
+    def execute(self, conn, name,transaction = False):
         """
         returns id for a given application
         """	
