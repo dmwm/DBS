@@ -3,8 +3,8 @@ DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
 
-__revision__ = "$Id: DBSValitaion_t.py,v 1.7 2010/03/19 18:30:50 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSValitaion_t.py,v 1.8 2010/05/05 21:07:05 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 import os
 import sys
@@ -113,7 +113,7 @@ class DBSValitaion_t(unittest.TestCase):
 	blkList = api.listBlocks(block)
 	self.assertEqual(len(blkList), 1)
 	blkInDBS=blkList[0]
-	self.assertEqual(blkInDBS['site_name'], site )
+	self.assertEqual(blkInDBS['origin_site_name'], site )
 	self.assertEqual(blkInDBS['open_for_writing'], 1)
 	self.assertEqual(blkInDBS['dataset'], dataset)
 	self.assertEqual(blkInDBS['block_name'], block)
@@ -209,7 +209,7 @@ class DBSValitaion_t(unittest.TestCase):
     	blkList = api.listBlocks(block)
 	self.assertEqual(len(blkList), 1)
 	blkInDBS=blkList[0]
-	self.assertEqual(blkInDBS['site_name'], site )
+	self.assertEqual(blkInDBS['origin_site_name'], site )
 	self.assertEqual(blkInDBS['open_for_writing'], 1)
 	self.assertEqual(blkInDBS['dataset'], dataset)
 	self.assertEqual(blkInDBS['block_name'], block)
