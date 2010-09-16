@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.7 2009/12/22 14:23:43 akhukhun Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: List.py,v 1.8 2009/12/27 13:41:25 akhukhun Exp $"
+__version__ = "$Revision: 1.8 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -27,26 +27,7 @@ JOIN %sPRIMARY_DS_TYPES PT
 ON PT.PRIMARY_DS_TYPE_ID=P.PRIMARY_DS_TYPE_ID
 """ % (self.owner, self.owner)
 
-    def formatCursor(self, cursor):
-        """
-        Tested only with cx_Oracle cursor. 
-        I suspect it will not work with MySQLdb
-        cursor must be already executed.
-        use fetchmany(size=arraysize=50)
-        """
-        keys = [d[0].lower() for d in cursor.description]
-        result = []
-        rapp = result.append
-        while True:
-            rows = cursor.fetchmany()
-            if not rows: 
-                cursor.close()
-                break
-            for r in rows:
-                rapp(dict(zip(keys, r)))
-        return result    
-        
-    def execute(self, primarydataset="", conn = None):
+    def execute(self, primary_ds_name="", conn=None):
         """
         Lists all primary datasets if pattern is not provided.
         """
@@ -56,11 +37,12 @@ ON PT.PRIMARY_DS_TYPE_ID=P.PRIMARY_DS_TYPE_ID
         sql = self.sql
         cursor = conn.connection.cursor()
         
-        if not primarydataset:
+        if not primary_ds_name:
             cursor.execute(sql)
         else:
-            sql += "WHERE P.PRIMARY_DS_NAME %s :primarydsname" % ("=", "like")["%" in primarydataset]
-            binds = {"primarydsname":primarydataset}
+            op = ("=", "like")["%" in primary_ds_name]
+            sql += "WHERE P.PRIMARY_DS_NAME %s :primary_ds_name" % op
+            binds = {"primary_ds_name":primary_ds_name}
             cursor.execute(sql, binds)
             
         result = self.formatCursor(cursor)

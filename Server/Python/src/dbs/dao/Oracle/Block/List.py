@@ -2,11 +2,10 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.9 2009/12/22 14:23:01 akhukhun Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: List.py,v 1.10 2009/12/27 13:40:20 akhukhun Exp $"
+__version__ = "$Revision: 1.10 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
-
 
 class List(DBFormatter):
     """
@@ -29,28 +28,7 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
 """ % ((self.owner,)*3)
 
-
-    def formatCursor(self, cursor):
-        """
-        Tested only with cx_Oracle cursor. 
-        I suspect it will not work with MySQLdb
-        cursor must be already executed.
-        use fetchmany(size=arraysize=50)
-        """
-        keys = [d[0].lower() for d in cursor.description]
-        result = []
-        rapp = result.append
-        while True:
-            rows = cursor.fetchmany()
-            if not rows: 
-                cursor.close()
-                break
-            for r in rows:
-                rapp(dict(zip(keys, r)))
-        return result    
-    
-
-    def execute(self, dataset = "", block = "", conn = None):
+    def execute(self, dataset="", block_name="", conn=None):
         """
         dataset: /a/b/c
         block: /a/b/c#d
@@ -59,17 +37,18 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
             conn = self.dbi.connection()
         sql = self.sql
         binds = {}
+        op = ("=", "like")["%" in block_name]
         if dataset:
             sql += "WHERE DS.DATASET = :dataset"
             binds.update({"dataset":dataset})
         
-            if block:
-                sql += " AND B.BLOCK_NAME %s :block" % ("=", "like")["%" in block]
-                binds.update({"block":block})
+            if block_name:
+                sql += " AND B.BLOCK_NAME %s :block_name" % op
+                binds.update({"block_name":block_name})
                 
-        elif block:
-            sql += "WHERE B.BLOCK_NAME %s :block" % ("=", "like")["%" in block]
-            binds.update({"block":block})
+        elif block_name:
+            sql += "WHERE B.BLOCK_NAME %s :block_name" % op
+            binds.update({"block_name":block_name})
         
         else: 
             raise Exception("Either dataset or block must be provided")
@@ -79,4 +58,3 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
         result = self.formatCursor(cursor)
         conn.close()
         return result
-
