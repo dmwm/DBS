@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.19 2010/03/15 16:30:05 afaq Exp $"
-__version__ = "$Revision: 1.19 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.20 2010/03/18 16:28:59 afaq Exp $"
+__version__ = "$Revision: 1.20 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -37,16 +37,16 @@ class DBSReaderModel(RESTModel):
         
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
         self.addService('GET', 'serverinfo', self.getServerInfo)
-        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primary_ds_name'])
-        self.addService('GET', 'datasets', self.listDatasets, ['dataset', 'parent_dataset', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
-        self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block_name', 'site_name'])
-        self.addService('GET', 'files', self.listFiles, ['dataset', 'block_name', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
-        self.addService('GET', 'datasetparents', self.listDatasetParents, ['dataset'])
-        self.addService('GET', 'outputconfigs', self.listOutputConfigs, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
-        self.addService('GET', 'fileparents', self.listFileParents, ['logical_file_name'])
-        self.addService('GET', 'filelumis', self.listFileLumis, ['logical_file_name', 'block_name'])
-        self.addService('GET', 'runs', self.listRuns, ['dataset', 'block_name', 'logical_file_name', 'minRun', 'maxRun'])
-        self.addService('GET', 'storage_elements', self.listStorageElements, ['block_name', 'se_name'])
+        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets)#, ['primary_ds_name'])
+        self.addService('GET', 'datasets', self.listDatasets)#, ['dataset', 'parent_dataset', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
+        self.addService('GET', 'blocks', self.listBlocks)#, ['dataset', 'block_name', 'site_name'])
+        self.addService('GET', 'files', self.listFiles)#, ['dataset', 'block_name', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
+        self.addService('GET', 'datasetparents', self.listDatasetParents)#, ['dataset'])
+        self.addService('GET', 'outputconfigs', self.listOutputConfigs)#, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
+        self.addService('GET', 'fileparents', self.listFileParents)#, ['logical_file_name'])
+        self.addService('GET', 'filelumis', self.listFileLumis)#, ['logical_file_name', 'block_name'])
+        self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minRun', 'maxRun'])
+        self.addService('GET', 'storage_elements', self.listStorageElements)#, ['block_name', 'se_name'])
         
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
@@ -194,7 +194,7 @@ class DBSReaderModel(RESTModel):
 	http://dbs3/runs?block_name=block_name
 	http://dbs3/runs?dataset=dataset
         """
-        return self.dbsRuns.listRuns(dataset, block_name, logical_file_name , minRun, maxRun)
+        return self.dbsRun.listRuns(dataset, block_name, logical_file_name , minRun, maxRun)
    
     def listStorageElements(self, block_name="", se_name=""):
         """

@@ -2,8 +2,8 @@
 """
 This module provides DatasetRun.ListFileRuns data access object.
 """
-__revision__ = "$Id: ListFileRuns.py,v 1.3 2010/03/05 16:51:49 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: ListFileRuns.py,v 1.4 2010/03/18 16:28:56 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -30,7 +30,7 @@ class ListFileRuns(DBFormatter):
         """
 
 	if not conn:
-		raise Exception("dbs/dao/Oracle/DatasetRun/ListFileRuns expects db connection from up layer.")	
+		raise Exception("dbs/dao/Oracle/DatasetRun/ListFileRuns expects db connection from upper layer.")	
         sql = self.sql
         binds = { "lfn" : logical_file_name }
 	if minRun > 0: 

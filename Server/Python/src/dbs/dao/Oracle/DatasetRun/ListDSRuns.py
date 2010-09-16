@@ -2,8 +2,8 @@
 """
 This module provides DatasetRun.List data access object.
 """
-__revision__ = "$Id: ListDSRuns.py,v 1.3 2010/03/05 16:51:49 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: ListDSRuns.py,v 1.4 2010/03/18 16:28:56 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -19,10 +19,11 @@ class ListDSRuns(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 	"""
-	SELECT DISTINCT DR.RUN_NUMBER, DS.DATASET
-	FROM %sDATASET_RUNS DR 
-	JOIN %sDATASET DS ON DR.DATASET_ID = DS.DATASET_ID
-	WHERE DATASET = :dataset """% ((self.owner,) * 2)
+	SELECT DISTINCT FL.RUN_NUM, DS.DATASET
+	FROM %sFILE_LUMIS FL
+	JOIN %sFILES F ON F.FILE_ID = FL.FILE_ID 
+	JOIN %sDATASET DS ON F.DATASET_ID = DS.DATASET_ID
+	WHERE DATASET = :dataset """% ((self.owner,) * 3)
 	
     def execute(self, conn, dataset="", minRun=-1, maxRun=-1, trans=False):
         """
@@ -30,14 +31,14 @@ class ListDSRuns(DBFormatter):
         """
 
 	if not conn:
-		raise Exception("dbs/dao/Oracle/DatasetRun/ListDSRuns expects db connection from up layer.")
+		raise Exception("dbs/dao/Oracle/DatasetRun/ListDSRuns expects db connection from upper layer.")
         sql = self.sql
         binds = {'dataset':dataset}
 	if minRun > 0: 
-		sql += " AND DR.RUN_NUMBER >= :min_run"
+		sql += " AND FL.RUN_NUM >= :min_run"
 		binds["min_run"] = minRun
 	if maxRun > 0:
-		sql += " where DR.RUN_NUMBER <= :max_run"
+		sql += " where FL.RUN_NUM <= :max_run"
 		binds["max_run"] = maxRun
 
 	cursors = self.dbi.processData(sql, binds, conn, transaction=trans, returnCursor=True)
