@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.53 2010/07/23 19:16:57 afaq Exp $"
-__version__ = "$Revision: 1.53 $"
+__revision__ = "$Id: DBSFile.py,v 1.54 2010/08/01 18:31:10 akhukhun Exp $"
+__version__ = "$Revision: 1.54 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -125,14 +125,15 @@ class DBSFile:
 				non-pattern block , non-pattern dataset with lfn ,  
 				non-pattern block with lfn or no-pattern lfn. """)
 	elif (lumi_list and len(lumi_list) != 0):
-	    if (not maxrun or maxrun ==-1) and(not minrun or minrun == -1) and (minrun!=maxrun):
+	    #if (not maxrun or maxrun ==-1) and (not minrun or minrun == -1) and (minrun!=maxrun): #if neither is provided, it will pass this condition
+	    if (maxrun==-1 and minrun==-1) or (minrun!=maxrun):
 		raise Exception(" lumi list must accompany A single run number, use minrun==maxrun")
 	else:
 	    pass
 	try:
 	    conn = self.dbi.connection()
 	    result = self.filelist.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
-			    output_module_label, maxrun, minrun, origin_site_name)
+			    output_module_label, maxrun, minrun, origin_site_name, lumi_list)
 	    conn.close()
 	    return result
 	except Exception, ex:
