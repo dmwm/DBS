@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.5 2009/11/30 09:53:44 akhukhun Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: List.py,v 1.6 2009/12/08 19:30:45 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -40,8 +40,9 @@ ON PT.PRIMARY_DS_TYPE_ID=P.PRIMARY_DS_TYPE_ID
                 for kk in self.formatkeys[k]:
                     idict[k][kk] = idict[kk]
                     del idict[kk]
-            dictOut.append(idict)     
-        return {"result":dictOut}         
+            dictOut.append(idict)   
+	return dictOut  
+        #return {"result":dictOut}         
         
     def execute(self, pattern = "", conn = None, transaction = False):
         """

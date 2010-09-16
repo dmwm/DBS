@@ -2,8 +2,8 @@
 """
 This module provides Dataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.12 2009/11/30 09:53:44 akhukhun Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: List.py,v 1.13 2009/12/08 19:30:43 afaq Exp $"
+__version__ = "$Revision: 1.13 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -47,8 +47,8 @@ JOIN %sDATASET_TYPES DP on DP.DATASET_TYPE_ID = D.DATASET_TYPE_ID
                     del idict[kk]
                     
             dictOut.append(idict) 
-        return {"result":dictOut} 
-
+	return dictOut
+        #return {"result":dictOut} 
 
     def execute(self, dataset="", conn = None, transaction = False):
         """
