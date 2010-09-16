@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.7 $"
-# $Id: dbsClient.py,v 1.7 2009/11/10 19:48:33 afaq Exp $"
+# $Revision: 1.8 $"
+# $Id: dbsClient.py,v 1.8 2009/11/11 22:52:45 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -45,7 +45,6 @@ class DbsApi:
 				data = urllib2.urlopen(calling)
 			else:
 				params = json.dumps(dict(params))
-				print params
 				req = urllib2.Request(url=calling)
 				req.add_data(params)
 				data = urllib2.urlopen(req)
@@ -110,6 +109,13 @@ class DbsApi:
                 * datasetObj : dataset object of type {}
                 """
                 return self.callServer("/datasets", params = datasetObj )
+
+        def insertBlock(self, blockObj={}):
+                """
+                * API to insert a block into DBS 
+                * blockObj : block object
+                """
+                return self.callServer("/blocks", params = blockObj )
 
         def listBlock(self, block):
                 """

@@ -28,9 +28,12 @@ try:
 		"/Wmunu/Summer09-MC_31X_V3_7TeV_SD_L1_L2_Mu-v1/GEN-SIM-RECO", 
 		"/Wmunu/Summer09-MC_31X_V3_7TeV_SD_Mu9-v1/GEN-SIM-RECO",
 		"/ZeeJet_Pt230to300/Summer09-MC_31X_V3_7TeV-v1/GEN-SIM-RAW",
-		"/TkCosmics38T/Summer09-STARTUP31X_V3_SuperPointing-v1/RAW-RECO"
+		"/TkCosmics38T/Summer09-STARTUP31X_V3_SuperPointing-v1/RAW-RECO",
+  		"/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-RECO"
 		]
-  datasets=["/TkCosmics38T/Summer09-STARTUP31X_V3_SuperPointing-v1/RAW-RECO"]
+
+  datasets=["/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-DIGI-RAW"]
+
 
   for dataset in datasets :
     blocks=api.listBlocks(dataset)
@@ -145,7 +148,6 @@ try:
 
                         if name == 'dbs':
 
-				print "fin"
 				# Lets populate this in DBS
 				# Some calls may be redundant, who cares !
         			# DBS-3 Service URL
@@ -154,18 +156,21 @@ try:
         			dbs3api = DbsApi(url=url)
         			# Is service Alive
         			print dbs3api.ping()
-				"""	
-        			print self.prdsobj
-        			print dbs3api.insertPrimaryDataset(self.prdsobj)
-				print self.dataset
-        			print dbs3api.insertDataset(self.dataset)
-				print self.block
-				print dbs3api.insertBlock(self.block)
-				"""
-				print dbs3api.insertFiles({"files" : self.files})
+        			#print self.prdsobj
 
+				import pdb
+				pdb.set_trace()
+        			print dbs3api.insertPrimaryDataset(self.prdsobj)
+				#print self.dataset
+        			print dbs3api.insertDataset(self.dataset)
+
+				#print self.block
+				print dbs3api.insertBlock(self.block)
+				
 				#for file in self.files:
 				#	print file
+				print dbs3api.insertFiles({"files" : self.files})
+				print "fin"
 				
   	xml.sax.parseString (data, Handler ())
 	break
