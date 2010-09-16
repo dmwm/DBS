@@ -2,8 +2,8 @@
 """
 This module provides DatasetTYpe.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.4 2010/03/05 16:57:19 yuyi Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: GetID.py,v 1.5 2010/04/22 15:32:31 yuyi Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -19,8 +19,8 @@ class GetID(DBFormatter):
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
         self.sql = \
 """
-SELECT TP.DATASET_TYPE_ID, TP.DATASET_TYPE
-FROM %sDATASET_TYPES TP 
+SELECT TP.DATASET_TYPE_ID, TP.DATASET_ACCESS_TYPE
+FROM %sDATASET_ACCESS_TYPES TP 
 """ % (self.owner)
 
     def execute(self, conn, name, transaction = False):
@@ -30,7 +30,7 @@ FROM %sDATASET_TYPES TP
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/DatasetType/GetID expects db connection from up layer.")
         sql = self.sql
-        sql += "WHERE TP.DATASET_TYPE = :datasettype" 
+        sql += "WHERE TP.DATASET_ACCESS_TYPE = :datasettype" 
         binds = {"datasettype":name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
