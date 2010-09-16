@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for DatasetOutputMod_configs table """ 
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: Insert.py,v 1.4 2010/02/11 18:03:24 afaq Exp $ "
+__revision__ = "$Revision: 1.5 $"
+__version__  = "$Id: Insert.py,v 1.5 2010/02/11 22:51:59 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -20,7 +20,7 @@ class Insert(DBFormatter):
 	try:
             result = self.dbi.processData(self.sql, dataset_output_mod_configsObj, conn, transaction)
 	except Exception, ex:
-		if str(ex).lower().find("unique constraint") != -1 :
+		if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			self.logger.warning("Unique constraint violation being ignored...")
 			self.logger.warning("%s" % ex)
 		else:
