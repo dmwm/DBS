@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.29 2010/03/15 16:30:04 afaq Exp $"
-__version__ = "$Revision: 1.29 $"
+__revision__ = "$Id: DBSDataset.py,v 1.30 2010/03/18 14:39:58 afaq Exp $"
+__version__ = "$Revision: 1.30 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -38,6 +38,7 @@ class DBSDataset:
         self.proceraid= daofactory(classname='ProcessingEra.GetID')
         self.acqeraid = daofactory(classname='AcquisitionEra.GetID')
         self.updatestatus = daofactory(classname='Dataset.UpdateStatus')
+        self.updatetype = daofactory(classname='Dataset.UpdateType')
 
     def updateStatus(self, dataset, is_dataset_valid):
         """
@@ -56,6 +57,23 @@ class DBSDataset:
 	    trans.close()
             conn.close()
     
+    def updateType(self, dataset, dataset_type):
+        """
+        Used to change the status of a dataset type (production/etc.)
+        """
+        conn = self.dbi.connection()
+        trans = conn.begin()
+
+        try :
+            self.updatetype.execute(conn, dataset, dataset_type, trans)
+	    trans.commit()
+	except Exception, ex:
+	    trans.rollback()
+            raise ex
+	finally:
+	    trans.close()
+            conn.close()
+   
     def listDatasets(self, dataset="", parent_dataset="", release_version="",
                      pset_hash="", app_name="", output_module_label="",
 		     processing_era="", acquisition_era=""):

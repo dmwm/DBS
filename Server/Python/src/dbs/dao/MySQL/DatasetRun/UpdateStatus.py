@@ -2,10 +2,10 @@
 """
 This module provides Dataset.UpdateStatus data access object.
 """
-__revision__ = "$Id: UpdateStatus.py,v 1.1 2010/03/08 23:12:38 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: UpdateStatus.py,v 1.2 2010/03/18 14:39:59 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
-from dbs.dao.Oracle.Dataset.UpdateStatus import UpdateStatus as OraDatasetUpdateStatus
+from dbs.dao.Oracle.DatasetRun.UpdateStatus import UpdateStatus as OraDatasetRunUpdateStatus
 
-class UpdateStatus(OraDatasetUpdateStatus):
+class UpdateStatus(OraDatasetRunUpdateStatus):
     pass

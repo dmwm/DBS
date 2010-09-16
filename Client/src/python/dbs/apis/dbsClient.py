@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.31 $"
-# $Id: dbsClient.py,v 1.31 2010/03/16 18:19:48 afaq Exp $"
+# $Revision: 1.32 $"
+# $Id: dbsClient.py,v 1.32 2010/03/18 14:41:09 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -385,7 +385,16 @@ class DbsApi:
 	    * is_file_valid : valid=1, invalid=0
 	    """
 	    return self.callServer("/files?logical_file_name=%s&is_file_valid=%s" %(lfn, is_file_valid), params={}, callmethod='PUT')
-	    
+
+	def updateDatasetType(self, dataset, dataset_type):
+	    """
+	    API to update dataset status
+	    * dataset : dataset name
+	    * dataset_type : production, deprecated, ...etc
+	    *
+	    """
+	    return self.callServer("/datasets?dataset=%s&dataset_type=%s" %(dataset, dataset_type), params={}, callmethod='PUT')    
+
 	def updateDatasetStatus(self, dataset, is_dataset_valid):
 	    """
 	    API to update dataset status
