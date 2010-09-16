@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.20 2010/03/19 18:51:58 yuyi Exp $"
-__version__ = "$Revision: 1.20 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.21 2010/04/23 19:55:52 afaq Exp $"
+__version__ = "$Revision: 1.21 $"
 
 import os
 import sys
@@ -32,12 +32,14 @@ primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
 tier = 'GEN-SIM-RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
+parent_dataset="/%s/parent_%s/%s" % (primary_ds_name, procdataset, tier)
 app_name='cmsRun'
 output_module_label='Merged-%s' %uid
 pset_hash='76e303993a1c2f842159dbfeeed9a0dd' 
 release_version='CMSSW_1_2_%s' % uid
 site="cmssrm-%s.fnal.gov" %uid
 block="%s#%s" % (dataset, uid)
+parent_block="%s#%s" % (parent_dataset, uid)
 acquisition_era_name="acq_era_%s" %uid
 processing_version="%s" %(uid if (uid<9999) else uid%9999)
 run_num=uid
@@ -51,13 +53,16 @@ outDict={
 "procdataset" : procdataset,
 "tier" : tier,
 "dataset" : dataset,
+"parent_dataset" : parent_dataset,
 "app_name" : app_name,
 "output_module_label" : output_module_label,
 "pset_hash" : pset_hash,
 "release_version" : release_version,
 "site" : site,
 "block" : block,
+"parent_block" : parent_block,
 "files" : [],
+"parent_files" : [],
 "run_num":run_num,
 "acquisition_era":acquisition_era_name,
 "processing_version" : processing_version,
@@ -149,6 +154,18 @@ class DBSWriterModel_t(unittest.TestCase):
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insert('datasets', data)
+	parentdata = {
+		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
+	        'dataset_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
+		'output_configs': [
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+		    'output_module_label': output_module_label},
+		    ],
+		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
+		}
+	api.insert('datasets', parentdata)
+
 	
     def test10(self):
 	"""test10: web.DBSWriterModel.insertDataset: duplicate insert should be ignored"""
@@ -237,6 +254,9 @@ class DBSWriterModel_t(unittest.TestCase):
 	data = {'block_name': block,
 		'origin_site': site }
 		
+	api.insert('blocks', data)
+	# insert the parent block as well
+	data = {'block_name': parent_block, 'origin_site': site }
 	api.insert('blocks', data)
 
     def test17(self):
@@ -337,6 +357,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 }
             flist.append(f)
             outDict['files'].append(f['logical_file_name'])
+	    outDict['parent_files'].append(f['file_parent_list'][0]['file_parent_lfn'])
         data={"files":flist}
         api.insert('files', data)
 	

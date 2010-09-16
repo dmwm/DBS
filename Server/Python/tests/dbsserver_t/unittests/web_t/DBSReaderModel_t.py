@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.16 2010/03/19 19:21:11 yuyi Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.17 2010/04/23 19:55:52 afaq Exp $"
+__version__ = "$Revision: 1.17 $"
 
 import os, sys, imp
 import json
@@ -133,7 +133,7 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('datasets', dataset=testparams['dataset'],
                                   app_name=testparams['app_name'],
                                   output_module_label=testparams['output_module_label'])
-    def test24(self):
+    def test00(self):
         print "\n Test24 web.DBSReaderModel.listBlocks: basic test"
 	try:
 	    api.list('blocks', dataset='*')
@@ -474,8 +474,31 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test86(self):
 	print '\n Test84 test for dataset run. Coming after the dao moved to right place'
+ 	
+    def test87(self):
+        """list dataset parents"""
+        api.list('datasetparents', dataset=testparams['dataset'])
+        
+    def test88(self):
+        """list dataset children"""
+        api.list('datasetchildren', dataset=testparams['parent_dataset'])
 
-      
+    def test89(self):
+        """list block parents"""
+        api.list('blockparents', block_name=testparams['block'])
+
+    def test90(self):
+        """list block children"""
+        api.list('blockchildren', block_name=testparams['parent_block'])
+        
+    def test91(self):
+        """list file parents"""
+        print api.list('fileparents', logical_file_name=testparams['files'][0])
+        
+    def test92(self):
+        """list file children"""
+        api.list('filechildren', logical_file_name=testparams['parent_files'][0])
+	
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSReaderModel_t)
     infofile=open("info.dict","r")    
