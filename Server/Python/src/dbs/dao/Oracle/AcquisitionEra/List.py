@@ -2,8 +2,8 @@
 """
 This module provides DataTier.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.2 2010/08/06 19:29:38 yuyi Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: List.py,v 1.3 2010/08/12 19:46:02 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -23,7 +23,7 @@ SELECT AE.ACQUISITION_ERA_NAME, AE.CREATION_DATE, AE.CREATE_BY, AE.DESCRIPTION
 FROM %sACQUISITION_ERAS AE 
 """ % (self.owner)
 
-    def execute(self, conn, acquisitionEra, transaction = False):
+    def execute(self, conn, acquisitionEra="", transaction = False):
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/AcquisitionEra/List expects db connection from upper layer.")
         sql = self.sql
