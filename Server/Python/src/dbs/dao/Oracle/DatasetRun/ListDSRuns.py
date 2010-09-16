@@ -2,8 +2,8 @@
 """
 This module provides DatasetRun.List data access object.
 """
-__revision__ = "$Id: ListDSRuns.py,v 1.2 2010/03/01 22:15:31 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: ListDSRuns.py,v 1.3 2010/03/05 16:51:49 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -24,13 +24,13 @@ class ListDSRuns(DBFormatter):
 	JOIN %sDATASET DS ON DR.DATASET_ID = DS.DATASET_ID
 	WHERE DATASET = :dataset """% ((self.owner,) * 2)
 	
-    def execute(self, dataset="", minRun=-1, maxRun=-1, conn=None, trans=False):
+    def execute(self, conn, dataset="", minRun=-1, maxRun=-1, trans=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
 
 	if not conn:
-		raise "database connection error"	
+		raise Exception("dbs/dao/Oracle/DatasetRun/ListDSRuns expects db connection from up layer.")
         sql = self.sql
         binds = {'dataset':dataset}
 	if minRun > 0: 

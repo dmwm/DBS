@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for DatasetRuns table """ 
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: Insert.py,v 1.4 2010/02/11 18:03:25 afaq Exp $ "
+__revision__ = "$Revision: 1.5 $"
+__version__  = "$Id: Insert.py,v 1.5 2010/03/05 16:51:49 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -42,9 +42,10 @@ class Insert(DBFormatter):
                return binds
 
 
-    def execute( self, dataset_runsObj, conn=None, transaction=False ):
-            ##binds = self.getBinds( dataset_runsObj )
-            result = self.dbi.processData(self.sql, binds, conn, transaction)
-            return
+    def execute( self, conn, dataset_runsObj, transaction=False ):
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/DatasetRun/Insert expects db connection from up layer.")
+	result = self.dbi.processData(self.sql, binds, conn, transaction)
+	return
 
 

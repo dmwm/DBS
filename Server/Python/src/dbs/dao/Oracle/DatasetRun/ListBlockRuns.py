@@ -2,8 +2,8 @@
 """
 This module provides DatasetRun.ListBlockRuns data access object.
 """
-__revision__ = "$Id: ListBlockRuns.py,v 1.2 2010/03/01 22:15:31 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: ListBlockRuns.py,v 1.3 2010/03/05 16:51:49 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -25,13 +25,13 @@ class ListBlockRuns(DBFormatter):
 	JOIN %sBLOCK B ON B.DATASET_ID = DS.DATASET_ID
 	WHERE B.BLOCK_NAME = :block_name"""% ((self.owner,) *3 )
 	
-    def execute(self, block_name="", minRun=-1, maxRun=-1, conn=None, trans=False):
+    def execute(self, conn, block_name="", minRun=-1, maxRun=-1, trans=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
 
 	if not conn:
-		raise "database connection error"	
+		raise Exception("dbs/dao/Oracle/DatasetRun/ListBlockRuns expects db connection from up layer.")
         sql = self.sql
         binds = { "block_name" : block_name }
 	if minRun > 0: 
