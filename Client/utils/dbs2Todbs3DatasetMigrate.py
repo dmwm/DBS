@@ -54,8 +54,6 @@ class migrateDBS2TODBS3:
 	fileName = os.path.join(self.dirName, blockName.replace('/', '_').replace('#', '_') + ".xml")
 	if os.path.exists(fileName):
 		data = open(fileName, "r").read()
-		print "done reading XML input"
-		print time.time()
 	else:	
 		#data=self.dbs2api.listDatasetContents(dataset, blockName)
 		fp=open(fileName, "w")
@@ -201,12 +199,6 @@ class migrateDBS2TODBS3:
 					start_time=time.time()
 					#for file in self.files:
 					#	print file
-
-					filejson=open("filejson.json", "w")
-					filejson.write(str(self.files))
-					filejson.close()
-					print "jsonfile written"
-					print time.time()
 					last=0
 					batchsize=10
 					for i in range (batchsize, len(self.files)+batchsize, batchsize):
@@ -228,8 +220,6 @@ class migrateDBS2TODBS3:
 					#print "fin"
 				except Exception, ex:
 					print ex
-	print "Starting parsing XML..."
-	print time.time()	
   	xml.sax.parseString (data, Handler (self.dbs3api))
 	return block_time
 
@@ -244,9 +234,6 @@ if __name__=='__main__':
 	dbs3url=sys.argv[2]
 	dataset=sys.argv[3]
 	# DBS3 migration service 
-
-	print "START: "
-	print time.time()
 
 	mig_srvc=migrateDBS2TODBS3(dbs2url, dbs3url)
 	mig_srvc.migrateWithParents(dataset)
