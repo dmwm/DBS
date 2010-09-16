@@ -2,10 +2,11 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.8 2009/11/29 18:49:53 akhukhun Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: List.py,v 1.9 2009/11/30 09:53:44 akhukhun Exp $"
+__version__ = "$Revision: 1.9 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+
 class List(DBFormatter):
     """
     File List DAO class.
