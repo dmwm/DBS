@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for DatasetTypes table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2010/06/23 21:21:22 afaq Exp $ "
+__revision__ = "$Revision: 1.8 $"
+__version__  = "$Id: Insert.py,v 1.8 2010/07/09 19:38:10 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -12,7 +12,7 @@ class Insert(DBFormatter):
             DBFormatter.__init__(self, logger, dbi)
 	    self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 
-            self.sql = """INSERT INTO %sDATASET_ACCESS_TYPES ( DATASET_TYPE_ID, DATASET_ACCESS_TYPE) VALUES (:datasettypeid, :datasettype)""" % (self.owner)
+            self.sql = """INSERT INTO %sDATASET_ACCESS_TYPES ( DATASET_ACCESS_TYPE_ID, DATASET_ACCESS_TYPE) VALUES (:datasettypeid, :datasettype)""" % (self.owner)
 
     def getBinds_delme( self, dataset_typesObj ):
             binds = {}

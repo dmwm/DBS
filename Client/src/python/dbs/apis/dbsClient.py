@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.50 $"
-# $Id: dbsClient.py,v 1.50 2010/06/28 21:27:58 afaq Exp $"
+# $Revision: 1.51 $"
+# $Id: dbsClient.py,v 1.51 2010/07/09 19:38:09 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -427,14 +427,14 @@ class DbsApi:
 	    """
 	    return self.callServer("/filelumis?logical_file_name=%s" %logical_file_name)
 
-        def insertFiles(self, filesList=[], qInserts=False):
+        def insertFiles(self, filesList=[], qInserts=True):
                 """
                 * API to insert a list of file into DBS in DBS 
                 * filesList : list of file objects
 		* qInserts : (NEVER use this parameter, unless you are TOLD by DBS Team)
                 """
 
-		if qInserts:
+		if qInserts==False: #turn off qInserts
 		    return self.callServer("/files?qInserts=%s" % qInserts, params = filesList , callmethod='POST' )    
                 return self.callServer("/files", params = filesList , callmethod='POST' )
 
@@ -495,14 +495,14 @@ class DbsApi:
 	    """
 	    return self.callServer("/files?logical_file_name=%s&is_file_valid=%s" %(logical_file_name, is_file_valid), params={}, callmethod='PUT')
 
-	def updateDatasetType(self, dataset, dataset_type):
+	def updateDatasetType(self, dataset, dataset_access_type):
 	    """
 	    API to update dataset status
 	    * dataset : Dataset --REQUIRED
-	    * dataset_type : production, deprecated, etc --REQUIRED
+	    * dataset_access_type : production, deprecated, etc --REQUIRED
 	    *
 	    """
-	    return self.callServer("/datasets?dataset=%s&dataset_type=%s" %(dataset, dataset_type), params={}, callmethod='PUT')    
+	    return self.callServer("/datasets?dataset=%s&dataset_access_type=%s" %(dataset, dataset_access_type), params={}, callmethod='PUT')    
 
 	def updateDatasetStatus(self, dataset, is_dataset_valid):
 	    """

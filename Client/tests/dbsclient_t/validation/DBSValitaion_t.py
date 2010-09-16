@@ -3,14 +3,15 @@ DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
 
-__revision__ = "$Id: DBSValitaion_t.py,v 1.8 2010/05/05 21:07:05 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSValitaion_t.py,v 1.9 2010/07/09 19:38:09 afaq Exp $"
+__version__ = "$Revision: 1.9 $"
 
 import os
 import sys
 import unittest
 from dbs.apis.dbsClient import *
 from ctypes import *
+import time
 
 def uuid():
     lib = CDLL("libuuid.so.1")
@@ -78,7 +79,7 @@ class DBSValitaion_t(unittest.TestCase):
 	"""test05: web.DBSClientWriter.Dataset: validation test"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		    ],
@@ -93,13 +94,13 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(dsInDBS['dataset'], dataset)
 	self.assertEqual(dsInDBS['is_dataset_valid'], 1)
 	self.assertEqual(dsInDBS['physics_group_name'], 'Tracker')
-	self.assertEqual(dsInDBS['dataset_type'], 'PRODUCTION')
+	self.assertEqual(dsInDBS['dataset_access_type'], 'PRODUCTION')
 	self.assertEqual(dsInDBS['processed_ds_name'], procdataset)
 	self.assertEqual(dsInDBS['primary_ds_name'], primary_ds_name)
-	self.assertEqual(dsInDBS['release_version'], release_version)
-	self.assertEqual(dsInDBS['pset_hash'], pset_hash)
-	self.assertEqual(dsInDBS['app_name'], app_name)
-	self.assertEqual(dsInDBS['output_module_label'], output_module_label)
+	#self.assertEqual(dsInDBS['release_version'], release_version)
+	#self.assertEqual(dsInDBS['pset_hash'], pset_hash)
+	#self.assertEqual(dsInDBS['app_name'], app_name)
+	#self.assertEqual(dsInDBS['output_module_label'], output_module_label)
 	self.assertEqual(dsInDBS['xtcrosssection'], 123)
 	self.assertEqual(dsInDBS['processing_version'], processing_version)
 	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name)
@@ -107,7 +108,7 @@ class DBSValitaion_t(unittest.TestCase):
     def test06(self):
 	"""test06 web.DBSClientWriter.Block: validation test"""
 	data = {'block_name': block,
-		'origin_site': site }
+		'origin_site_name': site }
 		
 	api.insertBlock(blockObj=data)
 	blkList = api.listBlocks(block)
@@ -131,7 +132,7 @@ class DBSValitaion_t(unittest.TestCase):
 	api.insertPrimaryDataset(primaryDSObj=pridata)
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset+"_parent", 'primary_ds_name': primary_ds_name+"_parent",
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset+"_parent", 'primary_ds_name': primary_ds_name+"_parent",
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		    ],
@@ -143,7 +144,7 @@ class DBSValitaion_t(unittest.TestCase):
 
 	block_parent="/%s/%s/%s#%s" % (primary_ds_name+"_parent", procdataset+"_parent", tier, uid)
 	pblkdata = {'block_name': block_parent,
-	                    'origin_site': site }
+	                    'origin_site_name': site }
 	api.insertBlock(blockObj=pblkdata)
 	#parent files
 	pflist=[]
@@ -163,7 +164,7 @@ class DBSValitaion_t(unittest.TestCase):
 		                    ]
                 }
 	    pflist.append(f)
-	api.insertFiles(filesList={"files":pflist})
+	api.insertFiles(filesList={"files":pflist}, qInserts=False)
 	#### This next block of test will now actually insert the files in the "test 'block' in this module, using the upper files as parent
  	for i in range(10):
 	    f={  
@@ -187,7 +188,7 @@ class DBSValitaion_t(unittest.TestCase):
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
-	api.insertFiles(filesList={"files":flist})
+	api.insertFiles(filesList={"files":flist}, qInserts=False)
 	### Lets begin the validation now
 	# our block, 'block' now has these 10 files, and that is basis of our validation
 	flList=api.listFiles(block=block)
@@ -198,7 +199,7 @@ class DBSValitaion_t(unittest.TestCase):
 	    self.assertEqual(afileInDBS['file_size'], 201221191)
 	    self.assertEqual(afileInDBS['is_file_valid'], 1)
 	# Get the file parent -- The inserted file must have a parent
-	flParentList=api.listFileParents(lfn="/store/mc/%s/%i.root" %(uid, 0))
+	flParentList=api.listFileParents(logical_file_name="/store/mc/%s/%i.root" %(uid, 0))
 	self.assertEqual(len(flParentList), 1)
 	self.assertEqual(flParentList[0]['parent_logical_file_name'], "/store/mc/parent_%s/%i.root" %(uid, 0))
 	# Get the dataset parent -- due to fact that files had parents, dataset parentage is also inserted
@@ -222,9 +223,9 @@ class DBSValitaion_t(unittest.TestCase):
 	"""update file status and validate that it got updated"""
 	logical_file_name = "/store/mc/%s/%i.root" %(uid, 0)
 	#print "WARNING : DBS cannot list INVALID file, so for now this test is commented out"
-	api.updateFileStatus(lfn=logical_file_name, is_file_valid=0)
+	api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
 	#listfile
-	filesInDBS=api.listFiles(lfn=logical_file_name)
+	filesInDBS=api.listFiles(logical_file_name=logical_file_name)
 	self.assertEqual(len(filesInDBS) ,1)
 	self.assertEqual(filesInDBS[0]['is_file_valid'], 0)
 	
@@ -237,10 +238,10 @@ class DBSValitaion_t(unittest.TestCase):
 	
     def test10(self):
 	"""test10 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-	api.updateDatasetType(dataset=dataset, dataset_type="PRODUCTION")
+	api.updateDatasetType(dataset=dataset, dataset_access_type="PRODUCTION")
 	dsInDBS=api.listDatasets(dataset=dataset)
 	self.assertEqual(len(dsInDBS), 1)
-	self.assertEqual(dsInDBS[0]['dataset_type'], "PRODUCTION")
+	self.assertEqual(dsInDBS[0]['dataset_access_type'], "PRODUCTION")
 
 
 	

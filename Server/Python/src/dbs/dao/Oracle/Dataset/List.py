@@ -4,8 +4,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.35 2010/07/08 17:05:59 afaq Exp $"
-__version__ = "$Revision: 1.35 $"
+__revision__ = "$Id: List.py,v 1.36 2010/07/09 19:38:10 afaq Exp $"
+__version__ = "$Revision: 1.36 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -42,7 +42,7 @@ class List(DBFormatter):
 	JOIN %sPRIMARY_DS_TYPES PDT ON PDT.PRIMARY_DS_TYPE_ID = P.PRIMARY_DS_TYPE_ID
 	JOIN %sPROCESSED_DATASETS PD ON PD.PROCESSED_DS_ID = D.PROCESSED_DS_ID
 	JOIN %sDATA_TIERS DT ON DT.DATA_TIER_ID = D.DATA_TIER_ID
-	JOIN %sDATASET_ACCESS_TYPES DP on DP.DATASET_TYPE_ID = D.DATASET_TYPE_ID
+	JOIN %sDATASET_ACCESS_TYPES DP on DP.DATASET_ACCESS_TYPE_ID= D.DATASET_ACCESS_TYPE_ID
 	
 	LEFT OUTER JOIN %sACQUISITION_ERAS AE ON AE.ACQUISITION_ERA_ID = D.ACQUISITION_ERA_ID
 	LEFT OUTER JOIN %sPROCESSING_ERAS PE ON PE.PROCESSING_ERA_ID = D.PROCESSING_ERA_ID

@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.19 2010/05/28 21:20:36 afaq Exp $"
-__version__ = "$Revision: 1.19 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.20 2010/07/09 19:38:09 afaq Exp $"
+__version__ = "$Revision: 1.20 $"
 
 import os
 import sys
@@ -98,7 +98,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	"""test08: web.DBSClientWriter.insertDataset: basic test"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		    ],
@@ -110,7 +110,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	# insert away the parent dataset as well
 	parentdata = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		    ],
@@ -125,7 +125,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	"""test09: web.DBSClientWriter.insertDataset: duplicate insert should be ignored"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		], 
@@ -141,7 +141,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	data = {
 		'dataset': dataset,
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
@@ -279,7 +279,7 @@ class DBSClientWriter_t(unittest.TestCase):
 
     def test21(self):
 	    """test21 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-	    api.updateDatasetType(dataset=dataset, dataset_type="PRODUCTION")	 
+	    api.updateDatasetType(dataset=dataset, dataset_access_type="PRODUCTION")	 
 	
     def test208(self):
 	"""test208 generating the output file for reader test"""

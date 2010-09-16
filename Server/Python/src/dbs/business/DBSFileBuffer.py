@@ -3,8 +3,8 @@
 This module provides business layer for the file buffer 
 """
 
-__revision__ = "$Id: DBSFileBuffer.py,v 1.1 2010/05/25 19:55:31 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSFileBuffer.py,v 1.2 2010/07/09 19:38:10 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -69,7 +69,7 @@ class DBSFileBuffer:
 	insert the files from the buffer
 	The files contain everything needed to insert them into various tables
 	"""
-	
+
 	conn = self.dbi.connection()
 	tran = conn.begin()
 	block_id=""
@@ -87,7 +87,7 @@ class DBSFileBuffer:
 		if ablob.has_key("file") : 
 		    files.append(ablob["file"])
 		    fidl.append(ablob["file"]["file_id"])
-		    flfnl.append({"lfn" : ablob["file"]["logical_file_name"] })
+		    flfnl.append({"logical_file_name" : ablob["file"]["logical_file_name"] })
 	        if ablob.has_key("file_lumi_list") : lumis.extend(ablob["file_lumi_list"])
 		if ablob.has_key("file_parent_list") : parents.extend(ablob["file_parent_list"])
 		if ablob.has_key("file_output_config_list") : configs.extend(ablob["file_output_config_list"]) 
@@ -173,7 +173,7 @@ class DBSFileBuffer:
 		self.blkstatsin.execute(conn, blkParams, transaction=tran)
 
 	    # Delete the just inserted files
-	    self.bufdeletefiles.execute(conn, flfnl, transaction=tran)
+	    if len(flfnl) > 0 : self.bufdeletefiles.execute(conn, flfnl, transaction=tran)
 	    
 	    # All good ?. 
             tran.commit()

@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.43 2010/07/02 21:01:37 afaq Exp $"
-__version__ = "$Revision: 1.43 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.44 2010/07/09 19:38:11 afaq Exp $"
+__version__ = "$Revision: 1.44 $"
 
 import re
 import cjson
@@ -251,7 +251,7 @@ class DBSWriterModel(DBSReaderModel):
 	    file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
 	    file_output_config_list(optional, default = []) :[{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] <br />
         """
-		
+	if qInserts in (False, 'False'): qInserts=False
 	try:
 	    body = request.body.read()
 	    indata = cjson.decode(body)["files"]
@@ -287,13 +287,13 @@ class DBSWriterModel(DBSReaderModel):
 	except Exception, ex:
 	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
 
-    def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_type=""):
+    def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_access_type=""):
 	"""
 	API to update dataset status
 	"""
 	try:
-	    if dataset_type != "":
-		self.dbsDataset.updateType(dataset, dataset_type)
+	    if dataset_access_type != "":
+		self.dbsDataset.updateType(dataset, dataset_access_type)
 	    else: 
 		if is_dataset_valid != -1:
 		    self.dbsDataset.updateStatus(dataset, is_dataset_valid)

@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.39 2010/06/23 21:21:17 afaq Exp $"
-__version__ = "$Revision: 1.39 $"
+__revision__ = "$Id: DBSDataset.py,v 1.40 2010/07/09 19:38:10 afaq Exp $"
+__version__ = "$Revision: 1.40 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -89,7 +89,7 @@ class DBSDataset:
 	    trans.close()
             conn.close()
     
-    def updateType(self, dataset, dataset_type):
+    def updateType(self, dataset, dataset_access_type):
         """
         Used to change the status of a dataset type (production/etc.)
         """
@@ -97,7 +97,7 @@ class DBSDataset:
         trans = conn.begin()
 
         try :
-            self.updatetype.execute(conn, dataset, dataset_type, trans)
+            self.updatetype.execute(conn, dataset, dataset_access_type, trans)
 	    trans.commit()
 	except Exception, ex:
 	    trans.rollback()
@@ -143,7 +143,7 @@ class DBSDataset:
         """
         input dictionary must have the following keys:
         dataset, is_dataset_valid, primary_ds_name(name), processed_ds(name), data_tier(name),
-        dataset_type(name), acquisition_era(name), processing_version(name), 
+        dataset_access_type(name), acquisition_era(name), processing_version(name), 
         physics_group(name), xtcrosssection, global_tag, creation_date, create_by, 
         last_modification_date, last_modified_by
         """ 
@@ -154,7 +154,7 @@ class DBSDataset:
             dsdaoinput={}
             dsdaoinput["primary_ds_id"] = self.primdsid.execute(conn, businput["primary_ds_name"], tran)
             dsdaoinput["data_tier_id"] = self.tierid.execute(conn, businput["data_tier_name"], tran)
-            dsdaoinput["dataset_type_id"] = self.datatypeid.execute(conn, businput["dataset_type"], tran)
+            dsdaoinput["dataset_access_type_id"] = self.datatypeid.execute(conn, businput["dataset_access_type"], tran)
             dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
 
             # See if processed dataset exists, if not, add one

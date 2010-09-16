@@ -2,8 +2,8 @@
 """
 This module provides DatasetTYpe.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/06/23 21:21:22 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: GetID.py,v 1.7 2010/07/09 19:38:10 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -19,7 +19,7 @@ class GetID(DBFormatter):
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
         self.sql = \
 """
-SELECT TP.DATASET_TYPE_ID, TP.DATASET_ACCESS_TYPE
+SELECT TP.DATASET_ACCESS_TYPE_ID, TP.DATASET_ACCESS_TYPE
 FROM %sDATASET_ACCESS_TYPES TP 
 """ % (self.owner)
 
@@ -36,4 +36,4 @@ FROM %sDATASET_ACCESS_TYPES TP
         plist = self.formatDict(result)
         assert len(plist) == 1, \
             "Dataset Type %s does not exist" % name
-        return plist[0]["dataset_type_id"]
+        return plist[0]["dataset_access_type_id"]

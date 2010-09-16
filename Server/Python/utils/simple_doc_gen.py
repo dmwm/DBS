@@ -7,7 +7,7 @@ in Twiki format.
 
 import os
 
-web_path="/home/anzar/devDBS3/DBS/DBS3/Server/Python/src/dbs/web"
+web_path="/uscms/home/anzar/devDBS3/DBS/DBS3/Server/Python/src/dbs/web"
 reader_web=open(os.path.join(web_path, "DBSReaderModel.py"), "r").readlines()
 writer_web=open(os.path.join(web_path, "DBSWriterModel.py"), "r").readlines()
 base_url="http://....../dbs3"
@@ -23,40 +23,22 @@ def makedoc(param):
 apilist={}
 for aline in reader_web:
     aline=aline.strip()
-    if aline.startswith("self.addService"):
-	api=aline.split(',')[1].replace("'", "").strip()
+    if aline.startswith("def"):
+	api= aline.split('def')[1].strip().split('(')[0]
 	if api not in apilist.keys():
 	    apilist[api]=[]
 	api_url= "%s/%s" % (base_url, api)
 	params=[]
-	if len(aline.split('[')) > 1:
-	    params=aline.split('[')[1].split(']')[0].replace("'", "").split(",")
-	count=0
-	last_param=""
-	anded=""
+	toks = aline.split('def')[1].strip().split('(')[1].split('):')
+	if len(toks) > 1:
+	    for atok in toks:
+		atok = atok.strip()
+		if atok in ('', 'self'): continue
+		params.append(atok)
 	if len(params) > 0:
 	    apilist[api]=params
-	for aparam in params:
-	    if count !=0:
-		anded="%s&%s=<%s>" % (last_param, aparam.strip(), aparam.strip())
-	    else:
-		anded="%s=<%s>" % (aparam.strip(), aparam.strip())
-#apilist[api].append(anded.strip())
-	    last_param=anded
-	    count+=1
-	    #if len(params) > 0:
-	    
 
-print "---++++WRITE APIs (POST URIs)"
-print "DBS uses POST instead of PUT, as in some cases the payload size can be larger than PUT payload's upper limit"
-for aline in writer_web:
-    aline=aline.strip()
-    if aline.startswith("self.addService"):
-	api=aline.split(',')[1].replace("'", "").strip()
-	print "---+++++ %s" %api
-	api_url= "%s/%s" % (base_url, api)
-	print "<verbatim> %s </verbatim> " % api_url 
-
+print apilist	    
 print "---++++READ APIs"
 for api, params in apilist.items():
     print "\n---++++ %s" %api
