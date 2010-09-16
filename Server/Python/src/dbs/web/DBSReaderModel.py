@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.32 2010/04/21 19:50:02 afaq Exp $"
-__version__ = "$Revision: 1.32 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.33 2010/04/22 07:46:29 akhukhun Exp $"
+__version__ = "$Revision: 1.33 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -19,6 +19,9 @@ from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
 from dbs.business.DBSDataType import DBSDataType
 from dbs.business.DBSDataTier import DBSDataTier
+
+from dbs.business.DBSMigrate import DBSMigrate
+
 
 __server__version__ = "$Name:  $"
 
@@ -51,6 +54,8 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'datatiers', self.listDataTiers)#, ['block_name', 'se_name'])
         self.addService('GET', 'blockparents', self.listBlockParents)#, ['block_name', 'se_name'])
         self.addService('GET', 'blockchildren', self.listBlockChildren)#, ['block_name', 'se_name'])
+        self.addService('GET', 'blockdump', self.dumpBlock)
+	
         
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
@@ -63,6 +68,9 @@ class DBSReaderModel(RESTModel):
 	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
 	self.dbsDataType = DBSDataType(self.logger, self.dbi, config.dbowner)
 	self.dbsDataTier = DBSDataTier(self.logger, self.dbi, config.dbowner)
+
+	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
+    
 
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
@@ -261,6 +269,11 @@ class DBSReaderModel(RESTModel):
 	"""
 	return  self.dbsDataType.listDataType(dataType=datatype, dataset=dataset)
 
+    def dumpBlock(self, block_name):
+	"""
+	Returns all information related with the block_name
+	"""
+	return self.dbsMigrate.dumpBlock(block_name)
 
 
 	    
