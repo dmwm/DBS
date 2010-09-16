@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.30 2010/04/22 15:49:58 yuyi Exp $"
-__version__ = "$Revision: 1.30 $"
+__revision__ = "$Id: DBSBlock.py,v 1.31 2010/04/22 15:58:18 yuyi Exp $"
+__version__ = "$Revision: 1.31 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -138,7 +138,7 @@ class DBSBlock:
             blkinput["block_id"] =  self.sm.increment(conn, "SEQ_BK", tran)
             if(businput.has_key("origin_site")):
                 #blkinput["origin_site"] = self.siteid.execute(conn, businput["origin_site"], tran)
-		blkinput["origin_site"] = businput["origin_site"]
+		blkinput["origin_site_name"] = businput["origin_site"]
             self.blockin.execute(conn, blkinput, tran)
 
 	    if businput.has_key("site_list"):
