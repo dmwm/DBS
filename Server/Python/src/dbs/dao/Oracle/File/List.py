@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.29 2010/05/24 15:20:44 yuyi Exp $"
-__version__ = "$Revision: 1.29 $"
+__revision__ = "$Id: List.py,v 1.30 2010/06/03 16:00:11 yuyi Exp $"
+__version__ = "$Revision: 1.30 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -94,8 +94,8 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
     	    sql += "AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
 	    binds.update({"origin_site_name":origin_site_name})
 	#    
-	print "sql=%s" %sql
-	print "binds=%s" %binds
+	#print "sql=%s" %sql
+	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	if len(cursors) != 1 :
 	    raise Exception("File does not exist.")
