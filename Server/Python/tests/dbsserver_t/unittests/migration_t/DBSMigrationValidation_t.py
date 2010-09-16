@@ -2,8 +2,8 @@
 migration unit and validation tests
 """
 
-__revision__ = "$Id: DBSMigrationValidation_t.py,v 1.2 2010/08/27 14:19:48 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSMigrationValidation_t.py,v 1.3 2010/08/27 16:11:01 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import os
 import sys
@@ -50,8 +50,8 @@ def setupDB(config):
 # Source parameters
 #srcurl = os.environ["DBS_SRC_URL"]
 srcurl = "http://vocms09.cern.ch:8585/DBS"
-srcdataset = "/RelValSinglePiPt100/CMSSW_3_1_0_pre9_IDEAL_31X_v1/GEN-SIM-DIGI-RAW-HLTDEBUG"
-
+#srcdataset = "/RelValSinglePiPt100/CMSSW_3_1_0_pre9_IDEAL_31X_v1/GEN-SIM-DIGI-RAW-HLTDEBUG"
+srcdataset = "/tt1j_mT_70-alpgen/CMSSW_1_5_2-CSA07-2211/GEN-SIM-DIGI-RECO"
 # Destination parameters
 readerconfig = os.environ["DBS_TEST_CONFIG_READER"]
 writerconfig = os.environ["DBS_TEST_CONFIG_WRITER"]
@@ -66,7 +66,7 @@ class DBSMigrationValidation_t(unittest.TestCase):
 
 	def test01(self):
 	    """test01: able to register a migration request"""
-	    data = dict(migration_url="http://vocms09.cern.ch:8585/DBS", migration_input='/RelValSinglePiPt100/CMSSW_3_1_0_pre9_IDEAL_31X_v1/GEN-SIM-DIGI-RAW-HLTDEBUG')
+	    data = dict(migration_url="http://vocms09.cern.ch:8585/DBS", migration_input=srcdataset)
 	    migapi.insert('submit', data)
 	    ## validate that the request has been submitted
 	    data = { 'dataset' : srcdataset }
@@ -92,6 +92,15 @@ class DBSMigrationValidation_t(unittest.TestCase):
 		dstblkdump = readerapi.list('blockdump', block_name=asrcblk['block_name'] )
 		assert len(srcblkdump['file_conf_list']) == len(dstblkdump['file_conf_list'])
 		assert len(srcblkdump['files']) == len(dstblkdump['files'])
+		assert srcblkdump['block']['file_count'] == dstblkdump['block']['file_count']
+		assert srcblkdump['block']['origin_site_name'] == dstblkdump['block']['origin_site_name']
+		#assert srcblkdump['block']['block_size'] == dstblkdump['block']['block_size']
+		assert srcblkdump['dataset']['is_dataset_valid'] == dstblkdump['dataset']['is_dataset_valid']
+		assert srcblkdump['dataset']['physics_group_name'] == dstblkdump['dataset']['physics_group_name']
+		assert srcblkdump['dataset']['dataset_access_type'] == dstblkdump['dataset']['dataset_access_type']
+		assert srcblkdump['dataset']['global_tag'] == dstblkdump['dataset']['global_tag']
+		assert srcblkdump['dataset']['xtcrosssection'] == dstblkdump['dataset']['xtcrosssection']
+		assert srcblkdump['dataset']['data_tier_name'] == dstblkdump['dataset']['data_tier_name']
 		#for afile in srcblkdump['files']:
 		#    assert afile[''] = dstblkdump['files']
 		assert len(srcblkdump['block_parent_list']) == len(dstblkdump['block_parent_list'])
