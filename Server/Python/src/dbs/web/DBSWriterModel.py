@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.31 2010/03/18 16:28:59 afaq Exp $"
-__version__ = "$Revision: 1.31 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.32 2010/03/18 17:13:02 afaq Exp $"
+__version__ = "$Revision: 1.32 $"
 
 import re
 import cjson
@@ -265,8 +265,6 @@ class DBSWriterModel(DBSReaderModel):
 	"""
 	API to update dataset status
 	"""
-	import pdb
-	pdb.set_trace()
 	try:
 	    if dataset_type != "":
 		self.dbsDataset.updateType(dataset, dataset_type)
