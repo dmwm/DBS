@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.6 2009/12/08 19:30:45 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: List.py,v 1.7 2009/12/22 14:23:43 akhukhun Exp $"
+__version__ = "$Revision: 1.7 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -12,12 +12,12 @@ class List(DBFormatter):
     """
     PrimaryDataset List DAO class.
     """
-    def __init__(self, logger, dbi, owner):
+    def __init__(self, logger, dbi, owner=""):
         """
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
+        self.owner = ("", "%s." % owner)[bool(owner)]
         self.sql = \
 """
 SELECT P.PRIMARY_DS_ID, P.PRIMARY_DS_NAME, P.PRIMARY_DS_TYPE_ID,
@@ -27,32 +27,42 @@ JOIN %sPRIMARY_DS_TYPES PT
 ON PT.PRIMARY_DS_TYPE_ID=P.PRIMARY_DS_TYPE_ID
 """ % (self.owner, self.owner)
 
-        self.formatkeys = {"PRIMARY_DS_TYPE_DO":["PRIMARY_DS_TYPE_ID", "PRIMARY_DS_TYPE"]}
+    def formatCursor(self, cursor):
+        """
+        Tested only with cx_Oracle cursor. 
+        I suspect it will not work with MySQLdb
+        cursor must be already executed.
+        use fetchmany(size=arraysize=50)
+        """
+        keys = [d[0].lower() for d in cursor.description]
+        result = []
+        rapp = result.append
+        while True:
+            rows = cursor.fetchmany()
+            if not rows: 
+                cursor.close()
+                break
+            for r in rows:
+                rapp(dict(zip(keys, r)))
+        return result    
         
-    def formatDict(self, result):
-        dictOut = []
-        r = result[0]
-        descriptions = [str(x) for x in r.keys]
-        for i in r.fetchall():
-            idict = dict(zip(descriptions, i))     
-            for k in self.formatkeys:
-                idict[k] = {}
-                for kk in self.formatkeys[k]:
-                    idict[k][kk] = idict[kk]
-                    del idict[kk]
-            dictOut.append(idict)   
-	return dictOut  
-        #return {"result":dictOut}         
-        
-    def execute(self, pattern = "", conn = None, transaction = False):
+    def execute(self, primarydataset="", conn = None):
         """
         Lists all primary datasets if pattern is not provided.
         """
+        if not conn:
+            conn = self.dbi.connection()
+            
         sql = self.sql
-        if pattern == "":
-            result = self.dbi.processData(sql, conn=conn, transaction=transaction)
+        cursor = conn.connection.cursor()
+        
+        if not primarydataset:
+            cursor.execute(sql)
         else:
-            sql += "WHERE P.PRIMARY_DS_NAME %s :primarydsname" % ("=", "like")["%" in pattern]
-            binds = {"primarydsname":pattern}
-            result = self.dbi.processData(sql, binds, conn, transaction)
-        return self.formatDict(result)
+            sql += "WHERE P.PRIMARY_DS_NAME %s :primarydsname" % ("=", "like")["%" in primarydataset]
+            binds = {"primarydsname":primarydataset}
+            cursor.execute(sql, binds)
+            
+        result = self.formatCursor(cursor)
+        conn.close()
+        return result

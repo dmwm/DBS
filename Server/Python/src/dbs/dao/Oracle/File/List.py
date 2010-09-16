@@ -2,22 +2,22 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.12 2009/12/08 19:30:45 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: List.py,v 1.13 2009/12/22 14:23:32 akhukhun Exp $"
+__version__ = "$Revision: 1.13 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
-import cx_Oracle
+
 
 class List(DBFormatter):
     """
     File List DAO class.
     """
-    def __init__(self, logger, dbi, owner):
+    def __init__(self, logger, dbi, owner=""):
         """
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
+        self.owner = ("","%s." % owner)[bool(owner)]
         self.sql = \
 """
 SELECT F.FILE_ID, F.LOGICAL_FILE_NAME, F.IS_FILE_VALID, 
@@ -36,29 +36,50 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 """ % ((self.owner,)*4)
 
 
-    def execute(self, dataset = "", block = "", lfn = "",  \
-                conn = None, transaction = False):
+    def formatCursor(self, cursor):
+        """
+        Tested only with cx_Oracle cursor. 
+        I suspect it will not work with MySQLdb
+        cursor must be already executed.
+        use fetchmany(size=arraysize=50)
+        """
+        keys = [d[0].lower() for d in cursor.description]
+        result = []
+        rapp = result.append
+        while True:
+            rows = cursor.fetchmany()
+            if not rows: 
+                cursor.close()
+                break
+            for r in rows:
+                rapp(dict(zip(keys, r)))
+        return result
+
+
+    def execute(self, dataset = "", block = "", lfn = "", conn = None):
         """
         dataset: /a/b/c
         block: /a/b/c#d
         lfn: /store/ .....root
         """	
+        if not conn:
+            conn = self.dbi.connection()
         sql = self.sql
         binds = {}
             
-        if not block == "":
+        if block:
             sql += "WHERE B.BLOCK_NAME = :block"
             binds.update({"block":block})
-            if not lfn == "":
+            if lfn:
                 sql += " AND F.LOGICAL_FILE_NAME %s :lfn" % ("=","like")["%" in lfn]
                 binds.update({"lfn":lfn})
-        elif not dataset == "": 
+        elif dataset: 
             sql += "WHERE D.DATASET = :dataset"
             binds.update({"dataset":dataset})
-            if not lfn == "":
+            if lfn:
                 sql += " AND F.LOGICAL_FILE_NAME %s :lfn" % ("=","like")["%" in lfn]
                 binds.update({"lfn":lfn})
-        elif not lfn == "":
+        elif lfn:
             sql += "WHERE F.LOGICAL_FILE_NAME = :lfn" 
             binds.update({"lfn":lfn})
         else:
@@ -66,19 +87,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
         
         cursor = conn.connection.cursor()
         cursor.execute(sql, binds)
-	#print sql
-	#print binds
-        keys = [d[0] for d in cursor.description]
+        result = self.formatCursor(cursor)
+        conn.close()
+        return result 
 
-        result = []
-        rapp = result.append
-        while True:
-            rows  = cursor.fetchmany()
-            if not rows: break
-            for r in rows:
-                rapp(dict(zip(keys, r)))
-
-        cursor.close()
-	#print result
-	return result
-        #return {"result":result}

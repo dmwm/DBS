@@ -2,21 +2,22 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.8 2009/12/08 19:30:43 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: List.py,v 1.9 2009/12/22 14:23:01 akhukhun Exp $"
+__version__ = "$Revision: 1.9 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+
 
 class List(DBFormatter):
     """
     Block List DAO class.
     """
-    def __init__(self, logger, dbi, owner):
+    def __init__(self, logger, dbi, owner=""):
         """
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % owner
+        self.owner = ("","%s." % owner)[bool(owner)]
         self.sql = \
 """
 SELECT B.BLOCK_ID, B.BLOCK_NAME, B.OPEN_FOR_WRITING, 
@@ -28,47 +29,54 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
 """ % ((self.owner,)*3)
 
-        self.formatkeys = {"DATASET_DO":["DATASET_ID", "DATASET"],
-                           "SITE_DO":["ORIGIN_SITE", "SITE_NAME"]}
-    
-    def formatDict(self, result):
-        dictOut = []
-        r = result[0]
-        descriptions = [str(x) for x in r.keys]
-        for i in r.fetchall():
-            idict = dict(zip(descriptions, i))     
-            for k in self.formatkeys:
-                idict[k] = {}
-                for kk in self.formatkeys[k]:
-                    idict[k][kk] = idict[kk]
-                    del idict[kk]
-            dictOut.append(idict) 
-	return dictOut    
-        #return {"result":dictOut} 
 
-    def execute(self, dataset = "", block = "",  \
-                conn = None, transaction = False):
+    def formatCursor(self, cursor):
+        """
+        Tested only with cx_Oracle cursor. 
+        I suspect it will not work with MySQLdb
+        cursor must be already executed.
+        use fetchmany(size=arraysize=50)
+        """
+        keys = [d[0].lower() for d in cursor.description]
+        result = []
+        rapp = result.append
+        while True:
+            rows = cursor.fetchmany()
+            if not rows: 
+                cursor.close()
+                break
+            for r in rows:
+                rapp(dict(zip(keys, r)))
+        return result    
+    
+
+    def execute(self, dataset = "", block = "", conn = None):
         """
         dataset: /a/b/c
         block: /a/b/c#d
         """	
+        if not conn:
+            conn = self.dbi.connection()
         sql = self.sql
         binds = {}
-        if not dataset == "":
+        if dataset:
             sql += "WHERE DS.DATASET = :dataset"
             binds.update({"dataset":dataset})
         
-            if not block == "":
+            if block:
                 sql += " AND B.BLOCK_NAME %s :block" % ("=", "like")["%" in block]
                 binds.update({"block":block})
                 
-        elif not block == "":
+        elif block:
             sql += "WHERE B.BLOCK_NAME %s :block" % ("=", "like")["%" in block]
             binds.update({"block":block})
         
         else: 
             raise Exception("Either dataset or block must be provided")
         
-        result = self.dbi.processData(sql, binds, conn, transaction)
-        return self.formatDict(result)
+        cursor = conn.connection.cursor()
+        cursor.execute(sql, binds)
+        result = self.formatCursor(cursor)
+        conn.close()
+        return result
 
