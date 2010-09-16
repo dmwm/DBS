@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: BriefList.py,v 1.1 2010/08/01 19:02:29 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: BriefList.py,v 1.2 2010/08/03 13:36:41 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -50,7 +50,7 @@ class BriefList(DBFormatter):
 	if release_version or pset_hash or app_name or output_module_label:
 	    joinsql += """
 		LEFT OUTER JOIN %sFILE_OUTPUT_MOD_CONFIGS FOMC ON FOMC.FILE_ID = F.FILE_ID
-		LEFT OUTER JOIN %sOUTPUT_MODULE_CONFIGS OMC ON OMC.OUTPUT_MOD_CONFIG_ID = DOMC.OUTPUT_MOD_CONFIG_ID 
+		LEFT OUTER JOIN %sOUTPUT_MODULE_CONFIGS OMC ON OMC.OUTPUT_MOD_CONFIG_ID = FOMC.OUTPUT_MOD_CONFIG_ID 
 	    """ % ((self.owner,)*2)
 	    
 	if release_version:
