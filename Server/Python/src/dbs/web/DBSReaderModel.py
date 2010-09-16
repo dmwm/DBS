@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.28 2010/04/19 15:41:20 afaq Exp $"
-__version__ = "$Revision: 1.28 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.29 2010/04/19 16:27:28 afaq Exp $"
+__version__ = "$Revision: 1.29 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -15,8 +15,6 @@ from dbs.business.DBSSite import DBSSite
 from dbs.business.DBSFile import DBSFile
 from dbs.business.DBSAcquisitionEra import DBSAcquisitionEra
 from dbs.business.DBSOutputConfig import DBSOutputConfig
-from dbs.business.DBSDatasetParent import DBSDatasetParent
-from dbs.business.DBSFileParent import DBSFileParent
 from dbs.business.DBSFileLumi import DBSFileLumi
 from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
@@ -44,6 +42,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'blocks', self.listBlocks)#, ['dataset', 'block_name', 'site_name'])
         self.addService('GET', 'files', self.listFiles)#, ['dataset', 'block_name', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'datasetparents', self.listDatasetParents)#, ['dataset'])
+        self.addService('GET', 'datasetchildren', self.listDatasetChildren)#, ['dataset'])
         self.addService('GET', 'outputconfigs', self.listOutputConfigs)#, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'fileparents', self.listFileParents)#, ['logical_file_name'])
         self.addService('GET', 'filelumis', self.listFileLumis)#, ['logical_file_name', 'block_name'])
@@ -59,9 +58,7 @@ class DBSReaderModel(RESTModel):
         self.dbsBlock = DBSBlock(self.logger, self.dbi, config.dbowner)
         self.dbsFile = DBSFile(self.logger, self.dbi, config.dbowner)
         self.dbsAcqEra = DBSAcquisitionEra(self.logger, self.dbi, config.dbowner)
-        self.dbsDatasetParent = DBSDatasetParent(self.logger, self.dbi, config.dbowner)
         self.dbsOutputConfig = DBSOutputConfig(self.logger, self.dbi, config.dbowner)
-        self.dbsFileParent = DBSFileParent(self.logger, self.dbi, config.dbowner)
         self.dbsFileLumi = DBSFileLumi(self.logger, self.dbi, config.dbowner)
         self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi, config.dbowner)
         self.dbsSite = DBSSite(self.logger, self.dbi, config.dbowner)
@@ -191,7 +188,14 @@ class DBSReaderModel(RESTModel):
         Example url's <br />
         http://dbs3/datasetparents?dataset=/a/b/c
         """
-        return self.dbsDatasetParent.listDatasetParents(dataset)
+        return self.dbsDataset.listDatasetParents(dataset)
+
+    def listDatasetChildren(self, dataset):
+        """
+        Example url's <br />
+        http://dbs3/datasetchildren?dataset=/a/b/c
+        """
+        return self.dbsDataset.listDatasetChildren(dataset)
     
     def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="", output_module_label=""):
         """
@@ -215,7 +219,7 @@ class DBSReaderModel(RESTModel):
         Example url's <br />
         http://dbs3/fileparents?logical_file_name=lfn
         """
-        return self.dbsFileParent.listFileParents(logical_file_name)
+        return self.dbsFile.listFileParents(logical_file_name)
         
     def listFileLumis(self, logical_file_name="", block_name=""):
         """

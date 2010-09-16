@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.37 2010/04/16 21:57:30 afaq Exp $"
-__version__ = "$Revision: 1.37 $"
+__revision__ = "$Id: DBSFile.py,v 1.38 2010/04/19 16:27:27 afaq Exp $"
+__version__ = "$Revision: 1.38 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -37,7 +37,25 @@ class DBSFile:
 	self.fconfigin = daofactory(classname='FileOutputMod_config.Insert')
 	self.updatestatus = daofactory(classname='File.UpdateStatus')
 	self.dsconfigids = daofactory(classname='DatasetOutputMod_config.GetDSConfigs')
-	
+	self.fileparentlist = daofactory(classname="FileParent.List")
+
+    def listFileParents(self, logical_file_name): 
+        """
+        required parameter: logical_file_name
+        returns: logical_file_name, parent_logical_file_name, parent_file_id
+        """
+	try:
+	    conn=self.dbi.connection()
+	    if not logical_file_name:
+		raise Exception("logical_file_name is required for listFileParents api")
+	    result= self.fileparentlist.execute(conn,logical_file_name)
+	    conn.close()
+	    return result
+        except Exception, ex:
+	    raise ex
+	finally:
+	    conn.close()
+
     def updateStatus(self, logical_file_name, is_file_valid):
 	"""
 	Used to toggle the status of a file from is_file_valid=1 (valid) to is_file_valid=0 (invalid)
