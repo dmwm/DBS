@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for DbsVersions table """ 
 
-__revision__ = "$Revision: 1.2 $"
-__version__  = "$Id: Insert.py,v 1.2 2009/10/20 02:19:20 afaq Exp $ "
+__revision__ = "$Revision: 1.3 $"
+__version__  = "$Id: Insert.py,v 1.3 2010/01/28 23:08:02 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -10,9 +10,9 @@ class Insert(DBFormatter):
 
     def __init__(self, logger, dbi):
             DBFormatter.__init__(self, logger, dbi)
-            self.owner = "%s." % self.dbi.engine.url.username
+	    self.owner = "%s." % owner
 
-            self.sql = """INSERT INTO %sDBS_VERSIONS ( DBS_VERSION_ID, SCHEMA_VERSION, DBS_RELEASE_VERSION, INSTANCE_NAME, INSTANCE_TYPE, CREATION_DATE, LAST_MODIFICATION_DATE) VALUES (:dbsversionid, :schemaversion, :dbsreleaseversion, :instancename, :instancetype, :creationdate, :lastmodificationdate) % (self.owner) ;"""
+            self.sql = """INSERT INTO %sDBS_VERSIONS ( DBS_VERSION_ID, SCHEMA_VERSION, DBS_RELEASE_VERSION, INSTANCE_NAME, INSTANCE_TYPE, CREATION_DATE, LAST_MODIFICATION_DATE) VALUES (:dbsversionid, :schemaversion, :dbsreleaseversion, :instancename, :instancetype, :creationdate, :lastmodificationdate)""" % (self.owner)
 
     def getBinds_delme( self, dbs_versionsObj ):
             binds = {}
