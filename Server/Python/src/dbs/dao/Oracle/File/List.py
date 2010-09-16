@@ -2,10 +2,11 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.10 2009/12/04 16:33:38 akhukhun Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: List.py,v 1.11 2009/12/07 15:47:38 akhukhun Exp $"
+__version__ = "$Revision: 1.11 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+import cx_Oracle
 
 class List(DBFormatter):
     """
@@ -33,37 +34,6 @@ JOIN %sFILE_TYPES FT ON  FT.FILE_TYPE_ID = F.FILE_TYPE_ID
 JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID 
 JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 """ % ((self.owner,)*4)
-
-        self.formatkeys = {"DATASET_DO":["DATASET_ID", "DATASET"],
-                           "BLOCK_DO":["BLOCK_ID", "BLOCK_NAME"],
-                           "FILE_TYPE_DO":["FILE_TYPE_ID", "FILE_TYPE"]}
-        
-    def formatDict(self, result):
-        dictOut = []
-        r = result[0]
-        descriptions = [str(x) for x in r.keys]
-        for i in r.fetchall():
-            idict = dict(zip(descriptions, i))     
-
-            for k in self.formatkeys:
-                idict[k] = {}
-                for kk in self.formatkeys[k]:
-                    idict[k][kk] = idict[kk]
-                    del idict[kk]
-
-            dictOut.append(idict)     
-        return {"result":dictOut} 
-
-
-    def ResultIter(self, cursor, size=100):
-        'An iterator that uses fetchmany to keep memory usage down'
-        done = False
-        while not done:
-            results = cursor.fetchmany(size)
-            if results == []:
-                done = True
-            for result in results:
-                yield result
 
 
     def execute(self, dataset = "", block = "", lfn = "",  \
@@ -94,22 +64,17 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
         else:
             raise Exception("Either dataset or block must be provided")
         
-        #this was before
-        #result = self.dbi.processData(sql, binds, conn, transaction)
-        #return self.formatDict(result)
-        # let's forget about the nested output now and optimize without it.
-        #return [dict(r) for r in result[0].fetchall()]
-       
-        conn = self.dbi.connection()
-        result = conn.execute(sql, binds)
+        cursor = conn.connection.cursor()
+        cursor.execute(sql, binds)
+        keys = [d[0] for d in cursor.description]
 
-        #return  [dict(r) for r in result] # same as fetchone
+        result = []
+        rapp = result.append
+        while True:
+            rows  = cursor.fetchmany()
+            if not rows: break
+            for r in rows:
+                rapp(dict(zip(keys, r)))
 
-        #return [dict(r) for r in result.fetchall()]
-
-        #I will leave this one for now. looks better... set the same arraysize in cx_Oracle
-        #return [dict(r) for r in self.ResultIter(result, 500)] #set the same arraysize for cx_Oracle
-
-        #return generator
-        return (dict(r) for r in self.ResultIter(result, 500)) #set the same arraysize for cx_Oracle
-
+        cursor.close()
+        return {"result":result}
