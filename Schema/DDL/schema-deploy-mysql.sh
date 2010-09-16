@@ -1,7 +1,9 @@
-export PATH=$MYSQL_ROOT/bin:$PATH
+#!/bin/bash
+#export PATH=$MYSQL_ROOT/bin:$PATH
 #update pd to real pd
-mysql --port=$MYSQL_PORT --socket=$MYSQL_SOCK -uroot -ppd < create-mysql-schema.sql
-mysql --port=$MYSQL_PORT --socket=$MYSQL_SOCK -uroot -ppd < initialize-mysql.sql
-mysql --port=$MYSQL_PORT --socket=$MYSQL_SOCK -uroot -ppd < create-seqTb-mysql.sql
-mysql --port=$MYSQL_PORT --socket=$MYSQL_SOCK -uroot -ppd < initialize-mysql-seq.sql
+mysql --port=$MYSQL_PORT --socket=$MYSQL_SOCK -uroot -ppd << ENDOFMYSQL 
+source create-mysql-schema.sql
+source initialize-mysql.sql
+source create-seqTb-mysql.sql
+source initialize-mysql-seq.sql
 

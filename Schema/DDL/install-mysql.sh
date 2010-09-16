@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 #create the database
 $MYSQL_ROOT/bin/mysql_install_db --datadir=$MYSQL_PATH --port=$MYSQL_PORT --socket=$MYSQL_SOCK
 #start the server
@@ -13,4 +15,6 @@ $MYSQL_ROOT/bin/mysql --socket=$MYSQL_SOCK -uroot -ppd mysql -e "CREATE USER use
 'upd';"
 $MYSQL_ROOT/bin/mysql --socket=$MYSQL_SOCK -uroot -ppd mysql -e "UPDATE user set
 Select_priv='Y',Insert_priv='Y',Update_priv='Y',Delete_priv='Y',Create_priv='Y',Drop_priv='Y',References_priv='Y',Index_priv='Y',Alter_priv='Y',Create_tmp_table_priv='Y',Lock_tables_priv='Y',Execute_priv='Y',Create_view_priv='Y',Show_view_priv='Y',Create_routine_priv='Y',Alter_routine_priv='Y' where User='username';"
+
+$MYSQL_ROOT/bin/mysql --socket=$MYSQL_SOCK --port=$MYSQL_PORT -uroot -ppd mysql -e "GRANT ALL ON CMS_DBS3.* TO dbs@localhost;"
 
