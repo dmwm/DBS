@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.7 2010/03/19 12:58:19 yuyi Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.8 2010/03/19 21:46:37 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 import json
 import os, logging
@@ -88,11 +88,12 @@ class DBSRestApi:
     def parseForException(self, data):
 	if type(data)==type("abc"):
 	    data=json.loads(data)	
-	if type(data) == type({}) and data.has_key('exception'):
-	    #raise Exception("DBS Server raised an exception: " + data['message']['message'])
-	    #import pdb
-	    #pdb.set_trace()
-	    raise Exception("DBS Server raised an exception: " + (data['message']))
+	if type(data) == type({}):
+	    if data.has_key('results'): 
+		data=data['results'] 
+		if type(data) == type({}) and data.has_key('exception'):
+		    #raise Exception("DBS Server raised an exception: " + data['message']['message'])
+		    raise Exception("DBS Server raised an exception: " + (data['message']))
 	return data
 
 def options():
