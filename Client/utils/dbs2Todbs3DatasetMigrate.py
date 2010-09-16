@@ -123,7 +123,7 @@ class migrateDBS2TODBS3:
 
 			if name == 'file':
 				self.currfile={
-					"logical_file_name":attrs.get('lfn'), "is_file_valid": 1, "dataset": self.path, "block" : self.block_name,
+					"logical_file_name":attrs.get('lfn'), "is_file_valid": 1, "dataset": self.path, "block_name" : self.block_name,
 					"file_type": "EDM",
 					"check_sum": attrs.get('checksum'), "event_count": attrs.get('number_of_events'), "file_size": attrs.get('size'), 
 					"adler32": attrs.get('adler32'), "md5": attrs.get('md5'), "auto_cross_section": 0.0, 
