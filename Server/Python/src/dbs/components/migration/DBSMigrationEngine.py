@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.14 2010/08/27 16:11:43 afaq Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.15 2010/08/27 16:49:58 afaq Exp $"
+__version__ = "$Revision: 1.15 $"
 
 import threading
 import logging
@@ -557,7 +557,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                         appobj={"app_name": m["app_name"], "app_exec_id": appId}
                         self.appin.execute(conn, appobj, tran)
                     #cached it
-                    self.datasetCache['appExe'][m["app_name"]] = pHId        
+                    self.datasetCache['appExe'][m["app_name"]] = appId        
                 #Now insert the config
                 configObj = {'output_mod_config_id':cfgid , 'app_exec_id':appId,  'release_version_id':reId,  \
                              'parameter_set_hash_id':pHId , 'output_module_label':m['output_module_label'],   \
