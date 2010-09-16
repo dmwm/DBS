@@ -55,12 +55,12 @@ class migrateDBS2TODBS3:
 	if os.path.exists(fileName):
 		data = open(fileName, "r").read()
 	else:	
-		#data=self.dbs2api.listDatasetContents(dataset, blockName)
+		data=self.dbs2api.listDatasetContents(dataset, blockName)
 		fp=open(fileName, "w")
 		fp.write(data)
 		fp.close()
-  	#print data
-	#print "Processing Dataset : %s and Block : %s " % (dataset, blockName)
+	#print data
+	print "Processing Dataset : %s and Block : %s " % (dataset, blockName)
   	class Handler (xml.sax.handler.ContentHandler):
 
 		def __init__(self, dbs3api):
@@ -89,7 +89,7 @@ class migrateDBS2TODBS3:
 			if name == 'processed_dataset':
 				self.dataset=	{
 						"is_dataset_valid": 1 , "primary_ds_name": self.primary_dataset, "primary_ds_type": "test", 
-						"dataset_type":"PRODUCTION",
+						"dataset_access_type":"PRODUCTION",
 						"global_tag": attrs.get('global_tag'),"xtcrosssection":123,"physics_group_name": "Tracker", 
 						#"processing_version" : "1", 
 						#"acquisition_era_name" : attrs.get('acquisition_era')
@@ -113,12 +113,12 @@ class migrateDBS2TODBS3:
 						"block_name":attrs.get('name'), "open_for_writing":1,"block_size": attrs.get('size'), 
 						"file_count":attrs.get('number_of_files'), "creation_date":attrs.get('creation_date'), 
 						"create_by":attrs.get('created_by'), "last_modification_date":attrs.get('last_modification_date'), 
-						"last_modified_by":attrs.get('last_modified_by'), "origin_site" : "cms.fnal.gov"
+						"last_modified_by":attrs.get('last_modified_by'), "origin_site_name" : "cms.fnal.gov"
 						}
 				self.block_name=attrs.get('name')
 
 			if name == 'storage_element':
-				self.block["origin_site"]=attrs.get('storage_element_name')
+				self.block["origin_site_name"]=attrs.get('storage_element_name')
 				self.sitelist.append({ "site_name" : attrs.get('storage_element_name') } )
 
 			if name == 'file':
