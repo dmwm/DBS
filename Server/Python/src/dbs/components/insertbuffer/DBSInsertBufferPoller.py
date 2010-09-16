@@ -2,8 +2,8 @@
 """
 DBS Insert Buffer Polling Module
 """
-__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.1 2010/05/26 21:27:08 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.2 2010/05/26 21:44:33 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 
 """
@@ -86,7 +86,6 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	    blks = self.getBlocks()
 	    for ablk_id in blks:
 	        bufferedinput = self.getBufferedFiles(ablk_id["block_id"])
-	        time.sleep(10)
 	        insertinput = [eval(afile['file_blob'])  for afile in bufferedinput ]
 	        #for afile in insertinput:
 		    #self.logger.debug("run_inserts : %s" % afile.keys() )
