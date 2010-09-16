@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.41 2010/04/22 16:23:23 yuyi Exp $"
-__version__ = "$Revision: 1.41 $"
+__revision__ = "$Id: DBSFile.py,v 1.42 2010/05/04 19:24:54 afaq Exp $"
+__version__ = "$Revision: 1.42 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -204,6 +204,9 @@ class DBSFile:
 	#import pdb
 	#pdb.set_trace()
 
+	if len(businput) > 10:
+	    raise Exception("DBS cannot insert more than 10 files in one bulk call")
+	    return
 	try:
 
 	    # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
