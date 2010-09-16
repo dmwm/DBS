@@ -3,11 +3,13 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.47 2010/08/02 20:49:37 afaq Exp $"
-__version__ = "$Revision: 1.47 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.48 2010/08/09 11:07:17 akhukhun Exp $"
+__version__ = "$Revision: 1.48 $"
 
 import cjson
+import inspect
 from WMCore.WebTools.RESTModel import RESTModel
+from dbs.utils.dbsUtils import dbsUtils as DBSUtils 
 
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
@@ -21,7 +23,6 @@ from dbs.business.DBSRun import DBSRun
 from dbs.business.DBSDataType import DBSDataType
 from dbs.business.DBSDataTier import DBSDataTier
 from dbs.business.DBSStatus import DBSStatus
-
 from dbs.business.DBSMigrate import DBSMigrate
 
 import urllib, urllib2
@@ -64,7 +65,9 @@ class DBSReaderModel(RESTModel):
         self.addMethod('GET', 'blockparents', self.listBlockParents)
         self.addMethod('GET', 'blockchildren', self.listBlockChildren)
         self.addMethod('GET', 'blockdump', self.dumpBlock)
+	self.addMethod('GET', 'help', self.getHelp)
 	self.addMethod('GET', 'register', self.register)
+
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
         self.dbsBlock = DBSBlock(self.logger, self.dbi, config.dbowner)
@@ -78,6 +81,8 @@ class DBSReaderModel(RESTModel):
 	self.dbsDataTier = DBSDataTier(self.logger, self.dbi, config.dbowner)
 	self.dbsStatus = DBSStatus(self.logger, self.dbi, config.dbowner)
 	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
+
+	self.dbsUtils = DBSUtils()
     
     def geoLocateThisHost(self, ip):
 	"""
@@ -126,6 +131,15 @@ class DBSReaderModel(RESTModel):
         version = version.replace("$", "")
         version = version.strip()
         return version
+
+    def getHelp(self, call=""):
+	if call:
+	    params=inspect.getargspec(self.methods['GET'][call]['call'])[0]
+	    del params[params.index('self')]
+	    doc = self.methods['GET'][call]['call'].__doc__
+	    return dict(params=params, doc=doc)
+	else:
+	    return self.methods['GET'].keys()
     
     def getServerInfo(self):
         """
@@ -157,11 +171,12 @@ class DBSReaderModel(RESTModel):
 			processing_version="", acquisition_era="", run_num=0, physics_group_name="", logical_file_name="", primary_ds_name="",
 			primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
         """
-        Example url's: <br />
-        http://dbs3/datasets <br />
-        http://dbs3/datasets/RelVal* <br />
-        http://dbs3/datasets?dataset=/RelVal*/*/*RECO <br />
-        http://dbs3/datasets?dataset=/RelVal*/*/*RECO&release_version=CMSSW_3_0_0<br />
+	This API lists the dataset paths and associated information.
+	If no parameter is given, all datasets will be returned.
+	<dataset> parameter can include one or several '*' as wildcards.
+	<detail> parameter is defaulted to False, which means only dataset paths will be returned in the output dictionary. 
+	In order to get more information, one needs to provide detail=True.
+	<run_num> can be only be passed as a single number. No interval of run numbers is supported for this api for now.
         """
         dataset = dataset.replace("*", "%")
 	parent_dataset = parent_dataset.replace("*", "%")
@@ -225,13 +240,18 @@ class DBSReaderModel(RESTModel):
  
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", 
 	pset_hash="", app_name="", output_module_label="", minrun=-1, maxrun=-1,
-	origin_site_name="", lumi_list=[], detail=False):
+	origin_site_name="", lumi_list="", detail=False):
         """
-        Example url's: <br />
-        http://dbs3/files?dataset=/a/b/c/ <br />
-        http://dbs3/files?block_name=a/b/c#d <br />
-        http://dbs3/files?dataset=/a/b/c&lfn=/store/* <br />
-        http://dbs3/files?block_name=/a/b/c%23d&logical_file_name=/store/* <br />
+	This API returns logical file names and associated information.
+	One of the following three parameters must be provided: dataset, block, logical_file_name.
+	<detail> parameter is defaulted to False, which means only logical_file_names will be returned in the output json. 
+	In order to get more information, one needs to provide detail=True.
+	Run numbers must be passed as two parameters, minrun and maxrun. 
+	for lumi_list the following two json formats are supported:
+	    - '[a1, a2, a3,]' 
+	    - '[[a,b], [c, d],]'
+	Also if lumi_list is provided, one also needs to provide both minrun and maxrun parameters(equal) 
+	No POST/PUT call for run-lumi json combination is provided as input for now...
         """
         logical_file_name = logical_file_name.replace("*", "%")
 	release_version = release_version.replace("*", "%")
@@ -242,8 +262,9 @@ class DBSReaderModel(RESTModel):
 	dataset = dataset.replace("*", "%")
 	maxrun = int(maxrun)
 	minrun = int(minrun)
-	if type(lumi_list) == str:
-	    lumi_list = cjson.decode(lumi_list)
+	if lumi_list:
+	    #lumi_list = cjson.decode(lumi_list)
+	    lumi_list = self.dbsUtils.decodeLumiIntervals(lumi_list)
 	detail = detail in (True, 1, "True", "1")
 	output_module_label = output_module_label.replace("*", "%")
 	return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
