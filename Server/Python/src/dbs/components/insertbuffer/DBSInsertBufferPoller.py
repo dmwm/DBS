@@ -2,8 +2,8 @@
 """
 DBS Insert Buffer Polling Module
 """
-__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.3 2010/05/27 19:36:11 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.4 2010/06/09 21:30:33 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 
 """
@@ -64,6 +64,7 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	self.buflistblks = daofactory(classname="FileBuffer.ListBlocks")
 	self.buffinddups = daofactory(classname="FileBuffer.FindDuplicates")
 	self.bufdeletedups = daofactory(classname="FileBuffer.DeleteDuplicates")
+	self.compstatus = daofactory(classname="ComponentStatus.Insert")
 
     # called by frk at the termination time
     def terminate(self, params):
@@ -99,6 +100,23 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	except Exception, ex:
 	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
 	
+    def reportStatus(self):
+	"""
+	This is a local function, basically component reports its status to database
+	"""
+	try:
+	    conn = self.dbi.connection()
+	    tran = conn.begin()
+	    comp_status_id = self.sm.increment(conn, "SEQ_CS", transaction=tran)
+	    statusObj={comp_status_id : comp_status_id, "component_name" : "WRITER BUFFER", "last_contact_time" : time.time()}
+	    self.compstatus.execute(conn, statusObj, tran)
+	    tran.commit()
+	except Exception, ex:
+	    tran.rollabck()
+	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
+    	finally:
+	    conn.close()
+    
     def getBlocks(self):
 	"""
 	Get the blocks that need to be migrated
