@@ -1,9 +1,10 @@
 import logging
 from WMCore.Database.DBFactory import DBFactory
-from dbs.business.DBSOutputConfig import DBSOutputConfig
 from dbs.business.DBSDataset import DBSDataset
+from dbs.business.DBSOutputConfig import DBSOutputConfig
 from dbs.business.DBSAcquisitionEra import DBSAcquisitionEra
 from dbs.business.DBSProcessingEra import DBSProcessingEra
+from dbs.business.DBSFile import DBSFile
 
 class Test:
 
@@ -59,8 +60,38 @@ class Test:
 		         }
 		bo.insertProcessingEra(binput)
 
+
+    def testFiles(self):
+		"""
+		This method tests the buisness login (and dao ) for the insertFiles() API
+		"""
+
+		bo = DBSFile(self.logger, self.dbi, "anzar")
+		binput = [{ 
+			    'file_type': 'EDM', 
+			    'logical_file_name': '/store100077/mc/Summer09/TkCosmics38T/GEN-SIM-DIGI-RAW/STARTUP31X_V3-v1/0010/66EE7132-FFB3-DE11-9D33-001E682F1FA6.root', 
+			    'file_size': '2824329131', 
+			    'last_modification_date': '1255099729', 
+			    'file_parent_list': [], 
+			    'auto_cross_section': 0.0, 
+			    'md5': 'NOTSET', 
+			    'check_sum': '862355611', 
+			    'file_lumi_list': [{'LUMI_SECTION_NUM': u'10018', 'RUN_NUM': '1'}], 
+			    'adler32': 'NOTSET', 
+			    'event_count': '2041', 
+			    'create_by': 'cmsprod@caraway.hep.wisc.edu', 
+			    'last_modified_by': '/DC=org/DC=doegrids/OU=People/CN=Ajit Kumar Mohapatra 867118', 
+			    'dataset': '/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-DIGI-RAW', 
+			    'block': '/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-DIGI-RAW#fc31bf9d-d44e-45a6-b87b-8fe6e2701062', 
+			    'is_file_valid': 1
+			}]
+
+		bo.insertFile(binput)
+
 test=Test()
-test.testOutputConfig()
-test.testDatasetInsert()
-test.testAcquisitionEra()
-test.testProcessingEra()
+#test.testOutputConfig()
+#test.testDatasetInsert()
+#test.testAcquisitionEra()
+#test.testProcessingEra()
+test.testFiles()
+    
