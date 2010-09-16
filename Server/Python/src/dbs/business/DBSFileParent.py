@@ -3,8 +3,8 @@
 This module provides business object class to interact with FileParent. 
 """
 
-__revision__ = "$Id: DBSFileParent.py,v 1.2 2010/01/26 22:17:38 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSFileParent.py,v 1.3 2010/03/08 19:56:36 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -28,6 +28,9 @@ class DBSFileParent:
         required parameter: logical_file_name
         returns: logical_file_name, parent_logical_file_name, parent_file_id
         """
+	conn=self.dbi.connection()
 	if not logical_file_name:
 	    raise Exception("logical_file_name is required for listFileParents api")
-        return self.fileparentlist.execute(logical_file_name)
+        result= self.fileparentlist.execute(conn,logical_file_name)
+	conn.close(0
+	return result
