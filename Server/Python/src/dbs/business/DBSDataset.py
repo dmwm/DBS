@@ -3,10 +3,12 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.6 2009/11/12 15:19:35 akhukhun Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: DBSDataset.py,v 1.7 2009/11/16 21:44:47 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.DAOFactory import DAOFactory
+
+from exceptions import Exception
 
 class DBSDataset:
     """
@@ -40,8 +42,8 @@ class DBSDataset:
         classdict = {"primaryds":"PrimaryDataset.GetID",
                  "datatier":"DataTier.GetID",
                  "datasettype":"DatasetType.GetID",
-                 "acquisitionera":"AcquisitionEra.GetID",
-                 "processingversion":"ProcessingEra.GetID",
+                 #"acquisitionera":"AcquisitionEra.GetID",
+                 #"processingversion":"ProcessingEra.GetID",
                  "physicsgroup":"PhysicsGroup.GetID"}
         
         conn = self.dbi.connection()
@@ -52,6 +54,7 @@ class DBSDataset:
                 businput[k] = dao.execute(businput[k], conn, True)
             
             processedds = self.daofactory(classname = "ProcessedDataset.GetID")
+	
             if processedds.execute(businput["processedds"]) > 0:
                 businput["processedds"] = processedds.execute(businput["processedds"])
             else:

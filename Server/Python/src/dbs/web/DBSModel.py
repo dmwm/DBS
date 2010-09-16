@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.14 2009/11/16 19:30:31 yuyi Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSModel.py,v 1.15 2009/11/16 21:44:47 afaq Exp $"
+__version__ = "$Revision: 1.15 $"
 
 import re
 import json, cjson
@@ -142,32 +142,44 @@ class DBSModel(RESTModel):
         datasettype, acquisitionera, processingversion,
         physicsgroup, xtcrosssection, globaltag
         """
-        body = request.body.read()
-        indata = json.loads(body)
-        
-        #>> validation.. will be moved to a separate method probably
-        assert type(indata) == dict
-        assert len(indata.keys()) == 8
-        vds = re.match(r"/([\w\d_-]+)/([\w\d_-]+)/([\w\d_-]+)", indata["dataset"])
-        assert vds
-        assert type(indata["isdatasetvalid"]) == bool
-        assert type(indata["xtcrosssection"]) == float
-        #finish validation
-        #<< end of validation
-        
-        indata.update({"primaryds":vds.groups()[0],
-                      "processedds":vds.groups()[1],
-                      "datatier":vds.groups()[2],
-                      "creationdate":1234,
-                      "createby":"me",
-                      "lastmodificationdate":1234,
-                      "lastmodifiedby":"alsome"})
-        
-        bo = DBSDataset(self.logger, self.dbi)
-        bo.insertDataset(indata)
-                
-         
-        
+
+        try :
+                body = request.body.read()
+                indata = json.loads(body)
+                self.debug(str(indata))
+                assert type(indata) == dict
+       
+                dataset={}
+                dataset['primaryds']=indata.get('PRIMARY_DS_NAME', '')
+                dataset['processedds']=indata.get('PROCESSED_DATASET_NAME', '')
+                dataset['datatier']=indata.get('DATA_TIER_NAME', '')
+                dataset['globaltag']=indata.get('GLOBAL_TAG', '')
+                dataset['physicsgroup']=indata.get('PHYSICS_GROUP_NAME', '')
+                #dataset['processingversion']=indata.get('PROCESSING_VERSION', '')
+                #dataset['acquisitionera']=indata.get('ACQUISITION_ERA_NAME', '')
+                dataset['creationdate']=1234
+                dataset['createby']="me"
+                dataset['datasettype']=indata.get('DATASET_TYPE', 'test')
+                dataset['lastmodificationdate']=1234
+                dataset['lastmodifiedby']="me"
+                dataset['isdatasetvalid']=indata.get('IS_DATASET_VALID', '')
+                dataset['xtcrosssection']=indata.get('XTCROSSSECTION', '')
+                vds = re.match(r"/([\w\d_-]+)/([\w\d_-]+)/([\w\d_-]+)", indata["DATASET"])
+                assert vds
+                dataset['dataset']=indata["DATASET"]
+
+                bo = DBSDataset(self.logger, self.dbi)
+                bo.insertDataset(dataset)
+
+        except Exception, ex:   
+                # ORA-00001: unique constraint
+                if str(ex).find("unique constraint") != -1 :
+                        self.debug("unique constraint violation being ignored")
+                else:
+                        self.debug(ex)
+                        self.debug(traceback.print_exc())
+                        raise ex
+                        #raise httplib.HTTPException(401, str(ex))        
         
     def insertBlock(self):
         """

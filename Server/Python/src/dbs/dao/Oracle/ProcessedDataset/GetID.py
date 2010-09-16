@@ -2,8 +2,8 @@
 """
 This module provides ProcessedDataset.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.1 2009/11/03 16:41:26 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: GetID.py,v 1.2 2009/11/16 21:44:47 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -33,6 +33,6 @@ FROM %sPROCESSED_DATASETS PD
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
         if len(plist) == 1:
-            return plist[0]["processed_ds_name"]
+            return plist[0]["processed_ds_id"]
         else:
             return -1
