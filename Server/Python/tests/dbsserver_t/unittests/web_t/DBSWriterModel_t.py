@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.13 2010/01/27 23:16:38 dsr Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.14 2010/01/28 15:54:23 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 import os
 import sys
@@ -54,10 +54,6 @@ outDict={
 "block" : block,
 "files" : []
 }
-
-infoout=open("info.dict", "w")
-infoout.write("info="+str(outDict))
-infoout.close()
 
 class DBSWriterModel_t(unittest.TestCase):
 
@@ -279,9 +275,15 @@ class DBSWriterModel_t(unittest.TestCase):
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
+	    outDict['files'].append(f['logical_file_name'])
 	data={"files":flist}
 	api.insert('files', data)
-	
+
+    def test2000(self):
+        infoout=open("info.dict", "w")
+        infoout.write("info="+str(outDict))
+        infoout.close()	
+
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSWriterModel_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
