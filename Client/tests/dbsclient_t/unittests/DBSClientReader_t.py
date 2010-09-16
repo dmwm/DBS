@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.13 2010/03/18 20:19:58 afaq Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.14 2010/03/19 15:06:14 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 import os
 import json
@@ -314,7 +314,20 @@ class DBSClientReader_t(unittest.TestCase):
     def test65(self):
 	"""test65 unittestDBSClientReader_t.listDatasets: acquisition_era"""
 	api.listDatasets(dataset=testparams['dataset'], acquisition_era=testparams['acquisition_era'] )
+
+    def test66(self):
+	"""test66 unittestDBSClientReader_t.listDatasets: acquisition_era and processing_version both"""
+	api.listDatasets(dataset=testparams['dataset'], acquisition_era=testparams['acquisition_era'], processing_version=testparams['processing_version'] )
+
+    def test67(self):
+	"""test67 unittestDBSClientReader_t.listDataTypes: basic test"""
+	api.listDataTypes()
+    
+    def test68(self):
+	"""test68 unittestDBSClientReader_t.listDataTypes: for a dataset"""
+	api.listDataTypes(dataset=testparams['dataset'])
 	
+    
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
