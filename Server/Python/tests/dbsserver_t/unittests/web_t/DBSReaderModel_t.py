@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.24 2010/08/23 18:14:51 afaq Exp $"
-__version__ = "$Revision: 1.24 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.25 2010/08/30 18:04:20 afaq Exp $"
+__version__ = "$Revision: 1.25 $"
 
 import os, sys, imp
 import json
@@ -598,7 +598,7 @@ class DBSReaderModel_t(unittest.TestCase):
         
     def test104(self):
         """test104: web.DBSReaderModel.listDatasetChildren: basic"""
-        api.list('datasetchildren', dataset=testparams['parent_dataset'])
+        api.list('datasetchildren', dataset=testparams['dataset'])
 
     def test105(self):
         """test105: web.DBSReaderModel.listBlockParents: basic"""
@@ -606,7 +606,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test106(self):
         """test106: web.DBSReaderModel.listBlockChildren: basic"""
-        api.list('blockchildren', block_name=testparams['parent_block'])
+        api.list('blockchildren', block_name=testparams['block'])
         
     def test107(self):
         """test107: web.DBSReaderModel.listFileParents: basic"""
