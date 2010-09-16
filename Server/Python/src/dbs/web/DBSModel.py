@@ -3,11 +3,11 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.18 2009/11/17 20:19:44 yuyi Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: DBSModel.py,v 1.19 2009/11/19 17:31:49 akhukhun Exp $"
+__version__ = "$Revision: 1.19 $"
 
 import re
-import json, cjson
+import cjson
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
@@ -15,9 +15,6 @@ from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
 from cherrypy import request
 
-
-from exceptions import Exception
-import traceback
 
 class DBSModel(RESTModel):
     """
@@ -37,8 +34,6 @@ class DBSModel(RESTModel):
         self.addService('POST', 'datasets', self.insertDataset)
         self.addService('POST', 'blocks', self.insertBlock)
         self.addService('POST', 'files', self.insertFile)
-        self.addService('POST', 'post', self.donothing)
-        self.addService('DELETE', 'delete', self.donothing)
 
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
@@ -97,193 +92,164 @@ class DBSModel(RESTModel):
         result = bo.listFiles(dataset = dataset, block = block, lfn = lfn)
         return {"result":result}
        
-    def insertPrimaryDataset(self, **kw):
+    def insertPrimaryDataset(self):
         """
         gets the input from cherrypy request body.
         input must be a dictionary with the following two keys:
-	PRIMARY_DS_NAME, PRIMARY_DS_TYPE
+        PRIMARY_DS_NAME, PRIMARY_DS_TYPE
         """
-	
-	try:
-        	body = request.body.read()
-        	indata = json.loads(body)
+        try:
+            body = request.body.read()
+            indata = cjson.decode(body)
+            
+            data = {}
+            data.update({"creationdate":123456, "createby":"me"})
+            data["primarydsname"] = indata["PRIMARY_DS_NAME"]
+            data["primarydstype"] = indata["PRIMARY_DS_TYPE"]
+            bo = DBSPrimaryDataset(self.logger, self.dbi)
+            bo.insertPrimaryDataset(data)
 
-        	#input validation
-        	valid = re.compile("^[\w\d_-]+$")
-        	assert type(indata) == dict
-        	assert len(indata.keys()) == 2, "Invalid input, %s" %(str(indata))
-        	assert valid.match(indata["PRIMARY_DS_NAME"]), \
-            	"Invalid character(s) in PRIMARY_DS_TYPE: %s" % indata["PRIMARY_DS_NAME"]
-        	assert valid.match(indata["PRIMARY_DS_TYPE"]), \
-            	"Invalid character(s) in PRIMARY_DS_TYPE: %s" % indata["PRIMARY_DS_TYPE"]
-
-        	indata.update({"creationdate":123456, "createby":"me"})
-        	data={}
-        	data.update({"creationdate":123456, "createby":"me"})
-        	data["primarydsname"]=indata["PRIMARY_DS_NAME"]
-        	data["primarydstype"]=indata["PRIMARY_DS_TYPE"]
-        	bo = DBSPrimaryDataset(self.logger, self.dbi)
-        	bo.insertPrimaryDataset(data)
-
-     	except Exception, ex:
-		# ORA-00001: unique constraint
-		if str(ex).find("unique constraint") != -1 :
-			self.debug("unique constraint violation being ignored")
-		else:	
-			self.debug(ex)
-            		self.debug(traceback.print_exc())
-			raise ex
+        except Exception, ex:
+            # Need to return this to the client
+            # ORA-00001: unique constraint
+            if str(ex).find("unique constraint") != -1 :
+                self.logger.warning("unique constraint violation being ignored")
+            else:	
+                self.logger.error(ex)
+                raise 
 
     def insertDataset(self):
         """
         gets the input from cherrypy request body.
         input must have the following keys:
-        dataset, isdatasetvalid
-        datasettype, acquisitionera, processingversion,
-        physicsgroup, xtcrosssection, globaltag
+        KEYS : required/optional:default = ...
+        ...
         """
 
         try :
-                body = request.body.read()
-                indata = json.loads(body)
-                self.debug(str(indata))
-                assert type(indata) == dict
-       
-                dataset={}
-                dataset['primaryds']=indata.get('PRIMARY_DS_NAME', '')
-                dataset['processedds']=indata.get('PROCESSED_DATASET_NAME', '')
-                dataset['datatier']=indata.get('DATA_TIER_NAME', '')
-                dataset['globaltag']=indata.get('GLOBAL_TAG', '')
-                dataset['physicsgroup']=indata.get('PHYSICS_GROUP_NAME', '')
-                #dataset['processingversion']=indata.get('PROCESSING_VERSION', '')
-                #dataset['acquisitionera']=indata.get('ACQUISITION_ERA_NAME', '')
-                dataset['creationdate']=1234
-                dataset['createby']="me"
-                dataset['datasettype']=indata.get('DATASET_TYPE', 'test')
-                dataset['lastmodificationdate']=1234
-                dataset['lastmodifiedby']="me"
-                dataset['isdatasetvalid']=indata.get('IS_DATASET_VALID', '')
-                dataset['xtcrosssection']=indata.get('XTCROSSSECTION', '')
-                vds = re.match(r"/([\w\d_-]+)/([\w\d_-]+)/([\w\d_-]+)", indata["DATASET"])
-                assert vds
-                dataset['dataset']=indata["DATASET"]
+            body = request.body.read()
+            indata = cjson.decode(body)
+                
+            # need proper validation
+                
+            dataset={}
+            dataset['primaryds'] = indata['PRIMARY_DS_NAME']
+            dataset['processedds'] = indata['PROCESSED_DATASET_NAME']
+            dataset['datatier'] = indata['DATA_TIER_NAME']
+            dataset['globaltag'] = indata.get('GLOBAL_TAG', '')
+            dataset['physicsgroup'] = indata.get('PHYSICS_GROUP_NAME', '')
+            dataset['creationdate'] = 1234
+            dataset['createby'] = "me"
+            dataset['datasettype'] = indata.get('DATASET_TYPE', 'test')
+            dataset['lastmodificationdate'] = 1234
+            dataset['lastmodifiedby'] = "me"
+            dataset['isdatasetvalid'] = indata.get('IS_DATASET_VALID', '')
+            dataset['xtcrosssection'] = indata.get('XTCROSSSECTION', '')
+            dataset['dataset'] = indata["DATASET"]
 
-                bo = DBSDataset(self.logger, self.dbi)
-                bo.insertDataset(dataset)
+            bo = DBSDataset(self.logger, self.dbi)
+            bo.insertDataset(dataset)
 
         except Exception, ex:   
-                # ORA-00001: unique constraint
-                if str(ex).find("unique constraint") != -1 :
-                        self.debug("unique constraint violation being ignored")
-                else:
-                        self.debug(ex)
-                        self.debug(traceback.print_exc())
-                        raise ex
-                        #raise httplib.HTTPException(401, str(ex))        
+            #Need to return this to the client
+            # ORA-00001: unique constraint
+            if str(ex).find("unique constraint") != -1 :
+                self.logger.warning("unique constraint violation being ignored")
+            else:
+                self.logger.error(ex)
+                raise 
         
     def insertBlock(self):
         """
         gets the input from cherrypy request body.
         input must be a dictionary with the following keys:
-        blockname:/string/string/string#string
-        openforwriting bool
-        originsite string
-        blocksize int
-        filecount int
+        KEYS: required/optional : default = ...
+        ...
         """
 
-	try:
+        try:
 
-        	body = request.body.read()
-        	indata = json.loads(body)
+            body = request.body.read()
+            indata = cjson.decode(body)
 
-        	#>>validation - will be moved to the separate method later.
-        	assert type(indata) == dict
-        	#assert len(indata.keys()) == 5
-        	assert "BLOCK_NAME" in indata.keys()
-        	vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
+            # Proper validation needed
+            # Some random validation
+            assert type(indata) == dict
+            vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
                           indata["BLOCK_NAME"])
-        	assert vblock, "Invalid block name %s" % indata["BLOCK_NAME"]
+            assert vblock, "Invalid block name %s" % indata["BLOCK_NAME"]
        
-		block={} 
-        	block.update({
-			"dataset":vblock.groups()[0],
-                        "creationdate": indata.get("CREATION_DATE", 123456),
-                        "createby":indata.get("CREATE_BY","me"),
-                        "lastmodificationdate":indata.get("LAST_MODIFICATION_DATE", 12345),
-                        "lastmodifiedby":indata.get("LAST_MODIFIED_BY","me"),
-			"blockname":indata["BLOCK_NAME"],
-			"filecount":indata.get("FILE_COUNT", 0),
-			"blocksize":indata.get("BLOCK_SIZE", 0),
-			#"originsite":indata.get("ORIGIN_SITE", "TEST")
-			"originsite":"TEST",
-			"openforwriting":1
-			})
-	
-        	bo = DBSBlock(self.logger, self.dbi)
-        	bo.insertBlock(block)
+            block={} 
+            block.update({
+                          "dataset":vblock.groups()[0],
+                          "creationdate": indata.get("CREATION_DATE", 123456),
+                          "createby":indata.get("CREATE_BY","me"),
+                          "lastmodificationdate":indata.get("LAST_MODIFICATION_DATE", 12345),
+                          "lastmodifiedby":indata.get("LAST_MODIFIED_BY","me"),
+                          "blockname":indata["BLOCK_NAME"],
+                          "filecount":indata.get("FILE_COUNT", 0),
+                          "blocksize":indata.get("BLOCK_SIZE", 0),
+                          #"originsite":indata.get("ORIGIN_SITE", "TEST")
+                          "originsite":"TEST",
+                          "openforwriting":1
+                          })
+            
+            bo = DBSBlock(self.logger, self.dbi)
+            bo.insertBlock(block)
 
         except Exception, ex :
-                # ORA-00001: unique constraint
-                if str(ex).find("unique constraint") != -1 :
-                        self.debug("unique constraint violation being ignored")
-                else:
-                        self.debug(ex)
-                        self.debug(traceback.print_exc())
-                        raise ex
-                        #raise httplib.HTTPException(401, str(ex))        
+            # Need to return this to the client
+            # ORA-00001: unique constraint
+            if str(ex).find("unique constraint") != -1 :
+                self.logger.warning("unique constraint violation being ignored")
+            else:
+                self.logger.error(ex)
+                raise 
 
     def insertFile(self):
         """
         gets the input from cherrypy request body
         input must be a (list of) dictionary with the following keys:
-        LOGICAL_FILE_NAME: string
-        IS_FILE_VALID: 1/0
-        #DATASET: /a/b/c I will get this from the block
-        BLOCK: /a/b/c#d
-        FILE_TYPE: one of the predefined types, e.g. EDM,
-        CHECK_SUM: string
-        EVENT_COUNT: int
-        FILE_SIZE: float
-        ADLER32: string
-        MD5: string
-        AUTO_CROSS_SECTION: float
-	FILE_LUMI_LIST: [{"RUN_NUM": 123, "LUMI_SECTION_NUM": 12},{}....]
-	FILE_PARENT_LIST :[{"FILE_PARENT_LFN": "mylfn"},{}....] 
+        LOGICAL_FILE_NAME (required) : string
+        IS_FILE_VALID: (optional, default = 1): 1/0
+        BLOCK, required: /a/b/c#d
+        FILE_TYPE (optional, default = EDM): one of the predefined types,
+        CHECK_SUM (optional, default = '-1'): string
+        EVENT_COUNT (optional, default = -1): int
+        FILE_SIZE (optional, default = -1.): float
+        ADLER32 (optional, default = ''): string
+        MD5 (optional, default = ''): string
+        AUTO_CROSS_SECTION (optional, default = -1.): float
+	    FILE_LUMI_LIST (optional, default = []): [{"RUN_NUM": 123, "LUMI_SECTION_NUM": 12},{}....]
+	    FILE_PARENT_LIST(optional, default = []) :[{"FILE_PARENT_LFN": "mylfn"},{}....] 
         """
-	#self.debug("****This is a test****")
         body = request.body.read()
         indata = cjson.decode(body)
         
-        # lot of validation goes here: These are bad checks. Need to be fixed later
+        # proper validation needed
         businput = []
         assert type(indata) in (list, dict)
         if type(indata) == dict:
             indata = [indata]
-        for f  in indata:
-            #block = vblock.match(f["block"])
+            
+        for f in indata:
+            #some random validation
             conditions = ( "LOGICAL_FILE_NAME" in f.keys(),
                           f["IS_FILE_VALID"] in (0,1),
                           "BLOCK" in f.keys(),
                           f["FILE_TYPE"] in ("EDM"))
             for c in conditions:
                 assert c, "One of the input conditions is not satisfied" % conditions
-	    block = f["BLOCK"]
-	    #self.debug("Error block %s %s" % (block, "test"))
-	    #self.debug("Dataset %s" %(block[0:block.find('#')]))
+                
+            block = f["BLOCK"]
             f.update({"DATASET":block[0:block.find('#')],
                      "CREATION_DATE":12345,
                      "CREATE_BY":"aleko",
                      "LAST_MODIFICATION_DATE":12345,
-                     "LAST_MODIFIED_BY":"alsoaleko"})
+                     "LAST_MODIFIED_BY":"alsoaleko",
+                     "FILE_LUMI_LIST":f.get("FILE_LUMI_LIST",[]),
+                     "FILE_PARENT_LIST":f.get("FILE_PARENT_LIST",[])})
             businput.append(f)
-	#print businput
-	#print len(businput)
-        bo = DBSFile(self, self.dbi)
+            
+        bo = DBSFile(self.logger, self.dbi)
         bo.insertFile(businput)
-        print "*** Done with Modle"
-    def donothing(self, *args, **kwargs):
-        """
-        doing nothing
-        """
-        pass
