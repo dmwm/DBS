@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.21 2010/03/09 16:38:02 afaq Exp $"
-__version__ = "$Revision: 1.21 $"
+__revision__ = "$Id: DBSBlock.py,v 1.22 2010/03/19 21:28:04 afaq Exp $"
+__version__ = "$Revision: 1.22 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -79,7 +79,7 @@ class DBSBlock:
             tran.commit()
     
         except Exception, e:
-	    if str(e).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+	    if str(e).lower().find("unique constraint") != -1 or str(e).lower().find("duplicate") != -1:
 		pass
 	    else:
 		tran.rollback()
