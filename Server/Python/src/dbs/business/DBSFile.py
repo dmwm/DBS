@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.49 2010/05/27 21:25:14 afaq Exp $"
-__version__ = "$Revision: 1.49 $"
+__revision__ = "$Id: DBSFile.py,v 1.50 2010/06/07 17:51:16 yuyi Exp $"
+__version__ = "$Revision: 1.50 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -169,6 +169,7 @@ class DBSFile:
 	# We do not wnat to go be beyond 10 files at a time
 	# If user wants to insert over 10 files in one shot, we run into risks of locking the database 
 	# tables for longer time, and in case of error, it will be hard to see where error occured 
+	#qInserts=False
 	if len(businput) > 10:
 	    raise Exception("DBS cannot insert more than 10 files in one bulk call")
 	    return
@@ -338,7 +339,8 @@ class DBSFile:
 		    if not qInserts:
 			self.fconfigin.execute(conn, fconfigs2insert, transaction=tran)  
 		if qInserts:
-		    try:  
+		    try: 
+		        print file_blob
 			self.filebufin.execute(conn, filein['logical_file_name'], block_id, file_blob, transaction=tran)
 		    except exceptions.IntegrityError, ex:
 		        if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
