@@ -2,8 +2,8 @@
 """
 This module provides StorageElement.ListBlockSE data access object.
 """
-__revision__ = "$Id: ListBlockSE.py,v 1.1 2010/03/02 20:17:19 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: ListBlockSE.py,v 1.2 2010/03/02 21:13:13 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -18,7 +18,6 @@ class ListBlockSE(DBFormatter):
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
-
 	"""
 	SELECT SE.SE_NAME, B.BLOCK_NAME 
 	FROM %sSTORAGE_ELEMENTS SE

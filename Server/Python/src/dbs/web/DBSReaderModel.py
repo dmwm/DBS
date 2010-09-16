@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.17 2010/03/01 22:29:10 afaq Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.18 2010/03/02 21:13:14 afaq Exp $"
+__version__ = "$Revision: 1.18 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -20,6 +20,7 @@ from dbs.business.DBSFileParent import DBSFileParent
 from dbs.business.DBSFileLumi import DBSFileLumi
 from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
+from dbs.business.DBSStorageElement import DBSStorageElement
 
 __server__version__ = "$Name:  $"
 
@@ -45,6 +46,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'fileparents', self.listFileParents, ['logical_file_name'])
         self.addService('GET', 'filelumis', self.listFileLumis, ['logical_file_name', 'block_name'])
         self.addService('GET', 'runs', self.listRuns, ['dataset', 'block_name', 'logical_file_name', 'minRun', 'maxRun'])
+        self.addService('GET', 'storage_elements', self.listRuns, ['block_name', 'se_name'])
         
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
@@ -58,6 +60,7 @@ class DBSReaderModel(RESTModel):
         self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi, config.dbowner)
         self.dbsSite = DBSSite(self.logger, self.dbi, config.dbowner)
 	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
+	self.dbsStorageElement = DBSStorageElement(self.logger, self.dbi, config.dbowner)
     
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
@@ -192,4 +195,13 @@ class DBSReaderModel(RESTModel):
 	http://dbs3/runs?dataset=dataset
         """
         return self.dbsRuns.listRuns(dataset, block_name, logical_file_name , minRun, maxRun)
-    
+   
+    def listStorageElements(self, block_name="", se_name=""):
+        """
+        Example url's <br />
+        http://dbs3/storage_elements
+	http://dbs3/storage_elements?block_name=block_name
+	http://dbs3/storage_elements?se_name
+        """
+        return self.dbsStorageElements.listStorageElements(block_name, se_name)
+   
