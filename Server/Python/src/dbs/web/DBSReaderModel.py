@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.41 2010/05/27 21:24:39 afaq Exp $"
-__version__ = "$Revision: 1.41 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.42 2010/06/14 15:08:42 afaq Exp $"
+__version__ = "$Revision: 1.42 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -19,6 +19,7 @@ from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
 from dbs.business.DBSDataType import DBSDataType
 from dbs.business.DBSDataTier import DBSDataTier
+from dbs.business.DBSStatus import DBSStatus
 
 from dbs.business.DBSMigrate import DBSMigrate
 
@@ -40,22 +41,22 @@ class DBSReaderModel(RESTModel):
     
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 	self.addService('GET', 'serverinfo', self.getServerInfo)
-        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets)#, ['primary_ds_name', 'primary_ds_type'])
-        self.addService('GET', 'datasets', self.listDatasets)#, ['dataset', 'parent_dataset', 'release_version', 'pset_hash', 'app_name', 'output_module_label', 'primary_ds_name', 'logical_file_name', 'run_num?', 'dataset_type?'])
-        self.addService('GET', 'blocks', self.listBlocks)#, ['dataset', 'block_name', 'site_name', 'release_version', 'logical_file_name'])
-        self.addService('GET', 'files', self.listFiles)#, ['dataset', 'block_name', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num'])
-        self.addService('GET', 'datasetparents', self.listDatasetParents)#, ['dataset'])
-        self.addService('GET', 'datasetchildren', self.listDatasetChildren)#, ['dataset'])
-        self.addService('GET', 'outputconfigs', self.listOutputConfigs)#, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
-        self.addService('GET', 'fileparents', self.listFileParents)#, ['logical_file_name'])
-        self.addService('GET', 'filechildren', self.listFileChildren)#, ['logical_file_name'])
-        self.addService('GET', 'filelumis', self.listFileLumis)#, ['logical_file_name', 'block_name', 'run_list'?])
-        self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minrun', 'maxrun']/['lumi_section_list[]?'])
-        self.addService('GET', 'sites', self.listSites)#, ['block_name', 'se_name'])
-        self.addService('GET', 'datatypes', self.listDataTypes)#, ['block_name', 'se_name'])
-        self.addService('GET', 'datatiers', self.listDataTiers)#, ['block_name', 'se_name'])
-        self.addService('GET', 'blockparents', self.listBlockParents)#, ['block_name', 'se_name'])
-        self.addService('GET', 'blockchildren', self.listBlockChildren)#, ['block_name', 'se_name'])
+        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets)
+        self.addService('GET', 'datasets', self.listDatasets)
+        self.addService('GET', 'blocks', self.listBlocks)
+        self.addService('GET', 'files', self.listFiles)
+        self.addService('GET', 'datasetparents', self.listDatasetParents)
+        self.addService('GET', 'datasetchildren', self.listDatasetChildren)
+        self.addService('GET', 'outputconfigs', self.listOutputConfigs)
+        self.addService('GET', 'fileparents', self.listFileParents)
+        self.addService('GET', 'filechildren', self.listFileChildren)
+        self.addService('GET', 'filelumis', self.listFileLumis)
+        self.addService('GET', 'runs', self.listRuns)
+        self.addService('GET', 'sites', self.listSites)
+        self.addService('GET', 'datatypes', self.listDataTypes)
+        self.addService('GET', 'datatiers', self.listDataTiers)
+        self.addService('GET', 'blockparents', self.listBlockParents)
+        self.addService('GET', 'blockchildren', self.listBlockChildren)
         self.addService('GET', 'blockdump', self.dumpBlock)
 	
         
@@ -70,7 +71,8 @@ class DBSReaderModel(RESTModel):
 	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
 	self.dbsDataType = DBSDataType(self.logger, self.dbi, config.dbowner)
 	self.dbsDataTier = DBSDataTier(self.logger, self.dbi, config.dbowner)
-
+	self.dbsStatus = DBSStatus(self.logger, self.dbi, config.dbowner)
+    
 	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
     
 
@@ -93,7 +95,6 @@ class DBSReaderModel(RESTModel):
         version = version.strip()
         return version
     
-    
     def getServerInfo(self):
         """
         Method that provides information about DBS Server to the clients
@@ -103,10 +104,10 @@ class DBSReaderModel(RESTModel):
         * ETC - TBD
         """
         ret = {}
-        ret["version"] = self.getServerVersion()
-        ret["schema"] = "DBS_0_0_0"
+        ret["tagged_version"] = self.getServerVersion()
+        ret["schema"] = self.dbsStatus.getSchemaStatus()
+	ret["components"] = self.dbsStatus.getComponentStatus()
         return ret
-
 
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
