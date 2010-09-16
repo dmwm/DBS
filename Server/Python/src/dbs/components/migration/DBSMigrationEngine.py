@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.3 2010/08/12 19:17:57 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.4 2010/08/17 16:28:34 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import threading
 import logging
@@ -58,6 +58,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	self.datasetCache['relVer']={}
 	self.datasetCache['pHash']={}
 	self.datasetCache['appExe']={}
+	self.datasetCache['conf']={} #key=app:rel:phash
 	
     # This is only called once by the frwk
     def setup(self, parameters):
@@ -85,6 +86,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	self.blocklist	    = daofactory(classname="Block.List")
 	self.blockid        = daofactory(classname="Block.GetID")
 	self.filelist	    = daofactory(classname="File.List")
+	self.fileid       = daofactory(classname="File.GetID")
+	self.filetypeid     = daofactory(classname="FileType.GetID")
 	self.fplist	    = daofactory(classname="FileParent.List")
         self.fllist	    = daofactory(classname="FileLumi.List")
 	self.primdstpid	    = daofactory(classname='PrimaryDSType.GetID')
@@ -111,6 +114,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	self.blockin        = daofactory(classname='Block.Insert')
 	self.sm             = daofactory(classname = "SequenceManager")
 	self.filein         = daofactory(classname = "File.Insert")
+	self.filetypein     = daofactory(classname = "FileType.Insert")
 	self.flumiin        = daofactory(classname = "FileLumi.Insert")
 	self.fparentin      = daofactory(classname = "FileParent.Insert")
 	self.fpbdlist       = daofactory(classname = "FileParentBlock.List")
@@ -211,9 +215,9 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		self.urs.execute(conn, requestID, 1, self.threadID, dbsUtils().getTime(),tran)
 		tran.commit()
 		return request[0]
-	except:
+	except Exception, ex:
 	    self.logger.exception("DBS Migrate Service Failed to find migration requests")
-	    raise
+	    raise Exception("DBS Migrate Service Failed to find migration requests: %s", %ex)
 	
 		
     def updateBlockStatus(self, conn, block_name, status):
@@ -249,7 +253,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    #Now it is depending on the remote server's blocks call.
 	    ddata = cjson.decode(data.read())
 	except Exception, ex:
-	    print ex
+	    #print ex
 	    raise Exception ("Unable to get information from src dbs : %s for block : %s" %(url, block_name))
         return ddata
 
@@ -262,7 +266,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
             #Now it is depending on the remote server's calls.
             ddata = cjson.decode(data.read())
         except Exception, ex:
-            print ex
+            #print ex
             raise Exception ("Unable to get information from src dbs : %s for %s?%s=%s" %(url, verb, searchingName, searchingVal))
         return ddata
 
@@ -270,10 +274,112 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	"""
 	Insert the data in sereral steps and commit when each step finishes or rollback if there is a problem.
 	"""
-	#1 insert dataset
-	datasetId = self.insertDataset(conn, blockcontent url)
-	#2 Insert Block
+	#1 insert configuration
+	configList = self.insertOutputModuleConfig(conn, blockcontent['dataset']['dataset'], url)
+	#2 insert dataset
+	datasetId = self.insertDataset(conn, blockcontent, configList,  url)
+	#3 Insert Block
 	blockId = self.insertBlock(conn, blockcontent)
+	#4 inser files
+    
+    def insertFile(self, conn, blockcontent, blockId, datasetId)
+        fileLumiList = []
+	fileTypeObjs = []
+	fileConfObjs = []
+	logicalFileName ={}
+	fileList = blockcontent['files']
+	fileConfigList = blockcontent['file_conf_list']
+	fileParentList = blockcontent['file_parent_list']
+	if not fileList:
+	    return
+	intval = 40
+        intvalum = 1000
+	intvalfileparent = 120
+	intvalfileconf = 1
+	try:
+	    for i in range(len(fileList)):
+		if(i%intval==0):
+		    id = self.sm.increment(conn,"SEQ_FL")
+		fileList[i]['file_id'] = id
+		logicalFileName{fileList[i]['logical_file_name']} = id
+		id += 1
+		fileList[i]['block_id'] = blockId
+		fileList[i]['dataset_id'] = datasetId
+		#get file type id
+		fType = fileList[i]['file_type']
+		fTypeid = self.filetypeid.execute(conn, fType)
+		if fTypeid <=0 :
+		    fTypeid =  self.sm.increment(conn,"SEQ_FT")
+		    ftypeO = {'file_type':fType, 'file_type_id':fTypeid}
+		    fileTypeObjs.append(ftypeO)
+		fileList[i]['file_type_id'] = fTypeid
+		#get lumi info
+		lumi = fileList[i]['file_lumi_list']
+                nlumi = len(lumi)
+		for j in range(nlumi):
+		    lumi[j]['file_id'] = id
+		    if((i*nlumi+j)%intvalum==0):
+			idlumi = self.sm.increment(conn,"SEQ_FLM")
+		    lumi[j]['file_lumi_id'] = idlumi
+		    idlumi += 1;
+		fileLumiList[len(fileLumiList):] = lumi
+		#remove the lumi list from the file 
+		del fileList[i]['file_lumi_list']
+		#get file parents
+	except Exception, ex:
+            self.logger.exception("DBS file and lumi section exception: %s" %ex)
+	   raise
+	try:	
+	    #deal with file parentage
+	    nfileparent = len(fileParentList)
+	    for k in range(nfileparent):
+		if(k%intvalfileparent==0):
+		    idfp = self.sm.increment(conn,"SEQ_FP")
+		fileParentList[k]['file_parent_id'] = idfp 
+		idfp += 1
+		fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
+		parentId = self.fileid.execute(conn, fileParentList[k]['parent_logical_file_name'])
+		if parentId <= 0 :
+		    raise Exception("File parent %s cannot be found" %fileParentList[k]['parent_logical_file_name'])
+		fileParentList[k]['parent_file_id'] = parentId
+		del fileParentList[k]['parent_logical_file_name']
+	    #deal with file config
+	    for fc in fileConfigList:
+		key=fc['app_name']+':'+fc['release_version']+':'+fc['pset_hash']
+		if not key in (self.datasetCache['conf']).keys():
+		    #we expect the config is inserted when the dataset is in.
+		    raise Exception("Configuration application name, release version and pset hash: %s, %s ,%s not found" \
+				%(fc['app_name'], fc['release_version'], fc['pset_hash']))
+		fcObj={'file_output_config_id':self.sm.increment(conn,"SEQ_FC"), 'file_id':logicalFileName[fc['lfn']]
+		       , 'output_mod_config_id': self.datasetCache['conf'][key] }
+		fileConfObjs.append(fcObj)
+	except Exception, ex:
+	    self.logger.exception("DBS file parentage and config exception: %s" %ex)
+	    raise
+	try:
+	    #now we build everything to insert the files.
+	    tran = conn.being()
+	    #insert the file type
+	    if fileTypeObjs:
+		self.filetypein.execute(conn, fileTypeObjs, tran)
+	    #insert files
+	    if fileList:
+		self.filein.execute(conn, fileList, tran)
+	    #insert file parents
+	    if fileParentList:
+		self.fparentin.execute(conn, fileParentList, tran)
+	    #insert file lumi
+	    if fileLumiList:
+		self.flumiin.execute(conn, fileLumiList, tran)
+	    #insert file configration
+	    if fileConfObjs:
+		self.fconfigin.execute(conn, fileConfObjs, tran)
+	    tran.commit()
+	except Exception, ex:
+	    self.logger.exception("DBS file inseration exception: %s" %ex)
+	    tran.rollback()
+	    raise
+
 
     def insertBlock(self, conn, blockcontent)
 	"""
@@ -292,7 +398,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	except exceptions.IntegrityError:
 	    #ok, already in db
 	    block['block_id'] = self.blockid.execute(conn, block['block_name'])
-	exception:
+	except Exception, ex:
+	    self.logger.exception("DBS block inseration exception: %s" %ex)
 	    tran.rollback()
 	    raise
 	#Now handle Block Parenttage
@@ -301,23 +408,24 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	if newBlock:
 	    try:
 		for i in range(len(bpList)):
-		    if(i==0 or i%intavl==0):
+		    if(i%intavl==0):
 			id = self.sm.increment(conn,"SEQ_BP")
-		    parent['block_parent_id'] = id
+		    bpList[i]['block_parent_id'] = id
 		    id += 1
-		    parent['this_block_id'] = block['block_id']
-		    parent['parent_block_id'] = self.blockid.execute(conn, parent['block_name'])
-		    if parent['parent_block_id'] <= 0:
-			raise Exception("Parent block: %s not found in db" %parent['block_name'])
-		    del parent['block_name']
+		    bpList[i]['this_block_id'] = block['block_id']
+		    bpList[i]['parent_block_id'] = self.blockid.execute(conn, bpList[i]['block_name'])
+		    if bpList[i]['parent_block_id'] <= 0:
+			raise Exception("Parent block: %s not found in db" %bpList[i]['block_name'])
+		    del bpList[i]['block_name']
 		if bpList and newBlock:
 		    self.blkparentin.execute(conn, bpList, tran)
-	    exception:
+	    except Exception, ex:
+		self.logger.exception("DBS block parentage inseration exception: %s" %ex)
 		tran.rollback()
 		raise
 	try:
 	    tran.commit()
-	exception:
+	except:
 	    raise
 	return block['block_id']
 
@@ -335,9 +443,11 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		   c["output_module_label"])
 		if cfgid > 0:
 		    otptIdList.append(cfgid)
+		    self.datasetCache['conf']={c["app_name"]+':'+c["release_version"]+':'c["pset_hash"] : cfgid}
 		if cfgid <=0 :
 		    missingList.append(c)
-	exception:
+	except Exception, ex:
+	    self.logger.exception("DBS output module config  exception: %s" %ex)
 	    raise
 	#Now insert the missing configs
 	try:
@@ -390,8 +500,10 @@ class DBSMigrationEngine(BaseWorkerThread) :
                              'creation_date':, 'create_by': }
 		self.otptModCfgin(conn,	configObj, tran)
 		otptIdList.append(cfgid)
+		self.datasetCache['conf']={m["app_name"]+':'+m["release_version"]+':'m["pset_hash"] : cfgid}
 	    tran.commit()
-	exception:
+	except Exception, ex:
+	    self.logger.exception("DBS output module configure inseration exception: %s" %ex)
             tran.rollback()
             raise
         return otptIdList
@@ -464,7 +576,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		    #regist to cache
 		    self.datasetCache['processedDs']['processed_ds_name'] = dataset['processed_ds_id']
 		    pass
-		except:
+		except Exception, ex:
+		    self.logger.exception("DBS processed ds inseration exception: %s" %ex)
 		    tran.rollback
 		    raise
 	    #3 Deal with Acquisition era
@@ -486,7 +599,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 			#ok, already in db
 			dataset['acquisition_era_id'] = self.acqid.execute(conn, aq['acquisition_era_name'])
 			self.datasetCache['acquisitionEra'][aq['acquisition_era_name']] = dataset['acquisition_era_id']
-		    except:
+		    except Exception, ex:
+			self.logger.exception("DBS acquisition era inseration exception: %s" %ex)
 			tran.rollback
 			raise
 	    else:
@@ -511,7 +625,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 			#ok, already in db
 			dataset['processing_era_id'] = self.procsingid.execute(conn, pera['processing_version'])
 			self.datasetCache['processingVersion'][pera['processing_version']] = dataset['processing_era_id']
-		    except:
+		    except Exception, ex:
+			self.logger.exception("DBS processing era inseration exception: %s" %ex)
 			tran.rollback
 			raise
 	    else:
@@ -580,7 +695,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		self.datasetCache['datasetAccTp'][dataT] = dsTpId
             del dataset['data_access_type_id']
             tran.commit()
-	except:
+	except Exception, ex:
+	    self.logger.exception("DBS pre-dataset inseration exception: %s" %ex)
             tran.rollback()
             raise
 	try:
@@ -599,7 +715,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		except exceptions.IntegrityError:
 		    #ok, already in db
 		    pass
-		except:
+		except Exception, ex:
+		    self.logger.exception("DBS dataset and output module mapping inseration exception: %s" %ex)
 		    raise 
 	    #10 Fill Dataset Parentage
 	    dsPList = blockcontent['blockcontent']
@@ -611,7 +728,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    #insert dataset parentage in bulk
 	    self.dsparentin(conn, dsParentObjList, tran)	    
 	    tran.commit()
-	except:
+	except Exception, ex:
+	    self.logger.exception("DBS dataset inseration exception: %s" %ex)
 	    tran.rollback()
 	    raise
 	return dataset['dataset_id']
