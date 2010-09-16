@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.9 2010/03/23 16:28:14 akhukhun Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.10 2010/03/23 19:24:36 afaq Exp $"
+__version__ = "$Revision: 1.10 $"
 
 import json
 import os, logging
@@ -49,6 +49,11 @@ class DBSRestApi:
         config.component_('DBS')
         config.DBS.application = app
 	config.DBS.model       = dbsconfig.model
+	#FIXME
+	# Eitehr we change formatter 
+	# OR change the 'Accept' type to application/json (which we don't know how to do at thi moment)	
+	config.DBS.section_("formatter")
+	config.DBS.formatter.object   = "WMCore.WebTools.RESTFormatter"
 	config.DBS.formatter   = dbsconfig.formatter
         config.DBS.database    = dbsconfig.database
         config.DBS.dbowner     = dbsconfig.dbowner
@@ -82,16 +87,12 @@ class DBSRestApi:
         ret=self.rest.default(*args, **kwargs)
         return self.parseForException(ret)
 
-
     def parseForException(self, data):
 	if type(data)==type("abc"):
 	    data=json.loads(data)	
 	if type(data) == type({}):
-	    if data.has_key('results'): 
-		data=data['results'] 
-		if type(data) == type({}) and data.has_key('exception'):
-		    #raise Exception("DBS Server raised an exception: " + data['message']['message'])
-		    raise Exception("DBS Server raised an exception: " + (data['message']))
+	    if type(data) == type({}) and data.has_key('exception'):
+		raise Exception("DBS Server raised an exception: " + (data['message']))
 	return data
 
 def options():
