@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.12 2010/03/18 19:48:37 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.13 2010/03/18 20:19:58 afaq Exp $"
+__version__ = "$Revision: 1.13 $"
 
 import os
 import json
@@ -306,6 +306,14 @@ class DBSClientReader_t(unittest.TestCase):
 	"""test63 unittestDBSClientReader_t.listFiles: NOT YET SUPPORTED"""
 	#api.listFiles(lfn=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])	
 	pass
+	
+    def test64(self):
+	"""test64 unittestDBSClientReader_t.listDatasets: processing_version"""
+	api.listDatasets(dataset=testparams['dataset'], processing_version=testparams['processing_version'] )
+	
+    def test65(self):
+	"""test65 unittestDBSClientReader_t.listDatasets: acquisition_era"""
+	api.listDatasets(dataset=testparams['dataset'], acquisition_era=testparams['acquisition_era'] )
 	
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)

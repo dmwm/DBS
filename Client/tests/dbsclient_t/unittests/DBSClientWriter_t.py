@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.14 2010/03/18 17:13:26 afaq Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.15 2010/03/18 20:19:58 afaq Exp $"
+__version__ = "$Revision: 1.15 $"
 
 import os
 import sys
@@ -46,7 +46,9 @@ outDict={
 "site" : site,
 "block" : block,
 "files" : [],
-"runs" : [1,2,3]
+"runs" : [1,2,3],
+"acquisition_era" : acquisition_era_name,
+"processing_version" : processing_version,
 }
 
 class DBSClientWriter_t(unittest.TestCase):
