@@ -2,20 +2,24 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.11 2010/03/16 17:01:02 afaq Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.12 2010/03/17 21:45:19 afaq Exp $"
+__version__ = "$Revision: 1.12 $"
 
 import os
 import sys
 import unittest
 from dbs.apis.dbsClient import *
 from ctypes import *
-import uuid
 
+def uuid():
+    lib = CDLL("libuuid.so.1")
+    uuid = create_string_buffer(16)
+    return lib.uuid_generate(byref(uuid))
+    
 url=os.environ['DBS_WRITER_URL']     
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
 api = DbsApi(url=url)
-uid = str(uuid.uuid1())
+uid = uuid()
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
 tier = 'GEN-SIM-RAW'
@@ -26,6 +30,8 @@ pset_hash='76e303993a1c2f842159dbfeeed9a0dd'
 release_version='CMSSW_1_2_3'
 site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
+acquisition_era_name="acq_era_%s" %uid
+processing_version="%s" %(uid if (uid<9999) else uid%9999)
 flist=[]
 
 outDict={
@@ -68,8 +74,18 @@ class DBSClientWriter_t(unittest.TestCase):
         """test05: web.DBSClientWriter.insertOutputModule: re-insertion should not raise any errors"""
         data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label}
         api.insertOutputConfig(outputConfigObj=data)
+    
+    def test06(self):
+	"""test06: web.DBSWriterModel.insertAcquisitionEra: Basic test """
+	data={'acquisition_era_name': acquisition_era_name}
+	api.insertAcquisitionEra(data)
 
     def test07(self):
+	"""test07: web.DBSWriterModel.insertProcessingEra: Basic test """
+	data={'processing_version': processing_version, 'description':'this is a test'}
+	api.insertProcessingEra(data)
+					    
+    def test08(self):
 	"""test07: web.DBSClientWriter.insertDataset: basic test"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
@@ -79,11 +95,11 @@ class DBSClientWriter_t(unittest.TestCase):
 		    ],
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
-		#'processing_version': '1',  'acquisition_era_name': u'',
+		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insertDataset(datasetObj=data)
 	
-    def test08(self):
+    def test09(self):
 	"""test08: web.DBSClientWriter.insertDataset: duplicate insert should be ignored"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
@@ -93,7 +109,7 @@ class DBSClientWriter_t(unittest.TestCase):
 		], 
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
-		#'processing_version': '1',  'acquisition_era_name': u'',
+		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	
 	api.insertDataset(datasetObj=data)
@@ -106,7 +122,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
-		#'processing_version': '1',  'acquisition_era_name': u'',
+		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insertDataset(datasetObj=data)
 
@@ -224,7 +240,6 @@ class DBSClientWriter_t(unittest.TestCase):
 	    outDict['files'].append(f['logical_file_name'])
 	api.insertFiles(filesList={"files":flist})
 	
- 
     def test18(self):
 	"""test18 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
 	logical_file_name = "/store/mc/%s/%i.root" %(uid, 1)
