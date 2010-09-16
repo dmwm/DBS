@@ -2,33 +2,27 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.15 2010/01/28 18:00:39 dsr Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.16 2010/03/10 17:17:12 akhukhun Exp $"
+__version__ = "$Revision: 1.16 $"
 
 import os
 import sys
 import unittest
+import uuid
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
-from ctypes import *
 
 class NullDevice:
     def write(self, s):
-	pass
+        pass
 
 """
 This is has to be change everytime running the test. So we need to make it using uuid. YG 1/11/10
 COUNTER = os.environ['DBS_TEST_COUNTER']
 """
 
-def uuid():
-    lib = CDLL("libuuid.so.1")
-    uuid = create_string_buffer(16)
-    return lib.uuid_generate(byref(uuid))
-
-
 config = os.environ["DBS_TEST_CONFIG_WRITER"] 
 api = DBSRestApi(config)
-uid = uuid()
+uid = str(uuid.uuid1())
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
 tier = 'GEN-SIM-RAW'
@@ -270,7 +264,7 @@ class DBSWriterModel_t(unittest.TestCase):
                                   ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/%i.root" %i,
+                'logical_file_name': "/store/mc/%s/%i.root" % (uid, i),
                 'block': block
 			    #'is_file_valid': 1
                 }
