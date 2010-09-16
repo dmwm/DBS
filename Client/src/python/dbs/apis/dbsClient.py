@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.26 $"
-# $Id: dbsClient.py,v 1.26 2010/01/28 17:51:30 afaq Exp $"
+# $Revision: 1.27 $"
+# $Id: dbsClient.py,v 1.27 2010/02/19 22:54:05 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -33,6 +33,7 @@ class DbsApi:
 		"""
 		UserID=os.environ['USER']+'@'+socket.gethostname()
 		headers =  {"Content-type": "application/json", "Accept": "application/json", "UserID": UserID }
+		#headers =  {"Content-type": "application/json", "Accept": "*/*", "UserID": UserID }
 
 		res=""
 		try:
@@ -42,9 +43,11 @@ class DbsApi:
 				proxies = { 'http': self.proxy }
 			#print calling
 			if params == {} :
-				data = urllib.urlopen(calling, proxies=proxies)
+				#data = urllib.urlopen(calling, proxies=proxies)
+				#data = urllib2.urlopen(calling)
+				req = urllib2.Request(url=calling, headers = headers)
+				data = urllib2.urlopen(req)
 			else:
-				#params = json.dumps(dict(params))
 				params = cjson.encode(params)
 				req = urllib2.Request(url=calling, data=params, headers = headers)
 				req.get_method = lambda: 'POST'
