@@ -2,12 +2,13 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.22 2010/07/14 16:10:10 akhukhun Exp $"
-__version__ = "$Revision: 1.22 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.23 2010/07/15 18:48:00 yuyi Exp $"
+__version__ = "$Revision: 1.23 $"
 
 import os
 import sys
 import unittest
+import time
 #import uuid
 from ctypes import *
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
@@ -146,7 +147,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	"""test09: web.DBSWriterModel.insertDataset(Dataset is construct by DBSDatset.): basic test"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
 		    'output_module_label': output_module_label},
@@ -154,10 +155,12 @@ class DBSWriterModel_t(unittest.TestCase):
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
+	#import pdb
+	#pdb.set_trace()
 	api.insert('datasets', data)
 	parentdata = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
 		    'output_module_label': output_module_label},
@@ -169,10 +172,12 @@ class DBSWriterModel_t(unittest.TestCase):
 
 	
     def test10(self):
+	#import pdb
+	#pdb.set_trace()
 	"""test10: web.DBSWriterModel.insertDataset: duplicate insert should be ignored"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': 
 		    app_name, 'output_module_label': output_module_label},
@@ -189,7 +194,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 
 		#'primary_ds_name': primary_ds_name,
 		'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 
 		    'app_name': app_name, 'output_module_label': output_module_label},
@@ -208,7 +213,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	"""test12: web.DBSWriterModel.insertDataset: missing parameter must raise an error"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
-	        #'dataset_type': 'PRODUCTION', 
+	        #'dataset_access_type': 'PRODUCTION', 
 		'processed_ds_name': procdataset,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': 
@@ -220,17 +225,18 @@ class DBSWriterModel_t(unittest.TestCase):
 	try:
 	    api.insert('datasets', data)
 	except Exception, ex:
-	    if 'dataset_type' in ex.args[0]:
+	    print "*******%s" %ex.args[0]
+	    if 'dataset_access_type' in ex.args[0]:
 		pass
 	    else:
-		self.fail("Exception missing dataset_type was expected and was not raised.")
+		self.fail("Exception missing dataset_access_type was expected and was not raised.")
 	    
     def test13(self):
 	"""test13: web.DBSWriterModel.insertDataset: no output_configs, should be fine insert!"""
 	data = {
 		'dataset': dataset,
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier
 		}
 	api.insert('datasets', data)
@@ -253,17 +259,17 @@ class DBSWriterModel_t(unittest.TestCase):
     def test16(self):
 	"""test16 web.DBSWriterModel.insertBlock: basic test"""
 	data = {'block_name': block,
-		'origin_site': site }
+		'origin_site_name': site }
 		
 	api.insert('blocks', data)
 	# insert the parent block as well
-	data = {'block_name': parent_block, 'origin_site': site }
+	data = {'block_name': parent_block, 'origin_site_name': site }
 	api.insert('blocks', data)
 
     def test17(self):
 	"""test17 web.DBSWriterModel.insertBlock: duplicate insert should not raise exception"""
 	data = {'block_name': block,
-		'origin_site': site }
+		'origin_site_name': site }
 		
 	api.insert('blocks', data)
 
@@ -296,6 +302,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	    flist.append(f)
 	data={"files":flist}
 	api.insert('files', data)
+	time.sleep(5)
 
     def test19(self):
 	"""test19 web.DBSWriterModel.insertFiles: duplicate insert file shuld not raise any errors"""
@@ -375,7 +382,7 @@ class DBSWriterModel_t(unittest.TestCase):
 
     def test23(self):
         """test23 web.DBSWriterModel.updateDatasetType: Basic test """
-        api.update('datasets', dataset=dataset, dataset_type="DEPRECATED") 
+        api.update('datasets', dataset=dataset, dataset_access_type="DEPRECATED") 
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSWriterModel_t)
