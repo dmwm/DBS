@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.24 2010/02/24 17:36:54 afaq Exp $"
-__version__ = "$Revision: 1.24 $"
+__revision__ = "$Id: DBSFile.py,v 1.25 2010/03/02 17:27:10 yuyi Exp $"
+__version__ = "$Revision: 1.25 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -49,7 +49,46 @@ class DBSFile:
 	    raise Exception("You must specify exact dataset name not pattern")  
         if ('*' in block_name):
 	    raise Exception("You must specify exact block name not pattern")
-	return self.filelist.execute(dataset, block_name, logical_file_name)
+	conn = self.dbi.connection()
+	result = self.filelist.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
+			    output_module_label)
+	conn.close()
+	return result
+
+    def listFilesByRun(self, maxrun, minrun=1,  blockName="", dataset=""):
+	""" 
+	retuen a list of files that has run number between minrun and maxrun.
+	Either dataset or block_name has to be provided. If both dataset and block_name 
+	is provided, the block_name overwrite the dataset.
+	"""
+	assert (maxrun), "Maxrun has to be not null"
+	if(not blockName and not dataset):
+	    raise Exception("You must provide block_name or dataset")
+	conn = self.dbi.connection()
+	if(blockName):
+	    result = self.filelist.executeByRun(conn, maxrun, minrun, blockName)
+	if(dataset):
+	    result = self.filelist.executeByRun(conn, maxrun, minrun, dataset+'%')
+	conn.close()
+	return result
+
+    def listFileBySite(self, originSite, blockName="", dataset=""):
+	"""	
+	Either dataset or block_name has to be provide with originSite always provided.
+	If both dataset and block_name is provided, the block_name overwrite the dataset
+	"""
+	
+	assert (originSite), "origin_sit has to be provided"
+	if(not blockName and not dataset):
+	    raise Exception("You must provide block_name or dataset")
+	conn = self.dbi.connection()
+	if(blockName):
+	    result=self.filelist.executeBySite(conn, originSite, blockName)
+	if(dataset):
+	    result=self.filelist.executeBySite(conn, originSite, dataset+'%')
+	conn.close()
+	return result
+	
 
     def insertFile(self, businput):
 	"""
@@ -299,4 +338,4 @@ class DBSFile:
 
 	finally:
 	    conn.close()
- 
+
