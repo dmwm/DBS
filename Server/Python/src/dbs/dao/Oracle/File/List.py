@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.31 2010/06/23 21:21:23 afaq Exp $"
-__version__ = "$Revision: 1.31 $"
+__revision__ = "$Id: List.py,v 1.32 2010/08/01 18:29:02 akhukhun Exp $"
+__version__ = "$Revision: 1.32 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -44,6 +44,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	sql = self.sql 
         binds = {}
 	if (minrun and minrun != -1) and (maxrun and maxrun != -1):
+	    sql = sql.replace("SELECT", "SELECT DISTINCT")
 	    sql += "JOIN %sFILE_LUMIS FL on  FL.FILE_ID=F.FILE_ID " %(self.owner)
 	if release_version or pset_hash or app_name or output_module_label :
             sql += """LEFT OUTER JOIN %sFILE_OUTPUT_MOD_CONFIGS FOMC ON FOMC.FILE_ID = F.FILE_ID
