@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.34 $"
-# $Id: dbsClient.py,v 1.34 2010/03/18 19:49:18 afaq Exp $"
+# $Revision: 1.35 $"
+# $Id: dbsClient.py,v 1.35 2010/03/18 20:20:42 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -160,7 +160,7 @@ class DbsApi:
                 """
                 return self.callServer("/processingeras", params = procEraObj , callmethod='POST' )
 
-        def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label=""):
+        def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", processing_version="", acquisition_era=""):
                 """
                 * API to list dataset(s) in DBS 
                 * dataset : Full dataset (path) of the dataset
@@ -197,7 +197,13 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "output_module_label=%s"%output_module_label
 		    amp=True
-		
+		if processing_version:
+		    if amp: add_to_url += "&"
+		    add_to_url += "processing_version=%s"%processing_version
+		    amp=True
+		if acquisition_era:
+		    add_to_url += "acquisition_era=%s"%acquisition_era
+		    amp=True
 		if add_to_url:
 		    return self.callServer("/datasets?%s" % add_to_url )
 		# Default, list all datasets
