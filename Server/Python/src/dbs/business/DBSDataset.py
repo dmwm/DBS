@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.41 2010/08/01 19:09:53 akhukhun Exp $"
-__version__ = "$Revision: 1.41 $"
+__revision__ = "$Id: DBSDataset.py,v 1.42 2010/08/03 21:06:23 afaq Exp $"
+__version__ = "$Revision: 1.42 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -158,9 +158,13 @@ class DBSDataset:
 
             dsdaoinput={}
             dsdaoinput["primary_ds_id"] = self.primdsid.execute(conn, businput["primary_ds_name"], tran)
+	    if dsdaoinput["primary_ds_id"] == -1: raise Exception ("Primary Dataset: %s not found" %businput["primary_ds_name"])
             dsdaoinput["data_tier_id"] = self.tierid.execute(conn, businput["data_tier_name"], tran)
+	    if dsdaoinput["data_tier_id"] == -1: raise Exception ("Data Tier: %s not found" %businput["data_tier_name"])
             dsdaoinput["dataset_access_type_id"] = self.datatypeid.execute(conn, businput["dataset_access_type"], tran)
+	    if dsdaoinput["dataset_access_type_id"] == -1: raise Exception ("Dataset Access Type : %s not found" %businput["dataset_access_type"])
             dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
+	    if dsdaoinput["physics_group_id"]  == -1: raise Exception ("Physics Group : %s Not found" % businput["physics_group_name"])
 
             # See if processed dataset exists, if not, add one
             procid = self.procdsid.execute(conn, businput["processed_ds_name"], tran)
@@ -189,9 +193,11 @@ class DBSDataset:
             # See if Processing Era exists
             if businput.has_key("processing_version"):
                 dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"], tran)
+		if dsdaoinput["processing_era_id"] == -1 : raise Exception ("Processing Era : %s not found" %businput["processing_version"] )
             # See if Acquisition Era exists
             if businput.has_key("acquisition_era_name"):
                 dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"], tran)
+		if dsdaoinput["acquisition_era_id"] == -1 : raise Exception ("Acquisition Era : %s not found" %dsdaoinput["acquisition_era_id"] )
                  
             try:
                 # insert the dataset
@@ -201,7 +207,9 @@ class DBSDataset:
                     # dataset already exists, lets fetch the ID
                     self.logger.warning("Unique constraint violation being ignored...")
                     self.logger.warning("%s" % ex)
-                    dsdaoinput["dataset_id"] = self.datasetid.execute(conn, "/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"]) , tran)
+		    ds = "/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"])
+                    dsdaoinput["dataset_id"] = self.datasetid.execute(conn, ds , tran)
+                    if dsdaoinput["dataset_id"] == -1 : raise ("Strange error, the dataset %s does not exist ?" % ds)
                 else:
                     raise	
 
@@ -215,6 +223,10 @@ class DBSDataset:
 										anOutConfig["release_version"], \
 										anOutConfig["pset_hash"], \
 										anOutConfig["output_module_label"], tran) 
+		    if dsoutconfdaoin["output_mod_config_id"] == -1 : raise Exception ("Output config (%s, %s, %s, %s) not found" %( anOutConfig["app_name"], \
+                                                                                                                              anOutConfig["release_version"], \
+                                                                                                                              anOutConfig["pset_hash"], \
+                                                                                                                            anOutConfig["output_module_label"] ))
 		    dsoutconfdaoin["ds_output_mod_conf_id"] = self.sm.increment(conn, "SEQ_DC", tran)
 		    #print "INSERTING output_mod_config_id :::::: %s" %str(dsoutconfdaoin["output_mod_config_id"])
 		    try:

@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.36 2010/08/01 19:09:54 akhukhun Exp $"
-__version__ = "$Revision: 1.36 $"
+__revision__ = "$Id: DBSBlock.py,v 1.37 2010/08/03 21:06:23 afaq Exp $"
+__version__ = "$Revision: 1.37 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -24,7 +24,7 @@ class DBSBlock:
 
         self.sm = daofactory(classname = "SequenceManager")
         self.datasetid = daofactory(classname = "Dataset.GetID")
-        self.siteid = daofactory(classname = "Site.GetID")
+        #self.siteid = daofactory(classname = "Site.GetID")
         self.blockin = daofactory(classname = "Block.Insert")
 	self.updatestatus = daofactory(classname='Block.UpdateStatus')
         self.blockparentlist = daofactory(classname="BlockParent.List")
@@ -129,7 +129,9 @@ class DBSBlock:
 		"file_count":businput["file_count"],
 		"block_name":businput["block_name"]
 	    }
-            blkinput["dataset_id"] = self.datasetid.execute(conn, (businput["block_name"]).split('#')[0], tran)
+	    ds_name = businput["block_name"].split('#')[0]
+            blkinput["dataset_id"] = self.datasetid.execute(conn,  ds_name, tran)
+	    if blkinput["dataset_id"] == -1 : raise Exception("Dataset %s does not exists" % ds_name)
             blkinput["block_id"] =  self.sm.increment(conn, "SEQ_BK", tran)
             if(businput.has_key("origin_site_name")):
                 #blkinput["origin_site"] = self.siteid.execute(conn, businput["origin_site"], tran)

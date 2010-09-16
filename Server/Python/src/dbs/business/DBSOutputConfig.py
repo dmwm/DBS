@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.12 2010/03/25 17:06:00 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.13 2010/08/03 21:06:23 afaq Exp $"
+__version__ = "$Revision: 1.13 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -62,53 +62,36 @@ class DBSOutputConfig:
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-
-	    try:
-                businput["app_exec_id"] = self.appid.execute(conn, businput["app_name"], tran)	
-            except Exception, e:
-                if str(e).find('does not exist') != -1:
-                    businput["app_exec_id"] = self.sm.increment(conn, "SEQ_AE",tran)
-                    appdaoinput = { "app_name" : businput["app_name"], 
+            businput["app_exec_id"] = self.appid.execute(conn, businput["app_name"], tran)	
+	    if businput["app_exec_id"] == -1:
+	        businput["app_exec_id"] = self.sm.increment(conn, "SEQ_AE",tran)
+                appdaoinput = { "app_name" : businput["app_name"], 
                                     "app_exec_id" : businput["app_exec_id"] }
-                    self.appin.execute(conn, appdaoinput, tran)
-                else : 
-                    raise
-                
-            try:
-                businput["release_version_id"] = self.verid.execute(conn, businput["release_version"], tran)
-            except Exception, e:
-                if str(e).find('does not exist') != -1:
-                    businput["release_version_id"] = self.sm.increment(conn, "SEQ_RV", tran)
-                    verdaoinput = { 
-                                    "release_version" : businput["release_version"],
-				    "release_version_id" : businput["release_version_id"]
-				}
-                    self.verin.execute(conn, verdaoinput, tran)
-                else : 
-                    raise
- 
-              
-            try:
-                businput["parameter_set_hash_id"] = self.hashid.execute(conn, businput["pset_hash"], tran)
-            except Exception, e:
-                if str(e).find('does not exist') != -1:
-                    businput["parameter_set_hash_id"] = self.sm.increment(conn, "SEQ_PSH", tran)
-                    pshdaoinput = {"parameter_set_hash_id" : businput["parameter_set_hash_id"], 
-                                   "pset_hash" : businput["pset_hash"], 
-                                   "name" : "no_name" }
-                    self.hashin.execute(conn, pshdaoinput, tran)
-                else : 
-                    raise
-                
+                self.appin.execute(conn, appdaoinput, tran)
+            businput["release_version_id"] = self.verid.execute(conn, businput["release_version"], tran)
+	    if businput["release_version_id"] == -1:
+		businput["release_version_id"] = self.sm.increment(conn, "SEQ_RV", tran)
+                verdaoinput = { 
+		    "release_version" : businput["release_version"],
+		    "release_version_id" : businput["release_version_id"]
+		    }
+                self.verin.execute(conn, verdaoinput, tran)
+            businput["parameter_set_hash_id"] = self.hashid.execute(conn, businput["pset_hash"], tran)
+	    if businput["parameter_set_hash_id"] == -1:
+		businput["parameter_set_hash_id"] = self.sm.increment(conn, "SEQ_PSH", tran)
+		pshdaoinput = {"parameter_set_hash_id" : businput["parameter_set_hash_id"], 
+                               "pset_hash" : businput["pset_hash"], 
+                               "name" : "no_name" }
+                self.hashin.execute(conn, pshdaoinput, tran)
             # Proceed with o/p module insertion
             omcdaoinput = {
-				"app_exec_id" : businput["app_exec_id"], 
-				"release_version_id" : businput["release_version_id"],
-				"parameter_set_hash_id" : businput["parameter_set_hash_id"],
-				"output_module_label" : businput["output_module_label"], 
-				"creation_date" : businput["creation_date"] , 
-				"create_by" : businput["create_by"]
-				}
+			"app_exec_id" : businput["app_exec_id"], 
+			"release_version_id" : businput["release_version_id"],
+			"parameter_set_hash_id" : businput["parameter_set_hash_id"],
+			"output_module_label" : businput["output_module_label"], 
+			"creation_date" : businput["creation_date"] , 
+			"create_by" : businput["create_by"]
+			}
             omcdaoinput["output_mod_config_id"] = self.sm.increment(conn, "SEQ_OMC", tran)
             self.outmodin.execute(conn, omcdaoinput, tran)
             tran.commit()

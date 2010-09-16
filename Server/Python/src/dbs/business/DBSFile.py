@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.55 2010/08/01 19:09:49 akhukhun Exp $"
-__version__ = "$Revision: 1.55 $"
+__revision__ = "$Id: DBSFile.py,v 1.56 2010/08/03 21:06:23 afaq Exp $"
+__version__ = "$Revision: 1.56 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -189,6 +189,7 @@ class DBSFile:
 	    # first check if the dataset exists
 	    # and block exists that files are suppose to be going to and is OPEN for writing
 	    dataset_id = self.datasetid.execute(conn, dataset=firstfile["dataset"], transaction=tran)
+	    if dataset_id == -1 :raise Exception("Dataset : %s does not exist" %firstfile["dataset"])
 	    # get the list of configs in for this dataset
 	    dsconfigs = [x['output_mod_config_id'] for x in self.dsconfigids.execute(conn, dataset=firstfile["dataset"], transaction=tran)]
 	    fileconfigs=[] # this will hold file configs that we will list in the insert file logic below	
@@ -200,6 +201,8 @@ class DBSFile:
 	    block_id = block_info["block_id"]
 	    
 	    file_type_id = self.ftypeid.execute( conn, firstfile.get("file_type", "EDM"), transaction=tran)
+	    if file_type_id == -1: raise Exception ("Unknown file type : %s, not found in DBS" %firstfile.get("file_type", "EDM"))
+
 	    iFile = 0
 	    fileIncrement = 40
 	    fID = self.sm.increment(conn, "SEQ_FL", transaction=tran, incCount=fileIncrement)
@@ -318,6 +321,8 @@ class DBSFile:
 			    fcdao["file_id"] = filein["file_id"]
 			    fcdao["output_mod_config_id"]= self.outconfigid.execute(conn, fc["app_name"], \
 				                        fc["release_version"], fc["pset_hash"], fc["output_module_label"], transaction=tran)
+			    if fcdao["output_mod_config_id"] == -1 : raise Exception ("Output module config (%s, %s, %s, %s) not found" %(fc["app_name"], \
+												fc["release_version"], fc["pset_hash"], fc["output_module_label"]))
 			    fileconfigs.append(fcdao["output_mod_config_id"])
 			    fconfigs2insert.append(fcdao)
 		#FIXME: file associations?-- in a later release
