@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.5 2010/01/25 18:07:10 yuyi Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.6 2010/01/26 16:27:29 yuyi Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import os
 import json
@@ -167,17 +167,19 @@ class DBSReaderModel_t(unittest.TestCase):
     def test23(self):
         """Test23 web.DBSReaderModel.listDatasetParents: must raise an exception if no parameter is passed"""
         try: self.api.list('datasetparents')
-        except: pass
-        else: self.fail("Exception was expected and was not raised")
+        except: 
+	    pass
+        else: 
+	    self.fail("Exception was expected and was not raised")
             
     def test24(self):
         """Test24 web.DBSReaderModel.listOutputConfigs: basic test"""
-        self.api.list('outputconfigurations')
+	self.api.list('outputconfigurations')
     
     def test25(self):
         """Test25 web.DBSReaderModel.listOutputConfigs: basic test"""
-        self.api.list('outputconfigurations', dataset="*")
-
+	self.api.list('outputconfigurations', dataset="*")
+	
     def test26(self):
         """Test26 web.DBSReaderModel.listOutputConfigs: basic test"""
         self.api.list('outputconfigurations', logical_file_name="*")
