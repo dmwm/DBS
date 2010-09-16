@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.37 2010/05/19 16:20:44 yuyi Exp $"
-__version__ = "$Revision: 1.37 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.38 2010/05/21 16:15:00 yuyi Exp $"
+__version__ = "$Revision: 1.38 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -189,7 +189,7 @@ class DBSReaderModel(RESTModel):
  
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", 
 	pset_hash="", app_name="", output_module_label="", minrun=-1, maxrun=-1,
-	origin_site=""):
+	origin_site_name=""):
         """
         Example url's: <br />
         http://dbs3/files?dataset=/a/b/c/ <br />
@@ -197,18 +197,20 @@ class DBSReaderModel(RESTModel):
         http://dbs3/files?dataset=/a/b/c&lfn=/store/* <br />
         http://dbs3/files?block_name=/a/b/c%23d&logical_file_name=/store/* <br />
         """
-	#FIXME add real site
         logical_file_name = logical_file_name.replace("*", "%")
 	release_version = release_version.replace("*", "%")
 	pset_hash = pset_hash.replace("*", "%")
 	app_name = app_name.replace("*", "%")
+	block_name = block_name.replace("*", "%")
+	origin_site_name = origin_site_name.replace("*", "%")
+	dataset = dataset.replace("*", "%")
+	if(maxrun):
+	    maxrun = int(maxrun)
+	if(minrun):
+	    minrun = int(minrun)
 	output_module_label = output_module_label.replace("*", "%")
-	if minrun!= -1 or maxrun!=-1:
-	    return self.dbsFile.listFilesByRun(maxrun, minrun,  block_name=block_name, dataset=dataset)
-	elif origin_site !="":
-	    return self.dbsFile.listFileBySite(origin_site, block_name, dataset)
-	else:
-	    return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, output_module_label)
+	return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
+					output_module_label, maxrun, minrun, origin_site_name)
     
     def listDatasetParents(self, dataset):
         """

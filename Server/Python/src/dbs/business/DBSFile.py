@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.44 2010/05/05 20:09:42 afaq Exp $"
-__version__ = "$Revision: 1.44 $"
+__revision__ = "$Id: DBSFile.py,v 1.45 2010/05/21 16:15:48 yuyi Exp $"
+__version__ = "$Revision: 1.45 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -109,73 +109,33 @@ class DBSFile:
 	    conn.close()
 
     def listFiles(self, dataset="", block_name="", logical_file_name="", release_version="", 
-	    pset_hash="", app_name="", output_module_label=""):
+	    pset_hash="", app_name="", output_module_label="",  maxrun=-1, minrun=-1, origin_site_name=""):
         """
-        either dataset(and lfn pattern) or block(and lfn pattern) must be specified.
+        One of below parameter groups must be presented: 
+        non-parttened dataset, non-parttened block , non-parttened dataset with lfn ,  non-parttened block with lfn , 
+	no-patterned lfn 
         """
-	if (not dataset and not block_name and not logical_file_name):
-	    raise Exception ("We cannot list all the files in DBS with listFiles API")
-	if (not dataset and not block_name and logical_file_name == '%'):
-	    raise Exception ("We cannot list all the files in DBS with listFiles API")
-	if ('*' in dataset):
-	    raise Exception("You must specify exact dataset name not pattern")  
-        if ('*' in block_name):
+	if ('%' in block_name):
 	    raise Exception("You must specify exact block name not pattern")
+	elif ('%' in dataset):
+	    raise Exception("You must specify exact dataset name not pattern")
+	elif (not dataset  and not block_name and (not logical_file_name or '%'in logical_file_name)):
+	    raise Exception ("""You must specify one of the parameter groups:  non-parttened dataset, 
+				non-parttened block , non-parttened dataset with lfn ,  
+				non-parttened block with lfn or  no-patterned lfn. """)
+	else:
+	    pass
 	try:
 	    conn = self.dbi.connection()
 	    result = self.filelist.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
-			    output_module_label)
+			    output_module_label, maxrun, minrun, origin_site_name)
 	    conn.close()
 	    return result
 	except Exception, ex:
 	    raise
 	finally:
 	    conn.close()
-    
-    def listFilesByRun(self, maxrun, minrun=1,  block_name="", dataset=""):
-	""" 
-	retuen a list of files that has run number between minrun and maxrun.
-	Either dataset or block_name has to be provided. If both dataset and block_name 
-	is provided, the block_name overwrite the dataset.
-	"""
-	assert (maxrun), "Maxrun has to be not null"
-	if(not block_name and not dataset):
-	    raise Exception("You must provide block_name or dataset")
-	try:
-	    conn = self.dbi.connection()
-	    if(block_name):
-		result = self.filelist.executeByRun(conn, maxrun, minrun, block_name=block_name)
-	    if(dataset):
-		result = self.filelist.executeByRun(conn, maxrun, minrun, dataset=dataset+'%')
-	    conn.close()
-	    return result
-        except Exception, ex:
-	    raise ex
-	finally:
-	    conn.close()
 
-    def listFileBySite(self, originSite, block_name="", dataset=""):
-	"""	
-	Either dataset or block_name has to be provide with originSite always provided.
-	If both dataset and block_name is provided, the block_name overwrite the dataset
-	"""
-	
-	assert (originSite), "origin_sit has to be provided"
-	if(not block_name and not dataset):
-	    raise Exception("You must provide block_name or dataset")
-	try:
-	    conn = self.dbi.connection()
-	    if(block_name):
-		result=self.filelist.executeBySite(conn, originSite, block_name)
-	    if(dataset):
-		result=self.filelist.executeBySite(conn, originSite, dataset+'%')
-	    conn.close()
-	    return result
-	except Exception, ex:
-	    raise ex
-	finally:
-	    conn.close()
-   
     def insertFile(self, businput):
 	"""
 	This method supports bulk insert of files
