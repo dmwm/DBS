@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.50 2010/06/07 17:51:16 yuyi Exp $"
-__version__ = "$Revision: 1.50 $"
+__revision__ = "$Id: DBSFile.py,v 1.51 2010/06/07 18:03:47 yuyi Exp $"
+__version__ = "$Revision: 1.51 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -125,7 +125,7 @@ class DBSFile:
 				non-parttened block , non-parttened dataset with lfn ,  
 				non-parttened block with lfn or  no-patterned lfn. """)
 	elif (lumi_list and len(lumi_list) != 0):
-	    if (not maxrun or maxrun ==-1) and(not minrun or minrun == -1) and (minrun==maxrun):
+	    if (not maxrun or maxrun ==-1) and(not minrun or minrun == -1) and (minrun!=maxrun):
 		raise Exception(" lumi list must be companied by A run_num that is minrun==maxrun")
 	else:
 	    pass
