@@ -69,6 +69,7 @@ try:
 			self.currfilelumis=[]
 			self.currfileparents=[]
 			self.outputconfs=[]
+			self.sitelist=[]
 
         	def startElement(self, name, attrs):
 			if name == 'primary_dataset':
@@ -104,6 +105,7 @@ try:
 
 			if name == 'storage_element':
 				self.block["origin_site"]=attrs.get('storage_element_name')
+				self.sitelist.append({ "site_name" : attrs.get('storage_element_name') } )
 
 			if name == 'file':
 				self.currfile={
@@ -172,6 +174,10 @@ try:
 					##print self.dataset
 					self.dataset["output_configs"]=self.outputconfs
         				dbs3api.insertDataset(self.dataset)
+
+					for asite in self.sitelist:
+					    dbs3api.insertSite(asite)
+    
 					#print self.block
 					dbs3api.insertBlock(self.block)
 					start_time=time.time()
