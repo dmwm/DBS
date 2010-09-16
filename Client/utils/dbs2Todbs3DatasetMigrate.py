@@ -29,7 +29,7 @@ class migrateDBS2TODBS3:
     def migrateWithParents(self, dataset):
 	#list all blocks in this dataset
 	#self.dirName="migratelog_"+str(time.time()).split('.')[0]
-	self.dirName=hashlib.md5(dataset).hexdigest()
+	self.dirName="_xml/" + hashlib.md5(dataset).hexdigest()
 	blocks=self.dbs2api.listBlocks(dataset)
 	for ablock in blocks:
 	    block_time=self.migrateBlock(ablock)
