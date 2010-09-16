@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.12 2010/02/18 16:48:03 yuyi Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: List.py,v 1.13 2010/03/05 19:23:15 yuyi Exp $"
+__version__ = "$Revision: 1.13 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -27,13 +27,12 @@ FROM %sPRIMARY_DATASETS P
 JOIN %sPRIMARY_DS_TYPES PT ON PT.PRIMARY_DS_TYPE_ID = P.PRIMARY_DS_TYPE_ID
 """ % (self.owner, self.owner)
 
-    def execute(self, primary_ds_name="", conn=None):
+    def execute(self, conn, primary_ds_name="", transaction=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-            conn = self.dbi.connection()
-            
+	    raise Exception("dbs/dao/Oracle/ParimaryDataset/List expects db connection from up layer.")	    
         sql = self.sql
         binds = {}
         
@@ -41,13 +40,8 @@ JOIN %sPRIMARY_DS_TYPES PT ON PT.PRIMARY_DS_TYPE_ID = P.PRIMARY_DS_TYPE_ID
             op = ("=", "like")["%" in primary_ds_name]
             sql += "WHERE P.PRIMARY_DS_NAME %s :primary_ds_name" % op
             binds.update(primary_ds_name=primary_ds_name)
-        """    
-        cursor = conn.connection.cursor()
-        cursor.execute(sql, binds)
-	"""
-	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	assert len(cursors) == 1, "primary DS does not exist"
 		
         result = self.formatCursor(cursors[0])
-        conn.close()
         return result
