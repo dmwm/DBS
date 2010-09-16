@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.52 $"
-# $Id: dbsClient.py,v 1.52 2010/08/04 12:13:14 akhukhun Exp $"
+# $Revision: 1.53 $"
+# $Id: dbsClient.py,v 1.53 2010/08/12 18:52:21 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -166,7 +166,7 @@ class DbsApi:
                 * acqEraObj : Acquisition Era object of type {}, with key(s) :-
 			* acquisition_era_name : Acquisition Era Name --REQUIRED
                 """
-                return self.callServer("/acquisitionras", params = acqEraObj , callmethod='POST' )
+                return self.callServer("/acquisitioneras", params = acqEraObj , callmethod='POST' )
 		
 	def insertProcessingEra(self, procEraObj={}):
                 """
