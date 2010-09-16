@@ -5,13 +5,12 @@
 # Project name:          DBS3                                            #
 # Author:                Yuyi Guo for DBS Group                          #
 # Script type:           Database creation script                        #
-# Created on:            2010-07-08 10:27                                #
+# Created on:            2010-07-28 11:53                                #
 # ---------------------------------------------------------------------- #
 
 drop database if exists CMS_DBS3;
 create database CMS_DBS3;
 use CMS_DBS3;
-
 
 # ---------------------------------------------------------------------- #
 # Tables                                                                 #
@@ -26,7 +25,8 @@ CREATE TABLE `APPLICATION_EXECUTABLES` (
     `APP_NAME` VARCHAR(100) NOT NULL,
     CONSTRAINT `PK_AE` PRIMARY KEY (`APP_EXEC_ID`),
     CONSTRAINT `TUC_AE_APP_NAME` UNIQUE (`APP_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "RELEASE_VERSIONS"                                           #
@@ -37,7 +37,8 @@ CREATE TABLE `RELEASE_VERSIONS` (
     `RELEASE_VERSION` VARCHAR(100) NOT NULL,
     CONSTRAINT `PK_RV` PRIMARY KEY (`RELEASE_VERSION_ID`),
     CONSTRAINT `TUC_RV_RELEASE_VERSION` UNIQUE (`RELEASE_VERSION`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "PROCESSED_DATASETS"                                         #
@@ -48,7 +49,8 @@ CREATE TABLE `PROCESSED_DATASETS` (
     `PROCESSED_DS_NAME` VARCHAR(100) NOT NULL,
     CONSTRAINT `PK_PSDS` PRIMARY KEY (`PROCESSED_DS_ID`),
     CONSTRAINT `TUC_PSDS_PROCESSED_DS_NAME` UNIQUE (`PROCESSED_DS_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "BRANCH_HASHES"                                              #
@@ -59,7 +61,8 @@ CREATE TABLE `BRANCH_HASHES` (
     `BRANCH_HASH` VARCHAR(700) NOT NULL,
     `CONTENT` MEDIUMTEXT,
     CONSTRAINT `PK_BH` PRIMARY KEY (`BRANCH_HASH_ID`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "FILE_DATA_TYPES"                                            #
@@ -70,7 +73,8 @@ CREATE TABLE `FILE_DATA_TYPES` (
     `FILE_TYPE` VARCHAR(100) NOT NULL,
     CONSTRAINT `PK_FT` PRIMARY KEY (`FILE_TYPE_ID`),
     CONSTRAINT `TUC_FT_FILE_TYPE` UNIQUE (`FILE_TYPE`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "PHYSICS_GROUPS"                                             #
@@ -82,7 +86,8 @@ CREATE TABLE `PHYSICS_GROUPS` (
     `PHYSICS_GROUP_CONVENER` VARCHAR(100),
     CONSTRAINT `PK_PG` PRIMARY KEY (`PHYSICS_GROUP_ID`),
     CONSTRAINT `TUC_PG_PHYSICS_GROUP_NAME` UNIQUE (`PHYSICS_GROUP_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "PRIMARY_DS_TYPES"                                           #
@@ -93,7 +98,8 @@ CREATE TABLE `PRIMARY_DS_TYPES` (
     `PRIMARY_DS_TYPE` VARCHAR(100) NOT NULL,
     CONSTRAINT `PK_PDT` PRIMARY KEY (`PRIMARY_DS_TYPE_ID`),
     CONSTRAINT `TUC_PDT_PRIMARY_DS_TYPE` UNIQUE (`PRIMARY_DS_TYPE`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "DATASET_ACCESS_TYPES"                                       #
@@ -104,7 +110,8 @@ CREATE TABLE `DATASET_ACCESS_TYPES` (
     `DATASET_ACCESS_TYPE` VARCHAR(100) NOT NULL,
     CONSTRAINT `PK_DTP` PRIMARY KEY (`DATASET_ACCESS_TYPE_ID`),
     CONSTRAINT `TUC_DTP_DATASET_ACCESS_TYPE` UNIQUE (`DATASET_ACCESS_TYPE`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "PARAMETER_SET_HASHES"                                       #
@@ -116,7 +123,8 @@ CREATE TABLE `PARAMETER_SET_HASHES` (
     `NAME` VARCHAR(100),
     CONSTRAINT `PK_PSH` PRIMARY KEY (`PARAMETER_SET_HASH_ID`),
     CONSTRAINT `TUC_PSH_PSET_HASH` UNIQUE (`PSET_HASH`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_PSH_1` ON `PARAMETER_SET_HASHES` (`NAME`);
 
@@ -133,7 +141,8 @@ CREATE TABLE `DBS_VERSIONS` (
     `CREATION_DATE` INTEGER,
     `LAST_MODIFICATION_DATE` INTEGER,
     CONSTRAINT `PK_DV` PRIMARY KEY (`DBS_VERSION_ID`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "SITES"                                                      #
@@ -144,7 +153,8 @@ CREATE TABLE `SITES` (
     `SITE_NAME` VARCHAR(100) NOT NULL,
     CONSTRAINT `PK_SI` PRIMARY KEY (`SITE_ID`),
     CONSTRAINT `TUC_SI_SITE_NAME` UNIQUE (`SITE_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "OUTPUT_MODULE_CONFIGS"                                      #
@@ -160,7 +170,8 @@ CREATE TABLE `OUTPUT_MODULE_CONFIGS` (
     `CREATE_BY` VARCHAR(100),
     CONSTRAINT `PK_OMC` PRIMARY KEY (`OUTPUT_MOD_CONFIG_ID`),
     CONSTRAINT `TUC_OMC_1` UNIQUE (`APP_EXEC_ID`, `RELEASE_VERSION_ID`, `PARAMETER_SET_HASH_ID`, `OUTPUT_MODULE_LABEL`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `ID_OMC_1` ON `OUTPUT_MODULE_CONFIGS` (`RELEASE_VERSION_ID`);
 
@@ -181,7 +192,8 @@ CREATE TABLE `DATA_TIERS` (
     `CREATE_BY` VARCHAR(100),
     CONSTRAINT `PK_DT` PRIMARY KEY (`DATA_TIER_ID`),
     CONSTRAINT `TUC_DT_DATA_TIER_NAME` UNIQUE (`DATA_TIER_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "PRIMARY_DATASETS"                                           #
@@ -195,7 +207,8 @@ CREATE TABLE `PRIMARY_DATASETS` (
     `CREATE_BY` VARCHAR(100),
     CONSTRAINT `PK_PDS` PRIMARY KEY (`PRIMARY_DS_ID`),
     CONSTRAINT `TUC_PDS_PRIMARY_DS_NAME` UNIQUE (`PRIMARY_DS_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_PDS_1` ON `PRIMARY_DATASETS` (`PRIMARY_DS_TYPE_ID`);
 
@@ -223,7 +236,8 @@ CREATE TABLE `DATASETS` (
     `LAST_MODIFIED_BY` VARCHAR(100),
     CONSTRAINT `PK_DS` PRIMARY KEY (`DATASET_ID`),
     CONSTRAINT `TUC_DS_DATASET` UNIQUE (`DATASET`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_DS_1` ON `DATASETS` (`PRIMARY_DS_ID`);
 
@@ -264,7 +278,8 @@ CREATE TABLE `BLOCKS` (
     `LAST_MODIFIED_BY` VARCHAR(100),
     CONSTRAINT `PK_BK` PRIMARY KEY (`BLOCK_ID`),
     CONSTRAINT `TUC_BK_BLOCK_NAME` UNIQUE (`BLOCK_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_BK_1` ON `BLOCKS` (`DATASET_ID`);
 
@@ -289,7 +304,8 @@ CREATE TABLE `BLOCK_PARENTS` (
     `PARENT_BLOCK_ID` INTEGER NOT NULL,
     CONSTRAINT `PK_BP` PRIMARY KEY (`BLOCK_PARENT_ID`),
     CONSTRAINT `TUC_BP_1` UNIQUE (`THIS_BLOCK_ID`, `PARENT_BLOCK_ID`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_BP_1` ON `BLOCK_PARENTS` (`THIS_BLOCK_ID`);
 
@@ -319,7 +335,8 @@ CREATE TABLE `FILES` (
     `LAST_MODIFIED_BY` VARCHAR(100),
     CONSTRAINT `PK_FL` PRIMARY KEY (`FILE_ID`),
     CONSTRAINT `TUC_FL_LOGICAL_FILE_NAME` UNIQUE (`LOGICAL_FILE_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_FL_1` ON `FILES` (`DATASET_ID`);
 
@@ -348,7 +365,8 @@ CREATE TABLE `DATASET_OUTPUT_MOD_CONFIGS` (
     `OUTPUT_MOD_CONFIG_ID` INTEGER NOT NULL,
     CONSTRAINT `PK_DC` PRIMARY KEY (`DS_OUTPUT_MOD_CONF_ID`),
     CONSTRAINT `TUC_DC_1` UNIQUE (`DATASET_ID`, `OUTPUT_MOD_CONFIG_ID`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_DC_1` ON `DATASET_OUTPUT_MOD_CONFIGS` (`DATASET_ID`);
 
@@ -364,7 +382,8 @@ CREATE TABLE `DATASET_PARENTS` (
     `PARENT_DATASET_ID` INTEGER NOT NULL,
     CONSTRAINT `PK_DP` PRIMARY KEY (`DATASET_PARENT_ID`),
     CONSTRAINT `TUC_DP_1` UNIQUE (`THIS_DATASET_ID`, `PARENT_DATASET_ID`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_DP_1` ON `DATASET_PARENTS` (`THIS_DATASET_ID`);
 
@@ -383,7 +402,8 @@ CREATE TABLE `DATASET_RUNS` (
     `CREATION_DATE` INTEGER,
     `CREATE_BY` VARCHAR(100),
     CONSTRAINT `PK_DR` PRIMARY KEY (`DATASET_RUN_ID`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_DR_1` ON `DATASET_RUNS` (`DATASET_ID`);
 
@@ -401,7 +421,8 @@ CREATE TABLE `FILE_OUTPUT_MOD_CONFIGS` (
     `OUTPUT_MOD_CONFIG_ID` INTEGER NOT NULL,
     CONSTRAINT `PK_FC` PRIMARY KEY (`FILE_OUTPUT_CONFIG_ID`),
     CONSTRAINT `TUC_FC_1` UNIQUE (`FILE_ID`, `OUTPUT_MOD_CONFIG_ID`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_FC_1` ON `FILE_OUTPUT_MOD_CONFIGS` (`FILE_ID`);
 
@@ -417,7 +438,8 @@ CREATE TABLE `ASSOCIATED_FILES` (
     `ASSOCATED_FILE` INTEGER NOT NULL,
     CONSTRAINT `PK_AF` PRIMARY KEY (`ASSOCATED_FILE_ID`),
     CONSTRAINT `TUC_AF_1` UNIQUE (`THIS_FILE_ID`, `ASSOCATED_FILE`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_AF_1` ON `ASSOCIATED_FILES` (`THIS_FILE_ID`);
 
@@ -433,7 +455,8 @@ CREATE TABLE `FILE_PARENTS` (
     `PARENT_FILE_ID` INTEGER NOT NULL,
     CONSTRAINT `PK_FP` PRIMARY KEY (`FILE_PARENT_ID`),
     CONSTRAINT `TUC_FP_1` UNIQUE (`THIS_FILE_ID`, `PARENT_FILE_ID`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_FP_1` ON `FILE_PARENTS` (`THIS_FILE_ID`);
 
@@ -450,7 +473,8 @@ CREATE TABLE `FILE_LUMIS` (
     `FILE_ID` INTEGER NOT NULL,
     CONSTRAINT `PK_FLM` PRIMARY KEY (`FILE_LUMI_ID`),
     CONSTRAINT `TUC_FLM_1` UNIQUE (`RUN_NUM`, `LUMI_SECTION_NUM`, `FILE_ID`)
-);
+)
+ENGINE = InnoDB;
 
 CREATE INDEX `IDX_FLM_1` ON `FILE_LUMIS` (`FILE_ID`);
 
@@ -466,7 +490,8 @@ CREATE TABLE `ACQUISITION_ERAS` (
     `DESCRIPTION` VARCHAR(40),
     CONSTRAINT `PK_AQE` PRIMARY KEY (`ACQUISITION_ERA_ID`),
     CONSTRAINT `TUC_AQE_ACQUISITION_ERA_NAME` UNIQUE (`ACQUISITION_ERA_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "PROCESSING_ERAS"                                            #
@@ -480,7 +505,8 @@ CREATE TABLE `PROCESSING_ERAS` (
     `DESCRIPTION` VARCHAR(40),
     CONSTRAINT `PK_PE` PRIMARY KEY (`PROCESSING_ERA_ID`),
     CONSTRAINT `TUC_PE_PROCESSING_VERSION` UNIQUE (`PROCESSING_VERSION`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "BLOCK_SITES"                                                #
@@ -491,7 +517,8 @@ CREATE TABLE `BLOCK_SITES` (
     `BLOCK_ID` INTEGER NOT NULL,
     `SITE_ID` INTEGER NOT NULL,
     CONSTRAINT `PK_BLST` PRIMARY KEY (`BLOCK_SITE_ID`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "FILE_BUFFERS"                                               #
@@ -499,10 +526,11 @@ CREATE TABLE `BLOCK_SITES` (
 
 CREATE TABLE `FILE_BUFFERS` (
     `LOGICAL_FILE_NAME` VARCHAR(700) NOT NULL,
-    `FILE_CLOB` LONGBLOB,
+    `FILE_BLOB` LONGBLOB,
     `BLOCK_ID` INTEGER,
     CONSTRAINT `PK_FB` PRIMARY KEY (`LOGICAL_FILE_NAME`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "MIGRATION_REQUESTS"                                         #
@@ -519,7 +547,8 @@ CREATE TABLE `MIGRATION_REQUESTS` (
     `LAST_MODIFIED_BY` VARCHAR(100),
     CONSTRAINT `PK_MR` PRIMARY KEY (`MIGRATION_REQUEST_ID`),
     CONSTRAINT `TUC_MR_1` UNIQUE (`MIGRATION_URL`, `MIGRATION_INPUT`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "MIGRATION_BLOCKS"                                           #
@@ -537,7 +566,8 @@ CREATE TABLE `MIGRATION_BLOCKS` (
     `LAST_MODIFIED_BY` VARCHAR(100),
     CONSTRAINT `PK_MB` PRIMARY KEY (`MIGRATION_BLOCK_ID`),
     CONSTRAINT `TUC_MB_1` UNIQUE (`MIGRATION_BLOCK_NAME`, `MIGRATION_REQUEST_ID`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Add table "COMPONENT_STATUS"                                           #
@@ -549,7 +579,8 @@ CREATE TABLE `COMPONENT_STATUS` (
     `COMPONENT_STATUS` VARCHAR(100),
     `LAST_CONTACT_TIME` INTEGER,
     CONSTRAINT `PK_CSS` PRIMARY KEY (`COMP_STATUS_ID`)
-);
+)
+ENGINE = InnoDB;
 
 # ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
