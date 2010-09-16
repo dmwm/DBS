@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.2 2010/01/07 17:38:52 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.3 2010/01/13 22:34:21 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import os
 import json
@@ -12,6 +12,7 @@ from dbsserver_t.utils.DBSRestApi import DBSRestApi
 
 class DBSReaderModel_t(unittest.TestCase):
     
+    	
     def setUp(self):
         """setup all necessary parameters"""
         config = os.environ["DBS_TEST_CONFIG_READER"] 
@@ -40,25 +41,38 @@ class DBSReaderModel_t(unittest.TestCase):
     
     def test03(self):
         """web.DBSReaderModel.listBlocks: basic test"""
-        self.api.list('blocks', dataset='*')
-        self.api.list('blocks', block_name='*')
-        self.api.list('blocks', site_name='*')
-        self.api.list('blocks', dataset='*', 
+	try:
+	    self.api.list('blocks', dataset='*')
+	    self.api.list('blocks', block_name='*')
+	    self.api.list('blocks', site_name='*')
+	    self.api.list('blocks', dataset='*', 
                                 block_name='*',
                                 site_name='*')
-        
+        except:
+	    pass
+	else:
+	    self.fail("Exception was expected and was not raised.")
+	    
     def test04(self):
         """web.DBSReaderModel.listBlocks: takes exact dataset name, not pattern"""
-        result = self.api.list('blocks', dataset='*')
-        result = json.loads(result)
-        self.assertTrue(type(result) == list)
-        self.assertEqual(len(result),0)
+	try:
+	    result=self.api.list('blocks', dataset='*')
+	    import pdb
+	    pdb.set_trace()
+	except:
+	    pass
+	else:
+	    self.fail("Exception was expected and was not raised.")
         
     def test05(self):
         """web.DBSReaderModel.listBlocks: Must raise an exception if no parameter is passed."""
-        try: self.api.list('blocks')
-        except: pass
-        else: self.fail("Exception was expected and was not raised.")
+	
+        try:
+	    self.api.list('blocks')
+        except: 
+	    pass
+        else: 
+	    self.fail("Exception was expected and was not raised.")
             
     def test06(self):
         """web.DBSReaderModel.listFiles: basic test"""

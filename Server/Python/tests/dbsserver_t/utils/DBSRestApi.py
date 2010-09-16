@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.1 2010/01/01 19:54:38 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.2 2010/01/13 22:34:21 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import json
 import os, logging
@@ -64,13 +64,19 @@ class DBSRestApi:
         takes individual parameters
         Example: api.list('files',dataset='/a/b/c')
         """
-        return self.rest.default(*args, **kwargs)
+        return self.parseForException(self.rest.default(*args, **kwargs))
 
     def insert(self, call, params={}):
         request.method = 'POST'
         request.body = FileLike(params)
         return self.rest.default(*[call])
 
+    def parseForException(self, data):
+	data=json.loads(data)	
+	if type(data) == type({}) and data.has_key('exception'):
+	    #print "Service Raised an exception: "+data['exception']
+	    raise Exception("DBS Server raised an exception: " + data['exception'])
+	return data
 
 def options():
     defaultcfg = os.environ["DBS_TEST_CONFIG_READER"]
