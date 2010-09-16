@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.13 2010/08/26 19:23:05 yuyi Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.14 2010/08/27 16:11:43 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 import threading
 import logging
@@ -539,8 +539,9 @@ class DBSMigrationEngine(BaseWorkerThread) :
                     pHId = self.psetHashid.execute(conn, m["pset_hash"], transaction=tran)
                     if pHId <= 0:
                         #not found p set hash in db, insert it now
+			print m
                         pHId = self.sm.increment(connx, "SEQ_PSH")
-                        pHobj={"pset_hash": m["pset_hash"], "parameter_set_hash_id": pHId, 'name':m['name']}
+                        pHobj={"pset_hash": m["pset_hash"], "parameter_set_hash_id": pHId, 'name':m.get('name', '')}
                         self.psetHashin.execute(conn, pHobj, tran)
                     #cached it
                     self.datasetCache['pHash'][m["pset_hash"]] = pHId
