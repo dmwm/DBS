@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.33 $"
-# $Id: dbsClient.py,v 1.33 2010/03/18 17:13:50 afaq Exp $"
+# $Revision: 1.34 $"
+# $Id: dbsClient.py,v 1.34 2010/03/18 19:49:18 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -253,10 +253,18 @@ class DbsApi:
 		    
 		return self.callServer("/blocks?%s" %url_param)
 
-        def listFiles(self, lfn="", dataset="", block="", release_version="", pset_hash="", app_name="", output_module_label=""):
+        def listFiles(self, lfn="", dataset="", block="", release_version="", pset_hash="", app_name="", output_module_label="", minrun="", maxrun=""):
                 """
                 * API to list A file in DBS 
                 * lfn : lfn of file
+		* dataset : dataset
+		* block : block name
+		* release_version : release version
+		* pset_hash
+		* app_name
+		* output_module_label
+		* minrun/maxrun : if you want to look for a run range use these 
+				  Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
                 """
 
 		add_to_url=""
@@ -290,7 +298,14 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "logical_file_name=%s" %lfn
 		    amp=True
-		    
+		if minrun:
+		    if amp: add_to_url += "&"
+		    add_to_url += "minrun=%s" %minrun
+		    amp=True
+		if maxrun:
+		    if amp: add_to_url += "&"
+		    add_to_url += "maxrun=%s" %maxrun
+		    amp=True
 		if add_to_url:
 		    return self.callServer("/files?%s" % add_to_url )
 		else:
@@ -317,7 +332,7 @@ class DbsApi:
                 """
                 return self.callServer("/files", params = filesList , callmethod='POST' )
 
-        def listRuns(self, dataset="", block="", lfn="", minRun="", maxRun=""):
+        def listRuns(self, dataset="", block="", lfn="", minrun="", maxrun=""):
                 """
                 * API to list A runs in DBS 
                 * lfn : lfn of file
@@ -326,8 +341,8 @@ class DbsApi:
 		
 		You can use lfn or dataset or block
 		The presedence order is : dataset, block, lfn
-		* minRun/maxRun : if you want to look for a run range use these 
-		Use minRun=maxRun for a specific run, say for runNumber 2000 use minRun=2000, maxRun=2000
+		* minrun/maxrun : if you want to look for a run range use these 
+		Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
                 """
 
 		add_to_url=""
@@ -345,13 +360,13 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "logical_file_name=%s" %lfn
 		    amp=True
-		if minRun:
+		if minrun:
 		    if amp: add_to_url += "&"
-		    add_to_url += "minRun=%s" %minRun
+		    add_to_url += "minrun=%s" %minrun
 		    amp=True
-		if maxRun:
+		if maxrun:
 		    if amp: add_to_url += "&"
-		    add_to_url += "maxRun=%s" %maxRun
+		    add_to_url += "maxrun=%s" %maxrun
 		    amp=True
 		if add_to_url:
 		    return self.callServer("/runs?%s" % add_to_url )
