@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.29 2010/04/19 16:27:28 afaq Exp $"
-__version__ = "$Revision: 1.29 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.30 2010/04/19 16:32:24 afaq Exp $"
+__version__ = "$Revision: 1.30 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -15,7 +15,6 @@ from dbs.business.DBSSite import DBSSite
 from dbs.business.DBSFile import DBSFile
 from dbs.business.DBSAcquisitionEra import DBSAcquisitionEra
 from dbs.business.DBSOutputConfig import DBSOutputConfig
-from dbs.business.DBSFileLumi import DBSFileLumi
 from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
 from dbs.business.DBSStorageElement import DBSStorageElement
@@ -59,7 +58,6 @@ class DBSReaderModel(RESTModel):
         self.dbsFile = DBSFile(self.logger, self.dbi, config.dbowner)
         self.dbsAcqEra = DBSAcquisitionEra(self.logger, self.dbi, config.dbowner)
         self.dbsOutputConfig = DBSOutputConfig(self.logger, self.dbi, config.dbowner)
-        self.dbsFileLumi = DBSFileLumi(self.logger, self.dbi, config.dbowner)
         self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi, config.dbowner)
         self.dbsSite = DBSSite(self.logger, self.dbi, config.dbowner)
 	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
@@ -227,7 +225,7 @@ class DBSReaderModel(RESTModel):
         http://dbs3/filelumis?logical_file_name=lfn
         http://dbs3/filelumis?block_name=block_name
         """
-        return self.dbsFileLumi.listFileLumis(logical_file_name, block_name)
+        return self.dbsFile.listFileLumis(logical_file_name, block_name)
          
     def listRuns(self, dataset="", block_name="", logical_file_name="", minrun=-1, maxrun=-1):
         """

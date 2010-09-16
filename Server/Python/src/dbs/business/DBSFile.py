@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.38 2010/04/19 16:27:27 afaq Exp $"
-__version__ = "$Revision: 1.38 $"
+__revision__ = "$Id: DBSFile.py,v 1.39 2010/04/19 16:32:23 afaq Exp $"
+__version__ = "$Revision: 1.39 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -38,7 +38,23 @@ class DBSFile:
 	self.updatestatus = daofactory(classname='File.UpdateStatus')
 	self.dsconfigids = daofactory(classname='DatasetOutputMod_config.GetDSConfigs')
 	self.fileparentlist = daofactory(classname="FileParent.List")
+        self.filelumilist = daofactory(classname="FileLumi.List")
 
+    def listFileLumis(self, logical_file_name="", block_name=""): 
+        """
+        optional parameter: logical_file_name, block_name
+        returns: logical_file_name, file_lumi_id, run_num, lumi_section_num
+        """
+	try:
+	    conn=self.dbi.connection()
+	    result=self.filelumilist.execute(conn, logical_file_name, block_name)
+	    conn.close()
+	    return result
+        except Exception, ex:
+	    raise ex
+	finally:
+	    conn.close()
+ 
     def listFileParents(self, logical_file_name): 
         """
         required parameter: logical_file_name
