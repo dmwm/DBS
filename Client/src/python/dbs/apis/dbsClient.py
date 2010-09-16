@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.49 $"
-# $Id: dbsClient.py,v 1.49 2010/06/24 21:37:52 afaq Exp $"
+# $Revision: 1.50 $"
+# $Id: dbsClient.py,v 1.50 2010/06/28 21:27:58 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -577,7 +577,30 @@ class DbsApi:
 	    """ Submit a migrate request to migration service"""
 	    return self.callServer("/submit", params=inp, callmethod='POST') 
 
-
+	def migrateStatus(self, migration_request_id="", block_name="", dataset="", user=""):
+	    """Check the status of migration request"""
+	    amp=False
+	    add_to_url=""
+	    if  migration_request_id:
+		add_to_url+="migration_request_id=%s" %migration_request_id
+		amp=True
+	    if dataset:
+		if amp: add_to_url += "&"
+		add_to_url+="dataset=%s" %dataset
+		amp=True
+	    if block_name:
+		parts=block_name.split('#')
+		block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+		if amp: add_to_url += "&"
+		add_to_url += "block_name=%s" %block_name
+		amp=True
+	    if user:
+		if amp: add_to_url += "&"
+		add_to_url += "user=%s" %user
+	    if add_to_url:
+		return self.callServer("/status?%s" % add_to_url )
+	    return self.callServer("/status")
+	    
 if __name__ == "__main__":
 	# DBS Service URL
 	url="http://cmssrv18.fnal.gov:8585/dbs3"
