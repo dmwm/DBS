@@ -2,8 +2,8 @@
 """
 DBS Insert Buffer Polling Module
 """
-__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.8 2010/07/23 19:11:38 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.9 2010/08/12 19:08:31 afaq Exp $"
+__version__ = "$Revision: 1.9 $"
 
 
 """
@@ -175,7 +175,6 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	try:
 	    conn = self.dbi.connection()
 	    result = self.buflist.execute(conn, block_id)
-	    print result
 	    
             conn.close()
             return result
@@ -214,6 +213,7 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	conn = self.dbi.connection()
 	tran = conn.begin()
 	block_id=""
+	dataset_id=""
 	try:
 	    files=[]
 	    lumis=[]
@@ -225,6 +225,7 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	    
 	    for ablob in businput:
 		block_id=ablob["file"]["block_id"]
+		dataset_id=ablob["file"]["dataset_id"]
 		if ablob.has_key("file") : 
 		    files.append(ablob["file"])
 		    fidl.append(ablob["file"]["file_id"])
@@ -293,7 +294,7 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 			if iPds == fpdsInc:
 			    pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
 			    iPds = 0
-			dsdao={ "this_dataset_id": dataset_id }
+			dsdao={ "this_dataset_id": dataset_id  }
 			dsdao["parent_dataset_id"] = ads
 			dsdao["dataset_parent_id"] = pdsID # PK of table 
 			dsdaolist.append(dsdao)
