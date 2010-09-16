@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.9 2009/12/23 20:39:15 afaq Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.10 2009/12/28 17:49:37 afaq Exp $"
+__version__ = "$Revision: 1.10 $"
 
 import re
 import cjson
@@ -93,6 +93,25 @@ class DBSWriterModel(DBSReaderModel):
         except Exception, ex:
                 raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
 
+
+    def insertProcessingEra(self):
+	"""
+	Insert an ProcessingEra in DBS
+	Gets the input from cherrypy request body.
+	input must be a dictionary with at least the following keys:
+	'processing_version', 'description'
+
+        """
+        try:
+                body = request.body.read()
+                indata = cjson.decode(body)
+                indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
+                self.dbsProcEra.insertProcessingEra(indata)
+
+        except Exception, ex:
+                    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+			    
+		
     def insertDataset(self):
         """
         gets the input from cherrypy request body.
