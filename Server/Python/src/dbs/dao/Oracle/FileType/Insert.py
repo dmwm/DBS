@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileTypes table """ 
 
-__revision__ = "$Revision: 1.5 $"
-__version__  = "$Id: Insert.py,v 1.5 2010/03/05 19:01:32 yuyi Exp $ "
+__revision__ = "$Revision: 1.6 $"
+__version__  = "$Id: Insert.py,v 1.6 2010/04/22 16:23:23 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -12,7 +12,7 @@ class Insert(DBFormatter):
             DBFormatter.__init__(self, logger, dbi)
 	    self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 	    
-            self.sql = """INSERT INTO %sFILE_TYPES ( FILE_TYPE_ID, FILE_TYPE) VALUES (:filetypeid, :filetype)""" % (self.owner)
+            self.sql = """INSERT INTO %sFILE_DATA_TYPES ( FILE_TYPE_ID, FILE_TYPE) VALUES (:filetypeid, :filetype)""" % (self.owner)
 
     def getBinds_delme( self, file_typesObj ):
             binds = {}
