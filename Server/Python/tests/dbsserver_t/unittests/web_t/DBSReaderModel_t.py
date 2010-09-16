@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.23 2010/08/09 10:57:59 akhukhun Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.24 2010/08/23 18:14:51 afaq Exp $"
+__version__ = "$Revision: 1.24 $"
 
 import os, sys, imp
 import json
@@ -278,8 +278,9 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test045(self):
         """test045: web.DBSReaderModel.listFiles: with dataset, lumi list"""
-        api.list('files', dataset=testparams['dataset'], lumi_list='[1,2,3]', maxrun=testparams['run_num'], 
+        api.list('files', dataset=testparams['dataset'], lumi_list='[27414, 26422, 29838]', maxrun=testparams['run_num'], 
 		  minrun=testparams['run_num'])
+
     def test0450(self):
         """test0450: web.DBSReaderModel.listFiles: with dataset and lumi intervals"""
         api.list('files', dataset=testparams['dataset'], lumi_list='[[1, 100]]', maxrun=testparams['run_num'], 

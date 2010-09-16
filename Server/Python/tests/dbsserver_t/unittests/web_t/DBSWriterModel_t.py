@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.24 2010/08/19 20:42:17 afaq Exp $"
-__version__ = "$Revision: 1.24 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.25 2010/08/23 18:14:51 afaq Exp $"
+__version__ = "$Revision: 1.25 $"
 
 import os
 import sys
@@ -225,7 +225,6 @@ class DBSWriterModel_t(unittest.TestCase):
 	try:
 	    api.insert('datasets', data)
 	except Exception, ex:
-	    print "*******%s" %ex.args[0]
 	    if 'dataset_access_type' in ex.args[0]:
 		pass
 	    else:
@@ -302,7 +301,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	    flist.append(f)
 	data={"files":flist}
 	api.insert('files', data)
-	time.sleep(5)
+	#time.sleep(5)
 
     def test19(self):
 	"""test19 web.DBSWriterModel.insertFiles: duplicate insert file shuld not raise any errors"""
