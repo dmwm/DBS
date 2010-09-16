@@ -3,8 +3,8 @@
 This module provides Dataset.GetID data access object.
 Light dao object to get the id for a give /primds/procds/tier
 """
-__revision__ = "$Id: GetID.py,v 1.4 2009/11/24 10:58:12 akhukhun Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: GetID.py,v 1.5 2009/12/22 21:52:26 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -26,11 +26,11 @@ FROM %sDATASETS D
 	
     def execute(self, name, conn = None, transaction = False):
         """
-        returns id for a given path = /primds/procds/tier
+        returns id for a given dataset = /primds/procds/tier
         """	
         sql = self.sql
-        sql += "WHERE D.DATASET = :path"
-        binds = {"path":name}
+        sql += "WHERE D.DATASET = :dataset"
+        binds = {"dataset":name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
         assert len(plist) == 1, "Dataset %s does not exist" % name

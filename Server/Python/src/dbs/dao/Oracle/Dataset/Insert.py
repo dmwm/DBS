@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for Datasets table """ 
 
-__revision__ = "$Revision: 1.8 $"
-__version__  = "$Id: Insert.py,v 1.8 2009/12/17 23:15:41 afaq Exp $ "
+__revision__ = "$Revision: 1.9 $"
+__version__  = "$Id: Insert.py,v 1.9 2009/12/22 21:52:26 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -50,10 +50,5 @@ class Insert(DBFormatter):
 	physics_group_id, xtcrosssection, global_tag, creation_date, create_by, 
 	last_modification_date, last_modified_by
 	"""
-
-        try:
-	    daoinput=self.processInput(daoinput)
-            self.dbi.processData(self.sql, daoinput, conn, transaction)
-        except exceptions.IntegrityError, ex:
-            self.logger.warning("Unique constraint violation being ignored...")
-            self.logger.warning("%s" % ex)
+	daoinput=self.processInput(daoinput)
+        self.dbi.processData(self.sql, daoinput, conn, transaction)
