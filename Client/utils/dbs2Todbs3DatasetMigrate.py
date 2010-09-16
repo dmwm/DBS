@@ -193,7 +193,7 @@ class migrateDBS2TODBS3:
 
 					for asite in self.sitelist:
 					    self.dbs3api.insertSite(asite)
-    
+					self.block["site_list"] = self.sitelist 
 					#print self.block
 					self.dbs3api.insertBlock(self.block)
 					start_time=time.time()
