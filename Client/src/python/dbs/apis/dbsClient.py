@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.38 $"
-# $Id: dbsClient.py,v 1.38 2010/04/16 19:27:15 afaq Exp $"
+# $Revision: 1.39 $"
+# $Id: dbsClient.py,v 1.39 2010/04/16 21:20:41 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -463,7 +463,18 @@ class DbsApi:
 		url_param+="?dataset=%s" %dataset
 	    
 	    return self.callServer("/datatypes%s" %url_param)
+
+        def listDataTiers(self, datatier=""):
+	    """
+	    API to list data types
+	    """
+
+	    url_param=""
+	    if datatier:
+		url_param+="?data_tier_name=%s" % datatier
 	    
+	    return self.callServer("/datatiers%s" %url_param)
+    
 if __name__ == "__main__":
 	# DBS Service URL
 	url="http://cmssrv18.fnal.gov:8586/dbs3"
