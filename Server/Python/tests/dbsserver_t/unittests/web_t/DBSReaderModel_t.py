@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.9 2010/01/27 14:56:02 yuyi Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.10 2010/01/27 15:29:14 yuyi Exp $"
+__version__ = "$Revision: 1.10 $"
 
 import os, sys, imp
 import json
@@ -241,7 +241,8 @@ class DBSReaderModel_t(unittest.TestCase):
     def test36(self):
         """Test36 web.DBSReaderModel.listFiles: basic test"""
 	#need to be updated
-	api.list('files', logical_file_name='ABC')	
+	lfn= testparams['files'][1]['logical_file_name']
+	api.list('files', logical_file_name=lfn)	
 
     def test37(self):
         """Test37 web.DBSReaderModel.listFiles: Must raise an exception if no parameter is passed."""
@@ -263,7 +264,8 @@ class DBSReaderModel_t(unittest.TestCase):
         
     def test41(self):
         """Test41 web.DBSReaderModel.listDatasetParents: must raise an exception if no parameter is passed"""
-        try: api.list('datasetparents')
+        try: 
+	    api.list('datasetparents')
         except: 
 	    pass
         else: 
@@ -291,13 +293,15 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test47(self):
         """Test47 web.DBSReaderModel.listOutputConfigs: basic test"""
-	#need to be updated with LFN 
-        api.list('outputconfigurations', logical_file_name="ABC")
+	#need to be updated with LFN
+	lfn= testparams['files'][1]['logical_file_name']
+        api.list('outputconfigurations', logical_file_name=lfn)
 
     def test48(self):
         """Test48 web.DBSReaderModel.listOutputConfigs: basic test""" 
         #need to be updated with LFN 
-        api.list('outputconfigurations', logical_file_name="ABC"+"*")
+	lfn= testparams['files'][1]['logical_file_name']
+        api.list('outputconfigurations', logical_file_name=lfn+"*")
 
     def test49(self):
         """Test49 web.DBSReaderModel.listOutputConfigs: basic test"""
@@ -389,7 +393,8 @@ class DBSReaderModel_t(unittest.TestCase):
     def test67(self):
         """Test67 web.DBSReaderModel.listFileLumis: basic test"""
 	#need to update LFN
-        api.list('filelumis', logical_file_name="ABC")
+	lfn= testparams['files'][1]['logical_file_name']
+        api.list('filelumis', logical_file_name=lfn)
 
 
     def test68(self):
