@@ -3,9 +3,10 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.45 2010/07/09 18:23:59 yuyi Exp $"
-__version__ = "$Revision: 1.45 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.46 2010/08/01 19:11:54 akhukhun Exp $"
+__version__ = "$Revision: 1.46 $"
 
+import cjson
 from WMCore.WebTools.RESTModel import RESTModel
 
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
@@ -126,7 +127,7 @@ class DBSReaderModel(RESTModel):
         
     def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", 
 			processing_version="", acquisition_era="", run_num=0, physics_group_name="", logical_file_name="", primary_ds_name="",
-			primary_ds_type="", data_tier_name="", dataset_access_type=""):
+			primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
         """
         Example url's: <br />
         http://dbs3/datasets <br />
@@ -146,10 +147,11 @@ class DBSReaderModel(RESTModel):
 	primary_ds_type = primary_ds_type.replace("*", "%")
 	data_tier_name = data_tier_name.replace("*", "%")
 	dataset_access_type = dataset_access_type.replace("*", "%")
-	if(run_num):
-	    run_num = int(run_num)
+	run_num = int(run_num)
+	detail = detail in (True, 1, "True", "1")
+
 	return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, processing_version, acquisition_era,
-	    run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, data_tier_name, dataset_access_type)
+	    run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, data_tier_name, dataset_access_type, detail)
 
     def listDataTiers(self, data_tier_name=""):
 	"""
@@ -160,7 +162,7 @@ class DBSReaderModel(RESTModel):
 	data_tier_name = data_tier_name.replace("*","%")
 	return self.dbsDataTier.listDataTiers(data_tier_name)
 	
-    def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num=-1):
+    def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num=-1, detail=False):
         """
         Example url's:
         http://dbs3/blocks?dataset=myDataset ||?origin_site_name=mySite <br />
@@ -174,7 +176,8 @@ class DBSReaderModel(RESTModel):
 	logical_file_name = logical_file_name.replace("*","%")
 	origin_site_name = origin_site_name.replace("*","%")
 	run_num = int(run_num)
-        return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num)
+	detail = detail in (True, 1, "True", "1")
+        return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num, detail)
 
     def listBlockParents(self, block_name=""):
         """
@@ -194,7 +197,7 @@ class DBSReaderModel(RESTModel):
  
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", 
 	pset_hash="", app_name="", output_module_label="", minrun=-1, maxrun=-1,
-	origin_site_name="", lumi_list=[]):
+	origin_site_name="", lumi_list=[], detail=False):
         """
         Example url's: <br />
         http://dbs3/files?dataset=/a/b/c/ <br />
@@ -209,13 +212,14 @@ class DBSReaderModel(RESTModel):
 	block_name = block_name.replace("*", "%")
 	origin_site_name = origin_site_name.replace("*", "%")
 	dataset = dataset.replace("*", "%")
-	if(maxrun):
-	    maxrun = int(maxrun)
-	if(minrun):
-	    minrun = int(minrun)
+	maxrun = int(maxrun)
+	minrun = int(minrun)
+	if type(lumi_list) == str:
+	    lumi_list = cjson.decode(lumi_list)
+	detail = detail in (True, 1, "True", "1")
 	output_module_label = output_module_label.replace("*", "%")
 	return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
-					output_module_label, maxrun, minrun, origin_site_name, lumi_list)
+					output_module_label, maxrun, minrun, origin_site_name, lumi_list, detail)
     
     def listDatasetParents(self, dataset):
         """
