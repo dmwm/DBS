@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.19 2010/07/09 18:34:51 yuyi Exp $"
-__version__ = "$Revision: 1.19 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.20 2010/07/14 16:10:03 akhukhun Exp $"
+__version__ = "$Revision: 1.20 $"
 
 import os, sys, imp
 import json
@@ -18,9 +18,9 @@ def importCode(code,name,add_to_sys_modules=0):
         sys.modules[name] = module
     return module
 
-#config = os.environ["DBS_TEST_CONFIG_READER"]
 config = os.environ["DBS_TEST_CONFIG_WRITER"]
-api = DBSRestApi(config)
+service = os.environ["DBS_TEST_SERVICE"]
+api = DBSRestApi(config, service)
 
 class DBSReaderModel_t(unittest.TestCase):
 

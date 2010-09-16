@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.21 2010/04/23 19:55:52 afaq Exp $"
-__version__ = "$Revision: 1.21 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.22 2010/07/14 16:10:10 akhukhun Exp $"
+__version__ = "$Revision: 1.22 $"
 
 import os
 import sys
@@ -22,7 +22,8 @@ def uuid():
     return lib.uuid_generate(byref(uuid))
 
 config = os.environ["DBS_TEST_CONFIG_WRITER"] 
-api = DBSRestApi(config)
+service = os.environ["DBS_TEST_SERVICE"] 
+api = DBSRestApi(config, service)
 uid = uuid()
 # cannot use python uuid since the generated uuid is too big to fit into some db columns.
 #uid = int(uuid.uuid1())

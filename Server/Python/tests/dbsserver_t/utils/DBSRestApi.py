@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.12 2010/05/06 14:56:00 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.13 2010/07/14 16:09:10 akhukhun Exp $"
+__version__ = "$Revision: 1.13 $"
 
 import json
 import os, logging
@@ -28,21 +28,18 @@ class FileLike(object):
         pass
 
 class DBSRestApi:
-    def __init__(self, configfile):
+    def __init__(self, configfile, service='DBS'):
         log.error_log.setLevel(logging.ERROR)
-        config = self.configure(configfile)
-	#print config
+        config = self.configure(configfile, service)
         config = config.section_("DBS")
-	#print config
         self.rest = RESTApi(config)
         self.config = config
 
-    def configure(self, configfile):
+    def configure(self, configfile, service):
         cfg = loadConfigurationFile(configfile)
         wconfig = cfg.section_("Webtools")
         app = wconfig.application
         appconfig = cfg.section_(app)
-        service = list(appconfig.views.active._internal_children)[0]
         dbsconfig = getattr(appconfig.views.active, service)
 	# Eitehr we change formatter 
 	# OR change the 'Accept' type to application/json (which we don't know how to do at thi moment)	
@@ -95,8 +92,10 @@ class DBSRestApi:
 
 def options():
     defaultcfg = os.environ["DBS_TEST_CONFIG_READER"]
+    defaultservice = os.environ["DBS_TEST_SERVICE"]
     parser = OptionParser()
     parser.add_option("-c", "--config", dest="cfile", default=defaultcfg)
+    parser.add_option("--service", dest="service", default=defaultservice)
     parser.add_option("--primary_ds_name", dest='primary_ds_name')
     parser.add_option("--processed_ds_name", dest='processed_ds_name')
     parser.add_option("--data_tier_name", dest='data_tier_name')
@@ -121,8 +120,9 @@ def options():
     
 if __name__ == "__main__":
     call, params = options()
-    api = DBSRestApi(params["cfile"])
+    api = DBSRestApi(params["cfile"], params["service"])
     del params["cfile"]
+    del params["service"]
     res = api.list1(call, params)
     dres = json.loads(res)
     pres = json.dumps(dres, sort_keys = True, indent = 4)
