@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.33 2010/08/23 15:49:29 afaq Exp $"
-__version__ = "$Revision: 1.33 $"
+__revision__ = "$Id: List.py,v 1.34 2010/08/23 18:08:41 afaq Exp $"
+__version__ = "$Revision: 1.34 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -87,19 +87,25 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	    sql += " AND FL.RUN_NUM between :minrun and :maxrun " 
 	    binds.update({"minrun":minrun})
 	    binds.update({"maxrun":maxrun})
-	if (lumi_list and len(lumi_list) != 0):
-	    sql += " AND FL.LUMI_SECTION_NUM in :lumi_list"
-	    binds.update({"lumi_list":lumi_list})
 	if (origin_site_name):
 	    op = ("=","like")["%" in origin_site_name]
     	    sql += " AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
 	    binds.update({"origin_site_name":origin_site_name})
+        # KEEP lumi_list as the LAST CHECK in this DAO, this is a MUST ---  ANZAR 08/23/2010
+        if (lumi_list and len(lumi_list) != 0):
+            wheresql += " AND FL.LUMI_SECTION_NUM in :lumi_list"
+            newbinds=[]
+            for alumi in lumi_list:
+                cpbinds={}
+                cpbinds.update(binds)
+                cpbinds["lumi_list"]=alumi
+                newbinds.append(cpbinds)
+            binds=newbinds
 	#    
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	if len(cursors) != 1 :
-	    raise Exception("File does not exist.")
-
+	#if len(cursors) != 1 :
+	#    raise Exception("File does not exist.")
 	result = self.formatCursor(cursors[0])
 	return result

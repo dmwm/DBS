@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: BriefList.py,v 1.2 2010/08/03 13:36:41 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: BriefList.py,v 1.3 2010/08/23 18:08:41 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -84,23 +84,29 @@ class BriefList(DBFormatter):
 	    binds.update({"minrun":minrun})
 	    binds.update({"maxrun":maxrun})
 
-	if (lumi_list):
-	    wheresql += " AND FL.LUMI_SECTION_NUM in :lumi_list"
-	    binds.update({"lumi_list":lumi_list})
-
 	if (origin_site_name):
 	    if not block_name:
 		joinsql += " JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID" % (self.owner)
 	    op = ("=","like")["%" in origin_site_name]
     	    wheresql += " AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
 	    binds.update({"origin_site_name":origin_site_name})
+
+        # KEEP lumi_list as the LAST CHECK in this DAO, this is a MUST ---  ANZAR 08/23/2010
+        if (lumi_list and len(lumi_list) != 0):
+            wheresql += " AND FL.LUMI_SECTION_NUM in :lumi_list"
+            newbinds=[]
+            for alumi in lumi_list:
+                cpbinds={}
+                cpbinds.update(binds)
+                cpbinds["lumi_list"]=alumi
+                newbinds.append(cpbinds)
+            binds=newbinds
 	
 	sql = " ".join((basesql, joinsql, wheresql))
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	if len(cursors) != 1 :
-	    raise Exception("File does not exist.")
-
+	#if len(cursors) != 1 :
+	#    raise Exception("File does not exist.")
 	result = self.formatCursor(cursors[0])
 	return result
