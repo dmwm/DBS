@@ -28,7 +28,6 @@ url=sys.argv[1]
 dbs3api = DbsApi(url=url)
 dataset=sys.argv[2]
 #primary/dataset are inserted only Once
-abc="true"
 
 try:
   optManager  = DbsOptionParser()
@@ -36,7 +35,6 @@ try:
   api = Dbs2Api(opts.__dict__)
   datasets=[dataset]
   block_time_lst=[]
-
   for dataset in datasets :
     blocks=api.listBlocks(dataset)
     for ablock in blocks:
@@ -70,17 +68,21 @@ try:
 			self.currfile={}
 			self.currfilelumis=[]
 			self.currfileparents=[]
+			self.outputconfs=[]
 
         	def startElement(self, name, attrs):
 			if name == 'primary_dataset':
 				self.primary_dataset=attrs.get('primary_name')
-				self.prdsobj = { "primary_ds_name" : str(self.primary_dataset), "primary_ds_type": "test" }
+				self.prdsobj =  { "primary_ds_name" : str(self.primary_dataset), "primary_ds_type": "test" }
+				
 			if name == 'processed_dataset':
 				self.dataset=	{
-						"is_dataset_valid": 1 , "primary_ds_name": self.primary_dataset, "primary_ds_type": "test", "dataset_type":"PRODUCTION",
+						"is_dataset_valid": 1 , "primary_ds_name": self.primary_dataset, "primary_ds_type": "test", 
+						"dataset_type":"PRODUCTION",
 						"global_tag": attrs.get('global_tag'),"xtcrosssection":123,"physics_group_name": "Tracker", 
-						"processing_version" : "1",
-						"processed_dataset_name": attrs.get('processed_datatset_name'), "acquisition_era_name" : attrs.get('acquisition_era') 
+						#"processing_version" : "1", 
+						#"acquisition_era_name" : attrs.get('acquisition_era')
+						"processed_ds_name": attrs.get('processed_datatset_name'),
 						}
 					
 				self.processed_dataset=attrs.get('processed_datatset_name')
@@ -88,8 +90,8 @@ try:
 			if name == 'path':
 				self.data_tier = str(attrs.get('dataset_path')).split('/')[3]
 				self.path=attrs.get('dataset_path')
-				self.dataset["DATA_TIER_NAME"]=self.data_tier 
-				self.dataset["DATASET"]=self.path
+				self.dataset["data_tier_name"]=self.data_tier 
+				self.dataset["dataset"]=self.path
 
 			if name == 'block':
 				self.block  = {
@@ -126,14 +128,16 @@ try:
 					}
 				self.currfileparents.append(fileparent)
 
-			"""
 			if name == 'algorithm':
-				print attrs
-                                return
-				attrs.get('app_version')
-				attrs.get('app_executable_name')
-				'NO_PSET_HASH'
+                                outputconf = {
+				    "app_name" : attrs.get('app_executable_name'),
+				    "release_version" : attrs.get('app_version'),
+				    "pset_hash" : attrs.get('ps_hash'),
+				    "output_module_label" : attrs.get('app_family_name')
+				}
+				self.outputconfs.append(outputconf)
 
+			"""
 			if name == 'processed_dataset_algorithm':
 				pass
 
@@ -150,22 +154,27 @@ try:
 			if name == 'file' : 
 				self.currfile["file_lumi_list"]=self.currfilelumis
 				self.currfile["file_parent_list"]=self.currfileparents
+				self.currfile["file_output_config_list"]=self.outputconfs
 				self.currfilelumis=[]
 				self.currfileparents=[]
 				self.files.append(self.currfile)
 
                         if name == 'dbs':
+#				import pdb
 				try :
 					# Lets populate this in DBS
         				# API Object  
-					if abc == "true" :
-        					#print self.prdsobj
-        					dbs3api.insertPrimaryDataset(self.prdsobj)
+        				#print self.prdsobj
+        				dbs3api.insertPrimaryDataset(self.prdsobj)
 
-						##print self.dataset
-        					dbs3api.insertDataset(self.dataset)
-						again="no"
+					for anocfg in self.outputconfs:
+					    dbs3api.insertOutputConfig(anocfg)
+
+					##print self.dataset
+					self.dataset["output_configs"]=self.outputconfs
+        				dbs3api.insertDataset(self.dataset)
 					#print self.block
+#pdb.set_trace()
 					dbs3api.insertBlock(self.block)
 					start_time=time.time()
 					#for file in self.files:
