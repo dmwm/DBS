@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.34 2010/05/28 21:20:31 afaq Exp $"
-__version__ = "$Revision: 1.34 $"
+__revision__ = "$Id: DBSBlock.py,v 1.35 2010/06/02 20:00:23 afaq Exp $"
+__version__ = "$Revision: 1.35 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -132,16 +132,16 @@ class DBSBlock:
 		blkinput["origin_site_name"] = businput["origin_site_name"]
             self.blockin.execute(conn, blkinput, tran)
 
-	    if businput.has_key("site_list"):
-		for asite in businput["site_list"]:
-		    blkstID = self.sm.increment(conn, "SEQ_BLST", transaction=tran)
-		    try:
-			self.blksitein.execute(conn, block_site_id=blkstID, block_id=blkinput["block_id"], site_name=asite['site_name'], transaction=tran)
-		    except exceptions.IntegrityError, ex:
-			if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-			    pass
-			else:
-			    raise
+	    #if businput.has_key("site_list"):
+	    #	for asite in businput["site_list"]:
+	    #	    blkstID = self.sm.increment(conn, "SEQ_BLST", transaction=tran)
+	    #	    try:
+	    #		self.blksitein.execute(conn, block_site_id=blkstID, block_id=blkinput["block_id"], site_name=asite['site_name'], transaction=tran)
+	    #	    except exceptions.IntegrityError, ex:
+	    #		if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+	    #		    pass
+	    #		else:
+	    #		    raise
             tran.commit()
         except Exception, e:
 	    if str(e).lower().find("unique constraint") != -1 or str(e).lower().find("duplicate") != -1:
