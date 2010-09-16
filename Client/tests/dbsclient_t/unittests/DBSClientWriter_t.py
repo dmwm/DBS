@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.8 2010/01/26 22:49:34 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.9 2010/02/01 17:38:42 afaq Exp $"
+__version__ = "$Revision: 1.9 $"
 
 import os
 import sys
@@ -16,8 +16,8 @@ def uuid():
     uuid = create_string_buffer(16)
     return lib.uuid_generate(byref(uuid))
 
-    
-url="http://cmssrv18.fnal.gov:8585/dbs3"
+url=os.environ['DBS_WRITER_URL']     
+#url="http://cmssrv18.fnal.gov:8585/dbs3"
 api = DbsApi(url=url)
 uid = uuid()
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
