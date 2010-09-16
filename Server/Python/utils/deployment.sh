@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # CVS tags for various involved modules
-wmcore_tag=WMCORE_DBS_3_S1_0_pre1
-dbs3_tag=DBS_3_S1_0_pre1
+wmcore_tag=DBS_3_S3_0
+dbs3_tag=DBS_3_S3_0_pre2
 
 #Configure
 #all these parameters are used to generate default config and setup script files
-dburl='oracle://user:passwd@db'
-dbowner='schemaowner'
-service="DBS"
+dburl='oracle://account-name:pd@dbname'
+dbowner='owner'
+service='DBS'
 instance='cms_dbs'
 version='DBS_3_0_0'
 
@@ -34,54 +34,55 @@ echo "Installing DBS3 Server Dependencies"
 echo "This can take upto 15 minutes..."
 echo ""
 
-install_python(){
-cd $dExternal
-wget http://www.python.org/ftp/python/2.6.4/Python-2.6.4.tgz
-tar xzvf Python-2.6.4.tgz
-mkdir -p python
-cd $dExternal/Python-2.6.4
-./configure --prefix $dExternal/python
-make install
-cd $dExternal
-export PATH=$dExternal/python/bin:$PATH
-}
-echo "Installing python 2.6.4"
-install_python 1>$dlogs/python.log 2>&1
-
+##this python has problem with sqlalchemy
+#install_python(){
+#cd $dExternal
+#wget http://www.python.org/ftp/python/2.6.4/Python-2.6.4.tgz
+#tar xzvf Python-2.6.4.tgz
+#mkdir -p python
+#cd $dExternal/Python-2.6.4
+#./configure --prefix $dExternal/python
+#make install
+#cd $dExternal
+#export PATH=$dExternal/python/bin:$PATH
+#}
+#echo "Installing python 2.6.4"
+#install_python 1>$dlogs/python.log 2>&1
 
 install_cherrypy(){
 cd $dExternal
 wget http://download.cherrypy.org/cherrypy/3.1.2/CherryPy-3.1.2.tar.gz
 tar -xzvf CherryPy-3.1.2.tar.gz
 cd CherryPy-3.1.2
-python setup.py install
+#python setup.py install
+python setup.py build
 cd $dExternal
 }
-echo "Installing Cheerypy 3.1.2"
+echo "Building Cheerypy 3.1.2"
 install_cherrypy 1>$dlogs/cherrypy.log 2>&1
-
 
 install_cheetah(){
 cd $dExternal
 wget http://pypi.python.org/packages/source/C/Cheetah/Cheetah-2.4.0.tar.gz#md5=873f5440676355512f176fc4ac01011e
 tar xzvf Cheetah-2.4.0.tar.gz
 cd Cheetah-2.4.0
-python setup.py install
+#python setup.py install
+python setup.py build
 cd $dExternal
 }
-echo "Installing Cheetah 2.4.0"
+echo "Building Cheetah 2.4.0"
 install_cheetah 1>$dlogs/cheetah.log 2>&1
-
 
 install_sqlalchemy(){
 cd $dExternal
-wget http://prdownloads.sourceforge.net/sqlalchemy/SQLAlchemy-0.5.6.tar.gz?download
-tar xzvf SQLAlchemy-0.5.6.tar.gz
-cd SQLAlchemy-0.5.6
-python setup.py install
+wget http://prdownloads.sourceforge.net/sqlalchemy/SQLAlchemy-0.5.8.tar.gz?download
+tar xzvf SQLAlchemy-0.5.8.tar.gz
+cd SQLAlchemy-0.5.8
+#python setup.py install
+python setup.py build
 cd $dExternal
 }
-echo "Installing sqlalchemy 0.5.6"
+echo "building sqlalchemy 0.5.8"
 install_sqlalchemy 1>$dlogs/sqlalchemy.log 2>&1
 
 install_openid(){
@@ -89,10 +90,11 @@ cd $dExternal
 wget http://openidenabled.com/files/python-openid/packages/python-openid-2.2.4.tar.gz
 tar xzvf python-openid-2.2.4.tar.gz
 cd python-openid-2.2.4
-python setup.py install
+#python setup.py install
+python setup.py build
 cd $dExternal
 }
-echo "Installing openid 2.2.4"
+echo "Building openid 2.2.4"
 install_openid 1>$dlogs/openid.log 2>&1
 
 
@@ -102,12 +104,12 @@ cd $dExternal
 wget http://pypi.python.org/packages/source/p/python-cjson/python-cjson-1.0.5.tar.gz#md5=4d55b66ecdf0300313af9d030d9644a3
 tar xzvf python-cjson-1.0.5.tar.gz
 cd python-cjson-1.0.5
-python setup.py install
+#python setup.py install
+python setup.py build
 cd $dExternal
 }
-echo "Installing cjson 1.0.5"
+echo "Building cjson 1.0.5"
 install_cjson 1>$dlogs/cjson.log 2>&1
-
 
 install_oracleclient(){
 cd $dExternal
@@ -156,34 +158,35 @@ cd $dExternal
 export CVSROOT=:pserver:anonymous@cmscvs.cern.ch:/cvs_server/repositories/CMSSW
 export CVS_RSH=ssh
 cvs -d `echo $CVSROOT | awk -F@ '{print $1":98passwd\@"$2}'` login
-#cvs co WMCORE/src/python/WMCore/Database
-#cvs co WMCORE/src/python/WMCore/HTTPFrontEnd
-#cvs co WMCORE/src/python/WMCore/WebTools
-#cvs co WMCORE/src/python/WMCore/DataStructs
-#cvs co WMCORE/src/python/WMCore/WMLogging.py
-#cvs co WMCORE/src/python/WMCore/WMFactory.py
-#cvs co WMCORE/src/python/WMCore/WMException.py
-#cvs co WMCORE/src/python/WMCore/Configuration.py
-#cvs co WMCORE/src/python/WMCore/DAOFactory.py
-#cvs co WMCORE/src/python/WMCore/Lexicon.py
-#cvs co WMCORE/src/python/WMCore/WMExceptions.py
-#cvs co WMCORE/src/templates/WMCore/WebTools
-#cvs co WMCORE/src/templates/WMCore/__init__.py
+cvs co WMCORE/src/python/WMCore/Database
+cvs co WMCORE/src/python/WMCore/HTTPFrontEnd
+cvs co WMCORE/src/python/WMCore/WebTools
+cvs co WMCORE/src/python/WMCore/DataStructs
+cvs co WMCORE/src/python/WMCore/WMLogging.py
+cvs co WMCORE/src/python/WMCore/WMFactory.py
+cvs co WMCORE/src/python/WMCore/WMException.py
+cvs co WMCORE/src/python/WMCore/Configuration.py
+cvs co WMCORE/src/python/WMCore/DAOFactory.py
+cvs co WMCORE/src/python/WMCore/Lexicon.py
+cvs co WMCORE/src/python/WMCore/WMExceptions.py
+cvs co WMCORE/src/templates/WMCore/WebTools
+cvs co WMCORE/src/templates/WMCore/__init__.py
 cvs co -r $wmcore_tag WMCORE
 cd $dExternal
 }
 echo "Installing WMCore Modules"
 install_wmcore 1>$dlogs/wmcore.log 2>&1
 
-install_dbs(){
-cd $DBS3_ROOT
-export CVSROOT=:pserver:anonymous@cmscvs.cern.ch:/cvs_server/repositories/CMSSW
-export CVS_RSH=ssh
-cvs -d `echo $CVSROOT | awk -F@ '{print $1":98passwd\@"$2}'` login
-cvs co -r $dbs3_tag DBS/DBS3
-}
-echo "Installing DBS3 Modules"
-install_dbs 1>$dlogs/dbs.log 2>&1
+#don't need this because we already checked out dbs to get this script.
+#install_dbs(){
+#cd $DBS3_ROOT
+#export CVSROOT=:pserver:anonymous@cmscvs.cern.ch:/cvs_server/repositories/CMSSW
+#export CVS_RSH=ssh
+#cvs -d `echo $CVSROOT | awk -F@ '{print $1":98passwd\@"$2}'` login
+#cvs co -r $dbs3_tag DBS/DBS3
+#}
+#echo "Installing DBS3 Modules"
+#install_dbs 1>$dlogs/dbs.log 2>&1
 
 
 gen_setup(){
@@ -196,11 +199,17 @@ export DBS3_SERVER_ROOT=\$DBS3_ROOT/DBS/DBS3/Server/Python
 #python
 export ORACLE_HOME=\$DBS3_ROOT/$externaldir/Oracle/instantclient_11_1
 export LD_LIBRARY_PATH=\$ORACLE_HOME
-export PATH=\$DBS3_ROOT/$externaldir/python/bin:\$ORACLE_HOME:\$PATH
+export PATH=\$ORACLE_HOME:\$PATH
 
 #WMCore Infrastructure
 export WTBASE=\$DBS3_ROOT/$externaldir/WMCORE/src
-export PYTHONPATH=\$DBS3_SERVER_ROOT/src:\$WTBASE/python:\$PYTHONPATH
+export PYTHONPATH=\$DBS3_SERVER_ROOT/src:\$WTBASE/python:\$DBS3_ROOT/$externaldir/CherryPy-3.1.2\
+:\$DBS3_ROOT/$externaldir/Cheetah-2.4.0/build/lib.linux-x86_64-2.6\
+:\$DBS3_ROOT/$externaldir/CherryPy-3.1.2/build/lib\
+:\$DBS3_ROOT/$externaldir/SQLAlchemy-0.5.8/build/lib\
+:\$DBS3_ROOT/$externaldir/python-cjson-1.0.5/build/lib.linux-x86_64-2.6\
+:\$DBS3_ROOT/$externaldir/cx_Oracle-5.0.2/build/lib.linux-x86_64-2.6-11g\
+:\$PYTHONPATH
 
 
 dbs3_start1(){
@@ -257,9 +266,11 @@ active.$service.model.object = 'dbs.web.DBSReaderModel'
 active.$service.section_('formatter')
 active.$service.formatter.object = 'WMCore.WebTools.RESTFormatter'
 
-active.$service.database = '$dburl'
 active.$service.dbowner = '$dbowner'
 active.$service.version = '$version'
+active.$service.section_('database')
+active.$service.database.connectUrl = '$dburl'
+active.$service.database.engineParameters = {'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 EOA
 
 cat > $dConfig/${instance}_writer.py << EOA
@@ -294,9 +305,11 @@ active.$service.model.object = 'dbs.web.DBSWriterModel'
 active.$service.section_('formatter')
 active.$service.formatter.object = 'WMCore.WebTools.RESTFormatter'
 
-active.$service.database = '$dburl'
 active.$service.dbowner = '$dbowner'
 active.$service.version = '$version'
+active.$service.section_('database')
+active.$service.database.connectUrl = '$dburl'
+active.$service.database.engineParameters = {'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 EOA
 
 }
