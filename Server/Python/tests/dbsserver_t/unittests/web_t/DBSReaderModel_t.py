@@ -2,13 +2,14 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.12 2010/01/28 15:54:23 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.13 2010/01/28 18:00:39 dsr Exp $"
+__version__ = "$Revision: 1.13 $"
 
 import os, sys, imp
 import json
 import unittest
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
+from DBSWriterModel_t import outDict
 
 def importCode(code,name,add_to_sys_modules=0):
     module = imp.new_module(name)
@@ -17,18 +18,16 @@ def importCode(code,name,add_to_sys_modules=0):
         sys.modules[name] = module
     return module
 
-infofile=open("info.dict","r")    
-testparams=importCode(infofile, "testparams", 0).info
 config = os.environ["DBS_TEST_CONFIG_READER"]
 api = DBSRestApi(config)
 
-print testparams
-
 class DBSReaderModel_t(unittest.TestCase):
-    
-    	
+
     def setUp(self):
         """setup all necessary parameters"""
+        global testparams
+        if len(testparams) == 0:
+            testparams = outDict
 	#import pdb
 	#pdb.set_trace()
 
@@ -419,5 +418,8 @@ class DBSReaderModel_t(unittest.TestCase):
         
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSReaderModel_t)
+    infofile=open("info.dict","r")    
+    testparams=importCode(infofile, "testparams", 0).info
     unittest.TextTestRunner(verbosity=2).run(SUITE)
-        
+else:
+    testparams={}
