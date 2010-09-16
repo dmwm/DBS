@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.8 2010/01/19 22:24:39 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.9 2010/01/20 15:51:06 yuyi Exp $"
+__version__ = "$Revision: 1.9 $"
 
 import os
 import sys
@@ -48,7 +48,6 @@ class DBSWriterModel_t(unittest.TestCase):
 
     def test01(self):
         """test01: web.DBSWriterModel.insertPrimaryDataset: basic test"""
-	#COUNTER = self.uuid()
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'TEST'}
         api.insert('primarydatasets', data)
@@ -201,7 +200,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	api.insert('blocks', data)
 
     def test14(self):
-	"""test15 web.DBSWriterModel.insertBlock: duplicate insert should not raise exception"""
+	"""test14 web.DBSWriterModel.insertBlock: duplicate insert should not raise exception"""
 	data = {'block_name': block,
 		'origin_site': site }
 		
