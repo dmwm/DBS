@@ -2,8 +2,8 @@
 """
 DBS Insert Buffer Polling Module
 """
-__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.5 2010/06/10 21:46:48 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.6 2010/07/09 18:55:40 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 
 """
@@ -189,10 +189,10 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 
       try:
 	conn = self.dbi.connection()
+	tran = conn.begin()
 	dups = self.buffinddups.execute(conn)
 	if len(dups) > 0 :
 	    # If there are duplicates, delete them
-	    tran = conn.begin()
 	    self.bufdeletedups.execute(conn, dups, tran)
 	    tran.commit()
       except Exception, ex:
@@ -226,7 +226,7 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 		if ablob.has_key("file") : 
 		    files.append(ablob["file"])
 		    fidl.append(ablob["file"]["file_id"])
-		    flfnl.append({"lfn" : ablob["file"]["logical_file_name"] })
+		    flfnl.append({"logical_file_name" : ablob["file"]["logical_file_name"] })
 	        if ablob.has_key("file_lumi_list") : lumis.extend(ablob["file_lumi_list"])
 		if ablob.has_key("file_parent_list") : parents.extend(ablob["file_parent_list"])
 		if ablob.has_key("file_output_config_list") : configs.extend(ablob["file_output_config_list"]) 
@@ -309,7 +309,7 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 		blkParams['block_size']=long(blkParams['block_size'])
 		self.blkstatsin.execute(conn, blkParams, transaction=tran)
 	    # Delete the just inserted files
-	    self.bufdeletefiles.execute(conn, flfnl, transaction=tran)
+	    if len(flfnl) > 0 : self.bufdeletefiles.execute(conn, flfnl, transaction=tran)
 	    # All good ?. 
             tran.commit()
 
