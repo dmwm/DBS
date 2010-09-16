@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.39 $"
-# $Id: dbsClient.py,v 1.39 2010/04/16 21:20:41 afaq Exp $"
+# $Revision: 1.40 $"
+# $Id: dbsClient.py,v 1.40 2010/04/16 22:05:21 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -447,8 +447,6 @@ class DbsApi:
 	    * block_name : block name
 	    * open_for_writing : open_for_writing=0 (close), open_for_writing=1 (open)
 	    """
-	    print block_name
-	    print open_for_writing
 	    parts=block_name.split('#')
 	    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
 	    return self.callServer("/blocks?block_name=%s&open_for_writing=%s" %(block_name, open_for_writing), params={}, callmethod='PUT')
@@ -474,7 +472,16 @@ class DbsApi:
 		url_param+="?data_tier_name=%s" % datatier
 	    
 	    return self.callServer("/datatiers%s" %url_param)
-    
+   
+	def listBlockParents(self, block_name=""):
+	   """
+	   API to list block parents
+	   * block_name : name of block whoes parents needs to be found
+	   """
+	   parts=block_name.split('#')
+	   block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+	   return self.callServer("/blockparents?block_name=%s" %block_name)
+	
 if __name__ == "__main__":
 	# DBS Service URL
 	url="http://cmssrv18.fnal.gov:8586/dbs3"
