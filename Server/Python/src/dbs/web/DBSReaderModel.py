@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.48 2010/08/09 11:07:17 akhukhun Exp $"
-__version__ = "$Revision: 1.48 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.49 2010/08/12 19:50:52 afaq Exp $"
+__version__ = "$Revision: 1.49 $"
 
 import cjson
 import inspect
@@ -65,6 +65,8 @@ class DBSReaderModel(RESTModel):
         self.addMethod('GET', 'blockparents', self.listBlockParents)
         self.addMethod('GET', 'blockchildren', self.listBlockChildren)
         self.addMethod('GET', 'blockdump', self.dumpBlock)
+        self.addMethod('GET', 'acquisitioneras', self.listAcquisitionEras)
+        self.addMethod('GET', 'processingeras', self.listProcessingEras)
 	self.addMethod('GET', 'help', self.getHelp)
 	self.addMethod('GET', 'register', self.register)
 
@@ -358,6 +360,18 @@ class DBSReaderModel(RESTModel):
 	Returns all information related with the block_name
 	"""
 	return self.dbsMigrate.dumpBlock(block_name)
+
+    def listAcquisitionEras(self):
+	"""
+	lists acquisition eras known to dbs
+	"""
+	return  self.dbsAcqEra.listAcquisitionEras()
+
+    def listProcessingEras(self):
+	"""
+	lists acquisition eras known to dbs
+	"""
+	return  self.dbsProcEra.listProcessingEras()
 
 
 	    

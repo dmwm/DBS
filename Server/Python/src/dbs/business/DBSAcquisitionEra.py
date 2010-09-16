@@ -3,7 +3,7 @@
 This module provides business object class to interact with DBSAcqusitionEra. 
 """
 
-__revision__ = "$Id: DBSAcquisitionEra.py,v 1.5 2010/03/09 16:38:02 afaq Exp $"
+__revision__ = "$Id: DBSAcquisitionEra.py,v 1.6 2010/08/12 19:52:24 afaq Exp $"
 __version__ = "$Revision $"
 
 from WMCore.DAOFactory import DAOFactory
@@ -19,7 +19,22 @@ class DBSAcquisitionEra:
         self.owner = owner
 
         self.acqin = daofactory(classname="AcquisitionEra.Insert")
+        self.acqlst = daofactory(classname="AcquisitionEra.List")
         self.sm = daofactory(classname="SequenceManager")
+
+    def listAcquisitionEras(self):
+        """
+        Returns all acquistion eras in dbs
+        """
+        try:
+            conn=self.dbi.connection()
+            result= self.acqlst.execute(conn)
+            conn.close()
+            return result
+        except Exception, ex:
+            raise ex
+        finally:
+            conn.close()
 
     def insertAcquisitionEra(self, businput):
         """
