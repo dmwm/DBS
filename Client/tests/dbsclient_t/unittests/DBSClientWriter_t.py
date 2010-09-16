@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.3 2010/01/25 19:47:21 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.4 2010/01/25 23:20:30 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import os
 import sys
@@ -43,11 +43,8 @@ outDict={
 "release_version" : release_version,
 "site" : site,
 "block" : block,
+"files" : []
 }
-
-infoout=open("info.dict", "w")
-infoout.write(str(outDict))
-infoout.close()
 
 class DBSClientWriter_t(unittest.TestCase):
 
@@ -194,14 +191,19 @@ class DBSClientWriter_t(unittest.TestCase):
                                   ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/%i.root" %i,
+                'logical_file_name': "/store/mc/%s/%i.root" %(uid, i),
                 'block': block
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
+	    outDict['files'].append(f['logical_file_name'])
 	api.insertFiles(filesList={"files":flist})
- 
-   
+	
+    def test17(self):
+	infoout=open("info.dict", "w")
+	infoout.write("info="+str(outDict))
+	infoout.close()
+
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientWriter_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)

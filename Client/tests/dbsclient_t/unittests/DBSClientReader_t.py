@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.3 2010/01/25 20:54:00 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.4 2010/01/25 23:20:30 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import os
 import json
@@ -30,6 +30,7 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test01(self):
         """unittestDBSClientReader_t.listPrimaryDatasets: basic test"""
+	return
         api.listPrimaryDatasets()
         api.listPrimaryDatasets('*')
 	api.listPrimaryDatasets(testparams['primary_ds_name'])
@@ -37,9 +38,10 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test02(self):
 	"""unittestDBSClientReader_t.listDatasets: basic test"""
+	return
 	api.listDatasets()
-	api.listDatasets(testparams['dataset'])
-	api.listDatasets(testparams['dataset']+"*")
+	api.listDatasets(dataset=testparams['dataset'])
+	api.listDatasets(dataset=testparams['dataset']+"*")
 	api.listDatasets(release_version=testparams['release_version'])
 	api.listDatasets(pset_hash=testparams['pset_hash'])
 	api.listDatasets(app_name=testparams['app_name'])
@@ -50,8 +52,25 @@ class DBSClientReader_t(unittest.TestCase):
 		pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
 	api.listDatasets(dataset=testparams['dataset'], release_version=testparams['release_version'])
 
-#def test03(self):
+    def test03(self):
+	"""unittestDBSClientReader_t.listOutputModules: basic test"""
+	print api.listOutputConfigs(dataset=testparams['dataset'])
+	return
+	api.listOutputConfigs(logical_file_name="/store/mc/9.root")
+	api.listOutputConfigs()
+	api.listOutputConfigs(release_version=testparams['release_version'])
+	api.listOutputConfigs(pset_hash=testparams['pset_hash'])
+	api.listOutputConfigs(app_name=testparams['app_name'])
+	api.listOutputConfigs(output_module_label=testparams['output_module_label'])
+	api.listOutputConfigs(release_version=testparams['release_version'], pset_hash=testparams['pset_hash'], \
+		 app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
+	api.listOutputConfigs(dataset=testparams['dataset'], release_version=testparams['release_version'], \
+		pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
+	api.listOutputConfigs(dataset=testparams['dataset'], release_version=testparams['release_version'])
+	
+#dataset="", logical_file_name="", release_version="", pset_hash="", app_name="", output_module_label=""
 
+	
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
