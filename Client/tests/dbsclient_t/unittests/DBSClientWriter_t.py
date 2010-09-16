@@ -2,24 +2,20 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.9 2010/02/01 17:38:42 afaq Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.10 2010/03/15 16:30:15 afaq Exp $"
+__version__ = "$Revision: 1.10 $"
 
 import os
 import sys
 import unittest
 from dbs.apis.dbsClient import *
 from ctypes import *
-
-def uuid():
-    lib = CDLL("libuuid.so.1")
-    uuid = create_string_buffer(16)
-    return lib.uuid_generate(byref(uuid))
+import uuid
 
 url=os.environ['DBS_WRITER_URL']     
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
 api = DbsApi(url=url)
-uid = uuid()
+uid = str(uuid.uuid1())
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
 tier = 'GEN-SIM-RAW'
@@ -201,7 +197,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	api.insertFiles(filesList={"files":flist})
 
     def test17(self):
-	"""test16 web.DBSClientWriter.insertFiles: duplicate insert file shuld not raise any errors"""
+	"""test17 web.DBSClientWriter.insertFiles: duplicate insert file shuld not raise any errors"""
 	flist=[]
  	for i in range(10):
 	    f={  
@@ -228,7 +224,26 @@ class DBSClientWriter_t(unittest.TestCase):
 	    outDict['files'].append(f['logical_file_name'])
 	api.insertFiles(filesList={"files":flist})
 	
+ 
     def test18(self):
+	"""test18 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
+	logical_file_name = "/store/mc/%s/%i.root" %(uid, 1)
+	api.updateFileStatus(lfn=logical_file_name, is_file_valid=0)
+
+    def test19(self):
+	"""test18 web.DBSClientWriter.updateDatasetStatus: should be able to update file status"""
+	print dataset
+	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=0)
+
+    def test20(self):
+	"""test18 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
+	#logical_file_name = "/store/mc/%s/%i.root" %(uid, 1)
+	#print logical_file_name
+	#api.updateDatasetRunStatus(dataset=dataset, run_number=-1, complete=1)
+	print "pass"
+   
+	
+    def test208(self):
 	"""test18 generating the output file for reader test"""
 	infoout=open("info.dict", "w")
 	infoout.write("info="+str(outDict))
@@ -237,3 +252,5 @@ class DBSClientWriter_t(unittest.TestCase):
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientWriter_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
+
+

@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.29 $"
-# $Id: dbsClient.py,v 1.29 2010/03/12 16:22:49 afaq Exp $"
+# $Revision: 1.30 $"
+# $Id: dbsClient.py,v 1.30 2010/03/15 16:31:15 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -42,7 +42,7 @@ class DbsApi:
 			if self.proxy not in (None, ""):
 				proxies = { 'http': self.proxy }
 			#print calling
-			if params == {} :
+			if params == {} and not callmethod in ('POST', 'PUT') :
 				#data = urllib.urlopen(calling, proxies=proxies)
 				#data = urllib2.urlopen(calling)
 				req = urllib2.Request(url=calling, headers = headers)
@@ -378,22 +378,22 @@ class DbsApi:
 		    
 		return self.callServer("/blocks?%s" %url_param)
 
-	def updateFileStatus(self, lfn="", status=-1):
+	def updateFileStatus(self, lfn="", is_file_valid=1):
 	    """
 	    API to update file status
 	    * lfn : logical_file_name
-	    * status : valid=1, invalid=0
+	    * is_file_valid : valid=1, invalid=0
 	    """
-	    return self.callServer("/files?logical_file_name&is_file_valid=%s" %(lfn, status), params={}, callmethod='PUT')
+	    return self.callServer("/files?logical_file_name=%s&is_file_valid=%s" %(lfn, is_file_valid), params={}, callmethod='PUT')
 	    
-	def updateDatasetStatus(self, dataset, status):
+	def updateDatasetStatus(self, dataset, is_dataset_valid):
 	    """
 	    API to update dataset status
 	    * dataset : dataset name
-	    * status : valid=1, invalid=0
+	    * is_dataset_valid : valid=1, invalid=0
 	    *
 	    """
-	    return self.callServer("/datasets?dataset=%s&is_dataset_valid" %(dataset, status), params={}, callmethod='PUT')    
+	    return self.callServer("/datasets?dataset=%s&is_dataset_valid=%s" %(dataset, is_dataset_valid), params={}, callmethod='PUT')    
 		
 	def updateDatasetRunStatus(self, dataset="", run_number=-1, complete=1):
 	    """
