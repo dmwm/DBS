@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.24 2010/03/19 15:04:48 afaq Exp $"
-__version__ = "$Revision: 1.24 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.25 2010/03/19 17:59:03 yuyi Exp $"
+__version__ = "$Revision: 1.25 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -134,7 +134,9 @@ class DBSReaderModel(RESTModel):
         block_name = block_name.replace("*","%")
         return self.dbsBlock.listBlocks(dataset, block_name, site_name)
     
-    def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", pset_hash="", app_name="", output_module_label="", minrun=-1, maxrun=-1):
+    def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", 
+	pset_hash="", app_name="", output_module_label="", minrun=-1, maxrun=-1,
+	origin_site=""):
         """
         Example url's: <br />
         http://dbs3/files?dataset=/a/b/c/ <br />
@@ -149,6 +151,8 @@ class DBSReaderModel(RESTModel):
 	output_module_label = output_module_label.replace("*", "%")
 	if minrun!= -1 or maxrun!=-1:
 	    return self.dbsFile.listFilesByRun(maxrun, minrun,  block_name=block_name, dataset=dataset)
+	elif origin_site !="":
+	    return self.dbsFile.listFileBySite(origin_site, block_name, dataset)
 	else:
 	    return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, output_module_label)
     
