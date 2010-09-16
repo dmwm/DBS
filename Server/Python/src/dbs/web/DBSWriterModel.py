@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.2 2009/12/15 17:29:58 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.3 2009/12/15 22:22:25 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import re
 import cjson
@@ -18,6 +18,8 @@ from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
 
 from dbs.web.DBSReaderModel import DBSReaderModel
+
+import traceback
 
 class DBSWriterModel(DBSReaderModel):
     """
@@ -35,21 +37,32 @@ class DBSWriterModel(DBSReaderModel):
         self.addService('POST', 'blocks', self.insertBlock)
         self.addService('POST', 'files', self.insertFile)
 
+
+
+    #----- These methods will move to an appropriate class in util
+    def getDate(self):
+	return time.time() 	
+
+    def getUser(self):
+	return "ANZAR"
+
     def insertPrimaryDataset(self):
         """
-        gets the input from cherrypy request body.
+	Inserts a Primary Dataset in DBS
+        Gets the input from cherrypy request body.
         input must be a dictionary with the following two keys:
-        PRIMARY_DS_NAME, PRIMARY_DS_TYPE
+        primary_ds_name, primary_ds_type
         """
-        body = request.body.read()
-        indata = cjson.decode(body)
-        
-        data = {}
-        data.update({"creationdate":123456, "createby":"me"})
-        data["primarydsname"] = indata["PRIMARY_DS_NAME"]
-        data["primarydstype"] = indata["PRIMARY_DS_TYPE"]
-        self.dbsPrimaryDataset.insertPrimaryDataset(data)
-        
+	
+	try :
+        	body = request.body.read()
+        	indata = cjson.decode(body)
+        	indata.update({"creationdate": self.getDate(), "createby": self.getUser() })
+        	self.dbsPrimaryDataset.insertPrimaryDataset(data)
+		
+	except Exception, ex:
+       		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) ) 
+
 
     def insertDataset(self):
         """
