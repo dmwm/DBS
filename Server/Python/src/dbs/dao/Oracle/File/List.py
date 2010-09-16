@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.32 2010/08/01 18:29:02 akhukhun Exp $"
-__version__ = "$Revision: 1.32 $"
+__revision__ = "$Id: List.py,v 1.33 2010/08/23 15:49:29 afaq Exp $"
+__version__ = "$Revision: 1.33 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -88,11 +88,11 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	    binds.update({"minrun":minrun})
 	    binds.update({"maxrun":maxrun})
 	if (lumi_list and len(lumi_list) != 0):
-	    sql += "AND FL.LUMI_SECTION_NUM in :lumi_list"
+	    sql += " AND FL.LUMI_SECTION_NUM in :lumi_list"
 	    binds.update({"lumi_list":lumi_list})
 	if (origin_site_name):
 	    op = ("=","like")["%" in origin_site_name]
-    	    sql += "AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
+    	    sql += " AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
 	    binds.update({"origin_site_name":origin_site_name})
 	#    
 	#print "sql=%s" %sql
