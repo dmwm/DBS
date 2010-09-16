@@ -3,8 +3,8 @@
 This module manages sequences.
 """
 
-__revision__ = "$Id: SequenceManager.py,v 1.2 2009/11/03 16:41:25 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: SequenceManager.py,v 1.3 2009/11/12 15:19:35 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -22,8 +22,6 @@ class  SequenceManager(DBFormatter):
         increments the sequence `seqName` by default `Incremented by`
         and returns its value
         """
-        #I am getting the increment_by from the database now. might as well just
-        # store all sequence related info in a separate module
         sql = "select %s%s.nextval as val from dual" % (self.owner, seqName)
         result = self.dbi.processData(sql, conn=conn, transaction=transaction)
         resultlist = self.formatDict(result)

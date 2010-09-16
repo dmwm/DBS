@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.4 2009/11/03 16:41:25 akhukhun Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSBlock.py,v 1.5 2009/11/12 15:19:35 akhukhun Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -17,13 +17,13 @@ class DBSBlock:
         self.logger = logger
         self.dbi = dbi
 
-    def listBlocks(self, dataset, block = ""):
+    def listBlocks(self, dataset="", block=""):
         """
         Returns all blocks in a dataset if block pattern ("can include %") 
         is not provided.
         """
         dao = self.daofactory(classname="Block.List")
-        return dao.execute(dataset, block)
+        return dao.execute(dataset=dataset, block=block)
 
     def insertBlock(self, businput):
         """

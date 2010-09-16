@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.1 2009/11/03 16:41:25 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSFile.py,v 1.2 2009/11/12 15:19:35 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -49,7 +49,6 @@ class DBSFile:
                 dao = self.daofactory(classname = classdict[k])
                 firstfile[k] = dao.execute(firstfile[k], conn, True)
             fileids = seqmanager.incrementN("SEQ_FL", len(businput), conn, True)
-            print fileids
             for i in range(len(businput)):
                 f = businput[i]
                 f["fileid"] = fileids[i] 
@@ -57,6 +56,7 @@ class DBSFile:
             fileinsert = self.daofactory(classname = "File.Insert")
             fileinsert.execute(businput, conn, True)
             tran.commit()
+            
         except Exception, e:
             tran.rollback()
             self.logger.exception(e)
