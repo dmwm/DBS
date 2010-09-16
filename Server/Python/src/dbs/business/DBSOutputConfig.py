@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.1 2009/12/18 22:46:04 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.2 2009/12/21 21:06:57 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -13,6 +13,7 @@ class DBSOutputConfig:
     Output Config business object class
     """
     def __init__(self, logger, dbi, owner):
+
         daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
         self.logger = logger
         self.dbi = dbi
@@ -43,26 +44,39 @@ class DBSOutputConfig:
 	tran = conn.begin()
 
 	try:
-		businput["app_exec_id"] = self.appid.execute(businput["app_name"], conn, True)	
-		if businput["app_exec_id"] in ('', None):
-			businput["app_exec_id"]=self.sm.increment("SEQ_AE", conn, True)
-			appdaoinput={businput["app_name"]}
-			self.appin.execute(appdaoinput, conn, True)
-
-		businput["release_version_id"] = self.verid.execute(businput["version"], conn, True)
-		if businput["release_version_id"] in ('', None):
-			verdaoinput={}
-			businput["release_version_id"]=self.sm.increment("SEQ_RV", conn, True)
-			self.verin.execute(verdaoinput, conn, True)
-
-		businput["parameter_set_hash_id"] = self.hashid.execute(businput["hash"], conn, True)
-		if businput["parameter_set_hash_id"] in ('', None):
-			pshdaoinput={}
-			businput["parameter_set_hash_id"]=self.sm.increment("SEQ_PSH", conn, True)
-			#if name is provided pshdaoinput["name"]=
-			self.hashin.execute(pshdaoinput, conn, True)
-
-		omcdaoinput ={}
+		try:
+			businput["app_exec_id"] = self.appid.execute(businput["app_name"], conn, True)	
+		except Exception, e:
+			if str(e).find('does not exist') != -1:
+				businput["app_exec_id"]=self.sm.increment("SEQ_AE", conn, True)
+				appdaoinput={ "app_name" : businput["app_name"], "app_exec_id" : businput["app_exec_id"] }
+				self.appin.execute(appdaoinput, conn, True)
+			else : raise
+		try:
+			businput["release_version_id"] = self.verid.execute(businput["version"], conn, True)
+		except Exception, e:
+			if str(e).find('does not exist') != -1:
+				businput["release_version_id"]=self.sm.increment("SEQ_RV", conn, True)
+				verdaoinput={ "release_version_id" : businput["release_version_id"], "version" : businput["version"]    }
+				self.verin.execute(verdaoinput, conn, True)
+			else : raise
+		try:
+			businput["parameter_set_hash_id"] = self.hashid.execute(businput["hash"], conn, True)
+		except Exception, e:
+			if str(e).find('does not exist') != -1:
+				businput["parameter_set_hash_id"]=self.sm.increment("SEQ_PSH", conn, True)
+				pshdaoinput={"parameter_set_hash_id" : businput["parameter_set_hash_id"], "hash" : businput["hash"], "name" : "no_name" }
+				self.hashin.execute(pshdaoinput, conn, True)
+			else : raise
+		# Proceed with o/p module insertion
+		omcdaoinput ={
+				"app_exec_id" : businput["app_exec_id"], 
+				"release_version_id" : businput["release_version_id"],
+				"parameter_set_hash_id" : businput["parameter_set_hash_id"],
+				"output_module_label" : businput["output_module_label"], 
+				"creation_date" : businput["creation_date"] , 
+				"create_by" : businput["create_by"]
+				}
 		omcdaoinput["output_mod_config_id"]=self.sm.increment("SEQ_OMC", conn, True)
 		self.outmodin.execute(omcdaoinput, conn, True)
 		tran.commit()
@@ -73,6 +87,3 @@ class DBSOutputConfig:
 		raise
 	finally:
 		conn.close()
-
-	
-
