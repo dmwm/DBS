@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.18 2010/03/19 12:57:37 yuyi Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.19 2010/03/19 15:49:16 yuyi Exp $"
+__version__ = "$Revision: 1.19 $"
 
 import os
 import sys
@@ -40,6 +40,7 @@ site="cmssrm-%s.fnal.gov" %uid
 block="%s#%s" % (dataset, uid)
 acquisition_era_name="acq_era_%s" %uid
 processing_version="%s" %(uid if (uid<9999) else uid%9999)
+run_num=uid
 flist=[]
 #print "acquisition_era_name=%s" %acquisition_era_name
 #print "processing_version=%s" %processing_version
@@ -55,7 +56,8 @@ outDict={
 "release_version" : release_version,
 "site" : site,
 "block" : block,
-"files" : []
+"files" : [],
+"run_num":run_num
 }
 
 class DBSWriterModel_t(unittest.TestCase):
@@ -256,9 +258,9 @@ class DBSWriterModel_t(unittest.TestCase):
                 'file_size': u'2012211901', 'auto_cross_section': 0.0, 
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
-	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
-		                      {'lumi_section_num': u'26422', 'run_num': u'1'},
-		                      {'lumi_section_num': u'29838', 'run_num': u'1'}
+	                              {'lumi_section_num': u'27414', 'run_num': uid},
+		                      {'lumi_section_num': u'26422', 'run_num': uid},
+		                      {'lumi_section_num': u'29838', 'run_num': uid}
                                   ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
@@ -337,6 +339,7 @@ class DBSWriterModel_t(unittest.TestCase):
     def test21(self):
 	"""test21 web.DBSWriterModel.updateFileStatus: Basic test """
 	lfn = "/store/mc/%s-child/%i.root" %(uid, 1)
+	print lfn
 	api.update('files', logical_file_name=lfn, is_file_valid=0)
 
 
