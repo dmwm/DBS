@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.23 2010/07/15 18:48:00 yuyi Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.24 2010/08/19 20:42:17 afaq Exp $"
+__version__ = "$Revision: 1.24 $"
 
 import os
 import sys
@@ -135,7 +135,7 @@ class DBSWriterModel_t(unittest.TestCase):
     def test07(self):
 	"""test07: web.DBSWriterModel.insertAcquisitionEra: Basic test """
 	data={'acquisition_era_name': acquisition_era_name}
-	api.insert('acquisitionras', data)
+	api.insert('acquisitioneras', data)
 
     def test08(self):
 	"""test08: web.DBSWriterModel.insertProcessingEra: Basic test """
@@ -296,7 +296,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'file_parent_list': [ ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/%s/%i.root" %(uid,i),
-                'block': block
+                'block_name': block
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
@@ -327,7 +327,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'file_parent_list': [ ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/%s/%i.root" %(uid,i),
-                'block': block
+                'block_name': block
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
@@ -360,7 +360,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'file_parent_list': [{"file_parent_lfn": "/store/mc/%s/%i.root" %(uid, i)}],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/%s-child/%i.root" %(uid, i),
-                'block': block
+                'block_name': block
                             #'is_file_valid': 1
                 }
             flist.append(f)
