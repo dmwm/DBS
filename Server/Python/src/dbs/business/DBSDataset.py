@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.7 2009/11/16 21:44:47 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSDataset.py,v 1.8 2009/11/24 10:58:12 akhukhun Exp $"
+__version__ = "$Revision: 1.8 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -14,11 +14,11 @@ class DBSDataset:
     """
     Dataset business object class
     """
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         """
         initialize business object class.
         """
-        self.daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi)
+        self.daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
         self.logger = logger
         self.dbi = dbi
 

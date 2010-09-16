@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDSType.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.2 2009/10/30 16:51:18 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: GetID.py,v 1.3 2009/11/24 10:58:16 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -11,12 +11,12 @@ class GetID(DBFormatter):
     """
     PrimaryDSType GetID DAO class.
     """
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         """
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
+        self.owner = "%s." % owner
         self.sql = \
 """
 SELECT PT.PRIMARY_DS_TYPE_ID, PT.PRIMARY_DS_TYPE

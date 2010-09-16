@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 """ DAO Object for Blocks table """ 
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: Insert.py,v 1.4 2009/10/30 16:44:37 akhukhun Exp $ "
+__revision__ = "$Revision: 1.5 $"
+__version__  = "$Id: Insert.py,v 1.5 2009/11/24 10:58:14 akhukhun Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
 class Insert(DBFormatter):
     """Block Insert DAO Class"""
 
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
-
+        self.owner = "%s." % owner
         self.sql = \
 """
 INSERT INTO %sBLOCKS 

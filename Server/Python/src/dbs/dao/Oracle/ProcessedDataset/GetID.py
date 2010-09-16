@@ -2,8 +2,8 @@
 """
 This module provides ProcessedDataset.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.2 2009/11/16 21:44:47 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: GetID.py,v 1.3 2009/11/24 10:58:16 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -11,12 +11,12 @@ class GetID(DBFormatter):
     """
     ProcessedDataset GetID DAO class.
     """
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         """
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
+        self.owner = "%s." % owner
         self.sql = \
 """
 SELECT PD.PROCESSED_DS_ID, PD.PROCESSED_DS_NAME

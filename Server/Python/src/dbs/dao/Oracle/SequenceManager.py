@@ -3,8 +3,8 @@
 This module manages sequences.
 """
 
-__revision__ = "$Id: SequenceManager.py,v 1.4 2009/11/19 18:58:09 akhukhun Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: SequenceManager.py,v 1.5 2009/11/24 10:58:15 akhukhun Exp $"
+__version__ = "$Revision: 1.5 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -13,9 +13,9 @@ class  SequenceManager(DBFormatter):
     """
     Sequence Manager class.
     """
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
+        self.owner = "%s." % owner
         self.logger = logger
 
     def increment(self, seqName, conn = None, transaction = False):

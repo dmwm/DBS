@@ -2,21 +2,22 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.2 2009/10/27 17:24:48 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: List.py,v 1.3 2009/11/24 10:58:15 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
+
 class List(DBFormatter):
     """
     PrimaryDataset List DAO class.
     """
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
         """
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-        self.owner = "%s." % self.dbi.engine.url.username
+        self.owner = "%s." % owner
         self.sql = \
 """
 SELECT P.PRIMARY_DS_ID, P.PRIMARY_DS_NAME, P.PRIMARY_DS_TYPE_ID,

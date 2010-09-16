@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.19 2009/11/19 17:31:49 akhukhun Exp $"
-__version__ = "$Revision: 1.19 $"
+__revision__ = "$Id: DBSModel.py,v 1.20 2009/11/24 10:58:14 akhukhun Exp $"
+__version__ = "$Revision: 1.20 $"
 
 import re
 import cjson
@@ -15,16 +15,16 @@ from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
 from cherrypy import request
 
-
 class DBSModel(RESTModel):
     """
-    DBS Rest Model class. 
+    DBS3 Server API Documentation 
     """
     def __init__(self, config):
         """
         All parameters are provided through DBSConfig module
         """
         RESTModel.__init__(self, config)
+
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
         self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
         self.addService('GET', 'datasets', self.listDatasets, ['dataset'])
@@ -34,6 +34,9 @@ class DBSModel(RESTModel):
         self.addService('POST', 'datasets', self.insertDataset)
         self.addService('POST', 'blocks', self.insertBlock)
         self.addService('POST', 'files', self.insertFile)
+
+        cdict = self.config.dictionary_()
+        self.owner = cdict["dbowner"] 
 
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
@@ -53,7 +56,7 @@ class DBSModel(RESTModel):
         """
         data = {}
         primds = primarydataset.replace("*","%")
-        bo = DBSPrimaryDataset(self.logger, self.dbi)
+        bo = DBSPrimaryDataset(self.logger, self.dbi, self.owner)
         data.update({'result':bo.listPrimaryDatasets(primds)})
         return data
     
@@ -65,7 +68,7 @@ class DBSModel(RESTModel):
         http://dbs3/datasets?dataset=/RelVal*/*/*RECO
         """
         dataset = dataset.replace("*", "%")
-        bo = DBSDataset(self.logger, self.dbi)
+        bo = DBSDataset(self.logger, self.dbi, self.owner)
         return {'result':bo.listDatasets(dataset = dataset)}
     
     def listBlocks(self, dataset = "", block = ""):
@@ -76,7 +79,7 @@ class DBSModel(RESTModel):
         """
         block = block.replace("*","%")
         dataset = dataset.replace("*","%")
-        bo = DBSBlock(self.logger, self.dbi)
+        bo = DBSBlock(self.logger, self.dbi, self.owner)
         return {"result":bo.listBlocks(dataset=dataset, block=block)}
     
     def listFiles(self, dataset = "", block = "", lfn = ""):
@@ -87,7 +90,7 @@ class DBSModel(RESTModel):
         http://dbs3/files?dataset=/a/b/c&lfn=/store/*
         http://dbs3/files?block=/a/b/c%23d&lfn=/store/*
         """
-        bo = DBSFile(self, self.dbi)
+        bo = DBSFile(self, self.dbi, self.owner)
         lfn = lfn.replace("*", "%")
         result = bo.listFiles(dataset = dataset, block = block, lfn = lfn)
         return {"result":result}
@@ -106,7 +109,7 @@ class DBSModel(RESTModel):
             data.update({"creationdate":123456, "createby":"me"})
             data["primarydsname"] = indata["PRIMARY_DS_NAME"]
             data["primarydstype"] = indata["PRIMARY_DS_TYPE"]
-            bo = DBSPrimaryDataset(self.logger, self.dbi)
+            bo = DBSPrimaryDataset(self.logger, self.dbi, self.owner)
             bo.insertPrimaryDataset(data)
 
         except Exception, ex:
@@ -147,7 +150,7 @@ class DBSModel(RESTModel):
             dataset['xtcrosssection'] = indata.get('XTCROSSSECTION', '')
             dataset['dataset'] = indata["DATASET"]
 
-            bo = DBSDataset(self.logger, self.dbi)
+            bo = DBSDataset(self.logger, self.dbi, self.owner)
             bo.insertDataset(dataset)
 
         except Exception, ex:   
@@ -194,7 +197,7 @@ class DBSModel(RESTModel):
                           "openforwriting":1
                           })
             
-            bo = DBSBlock(self.logger, self.dbi)
+            bo = DBSBlock(self.logger, self.dbi, self.owner)
             bo.insertBlock(block)
 
         except Exception, ex :
@@ -209,22 +212,23 @@ class DBSModel(RESTModel):
     def insertFile(self):
         """
         gets the input from cherrypy request body
-        input must be a (list of) dictionary with the following keys:
-        LOGICAL_FILE_NAME (required) : string
-        IS_FILE_VALID: (optional, default = 1): 1/0
-        BLOCK, required: /a/b/c#d
-        FILE_TYPE (optional, default = EDM): one of the predefined types,
-        CHECK_SUM (optional, default = '-1'): string
-        EVENT_COUNT (optional, default = -1): int
-        FILE_SIZE (optional, default = -1.): float
-        ADLER32 (optional, default = ''): string
-        MD5 (optional, default = ''): string
-        AUTO_CROSS_SECTION (optional, default = -1.): float
-	    FILE_LUMI_LIST (optional, default = []): [{"RUN_NUM": 123, "LUMI_SECTION_NUM": 12},{}....]
-	    FILE_PARENT_LIST(optional, default = []) :[{"FILE_PARENT_LFN": "mylfn"},{}....] 
+        input must be a (list of) dictionary with the following keys: <br />
+        LOGICAL_FILE_NAME (required) : string  <br />
+        IS_FILE_VALID: (optional, default = 1): 1/0 <br />
+        BLOCK, required: /a/b/c#d <br />
+        DATASET, required: /a/b/c <br />
+        FILE_TYPE (optional, default = EDM): one of the predefined types, <br />
+        CHECK_SUM (optional, default = '-1'): string <br />
+        EVENT_COUNT (optional, default = -1): int <br />
+        FILE_SIZE (optional, default = -1.): float <br />
+        ADLER32 (optional, default = ''): string <br />
+        MD5 (optional, default = ''): string <br />
+        AUTO_CROSS_SECTION (optional, default = -1.): float <br />
+	    FILE_LUMI_LIST (optional, default = []): [{"RUN_NUM": 123, "LUMI_SECTION_NUM": 12},{}....] <br />
+	    FILE_PARENT_LIST(optional, default = []) :[{"FILE_PARENT_LFN": "mylfn"},{}....] <br />
         """
         body = request.body.read()
-        indata = cjson.decode(body)
+        indata = cjson.decode(body)["files"]
         
         # proper validation needed
         businput = []
@@ -241,8 +245,7 @@ class DBSModel(RESTModel):
             for c in conditions:
                 assert c, "One of the input conditions is not satisfied" % conditions
                 
-            block = f["BLOCK"]
-            f.update({"DATASET":block[0:block.find('#')],
+            f.update({"DATASET":f["DATASET"],
                      "CREATION_DATE":12345,
                      "CREATE_BY":"aleko",
                      "LAST_MODIFICATION_DATE":12345,
@@ -251,5 +254,15 @@ class DBSModel(RESTModel):
                      "FILE_PARENT_LIST":f.get("FILE_PARENT_LIST",[])})
             businput.append(f)
             
-        bo = DBSFile(self.logger, self.dbi)
-        bo.insertFile(businput)
+        bo = DBSFile(self.logger, self.dbi, self.owner)
+
+        try:
+            bo.insertFile(businput)
+        except Exception, ex:
+            # Need to return this to the client
+            # ORA-00001: unique constraint
+            if str(ex).find("unique constraint") != -1 :
+                self.logger.warning("unique constraint violation being ignored")
+            else:
+                self.logger.error(ex)
+                raise

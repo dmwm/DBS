@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.5 2009/11/12 15:19:35 akhukhun Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSBlock.py,v 1.6 2009/11/24 10:58:12 akhukhun Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -12,8 +12,8 @@ class DBSBlock:
     """
     Block business object class
     """
-    def __init__(self, logger, dbi):
-        self.daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi)
+    def __init__(self, logger, dbi, owner):
+        self.daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
         self.logger = logger
         self.dbi = dbi
 
