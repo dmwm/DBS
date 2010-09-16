@@ -3,8 +3,8 @@
 Very simple dbs3 client:
 """
 
-__revision__ = "$Id: DBS3SimpleClient.py,v 1.7 2009/11/26 16:49:42 akhukhun Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBS3SimpleClient.py,v 1.8 2009/11/29 11:37:54 akhukhun Exp $"
+__version__ = "$Revision: 1.8 $"
 
 import sys
 import cjson
@@ -21,10 +21,14 @@ class DBS3Client:
         url = self.baseurl + apiurl
         if not params == {}:
             url = "?".join((url, urllib.urlencode(params, doseq=True)))
-        req = urllib2.Request(url = url, headers = self.header)
+        #req = urllib2.Request(url = url, headers = self.header)
+        req = urllib2.Request(url = url)
         data = self.opener.open(req)
-        ddata = cjson.decode(data.read())
-        return ddata
+        #ddata = cjson.decode(data.read())
+        #return ddata
+        a = data.read()
+        data.close()
+        return a
     
     def put(self, apiurl, indata):
         """method for PUT verb"""
@@ -34,20 +38,19 @@ class DBS3Client:
         endata = cjson.encode(indata)
         req = urllib2.Request(url = url, data = endata, headers = header)
         req.get_method = lambda: 'POST'
-        data = self.opener.open(req)
-        #ddata = cjson.decode(data.read())
-        #return ddata
+        self.opener.open(req)
 
 if __name__ == "__main__":
     import json
     
-    URLBASE = "http://localhost:8585/dbs3/"
-    CLI = DBS3Client(URLBASE)
-    if len(sys.argv)==2:
-        res = CLI.get(sys.argv[1])
-    elif len(sys.argv)==3:
-        params = cjson.decode(sys.argv[2])
-        res = CLI.get(sys.argv[1], params)
-    else: res = {}
+    URLBASE = "http://vocms09.cern.ch:8585/dbs3/"
+    #URLBASE = "http://vocms09.cern.ch:8989/DBSServlet/"
+
+    url = {"java":"http://vocms09.cern.ch:8989/DBSServlet/",
+           "xxpy":"http://localhost/intlxx/",
+           "yypy":"http://localhost/intlyy/"}
+    CLI = DBS3Client(url[sys.argv[1]])
+    res = CLI.get(sys.argv[2])
     print json.dumps(res, sort_keys = True, indent = 4)
+    #print res
 

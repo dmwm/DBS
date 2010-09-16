@@ -1,7 +1,7 @@
 """This module provides all basic tests for the server"""
 
-__revision__ = "$Id: TestStress.py,v 1.2 2009/11/26 16:49:42 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: TestStress.py,v 1.3 2009/11/29 11:37:54 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import threading
 from DBS3SimpleClient import DBS3Client
@@ -108,37 +108,37 @@ class DBS3StressTest(Thread):
         
         
         #listPrimaryDatasets
-        #t = time.time()
-        #self.cli.get("primarydatasets")
-        #res = self.cli.get("primarydatasets/SUT_%s" % self.IC)
-        #print "%s: LIST PRIMARY DATASETS:    %s" % (self.IC, time.time() - t)
+        t = time.time()
+        self.cli.get("primarydatasets")
+        res = self.cli.get("primarydatasets/SUT_%s" % self.IC)
+        print "%s: LIST PRIMARY DATASETS:    %s" % (self.IC, time.time() - t)
     
         #listDatasets
-        #t = time.time()
-        #self.cli.get("datasets")
-        #params = {"dataset":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (self.IC, self.IC)}
-        #res = self.cli.get("datasets", params)
-        #print "%s: LIST DATASETS:    %s" % (self.IC, time.time() - t)
+        t = time.time()
+        self.cli.get("datasets")
+        params = {"dataset":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (self.IC, self.IC)}
+        res = self.cli.get("datasets", params)
+        print "%s: LIST DATASETS:    %s" % (self.IC, time.time() - t)
         
         
         #listBlocks
-        #t = time.time()
-        #params = {"dataset":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (self.IC, self.IC)}
-        #res = self.cli.get("blocks", params)
-        #params = {"block":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC)}
-        #res = self.cli.get("blocks", params)
-        #print "%s: LIST BLOCKS:    %s" % (self.IC, time.time() - t)
+        t = time.time()
+        params = {"dataset":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (self.IC, self.IC)}
+        res = self.cli.get("blocks", params)
+        params = {"block":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC)}
+        res = self.cli.get("blocks", params)
+        print "%s: LIST BLOCKS:    %s" % (self.IC, time.time() - t)
 
         #listFiles
-        #t = time.time()
-        #params = {"block":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC)}
-        #res = self.cli.get("files", params)
-        #print "%s: LIST FILES:    %s" % (self.IC, time.time() - t)
+        t = time.time()
+        params = {"block":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC)}
+        res = self.cli.get("files", params)
+        print "%s: LIST FILES:    %s" % (self.IC, time.time() - t)
 
         print "%s: TEST FINISHED in %s SECONDS" % (self.IC, time.time() - t0)
         
 if __name__ == "__main__":
-    for i in range(120, 130):
-        current = DBS3StressTest(IC = i, NFILES = 10, NPARENTS = 20, NLUMIS = 100)
+    for i in range(200, 210):
+        current = DBS3StressTest(url="http://localhost:8587/dbs3/", IC = i, NFILES = 10, NPARENTS = 10, NLUMIS = 10)
         #current = DBS3StressTest(url="http://vocms09.cern.ch:8989/DBSServlet/", IC = i, NFILES = 10000, NPARENTS = 5, NLUMIS = 10)
         current.start()

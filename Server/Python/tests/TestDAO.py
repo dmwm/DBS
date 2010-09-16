@@ -3,8 +3,8 @@ As the number of tests increase we will probably repackage these tests
 to separate package/modules for each DAO object
 """
 
-__revision__ = "$Id: TestDAO.py,v 1.4 2009/11/12 15:21:43 akhukhun Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: TestDAO.py,v 1.5 2009/11/29 11:37:55 akhukhun Exp $"
+__version__ = "$Revision: 1.5 $"
 
 INSERTCOUNT = "1029"
 
@@ -16,8 +16,7 @@ class TestDAO(unittest.TestCase):
     """DAO unittests class"""
     def setUp(self):
         """setup all necessary variables"""
-        #url = "oracle://cms_dbs_afaq:anzpw03062009@oradev10.cern.ch:10520/D10"
-        url = "oracle://CMS_DBS3_OWNER:new4_dbs3@uscmsdb03.fnal.gov:1521/cmscald"
+        url = "oracle://user:password@host:port/sid"
         self.logger = logging.getLogger("dbs test logger")
         self.dbi = DBFactory(self.logger, url).connect()
         
