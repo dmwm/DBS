@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.8 2010/06/23 21:21:24 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: GetID.py,v 1.9 2010/08/02 21:49:59 afaq Exp $"
+__version__ = "$Revision: 1.9 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -32,8 +32,6 @@ class GetID(DBFormatter):
         """
         returns id for a given application
         """	
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/OutputModuleConfig/GetID expects db connection from upper layer.")
 	sql = self.sql
         binds = {}
 	setAnd=False
@@ -59,6 +57,6 @@ class GetID(DBFormatter):
             raise Exception("Either app_name, release_version or pset_hash must be provided")	
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
-        assert len(plist) == 1, "output module does not exist"
+	if len(plist) < 1: return -1
         return plist[0]["output_mod_config_id"]
 

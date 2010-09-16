@@ -3,8 +3,8 @@
 This module provides BranchHashe.GetID data access object.
 Light dao object to get the id for a given BranchHash
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/06/23 21:21:19 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: GetID.py,v 1.7 2010/08/02 21:49:47 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -27,12 +27,10 @@ FROM %sBRANCH_HASHES BH
         """
         returns id for a given branch hash
         """	
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/BranchHashes/Insert expects db connection from upper layer.")
         sql = self.sql
         sql += "WHERE BH.HASH = :branch_hash"
         binds = {"branch_hash":name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
-        assert len(plist) == 1, "Branch Hash %s does not exist" % name
+	if len(plist) < 1: return -1
         return plist[0]["branch_hash_id"]

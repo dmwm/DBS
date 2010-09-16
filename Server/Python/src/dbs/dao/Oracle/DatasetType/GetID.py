@@ -2,8 +2,8 @@
 """
 This module provides DatasetTYpe.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.7 2010/07/09 19:38:10 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: GetID.py,v 1.8 2010/08/02 21:49:51 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -27,13 +27,10 @@ FROM %sDATASET_ACCESS_TYPES TP
         """
         returns id for a given dataset type name
         """
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/DatasetType/GetID expects db connection from upper layer.")
         sql = self.sql
         sql += "WHERE TP.DATASET_ACCESS_TYPE = :datasettype" 
         binds = {"datasettype":name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
-        assert len(plist) == 1, \
-            "Dataset Type %s does not exist" % name
+	if len(plist) < 1: return -1
         return plist[0]["dataset_access_type_id"]

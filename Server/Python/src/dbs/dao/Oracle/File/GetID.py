@@ -2,8 +2,8 @@
 """
 This module provides File.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.5 2010/06/23 21:21:23 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: GetID.py,v 1.6 2010/08/02 21:49:53 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -26,12 +26,10 @@ FROM %sFILES F
         """
         returns id for a given lfn
         """	
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/File/getID expects db connection from upper layer.")
         sql = self.sql
         sql += "WHERE F.LOGICAL_FILE_NAME = :lfn"
         binds = {"lfn":name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
-        assert len(plist) == 1, "File %s does not exist" % name
+	if len(plist) < 1: return -1
         return plist[0]["file_id"]

@@ -2,8 +2,8 @@
 """
 This module provides ParameterSetHashes.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/06/23 21:21:25 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: GetID.py,v 1.7 2010/08/02 21:50:00 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -27,11 +27,9 @@ class GetID(DBFormatter):
         """
         returns id for a given application
         """	
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/ParameterSetHashe/GetID expects db connection from upper layer.")
         binds = {"pset_hash":pset_hash}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)
-        assert len(plist) == 1, "PARAMETER_SET_HASH %s does not exist" % pset_hash
+	if len(plist) < 1: return -1
         return plist[0]["parameter_set_hash_id"]
 

@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDSType.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/06/23 21:21:25 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: GetID.py,v 1.7 2010/08/02 21:50:02 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -27,14 +27,11 @@ FROM %sPRIMARY_DS_TYPES PT
         """
         returns id for a give primdstype
         """
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/PrimaryDSType/GetID expects db connection from upper layer.")
         sql = self.sql
         sql += "WHERE PT.PRIMARY_DS_TYPE = :primdstype" 
         binds = {"primdstype":name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
-        assert len(plist) == 1, \
-            "PrimaryDSType %s does not exist" % name
+	if len(plist) < 1: return -1
         return plist[0]["primary_ds_type_id"]
 

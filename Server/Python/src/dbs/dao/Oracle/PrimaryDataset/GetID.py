@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.5 2010/06/23 21:21:25 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: GetID.py,v 1.6 2010/08/02 21:50:06 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -27,13 +27,10 @@ FROM %sPRIMARY_DATASETS P
         """
         returns id for a given primary dataset name
         """
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/PrimaryDataset/GetID expects db connection from upper layer.")
         sql = self.sql
         sql += "WHERE P.PRIMARY_DS_NAME = :primarydataset" 
         binds = {"primarydataset":name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
-        assert len(plist) == 1, \
-            "PrimaryDataset %s does not exist" % name
+	if len(plist) < 1: return -1
         return plist[0]["primary_ds_id"]

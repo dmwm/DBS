@@ -2,8 +2,8 @@
 """
 This module provides ReleaseVersion.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/06/23 21:21:26 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: GetID.py,v 1.7 2010/08/02 21:50:12 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -27,11 +27,9 @@ class GetID(DBFormatter):
         """
         returns id for a given application
         """	
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/ReleaseVersion/GetID expects db connection from upper layer.")
         binds = {"release_version":release_version}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)
-        assert len(plist) == 1, "release_version %s does not exist" % release_version
+	if len(plist) < 1: return -1
         return plist[0]["release_version_id"]
 
