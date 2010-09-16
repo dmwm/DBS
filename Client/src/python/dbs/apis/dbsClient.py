@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.43 $"
-# $Id: dbsClient.py,v 1.43 2010/04/22 08:45:42 akhukhun Exp $"
+# $Revision: 1.44 $"
+# $Id: dbsClient.py,v 1.44 2010/05/03 20:18:40 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -398,10 +398,11 @@ class DbsApi:
 		else:
 		    return self.callServer("/runs")
 
-	def listStorageElements(self, block_name="", dataset="", site_name=""):
+	def listSites(self, block_name="", site_name=""):
                 """
-                * API to list A block in DBS 
-                * name : name of the block
+                * API to list sites (or for a block) in DBS 
+                * block_name : name of the block
+		* site_name : name of site
                 """
 		url_param=""
 		addAnd=False
@@ -410,15 +411,13 @@ class DbsApi:
 		    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
 		    url_param+="block_name=%s" %block_name
 		    addAnd=True
-		if dataset:
-		    if addAnd: url_param+="&"
-		    url_param="dataset=%s" %dataset
-		    addAnd=True
 		if site_name:
 		    if addAnd: url_param+="&"
 		    url_param += "site_name=%s"%site_name
-		    
-		return self.callServer("/blocks?%s" %url_param)
+		if url_param:
+		    return self.callServer("/sites?%s" %url_param)
+		else:	    
+		    return self.callServer("/sites")
 
 	def updateFileStatus(self, lfn="", is_file_valid=1):
 	    """
@@ -488,22 +487,29 @@ class DbsApi:
 	    return self.callServer("/datatiers%s" %url_param)
    
 	def listBlockParents(self, block_name=""):
-	   """
-	   API to list block parents
-	   * block_name : name of block whoes parents needs to be found
-	   """
-	   parts=block_name.split('#')
-	   block_name=parts[0]+urllib.quote_plus('#')+parts[1]
-	   return self.callServer("/blockparents?block_name=%s" %block_name)
+	    """
+	    API to list block parents
+	    * block_name : name of block whoes parents needs to be found
+	    """
+	    parts=block_name.split('#')
+	    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+	    return self.callServer("/blockparents?block_name=%s" %block_name)
 	   
 	def listBlockChildren(self, block_name=""):
-	   """
-	   API to list block children
-	   * block_name : name of block whoes children needs to be found
-	   """
-	   parts=block_name.split('#')
-	   block_name=parts[0]+urllib.quote_plus('#')+parts[1]
-	   return self.callServer("/blockchildren?block_name=%s" %block_name)
+	    """
+	    API to list block children
+	    * block_name : name of block whoes children needs to be found
+	    """
+	    parts=block_name.split('#')
+	    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+	    return self.callServer("/blockchildren?block_name=%s" %block_name)
+
+	def insertDataTier(self, dataTierObj={}):
+            """
+            * API to insert A Data Tier in DBS 
+            * dataTierObj : Data Tier object of type {}
+            """
+            return self.callServer("/datatiers", params = dataTierObj , callmethod='POST' )
 
 	def migrateStart(self, inp):
 	    """ initialize without service name"""

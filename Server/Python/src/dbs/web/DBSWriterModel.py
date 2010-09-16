@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.35 2010/04/22 16:23:24 yuyi Exp $"
-__version__ = "$Revision: 1.35 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.36 2010/05/03 20:21:10 afaq Exp $"
+__version__ = "$Revision: 1.36 $"
 
 import re
 import cjson
@@ -39,6 +39,7 @@ class DBSWriterModel(DBSReaderModel):
 	self.addService('PUT', 'files', self.updateFile)
 	self.addService('PUT', 'datasets', self.updateDataset)
 	self.addService('PUT', 'blocks', self.updateBlock)
+	self.addService('POST', 'datatiers', self.insertDataTier)
 
     def insertPrimaryDataset(self):
         """
@@ -283,5 +284,18 @@ class DBSWriterModel(DBSReaderModel):
 	    self.dbsBlock.updateStatus(block_name, open_for_writing)
 	except Exception, ex:
 	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+
+    def insertDataTier(self):
+	"""
+	Inserts a data tier in DBS
+	"""
+
+	try:
+		body = request.body.read()
+		indata = cjson.decode(body)
+		indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
+		self.dbsDataTier.insertDataTier(indata)
+	except Exception, ex:
+		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
 
 
