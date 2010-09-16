@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.9 2009/12/22 12:58:13 akhukhun Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.10 2009/12/22 14:33:52 yuyi Exp $"
+__version__ = "$Revision: 1.10 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -20,7 +20,7 @@ class DBSPrimaryDataset:
 
         self.primdslist = daofactory(classname="PrimaryDataset.List")
         self.sm = daofactory(classname="SequenceManager")
-        self.primdstypeid = daofactory(classname="PrimaryDSType.GetID")
+        self.primdstypeList = daofactory(classname="PrimaryDSType.List")
         self.primdsin = daofactory(classname="PrimaryDataset.Insert")
 
 
@@ -40,10 +40,16 @@ class DBSPrimaryDataset:
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            businput["primary_ds_type"] = self.primdstypeid.execute(businput["primary_ds_type"]) 
-            businput["primary_ds_id"] = self.sm.increment("SEQ_PDS", conn, True)
+            businput["primary_ds_type_id"] = (self.primdstypeList.execute(businput["primary_ds_type"]))[0]["primary_ds_type_id"] 
+            del businput["primary_ds_type"]
+	    businput["primary_ds_id"] = self.sm.increment("SEQ_PDS", conn, True)
+	    
             self.primdsin.execute(businput, conn, True)
             tran.commit()
+	except IndexError:
+	    self.logger.exception( "DBS Error: Index error raised")
+	    #self.logger.error( "Index error raised")
+	    raise 
         except Exception, e:
             tran.rollback()
             self.logger.exception(e)
