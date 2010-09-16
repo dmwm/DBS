@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.23 2010/03/25 17:06:00 afaq Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: DBSBlock.py,v 1.24 2010/04/16 19:26:01 afaq Exp $"
+__version__ = "$Revision: 1.24 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -23,6 +23,30 @@ class DBSBlock:
         self.datasetid = daofactory(classname = "Dataset.GetID")
         self.siteid = daofactory(classname = "Site.GetID")
         self.blockin = daofactory(classname = "Block.Insert")
+	self.updatestatus = daofactory(classname='Block.UpdateStatus')
+	
+    def updateStatus(self, block_name="", open_for_writing=0):
+	"""
+	Used to toggle the status of a block open_for_writing=1, open for writing, open_for_writing=0, closed
+	"""
+
+	open_for_writing=int(open_for_writing)
+        conn = self.dbi.connection()
+	trans = conn.begin()
+	if not len(block_name) > 1:
+	    raise Exception("Provide a valid block_name")
+	if (open_for_writing < 0)  or (open_for_writing > 1) :
+	    raise Exception("open_for_writing can only be 0 or 1 : passed %s" %open_for_writing)
+	try :
+	    self.updatestatus.execute(conn, block_name, open_for_writing, trans)
+	    trans.commit()
+	except Exception, ex:
+	    trans.rollback()
+	    raise ex
+		
+	finally:
+	    trans.close()
+	    conn.close()
 
 
     def listBlocks(self, dataset="", block_name="", site_name=""):
