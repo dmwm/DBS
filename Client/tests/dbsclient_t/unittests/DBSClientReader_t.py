@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.5 2010/01/26 21:02:12 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.6 2010/01/26 22:18:29 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import os
 import json
@@ -29,7 +29,6 @@ testparams=importCode(infofile, "testparams", 0).info
 class DBSClientReader_t(unittest.TestCase):
     
     def test01(self):
-	return
         """unittestDBSClientReader_t.listPrimaryDatasets: basic test"""
         api.listPrimaryDatasets()
         api.listPrimaryDatasets('*')
@@ -37,7 +36,6 @@ class DBSClientReader_t(unittest.TestCase):
 	api.listPrimaryDatasets(testparams['primary_ds_name']+"*")
 
     def test02(self):
-	return
 	"""unittestDBSClientReader_t.listDatasets: basic test"""
 	api.listDatasets()
 	api.listDatasets(dataset=testparams['dataset'])
@@ -54,7 +52,6 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test03(self):
 	"""unittestDBSClientReader_t.listOutputModules: basic test"""
-	return
 	api.listOutputConfigs(dataset=testparams['dataset'])
 	api.listOutputConfigs(logical_file_name=testparams['files'][0])
 	api.listOutputConfigs()
@@ -82,10 +79,31 @@ class DBSClientReader_t(unittest.TestCase):
 	else: 
 	    self.fail("exception was excepted, was not raised")
 	
-	
-	#block_name="", dataset="", site_name=""
+    def test05(self):
+	"""unittestDBSClientReader_t.listDatasetParents basic test"""
+	api.listDatasetParents(dataset=testparams['dataset'])	
+	api.listDatasetParents(dataset='doesnotexists')
 
-	
+    def test06(self):
+	"""unittestDBSClientReader_t.listFiles: basic test"""
+	api.listFiles(dataset=testparams['dataset'])
+	api.listFiles(block=testparams['block'])
+	api.listFiles(lfn=testparams['files'][0])	
+	api.listFiles(dataset="doesnotexist")
+	api.listFiles(block="doesnotexist#123")
+	api.listFiles(lfn="doesnotexist")
+
+    def test07(self):
+	"""unittestDBSClientReader_t.listFileParents: basic test"""	
+	api.listFileParents(lfn=testparams['files'][0])
+	try:
+	    api.listFileParents()
+	except:
+	    pass
+	else:
+	    self.fail("exception was excepted, was not raised")
+	api.listFileParents(lfn="doesnotexist")
+
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
