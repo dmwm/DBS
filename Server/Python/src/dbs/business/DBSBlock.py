@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.33 2010/05/24 19:13:51 yuyi Exp $"
-__version__ = "$Revision: 1.33 $"
+__revision__ = "$Id: DBSBlock.py,v 1.34 2010/05/28 21:20:31 afaq Exp $"
+__version__ = "$Revision: 1.34 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -80,8 +80,6 @@ class DBSBlock:
 	finally:
 	    conn.close()
 
-
-    
     def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num=-1):
         """
         dataset, block_name, or logical_file_name must be passed.
@@ -89,7 +87,7 @@ class DBSBlock:
 	if (not dataset) or dataset=='%':
 	    if (not block_name) or block_name=='%':
 		if (not logical_file_name) or logical_file_name =='%':
-			raise Exception("You must specify at least one parameter (dataset, block_namei, logical_file_name) with listBlocks api")
+			raise Exception("You must specify at least one parameter (dataset, block_name, logical_file_name) with listBlocks api")
 	try:
 	    conn = self.dbi.connection()
 	    result = self.blocklist.execute(conn, dataset, block_name, origin_site_name, logical_file_name,run_num )
@@ -129,9 +127,9 @@ class DBSBlock:
 	    }
             blkinput["dataset_id"] = self.datasetid.execute(conn, (businput["block_name"]).split('#')[0], tran)
             blkinput["block_id"] =  self.sm.increment(conn, "SEQ_BK", tran)
-            if(businput.has_key("origin_site")):
+            if(businput.has_key("origin_site_name")):
                 #blkinput["origin_site"] = self.siteid.execute(conn, businput["origin_site"], tran)
-		blkinput["origin_site_name"] = businput["origin_site"]
+		blkinput["origin_site_name"] = businput["origin_site_name"]
             self.blockin.execute(conn, blkinput, tran)
 
 	    if businput.has_key("site_list"):

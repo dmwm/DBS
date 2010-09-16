@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.39 2010/05/27 20:14:30 afaq Exp $"
-__version__ = "$Revision: 1.39 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.40 2010/05/28 21:20:32 afaq Exp $"
+__version__ = "$Revision: 1.40 $"
 
 import re
 import cjson
@@ -222,7 +222,7 @@ class DBSWriterModel(DBSReaderModel):
                       "block_name":indata["block_name"],
                       "file_count":indata.get("file_count", 0),
                       "block_size":indata.get("block_size", 0),
-                      "origin_site": indata.get("origin_site"),
+                      "origin_site_name": indata.get("origin_site_name"),
                       "open_for_writing": indata.get("open_for_writing", 1),
 		      "site_list" : indata.get("site_list", [])
                       })

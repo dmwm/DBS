@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.37 2010/05/19 16:21:05 yuyi Exp $"
-__version__ = "$Revision: 1.37 $"
+__revision__ = "$Id: DBSDataset.py,v 1.38 2010/05/28 21:20:31 afaq Exp $"
+__version__ = "$Revision: 1.38 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -120,20 +120,7 @@ class DBSDataset:
 	    raise Exception("listDataset API only works with fullly qualifiled logical_file_name. NO * is allowed in logical_file_name.")
 	try:
 	    conn = self.dbi.connection()
-            if (not logical_file_name or  logical_file_name=="%") and (not run_num or run_num==0): 	
-		result = self.datasetlist.execute(conn, dataset, 
-                                             parent_dataset, 
-                                             release_version, 
-					     pset_hash,
-                                             app_name, 
-                                             output_module_label,
-					     processing_version,
-					     acquisition_era, 
-						physics_group_name,  
-						primary_ds_name, primary_ds_type, data_tier_name, 
-						dataset_access_type)
-	    elif (not run_num or run_num==0) and logical_file_name :
-		result = self.datasetlist.execute1(conn, dataset,
+	    result = self.datasetlist.execute(conn, dataset,
                                              parent_dataset,
                                              release_version,
                                              pset_hash,
@@ -141,21 +128,9 @@ class DBSDataset:
                                              output_module_label,
                                              processing_version,
                                              acquisition_era, 
-                                                physics_group_name, logical_file_name, 
-                                                primary_ds_name, primary_ds_type, data_tier_name, 
-                                                dataset_access_type)
-	    elif(run_num and run_num!=0):
-		result = self.datasetlist.execute2(conn, dataset,
-                                             parent_dataset,
-                                             release_version,
-                                             pset_hash,
-                                             app_name,
-                                             output_module_label,
-                                             processing_version,
-                                             acquisition_era, 
-                                                run_num, physics_group_name, logical_file_name, 
-                                                primary_ds_name, primary_ds_type, data_tier_name, 
-                                                dataset_access_type)	
+                                             run_num, physics_group_name, logical_file_name, 
+                                             primary_ds_name, primary_ds_type, data_tier_name, 
+                                             dataset_access_type)	
 	    conn.close()
 	    return result
         except Exception, ex:
