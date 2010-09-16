@@ -2,8 +2,8 @@
 """
 DBS Migration Service Polling Module
 """
-__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.4 2010/06/29 19:22:36 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.5 2010/06/29 21:40:45 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 import threading
 import logging
@@ -125,6 +125,7 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	    #1.
 	    #FIXME: lock requests table
 	    conn = self.dbi.connection()
+
 	    request=self.getMigrationRequest(conn)
 	    if len(request) < 1:
 		return
@@ -134,14 +135,13 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	    for ablock in blocks:
 	        self.migrateBlock(conn, ablock['migration_block'], request["migration_url"])
 	        # report status to database, a cycle has been completed, successfully
-	        self.reportStatus("WORKING FINE")
+	        self.reportStatus(conn, "WORKING FINE")
 	    #Mark the request as done
 	    self.updateRequestStatus(conn, request_id, "COMPLETED")
-	    #FIXME: What do we do to the blocks, once all the blocks are DONE 
+	    #FIXME: What do we do to the blocks, once all the blocks are DONE (clean up service)
 	except Exception, ex:
 	    self.logger.exception("DBS Migration Service failed to perform migration %s" %str(ex))
-	    if request.has_key('migration_request_id') and  request['migration_status'] == "RUNNING":
-		self.updateRequestStatus(conn, request_id, "FAILED")
+	    self.updateRequestStatus(conn, request_id, "FAILED")
 	    raise
 	finally:
 	    #FIXME: un-lock requests table
@@ -172,6 +172,7 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
             try:
 	        upst = dict(migration_status=status, migration_request_id=request_id)
                 self.requestup.execute(conn, upst)
+	        self.reportStatus(conn, "WORKING FINE")
             except:
 	        raise
 		
@@ -179,6 +180,7 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
             try:
 	        blkupst = dict(migration_status=status, migration_block=block_name)
                 self.blkup.execute(conn, blkupst)
+	        self.reportStatus(conn, "WORKING FINE")
             except:
 	        raise
 
@@ -188,6 +190,7 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	"""
 	try:
 	    result = self.blklist.execute(conn, request_id)
+	    self.reportStatus(conn, "WORKING FINE")
             return result
 	except Exception, ex:
 	    raise ex
@@ -200,28 +203,30 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	try:
 	    self.updateBlockStatus(conn, block_name, 'RUNNING')
 	    blockcontent = self.getBlock(url, block_name)
-	    self.putBlock(blockcontent)
+	    self.putBlock(conn, blockcontent)
 	    self.updateBlockStatus(conn, block_name, 'COMPLETED')
 	except Exception, ex:
-	    self.dbsMigrate.updateBlockStatus(conn, block_name, 'FAILED')
-	    raise Exception ("Migration Failed, DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+	    self.updateBlockStatus(conn, block_name, 'FAILED')
+	    raise Exception ("Migration of Block % from DBS %s has failed, Exception trace: \n %s " % (url, block_name, ex ))
 
     def getBlock(self, url, block_name):
 	"""Client type call to get the block content from the server"""
-	blockname = block_name.replace("#",urllib.quote_plus('#'))
-	resturl = "%s/blockdump?block_name=%s" % (url, blockname)
-	req = urllib2.Request(url = resturl)
-        data = urllib2.urlopen(req)
-        ddata = cjson.decode(data.read())
+	try:
+	    blockname = block_name.replace("#",urllib.quote_plus('#'))
+	    resturl = "%s/blockdump?block_name=%s" % (url, blockname)
+	    req = urllib2.Request(url = resturl)
+	    data = urllib2.urlopen(req)
+	    ddata = cjson.decode(data.read())
+	except Exception, ex:
+	    raise Exception ("Unable to get information from src dbs : %s for block : %s" %(url, block_name))
         return ddata
 
-    def putBlock(self, blockcontent):
+    def putBlock(self, conn, blockcontent):
 	"""Huge method that inserts everything.
 	   Want to do it in one transaction, so that if there is problem it rolls back.
 	   Inserts all data into corresponding tables"""
-	conn = self.dbi.connection()
-        tran = conn.begin()
-
+	tran = conn.begin()
+	
 	#insert primary dataset
 	d = blockcontent["primds"]
 	primds = {}
@@ -260,7 +265,16 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	for k in ("dataset", "is_dataset_valid", "global_tag", "xtcrosssection",
 		  "creation_date", "create_by", "last_modification_date", "last_modified_by"):
 	    print "DO SOMETHING EHRE............"
-	
+	    dataset[k] = d[k]
+	try:
+	    self.datasetin.execute(conn, dataset, tran)
+	except IntegrityError: 
+	    pass
+	except:
+	    tran.rollback()
+	    conn.close()
+	    raise
+    
     def insertStatus(self, status = "UNKNOWN" ):
 	"""
 	This is a local function, basically component reports its status to database
@@ -286,29 +300,25 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
     	finally:
 	    conn.close()
 
-    def reportStatus(self, status = "UNKNOWN" ):
+    def reportStatus(self, conn, status = "UNKNOWN" ):
 	"""
 	This is a local function, basically component reports its status to database
 	"""
 	try:
-	    conn = self.dbi.connection()
 	    tran = conn.begin()
-	    statusObj={ "component_name" : "WRITER BUFFER", "component_status" : status, "last_contact_time" : str(int(time.time())) }
+	    statusObj={ "component_name" : "MIGRATION SERVICE", "component_status" : status, "last_contact_time" : str(int(time.time())) }
 	    self.compstatusup.execute(conn, statusObj, tran)
 	    tran.commit()
 	except Exception, ex:
 	    tran.rollback()
 	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
-    	finally:
-	    conn.close()
-        # called by frk at the termination time
 
+    # called by frk at the termination time
     def terminate(self, params):
 	"""
 	Terminate
 	"""
 	logging.debug("Terminating DBS Migration Service")
-
 
 if __name__ == '__main__':
 #----------------
