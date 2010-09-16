@@ -1,8 +1,8 @@
 """ DAO Object for MigrationRequests table """ 
 """ DAO Object for MigrationRequests table """ 
 
-__revision__ = "$Revision: 1.2 $"
-__version__  = "$Id: Insert.py,v 1.2 2010/06/24 21:38:52 afaq Exp $ "
+__revision__ = "$Revision: 1.3 $"
+__version__  = "$Id: Insert.py,v 1.3 2010/06/25 18:50:47 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -17,8 +17,8 @@ class Insert(DBFormatter):
         self.sql = \
 """
 INSERT INTO %sMIGRATION_REQUESTS 
-(MIGRATION_ID, MIGRATION_URL, MIGRATION_INPUT, MIGRATION_STATUS, CREATION_DATE, CREATE_BY, LAST_MODIFICATION_DATE, LAST_MODIFIED_BY)
-VALUES(:migration_id, :migration_url, :migration_input, :migration_status, :creation_date, :create_by, :last_modification_date, :last_modified_by)
+(MIGRATION_REQUEST_ID, MIGRATION_URL, MIGRATION_INPUT, MIGRATION_STATUS, CREATION_DATE, CREATE_BY, LAST_MODIFICATION_DATE, LAST_MODIFIED_BY)
+VALUES(:migration_request_id, :migration_url, :migration_input, :migration_status, :creation_date, :create_by, :last_modification_date, :last_modified_by)
 """ % self.owner
 
     def execute(self, conn, daoinput, transaction = False):
