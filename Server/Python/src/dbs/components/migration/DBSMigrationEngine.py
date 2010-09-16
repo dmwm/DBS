@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.1 2010/08/09 20:14:47 yuyi Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.2 2010/08/10 20:28:10 yuyi Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import threading
 import logging
@@ -98,6 +98,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
         self.primdsin	    = daofactory(classname="PrimaryDataset.Insert")
 	self.primdstpin     = daofactory(classname="PrimaryDSType.Insert")
         self.datasetin	    = daofactory(classname='Dataset.Insert')
+	self.datatypein     = daofactory(classname='DatasetType.Insert')
 	self.blockin        = daofactory(classname='Block.Insert')
 	self.sm             = daofactory(classname = "SequenceManager")
 	self.filein         = daofactory(classname = "File.Insert")
@@ -282,6 +283,30 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	tran.commit()
 	return block['block_id']
 
+    def insertOutputModuleConfig(self, conn, confcontent)
+        """
+        Insert Release version, application, parameter set hashes and the map(output module config).
+
+        """
+        block = blockcontent['block']
+        #Insert the block
+        try:
+            tran = conn.begin()
+            block['block_id'] = self.sm.increment(conn,"SEQ_BK")
+            block['dataset_id'] =  blockcontent['dataset']['datset_id']
+            self.blockin.execute(conn, block, tran)
+        except exceptions.IntegrityError:
+            #ok, already in db
+            block['block_id'] = self.blockid.execute(conn, block['block_name'])
+        exception:
+            tran.rollback()
+            raise
+        #Now handle Block Parenttage
+        #FIXME
+        tran.commit()
+        return ConfigId
+
+
     def insertDataset(self, conn, blockcontent, sourceurl)
 	"""
 	This method insert a datsset from a block object into dest dbs. When data is not completed in
@@ -290,156 +315,189 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	#Check if dataset in the cache
 	if dataset["dataset"] in (self.datasetCache['dataset']).keys():
 	    dataset['dataset_id'] = self.datasetCache['dataset'][dataset["dataset"]]
+	    return dataset['dataset_id']
 	else:
 	    #check if the dataset in local db
 	    try:
 		dataset['dataset_id'] = self.datasetid.execute(conn, dataset["dataset"])
-		if dataset['dataset_id'] <= 0:
-		    #not found in local db, Now insert. Start a new transaction 
-		    tran = conn.begin()
-		    #1. Deal with primary dataset. Most primary datasets are perinstalled in db  
-		    primds = blockcontent["primds"]
-		    #First, search in the cache
-		    if primds["primary_ds_name"] in (self.datasetCache['primDs']).keys():
-			#found it, update the ID with local ID 
-			primds["primary_ds_id"] = self.datasetCache['primDs'][primds["primary_ds_name"]]
-		    else:   
-			#Second, seach in the local db
-			primds["primary_ds_id"] = self.primdsid.execute(conn, primds["primary_ds_name"])
-			if primds["primary_ds_id"] <= 0:
-			    #primary dataset is not in db yet. We need to check if the primary_ds_type before insert primary ds
-			    if primds["primary_ds_type"] in (self.datasetCache['primDsTp']).keys(): 
-				primds["primary_ds_type_id"] = self.datasetCache['primDsTp'][primds["primary_ds_type"]]
-			    else:
-				primds["primary_ds_type_id"] = self.primdstpid.execute(conn, primds["primary_ds_type"]))
-				if primds["primary_ds_type_id"] <= 0:
-				    #primary ds type is not in db yet. Insert it now
-				    primds["primary_ds_type_id"] = self.sm.increment(conn,"SEQ_PDT")
-				    self.primdstpin(conn, primds["primary_ds_type_id"], primds["primary_ds_type"],tran)
-				#register to cache. Done with primary ds type    
-				self.datasetCache['primDsTp']["primary_ds_type"]=primds["primary_ds_type_id"]
-			    #Now inserting primary ds. Clean up dao object befer inserting
-			    del primds["primary_ds_type"]
-			    primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS"))
-			    self.primdsin(conn, primds, tran) 
-			#register to cache. Done with primary ds     
-			self.datasetCache['primDs']["primary_ds_name"] = primds["primary_ds_id"]
-		    #2 Deal with processed ds
-		    #Check if processed ds in the cache
-		    if dataset["processed_ds_name"] in (self.datasetCache['processedDs']).keys():
-			dataset['processed_ds_id'] = self.datasetCache['processedDs'][dataset["processed_ds_name"]]
-		    else:
-			try:
-			    #Let's insert the processed ds since it is not pre-inserted at schema level
-			    daoproc={'processed_ds_id':self.sm.increment(conn,"SEQ_PSDS"), 
-			    "processed_ds_name": dataset['processed_ds_name']}
-			    self.procdsin.execute(conn,daoproc, tran)
-			    #regist to cache
-			    self.datasetCache['processedDs']['processed_ds_name'] = daoproc['processed_ds_id']
-			    dataset['processed_ds_id'] = daoproc['processed_ds_id']
-			except exceptions.IntegrityError:
-			    #Ok, it is in db already. Get the ID
-			    dataset['processed_ds_id'] = self.procdsid.execute(conn, dataset['processed_ds_name']))
-			    #regist to cache
-			    self.datasetCache['processedDs']['processed_ds_name'] = dataset['processed_ds_id']
-			    pass
-			except:
-			    tran.rollback
-			    raise
-		    #3 Deal with Acquisition era
-		    aq = blockcontent['acquisition_era']
-		    #is there acquisition?
-		    if aq:
-			#check if acquisition in cache
-			if aq['acquisition_era_name'] in (self.datasetCache['acquisitionEra']).keys():
-			    dataset['acquisition_era_id'] = self.datasetCache['acquisitionEra'][aq['acquisition_era_name']]
-		        else:
-			    try;
-				#insert acquisition era into db
-				aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
-				self.acqin.execute(conn, aq, tran)
-				#regist to cache
-				self.datasetCache['acquisitionEra']['acquisition_era_name'] = aq['acquisition_era_id']
-				dataset['acquisition_era_id'] = aq['acquisition_era_id']
-			    except exceptions.IntegrityError:
-				#ok, already in db
-				dataset['acquisition_era_id'] = self.acqid.execute(conn, aq['acquisition_era_name'])
-				self.datasetCache['acquisitionEra'][aq['acquisition_era_name']] = dataset['acquisition_era_id']
-			    except:
-				tran.rollback
-				raise
-		    else:
-			#no acquisition era for this dataset
-			pass
-		    #4 Deal with Processing era
-		    pera = blockcontent['processing_era']
-                    #is there processing era?
-                    if pera:
-                        #check if in cache
-                        if pera['processing_version'] in (self.datasetCache['processingVersion']).keys():
-                            dataset['processing_era_id'] = self.datasetCache['processingVersion'][aq['processing_version']]
-                        else:
-                            try;
-                                #insert processing era into db
-                                pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE")
-                                self.procsingin.execute(conn, pera, tran)
-                                #regist to cache
-                                self.datasetCache['processingVersion'][pera['processing_version']] = pera['processing_era_id']
-                                dataset['processing_era_id'] = pera['processing_era_id']
-                            except exceptions.IntegrityError:
-                                #ok, already in db
-                                dataset['processing_era_id'] = self.procsingid.execute(conn, pera['processing_version'])
-                                self.datasetCache['processingVersion'][pera['processing_version']] = dataset['processing_era_id']
-                            except:
-                                tran.rollback
-                                raise
-                    else:
-                        #no processing era for this dataset
-		    #5 Deal with physics gruop
-		    phg = dataset['physics_group_name']
-		    if phg:
-			#Yes, the dataset has physica group. 
-			if phg in (self.datasetCache['phyGrp']).keys():
-			    dataset['physics_group_id'] = self.datasetCache['phyGrp'][phg]
-			else:
-			    #find in db since not find it in cache
-			    phgId = self.phygrpid.execute(conn, phg)
-			    if phgId <=0 :
-				#not in db yet, insert it
-				phygrp={'physics_group_id':self.sm.increment(conn,"SEQ_PG"), 'physics_group_name':phg}
-				self.phygrpin.execute(conn, phygrp, tran)
-				#cache it
-			    self.datasetCache['phyGrp'][phg] = phgId
-			    dataset['physics_group_id'] = phgId
-		    else:
-			#no physics gruop for the dataset.
-			pass
-		    del dataset['physics_group_name']
-		    #6 Deal with Data tier. A dataset must has a data tier
-		    dataT = dataset['data_tier_name']
-		    #check cache
-		    if dataT in (self.datasetCache['dataTier']).keys():
-			dataset['data_tier_id'] = self.datasetCache['dataTier'][dataT]
-		    else:
-			#not in cache, check if in db
-			dataTId = sef.tierid.execute(conn, dataT)
-			if dataTId <= 0 :
-			    #not in db. Insert the tier
-			    #get the rest data from remote db
-		            theTier = self.getRemoteData(url,datatiers, 'data_tier_name', dataT)
-			    dataTId = self.sm.increment(conn,"SEQ_DT")
-			    theTier['data_tier_id'] = dataTId		    
-			    self.tierin.execute(conn, theTier, tran)
-			dataset['data_tier_id'] = dataTId
-		    del dataset['data_tier_name']
-		    #Finally, we have everything to insert a maataset
-		    dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
-		    self.datasetin.execute(conn, dataset, tran)
-		    self.datasetCache['dataset'][dataset['dataset']]=dataset['dataset_id'] 
 	    except:
-		tran.rollback()
 		raise
-	tran.commit()
+	    if dataset['dataset_id'] > 0:
+		return dataset['dataset_id']
+	#Not in cache nor in local db. A brand new dataset needed to be inserted. 	
+	try:
+	    #Start a new transaction 
+	    tran = conn.begin()
+	    #1. Deal with primary dataset. Most primary datasets are perinstalled in db  
+	    primds = blockcontent["primds"]
+	    #First, search in the cache
+	    if primds["primary_ds_name"] in (self.datasetCache['primDs']).keys():
+		#found it, update the ID with local ID 
+		primds["primary_ds_id"] = self.datasetCache['primDs'][primds["primary_ds_name"]]
+	    else:   
+		#Second, seach in the local db
+		primds["primary_ds_id"] = self.primdsid.execute(conn, primds["primary_ds_name"])
+		    if primds["primary_ds_id"] <= 0:
+			#primary dataset is not in db yet. We need to check if the primary_ds_type before insert primary ds
+			if primds["primary_ds_type"] in (self.datasetCache['primDsTp']).keys(): 
+			    primds["primary_ds_type_id"] = self.datasetCache['primDsTp'][primds["primary_ds_type"]]
+			else:
+			    primds["primary_ds_type_id"] = self.primdstpid.execute(conn, primds["primary_ds_type"]))
+			    if primds["primary_ds_type_id"] <= 0:
+				#primary ds type is not in db yet. Insert it now
+				primds["primary_ds_type_id"] = self.sm.increment(conn,"SEQ_PDT")
+				self.primdstpin(conn, primds["primary_ds_type_id"], primds["primary_ds_type"],tran)
+			    #register to cache. Done with primary ds type    
+			    self.datasetCache['primDsTp']["primary_ds_type"]=primds["primary_ds_type_id"]
+			#Now inserting primary ds. Clean up dao object befer inserting
+			del primds["primary_ds_type"]
+			primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS"))
+			self.primdsin(conn, primds, tran) 
+		#register to cache. Done with primary ds     
+		self.datasetCache['primDs']["primary_ds_name"] = primds["primary_ds_id"]
+	    #2 Deal with processed ds
+	    #Check if processed ds in the cache
+	    if dataset["processed_ds_name"] in (self.datasetCache['processedDs']).keys():
+		dataset['processed_ds_id'] = self.datasetCache['processedDs'][dataset["processed_ds_name"]]
+	    else:
+		try:
+		    #Let's insert the processed ds since it is not pre-inserted at schema level
+		    daoproc={'processed_ds_id':self.sm.increment(conn,"SEQ_PSDS"), 
+			    "processed_ds_name": dataset['processed_ds_name']}
+		    self.procdsin.execute(conn,daoproc, tran)
+		    #regist to cache
+		    self.datasetCache['processedDs']['processed_ds_name'] = daoproc['processed_ds_id']
+		    dataset['processed_ds_id'] = daoproc['processed_ds_id']
+		except exceptions.IntegrityError:
+		    #Ok, it is in db already. Get the ID
+		    dataset['processed_ds_id'] = self.procdsid.execute(conn, dataset['processed_ds_name']))
+		    #regist to cache
+		    self.datasetCache['processedDs']['processed_ds_name'] = dataset['processed_ds_id']
+		    pass
+		except:
+		    tran.rollback
+		    raise
+	    #3 Deal with Acquisition era
+	    aq = blockcontent['acquisition_era']
+	    #is there acquisition?
+	    if aq:
+	    #check if acquisition in cache
+		if aq['acquisition_era_name'] in (self.datasetCache['acquisitionEra']).keys():
+		    dataset['acquisition_era_id'] = self.datasetCache['acquisitionEra'][aq['acquisition_era_name']]
+		else:
+		    try;
+			#insert acquisition era into db
+			aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
+			self.acqin.execute(conn, aq, tran)
+			#regist to cache
+			self.datasetCache['acquisitionEra']['acquisition_era_name'] = aq['acquisition_era_id']
+			dataset['acquisition_era_id'] = aq['acquisition_era_id']
+		    except exceptions.IntegrityError:
+			#ok, already in db
+			dataset['acquisition_era_id'] = self.acqid.execute(conn, aq['acquisition_era_name'])
+			self.datasetCache['acquisitionEra'][aq['acquisition_era_name']] = dataset['acquisition_era_id']
+		    except:
+			tran.rollback
+			raise
+	    else:
+		#no acquisition era for this dataset
+		pass
+	    #4 Deal with Processing era
+	    pera = blockcontent['processing_era']
+	    #is there processing era?
+	    if pera:
+		#check if in cache
+		if pera['processing_version'] in (self.datasetCache['processingVersion']).keys():
+		    dataset['processing_era_id'] = self.datasetCache['processingVersion'][aq['processing_version']]
+		else:
+		    try;
+			#insert processing era into db
+			pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE")
+			self.procsingin.execute(conn, pera, tran)
+			#regist to cache
+			self.datasetCache['processingVersion'][pera['processing_version']] = pera['processing_era_id']
+			dataset['processing_era_id'] = pera['processing_era_id']
+		    except exceptions.IntegrityError:
+			#ok, already in db
+			dataset['processing_era_id'] = self.procsingid.execute(conn, pera['processing_version'])
+			self.datasetCache['processingVersion'][pera['processing_version']] = dataset['processing_era_id']
+		    except:
+			tran.rollback
+			raise
+	    else:
+		#no processing era for this dataset
+		pass
+	    #let's committe first 4 db acativties before going on.
+	    tran.commit()
+	except:
+	    raise
+	
+	#Continue for the rest.
+	try:
+	    tran=conn.begnin()
+	    #5 Deal with physics gruop
+	    phg = dataset['physics_group_name']
+	    if phg:
+		#Yes, the dataset has physica group. 
+		if phg in (self.datasetCache['phyGrp']).keys():
+		    dataset['physics_group_id'] = self.datasetCache['phyGrp'][phg]
+		else:
+		    #find in db since not find it in cache
+		    phgId = self.phygrpid.execute(conn, phg)
+		    if phgId <=0 :
+			#not in db yet, insert it
+			phygrp={'physics_group_id':self.sm.increment(conn,"SEQ_PG"), 'physics_group_name':phg}
+			self.phygrpin.execute(conn, phygrp, tran)
+		    #cache it
+		    self.datasetCache['phyGrp'][phg] = phgId
+		    dataset['physics_group_id'] = phgId
+	    else:
+		#no physics gruop for the dataset.
+		pass
+	    del dataset['physics_group_name']
+	    #6 Deal with Data tier. A dataset must has a data tier
+	    dataT = dataset['data_tier_name']
+	    #check cache
+	    if dataT in (self.datasetCache['dataTier']).keys():
+		dataset['data_tier_id'] = self.datasetCache['dataTier'][dataT]
+	    else:
+		#not in cache, check if in db
+		dataTId = sef.tierid.execute(conn, dataT)
+		if dataTId <= 0 :
+		    #not in db. Insert the tier
+		    #get the rest data from remote db
+		    theTier = self.getRemoteData(url,datatiers, 'data_tier_name', dataT)
+		    dataTId = self.sm.increment(conn,"SEQ_DT")
+		    theTier['data_tier_id'] = dataTId		    
+		    self.tierin.execute(conn, theTier, tran)
+		dataset['data_tier_id'] = dataTId
+		self.datasetCache['dataTier'][dataT] = dataTId
+	    del dataset['data_tier_name']
+	    #7 Deal with dataset access type. A dataset must have a data type
+	    dsTp = dataset['dataset_access_type']
+	    #check cache
+            if dsTp in (self.datasetCache['datasetAccTp']).keys():
+                dataset['dataset_access_type_id'] = self.datasetCache['datasetAccTp'][dataT]
+            else:
+                #not in cache, check if in db
+                dsTpId = sef.datatypeid.execute(conn, dsTp)
+                if dsTpId <= 0 :
+                    #not in db. Insert the type
+                    dsTpId = self.sm.increment(conn,"SEQ_DTP")
+                    theType={'dataset_access_type':dsTp, 'dataset_access_type_id':dsTpId}
+                    self.datatypein.execute(conn, theType, tran)
+                dataset['dataset_access_type_id'] = dsTpId
+		self.datasetCache['datasetAccTp'][dataT] = dsTpId
+            del dataset['data_access_type_id']
+	    #8 Finally, we have everything to insert a dataset
+	    dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
+	    self.datasetin.execute(conn, dataset, tran)
+	    self.datasetCache['dataset'][dataset['dataset']]=dataset['dataset_id']
+	    #9 FIXME, Before we commit, make dataset and output module configure mapping	
+	    tran.commit()
+	except:
+	    tran.rollback()
+	    raise
 	return dataset['dataset_id']
     
     def insertStatus(self, status = "UNKNOWN" ):
