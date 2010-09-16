@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.19 2010/01/26 17:41:43 afaq Exp $"
-__version__ = "$Revision: 1.19 $"
+__revision__ = "$Id: DBSFile.py,v 1.20 2010/01/27 16:54:24 afaq Exp $"
+__version__ = "$Revision: 1.20 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -36,7 +36,8 @@ class DBSFile:
 	self.outconfigid = daofactory(classname='OutputModuleConfig.GetID')
 	self.fconfigin = daofactory(classname='FileOutputMod_config.Insert')
 	
-    def listFiles(self, dataset="", block_name="", logical_file_name=""):
+    def listFiles(self, dataset="", block_name="", logical_file_name="", release_version="", 
+	    pset_hash="", app_name="", output_module_label=""):
         """
         either dataset(and lfn pattern) or block(and lfn pattern) must be specified.
         """
@@ -77,10 +78,7 @@ class DBSFile:
  
 	try:
 	    # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
-	    files2insert = []
-            fparents2insert = []
-            flumis2insert = []
-	    fconfigs2insert = []
+	    #files2insert = []
 	    fidl=[]
 	    fileInserted=False
 	    
@@ -102,6 +100,10 @@ class DBSFile:
 	    #looping over the files, everytime create a new object 'filein' as you never know 
 	    #whats in the original object and we do not want to know
 	    for f in businput:
+		fparents2insert = []
+		fparents2insert = []
+		flumis2insert = []
+		fconfigs2insert = []
 		# create the file object from the original 
 		# taking care of defaults, and required
 		filein={
@@ -144,7 +146,7 @@ class DBSFile:
 		    else:
 			raise	
 	        # Saving the id for later use
-	        files2insert.append(filein)
+		#files2insert.append(filein)
 	        fidl.append(filein["file_id"])
 
 		#Now let us process, file parents, file lumi, file outputmodconfigs, association 
