@@ -2,13 +2,13 @@
 """
 This module provides Block.UpdateStats data access object.
 """
-__revision__ = "$Id: UpdateStats.py,v 1.5 2010/02/17 22:31:32 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: UpdateStats.py,v 1.6 2010/03/03 22:35:54 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class UpdateStats(DBFormatter):
     """
-    FileType GetID DAO class.
+    Block UpdateStats DAO class.
     """
     def __init__(self, logger, dbi, owner):
         """

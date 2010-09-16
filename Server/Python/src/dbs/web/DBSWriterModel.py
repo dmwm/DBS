@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.23 2010/02/15 15:51:21 afaq Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.24 2010/03/03 22:35:54 afaq Exp $"
+__version__ = "$Revision: 1.24 $"
 
 import re
 import cjson
@@ -36,6 +36,7 @@ class DBSWriterModel(DBSReaderModel):
         self.addService('POST', 'sites', self.insertSite)
         self.addService('POST', 'blocks', self.insertBlock)
         self.addService('POST', 'files', self.insertFile)
+	self.addService('PUT', 'files', self.updateFileStatus)
 
     def insertPrimaryDataset(self):
         """
@@ -249,4 +250,20 @@ class DBSWriterModel(DBSReaderModel):
     
 	except Exception, ex:
 	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+   
+    def updateFileStatus(self, logical_file_name="", is_file_valid=-1):
+	"""
+	API to update fil status
+	"""
+
+        import pdb
+	pdb.set_trace()
     
+	try:
+	    self.dbsFile.updateStatus(logical_file_name, is_file_valid)
+	except Exception, ex:
+	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+
+
+
+
