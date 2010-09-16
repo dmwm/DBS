@@ -2,8 +2,8 @@
 """
 This module provides File.UpdateStatus data access object.
 """
-__revision__ = "$Id: UpdateStatus.py,v 1.2 2010/03/04 17:25:31 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: UpdateStatus.py,v 1.3 2010/03/05 17:12:24 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -25,6 +25,8 @@ class UpdateStatus(DBFormatter):
         """
         for a given file
         """	
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/File/UpdateStatus expects db connection from up layer.")
 	binds = { "logical_file_name" : logical_file_name , "is_file_valid" : is_file_valid }
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

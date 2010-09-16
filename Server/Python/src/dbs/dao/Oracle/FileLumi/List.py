@@ -2,8 +2,8 @@
 """
 This module provides FileLumi.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2010/02/18 20:09:18 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: List.py,v 1.4 2010/03/05 17:16:01 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -27,12 +27,12 @@ JOIN %sFILES F ON F.FILE_ID = FL.FILE_ID
 JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 """ % ((self.owner,)*3)
 
-    def execute(self, logical_file_name='', block_name='', conn=None):
+    def execute(self, conn, logical_file_name='', block_name=''):
         """
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-            conn = self.dbi.connection()
+            raise Exception("dbs/dao/Oracle/FileLumi/List expects db connection from up layer.")
             
         sql = self.sql
         
