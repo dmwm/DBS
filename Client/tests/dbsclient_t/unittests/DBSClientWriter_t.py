@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.13 2010/03/18 14:40:32 afaq Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.14 2010/03/18 17:13:26 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 import os
 import sys
@@ -45,7 +45,8 @@ outDict={
 "release_version" : release_version,
 "site" : site,
 "block" : block,
-"files" : []
+"files" : [],
+"runs" : [1,2,3]
 }
 
 class DBSClientWriter_t(unittest.TestCase):
@@ -200,8 +201,8 @@ class DBSClientWriter_t(unittest.TestCase):
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
-		                      {'lumi_section_num': u'26422', 'run_num': u'1'},
-		                      {'lumi_section_num': u'29838', 'run_num': u'1'}
+		                      {'lumi_section_num': u'26422', 'run_num': u'2'},
+		                      {'lumi_section_num': u'29838', 'run_num': u'3'}
                                   ],
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
@@ -227,8 +228,8 @@ class DBSClientWriter_t(unittest.TestCase):
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
-		                      {'lumi_section_num': u'26422', 'run_num': u'1'},
-		                      {'lumi_section_num': u'29838', 'run_num': u'1'}
+		                      {'lumi_section_num': u'26422', 'run_num': u'2'},
+		                      {'lumi_section_num': u'29838', 'run_num': u'3'}
                                   ],
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
@@ -247,13 +248,9 @@ class DBSClientWriter_t(unittest.TestCase):
 
     def test19(self):
 	"""test19 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status"""
-	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=0)
+	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=1)
 
     def test20(self):
-	"""test20 web.DBSClientWriter.updateDatasetRunStatus: should be able to update run status"""
-	api.updateDatasetRunStatus(dataset=dataset, run_number=1, complete=1)
-
-    def test21(self):
 	    """test20 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
 	    api.updateDatasetType(dataset=dataset, dataset_type="production")	 
 	
