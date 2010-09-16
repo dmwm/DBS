@@ -2,8 +2,8 @@
 """
 DBS Insert Buffer Polling Module
 """
-__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.7 2010/07/23 18:49:30 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSInsertBufferPoller.py,v 1.8 2010/07/23 19:11:38 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 
 """
@@ -97,7 +97,7 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	    blks = self.getBlocks()
 	    for ablk_id in blks:
 	        bufferedinput = self.getBufferedFiles(ablk_id["block_id"])
-	        insertinput = [eval(afile['file_blob'])  for afile in bufferedinput ]
+	        insertinput = [eval(afile['file_clob'])  for afile in bufferedinput ]
 	        #for afile in insertinput:
 		    #self.logger.debug("run_inserts : %s" % afile.keys() )
 		    #self.logger.debug("run_inserts : %s" % afile['file_output_config_list'] )
@@ -108,7 +108,7 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	except Exception, ex:
 	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
 	    try:
-		self.reportStatus("ERROR: %s" %ex)
+		self.reportStatus("ERROR")
 	    except Exception, ex:
 		self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
 	
