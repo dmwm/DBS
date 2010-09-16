@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.5 2010/01/26 21:02:12 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.6 2010/01/26 22:43:57 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import os
 import sys
@@ -144,6 +144,35 @@ class DBSClientWriter_t(unittest.TestCase):
 	api.insertBlock(blockObj=data)
 
     def test15(self):
+	"""test15 web.DBSClientWriter.insertFiles: insert parent file for later use : basic test"""
+	
+	flist=[]
+ 	for i in range(10):
+	    f={  
+		'adler32': u'NOTSET', 'file_type': 'EDM',
+                'file_output_config_list': 
+		    [ 
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+		    ],
+                'dataset': dataset,
+                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'check_sum': u'1504266448',
+                'file_lumi_list': [
+	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
+		                      {'lumi_section_num': u'26422', 'run_num': u'1'},
+		                      {'lumi_section_num': u'29838', 'run_num': u'1'}
+                                  ],
+                'file_parent_list': [ ],
+                'event_count': u'1619',
+                'logical_file_name': "/store/mc/parent_%s/%i.root" %(uid, i),
+                'block': block
+			    #'is_file_valid': 1
+                }
+	    flist.append(f)
+	api.insertFiles(filesList={"files":flist})
+
+
+    def test16(self):
 	"""test15 web.DBSClientWriter.insertFiles: basic test"""
 	
 	flist=[]
@@ -162,7 +191,7 @@ class DBSClientWriter_t(unittest.TestCase):
 		                      {'lumi_section_num': u'26422', 'run_num': u'1'},
 		                      {'lumi_section_num': u'29838', 'run_num': u'1'}
                                   ],
-                'file_parent_list': [ ],
+                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/%s/%i.root" %(uid, i),
                 'block': block
@@ -171,7 +200,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	    flist.append(f)
 	api.insertFiles(filesList={"files":flist})
 
-    def test16(self):
+    def test17(self):
 	"""test16 web.DBSClientWriter.insertFiles: duplicate insert file shuld not raise any errors"""
 	flist=[]
  	for i in range(10):
@@ -189,7 +218,7 @@ class DBSClientWriter_t(unittest.TestCase):
 		                      {'lumi_section_num': u'26422', 'run_num': u'1'},
 		                      {'lumi_section_num': u'29838', 'run_num': u'1'}
                                   ],
-                'file_parent_list': [ ],
+                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/%s/%i.root" %(uid, i),
                 'block': block
@@ -199,7 +228,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	    outDict['files'].append(f['logical_file_name'])
 	api.insertFiles(filesList={"files":flist})
 	
-    def test17(self):
+    def test18(self):
 	infoout=open("info.dict", "w")
 	infoout.write("info="+str(outDict))
 	infoout.close()

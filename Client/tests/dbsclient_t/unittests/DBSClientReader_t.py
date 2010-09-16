@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.6 2010/01/26 22:18:29 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.7 2010/01/26 22:43:57 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 import os
 import json
@@ -103,6 +103,17 @@ class DBSClientReader_t(unittest.TestCase):
 	else:
 	    self.fail("exception was excepted, was not raised")
 	api.listFileParents(lfn="doesnotexist")
+
+    def test08(self):
+	"""unittestDBSClientReader_t.listFileLumis: basic test"""	
+	api.listFileLumis(lfn=testparams['files'][0])
+	try:
+	    api.listFileLumis()
+	except:
+	    pass
+	else:
+	    self.fail("exception was excepted, was not raised")
+	api.listFileLumis(lfn="doesnotexist")
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
