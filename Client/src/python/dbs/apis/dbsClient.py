@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.28 $"
-# $Id: dbsClient.py,v 1.28 2010/03/12 15:16:11 afaq Exp $"
+# $Revision: 1.29 $"
+# $Id: dbsClient.py,v 1.29 2010/03/12 16:22:49 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -23,7 +23,7 @@ class DbsApi:
 		self.proxy=proxy
 		self.opener =  urllib2.build_opener()
 
-	def callServer(self, urlplus="", params={}):
+	def callServer(self, urlplus="", params={}, callmethod='POST'):
 		"""
         	* callServer
 		* API to make HTTP call to the DBS Server
@@ -50,7 +50,7 @@ class DbsApi:
 			else:
 				params = cjson.encode(params)
 				req = urllib2.Request(url=calling, data=params, headers = headers)
-				req.get_method = lambda: 'POST'
+				req.get_method = lambda: callmethod
 				data = self.opener.open(req)
 			res = data.read()
 		except urllib2.HTTPError, httperror:
@@ -378,8 +378,32 @@ class DbsApi:
 		    
 		return self.callServer("/blocks?%s" %url_param)
 
+	def updateFileStatus(self, lfn="", status=-1):
+	    """
+	    API to update file status
+	    * lfn : logical_file_name
+	    * status : valid=1, invalid=0
+	    """
+	    return self.callServer("/files?logical_file_name&is_file_valid=%s" %(lfn, status), params={}, callmethod='PUT')
+	    
+	def updateDatasetStatus(self, dataset, status):
+	    """
+	    API to update dataset status
+	    * dataset : dataset name
+	    * status : valid=1, invalid=0
+	    *
+	    """
+	    return self.callServer("/datasets?dataset=%s&is_dataset_valid" %(dataset, status), params={}, callmethod='PUT')    
 		
-
+	def updateDatasetRunStatus(self, dataset="", run_number=-1, complete=1):
+	    """
+	    API to update dataset run status 
+	    * dataset : dataset name
+	    * run_number : the run number taht needs to be updated
+	    * complete : 1/0 mark it complete
+	    """
+	    return self.callServer("/runs?dataset=%s&run_number=%s&complete=%s" %(dataset, run_number, complete), params={}, callmethod='PUT')
+	    
 if __name__ == "__main__":
 	# DBS Service URL
 	url="http://cmssrv18.fnal.gov:8586/dbs3"
@@ -389,3 +413,4 @@ if __name__ == "__main__":
 	api = DbsApi(url=url, proxy=read_proxy)
 	print api.listPrimaryDatasets()
 
+    
