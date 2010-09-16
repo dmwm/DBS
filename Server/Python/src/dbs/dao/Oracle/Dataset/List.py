@@ -2,8 +2,8 @@
 """
 This module provides Dataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.17 2010/02/11 18:03:24 afaq Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: List.py,v 1.18 2010/02/19 17:29:22 yuyi Exp $"
+__version__ = "$Revision: 1.18 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -49,8 +49,8 @@ AND DP.DATASET_TYPE <> 'DELETED'
         """
         dataset is a wild card parameter and can include % character
         """	
-        if not conn:
-            conn = self.dbi.connection()
+        #if not conn:
+        #    conn = self.dbi.connection()
             
         sql = self.sql
         cursor = conn.connection.cursor()
@@ -64,5 +64,5 @@ AND DP.DATASET_TYPE <> 'DELETED'
             cursor.execute(sql, binds)
             
         result = self.formatCursor(cursor)
-        conn.close()
+        #conn.close()
         return result
