@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.28 2010/03/15 14:50:51 yuyi Exp $"
-__version__ = "$Revision: 1.28 $"
+__revision__ = "$Id: DBSDataset.py,v 1.29 2010/03/15 16:30:04 afaq Exp $"
+__version__ = "$Revision: 1.29 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -47,7 +47,8 @@ class DBSDataset:
         trans = conn.begin()
 
         try :
-            self.updatestatus.execute(conn, trans, dataset, is_dataset_valid)
+            self.updatestatus.execute(conn, dataset, is_dataset_valid, trans)
+	    trans.commit()
 	except Exception, ex:
 	    trans.rollback()
             raise ex

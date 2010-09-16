@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset Run table. 
 """
 
-__revision__ = "$Id: DBSRun.py,v 1.4 2010/03/09 16:38:03 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSRun.py,v 1.5 2010/03/15 16:30:04 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -40,6 +40,8 @@ class DBSRun:
 		elif logical_file_name:
 			ret=self.flrunlist.execute(conn, logical_file_name, minRun, maxRun, tran)
 		else:
+			if minRun==-1 and maxRun==-1:
+			    raise Exception ("DBS Error: you must provide parameters to lisRuns call")
         		ret=self.runlist.execute(conn, minRun, maxRun, tran)
 		return ret
 
@@ -57,11 +59,12 @@ class DBSRun:
         trans = conn.begin()
 
         try :
-             self.updatestatus.execute(conn, trans, dataset, run_number, complete)
+	    self.updatestatus.execute(conn, dataset, run_number, complete, trans)
+	    trans.commit()
         except Exception, ex:
-             trans.rollback()
-             raise ex
+	    trans.rollback()
+	    raise ex
         finally:
-               trans.close()
-               conn.close()
+	    trans.close()
+	    conn.close()
     

@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.27 2010/03/12 16:20:58 afaq Exp $"
-__version__ = "$Revision: 1.27 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.28 2010/03/15 16:30:05 afaq Exp $"
+__version__ = "$Revision: 1.28 $"
 
 import re
 import cjson
@@ -257,7 +257,6 @@ class DBSWriterModel(DBSReaderModel):
 	"""
 	API to update file status
 	"""
-
 	try:
 	    self.dbsFile.updateStatus(logical_file_name, is_file_valid)
 	except Exception, ex:
