@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.17 2010/08/31 18:27:35 yuyi Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.18 2010/09/14 14:49:55 yuyi Exp $"
+__version__ = "$Revision: 1.18 $"
 
 import threading
 import logging
@@ -673,7 +673,9 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 #
                 del dataset["processed_ds_name"]
                 #3 Deal with Acquisition era
-                aq = blockcontent['acquisition_era']
+                aq={}
+                if blockcontent.has_key('acquisition_era'):
+                    aq = blockcontent['acquisition_era']
                 #is there acquisition?
                 if aq:
                 #check if acquisition in cache
@@ -699,7 +701,9 @@ class DBSMigrationEngine(BaseWorkerThread) :
                     #no acquisition era for this dataset
                     pass
                 #4 Deal with Processing era
-                pera = blockcontent['processing_era']
+                pera={}
+                if (blockcontent.has_key('processing_era')):
+                    pera = blockcontent['processing_era']
                 #is there processing era?
                 if pera:
                     #import pdb
