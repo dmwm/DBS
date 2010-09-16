@@ -3,8 +3,8 @@
 This module provides Block.ListStats data access object.
 Block parameters based on current conditions at DBS, are listed by this DAO
 """
-__revision__ = "$Id: ListStats.py,v 1.1 2010/01/04 21:02:19 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: ListStats.py,v 1.2 2010/01/05 00:24:57 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -20,10 +20,10 @@ class ListStats(DBFormatter):
         self.owner = "%s." % owner
 	self.sql = """SELECT count(*) AS FILE_COUNT, 
 			SUM(FILE_SIZE) AS BLOCK_SIZE,
-			f.Block AS BLOCK_ID
+			f.BLOCK_ID AS BLOCK_ID
 			FROM %sFILES f 
 				WHERE f.IS_FILE_VALID=1
-				    AND f.Block = :block_id""" % (self.owner)
+				    AND f.BLOCK_ID = :block_id  group by BLOCK_ID""" % (self.owner)
 	
     def execute(self, block_id, conn = None, transaction = False):
         """

@@ -1,42 +1,21 @@
 #!/usr/bin/env python
 """ DAO Object for DatasetParents table """ 
 
-__revision__ = "$Revision: 1.2 $"
-__version__  = "$Id: Insert.py,v 1.2 2009/10/20 02:19:19 afaq Exp $ "
+__revision__ = "$Revision: 1.3 $"
+__version__  = "$Id: Insert.py,v 1.3 2010/01/05 00:24:58 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
 class Insert(DBFormatter):
 
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
             DBFormatter.__init__(self, logger, dbi)
-            self.owner = "%s." % self.dbi.engine.url.username
+            self.owner = "%s." % owner
+	    self.logger = logger
 
-            self.sql = """INSERT INTO %sDATASET_PARENTS ( DATASET_PARENT_ID, THIS_DATASET_ID, PARENT_DATASET_ID) VALUES (:datasetparentid, :thisdatasetid, :parentdatasetid) % (self.owner) ;"""
-
-    def getBinds_delme( self, dataset_parentsObj ):
-            binds = {}
-            if type(dataset_parentsObj) == type ('object'):
-            	binds = {
-			'datasetparentid' : dataset_parentsObj['datasetparentid'],
-			'thisdatasetid' : dataset_parentsObj['thisdatasetid'],
-			'parentdatasetid' : dataset_parentsObj['parentdatasetid'],
-                 }
-
-            elif type(dataset_parentsObj) == type([]):
-               binds = []
-               for item in dataset_parentsObj:
-                   binds.append({
- 	                'datasetparentid' : item['datasetparentid'],
- 	                'thisdatasetid' : item['thisdatasetid'],
- 	                'parentdatasetid' : item['parentdatasetid'],
- 	                })
-               return binds
-
-
-    def execute( self, dataset_parentsObj, conn=None, transaction=False ):
-            ##binds = self.getBinds( dataset_parentsObj )
+            self.sql = """INSERT INTO %sDATASET_PARENTS ( DATASET_PARENT_ID, THIS_DATASET_ID, PARENT_DATASET_ID) VALUES (:dataset_parent_id, :this_dataset_id, :parent_dataset_id)""" % (self.owner)
+	    
+    def execute( self, binds, conn=None, transaction=False ):
             result = self.dbi.processData(self.sql, binds, conn, transaction)
-            return
 
 

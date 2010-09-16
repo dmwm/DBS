@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.13 2009/12/29 20:40:49 afaq Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSFile.py,v 1.14 2010/01/05 00:24:57 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -27,7 +27,12 @@ class DBSFile:
         self.blockid = daofactory(classname = "Block.GetID")
         self.blocklist = daofactory(classname = "Block.List")
         self.ftypeid = daofactory(classname = "FileType.GetID")
-	self.fpblist = daofactory(classname = "FileParentBlock.List")
+	self.fpbdlist = daofactory(classname = "FileParentBlock.List")
+	self.blkparentin = daofactory(classname = "BlockParent.Insert")
+	self.dsparentin = daofactory(classname = "DatasetParent.Insert")
+	self.blkstats = daofactory(classname = "Block.ListStats")
+	self.blkstatsin = daofactory(classname = "Block.UpdateStats")
+	self.outconfigid = daofactory(classname='OutputModuleConfig.GetID')
 
     def listFiles(self, dataset="", block_name="", logical_file_name=""):
         """
@@ -66,15 +71,15 @@ class DBSFile:
             fparents2insert = []
             flumis2insert = []
 	    fconfigs2insert = []
-	    fpblks = []
-	    fpds = []
+	    fidl=[]
 
 	    firstfile = businput[0]
 	    # first check if the dataset exists
 	    # and block exists that files are suppose to be going to and is OPEN for writing
 	    dataset_id = self.datasetid.execute(firstfile["dataset"], conn, True)
-	    block_info = self.blocklist.execute(block_name=firstfile["block"], conn, True)
-	    assert block_info
+	    block_info = self.blocklist.execute(block_name=firstfile["block"])
+	    assert len(block_info)==1
+	    block_info=block_info[0]
 	    assert block_info["block_id"]
 	    assert block_info["open_for_writing"]==1
 	    block_id = block_info["block_id"]
@@ -113,76 +118,75 @@ class DBSFile:
 		#FIXME: Add this later if f.get("branch_hash", "") not in ("", None): filein["branch_hash"]=self.fbranchid.execute( f.get("branch_hash"), conn, True)
 		# filein will be what goes into database, we will collect them for bulk insert in files2insert
 		files2insert.append(filein)
+		# Saving the id for later use
+		fidl.append(filein["file_id"])
 	    
 		#Now let us process, file parents, file lumi, file outputmodconfigs, association 
 
 		#file lumi sections
-                fllist = f["file_lumi_list"]
-                if(len(fllist) > 0):
-                    iLumi = 0
-                    flIncrement = 1000
-                    flID = self.sm.increment("SEQ_FLM", conn, True)
-                    for fl in fllist:
-                        if iLumi == flIncrement:
-                            flID =  self.sm.increment("SEQ_FLM", conn, True)
-                            iLumi = 0
-			fldao={ 
-			    "run_num" : fl["run_num"],
-			    "lumi_section_num" : fl["lumi_section_num"] 
-			}
-                        fldao["file_lumi_id"] = flID + iLumi
-                        iLumi += 1
-                        fldao["file_id"] = filein["file_id"]
-			flumis2insert.append(fldao)
-	  
-                #file parents    
-                fplist = f["file_parent_list"]
-                if(len(fplist) > 0):
-                    iParent = 0
-                    fpIncrement = 120
-                    fpID = self.sm.increment("SEQ_FP", conn, True)
-                    
-                    for fp in fplist:
-                        if iParent == fpIncrement:
-                            fpID = self.sm.increment("SEQ_FP", conn, True)
-                            iParent  = 0
-			fpdao={}
-                        fpdao["file_parent_id"] = fpID + iParent
-                        iParent += 1 
-                        fpdao["this_file_id"] = filein["file_id"]
-                        lfn = fp["file_parent_lfn"]
-                        fpdao["parent_file_id"] = self.fileid.execute(lfn, conn, True)
-			fparents2insert.append(fpdao)
-
-		#file output config modules
-		foutconfigs = f["file_output_config_list"]
-		if(len(foutconfigs) > 0):
-		    iConfig = 0
-		    fconfigInc = 5
-		    fcID = self.sm.increment("SEQ_FC", conn, True)
-		    for fc in foutconfigs:
-			if iConfig == fconfigInc:
-			    fcID = self.sm.increment("SEQ_FC", conn, True)
-			    iConfig = 0
-			fcdao={}
-			fcdao["file_output_config_id"] = fcID + iConfig
-			iConfig += 1
-			fcdao["file_id"] = filein["file_id"]
-			fcdao["output_mod_config_id"]= self.outconfigid.execute(fc["app_name"], \
-				                        fc["version"], fc["hash"], conn, True)
-			fconfigs2insert.append(fcdao)
-
-		# List the parent blocks and datasets of this file's parents (parent of this block and dataset)
-		# fpbdlist, returns a tuple of (block, dataset) combination
-		fileParentBlocksDatasets = self.fpbdlist.execute(fileID=filein["file_id"], conn, True)
-		for (pblk, pds) in fileParentBlocksDatasets:
-		    if pblk not in fpblks:
-			fpblks.append(pblk)
-		    if pds not in fpds:
-			fpds.append(pds)
-		
-		#FIXME: file associations?-- in a later release
+		if f.has_key("file_lumi_list"):
+		    fllist = f["file_lumi_list"]
+		    if(len(fllist) > 0):
+			iLumi = 0
+			flIncrement = 1000
+			flID = self.sm.increment("SEQ_FLM", conn, True)
+			for fl in fllist:
+			    if iLumi == flIncrement:
+				flID =  self.sm.increment("SEQ_FLM", conn, True)
+				iLumi = 0
+			    fldao={ 
+				"run_num" : fl["run_num"],
+				"lumi_section_num" : fl["lumi_section_num"] 
+			    }
+			    fldao["file_lumi_id"] = flID + iLumi
+			    iLumi += 1
+			    fldao["file_id"] = filein["file_id"]
+			    flumis2insert.append(fldao)
     
+		if f.has_key("file_parent_list"):
+		    #file parents    
+		    fplist = f["file_parent_list"]
+		    if(len(fplist) > 0):
+			iParent = 0
+			fpIncrement = 120
+			fpID = self.sm.increment("SEQ_FP", conn, True)
+                    
+			for fp in fplist:
+			    if iParent == fpIncrement:
+				fpID = self.sm.increment("SEQ_FP", conn, True)
+				iParent  = 0
+			    fpdao={}
+			    fpdao["file_parent_id"] = fpID + iParent
+			    iParent += 1 
+			    fpdao["this_file_id"] = filein["file_id"]
+			    lfn = fp["file_parent_lfn"]
+			    fpdao["parent_file_id"] = self.fileid.execute(lfn, conn, True)
+			    fparents2insert.append(fpdao)
+
+	        import pdb
+	        pdb.set_trace()
+    
+		if f.has_key("file_output_config_list"):
+		    #file output config modules
+		    foutconfigs = f["file_output_config_list"]
+		    if(len(foutconfigs) > 0):
+			iConfig = 0
+			fconfigInc = 5
+			fcID = self.sm.increment("SEQ_FC", conn, True)
+			for fc in foutconfigs:
+			    if iConfig == fconfigInc:
+				fcID = self.sm.increment("SEQ_FC", conn, True)
+				iConfig = 0
+			    fcdao={}
+			    fcdao["file_output_config_id"] = fcID + iConfig
+			    iConfig += 1
+			    fcdao["file_id"] = filein["file_id"]
+			    fcdao["output_mod_config_id"]= self.outconfigid.execute(fc["app_name"], \
+				                        fc["version"], fc["hash"], conn, True)
+			    fconfigs2insert.append(fcdao)
+			
+		#FIXME: file associations?-- in a later release
+		
 	    # insert files
 	    self.filein.execute(files2insert, conn, True)
 	    # insert file lumi sections
@@ -194,15 +198,26 @@ class DBSFile:
 	    # insert output module config mapping
 	    if fconfigs2insert:
 		self.fconfigin.execute(fconfigs2insert, conn, True)
-
+	
+	    # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
+	    # fpbdlist, returns a dict of {block_id, dataset_id} combination
+	    fpblks=[]
+	    fpds=[]
+	    fileParentBlocksDatasets = self.fpbdlist.execute(fidl, conn, True)
+	    for adict in fileParentBlocksDatasets:
+		if adict["block_id"] not in fpblks:
+		    fpblks.append(adict["block_id"])
+	        if adict["dataset_id"] not in fpds:
+			fpds.append(adict["dataset_id"])
+    
 	    # Update Block parentage
-	    if len(fpblk) > 0 :
+	    if len(fpblks) > 0 :
 		# we need to bulk this, number of parents can get big in rare cases
 		bpdaolist=[]
 		iPblk = 0
 		fpblkInc = 10
 		bpID = self.sm.increment("SEQ_BP", conn, True)
-		for ablk in fpblk:
+		for ablk in fpblks:
 		    if iPblk == fpblkInc:
 			bpID = self.sm.increment("SEQ_BP", conn, True)
 			iPblk = 0
@@ -210,7 +225,8 @@ class DBSFile:
 		    bpdao["parent_block_id"] = ablk
 		    bpdao["block_parent_id"] = bpID
 		    bpdaolist.append(bpdao)
-		self.blkparentin.execute(bpdaolist, conn, True)	
+		# insert them all
+		self.blkparentin.execute(bpdaolist, conn, True)
 
 	    # Update dataset parentage
 	    if len(fpds) > 0 :
@@ -224,16 +240,22 @@ class DBSFile:
                         iPds = 0
                     dsdao={ "this_dataset_id": dataset_id }
                     dsdao["parent_dataset_id"] = ads
-                    dsdao["dataset_parent_id"] = dsID
+                    dsdao["dataset_parent_id"] = pdsID # PK of table 
                     dsdaolist.append(dsdao)
+		# insert them all
                 self.dsparentin.execute(dsdaolist, conn, True)
-	    	    
+	    
 	    # Update block parameters, file_count, block_size
-	    self.dsupdateblk.execute(block_name=firstfile["block"], conn, True)
+	    blkParams=self.blkstats.execute(block_id, conn, True)
+	    self.blkstatsin.execute(blkParams, conn, True)
 
 	    # All good ?. 
             tran.commit()
 
+#except exceptions.IntegrityError, ex:
+#	            self.logger.warning("Unique constraint violation being ignored...")
+#		                self.logger.warning("%s" % ex)
+	
         except Exception, e:
             tran.rollback()
             self.logger.exception(e)
