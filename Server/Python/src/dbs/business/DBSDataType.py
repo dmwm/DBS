@@ -3,8 +3,8 @@
 This module provides business object class to interact with primary_ds_types table. 
 """
 
-__revision__ = "$Id: DBSDataType.py,v 1.2 2010/03/19 15:04:47 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSDataType.py,v 1.3 2010/06/23 21:21:17 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -27,7 +27,7 @@ class DBSDataType:
 	try:
 	    conn = self.dbi.connection()
 	    if dataset and dataType:
-		raise Exception("DBSDataType can be only query by a data type or by a dataset, not both.")
+		raise Exception("Data Type can be only queried by data_type or by dataset, not both.")
 	    else:
 		result=self.dataType.execute(conn, dataType, dataset)
 	    return result

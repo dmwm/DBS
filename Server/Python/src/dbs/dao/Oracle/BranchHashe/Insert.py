@@ -1,8 +1,8 @@
 !/usr/bin/env python
 """ DAO Object for BranchHashes table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2010/03/05 15:41:53 yuyi Exp $ "
+__revision__ = "$Revision: 1.8 $"
+__version__  = "$Id: Insert.py,v 1.8 2010/06/23 21:21:19 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -17,7 +17,7 @@ class Insert(DBFormatter):
 
     def execute( self, conn, binds, transaction=False ):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/BranchHashes expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/BranchHashes expects db connection from upper layer.")
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
 	return
 

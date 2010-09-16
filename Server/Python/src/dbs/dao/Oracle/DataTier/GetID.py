@@ -2,8 +2,8 @@
 """
 This module provides DataTier.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.4 2010/03/05 17:00:53 yuyi Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: GetID.py,v 1.5 2010/06/23 21:21:20 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -28,7 +28,7 @@ FROM %sDATA_TIERS DT
         returns id for a given datatier name
         """
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/DataTier/GetID expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/DataTier/GetID expects db connection from upper layer.")
         sql = self.sql
         sql += "WHERE DT.DATA_TIER_NAME = :datatier" 
         binds = {"datatier":name}

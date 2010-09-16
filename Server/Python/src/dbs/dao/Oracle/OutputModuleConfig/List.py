@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.15 2010/03/05 19:09:32 yuyi Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: List.py,v 1.16 2010/06/23 21:21:24 afaq Exp $"
+__version__ = "$Revision: 1.16 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
@@ -37,7 +37,7 @@ class List(DBFormatter):
         returns id for a given application
         """	
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/OutputModuleConfig/List expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/OutputModuleConfig/List expects db connection from upper layer.")
 	sql=self.sql	
         binds = {}
 	setAnd=False

@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.42 2010/06/14 15:08:42 afaq Exp $"
-__version__ = "$Revision: 1.42 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.43 2010/06/23 21:21:27 afaq Exp $"
+__version__ = "$Revision: 1.43 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -24,6 +24,8 @@ from dbs.business.DBSStatus import DBSStatus
 from dbs.business.DBSMigrate import DBSMigrate
 
 
+from cherrypy import server
+
 __server__version__ = "$Name:  $"
 
 class DBSReaderModel(RESTModel):
@@ -36,7 +38,12 @@ class DBSReaderModel(RESTModel):
         """
         RESTModel.__init__(self, config)
         self.version = self.getServerVersion()
-        
+      
+	self.logger.warning("<<<<<<<<<<<<<DBS SERVER IS NO AVAILABLE ON>>>>>>>>> %s/%s" \
+					% (server.base(), config._internal_name))
+
+	self.logger.warning("<<<<<<<<<<<<<DBS SERVER IS CONNECTING TO ::::: %s" % config.database)
+    	
 	#FIXME : addService can be replaced safely with addMethod from Framework
     
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}

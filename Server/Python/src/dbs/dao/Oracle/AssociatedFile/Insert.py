@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for AssociatedFiles table """ 
 
-__revision__ = "$Revision: 1.5 $"
-__version__  = "$Id: Insert.py,v 1.5 2010/03/05 15:06:24 yuyi Exp $ "
+__revision__ = "$Revision: 1.6 $"
+__version__  = "$Id: Insert.py,v 1.6 2010/06/23 21:21:18 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -36,7 +36,7 @@ class Insert(DBFormatter):
 
     def execute( self, associated_filesObj, conn, transaction=False ):
 	    if not conn:
-		raise Exception("dbs/dao/Oracle/AssociatedFile/Insert expect db connection from up layer.")
+		raise Exception("dbs/dao/Oracle/AssociatedFile/Insert expect db connection from upper layer.")
             ##binds = self.getBinds( associated_filesObj )
             result = self.dbi.processData(self.sql, binds, conn, transaction)
             return

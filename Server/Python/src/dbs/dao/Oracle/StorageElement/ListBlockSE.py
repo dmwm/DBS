@@ -2,8 +2,8 @@
 """
 This module provides StorageElement.ListBlockSE data access object.
 """
-__revision__ = "$Id: ListBlockSE.py,v 1.3 2010/03/05 20:17:42 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: ListBlockSE.py,v 1.4 2010/06/23 21:21:27 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -33,7 +33,7 @@ class ListBlockSE(DBFormatter):
         """
 
 	if not conn:
-		raise Exception("dbs/dao/Oracle//Insert expects db connection from up layer.")
+		raise Exception("dbs/dao/Oracle//Insert expects db connection from upper layer.")
 	sql = self.sql
 
 	binds={ "block_name" : block_name }

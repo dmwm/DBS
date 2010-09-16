@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for Blocks table """ 
 
-__revision__ = "$Revision: 1.10 $"
-__version__  = "$Id: Insert.py,v 1.10 2010/03/09 16:38:03 afaq Exp $ "
+__revision__ = "$Revision: 1.11 $"
+__version__  = "$Id: Insert.py,v 1.11 2010/06/23 21:21:18 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -19,7 +19,7 @@ class Insert(InsertSingle):
         file_count, creation_date, create_by, lastmodification_date, lastmodified_by
         """
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Block/Insert expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/Block/Insert expects db connection from upper layer.")
         self.executeSingle(conn, daoinput, "BLOCKS", transaction)
             
 

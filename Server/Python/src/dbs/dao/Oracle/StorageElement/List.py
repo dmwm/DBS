@@ -2,8 +2,8 @@
 """
 This module provides StorageElement.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.2 2010/03/05 20:17:42 yuyi Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: List.py,v 1.3 2010/06/23 21:21:26 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -29,7 +29,7 @@ class List(DBFormatter):
         """
 
 	if not conn:
-		raise Exception("dbs/dao/Oracle/StorageElement/List expects db connection from up layer.")
+		raise Exception("dbs/dao/Oracle/StorageElement/List expects db connection from upper layer.")
 	sql = self.sql
 	
 	if se_name:

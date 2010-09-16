@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ProcessedDatasets table """ 
 
-__revision__ = "$Revision: 1.8 $"
-__version__  = "$Id: Insert.py,v 1.8 2010/03/05 19:51:41 yuyi Exp $ "
+__revision__ = "$Revision: 1.9 $"
+__version__  = "$Id: Insert.py,v 1.9 2010/06/23 21:21:26 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -26,7 +26,7 @@ class Insert(DBFormatter):
         processeddsid, processeddsname
 	"""
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/ProcessedDataset/Insert expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/ProcessedDataset/Insert expects db connection from upper layer.")
         try:
             self.dbi.processData(self.sql, daoinput, conn, transaction)
         except exceptions.IntegrityError, ex:

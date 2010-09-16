@@ -2,8 +2,8 @@
 """
 This module provides FileParent.ListChild data access object.
 """
-__revision__ = "$Id: ListChild.py,v 1.1 2010/04/21 19:50:56 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: ListChild.py,v 1.2 2010/06/23 21:21:24 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -33,7 +33,7 @@ JOIN %sFILES F ON  F.FILE_ID = FP.PARENT_FILE_ID
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-            raise Exception("dbs/dao/Oracle/FileParent/ListChild expects db connection from up layer.")
+            raise Exception("dbs/dao/Oracle/FileParent/ListChild expects db connection from upper layer.")
         sql = self.sql
         sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
         binds = {"logical_file_name":logical_file_name}

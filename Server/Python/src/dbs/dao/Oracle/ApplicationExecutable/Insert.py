@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ApplicationExecutables table """ 
 
-__revision__ = "$Revision: 1.9 $"
-__version__  = "$Id: Insert.py,v 1.9 2010/03/08 20:05:04 yuyi Exp $ "
+__revision__ = "$Revision: 1.10 $"
+__version__  = "$Id: Insert.py,v 1.10 2010/06/23 21:21:18 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -16,7 +16,7 @@ class Insert(DBFormatter):
 
     def execute( self, conn, appExeObj, transaction=False ):
 	if not conn:
-	    raise Excpetion("dbs/dao/Oracle/ApplicationExecutable/Insert expects db connection from up layer.")
+	    raise Excpetion("dbs/dao/Oracle/ApplicationExecutable/Insert expects db connection from upper layer.")
 	try:
 	    #print self.sql
 	    #print appExeObj

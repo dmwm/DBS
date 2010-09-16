@@ -2,8 +2,8 @@
 """
 This module provides FileBuffer.DeleteFiles data access object.
 """
-__revision__ = "$Id: DeleteFiles.py,v 1.1 2010/05/25 21:01:55 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DeleteFiles.py,v 1.2 2010/06/23 21:21:23 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -26,6 +26,6 @@ class DeleteFiles(DBFormatter):
 	simple execute
         """	
         if not conn:
-            raise Exception("dbs/dao/Oracle/FileBuffer/DeleteFiles expects db connection from up layer.")
+            raise Exception("dbs/dao/Oracle/FileBuffer/DeleteFiles expects db connection from upper layer.")
         self.dbi.processData(self.sql, lfn, conn, transaction, returnCursor=True)
 

@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.30 2010/06/03 16:00:11 yuyi Exp $"
-__version__ = "$Revision: 1.30 $"
+__revision__ = "$Id: List.py,v 1.31 2010/06/23 21:21:23 afaq Exp $"
+__version__ = "$Revision: 1.31 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -40,7 +40,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
             release_version="", pset_hash="", app_name="", output_module_label="",
 	    maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[], transaction=False):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/File/List expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/File/List expects db connection from upper layer.")
 	sql = self.sql 
         binds = {}
 	if (minrun and minrun != -1) and (maxrun and maxrun != -1):

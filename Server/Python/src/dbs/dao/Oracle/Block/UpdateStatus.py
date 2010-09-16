@@ -2,8 +2,8 @@
 """
 This module provides Block.UpdateStatus data access object.
 """
-__revision__ = "$Id: UpdateStatus.py,v 1.1 2010/04/16 19:26:02 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: UpdateStatus.py,v 1.2 2010/06/23 21:21:18 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -26,7 +26,7 @@ class UpdateStatus(DBFormatter):
         for a given file
         """	
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Block/UpdateStatus expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/Block/UpdateStatus expects db connection from upper layer.")
 	binds = { "block_name" : block_name , "open_for_writing" : open_for_writing }
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

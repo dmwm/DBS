@@ -2,8 +2,8 @@
 """
 This module provides Dataset.UpdateStatus data access object.
 """
-__revision__ = "$Id: UpdateStatus.py,v 1.4 2010/03/15 16:30:05 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: UpdateStatus.py,v 1.5 2010/06/23 21:21:21 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -26,7 +26,7 @@ class UpdateStatus(DBFormatter):
         for a given file
         """	
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Dataset/ListStatus expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/Dataset/ListStatus expects db connection from upper layer.")
 	binds = { "dataset" : dataset , "is_dataset_valid" : is_dataset_valid}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

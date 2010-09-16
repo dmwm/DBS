@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.51 2010/06/07 18:03:47 yuyi Exp $"
-__version__ = "$Revision: 1.51 $"
+__revision__ = "$Id: DBSFile.py,v 1.52 2010/06/23 21:21:17 afaq Exp $"
+__version__ = "$Revision: 1.52 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -117,16 +117,16 @@ class DBSFile:
 	no-patterned lfn 
         """
 	if ('%' in block_name):
-	    raise Exception("You must specify exact block name not pattern")
+	    raise Exception("You must specify exact block name not a pattern")
 	elif ('%' in dataset):
-	    raise Exception("You must specify exact dataset name not pattern")
+	    raise Exception("You must specify exact dataset name not a pattern")
 	elif (not dataset  and not block_name and (not logical_file_name or '%'in logical_file_name)):
-	    raise Exception ("""You must specify one of the parameter groups:  non-parttened dataset, 
-				non-parttened block , non-parttened dataset with lfn ,  
-				non-parttened block with lfn or  no-patterned lfn. """)
+	    raise Exception ("""You must specify one of the parameter groups:  non-pattern dataset, 
+				non-pattern block , non-pattern dataset with lfn ,  
+				non-pattern block with lfn or no-pattern lfn. """)
 	elif (lumi_list and len(lumi_list) != 0):
 	    if (not maxrun or maxrun ==-1) and(not minrun or minrun == -1) and (minrun!=maxrun):
-		raise Exception(" lumi list must be companied by A run_num that is minrun==maxrun")
+		raise Exception(" lumi list must accompany A single run number, use minrun==maxrun")
 	else:
 	    pass
 	try:
@@ -247,7 +247,7 @@ class DBSFile:
 			#refresh the file_id from database
 			#filein["file_id"]=self.fileid.execute(filein["logical_file_name"], conn, transaction=tran)
 			# Lets move on to NEXT file, we do not want to continue processing this file
-			self.logger.warning("File already exists in DBS, not touching it: %s" %filein["logical_file_name"])
+			self.logger.warning("File already exists in DBS, not changing it: %s" %filein["logical_file_name"])
 			continue
 		    else:
 			raise	

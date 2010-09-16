@@ -4,8 +4,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.33 2010/06/03 15:58:56 yuyi Exp $"
-__version__ = "$Revision: 1.33 $"
+__revision__ = "$Id: List.py,v 1.34 2010/06/23 21:21:20 afaq Exp $"
+__version__ = "$Revision: 1.34 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -75,7 +75,7 @@ class List(DBFormatter):
                 primary_ds_type="", data_tier_name="", dataset_access_type="", transaction=False):
 
         if not conn:
-            raise Exception("dbs/dao/Oracle/Dataset/List expects db connection from up layer.")
+            raise Exception("dbs/dao/Oracle/Dataset/List expects db connection from upper layer.")
 
 	sql = ""
 	wheresql = self.wheresql

@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.38 2010/05/28 21:20:31 afaq Exp $"
-__version__ = "$Revision: 1.38 $"
+__revision__ = "$Id: DBSDataset.py,v 1.39 2010/06/23 21:21:17 afaq Exp $"
+__version__ = "$Revision: 1.39 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -117,7 +117,7 @@ class DBSDataset:
         all other parameters are not wild card ones.
         """
  	if(logical_file_name and logical_file_name.find("%")!=-1):
-	    raise Exception("listDataset API only works with fullly qualifiled logical_file_name. NO * is allowed in logical_file_name.")
+	    raise Exception("listDataset API only works with fullly qualified logical_file_name. NO * is allowed in logical_file_name.")
 	try:
 	    conn = self.dbi.connection()
 	    result = self.datasetlist.execute(conn, dataset,

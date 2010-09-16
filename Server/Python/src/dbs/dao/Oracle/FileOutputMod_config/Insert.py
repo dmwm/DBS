@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileOutputMod_configs table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2010/03/05 18:52:02 yuyi Exp $ "
+__revision__ = "$Revision: 1.8 $"
+__version__  = "$Id: Insert.py,v 1.8 2010/06/23 21:21:24 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -17,7 +17,7 @@ class Insert(DBFormatter):
 
     def execute( self, conn, binds, transaction=False ):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/FileOutputMod_config/Insert expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/FileOutputMod_config/Insert expects db connection from upper layer.")
 	try:
 	    
             result = self.dbi.processData(self.sql, binds, conn, transaction)

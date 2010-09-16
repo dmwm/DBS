@@ -2,8 +2,8 @@
 """
 This module provides ProcessingEra.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/03/05 19:55:48 yuyi Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: GetID.py,v 1.7 2010/06/23 21:21:26 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -29,7 +29,7 @@ class GetID(DBFormatter):
         returns id for a given processing version name
         """
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/ProcessingEra/GetID expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/ProcessingEra/GetID expects db connection from upper layer.")
         binds = {"processing_version":name}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)

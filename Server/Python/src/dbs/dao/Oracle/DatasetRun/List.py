@@ -2,8 +2,8 @@
 """
 This module provides DatasetRun.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.7 2010/03/23 19:40:27 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: List.py,v 1.8 2010/06/23 21:21:22 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -28,7 +28,7 @@ class List(DBFormatter):
         """
 
 	if not conn:
-		raise Exception("dbs/dao/Oracle/DatasetRun/List expects db connection from up layer.")	
+		raise Exception("dbs/dao/Oracle/DatasetRun/List expects db connection from upper layer.")	
         sql = self.sql
         binds = {}
 	if minrun > 0: 

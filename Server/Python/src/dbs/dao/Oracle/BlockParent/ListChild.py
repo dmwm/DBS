@@ -2,8 +2,8 @@
 """
 This module provides Block.ListChild data access object.
 """
-__revision__ = "$Id: ListChild.py,v 1.1 2010/04/19 15:41:20 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: ListChild.py,v 1.2 2010/06/23 21:21:19 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from WMCore.Database.MySQLCore import  MySQLInterface
@@ -30,7 +30,7 @@ class ListChild(DBFormatter):
         block: /a/b/c#d
         """	
 	if not conn:
-	    raise Exception("dbs/dao/Oarcle/BlockParent/ListChild expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oarcle/BlockParent/ListChild expects db connection from upper layer.")
         sql = self.sql
         binds = {}
 	if block_name:

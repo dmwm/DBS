@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileBuffer table """ 
 
-__revision__ = "$Revision: 1.1 $"
-__version__  = "$Id: Insert.py,v 1.1 2010/05/25 21:01:55 afaq Exp $ "
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Insert.py,v 1.2 2010/06/23 21:21:23 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -18,7 +18,7 @@ class Insert(DBFormatter):
 
     def execute(self, conn, lfn, block_id, file_blob, transaction = False):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/FileBuffer/Insert expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/FileBuffer/Insert expects db connection from upper layer.")
 	daoinput={}
 	daoinput['lfn']=lfn
 	daoinput['file_blob']=str(file_blob)

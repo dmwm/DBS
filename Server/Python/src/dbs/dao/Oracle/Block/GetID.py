@@ -3,8 +3,8 @@
 This module provides Block.GetID data access object.
 Light dao object to get the id for a give /primds/procds/tier#block
 """
-__revision__ = "$Id: GetID.py,v 1.4 2010/03/05 15:32:53 yuyi Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: GetID.py,v 1.5 2010/06/23 21:21:18 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -28,7 +28,7 @@ FROM %sBLOCKS B
         returns id for a given block = /primds/procds/tier#block
         """	
 	if not conn:
-	    raise Excpetion("dbs/dao/Oracle/Block/Insert expects db connection from up layer.")
+	    raise Excpetion("dbs/dao/Oracle/Block/Insert expects db connection from upper layer.")
         sql = self.sql
         sql += "WHERE B.BLOCK_NAME = :block"
         binds = {"block":name}

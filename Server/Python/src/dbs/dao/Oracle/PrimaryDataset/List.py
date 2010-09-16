@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.13 2010/03/05 19:23:15 yuyi Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: List.py,v 1.14 2010/06/23 21:21:25 afaq Exp $"
+__version__ = "$Revision: 1.14 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -32,7 +32,7 @@ JOIN %sPRIMARY_DS_TYPES PT ON PT.PRIMARY_DS_TYPE_ID = P.PRIMARY_DS_TYPE_ID
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-	    raise Exception("dbs/dao/Oracle/ParimaryDataset/List expects db connection from up layer.")	    
+	    raise Exception("dbs/dao/Oracle/ParimaryDataset/List expects db connection from upper layer.")	    
         sql = self.sql
         binds = {}
         

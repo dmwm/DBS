@@ -6,8 +6,8 @@ Given the ID of a File, returns a LIST of the dicts containing IDs
 [{block_id, dataset_id},....] of the Parent BLOCK of the 
 Block containing THIS file.
 """
-__revision__ = "$Id: List.py,v 1.6 2010/03/05 18:58:49 yuyi Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: List.py,v 1.7 2010/06/23 21:21:24 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -28,7 +28,7 @@ class List(DBFormatter):
 	file_id_list : file_id_list 
 	"""
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/FileParentBlock/List expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/FileParentBlock/List expects db connection from upper layer.")
 	sql=self.sql
 	binds={}
 	if file_id_list:

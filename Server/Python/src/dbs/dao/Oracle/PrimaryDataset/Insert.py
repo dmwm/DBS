@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for PrimaryDatasets table """ 
 
-__revision__ = "$Revision: 1.13 $"
-__version__  = "$Id: Insert.py,v 1.13 2010/03/09 16:38:04 afaq Exp $ "
+__revision__ = "$Revision: 1.14 $"
+__version__  = "$Id: Insert.py,v 1.14 2010/06/23 21:21:25 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -12,7 +12,7 @@ class Insert(InsertSingle):
     """ PrimaryDataset Insert DAO Class"""
     def execute(self, conn, daoinput, transaction = False):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/PrimaryDataset/Insert expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/PrimaryDataset/Insert expects db connection from upper layer.")
 	try:
 	    self.executeSingle(conn, daoinput, "PRIMARY_DATASETS", transaction )
 	except Exception:

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for StorageElements table """ 
 
-__revision__ = "$Revision: 1.5 $"
-__version__  = "$Id: Insert.py,v 1.5 2010/03/05 20:17:42 yuyi Exp $ "
+__revision__ = "$Revision: 1.6 $"
+__version__  = "$Id: Insert.py,v 1.6 2010/06/23 21:21:26 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -15,7 +15,7 @@ class Insert(DBFormatter):
             self.sql = """INSERT INTO %sSTORAGE_ELEMENTS ( SE_ID, SE_NAME) VALUES (:seid, :sename)""" % (self.owner)
     def execute( self, conn, storage_elementsObj, transaction=False ):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/StorageElement/Insert expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/StorageElement/Insert expects db connection from upper layer.")
 	result = self.dbi.processData(self.sql,  storage_elementsObj, conn, transaction)
 	return
 
