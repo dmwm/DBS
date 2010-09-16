@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.25 2010/04/16 16:23:15 afaq Exp $"
-__version__ = "$Revision: 1.25 $"
+__revision__ = "$Id: List.py,v 1.26 2010/05/05 15:03:05 yuyi Exp $"
+__version__ = "$Revision: 1.26 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -31,7 +31,7 @@ SELECT F.FILE_ID, F.LOGICAL_FILE_NAME, F.IS_FILE_VALID,
         F.CREATION_DATE, F.CREATE_BY, 
         F.LAST_MODIFICATION_DATE, F.LAST_MODIFIED_BY
 FROM %sFILES F 
-JOIN %sFILE_TYPES FT ON  FT.FILE_TYPE_ID = F.FILE_TYPE_ID 
+JOIN %sFILE_DATA_TYPES FT ON  FT.FILE_TYPE_ID = F.FILE_TYPE_ID 
 JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID 
 JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 """ % ((self.owner,)*4)
