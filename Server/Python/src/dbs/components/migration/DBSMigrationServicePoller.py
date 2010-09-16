@@ -2,8 +2,8 @@
 """
 DBS Migration Service Polling Module
 """
-__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.7 2010/07/02 20:56:22 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.8 2010/07/09 14:46:13 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 import threading
 import logging
@@ -138,7 +138,7 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	    #If a request has been found
 	    blocks = self.findMigrateableBlocks(conn, request_id)
 	    for ablock in blocks:
-	        self.migrateBlock(conn, ablock['migration_block'], request["migration_url"])
+	        self.migrateBlock(conn, ablock['migration_block_name'], request["migration_url"])
 	        # report status to database, a cycle has been completed, successfully
 	        self.reportStatus(conn, "WORKING FINE")
 	    #Mark the request as done
@@ -185,7 +185,7 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 		
     def updateBlockStatus(self, conn, block_name, status):
             try:
-	        blkupst = dict(migration_status=status, migration_block=block_name)
+	        blkupst = dict(migration_status=status, migration_block_name=block_name)
 		print "TEMPORARY : commented out"
 		#self.blkup.execute(conn, blkupst)
 	        self.reportStatus(conn, "WORKING FINE")
