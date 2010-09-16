@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.12 2009/11/16 17:46:24 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSModel.py,v 1.13 2009/11/16 18:56:36 afaq Exp $"
+__version__ = "$Revision: 1.13 $"
 
 import re
 import json, cjson
@@ -13,8 +13,11 @@ from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
-
 from cherrypy import request
+
+
+from exceptions import Exception
+import traceback
 
 class DBSModel(RESTModel):
     """
@@ -26,7 +29,7 @@ class DBSModel(RESTModel):
         """
         RESTModel.__init__(self, config)
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
-       self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
+        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
         self.addService('GET', 'datasets', self.listDatasets, ['dataset'])
         self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block'])
         self.addService('GET', 'files', self.listFiles, ['dataset', 'block', 'lfn'])
@@ -100,27 +103,37 @@ class DBSModel(RESTModel):
         input must be a dictionary with the following two keys:
 	PRIMARY_DS_NAME, PRIMARY_DS_TYPE
         """
+	
+	try:
+        	body = request.body.read()
+        	indata = json.loads(body)
 
-        body = request.body.read()
-        indata = json.loads(body)
+        	#input validation
+        	valid = re.compile("^[\w\d_-]+$")
+        	assert type(indata) == dict
+        	assert len(indata.keys()) == 2, "Invalid input, %s" %(str(indata))
+        	assert valid.match(indata["PRIMARY_DS_NAME"]), \
+            	"Invalid character(s) in PRIMARY_DS_TYPE: %s" % indata["PRIMARY_DS_NAME"]
+        	assert valid.match(indata["PRIMARY_DS_TYPE"]), \
+            	"Invalid character(s) in PRIMARY_DS_TYPE: %s" % indata["PRIMARY_DS_TYPE"]
 
-        #input validation
-        valid = re.compile("^[\w\d_-]+$")
-        assert type(indata) == dict
-        assert len(indata.keys()) == 2, "Invalid input, %s" %(str(indata))
-        assert valid.match(indata["PRIMARY_DS_NAME"]), \
-            "Invalid character(s) in PRIMARY_DS_TYPE: %s" % indata["PRIMARY_DS_NAME"]
-        assert valid.match(indata["PRIMARY_DS_TYPE"]), \
-            "Invalid character(s) in PRIMARY_DS_TYPE: %s" % indata["PRIMARY_DS_TYPE"]
+        	indata.update({"creationdate":123456, "createby":"me"})
+        	data={}
+        	data.update({"creationdate":123456, "createby":"me"})
+        	data["primarydsname"]=indata["PRIMARY_DS_NAME"]
+        	data["primarydstype"]=indata["PRIMARY_DS_TYPE"]
+        	bo = DBSPrimaryDataset(self.logger, self.dbi)
+        	bo.insertPrimaryDataset(data)
 
-        indata.update({"creationdate":123456, "createby":"me"})
-        data={}
-        data.update({"creationdate":123456, "createby":"me"})
-        data["primarydsname"]=indata["PRIMARY_DS_NAME"]
-        data["primarydstype"]=indata["PRIMARY_DS_TYPE"]
-        bo = DBSPrimaryDataset(self.logger, self.dbi)
-        bo.insertPrimaryDataset(data)
-     
+     	except Exception, ex:
+		# ORA-00001: unique constraint
+		if str(ex).find("unique constraint") != -1 :
+			self.debug("unique constraint violation being ignored")
+		else:	
+			self.debug(ex)
+            		self.debug(traceback.print_exc())
+			raise ex
+
     def insertDataset(self):
         """
         gets the input from cherrypy request body.
