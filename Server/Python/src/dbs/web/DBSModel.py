@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.17 2009/11/17 16:42:34 afaq Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: DBSModel.py,v 1.18 2009/11/17 20:19:44 yuyi Exp $"
+__version__ = "$Revision: 1.18 $"
 
 import re
 import json, cjson
@@ -92,7 +92,7 @@ class DBSModel(RESTModel):
         http://dbs3/files?dataset=/a/b/c&lfn=/store/*
         http://dbs3/files?block=/a/b/c%23d&lfn=/store/*
         """
-        bo = DBSFile(self.logger, self.dbi)
+        bo = DBSFile(self, self.dbi)
         lfn = lfn.replace("*", "%")
         result = bo.listFiles(dataset = dataset, block = block, lfn = lfn)
         return {"result":result}
@@ -251,12 +251,12 @@ class DBSModel(RESTModel):
 	FILE_LUMI_LIST: [{"RUN_NUM": 123, "LUMI_SECTION_NUM": 12},{}....]
 	FILE_PARENT_LIST :[{"FILE_PARENT_LFN": "mylfn"},{}....] 
         """
+	#self.debug("****This is a test****")
         body = request.body.read()
         indata = cjson.decode(body)
         
         # lot of validation goes here: These are bad checks. Need to be fixed later
         businput = []
-        #vblock = re.compile(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$")
         assert type(indata) in (list, dict)
         if type(indata) == dict:
             indata = [indata]
@@ -269,16 +269,19 @@ class DBSModel(RESTModel):
             for c in conditions:
                 assert c, "One of the input conditions is not satisfied" % conditions
 	    block = f["BLOCK"]
-            f.update({"DATASET":block.groups()[0],
+	    #self.debug("Error block %s %s" % (block, "test"))
+	    #self.debug("Dataset %s" %(block[0:block.find('#')]))
+            f.update({"DATASET":block[0:block.find('#')],
                      "CREATION_DATE":12345,
                      "CREATE_BY":"aleko",
                      "LAST_MODIFICATION_DATE":12345,
                      "LAST_MODIFIED_BY":"alsoaleko"})
             businput.append(f)
-        bo = DBSFile(self.logger, self.dbi)
+	#print businput
+	#print len(businput)
+        bo = DBSFile(self, self.dbi)
         bo.insertFile(businput)
-
-        
+        print "*** Done with Modle"
     def donothing(self, *args, **kwargs):
         """
         doing nothing
