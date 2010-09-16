@@ -2,9 +2,8 @@
 """
 DBS Migration Service Polling Module
 """
-__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.2 2010/06/24 21:38:51 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
-
+__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.3 2010/06/28 21:27:54 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import threading
 import logging
@@ -20,7 +19,7 @@ from WMCore.DAOFactory import DAOFactory
 class DBSMigrationServicePoller(BaseWorkerThread) :
 
     """
-    Handles poll-based File Inserts
+    Handles poll-based migration requests
     """
     
     def __init__(self, config):
@@ -50,6 +49,18 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=self.dbowner)
 
         self.sm		    = daofactory(classname="SequenceManager")
+	self.requestlist = daofactory(classname="MigrationRequests.ListOldest")
+	self.requestup   = daofactory(classname="MigrationRequests.Update")
+
+
+
+
+
+
+
+
+
+	
         self.primdslist	    = daofactory(classname="PrimaryDataset.List")
 	self.datasetlist    = daofactory(classname="Dataset.List")
 	self.blocklist	    = daofactory(classname="Block.List")
@@ -86,6 +97,8 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	self.compstatusin = daofactory(classname="ComponentStatus.Insert")
 	self.compstatusup = daofactory(classname="ComponentStatus.Update")
 
+
+	# Report that service has started
 	self.insertStatus("STARTED")
 
 
@@ -117,41 +130,88 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	"""
 	Terminate
 	"""
-	logging.debug("Terminating DBSUploadPoller")
+	logging.debug("Terminating DBS Migration Service")
 
     # This is the actual poll method, called over and over by the frwk
     def algorithm(self, parameters):
 	"""
-	Performs the handleBuffer method, called by frwk over and over (until terminate is called)
+	Performs the handleMigration method, called by frwk over and over (until terminate is called)
 	"""
-	logging.debug("Running dbs insert buffer algorithm")
-	self.handleBuffer()	
+	logging.debug("Running dbs migration algorithm")
+	self.handleMigration()	
 	
-    def handleBuffer(self):
+    def handleMigration(self):
 	"""
-	The actual handle method for performing inserts from dbs buffer
+	The actual handle method for performing migration
+
+	* The method takes a request and tries to complete it till end, this way we 
+	* do not have incomplete running migrations running forever
+	
+	1. get a migration request in 'PENDING' STATUS
+	2. Change its status to 'RUNNING'
+	3. Get the highest order 'PENDING' block
+	4. Change the status of block to RUNNING
+	5. Migrate it
+	6. Change the block status to 'COMPLETED' (?remove from the list?)
+	7. Pick the next block, go to 4.
+	8. After no more blocks can be migrated, mark the request as DONE (move to history table!!!!)
 	"""
+	
+	request=-1
 	try :
-	    # Remove the duplicate entries from the buffer
-	    self.removeDuplicates()
-	    blks = self.getBlocks()
-	    for ablk_id in blks:
-	        bufferedinput = self.getBufferedFiles(ablk_id["block_id"])
-	        insertinput = [eval(afile['file_blob'])  for afile in bufferedinput ]
-	        #for afile in insertinput:
-		    #self.logger.debug("run_inserts : %s" % afile.keys() )
-		    #self.logger.debug("run_inserts : %s" % afile['file_output_config_list'] )
-		if len(insertinput) > 0:
-		    self.insertBufferedFiles(businput=insertinput)
-	    # report status to database, a cycle has been completed, successfully
-	    self.reportStatus("WORKING FINE")
-	except Exception, ex:
-	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
-	    try:
-		self.reportStatus("ERROR: %s" %ex)
-	    except Exception, ex:
-		self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
+	    #1.
+	    #FIXME: lock requests table
+	    requests=self.getMigrationRequests(conn)
+	    if len(requests) > 0:
+		request=requests[0]	
+	    # 2.
+	    #Change the status to RUNNING
+	    self.updateRequestStatus(conn, request[""], "RUNNING")	
+	except exception, ex:
+	    self.logger.exception("DBS Migration Service failed to acquire a request: %s" %str(ex))
+	    raise
+	finally:
+	    #FIXME: un-lock requests table
+
+	#If a request has been found
+	if request!=-1: 
+	    self.findMigrateableBlocks()
 	
+    def getMigrationRequest(self):
+	"""
+	Pick up a pending request from the queued requests (in database)
+	"""
+	
+	try:
+	    conn = self.dbi.connection()
+	    requests = self.requestlist.execute()
+	    return requests
+	except:
+	    self.logger.exception("DBS Migrate Service Failed to find migration requests")
+	    raise
+	    
+    def updateMigrationStatus(self, conn, migration_request_id, migration_status):
+            try:
+	        upst = dict(migration_status=migration_status, migration_request_id=migration_request_id)
+                self.mgrup.execute(conn, upst)
+            except:
+	        raise
+	
+    def findMigrateableBlocks(self):
+	"""
+	Get the blocks that need to be migrated
+	"""
+	try:
+	    conn = self.dbi.connection()
+	    result = self.blklist.execute(conn)
+            conn.close()
+            return result
+	except Exception, ex:
+	    raise ex
+	finally:
+	    conn.close()
+    
+
     def insertStatus(self, status = "UNKNOWN" ):
 	"""
 	This is a local function, basically component reports its status to database
@@ -160,7 +220,7 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	    conn = self.dbi.connection()
 	    tran = conn.begin()
 	    comp_status_id = self.sm.increment(conn, "SEQ_CS", transaction=tran)
-	    statusObj={ "comp_status_id" : comp_status_id, "component_name" : "WRITER BUFFER", "component_status" : status, "last_contact_time" : str(int(time.time())) }
+	    statusObj={ "comp_status_id" : comp_status_id, "component_name" : "MIGRATION SERVICE", "component_status" : status, "last_contact_time" : str(int(time.time())) }
 	    self.compstatusin.execute(conn, statusObj, tran)
 	    tran.commit()
 	except exceptions.IntegrityError, ex:
@@ -192,21 +252,6 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
     	finally:
 	    conn.close()
- 
-    def getBlocks(self):
-	"""
-	Get the blocks that need to be migrated
-	"""
-	try:
-	    conn = self.dbi.connection()
-	    result = self.buflistblks.execute(conn)
-            conn.close()
-            return result
-	except Exception, ex:
-	    raise ex
-	finally:
-	    conn.close()
-    
     def getBufferedFiles(self, block_id):
         """
         Get some files from the insert buffer
