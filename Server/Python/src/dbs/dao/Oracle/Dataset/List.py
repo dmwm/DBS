@@ -3,8 +3,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.23 2010/03/04 20:39:37 afaq Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: List.py,v 1.24 2010/03/05 16:04:02 yuyi Exp $"
+__version__ = "$Revision: 1.24 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -65,12 +65,12 @@ AND DP.DATASET_TYPE <> 'DELETED'
 
     def execute(self, conn, dataset="", parent_dataset="", 
                 release_version="", pset_hash="", app_name="", output_module_label="", 
-                processing_era="", acquisition_era=""):
+                processing_era="", acquisition_era="", transaction=False):
         """
         dataset key is a wild card parameter
         """	
         if not conn:
-	    raise Exception("No connection to DB") 
+	    raise Exception("dbs/dao/Oracle/Dataset/List expects db connection from up layer.") 
             
         sql = self.sql
         binds = {}
@@ -106,7 +106,7 @@ AND DP.DATASET_TYPE <> 'DELETED'
 	    op = ("=", "like")["%" in acquisition_era]
 	    sql += "AND AE.ACQUISITION_ERA_NAME %s :aera" % op
 	    binds.update(aera=acquisition_era)
-	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	assert len(cursors) == 1, "block does not exist"
 	result = self.formatCursor(cursors[0])
 

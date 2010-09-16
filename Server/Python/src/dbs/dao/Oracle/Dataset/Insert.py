@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for Datasets table """ 
 
-__revision__ = "$Revision: 1.11 $"
-__version__  = "$Id: Insert.py,v 1.11 2010/02/11 18:03:24 afaq Exp $ "
+__revision__ = "$Revision: 1.12 $"
+__version__  = "$Id: Insert.py,v 1.12 2010/03/05 16:04:02 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -37,7 +37,7 @@ class Insert(DBFormatter):
 				self.logger.warning("DROPPING Key: "+akey)
                 return daoinput
 
-    def execute(self, daoinput, conn = None, transaction = False):
+    def execute(self, conn, daoinput, transaction = False):
 
         """
         daoinput must be a dictionary with the following keys:
@@ -46,5 +46,7 @@ class Insert(DBFormatter):
 	physics_group_id, xtcrosssection, global_tag, creation_date, create_by, 
 	last_modification_date, last_modified_by
 	"""
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/Dataset/Insert expects db connection from up layer.")
 	daoinput=self.processInput(daoinput)
         self.dbi.processData(self.sql, daoinput, conn, transaction)
