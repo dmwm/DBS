@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.19 2010/03/19 15:49:16 yuyi Exp $"
-__version__ = "$Revision: 1.19 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.20 2010/03/19 18:51:58 yuyi Exp $"
+__version__ = "$Revision: 1.20 $"
 
 import os
 import sys
@@ -44,6 +44,7 @@ run_num=uid
 flist=[]
 #print "acquisition_era_name=%s" %acquisition_era_name
 #print "processing_version=%s" %processing_version
+primary_ds_type='TEST'
 
 outDict={
 "primary_ds_name" : primary_ds_name,
@@ -57,7 +58,10 @@ outDict={
 "site" : site,
 "block" : block,
 "files" : [],
-"run_num":run_num
+"run_num":run_num,
+"acquisition_era":acquisition_era_name,
+"processing_version" : processing_version,
+"primary_ds_type" : primary_ds_type
 }
 
 class DBSWriterModel_t(unittest.TestCase):
@@ -68,13 +72,13 @@ class DBSWriterModel_t(unittest.TestCase):
     def test01(self):
         """test01: web.DBSWriterModel.insertPrimaryDataset: basic test"""
         data = {'primary_ds_name':primary_ds_name,
-                'primary_ds_type':'TEST'}
+                'primary_ds_type':primary_ds_type}
         api.insert('primarydatasets', data)
 
     def test02(self):
         """test02: web.DBSWriterModel.insertPrimaryDataset: duplicate should not riase an exception"""
         data = {'primary_ds_name':primary_ds_name,
-                'primary_ds_type':'TEST'}
+                'primary_ds_type':primary_ds_type}
         api.insert('primarydatasets', data)
 	
     def test03(self):
@@ -82,7 +86,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	#import pdb
 	#pdb.set_trace()
 		
-	data = {'primary_ds_type':'TEST'}
+	data = {'primary_ds_type':primary_ds_type}
 	try:
 	    junk = api.insert('primarydatasets', data)
 	except Exception, ex:
