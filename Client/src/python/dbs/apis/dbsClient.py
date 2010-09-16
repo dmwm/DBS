@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.22 $"
-# $Id: dbsClient.py,v 1.22 2010/01/26 21:03:22 afaq Exp $"
+# $Revision: 1.23 $"
+# $Id: dbsClient.py,v 1.23 2010/01/26 21:19:19 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -247,7 +247,8 @@ class DbsApi:
 		    url_param += "site_name=%s"%site_name
 		    
 		return self.callServer("/blocks?%s" %url_param)
-        def listFile(self, lfn="", dataset="", block=""):
+
+        def listFiles(self, lfn="", dataset="", block=""):
                 """
                 * API to list A file in DBS 
                 * lfn : lfn of file
