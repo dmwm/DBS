@@ -1,18 +1,16 @@
 # ---------------------------------------------------------------------- #
-# Script generated with: DeZign for Databases v5.2.3                     #
+# Script generated with: DeZign for Databases v6.1.2                     #
 # Target DBMS:           MySQL 5                                         #
 # Project file:          DBS3.dez                                        #
 # Project name:          DBS3                                            #
 # Author:                Yuyi Guo for DBS Group                          #
 # Script type:           Database creation script                        #
-# Created on:            2010-02-08 10:21                                #
-# Model version:         Version 2010-02-08                              #
+# Created on:            2010-04-19 14:19                                #
 # ---------------------------------------------------------------------- #
 
 drop database if exists CMS_DBS3;
 create database CMS_DBS3;
 use CMS_DBS3;
-
 
 # ---------------------------------------------------------------------- #
 # Tables                                                                 #
@@ -63,10 +61,10 @@ CREATE TABLE `BRANCH_HASHES` (
 );
 
 # ---------------------------------------------------------------------- #
-# Add table "FILE_TYPES"                                                 #
+# Add table "FILE_DATA_TYPES"                                            #
 # ---------------------------------------------------------------------- #
 
-CREATE TABLE `FILE_TYPES` (
+CREATE TABLE `FILE_DATA_TYPES` (
     `FILE_TYPE_ID` INTEGER NOT NULL,
     `FILE_TYPE` VARCHAR(100) NOT NULL,
     CONSTRAINT `PK_FT` PRIMARY KEY (`FILE_TYPE_ID`),
@@ -97,14 +95,14 @@ CREATE TABLE `PRIMARY_DS_TYPES` (
 );
 
 # ---------------------------------------------------------------------- #
-# Add table "DATASET_TYPES"                                              #
+# Add table "DATASET_ACCESS_TYPES"                                       #
 # ---------------------------------------------------------------------- #
 
-CREATE TABLE `DATASET_TYPES` (
+CREATE TABLE `DATASET_ACCESS_TYPES` (
     `DATASET_TYPE_ID` INTEGER NOT NULL,
-    `DATASET_TYPE` VARCHAR(100) NOT NULL,
+    `DATASET_ACCESS_TYPE` VARCHAR(100) NOT NULL,
     CONSTRAINT `PK_DTP` PRIMARY KEY (`DATASET_TYPE_ID`),
-    CONSTRAINT `TUC_DTP_DATASET_TYPE` UNIQUE (`DATASET_TYPE`)
+    CONSTRAINT `TUC_DTP_DATASET_ACCESS_TYPE` UNIQUE (`DATASET_ACCESS_TYPE`)
 );
 
 # ---------------------------------------------------------------------- #
@@ -114,7 +112,7 @@ CREATE TABLE `DATASET_TYPES` (
 CREATE TABLE `PARAMETER_SET_HASHES` (
     `PARAMETER_SET_HASH_ID` INTEGER NOT NULL,
     `PSET_HASH` VARCHAR(128) NOT NULL,
-    `NAME` VARCHAR(45),
+    `NAME` VARCHAR(100),
     CONSTRAINT `PK_PSH` PRIMARY KEY (`PARAMETER_SET_HASH_ID`),
     CONSTRAINT `TUC_PSH_PSET_HASH` UNIQUE (`PSET_HASH`)
 );
@@ -206,8 +204,8 @@ CREATE INDEX `IDX_PDS_1` ON `PRIMARY_DATASETS` (`PRIMARY_DS_TYPE_ID`);
 
 CREATE TABLE `DATASETS` (
     `DATASET_ID` INTEGER NOT NULL,
-    `DATASET` VARCHAR(500) NOT NULL,
-    `IS_DATASET_VALID` INTEGER NOT NULL DEFAULT 1,
+    `DATASET` VARCHAR(700) NOT NULL,
+    `IS_DATASET_VALID` NUMERIC(1) NOT NULL DEFAULT 1,
     `PRIMARY_DS_ID` INTEGER NOT NULL,
     `PROCESSED_DS_ID` INTEGER NOT NULL,
     `DATA_TIER_ID` INTEGER NOT NULL,
@@ -217,6 +215,7 @@ CREATE TABLE `DATASETS` (
     `PHYSICS_GROUP_ID` INTEGER,
     `XTCROSSSECTION` FLOAT(126,0),
     `GLOBAL_TAG` VARCHAR(255),
+    `DATASET_UID` VARCHAR(100),
     `CREATION_DATE` INTEGER,
     `CREATE_BY` VARCHAR(100),
     `LAST_MODIFICATION_DATE` INTEGER,
@@ -254,8 +253,8 @@ CREATE TABLE `BLOCKS` (
     `BLOCK_ID` INTEGER NOT NULL,
     `BLOCK_NAME` VARCHAR(500) NOT NULL,
     `DATASET_ID` INTEGER NOT NULL,
-    `OPEN_FOR_WRITING` INTEGER NOT NULL DEFAULT 1,
-    `ORIGIN_SITE` INTEGER,
+    `OPEN_FOR_WRITING` NUMERIC(1) NOT NULL DEFAULT 1,
+    `ORIGIN_SITE_NAME` VARCHAR(100) NOT NULL,
     `BLOCK_SIZE` INTEGER,
     `FILE_COUNT` INTEGER,
     `CREATION_DATE` INTEGER,
@@ -268,15 +267,13 @@ CREATE TABLE `BLOCKS` (
 
 CREATE INDEX `IDX_BK_1` ON `BLOCKS` (`DATASET_ID`);
 
-CREATE INDEX `IDX_BK_2` ON `BLOCKS` (`ORIGIN_SITE`);
+CREATE INDEX `ID_BK_2` ON `BLOCKS` (`BLOCK_SIZE`);
 
-CREATE INDEX `ID_BK_3` ON `BLOCKS` (`BLOCK_SIZE`);
+CREATE INDEX `ID_BK_3` ON `BLOCKS` (`FILE_COUNT`);
 
-CREATE INDEX `ID_BK_4` ON `BLOCKS` (`FILE_COUNT`);
+CREATE INDEX `ID_BK_4` ON `BLOCKS` (`CREATION_DATE`);
 
-CREATE INDEX `ID_BK_5` ON `BLOCKS` (`CREATION_DATE`);
-
-CREATE INDEX `ID_BK_6` ON `BLOCKS` (`CREATE_BY`);
+CREATE INDEX `ID_BK_5` ON `BLOCKS` (`CREATE_BY`);
 
 ALTER TABLE `BLOCKS` ADD CONSTRAINT `CC_BK_OPEN_FOR_WRITING` 
     CHECK (OPEN_FOR_WRITING IN (1,0));
@@ -304,7 +301,7 @@ CREATE INDEX `IDX_BP_2` ON `BLOCK_PARENTS` (`PARENT_BLOCK_ID`);
 CREATE TABLE `FILES` (
     `FILE_ID` INTEGER NOT NULL,
     `LOGICAL_FILE_NAME` VARCHAR(500) NOT NULL,
-    `IS_FILE_VALID` INTEGER NOT NULL DEFAULT 1,
+    `IS_FILE_VALID` NUMERIC(1) NOT NULL DEFAULT 1,
     `DATASET_ID` INTEGER NOT NULL,
     `BLOCK_ID` INTEGER NOT NULL,
     `FILE_TYPE_ID` INTEGER NOT NULL,
@@ -485,31 +482,15 @@ CREATE TABLE `PROCESSING_ERAS` (
 );
 
 # ---------------------------------------------------------------------- #
-# Add table "STORAGE_ELEMENTS"                                           #
+# Add table "BLOCK_SITES"                                                #
 # ---------------------------------------------------------------------- #
 
-CREATE TABLE `STORAGE_ELEMENTS` (
-    `SE_ID` INTEGER NOT NULL,
-    `SE_NAME` VARCHAR(500),
-    CONSTRAINT `PK_SE` PRIMARY KEY (`SE_ID`),
-    CONSTRAINT `TUC_SE_SE_NAME` UNIQUE (`SE_NAME`)
-);
-
-# ---------------------------------------------------------------------- #
-# Add table "BLOCK_STORAGE_ELEMENTS"                                     #
-# ---------------------------------------------------------------------- #
-
-CREATE TABLE `BLOCK_STORAGE_ELEMENTS` (
-    `BLOCK_SE_ID` INTEGER NOT NULL,
-    `SE_ID` INTEGER NOT NULL,
+CREATE TABLE `BLOCK_SITES` (
+    `BLOCK_SITE_ID` INTEGER NOT NULL,
     `BLOCK_ID` INTEGER NOT NULL,
-    CONSTRAINT `PK_BSE` PRIMARY KEY (`BLOCK_SE_ID`),
-    CONSTRAINT `TUC_BSE_1` UNIQUE (`SE_ID`, `BLOCK_ID`)
+    `SITE_ID` INTEGER NOT NULL,
+    CONSTRAINT `PK_BLST` PRIMARY KEY (`BLOCK_SITE_ID`)
 );
-
-CREATE INDEX `IDX_BSE_1` ON `BLOCK_STORAGE_ELEMENTS` (`SE_ID`);
-
-CREATE INDEX `IDX_BSE_2` ON `BLOCK_STORAGE_ELEMENTS` (`BLOCK_ID`);
 
 # ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
@@ -537,7 +518,7 @@ ALTER TABLE `DATASETS` ADD CONSTRAINT `PSDS_DS`
     FOREIGN KEY (`PROCESSED_DS_ID`) REFERENCES `PROCESSED_DATASETS` (`PROCESSED_DS_ID`) ON DELETE CASCADE;
 
 ALTER TABLE `DATASETS` ADD CONSTRAINT `DTP_DS` 
-    FOREIGN KEY (`DATASET_TYPE_ID`) REFERENCES `DATASET_TYPES` (`DATASET_TYPE_ID`);
+    FOREIGN KEY (`DATASET_TYPE_ID`) REFERENCES `DATASET_ACCESS_TYPES` (`DATASET_TYPE_ID`);
 
 ALTER TABLE `DATASETS` ADD CONSTRAINT `PG_DS` 
     FOREIGN KEY (`PHYSICS_GROUP_ID`) REFERENCES `PHYSICS_GROUPS` (`PHYSICS_GROUP_ID`) ON DELETE SET NULL;
@@ -550,9 +531,6 @@ ALTER TABLE `DATASETS` ADD CONSTRAINT `PE_DS`
 
 ALTER TABLE `BLOCKS` ADD CONSTRAINT `DS_BK` 
     FOREIGN KEY (`DATASET_ID`) REFERENCES `DATASETS` (`DATASET_ID`) ON DELETE CASCADE;
-
-ALTER TABLE `BLOCKS` ADD CONSTRAINT `SI_BK` 
-    FOREIGN KEY (`ORIGIN_SITE`) REFERENCES `SITES` (`SITE_ID`) ON DELETE SET NULL;
 
 ALTER TABLE `BLOCK_PARENTS` ADD CONSTRAINT `BK_BP` 
     FOREIGN KEY (`THIS_BLOCK_ID`) REFERENCES `BLOCKS` (`BLOCK_ID`) ON DELETE CASCADE;
@@ -567,7 +545,7 @@ ALTER TABLE `FILES` ADD CONSTRAINT `BK_FL`
     FOREIGN KEY (`BLOCK_ID`) REFERENCES `BLOCKS` (`BLOCK_ID`) ON DELETE CASCADE;
 
 ALTER TABLE `FILES` ADD CONSTRAINT `FT_FL` 
-    FOREIGN KEY (`FILE_TYPE_ID`) REFERENCES `FILE_TYPES` (`FILE_TYPE_ID`);
+    FOREIGN KEY (`FILE_TYPE_ID`) REFERENCES `FILE_DATA_TYPES` (`FILE_TYPE_ID`);
 
 ALTER TABLE `FILES` ADD CONSTRAINT `BH_FL` 
     FOREIGN KEY (`BRANCH_HASH_ID`) REFERENCES `BRANCH_HASHES` (`BRANCH_HASH_ID`) ON DELETE SET NULL;
@@ -608,8 +586,9 @@ ALTER TABLE `FILE_PARENTS` ADD CONSTRAINT `FL_FP2`
 ALTER TABLE `FILE_LUMIS` ADD CONSTRAINT `FL_FLM` 
     FOREIGN KEY (`FILE_ID`) REFERENCES `FILES` (`FILE_ID`) ON DELETE CASCADE;
 
-ALTER TABLE `BLOCK_STORAGE_ELEMENTS` ADD CONSTRAINT `SE_BSE` 
-    FOREIGN KEY (`SE_ID`) REFERENCES `STORAGE_ELEMENTS` (`SE_ID`) ON DELETE CASCADE;
+ALTER TABLE `BLOCK_SITES` ADD CONSTRAINT `BK_BLST` 
+    FOREIGN KEY (`BLOCK_ID`) REFERENCES `BLOCKS` (`BLOCK_ID`);
 
-ALTER TABLE `BLOCK_STORAGE_ELEMENTS` ADD CONSTRAINT `BK_BSE` 
-    FOREIGN KEY (`BLOCK_ID`) REFERENCES `BLOCKS` (`BLOCK_ID`) ON DELETE CASCADE;
+ALTER TABLE `BLOCK_SITES` ADD CONSTRAINT `SI_BLST` 
+    FOREIGN KEY (`SITE_ID`) REFERENCES `SITES` (`SITE_ID`);
+

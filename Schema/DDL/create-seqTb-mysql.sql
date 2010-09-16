@@ -1,14 +1,14 @@
 # ---------------------------------------------------------------------- #
-# Script generated with: DeZign for Databases v5.2.3                     #
+# Script generated with: DeZign for Databases v6.1.2                     #
 # Target DBMS:           MySQL 5                                         #
 # Project file:          Mysql_Seq.dez                                   #
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2010-02-12 08:42                                #
-# Model version:         Version 2010-02-12                              #
+# Created on:            2010-04-19 14:34                                #
 # ---------------------------------------------------------------------- #
 
+USE CMS_DBS3;
 
 # ---------------------------------------------------------------------- #
 # Tables                                                                 #
@@ -114,7 +114,7 @@ CREATE TABLE `SEQ_DSS` (
 );
 
 # ---------------------------------------------------------------------- #
-# Add table "SEQ_PSDSS"                                                   #
+# Add table "SEQ_PSDSS"                                                  #
 # ---------------------------------------------------------------------- #
 
 CREATE TABLE `SEQ_PSDSS` (
@@ -226,8 +226,8 @@ CREATE TABLE `SEQ_FTS` (
 # ---------------------------------------------------------------------- #
 
 CREATE TABLE `SEQ_SES` (
-    `ID` BIGINT NOT NULL,
-    CONSTRAINT `PK_SEQ_SES` PRIMARY KEY (`ID`)
+    `SE_ID` BIGINT NOT NULL,
+    CONSTRAINT `PK_SEQ_SES` PRIMARY KEY (`SE_ID`)
 );
 
 # ---------------------------------------------------------------------- #
@@ -273,4 +273,13 @@ CREATE TABLE `SEQ_BHS` (
 CREATE TABLE `SEQ_DVS` (
     `ID` BIGINT NOT NULL,
     CONSTRAINT `PK_SEQ_DVS` PRIMARY KEY (`ID`)
+);
+
+# ---------------------------------------------------------------------- #
+# Add table "SEQ_BLST"                                                   #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `SEQ_BLST` (
+    `ID` INTEGER NOT NULL,
+    CONSTRAINT `PK_SEQ_BLST` PRIMARY KEY (`ID`)
 );
