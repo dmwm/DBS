@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.2 2010/08/10 20:28:10 yuyi Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.3 2010/08/12 19:17:57 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import threading
 import logging
@@ -55,6 +55,9 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	self.datasetCache['primDsTp']={}
 	self.datasetCache['datasetAccTp']={}
 	self.datasetCache['processedDs']={}
+	self.datasetCache['relVer']={}
+	self.datasetCache['pHash']={}
+	self.datasetCache['appExe']={}
 	
     # This is only called once by the frwk
     def setup(self, parameters):
@@ -91,6 +94,11 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	self.acqid          = daofactory(classname='AcquisitionEra.GetID')
 	self.procsingid     = daofactory(classname='ProcessingEra.GetID')
         self.procdsid	    = daofactory(classname='ProcessedDataset.GetID')
+	#self.otptModCfglist = daofactory(classname='OutputModuleConfig.List')
+	self.otptModCfgid   = daofactory(classname='OutputModuleConfig.GetID')
+	self.releaseVid     = daofactory(classname='ReleaseVersion.GetID')
+	self.psetHashid     = daofactory(classname='ParameterSetHashe.GetID') 
+	self.appid          = daofactory(classname='ApplicationExecutable.GetID') 
 
 	self.procsingin     = daofactory(classname='ProcessingEra.Insert')
         self.acqin          = daofactory(classname='AcquisitionEra.Insert')
@@ -98,6 +106,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
         self.primdsin	    = daofactory(classname="PrimaryDataset.Insert")
 	self.primdstpin     = daofactory(classname="PrimaryDSType.Insert")
         self.datasetin	    = daofactory(classname='Dataset.Insert')
+        self.dsparentin     = daofactory(classname='DatasetParent.Insert')
 	self.datatypein     = daofactory(classname='DatasetType.Insert')
 	self.blockin        = daofactory(classname='Block.Insert')
 	self.sm             = daofactory(classname = "SequenceManager")
@@ -117,6 +126,12 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	self.bufdeletedups  = daofactory(classname="FileBuffer.DeleteDuplicates")
 	self.compstatusin   = daofactory(classname="ComponentStatus.Insert")
 	self.compstatusup   = daofactory(classname="ComponentStatus.Update")
+	self.otptModCfgin   = daofactory(classname='OutputModuleConfig.Insert')
+        self.releaseVin     = daofactory(classname='ReleaseVersion.Insert')
+	self.psetHashin     = daofactory(classname='ParameterSetHashe.Insert')
+	self.appin          = daofactory(classname='ApplicationExecutable.Insert')
+        self.dcin           = daofactory(classname='DatasetOutputMod_config.Insert')
+
 
 	# Report that service has started
 	self.insertStatus("STARTED")
@@ -266,12 +281,14 @@ class DBSMigrationEngine(BaseWorkerThread) :
 
 	"""
 	block = blockcontent['block']
+	newBlock = False
 	#Insert the block
 	try:
 	    tran = conn.begin()
 	    block['block_id'] = self.sm.increment(conn,"SEQ_BK")
 	    block['dataset_id'] =  blockcontent['dataset']['datset_id']
 	    self.blockin.execute(conn, block, tran)
+	    newBlock = True
 	except exceptions.IntegrityError:
 	    #ok, already in db
 	    block['block_id'] = self.blockid.execute(conn, block['block_name'])
@@ -279,35 +296,108 @@ class DBSMigrationEngine(BaseWorkerThread) :
 	    tran.rollback()
 	    raise
 	#Now handle Block Parenttage
-	#FIXME
-	tran.commit()
+	bpList = blockcontent['block_parent_list']
+	intval = 10
+	if newBlock:
+	    try:
+		for i in range(len(bpList)):
+		    if(i==0 or i%intavl==0):
+			id = self.sm.increment(conn,"SEQ_BP")
+		    parent['block_parent_id'] = id
+		    id += 1
+		    parent['this_block_id'] = block['block_id']
+		    parent['parent_block_id'] = self.blockid.execute(conn, parent['block_name'])
+		    if parent['parent_block_id'] <= 0:
+			raise Exception("Parent block: %s not found in db" %parent['block_name'])
+		    del parent['block_name']
+		if bpList and newBlock:
+		    self.blkparentin.execute(conn, bpList, tran)
+	    exception:
+		tran.rollback()
+		raise
+	try:
+	    tran.commit()
+	exception:
+	    raise
 	return block['block_id']
 
-    def insertOutputModuleConfig(self, conn, confcontent)
+    def insertOutputModuleConfig(self, conn, dataset, url)
         """
         Insert Release version, application, parameter set hashes and the map(output module config).
 
         """
-        block = blockcontent['block']
-        #Insert the block
-        try:
-            tran = conn.begin()
-            block['block_id'] = self.sm.increment(conn,"SEQ_BK")
-            block['dataset_id'] =  blockcontent['dataset']['datset_id']
-            self.blockin.execute(conn, block, tran)
-        except exceptions.IntegrityError:
-            #ok, already in db
-            block['block_id'] = self.blockid.execute(conn, block['block_name'])
-        exception:
+	remoteConfig = self.getRemoteData(url,'outputconfigs', 'dataset', dataset)
+	otptIdList = []
+	missingList = []
+	try:
+	    for c in remoteConfig:
+		cfgid = self.otptModCfgid.execute(conn, c["app_name"], c["release_version"], c["pset_hash"],\
+		   c["output_module_label"])
+		if cfgid > 0:
+		    otptIdList.append(cfgid)
+		if cfgid <=0 :
+		    missingList.append(c)
+	exception:
+	    raise
+	#Now insert the missing configs
+	try:
+	    tran = conn.begin()
+	    for m in missingList:
+		#get output module config id
+		cfgid = self.sm.increment(conn, "SEQ_OMC")
+		#find release version id
+		if m["release_version"] in (self.datasetCache['relVer']).keys():
+		    #found in cache
+		    reId = self.datasetCache['relVer'][m["release_version"]]
+		else:
+		    reId = self.releaseVid.execute(conn, m["release_version"])
+		    if reId <= 0:
+			#not found release version in db, insert it now
+			reId = self.sm.increment(conn, "SEQ_RV")
+			reobj={"release_version": m["release_version"], "release_version_id": reId}
+			self.releaseVin(conn, reobj, tran)
+		    #cached it
+		    self.datasetCache['relVer'][m["release_version"]] = reId
+		#find pset hash id
+		if m["pset_hash"] in (self.datasetCache['pHash']).keys():
+                    #found in cache
+                    pHId = self.datasetCache['pHash'][m["pset_hash"]]
+                else:
+                    pHId = self.psetHashid.execute(conn, m["release_version"])
+                    if pHId <= 0:
+                        #not found p set hash in db, insert it now
+                        pHId = self.sm.increment(conn, "SEQ_PSH")
+                        pHobj={"pset_hash": m["pset_hash"], "parameter_set_hash_id": pHId}
+                        self.psetHashin(conn, pHobj, tran)
+                    #cached it
+                    self.datasetCache['pHash'][m["pset_hash"]] = pHId
+		#find application id
+		if m["app_name"] in (self.datasetCache['appExe']).keys():
+                    #found in cache
+                    appId = self.datasetCache['appExe'][m["app_name"]]
+                else:
+                    appId = self.appid.execute(conn, m["app_name"])
+                    if appId <= 0:
+                        #not found application in db, insert it now
+                        appId = self.sm.increment(conn, "SEQ_AE")
+                        appobj={"app_name": m["app_name"], "app_exec_id": appId}
+                        self.appin(conn, appobj, tran)
+                    #cached it
+                    self.datasetCache['appExe'][m["app_name"]] = pHId	
+		#Now insert the config
+		configObj = {'output_mod_config_id':cfgid , 'app_exec_id':appId,  'release_version_id':reId,  \
+                             'parameter_set_hash_id':pHId , 'output_module_label':m['output_module_label'],   \
+                             'creation_date':, 'create_by': }
+		self.otptModCfgin(conn,	configObj, tran)
+		otptIdList.append(cfgid)
+	    tran.commit()
+	exception:
             tran.rollback()
             raise
-        #Now handle Block Parenttage
-        #FIXME
-        tran.commit()
-        return ConfigId
+        return otptIdList
 
 
-    def insertDataset(self, conn, blockcontent, sourceurl)
+    def insertDataset(self, conn, blockcontent, otptIdList, sourceurl)
 	"""
 	This method insert a datsset from a block object into dest dbs. When data is not completed in
 	the block object. It will reterive data from the source url. 
@@ -466,7 +556,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
 		if dataTId <= 0 :
 		    #not in db. Insert the tier
 		    #get the rest data from remote db
-		    theTier = self.getRemoteData(url,datatiers, 'data_tier_name', dataT)
+		    theTier = self.getRemoteData(sourceurl,'datatiers', 'data_tier_name', dataT)
 		    dataTId = self.sm.increment(conn,"SEQ_DT")
 		    theTier['data_tier_id'] = dataTId		    
 		    self.tierin.execute(conn, theTier, tran)
@@ -489,11 +579,37 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 dataset['dataset_access_type_id'] = dsTpId
 		self.datasetCache['datasetAccTp'][dataT] = dsTpId
             del dataset['data_access_type_id']
+            tran.commit()
+	except:
+            tran.rollback()
+            raise
+	try:
+	    tran.conn.begin()
 	    #8 Finally, we have everything to insert a dataset
 	    dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
 	    self.datasetin.execute(conn, dataset, tran)
 	    self.datasetCache['dataset'][dataset['dataset']]=dataset['dataset_id']
-	    #9 FIXME, Before we commit, make dataset and output module configure mapping	
+	    #9 Before we commit, make dataset and output module configure mapping	
+	    for c in otptIdList:
+		try:
+		    dcId = self.sm.increment(conn,"SEQ_DC")
+		    dcObj ={'ds_output_mod_conf_id': self.sm.increment(conn,"SEQ_DC"), \
+                         'dataset_id':dataset['dataset_id'] , 'output_mod_config_id':c }
+		    self.dcin.execute(conn, dcobj, tran)
+		except exceptions.IntegrityError:
+		    #ok, already in db
+		    pass
+		except:
+		    raise 
+	    #10 Fill Dataset Parentage
+	    dsPList = blockcontent['blockcontent']
+	    dsParentObjList=[]
+	    for p in dsPList:
+		dsParentObj={'dataset_parent_id': self.sm.increment(conn,"SEQ_DP"), 'this_dataset_id': dataset['dataset_id']\
+                              'parent_dataset_id' : self.datasetid(conn, p['parent_dataset']}
+		dsParentObjList.append(dsParentObj)
+	    #insert dataset parentage in bulk
+	    self.dsparentin(conn, dsParentObjList, tran)	    
 	    tran.commit()
 	except:
 	    tran.rollback()
