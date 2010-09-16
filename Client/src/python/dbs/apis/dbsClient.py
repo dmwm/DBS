@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.48 $"
-# $Id: dbsClient.py,v 1.48 2010/06/04 20:43:50 afaq Exp $"
+# $Revision: 1.49 $"
+# $Id: dbsClient.py,v 1.49 2010/06/24 21:37:52 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -573,9 +573,9 @@ class DbsApi:
             """
             return self.callServer("/datatiers", params = dataTierObj , callmethod='POST' )
 
-	def migrateStart(self, inp):
-	    """ initialize without service name"""
-	    return self.callServer("/MIGRATE/start", params=inp, callmethod='POST') 
+	def migrateSubmit(self, inp):
+	    """ Submit a migrate request to migration service"""
+	    return self.callServer("/submit", params=inp, callmethod='POST') 
 
 
 if __name__ == "__main__":
