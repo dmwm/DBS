@@ -3,8 +3,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.25 2010/03/18 20:13:26 afaq Exp $"
-__version__ = "$Revision: 1.25 $"
+__revision__ = "$Id: List.py,v 1.26 2010/03/18 20:19:22 afaq Exp $"
+__version__ = "$Revision: 1.26 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -99,7 +99,7 @@ AND DP.DATASET_TYPE <> 'DELETED'
             sql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label" % op
             binds.update(output_module_label=output_module_label)
 	if processing_version:
-	    op = ("=", "like")["%" in processing_era]
+	    op = ("=", "like")["%" in processing_version]
 	    sql += "AND PE.PROCESSING_VERSION %s :pversion" % op
 	    binds.update(pversion=processing_version)
 	if acquisition_era:

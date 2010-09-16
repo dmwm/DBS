@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.22 2010/03/18 19:48:12 afaq Exp $"
-__version__ = "$Revision: 1.22 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.23 2010/03/18 20:19:23 afaq Exp $"
+__version__ = "$Revision: 1.23 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -105,7 +105,7 @@ class DBSReaderModel(RESTModel):
         primary_ds_name = primary_ds_name.replace("*","%")
         return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name)
         
-    def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label=""):
+    def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", processing_version="", acquisition_era=""):
         """
         Example url's: <br />
         http://dbs3/datasets <br />
@@ -119,7 +119,7 @@ class DBSReaderModel(RESTModel):
 	pset_hash = pset_hash.replace("*", "%")
 	app_name = app_name.replace("*", "%")
 	output_module_label = output_module_label.replace("*", "%")
-        return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label)
+        return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, processing_version, acquisition_era)
 
     def listBlocks(self, dataset="", block_name="", site_name=""):
         """
