@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.17 2010/03/15 18:50:45 yuyi Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.18 2010/03/19 12:57:37 yuyi Exp $"
+__version__ = "$Revision: 1.18 $"
 
 import os
 import sys
@@ -77,10 +77,16 @@ class DBSWriterModel_t(unittest.TestCase):
 	
     def test03(self):
 	"""test03: web.DBSWriterModel.insertPrimaryDataset: missing primary_ds_name, must throw exception"""
+	#import pdb
+	#pdb.set_trace()
+		
 	data = {'primary_ds_type':'TEST'}
 	try:
 	    junk = api.insert('primarydatasets', data)
 	except Exception, ex:
+	    #print "**** "
+	    #print ex
+	    #print "****"
 	    if "Primary dataset Name is required for insertPrimaryDataset" in ex.args[0]:
 		pass
 	    else :
@@ -108,7 +114,7 @@ class DBSWriterModel_t(unittest.TestCase):
  	try:
  	    api.insert('outputconfigs', data)
  	except Exception, e:
-	    if "KeyError: 'app_name'" in e.args[0]:
+	    if  'app_name' in e.args[0]:
 		pass
 	    else:
 		self.fail("test06: web.DBSWriterModel.insertOutputModule: missing parameter must cause an exception")
@@ -192,8 +198,8 @@ class DBSWriterModel_t(unittest.TestCase):
 	except Exception, ex:
 	    if 'dataset_type' in ex.args[0]:
 		pass
-	else:
-	    self.fail("Exception missing dataset_type was expected and was not raised.")
+	    else:
+		self.fail("Exception missing dataset_type was expected and was not raised.")
 	    
     def test13(self):
 	"""test13: web.DBSWriterModel.insertDataset: no output_configs, should be fine insert!"""
@@ -327,7 +333,20 @@ class DBSWriterModel_t(unittest.TestCase):
             outDict['files'].append(f['logical_file_name'])
         data={"files":flist}
         api.insert('files', data)
+	
+    def test21(self):
+	"""test21 web.DBSWriterModel.updateFileStatus: Basic test """
+	lfn = "/store/mc/%s-child/%i.root" %(uid, 1)
+	api.update('files', logical_file_name=lfn, is_file_valid=0)
 
+
+    def test22(self):
+        """test22 web.DBSWriterModel.updateDatasetStatus: Basic test """
+        api.update('datasets', dataset=dataset, is_dataset_valid=0)
+
+    def test23(self):
+        """test23 web.DBSWriterModel.updateDatasetType: Basic test """
+        api.update('datasets', dataset=dataset, dataset_type="DEPRECATED") 
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSWriterModel_t)
