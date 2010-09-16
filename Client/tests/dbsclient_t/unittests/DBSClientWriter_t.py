@@ -2,11 +2,12 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.17 2010/04/23 16:50:39 afaq Exp $"
-__version__ = "$Revision: 1.17 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.18 2010/05/27 20:58:18 afaq Exp $"
+__version__ = "$Revision: 1.18 $"
 
 import os
 import sys
+import time
 import unittest
 from dbs.apis.dbsClient import *
 from ctypes import *
@@ -206,7 +207,7 @@ class DBSClientWriter_t(unittest.TestCase):
                 }
 	    flist.append(f)
 	api.insertFiles(filesList={"files":flist})
-
+	time.sleep(10)
 
     def test17(self):
 	"""test17 web.DBSClientWriter.insertFiles: basic test"""
@@ -236,6 +237,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	    flist.append(f)
 	    outDict['parent_files'].append(f['file_parent_list'][0]['file_parent_lfn'])
 	api.insertFiles(filesList={"files":flist})
+	time.sleep(10)
 
     def test18(self):
 	"""test18 web.DBSClientWriter.insertFiles: duplicate insert file shuld not raise any errors"""
@@ -264,6 +266,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	    flist.append(f)
 	    outDict['files'].append(f['logical_file_name'])
 	api.insertFiles(filesList={"files":flist})
+	time.sleep(10)
 	
     def test19(self):
 	"""test19 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
