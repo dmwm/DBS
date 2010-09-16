@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.42 2010/05/04 19:24:54 afaq Exp $"
-__version__ = "$Revision: 1.42 $"
+__revision__ = "$Id: DBSFile.py,v 1.43 2010/05/04 20:04:44 afaq Exp $"
+__version__ = "$Revision: 1.43 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -175,8 +175,7 @@ class DBSFile:
 	    raise ex
 	finally:
 	    conn.close()
-    
-
+   
     def insertFile(self, businput):
 	"""
 	This method supports bulk insert of files
@@ -197,16 +196,18 @@ class DBSFile:
             file_lumi_list (optional, default = []): [{"run_num": 123, "lumi_section_num": 12},{}....] <br />
             file_parent_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
             file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
-            file_output_config_list(optional, default = []) :[{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] <br />
+            file_output_config_list(optional, default = []) :
+		[{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] <br />
 	"""
-	conn = self.dbi.connection()
-	tran = conn.begin()
-	#import pdb
-	#pdb.set_trace()
 
+	# We do not wnat to go be beyond 10 files at a time
+	# If user wants to insert over 10 files in one shot, we run into risks of locking the database 
+	# tables for longer time, and in case of error, it will be hard to see where error occured 
 	if len(businput) > 10:
 	    raise Exception("DBS cannot insert more than 10 files in one bulk call")
 	    return
+	conn = self.dbi.connection()
+	tran = conn.begin()
 	try:
 
 	    # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
