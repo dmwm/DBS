@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.51 $"
-# $Id: dbsClient.py,v 1.51 2010/07/09 19:38:09 afaq Exp $"
+# $Revision: 1.52 $"
+# $Id: dbsClient.py,v 1.52 2010/08/04 12:13:14 akhukhun Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -178,7 +178,7 @@ class DbsApi:
                 return self.callServer("/processingeras", params = procEraObj , callmethod='POST' )
 
         def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", processing_version="", acquisition_era="",
-		run_num="", physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="", data_tier_name="", dataset_access_type=""):
+		run_num="", physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
                 """
                 * API to list dataset(s) in DBS 
                 * dataset : Full dataset (path) of the dataset
@@ -249,6 +249,10 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "dataset_access_type=%s" % dataset_access_type
 		    amp=True
+		if detail: 
+		    if amp: add_to_url += "&"
+		    add_to_url += "detail=%s" % detail
+		    amp=True
 		if add_to_url:
 		    return self.callServer("/datasets?%s" % add_to_url )
 		# Default, list all datasets
@@ -305,7 +309,7 @@ class DbsApi:
                 """
                 return self.callServer("/blocks", params = blockObj , callmethod='POST' )
 
-        def listBlocks(self, block_name="", dataset="", logical_file_name="", origin_site_name="", run_num=-1):
+        def listBlocks(self, block_name="", dataset="", logical_file_name="", origin_site_name="", run_num=-1, detail=False):
                 """
                 * API to list A block in DBS 
                 * block_name : name of the block
@@ -336,10 +340,14 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "run_num=%s" %run_num
 		    amp=True
+		if detail: 
+		    if amp: add_to_url += "&"
+		    add_to_url += "detail=%s" % detail
+		    amp=True
 
 		return self.callServer("/blocks?%s" %add_to_url)
 
-        def listFiles(self, logical_file_name="", dataset="", block="", release_version="", pset_hash="", app_name="", output_module_label="", minrun="", maxrun="", origin_site_name="", lumi_list=[]):
+        def listFiles(self, logical_file_name="", dataset="", block="", release_version="", pset_hash="", app_name="", output_module_label="", minrun="", maxrun="", origin_site_name="", lumi_list=[], detail=False):
                 """
                 * API to list A file in DBS 
                 * logical_file_name : logical_file_name of file
@@ -398,9 +406,13 @@ class DbsApi:
 		    add_to_url += "origin_site_name=%s" %origin_site_name
 		    amp=True
 		if len(lumi_list) > 0 :
+		    #FIXME instead of cjson encoding will need to support the list of intervals, like "1-10,12-24" string
 		    if amp: add_to_url += "&"
-		    add_to_url += "lumi_liste=%s" %lumi_list
-		    print "HOW DO YOU SEND A LIST via URI ???" 
+		    add_to_url += "lumi_list=%s" % lumi_list
+		if detail: 
+		    if amp: add_to_url += "&"
+		    add_to_url += "detail=%s" % detail
+		    amp=True
 		if add_to_url:
 		    return self.callServer("/files?%s" % add_to_url )
 		else:
