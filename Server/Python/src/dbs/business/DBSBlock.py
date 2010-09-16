@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.7 2009/11/27 09:55:02 akhukhun Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSBlock.py,v 1.8 2009/11/30 09:52:31 akhukhun Exp $"
+__version__ = "$Revision: 1.8 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -13,26 +13,24 @@ class DBSBlock:
     Block business object class
     """
     def __init__(self, logger, dbi, owner):
-        self.daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
+        daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
         self.logger = logger
         self.dbi = dbi
 
-        self.BlockList = self.daofactory(classname="Block.List")
-
-        self.SequenceManager = self.daofactory(classname = "SequenceManager")
-        self.DatasetGetID = self.daofactory(classname = "Dataset.GetID")
-        self.SiteGetID = self.daofactory(classname = "Site.GetID")
-        self.BlockInsert = self.daofactory(classname = "Block.Insert")
-
+        self.blocklist = daofactory(classname="Block.List")
+        self.sm = daofactory(classname = "SequenceManager")
+        self.datasetid = daofactory(classname = "Dataset.GetID")
+        self.siteid = daofactory(classname = "Site.GetID")
+        self.blockin = daofactory(classname = "Block.Insert")
 
 
     def listBlocks(self, dataset="", block=""):
         """
-        Returns all blocks in a dataset if block pattern ("can include %") 
-        is not provided.
+        either dataset or block must be provided.
         """
-        return self.BlockList.execute(dataset=dataset, block=block)
-
+        return self.blocklist.execute(dataset=dataset, block=block)
+    
+    
     def insertBlock(self, businput):
         """
         Input dictionary has to have the following keys:
@@ -40,14 +38,13 @@ class DBSBlock:
         filecount, creationdate, createby, lastmodificationdate, lastmodifiedby
         it builds the correct dictionary for dao input and executes the dao
         """
-
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            businput["dataset"] = self.DatasetGetID.execute(businput["dataset"], conn, True)
-            businput["originsite"] = self.SiteGetID.execute(businput["originsite"], conn, True)
-            businput["blockid"] =  self.SequenceManager.increment("SEQ_BK", conn, True)
-            self.BlockInsert.execute(businput, conn, True)
+            businput["dataset"] = self.datasetid.execute(businput["dataset"], conn, True)
+            businput["originsite"] = self.siteid.execute(businput["originsite"], conn, True)
+            businput["blockid"] =  self.sm.increment("SEQ_BK", conn, True)
+            self.blockin.execute(businput, conn, True)
             tran.commit()
         except Exception, e:
             tran.rollback()
