@@ -2,8 +2,8 @@
 """
 This module provides AcquisitionEra.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/03/05 14:57:52 yuyi Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: GetID.py,v 1.7 2010/03/15 14:09:30 yuyi Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -24,7 +24,7 @@ class GetID(DBFormatter):
         WHERE AE.ACQUISITION_ERA_NAME = :acquisition_era_name 
 	""" % (self.owner)
 
-    def execute(self, name, conn, transaction = False):
+    def execute(self, conn, name, transaction = False):
         """
         returns id for a given acquisition_era
         """
