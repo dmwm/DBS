@@ -2,8 +2,8 @@
 """
 This module provides StorageElement.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.1 2010/03/02 20:17:19 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List.py,v 1.2 2010/03/05 20:17:42 yuyi Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -22,14 +22,14 @@ class List(DBFormatter):
 	SELECT SE.SE_NAME 
 	FROM %sSTORAGE_ELEMENTS SE""" % (self.owner)
 
-    def execute(self, se_name = "", conn = None, trans = False):
+    def execute(self, conn, se_name = "", trans = False):
         """
         Lists all storage elements.
 	se_name can be a pattern as well
         """
 
 	if not conn:
-		raise "database conection does not exist"
+		raise Exception("dbs/dao/Oracle/StorageElement/List expects db connection from up layer.")
 	sql = self.sql
 	
 	if se_name:

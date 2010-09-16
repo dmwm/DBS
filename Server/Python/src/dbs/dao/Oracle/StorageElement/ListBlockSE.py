@@ -2,8 +2,8 @@
 """
 This module provides StorageElement.ListBlockSE data access object.
 """
-__revision__ = "$Id: ListBlockSE.py,v 1.2 2010/03/02 21:13:13 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: ListBlockSE.py,v 1.3 2010/03/05 20:17:42 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -27,13 +27,13 @@ class ListBlockSE(DBFormatter):
 			ON B.BLOCK_ID = BSE.BLOCK_ID
 	WHERE BLOCK_NAME = :block_name""" % ((self.owner,) * 3)
 
-    def execute(self, block_name = "", conn = None, trans = False):
+    def execute(self, conn, block_name = "", trans = False):
         """
         Lists all storage elements for the block.
         """
 
 	if not conn:
-		raise "database conection does not exist"
+		raise Exception("dbs/dao/Oracle//Insert expects db connection from up layer.")
 	sql = self.sql
 
 	binds={ "block_name" : block_name }
