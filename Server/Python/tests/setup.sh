@@ -10,12 +10,13 @@ export DBS_TEST_COUNTER=3
 export DBS_TEST_CONFIG_READER=$DBS3_ROOT/Config/${1:-cms_dbs}.py
 export DBS_TEST_CONFIG_WRITER=$DBS3_ROOT/Config/${1:-cms_dbs}_writer.py
 
+echo ${1}
 [ -f $DBS_TEST_CONFIG_READER ] || {
         echo "Reader config $DBS_TEST_CONFIG_READER not found"
         exit 1
 }
 [ -f $DBS_TEST_CONFIG_WRITER ] || {
-        echo "Reader config $DBS_TEST_CONFIG_WRITER not found"
+        echo "Writer config $DBS_TEST_CONFIG_WRITER not found"
         exit 1
 }
 
