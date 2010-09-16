@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.37 $"
-# $Id: dbsClient.py,v 1.37 2010/03/19 19:40:24 afaq Exp $"
+# $Revision: 1.38 $"
+# $Id: dbsClient.py,v 1.38 2010/04/16 19:27:15 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -440,7 +440,19 @@ class DbsApi:
 	    * complete : 1/0 mark it complete
 	    """
 	    return self.callServer("/runs?dataset=%s&run_number=%s&complete=%s" %(dataset, run_number, complete), params={}, callmethod='PUT')
-	
+
+	def updateBlockStatus(self, block_name, open_for_writing):
+	    """
+	    API to update block status
+	    * block_name : block name
+	    * open_for_writing : open_for_writing=0 (close), open_for_writing=1 (open)
+	    """
+	    print block_name
+	    print open_for_writing
+	    parts=block_name.split('#')
+	    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+	    return self.callServer("/blocks?block_name=%s&open_for_writing=%s" %(block_name, open_for_writing), params={}, callmethod='PUT')
+
 	def listDataTypes(self, dataset=""):
 	    """
 	    API to list data types
