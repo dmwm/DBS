@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.16 2010/08/27 14:19:02 afaq Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.17 2010/08/27 21:57:13 afaq Exp $"
+__version__ = "$Revision: 1.17 $"
 
 import json
 import os, logging
@@ -82,6 +82,9 @@ class DBSRestApi:
     def insert(self, call, params={}):
         request.method = 'POST'
         request.body = FileLike(params)
+	#Forcing NO use of insert buffer during the unit tests
+	if call=='files':
+	    ret=self.rest.default(*[call, False])
 	ret=self.rest.default(*[call])
         return self.parseForException(ret)
 
