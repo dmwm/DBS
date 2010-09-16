@@ -11,7 +11,7 @@ def echoInfo(configfile):
     service = list(appconfig.views.active._internal_children)[0]
     dbsconfig = getattr(appconfig.views.active, service)   
     if sys.argv[2] == "database":
-	print dbsconfig.database.connectUrl
+	print dbsconfig.database
     elif sys.argv[2] == "dbowner":
 	print dbsconfig.dbowner
     else:
