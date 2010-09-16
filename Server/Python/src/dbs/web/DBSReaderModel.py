@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.14 2010/01/27 17:27:22 afaq Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.15 2010/02/08 22:43:29 afaq Exp $"
+__version__ = "$Revision: 1.15 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -108,6 +108,11 @@ class DBSReaderModel(RESTModel):
         http://dbs3/datasets?dataset=/RelVal*/*/*RECO&release_version=CMSSW_3_0_0<br />
         """
         dataset = dataset.replace("*", "%")
+	parent_dataset = parent_dataset.replace("*", "%")
+	release_version = release_version.replace("*", "%")
+	pset_hash = pset_hash.replace("*", "%")
+	app_name = app_name.replace("*", "%")
+	output_module_label = output_module_label.replace("*", "%")
         return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label)
 
     def listBlocks(self, dataset="", block_name="", site_name=""):
@@ -129,6 +134,10 @@ class DBSReaderModel(RESTModel):
         http://dbs3/files?block_name=/a/b/c%23d&logical_file_name=/store/* <br />
         """
         logical_file_name = logical_file_name.replace("*", "%")
+	release_version = release_version.replace("*", "%")
+	pset_hash = pset_hash.replace("*", "%")
+	app_name = app_name.replace("*", "%")
+	output_module_label = output_module_label.replace("*", "%")
         return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, output_module_label)
     
     def listDatasetParents(self, dataset):
@@ -149,7 +158,11 @@ class DBSReaderModel(RESTModel):
         http://dbs3/outputconfigurations?app_name=app_name <br/>
         http://dbs3/outputconfigurations?output_module_label="output_module_label" <br/>
         """
-        return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, release_version, pset_hash, app_name, output_module_label)
+       	release_version = release_version.replace("*", "%")
+	pset_hash = pset_hash.replace("*", "%")
+	app_name = app_name.replace("*", "%")
+	output_module_label = output_module_label.replace("*", "%")
+	return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, release_version, pset_hash, app_name, output_module_label)
     
     def listFileParents(self, logical_file_name):
         """

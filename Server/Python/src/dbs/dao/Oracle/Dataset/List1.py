@@ -3,8 +3,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List1.py,v 1.5 2010/01/25 23:20:56 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: List1.py,v 1.6 2010/02/08 22:43:27 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -83,16 +83,20 @@ AND DP.DATASET_TYPE <> 'DELETED'
             sql += " AND PDS.DATASET = :parent_dataset"
             binds.update(parent_dataset = parent_dataset)
         if release_version:
-            sql += " AND RV.RELEASE_VERSION = :release_version"
+	    op = ("=", "like")["%" in release_version]
+            sql += " AND RV.RELEASE_VERSION %s :release_version" % op
             binds.update(release_version=release_version)
         if pset_hash:
-            sql += " AND PSH.PSET_HASH = :pset_hash"
+	    op = ("=", "like")["%" in pset_hash]
+            sql += " AND PSH.PSET_HASH %s :pset_hash" % op
             binds.update(pset_hash = pset_hash)
         if app_name:
-            sql += " AND AEX.APP_NAME = :app_name"
+	    op = ("=", "like")["%" in app_name]
+            sql += " AND AEX.APP_NAME %s :app_name" % op
             binds.update(app_name = app_name)
         if output_module_label:
-            sql += " AND OMC.OUTPUT_MODULE_LABEL  = :output_module_label" 
+	    op = ("=", "like")["%" in output_module_label]
+            sql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label" % op
             binds.update(output_module_label=output_module_label)
 
         cursor = conn.connection.cursor()
