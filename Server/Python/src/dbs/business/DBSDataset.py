@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.32 2010/03/25 17:06:00 afaq Exp $"
-__version__ = "$Revision: 1.32 $"
+__revision__ = "$Id: DBSDataset.py,v 1.33 2010/04/06 14:24:52 afaq Exp $"
+__version__ = "$Revision: 1.33 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -176,13 +176,13 @@ class DBSDataset:
 										anOutConfig["output_module_label"], tran) 
 		    dsoutconfdaoin["ds_output_mod_conf_id"] = self.sm.increment(conn, "SEQ_DC", tran)
 		    #print "INSERTING output_mod_config_id :::::: %s" %str(dsoutconfdaoin["output_mod_config_id"])
-                try:
-                    self.datasetoutmodconfigin.execute(conn, dsoutconfdaoin, tran)
-                except Exception, ex:
-                    if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-                        pass
-                    else:
-                        raise
+		    try:
+			self.datasetoutmodconfigin.execute(conn, dsoutconfdaoin, tran)
+		    except Exception, ex:
+			if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+			    pass
+			else:
+			    raise
             # Dataset parentage will NOT be added by this API it will be set by insertFiles()--deduced by insertFiles
             # Dataset  runs will NOT be added by this API they will be set by insertFiles()--deduced by insertFiles OR insertRun API call
             tran.commit()
