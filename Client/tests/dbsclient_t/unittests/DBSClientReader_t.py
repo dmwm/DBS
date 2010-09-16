@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.11 2010/03/18 17:13:26 afaq Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.12 2010/03/18 19:48:37 afaq Exp $"
+__version__ = "$Revision: 1.12 $"
 
 import os
 import json
@@ -264,33 +264,49 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test54(self):
         """test54 unittestDBSClientReader_t.listRuns : basic test"""
-        #listRuns(self, dataset="", block="", lfn="", minRun="", maxRun="")
-        api.listRuns(minRun=testparams['runs'][1])
+        api.listRuns(minrun=testparams['runs'][1])
  
     def test55(self):
         """test55 unittestDBSClientReader_t.listRuns : basic test"""
-        api.listRuns(maxRun=testparams['runs'][2])
+        api.listRuns(maxrun=testparams['runs'][2])
     
     def test55(self):
         """test55 unittestDBSClientReader_t.listRuns : basic test"""
-        api.listRuns(minRun=testparams['runs'][0], maxRun=testparams['runs'][2])
-
+        api.listRuns(minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
 
     def test56(self):
 	"""test56 unittestDBSClientReader_t.listRuns : basic test"""
-	api.listRuns(dataset=testparams['dataset'], minRun=testparams['runs'][0], maxRun=testparams['runs'][2])
+	api.listRuns(dataset=testparams['dataset'], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
 
     def test57(self):
 	"""test57 unittestDBSClientReader_t.listRuns : basic test"""
-	api.listRuns(block=testparams['block'], minRun=testparams['runs'][0], maxRun=testparams['runs'][2])
+	api.listRuns(block=testparams['block'], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
 	
     def test58(self):
 	"""test58 unittestDBSClientReader_t.listRuns : basic test"""
-	api.listRuns(lfn=testparams['files'][0], minRun=testparams['runs'][0], maxRun=testparams['runs'][2])
+	api.listRuns(lfn=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
 
+    def test59(self):
+	"""test59 unittestDBSClientReader_t.listRuns : basic test"""
+	api.listRuns(dataset=testparams['dataset'], block=testparams['block'], lfn=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
 
+    def test60(self):
+	"""test60 unittestDBSClientReader_t.listDatasetParents basic test"""
+	api.listDatasetParents(dataset='doesnotexists')
 
+    def test61(self):
+	"""test61 unittestDBSClientReader_t.listFiles: basic test"""
+	api.listFiles(dataset=testparams['dataset'], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
     
+    def test62(self):
+	"""test62 unittestDBSClientReader_t.listFiles: basic test"""
+	api.listFiles(block=testparams['block'], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
+    
+    def test63(self):
+	"""test63 unittestDBSClientReader_t.listFiles: NOT YET SUPPORTED"""
+	#api.listFiles(lfn=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])	
+	pass
+	
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
