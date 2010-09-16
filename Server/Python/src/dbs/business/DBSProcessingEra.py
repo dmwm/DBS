@@ -3,7 +3,7 @@
 This module provides business object class to interact with DBSProcessingEra. 
 """
 
-__revision__ = "$Id: DBSProcessingEra.py,v 1.1 2009/12/28 16:55:29 afaq Exp $"
+__revision__ = "$Id: DBSProcessingEra.py,v 1.2 2010/01/19 19:42:52 afaq Exp $"
 __version__ = "$Revision $"
 
 from WMCore.DAOFactory import DAOFactory
@@ -36,8 +36,6 @@ class DBSProcessingEra:
         processing_version, creation_date, create_by, description
         it builds the correct dictionary for dao input and executes the dao
         """
-	import pdb
-	pdb.set_trace()
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
