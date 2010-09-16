@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.10 2009/11/12 22:47:53 afaq Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: DBSModel.py,v 1.11 2009/11/13 21:07:50 yuyi Exp $"
+__version__ = "$Revision: 1.11 $"
 
 import re
 import json, cjson
@@ -26,7 +26,7 @@ class DBSModel(RESTModel):
         """
         RESTModel.__init__(self, config)
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
-        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
+       self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
         self.addService('GET', 'datasets', self.listDatasets, ['dataset'])
         self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block'])
         self.addService('GET', 'files', self.listFiles, ['dataset', 'block', 'lfn'])
@@ -187,48 +187,43 @@ class DBSModel(RESTModel):
         """
         gets the input from cherrypy request body
         input must be a (list of) dictionary with the following keys:
-        logicalfilename: string
-        isfilevalid: bool
-        #dataset: /a/b/c I will get this from the block
-        block: /a/b/c#d
-        filetype: one of the predefined types, e.g. EDM,
-        checksum: string
-        eventcount: int
-        filesize: float
-        branchhash: string
-        adler32: string
-        md5: string
-        autocrosssection: float
+        LOGICAL_FILE_NAME: string
+        IS_FILE_VALID: 1/0
+        #DATASET: /a/b/c I will get this from the block
+        BLOCK: /a/b/c#d
+        FILE_TYPE: one of the predefined types, e.g. EDM,
+        CHECK_SUM: string
+        EVENT_COUNT: int
+        FILE_SIZE: float
+        ADLER32: string
+        MD5: string
+        AUTO_CROSS_SECTION: float
+	FILE_LUMI_LIST: [{"RUN_NUM": 123, "LUMI_SECTION_NUM": 12},{}....]
+	FILE_PARENT_LIST :[{"FILE_PARENT_LFN": "mylfn"},{}....] 
         """
         body = request.body.read()
         indata = cjson.decode(body)
         
+        # lot of validation goes here: These are bad checks. Need to be fixed later
         businput = []
-        vblock = re.compile(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$")
+        #vblock = re.compile(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$")
         assert type(indata) in (list, dict)
         if type(indata) == dict:
             indata = [indata]
         for f  in indata:
-            block = vblock.match(f["block"])
-            conditions = (len(f.keys()) == 11,
-                          "logicalfilename" in f.keys(),
-                          type(f["isfilevalid"]) == bool,
-                          block,
-                          f["filetype"] in ("EDM"),
-                           "checksum" in f.keys(),
-                           type(f["eventcount"]) == int,
-                           type(f["filesize"]) == float,
-                           "branchhash" in f.keys(),
-                           "adler32" in f.keys(),
-                           "md5" in f.keys(),
-                           type(f["autocrosssection"]) == float)
+            #block = vblock.match(f["block"])
+	    block = f["BLOCK"]
+            conditions = ( "LOGICAL_FILE_NAME" in f.keys(),
+                          f["IS_FILE_VALID"] in (0,1),
+                          "BLOCK" in f.keys(),
+                          f["FILE_TYPE"] in ("EDM"))
             for c in conditions:
                 assert c, "One of the input conditions is not satisfied" % conditions
-            f.update({"dataset":block.groups()[0],
-                     "creationdate":12345,
-                     "createby":"aleko",
-                     "lastmodificationdate":1234,
-                     "lastmodifiedby":"alsoaleko"})
+            f.update({"DATASET":block.groups()[0],
+                     "CREATION_DATE":12345,
+                     "CREATE_BY":"aleko",
+                     "LAST_MODIFICATION_DATE":12345,
+                     "LAST_MODIFIED_BY":"alsoaleko"})
             businput.append(f)
         bo = DBSFile(self.logger, self.dbi)
         bo.insertFile(businput)
