@@ -2,8 +2,8 @@
 """
 DBS Migration Service Polling Module
 """
-__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.3 2010/06/28 21:27:54 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.4 2010/06/29 19:22:36 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import threading
 import logging
@@ -15,6 +15,9 @@ from sqlalchemy import exceptions
 
 from WMCore.WorkerThreads.BaseWorkerThread import BaseWorkerThread
 from WMCore.DAOFactory import DAOFactory
+
+import json, cjson
+import urllib, urllib2
 
 class DBSMigrationServicePoller(BaseWorkerThread) :
 
@@ -44,23 +47,17 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
         """
         Load DB objects required for queries
         """
-	
+
 	# Setup the DAO objects
 	daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=self.dbowner)
 
         self.sm		    = daofactory(classname="SequenceManager")
-	self.requestlist = daofactory(classname="MigrationRequests.ListOldest")
+	self.reqlist = daofactory(classname="MigrationRequests.List")
+	self.minreqlist = daofactory(classname="MigrationRequests.ListOldest")
 	self.requestup   = daofactory(classname="MigrationRequests.Update")
+	self.blklist = daofactory(classname="MigrationBlock.List")
+	self.blkup = daofactory(classname="MigrationBlock.Update")
 
-
-
-
-
-
-
-
-
-	
         self.primdslist	    = daofactory(classname="PrimaryDataset.List")
 	self.datasetlist    = daofactory(classname="Dataset.List")
 	self.blocklist	    = daofactory(classname="Block.List")
@@ -75,9 +72,6 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
         self.procdsin	    = daofactory(classname='ProcessedDataset.Insert')
         self.primdsin	    = daofactory(classname="PrimaryDataset.Insert")
         self.datasetin	    = daofactory(classname='Dataset.Insert')
-	
-
-
 	
 	self.sm = daofactory(classname = "SequenceManager")
 	self.filein = daofactory(classname = "File.Insert")
@@ -97,40 +91,8 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	self.compstatusin = daofactory(classname="ComponentStatus.Insert")
 	self.compstatusup = daofactory(classname="ComponentStatus.Update")
 
-
 	# Report that service has started
 	self.insertStatus("STARTED")
-
-
-
-    def run(self):
-	while True:
-	    req = self.q.get()
-	    migration_dataset = req['migration_dataset']
-	    self.dbsMigrate.updateMigrationStatus('RUNNING', migration_dataset)
-	    #here the actual migration goes
-	    try:
-		businput = dict(url=req["migration_url"], dataset=req["migration_dataset"])
-		self.dbsMigrate.migrate(businput)
-		self.dbsMigrate.updateMigrationStatus('COMPLETED', migration_dataset)
-		time.sleep(10)
-	    except Exception, ex:
-		self.dbsMigrate.updateMigrationStatus('FAILED', migration_dataset)
-		print "I AM HERE"
-		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-
-
-
-
-
-
-	
-    # called by frk at the termination time
-    def terminate(self, params):
-	"""
-	Terminate
-	"""
-	logging.debug("Terminating DBS Migration Service")
 
     # This is the actual poll method, called over and over by the frwk
     def algorithm(self, parameters):
@@ -157,61 +119,148 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	8. After no more blocks can be migrated, mark the request as DONE (move to history table!!!!)
 	"""
 	
-	request=-1
+	request={}
+	request_id=-1
 	try :
 	    #1.
 	    #FIXME: lock requests table
-	    requests=self.getMigrationRequests(conn)
-	    if len(requests) > 0:
-		request=requests[0]	
-	    # 2.
-	    #Change the status to RUNNING
-	    self.updateRequestStatus(conn, request[""], "RUNNING")	
-	except exception, ex:
-	    self.logger.exception("DBS Migration Service failed to acquire a request: %s" %str(ex))
+	    conn = self.dbi.connection()
+	    request=self.getMigrationRequest(conn)
+	    if len(request) < 1:
+		return
+	    request_id=request["migration_request_id"]
+	    #If a request has been found
+	    blocks = self.findMigrateableBlocks(conn, request_id)
+	    for ablock in blocks:
+	        self.migrateBlock(conn, ablock['migration_block'], request["migration_url"])
+	        # report status to database, a cycle has been completed, successfully
+	        self.reportStatus("WORKING FINE")
+	    #Mark the request as done
+	    self.updateRequestStatus(conn, request_id, "COMPLETED")
+	    #FIXME: What do we do to the blocks, once all the blocks are DONE 
+	except Exception, ex:
+	    self.logger.exception("DBS Migration Service failed to perform migration %s" %str(ex))
+	    if request.has_key('migration_request_id') and  request['migration_status'] == "RUNNING":
+		self.updateRequestStatus(conn, request_id, "FAILED")
 	    raise
 	finally:
 	    #FIXME: un-lock requests table
+	    print "Unlock here"
+	    conn.close()
 
-	#If a request has been found
-	if request!=-1: 
-	    self.findMigrateableBlocks()
-	
-    def getMigrationRequest(self):
+    def getMigrationRequest(self, conn):
 	"""
 	Pick up a pending request from the queued requests (in database)
+	--atomic operation
 	"""
-	
+	request=[]
 	try:
-	    conn = self.dbi.connection()
-	    requests = self.requestlist.execute()
-	    return requests
+	    requests = self.minreqlist.execute(conn)
+	    if len(requests) > 0:
+		# get details
+		request=self.reqlist.execute(conn, migration_request_id=requests[0]['migration_request_id'])[0]
+		# 2.
+		#Change the status to RUNNING
+		self.updateRequestStatus(conn, request["migration_request_id"], "RUNNING")	
+		request["migration_status"]="RUNNING"
+	    return request
 	except:
 	    self.logger.exception("DBS Migrate Service Failed to find migration requests")
 	    raise
-	    
-    def updateMigrationStatus(self, conn, migration_request_id, migration_status):
+	
+    def updateRequestStatus(self, conn, request_id, status):
             try:
-	        upst = dict(migration_status=migration_status, migration_request_id=migration_request_id)
-                self.mgrup.execute(conn, upst)
+	        upst = dict(migration_status=status, migration_request_id=request_id)
+                self.requestup.execute(conn, upst)
             except:
 	        raise
-	
-    def findMigrateableBlocks(self):
+		
+    def updateBlockStatus(self, conn, block_name, status):
+            try:
+	        blkupst = dict(migration_status=status, migration_block=block_name)
+                self.blkup.execute(conn, blkupst)
+            except:
+	        raise
+
+    def findMigrateableBlocks(self, conn, request_id):
 	"""
 	Get the blocks that need to be migrated
 	"""
 	try:
-	    conn = self.dbi.connection()
-	    result = self.blklist.execute(conn)
-            conn.close()
+	    result = self.blklist.execute(conn, request_id)
             return result
 	except Exception, ex:
 	    raise ex
-	finally:
-	    conn.close()
-    
 
+    def migrateBlock(self, conn, block_name, url):
+	"""
+	Performs the block migration
+	"""
+
+	try:
+	    self.updateBlockStatus(conn, block_name, 'RUNNING')
+	    blockcontent = self.getBlock(url, block_name)
+	    self.putBlock(blockcontent)
+	    self.updateBlockStatus(conn, block_name, 'COMPLETED')
+	except Exception, ex:
+	    self.dbsMigrate.updateBlockStatus(conn, block_name, 'FAILED')
+	    raise Exception ("Migration Failed, DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+
+    def getBlock(self, url, block_name):
+	"""Client type call to get the block content from the server"""
+	blockname = block_name.replace("#",urllib.quote_plus('#'))
+	resturl = "%s/blockdump?block_name=%s" % (url, blockname)
+	req = urllib2.Request(url = resturl)
+        data = urllib2.urlopen(req)
+        ddata = cjson.decode(data.read())
+        return ddata
+
+    def putBlock(self, blockcontent):
+	"""Huge method that inserts everything.
+	   Want to do it in one transaction, so that if there is problem it rolls back.
+	   Inserts all data into corresponding tables"""
+	conn = self.dbi.connection()
+        tran = conn.begin()
+
+	#insert primary dataset
+	d = blockcontent["primds"]
+	primds = {}
+	try:
+	    primds["primary_ds_type_id"] = self.primdstpid.execute(conn, d["primary_ds_type"])
+	    primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS", tran)
+	    for k in ("primary_ds_name", "creation_date", "create_by"):
+		primds[k] = d[k]
+
+	    self.primdsin.execute(conn, primds, tran)
+	except IntegrityError:
+	    pass
+	except:
+	    tran.rollback()
+	    conn.close()
+	    raise
+
+	#insert dataset (and processed dataset if it is not already inserted)
+	d = blockcontent["dataset"]
+	dataset = {}
+	dataset["primary_ds_id"]    = primds["primary_ds_id"]
+	dataset["data_tier_id"]     = self.tierid.execute(conn, d["data_tier_name"])
+	dataset["dataset_type_id"]  = self.datatypeid.execute(conn, d["dataset_type"])
+	dataset["physics_group_id"] = self.phygrpid.execute(conn, d["physics_group_name"])
+
+	procid = self.procdsid.execute(conn, d["processed_ds_name"])
+	if procid>0:
+	    dataset["processed_ds_id"] = procid
+	else:
+	    procid = self.sm.increment(conn, "SEQ_PSDS", tran)
+	    procdaoinput = {"processed_ds_name":d["processed_ds_name"],
+                            "processed_ds_id":procid}
+	    self.procdsin.execute(conn, procdaoinput, tran)
+	    dataset["processed_ds_id"] = procid
+        dataset["dataset_id"] = self.sm.increment(conn, "SEQ_DS", tran) 
+	for k in ("dataset", "is_dataset_valid", "global_tag", "xtcrosssection",
+		  "creation_date", "create_by", "last_modification_date", "last_modified_by"):
+	    print "DO SOMETHING EHRE............"
+	
     def insertStatus(self, status = "UNKNOWN" ):
 	"""
 	This is a local function, basically component reports its status to database
@@ -252,157 +301,78 @@ class DBSMigrationServicePoller(BaseWorkerThread) :
 	    self.logger.exception("DBS Insert Buffer Poller Exception: %s" %ex)
     	finally:
 	    conn.close()
-    def getBufferedFiles(self, block_id):
-        """
-        Get some files from the insert buffer
-        """
-	    
-	try:
-	    conn = self.dbi.connection()
-	    result = self.buflist.execute(conn, block_id)
-            conn.close()
-            return result
-	except Exception, ex:
-	    raise ex
-	finally:
-	    conn.close()
-   
-    def removeDuplicates(self):
-      """
-      Check to see if there are duplicate entries for a block in the buffer, remove them
-      """
+        # called by frk at the termination time
 
-      try:
-	conn = self.dbi.connection()
-	dups = self.buffinddups.execute(conn)
-	if len(dups) > 0 :
-	    # If there are duplicates, delete them
-	    tran = conn.begin()
-	    self.bufdeletedups.execute(conn, dups, tran)
-	    tran.commit()
-      except Exception, ex:
-        tran.rollback()
-        self.logger.exception(ex)
-	raise ex
-      finally:
-        conn.close()
+    def terminate(self, params):
+	"""
+	Terminate
+	"""
+	logging.debug("Terminating DBS Migration Service")
+
+
+if __name__ == '__main__':
+#----------------
+# This section is just for testing
+#---------------
+
+    from WMCore.Configuration import Configuration, loadConfigurationFile
+    from WMCore.Database.DBCore import DBInterface
+    from WMCore.Database.DBFactory import DBFactory
+    from sqlalchemy import create_engine
+    import logging
+
+    def configure(configfile):
+        config = loadConfigurationFile(configfile)
 	
-    def insertBufferedFiles(self, businput):
+	"""
+        wconfig = cfg.section_("Webtools")
+        app = wconfig.application
+        appconfig = cfg.section_(app)
+        service = list(appconfig.views.active._internal_children)[0]
+        dbsconfig = getattr(appconfig.views.active, service)
+        dbsconfig.formatter.object="WMCore.WebTools.RESTFormatter"
+        config = Configuration()
+        config.component_('DBS')
+        config.DBS.application = app
+        config.DBS.model       = dbsconfig.model
+        config.DBS.formatter   = dbsconfig.formatter
+        config.DBS.database    = dbsconfig.database
+        config.DBS.dbowner     = dbsconfig.dbowner
+        config.DBS.version     = dbsconfig.version
+        config.DBS.default_expires = 300
+        config = config.section_("DBS")
 	"""
 
-	insert the files from the buffer
-	The files contain everything needed to insert them into various tables
+        print config
+        return config
+
+    def setupDB(config):
+	
+	logger = logging.getLogger()
+	_engineMap = {}
+	myThread = threading.currentThread()
+	print config
 	"""
-	
-	conn = self.dbi.connection()
-	tran = conn.begin()
-	block_id=""
-	try:
-	    files=[]
-	    lumis=[]
-	    parents=[]
-	    configs=[]	    
-	    fidl=[]
-	    flfnl=[]
-	    fileInserted=False
-	    
-	    for ablob in businput:
-		block_id=ablob["file"]["block_id"]
-		if ablob.has_key("file") : 
-		    files.append(ablob["file"])
-		    fidl.append(ablob["file"]["file_id"])
-		    flfnl.append({"lfn" : ablob["file"]["logical_file_name"] })
-	        if ablob.has_key("file_lumi_list") : lumis.extend(ablob["file_lumi_list"])
-		if ablob.has_key("file_parent_list") : parents.extend(ablob["file_parent_list"])
-		if ablob.has_key("file_output_config_list") : configs.extend(ablob["file_output_config_list"]) 
+	_defaultEngineParams = {"convert_unicode" : True,
+                            "strategy": "threadlocal",
+                            "pool_recycle": 7200}
+	engine = _engineMap.setdefault(config.database.connectUrl,
+                                         create_engine(config.database.connectUrl,
+                                                       connect_args = {},
+                                                       **_defaultEngineParams)
+                                                  )
+	"""
 
-	    # insert files
-	    if len(files) > 0:	
-		self.filein.execute(conn, files, transaction=tran)
-		fileInserted=True
-	    # insert file - lumi   
-	    if len(lumis) > 0:
-		self.flumiin.execute(conn, lumis, transaction=tran)
-	    # insert file parent mapping
-	    if len(parents) > 0:
-		self.fparentin.execute(conn, parents, transaction=tran)
-	    # insert output module config mapping
-	    if len(configs) > 0:
-		self.fconfigin.execute(conn, configs, transaction=tran)  
-	    # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
-	    # fpbdlist, returns a dict of {block_id, dataset_id} combination
-	    if fileInserted:
-		fpblks=[]
-		fpds=[]
-		fileParentBlocksDatasets = self.fpbdlist.execute(conn, fidl, transaction=tran)
-		for adict in fileParentBlocksDatasets:
-		    if adict["block_id"] not in fpblks:
-			fpblks.append(adict["block_id"])
-		    if adict["dataset_id"] not in fpds:
-		    	fpds.append(adict["dataset_id"])
-		# Update Block parentage
-		if len(fpblks) > 0 :
-		    # we need to bulk this, number of parents can get big in rare cases
-		    bpdaolist=[]
-		    iPblk = 0
-		    fpblkInc = 10
-		    bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
-		    for ablk in fpblks:
-			if iPblk == fpblkInc:
-			    bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
-			    iPblk = 0
-			bpdao={ "this_block_id": block_id }
-			bpdao["parent_block_id"] = ablk
-			bpdao["block_parent_id"] = bpID
-			bpdaolist.append(bpdao)
-		    # insert them all
-		    # Do this one by one, as its sure to have duplicate in dest table
+	myThread.logger=logger
+	myThread.dbFactory = DBFactory(myThread.logger, config.CoreDatabase.connectUrl, options={})
+        myThread.dbi = myThread.dbFactory.connect()
+    	#dbInterface =  DBInterface(logger, engine)
+        #myThread.dbi=dbInterface
+#Run the test
 
-		    for abp in bpdaolist:
-			try:
-			    self.blkparentin.execute(conn, abp, transaction=tran)
-			except exceptions.IntegrityError, ex:
-			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-				pass
-			    else:
-				raise
-		# Update dataset parentage
-		if len(fpds) > 0 :
-		    dsdaolist=[]
-		    iPds = 0
-		    fpdsInc = 10
-		    pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
-		    for ads in fpds:
-			if iPds == fpdsInc:
-			    pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
-			    iPds = 0
-			dsdao={ "this_dataset_id": dataset_id }
-			dsdao["parent_dataset_id"] = ads
-			dsdao["dataset_parent_id"] = pdsID # PK of table 
-			dsdaolist.append(dsdao)
-		    # Do this one by one, as its sure to have duplicate in dest table
-		    for adsp in dsdaolist:
-			try:
-			    self.dsparentin.execute(conn, adsp, transaction=tran)
-			except exceptions.IntegrityError, ex:
-			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-				pass
-			    else:
-				raise
-		# Update block parameters, file_count, block_size
-		blkParams=self.blkstats.execute(conn, block_id, transaction=tran)
-		blkParams['block_size']=long(blkParams['block_size'])
-		self.blkstatsin.execute(conn, blkParams, transaction=tran)
-	    # Delete the just inserted files
-	    self.bufdeletefiles.execute(conn, flfnl, transaction=tran)
-	    # All good ?. 
-            tran.commit()
+    config=configure("DefaultConfig.py")
+    setupDB(config)
 
-	except Exception, e:
-	    tran.rollback()
-	    self.logger.exception(e)
-	    raise
-
-	finally:
-	    conn.close()
-	
+    migrator=DBSMigrationServicePoller(config)
+    migrator.setup("NONE")
+    migrator.algorithm("NONE")
