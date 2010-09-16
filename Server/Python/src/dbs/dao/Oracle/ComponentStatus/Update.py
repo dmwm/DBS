@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ComponentStatus Table """ 
 
-__revision__ = "$Revision: 1.1 $"
-__version__  = "$Id: Update.py,v 1.1 2010/06/10 21:49:36 afaq Exp $ "
+__revision__ = "$Revision: 1.2 $"
+__version__  = "$Id: Update.py,v 1.2 2010/06/14 14:33:31 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -19,6 +19,4 @@ class Update(DBFormatter):
     def execute(self, conn, daoinput, transaction = False):
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/ComponentStatus/Update expects db connection from up layer.")
-	print "This is SQL : %s " %self.sql
-	print daoinput
 	self.dbi.processData(self.sql, daoinput, conn, transaction)
