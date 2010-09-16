@@ -3,8 +3,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.22 2010/03/04 17:33:43 yuyi Exp $"
-__version__ = "$Revision: 1.22 $"
+__revision__ = "$Id: List.py,v 1.23 2010/03/04 20:39:37 afaq Exp $"
+__version__ = "$Revision: 1.23 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -69,7 +69,7 @@ AND DP.DATASET_TYPE <> 'DELETED'
         """
         dataset key is a wild card parameter
         """	
-        if conn:
+        if not conn:
 	    raise Exception("No connection to DB") 
             
         sql = self.sql
