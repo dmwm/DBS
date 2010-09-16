@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.10 2010/08/10 21:49:25 yuyi Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.11 2010/08/12 18:49:34 yuyi Exp $"
+__version__ = "$Revision: 1.11 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -41,6 +41,7 @@ class DBSMigrate:
 	self.mgrblkin       = daofactory(classname="MigrationBlock.Insert")
 	self.blocklist      = daofactory(classname="Block.List")
 	self.bparentlist    = daofactory(classname="BlockParent.List")
+	self.dsparentlist   = daofactory(classname="DatasetParent.List")
 
     def prepareDatasetMigrationList(self, conn, request):
 	"""
@@ -267,11 +268,18 @@ class DBSMigrate:
 	    Try to return in a format to be ready for insert calls"""
         conn = self.dbi.connection()
         #block name is unique
-	block = self.blocklist.execute(conn, block_name=block_name)[0]
+	block1 = self.blocklist.execute(conn, block_name=block_name)
+	if not block1:
+	    return {}
+	block = block1[0]
 	#a block only has one dataset and one primary dataset
 	dataset = self.datasetlist.execute(conn,dataset=block["dataset"])[0]
 	#get block parentage
 	bparent = self.bparentlist.execute(conn, block['block_name'])
+	#get dataset parentage
+	dsparent = self.dsparentlist.execute(conn, dataset['dataset'])
+	for p in dsparent:
+	    del p['parent_dataset_id'], p['dataset']
 	acqEra = {}
 	prsEra = {}
 	if(dataset["acquisition_era_name"] != "" ):
@@ -285,7 +293,8 @@ class DBSMigrate:
 		     file_parent_list = self.fplist.execute(conn, logical_file_name=f['logical_file_name']))
 	del dataset["acquisition_era_name"], dataset["processing_version"]
 	del block["dataset"]
-        result= dict(block=block, dataset=dataset, primds=primds, files=files, block_parent_list=bparent)
+        result= dict(block=block, dataset=dataset, primds=primds, files=files, \
+	             block_parent_list=bparent, ds_parent_list=dsparent)
         if acqEra:
 	    result["acquisition_era"]=acqEra
 	if prsEra:
