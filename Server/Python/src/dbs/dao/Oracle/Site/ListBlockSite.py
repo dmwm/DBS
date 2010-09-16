@@ -2,8 +2,8 @@
 """
 This module provides Site.ListBlockSite data access object.
 """
-__revision__ = "$Id: ListBlockSite.py,v 1.1 2010/04/21 19:50:02 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: ListBlockSite.py,v 1.2 2010/06/04 19:56:49 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -19,17 +19,13 @@ class ListBlockSite(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 	"""
-	SELECT SE.SITE_NAME, B.BLOCK_NAME 
-	FROM %sSITES SE
-		JOIN %sBLOCK_SITES BSE
-			ON BSE.SITE_ID = SE.SITE_ID
-		JOIN %sBLOCKS B
-			ON B.BLOCK_ID = BSE.BLOCK_ID
-	WHERE BLOCK_NAME = :block_name""" % ((self.owner,) * 3)
+	SELECT ORIGIN_SITE_NAME, B.BLOCK_NAME 
+	FROM %sBLOCKS 
+	WHERE BLOCK_NAME = :block_name""" % self.owner
 
     def execute(self, conn, block_name = "", trans = False):
         """
-        Lists all storage elements for the block.
+        Lists all sites for the block.
         """
 
 	if not conn:
