@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.19 $"
-# $Id: dbsClient.py,v 1.19 2010/01/13 22:34:20 afaq Exp $"
+# $Revision: 1.20 $"
+# $Id: dbsClient.py,v 1.20 2010/01/20 22:45:25 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -34,6 +34,7 @@ class DbsApi:
 		UserID=os.environ['USER']+'@'+socket.gethostname()
 		headers =  {"Content-type": "application/json", "Accept": "application/json", "UserID": UserID }
 
+		res=""
 		try:
 			calling=self.url+urlplus
 			proxies = {}
@@ -55,19 +56,19 @@ class DbsApi:
 		except urllib2.URLError, urlerror:
 			print urlerror
 		
-		return res
-
 		#FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
 		json_ret=json.loads(res)
-		self.parseForException(json_ret['DBS']['results'])
+		self.parseForException(json_ret)
 		return json_ret
-
+		
 	def parseForException(self, data):
-        	if type(data) == type({}) and data.has_key('exception'):
-                	#print "Service Raised an exception: "+data['exception']
-                	raise Exception("DBS Server raised an exception: " + data['exception'])
-        	return data
-
+	    if type(data)==type("abc"):
+		data=json.loads(data)
+            if type(data) == type({}) and data.has_key('exception'):
+		#print "Service Raised an exception: "+data['exception']
+		raise Exception("DBS Server raised an exception: " + data['message'])
+	    return data
+		
         def ping(self):
                 """
                 * API to retrieve DAS interface for DQM Catalog Service
