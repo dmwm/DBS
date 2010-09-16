@@ -115,3 +115,4 @@ insert into SEQ_BHS(ID) values(1);
 
 insert into SEQ_DVS(ID) values(1);
 
+commit;
