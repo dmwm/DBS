@@ -2,8 +2,8 @@
 """
 This module provides Block.UpdateStats data access object.
 """
-__revision__ = "$Id: UpdateStats.py,v 1.6 2010/03/03 22:35:54 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: UpdateStats.py,v 1.7 2010/03/05 15:32:53 yuyi Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class UpdateStats(DBFormatter):
@@ -18,8 +18,10 @@ class UpdateStats(DBFormatter):
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """UPDATE %sBLOCKS SET FILE_COUNT=:file_count, BLOCK_SIZE=:block_size where BLOCK_ID=:block_id""" %  self.owner 
         
-    def execute(self, blockStats, conn = None, transaction = False):
+    def execute(self, conn, blockStats, transaction = False):
         """
         for a given block_id
         """	
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/Block/UpdateStatus expects db connection from up layer.")
         result = self.dbi.processData(self.sql, blockStats, conn, transaction)

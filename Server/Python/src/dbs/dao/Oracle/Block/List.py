@@ -2,8 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.15 2010/03/01 21:59:14 afaq Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: List.py,v 1.16 2010/03/05 15:32:53 yuyi Exp $"
+__version__ = "$Revision: 1.16 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from WMCore.Database.MySQLCore import  MySQLInterface
@@ -29,15 +29,13 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
 """ % ((self.owner,)*3)
 
-    def execute(self, dataset="", block_name="", site_name="", conn=None):
+    def execute(self, conn, dataset="", block_name="", site_name="", transaction = False):
         """
         dataset: /a/b/c
         block: /a/b/c#d
         """	
-#if not conn:
-#            conn = self.dbi.connection()
-	import pdb
-	pdb.set_trace()
+	if not conn:
+	    raise Exception("dbs/dao/Oarcle/Block/List expects db connection from up layer.")
         sql = self.sql
         binds = {}
         op = ("=", "like")["%" in block_name]
@@ -66,12 +64,8 @@ LEFT OUTER JOIN %sSITES SI ON SI.SITE_ID = B.ORIGIN_SITE
             
         else: 
             raise Exception("dataset, block_name or site_name must be provided")
-	cursors = self.dbi.processData(sql, binds, conn, transaction=True, returnCursor=True)
+	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	assert len(cursors) == 1, "block does not exist"
 #if self.dbi.engine.dialect.name == 'mysql' :
-#	    sql, binds = self.dbi.substitute( sql, binds ) 
-	#cursor = conn.connection.cursor()
-	#cursor.execute(sql, binds)
         result = self.formatCursor(cursors[0])
-#conn.close()
         return result
