@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# CVS tags for various involved modules
+wmcore_tag=WMCORE_DBS_3_S1_0_pre1
+dbs3_tag=DBS_3_S1_0_pre1
+
 #Configure
 #all these parameters are used to generate default config and setup script files
 dburl='oracle://user:passwd@db'
@@ -165,7 +169,7 @@ cvs -d `echo $CVSROOT | awk -F@ '{print $1":98passwd\@"$2}'` login
 #cvs co WMCORE/src/python/WMCore/WMExceptions.py
 #cvs co WMCORE/src/templates/WMCore/WebTools
 #cvs co WMCORE/src/templates/WMCore/__init__.py
-cvs co WMCORE
+cvs co -r $wmcore_tag WMCORE
 cd $dExternal
 }
 echo "Installing WMCore Modules"
@@ -176,7 +180,7 @@ cd $DBS3_ROOT
 export CVSROOT=:pserver:anonymous@cmscvs.cern.ch:/cvs_server/repositories/CMSSW
 export CVS_RSH=ssh
 cvs -d `echo $CVSROOT | awk -F@ '{print $1":98passwd\@"$2}'` login
-cvs co DBS/DBS3
+cvs co -r $dbs3_tag DBS/DBS3
 }
 echo "Installing DBS3 Modules"
 install_dbs 1>$dlogs/dbs.log 2>&1
