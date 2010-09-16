@@ -2,8 +2,8 @@
 """
 DBS Migration Service Component Module
 """
-__revision__ = "$Id: DBSMigrationService.py,v 1.2 2010/06/23 21:30:02 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSMigrationService.py,v 1.3 2010/08/02 20:49:36 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 
 import logging
@@ -15,7 +15,7 @@ from dbs.components.insertbuffer.DBSInsertBufferPoller import DBSInsertBufferPol
 
 #['__call__', '__doc__', '__init__', '__module__', '__str__', 'config', 'handleMessage', 'initInThread', 'initialization', 'logState', 'postInitialization', 'preInitialization', 'prepareToStart', 'publishItem', 'startComponent']
 
-class DBSInsertBuffer(Harness):
+class DBSMigrationService(Harness):
     def __init__(self, config):
 	# call the base class
 	Harness.__init__(self, config)

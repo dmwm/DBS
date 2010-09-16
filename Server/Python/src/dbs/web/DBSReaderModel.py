@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.46 2010/08/01 19:11:54 akhukhun Exp $"
-__version__ = "$Revision: 1.46 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.47 2010/08/02 20:49:37 afaq Exp $"
+__version__ = "$Revision: 1.47 $"
 
 import cjson
 from WMCore.WebTools.RESTModel import RESTModel
@@ -24,6 +24,11 @@ from dbs.business.DBSStatus import DBSStatus
 
 from dbs.business.DBSMigrate import DBSMigrate
 
+import urllib, urllib2
+import re
+import threading
+import socket
+import cjson
 
 from cherrypy import server
 
@@ -39,12 +44,7 @@ class DBSReaderModel(RESTModel):
         """
         RESTModel.__init__(self, config)
         self.version = self.getServerVersion()
-      
-	self.logger.warning("<<<<<<<<<<<<<DBS SERVER IS NO AVAILABLE ON>>>>>>>>> %s/%s" \
-					% (server.base(), config._internal_name))
-
-	self.logger.warning("<<<<<<<<<<<<<DBS SERVER IS CONNECTING TO ::::: %s" % config.database)
-    
+	self.register()
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 	self.addMethod('GET', 'serverinfo', self.getServerInfo)
         self.addMethod('GET', 'primarydatasets', self.listPrimaryDatasets)
@@ -64,6 +64,7 @@ class DBSReaderModel(RESTModel):
         self.addMethod('GET', 'blockparents', self.listBlockParents)
         self.addMethod('GET', 'blockchildren', self.listBlockChildren)
         self.addMethod('GET', 'blockdump', self.dumpBlock)
+	self.addMethod('GET', 'register', self.register)
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
         self.dbsBlock = DBSBlock(self.logger, self.dbi, config.dbowner)
@@ -76,19 +77,46 @@ class DBSReaderModel(RESTModel):
 	self.dbsDataType = DBSDataType(self.logger, self.dbi, config.dbowner)
 	self.dbsDataTier = DBSDataTier(self.logger, self.dbi, config.dbowner)
 	self.dbsStatus = DBSStatus(self.logger, self.dbi, config.dbowner)
-    
 	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
     
-
-    def addService_deprecated(self, verb, methodKey, func, args=[], validation=[], version=1):
-        """
-        method that adds services to the DBS rest model
-        """
-        self.methods[verb][methodKey] = {'args': args,
-                                         'call': func,
-                                         'validation': validation,
-                                         'version': version,
-					 'expires' : 10000 }
+    def geoLocateThisHost(self, ip):
+	"""
+	Locate the host, otherwise return 'UNKNOWN'
+	"""
+	response = urllib.urlopen('http://api.hostip.info/get_html.php?ip=%s' % ip).read()
+	m = re.search('City: (.*)', response)
+	if m:
+	    return m.group(1)
+	return "UNKNOWN"
+    
+    def register(self):
+	"""
+	Method that attempts to register this service with Service Registry.
+	NO Error is thrown, if the registry is inaccessible for any reason
+	"""
+	try:
+	    srvcregistry="http://cmssrv18.fnal.gov:8686/SRVCREGISTRY/services"
+	    addthis={}
+	    addthis['NAME'] = self.config._internal_name
+	    addthis['TYPE'] = self.__class__.__name__
+	    addthis['LOCATION'] = self.geoLocateThisHost(socket.gethostbyname(socket.gethostname()))
+	    addthis['STATUS'] = "WORKING"
+	    addthis['ADMIN'] = self.config.admin
+	    addthis['URI'] = "%s/%s" % (server.base(), self.config._internal_name)
+	    addthis['DB'] = self.config.database.connectUrl  #<<<<<<<<<<<remove password
+	    addthis['VERSION'] = self.getServerVersion()
+	    addthis['LAST_CONTACT'] = dbsUtils().getTime()
+	    addthis['COMMENTS'] = "DBS Service"
+	    self.logger.warning("REGISTERING DBS: %s" %str(addthis))
+	    params = cjson.encode(addthis)
+	    headers =  {"Content-type": "application/json", "Accept": "application/json" }
+	    self.opener =  urllib2.build_opener()
+	    req = urllib2.Request(url=srvcregistry, data=params, headers = headers)
+	    req.get_method = lambda: 'POST'
+	    data = self.opener.open(req)
+	except Exception, ex:
+	    print ex
+	    pass
 
     def getServerVersion(self):
         """

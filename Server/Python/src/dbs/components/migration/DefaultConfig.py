@@ -2,8 +2,8 @@
 DBS migration service configuration file
 """
 
-__revision__ = "$Id: DefaultConfig.py,v 1.3 2010/06/29 21:40:45 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DefaultConfig.py,v 1.4 2010/08/02 20:49:36 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import os, logging
 from WMCore.Configuration import Configuration
@@ -30,7 +30,7 @@ config.CoreDatabase.dbowner = '__MYSQL__'
 config.component_('DBSMigrationService')
 config.DBSMigrationService.default_expires=300
 config.DBSMigrationService.pollInterval = 1 
-config.DBSMigrationService.namespace= "dbs.components.insertbuffer.DBSMigrationService"
+config.DBSMigrationService.namespace= "dbs.components.migration.DBSMigrationService"
 config.DBSMigrationService.componentDir = config.General.workDir + "/DBSMigrationService"
 #config.DBSInsertBuffer.dbowner = '__MYSQL__'
 config.DBSMigrationService.workerThreads = 1
