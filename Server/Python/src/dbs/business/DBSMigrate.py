@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.4 2010/06/25 21:18:02 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.5 2010/06/28 16:09:04 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -219,19 +219,20 @@ class DBSMigrate:
 	finally:
 	    conn.close()
     
-    def listMigrationRequests(self, migration_id, block_name, dataset, user):
+    def listMigrationRequests(self, migration_request_id="", block_name="", dataset="", user=""):
 	"""
 	get the status of the migration
 	migratee : can be dataset or block_name
 	"""
 	
 	conn = self.dbi.connection()
+	migratee=""
 	try:
-	    if block:
+	   if block_name:
 		migratee=block_name
-	    elif dataset:
+	   elif dataset:
 		migratee=dataset
-	   result = self.mgrlist.execute(conn, url="", migration_input=migratee, create_by=user)
+	   result = self.mgrlist.execute(conn, migration_url="", migration_input=migratee, create_by=user, migration_request_id="")
 	   conn.close()
 	   return result
 	except:

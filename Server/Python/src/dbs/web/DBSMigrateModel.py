@@ -3,8 +3,8 @@
 DBS Migration Service Client Interface Rest Model module
 """
 
-__revision__ = "$Id: DBSMigrateModel.py,v 1.2 2010/06/24 21:38:53 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSMigrateModel.py,v 1.3 2010/06/28 16:09:04 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import re
 import cjson
@@ -45,20 +45,20 @@ class DBSMigrateModel(RESTModel):
 		"create_by" : dbsUtils().getCreateBy() , "last_modified_by" : dbsUtils().getCreateBy() })
 	return self.dbsMigrate.insertMigrationRequest(indata)
 
-    def status(self, migration_id="", block="", dataset="", user=""):
+    def status(self, migration_request_id="", block_name="", dataset="", user=""):
 	"""
 	Interface to query status of a migration request
 	In this preference order of input parameters :-
-	    migration_id, block, dataset, user
+	    migration_request_id, block, dataset, user
 	    (if multi parameters are provided, only the precedence order is followed
 	"""
-	return self.dbsMigrate.listMigrationRequests(migration_id, block, dataset, user)
+	return self.dbsMigrate.listMigrationRequests(migration_request_id, block_name, dataset, user)
     
-    def remove(self, migration_id=""):
+    def remove(self, migration_request_id=""):
 	"""
 	Interface to remove a migration request from the queue
 	Only FAILED, COMPLETED and PENDING requests can be removed
 	(running requests cannot be removed)
 	"""
-	return self.dbsMigrate.removeMigrationRequest(migration_id)
+	return self.dbsMigrate.removeMigrationRequest(migration_request_id)
 

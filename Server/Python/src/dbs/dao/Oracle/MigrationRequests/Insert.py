@@ -1,8 +1,8 @@
 """ DAO Object for MigrationRequests table """ 
 """ DAO Object for MigrationRequests table """ 
 
-__revision__ = "$Revision: 1.3 $"
-__version__  = "$Id: Insert.py,v 1.3 2010/06/25 18:50:47 afaq Exp $ "
+__revision__ = "$Revision: 1.4 $"
+__version__  = "$Id: Insert.py,v 1.4 2010/06/28 16:09:04 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -24,7 +24,7 @@ VALUES(:migration_request_id, :migration_url, :migration_input, :migration_statu
     def execute(self, conn, daoinput, transaction = False):
         """
         inputdict must be validated to have the following keys:
-	:migration_id, :migration_url, :migration_input, :migration_status
+	:migration_request_id, :migration_url, :migration_input, :migration_status
 	:creation_date, :create_by, :last_modification_date, :last_modified_by
         """
         self.dbi.processData(self.sql, daoinput, conn, transaction)

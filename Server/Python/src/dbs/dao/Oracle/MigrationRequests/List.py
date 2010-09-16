@@ -2,8 +2,8 @@
 """
 This module provides MigrationRequests.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2010/06/25 21:18:03 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: List.py,v 1.4 2010/06/28 16:09:04 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -27,15 +27,15 @@ SELECT MR.MIGRATION_REQUEST_ID, MR.MIGRATION_URL,
 FROM %sMIGRATION_REQUESTS MR
 """ % (self.owner)
 
-    def execute(self, conn, migration_url="", migration_input="", create_by="", migration_id="", transaction=False):
+    def execute(self, conn, migration_url="", migration_input="", create_by="", migration_request_id="", transaction=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
         sql = self.sql
         binds = {}
-	if migration_id:
-	    sql += " WHERE MR.MIGRATION_REQUEST_ID=:migration_id"
-	    binds['migration_id']=migration_id
+	if migration_request_id:
+	    sql += " WHERE MR.MIGRATION_REQUEST_ID=:migration_request_id"
+	    binds['migration_request_id']=migration_request_id
 	else:    
 	    if  migration_url or migration_input or create_by:
 		sql += " WHERE "
