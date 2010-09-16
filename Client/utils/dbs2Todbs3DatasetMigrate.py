@@ -8,6 +8,8 @@ from DBSAPI.dbsException import *
 from DBSAPI.dbsApiException import *
 from DBSAPI.dbsOptions import DbsOptionParser
 
+from exceptions import Exception
+
 #DBS-3 imports
 from dbs.apis.dbsClient import *
 
@@ -147,30 +149,34 @@ try:
 				self.files.append(self.currfile)
 
                         if name == 'dbs':
-
-				# Lets populate this in DBS
-				# Some calls may be redundant, who cares !
-        			# DBS-3 Service URL
-        			url="http://cmssrv48.fnal.gov:8989/DBSServlet"
-        			# API Object    
-        			dbs3api = DbsApi(url=url)
-        			# Is service Alive
-        			print dbs3api.ping()
-        			#print self.prdsobj
-
-				import pdb
-				pdb.set_trace()
-        			print dbs3api.insertPrimaryDataset(self.prdsobj)
-				#print self.dataset
-        			print dbs3api.insertDataset(self.dataset)
-
-				#print self.block
-				print dbs3api.insertBlock(self.block)
+				try :
+					# Lets populate this in DBS
+					# Some calls may be redundant, who cares !
+        				# DBS-3 Service URL
 				
-				#for file in self.files:
-				#	print file
-				print dbs3api.insertFiles({"files" : self.files})
-				print "fin"
+        				#url="http://cmssrv48.fnal.gov:8989/DBSServlet"
+					url="http://cmssrv18.fnal.gov:8585/dbs3"
+        				# API Object    
+        				dbs3api = DbsApi(url=url)
+        				# Is service Alive
+        				#print dbs3api.ping()
+        				#print self.prdsobj
+
+        				print dbs3api.insertPrimaryDataset(self.prdsobj)
+					print self.dataset
+					import pdb
+					pdb.set_trace()
+        				#print dbs3api.insertDataset(self.dataset)
+
+					#print self.block
+					#print dbs3api.insertBlock(self.block)
+				
+					for file in self.files:
+						print file
+					#print dbs3api.insertFiles({"files" : self.files})
+					#print "fin"
+				except Exception, ex:
+					print ex
 				
   	xml.sax.parseString (data, Handler ())
 	break

@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.9 $"
-# $Id: dbsClient.py,v 1.9 2009/11/12 22:47:17 afaq Exp $"
+# $Revision: 1.10 $"
+# $Id: dbsClient.py,v 1.10 2009/11/16 20:36:19 afaq Exp $"
 # @author anzar
 #
 import os, sys
@@ -8,7 +8,7 @@ import urllib, urllib2
 from httplib import HTTPConnection
 from StringIO import StringIO
 from exceptions import Exception
-
+import cjson
 
 try:
 	# Python 2.6
@@ -20,6 +20,7 @@ except:
 class DbsApi:
         def __init__(self, url=""):
                 self.url=url
+		self.opener =  urllib2.build_opener()
 
 	def callServer(self, urlplus="", params={}):
 		"""
@@ -30,8 +31,14 @@ class DbsApi:
 
 		"""
 		UserID="anzar"	
-		headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain/application/x-json",
-                                                        "UserID": UserID}
+		#headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain/application/x-json/json",
+                #                                        "UserID": UserID}
+		
+		#headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain/application/x-json",
+                #                                        "UserID": UserID}
+
+		headers =  {"Content-type": "application/json", "Accept": "application/json"}
+
 
         	#headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain",
         	#                                                "UserID": UserID}
@@ -44,12 +51,14 @@ class DbsApi:
 			if params == {} :
 				data = urllib2.urlopen(calling)
 			else:
-				params = json.dumps(dict(params))
-				req = urllib2.Request(url=calling, headers = header)
+				#params = json.dumps(dict(params))
+				params = cjson.encode(params)
+				req = urllib2.Request(url=calling, data=params, headers = headers)
 				req.get_method = lambda: 'PUT'
-				req.add_data(params)
-				data = urllib2.urlopen(req)
-
+				#req.add_data(params)
+				#print req
+				#data = urllib2.urlopen(req)
+				data = self.opener.open(req)
 			res = data.read()
 		except urllib2.HTTPError, httperror:
 			print httperror
