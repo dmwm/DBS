@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.49 2010/08/12 19:50:52 afaq Exp $"
-__version__ = "$Revision: 1.49 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.50 2010/08/13 20:38:37 yuyi Exp $"
+__version__ = "$Revision: 1.50 $"
 
 import cjson
 import inspect
@@ -286,7 +286,8 @@ class DBSReaderModel(RESTModel):
         """
         return self.dbsDataset.listDatasetChildren(dataset)
     
-    def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="", output_module_label=""):
+    def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="",
+    output_module_label="", block_id=0):
         """
         Example url's: <br />
         http://dbs3/outputconfigurations <br />
@@ -301,7 +302,8 @@ class DBSReaderModel(RESTModel):
 	pset_hash = pset_hash.replace("*", "%")
 	app_name = app_name.replace("*", "%")
 	output_module_label = output_module_label.replace("*", "%")
-	return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, release_version, pset_hash, app_name, output_module_label)
+	return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, release_version, pset_hash, app_name,
+	output_module_label, block_id)
     
     def listFileParents(self, logical_file_name):
         """

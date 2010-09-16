@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.13 2010/08/03 21:06:23 afaq Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.14 2010/08/13 20:33:49 yuyi Exp $"
+__version__ = "$Revision: 1.14 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -35,7 +35,7 @@ class DBSOutputConfig:
         self.outmodin = daofactory(classname='OutputModuleConfig.Insert')
         
     def listOutputConfigs(self, dataset="", logical_file_name="", 
-                         release_version="", pset_hash="", app_name="", output_module_label=""):
+                         release_version="", pset_hash="", app_name="", output_module_label="", block_id=0):
 	try:
 	    conn=self.dbi.connection()
 	    result = self.outputmoduleconfiglist.execute(conn, dataset,
@@ -43,7 +43,7 @@ class DBSOutputConfig:
                                                    app_name,
                                                    release_version,
                                                    pset_hash,
-                                                   output_module_label)
+                                                   output_module_label, block_id)
 	    conn.close()
 	    return result
         except Exception, ex:
