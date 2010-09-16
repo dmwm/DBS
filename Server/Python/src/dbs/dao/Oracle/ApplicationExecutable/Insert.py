@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ApplicationExecutables table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2010/02/12 22:25:33 afaq Exp $ "
+__revision__ = "$Revision: 1.8 $"
+__version__  = "$Id: Insert.py,v 1.8 2010/03/05 15:03:29 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -14,10 +14,12 @@ class Insert(DBFormatter):
 
             self.sql = """INSERT INTO %sAPPLICATION_EXECUTABLES ( APP_EXEC_ID, APP_NAME) VALUES (:app_exec_id, :app_name)""" % (self.owner)
 
-    def execute( self, appExeObj, conn=None, transaction=False ):
+    def execute( self, appExeObj, conn, transaction=False ):
+	if not conn:
+	    raise Excpetion("dbs/dao/Oracle/ApplicationExecutable/Insert expects db connection from up layer.")
 	try:
-	    print self.sql
-	    print appExeObj
+	    #print self.sql
+	    #print appExeObj
             result = self.dbi.processData(self.sql, appExeObj, conn, transaction)
  	except Exception, e:
 	    if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
