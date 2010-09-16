@@ -1,40 +1,22 @@
 #!/usr/bin/env python
 """ DAO Object for ApplicationExecutables table """ 
 
-__revision__ = "$Revision: 1.2 $"
-__version__  = "$Id: Insert.py,v 1.2 2009/10/20 02:19:16 afaq Exp $ "
+__revision__ = "$Revision: 1.3 $"
+__version__  = "$Id: Insert.py,v 1.3 2009/12/21 21:05:38 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
 class Insert(DBFormatter):
 
-    def __init__(self, logger, dbi):
+    def __init__(self, logger, dbi, owner):
             DBFormatter.__init__(self, logger, dbi)
-            self.owner = "%s." % self.dbi.engine.url.username
+	    self.owner = "%s." % owner
 
-            self.sql = """INSERT INTO %sAPPLICATION_EXECUTABLES ( APP_EXEC_ID, APP_NAME) VALUES (:appexecid, :appname) % (self.owner) ;"""
+            self.sql = """INSERT INTO %sAPPLICATION_EXECUTABLES ( APP_EXEC_ID, APP_NAME) VALUES (:app_exec_id, :app_name)""" % (self.owner)
 
-    def getBinds_delme( self, application_executablesObj ):
-            binds = {}
-            if type(application_executablesObj) == type ('object'):
-            	binds = {
-			'appexecid' : application_executablesObj['appexecid'],
-			'appname' : application_executablesObj['appname'],
-                 }
-
-            elif type(application_executablesObj) == type([]):
-               binds = []
-               for item in application_executablesObj:
-                   binds.append({
- 	                'appexecid' : item['appexecid'],
- 	                'appname' : item['appname'],
- 	                })
-               return binds
-
-
-    def execute( self, application_executablesObj, conn=None, transaction=False ):
+    def execute( self, appExeObj, conn=None, transaction=False ):
             ##binds = self.getBinds( application_executablesObj )
-            result = self.dbi.processData(self.sql, binds, conn, transaction)
+            result = self.dbi.processData(self.sql, appExeObj, conn, transaction)
             return
 
 
