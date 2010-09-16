@@ -163,8 +163,6 @@ class Test:
 			},
 			
 		]
-		import pdb
-		pdb.set_trace()
 		bo.insertFile(binput)
 
 test=Test()
