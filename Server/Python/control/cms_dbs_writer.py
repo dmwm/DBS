@@ -23,21 +23,23 @@ config.section_("CoreDatabase")
 # mySql
 config.CoreDatabase.dbowner = '__MYSQL__'
 config.CoreDatabase.version = 'DBS_3_0_0'
-config.CoreDatabase.connectUrl = 'mysql://username:pd@hostname:port#/CMS_DBS3'
+config.CoreDatabase.connectUrl = 'mysql://acct:pd@hostname:port#/CMS_DBS3'
 config.CoreDatabase.engineParameters = {'pool_size': 50, 'max_overflow': 10, 'pool_timeout':200 }
 #Oracle
-#config.CoreDatabase.dbowner = 'DB_OWNER'
+#config.CoreDatabase.dbowner = 'CMS_LUM_OWNER'
 #config.CoreDatabase.version = 'DBS_3_0_0'
-#config.CoreDatabase.connectUrl = 'oracle://username:pd@dbname'
+#config.CoreDatabase.connectUrl = 'oracle://acct:pd@cmscald'
 #config.CoreDatabase.engineParameters = {'pool_size': 15, 'max_overflow': 10, 'pool_timeout': 200 }
 
-#config web server
+#config web server. These are required fields by WMCore althrough some of them are useless.
 config.webapp_("cmsdbs")
 config.cmsdbs.componentDir = config.General.workDir + "/Logs/DBSServer"
 config.cmsdbs.server.host = "::"
 config.cmsdbs.server.port = 8686
 config.cmsdbs.templates = WMCore.WMInit.getWMBASE() + '/src/templates/WMCore/WebTools'
+config.cmsdbs.admin = "yuyi@fnal.gov"
 config.cmsdbs.title = 'DBS Server'
+config.cmsdbs.dbowner = '__MYSQL__'
 config.cmsdbs.description = 'CMS DBS Service'
 config.cmsdbs.default_expires=300
 config.cmsdbs.section_('views')
@@ -51,7 +53,7 @@ DBS.model.object = 'dbs.web.DBSWriterModel'
 DBS.section_('formatter')
 active.DBS.formatter.object = 'WMCore.WebTools.RESTFormatter'
 
-#Migration server
+#Migration server page/view
 MIGRATE = active.section_('MIGRATE')
 MIGRATE.object = 'WMCore.WebTools.RESTApi'
 MIGRATE.section_('model')
