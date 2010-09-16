@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.28 2010/04/21 21:48:01 afaq Exp $"
-__version__ = "$Revision: 1.28 $"
+__revision__ = "$Id: DBSBlock.py,v 1.29 2010/04/21 22:18:10 afaq Exp $"
+__version__ = "$Revision: 1.29 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -144,7 +144,7 @@ class DBSBlock:
 		for asite in businput["site_list"]:
 		    blkstID = self.sm.increment(conn, "SEQ_BLST", transaction=tran)
 		    try:
-			self.blksitein.execute(conn, block_site_id=blkstID, block_id=blkinput["block_id"], site_name=asite, transaction=tran)
+			self.blksitein.execute(conn, block_site_id=blkstID, block_id=blkinput["block_id"], site_name=asite['site_name'], transaction=tran)
 		    except exceptions.IntegrityError, ex:
 			if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			    pass
