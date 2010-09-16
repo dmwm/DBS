@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.32 2010/05/19 16:21:05 yuyi Exp $"
-__version__ = "$Revision: 1.32 $"
+__revision__ = "$Id: DBSBlock.py,v 1.33 2010/05/24 19:13:51 yuyi Exp $"
+__version__ = "$Revision: 1.33 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -82,9 +82,9 @@ class DBSBlock:
 
 
     
-    def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name=""):
+    def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num=-1):
         """
-        dataset, block_name or logical_file_name must be passed.
+        dataset, block_name, or logical_file_name must be passed.
         """
 	if (not dataset) or dataset=='%':
 	    if (not block_name) or block_name=='%':
@@ -92,7 +92,7 @@ class DBSBlock:
 			raise Exception("You must specify at least one parameter (dataset, block_namei, logical_file_name) with listBlocks api")
 	try:
 	    conn = self.dbi.connection()
-	    result = self.blocklist.execute(conn, dataset, block_name, origin_site_name, logical_file_name)
+	    result = self.blocklist.execute(conn, dataset, block_name, origin_site_name, logical_file_name,run_num )
 	    conn.close()
 	    return result
         except Exception, ex:

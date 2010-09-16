@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.38 2010/05/21 16:15:00 yuyi Exp $"
-__version__ = "$Revision: 1.38 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.39 2010/05/24 19:12:45 yuyi Exp $"
+__version__ = "$Revision: 1.39 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -156,7 +156,7 @@ class DBSReaderModel(RESTModel):
 	data_tier_name = data_tier_name.replace("*","%")
 	return self.dbsDataTier.listDataTiers(data_tier_name)
 	
-    def listBlocks(self, dataset="", block_name="", original_site_name="", logical_file_name=""):
+    def listBlocks(self, dataset="", block_name="", original_site_name="", logical_file_name="",run_num=-1):
         """
         Example url's:
         http://dbs3/blocks?dataset=myDataset ||?original_site_name=mySite <br />
@@ -169,7 +169,8 @@ class DBSReaderModel(RESTModel):
         block_name = block_name.replace("*","%")
 	logical_file_name = logical_file_name.replace("*","%")
 	original_site_name = original_site_name.replace("*","%")
-        return self.dbsBlock.listBlocks(dataset, block_name, original_site_name, logical_file_name)
+	run_num = int(run_num)
+        return self.dbsBlock.listBlocks(dataset, block_name, original_site_name, logical_file_name,run_num)
 
     def listBlockParents(self, block_name=""):
         """
@@ -189,7 +190,7 @@ class DBSReaderModel(RESTModel):
  
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", 
 	pset_hash="", app_name="", output_module_label="", minrun=-1, maxrun=-1,
-	origin_site_name=""):
+	origin_site_name="", lumi_list=[]):
         """
         Example url's: <br />
         http://dbs3/files?dataset=/a/b/c/ <br />
@@ -210,7 +211,7 @@ class DBSReaderModel(RESTModel):
 	    minrun = int(minrun)
 	output_module_label = output_module_label.replace("*", "%")
 	return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
-					output_module_label, maxrun, minrun, origin_site_name)
+					output_module_label, maxrun, minrun, origin_site_name, lumi_list)
     
     def listDatasetParents(self, dataset):
         """

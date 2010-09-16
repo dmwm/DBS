@@ -2,8 +2,8 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.19 2010/05/19 16:18:39 yuyi Exp $"
-__version__ = "$Revision: 1.19 $"
+__revision__ = "$Id: List.py,v 1.20 2010/05/24 19:12:02 yuyi Exp $"
+__version__ = "$Revision: 1.20 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from WMCore.Database.MySQLCore import  MySQLInterface
@@ -28,7 +28,7 @@ FROM %sBLOCKS B
 JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
     """ % ((self.owner,)*2)
 #
-    def execute(self, conn, dataset="", block_name="", original_site_name="", logical_file_name="", transaction = False):
+    def execute(self, conn, dataset="", block_name="", original_site_name="", logical_file_name="", run_num=-1, transaction = False):
 	"""
 	dataset: /a/b/c
 	block: /a/b/c#d
@@ -40,8 +40,13 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 	if logical_file_name and logical_file_name != "%":
 	    op = ("=", "like")["%" in logical_file_name] 
 	    sql1 += " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID" %(self.owner)
+	    if run_num and run_num !=-1:
+		sql1 += " JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID" %(self.owner)
 	    sql1 += " WHERE LOGICAL_FILE_NAME %s :logical_file_name" % op
 	    binds.update( logical_file_name = logical_file_name)
+	    if run_num and run_num !=-1:
+		sql1 += " AND RUN_NUM = :run_num"
+		binds.update(run_num = run_num)
 	    if  block_name and  block_name !="%":
 		op = ("=", "like")["%" in block_name]
 		sql1 += " AND B.BLOCK_NAME %s :block_name" % op
@@ -67,9 +72,16 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 		sql1 += " AND B.ORIGIN_SITE_NAME %s :original_site_name" %op
 		binds.update(original_site_name = original_site_name)
 	elif block_name and  block_name !="%":
+	    if run_num and run_num !=-1:
+		sql1 += """ JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID
+		            JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID
+			""" %((self.owner,)*2)
 	    op = ("=", "like")["%" in block_name]
 	    sql1 += " WHERE B.BLOCK_NAME %s :block_name" % op
 	    binds.update({"block_name":block_name}) 
+	    if run_num and run_num !=-1:
+                sql1 += " AND RUN_NUM = :run_num"
+                binds.update(run_num = run_num)
 	    if dataset and dataset !="%": 
 		op = ("=", "like")["%" in dataset]
 		sql1 += " AND DS.DATASET %s :dataset" %op
@@ -79,9 +91,16 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 		sql1 += " AND B.ORIGIN_SITE_NAME %s :original_site_name" %op
 		binds.update(original_site_name = original_site_name)	
 	elif dataset and dataset !="%":
+	    if run_num and run_num !=-1:
+                sql1 += """ JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID 
+		            JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID
+			""" %((self.owner,)*2)
 	    op = ("=", "like")["%" in dataset] 
 	    sql1 += " WHERE DS.DATASET %s :dataset" %op
 	    binds.update(dataset=dataset) 
+	    if run_num and run_num !=-1:
+		sql1 += " AND RUN_NUM = :run_num"
+                binds.update(run_num = run_num)
 	    if original_site_name and  original_site_name != "%": 
 		op = ("=", "like")["%" in original_site_name] 
 		sql1 += " AND B.ORIGIN_SITE_NAME %s :original_site_name" %op
