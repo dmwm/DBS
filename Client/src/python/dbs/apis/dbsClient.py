@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.32 $"
-# $Id: dbsClient.py,v 1.32 2010/03/18 14:41:09 afaq Exp $"
+# $Revision: 1.33 $"
+# $Id: dbsClient.py,v 1.33 2010/03/18 17:13:50 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -347,14 +347,16 @@ class DbsApi:
 		    amp=True
 		if minRun:
 		    if amp: add_to_url += "&"
-		    dd_to_url += "minRun=%s" %minRun
+		    add_to_url += "minRun=%s" %minRun
+		    amp=True
 		if maxRun:
 		    if amp: add_to_url += "&"
 		    add_to_url += "maxRun=%s" %maxRun
+		    amp=True
 		if add_to_url:
 		    return self.callServer("/runs?%s" % add_to_url )
 		else:
-		    raise Exception("You must supply parameters to listRuns calls")
+		    return self.callServer("/runs")
 
 	def listStorageElements(self, block_name="", dataset="", site_name=""):
                 """
