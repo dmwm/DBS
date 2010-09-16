@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.10 2010/03/15 16:30:15 afaq Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.11 2010/03/16 17:01:02 afaq Exp $"
+__version__ = "$Revision: 1.11 $"
 
 import os
 import sys
@@ -231,16 +231,12 @@ class DBSClientWriter_t(unittest.TestCase):
 	api.updateFileStatus(lfn=logical_file_name, is_file_valid=0)
 
     def test19(self):
-	"""test18 web.DBSClientWriter.updateDatasetStatus: should be able to update file status"""
-	print dataset
+	"""test19 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status"""
 	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=0)
 
     def test20(self):
-	"""test18 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
-	#logical_file_name = "/store/mc/%s/%i.root" %(uid, 1)
-	#print logical_file_name
-	#api.updateDatasetRunStatus(dataset=dataset, run_number=-1, complete=1)
-	print "pass"
+	"""test20 web.DBSClientWriter.updateDatasetRunStatus: should be able to update run status"""
+	api.updateDatasetRunStatus(dataset=dataset, run_number=1, complete=1)
    
 	
     def test208(self):
