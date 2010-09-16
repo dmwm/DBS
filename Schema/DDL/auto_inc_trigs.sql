@@ -20,7 +20,7 @@ CREATE OR REPLACE TRIGGER PG_TRIG before insert on PHYSICS_GROUPS for each row b
 CREATE OR REPLACE TRIGGER PDT_TRIG before insert on PRIMARY_DS_TYPES for each row begin if :NEW.PRIMARY_DS_TYPE_ID is null then select SEQ_PDT.nextval into :NEW.PRIMARY_DS_TYPE_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER DTP_TRIG before insert on DATASET_ACCESS_TYPES for each row begin if :NEW.DATASET_TYPE_ID is null then select SEQ_DTP.nextval into :NEW.DATASET_TYPE_ID from dual; end if; end;
+CREATE OR REPLACE TRIGGER DTP_TRIG before insert on DATASET_ACCESS_TYPES for each row begin if :NEW.DATASET_ACCESS_TYPE_ID is null then select SEQ_DTP.nextval into :NEW.DATASET_ACCESS_TYPE_ID from dual; end if; end;
  /
 
 CREATE OR REPLACE TRIGGER PSH_TRIG before insert on PARAMETER_SET_HASHES for each row begin if :NEW.PARAMETER_SET_HASH_ID is null then select SEQ_PSH.nextval into :NEW.PARAMETER_SET_HASH_ID from dual; end if; end;
@@ -80,10 +80,7 @@ CREATE OR REPLACE TRIGGER AQE_TRIG before insert on ACQUISITION_ERAS for each ro
 CREATE OR REPLACE TRIGGER PE_TRIG before insert on PROCESSING_ERAS for each row begin if :NEW.PROCESSING_ERA_ID is null then select SEQ_PE.nextval into :NEW.PROCESSING_ERA_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER SI_TRIG before insert on BLOCK_SITES for each row begin if :NEW.BLOCK_SITE_ID is null then select SEQ_SI.nextval into :NEW.BLOCK_SITE_ID from dual; end if; end;
- /
-
-CREATE OR REPLACE TRIGGER FB_TRIG before insert on FILE_BUFFERS for each row begin if :NEW.LOGICAL_FILE_NAME is null then select SEQ_FB.nextval into :NEW.LOGICAL_FILE_NAME from dual; end if; end;
+CREATE OR REPLACE TRIGGER BLST_TRIG before insert on BLOCK_SITES for each row begin if :NEW.BLOCK_SITE_ID is null then select SEQ_BLST.nextval into :NEW.BLOCK_SITE_ID from dual; end if; end;
  /
 
 CREATE OR REPLACE TRIGGER MR_TRIG before insert on MIGRATION_REQUESTS for each row begin if :NEW.MIGRATION_REQUEST_ID is null then select SEQ_MR.nextval into :NEW.MIGRATION_REQUEST_ID from dual; end if; end;
