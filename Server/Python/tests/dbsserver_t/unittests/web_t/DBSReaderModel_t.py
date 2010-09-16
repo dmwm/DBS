@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.7 2010/01/26 17:54:17 yuyi Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.8 2010/01/26 20:30:49 yuyi Exp $"
+__version__ = "$Revision: 1.8 $"
 
 import os, sys, imp
 import json
@@ -34,49 +34,108 @@ class DBSReaderModel_t(unittest.TestCase):
     def test01(self):
         """Test01 web.DBSReaderModel.listPrimaryDatasets: basic test"""
         api.list('primarydatasets')
-       
+
     def test02(self):
 	"""Test02 web.DBSReaderModel.listPrimaryDatasets: basic test"""
 	api.list('primarydatasets', primary_ds_name='*')
        
     def test03(self):
-        """Test03 web.DBSReaderModel.listDatasets: basic test"""
-        api.list('datasets')
-    
-    def test04(self):
-        """Test04 web.DBSReaderModel.listDatasets: basic test"""
-        api.list('datasets', dataset='*')
+	"""Test02 web.DBSReaderModel.listPrimaryDatasets: basic test"""
+	api.list('primarydatasets', primary_ds_name=['primary_ds_name'])
 
+    def test04(self):
+        """Test04 web.DBSReaderModel.listPrimaryDatasets: basic test"""
+	api.list('primarydatasets', primary_ds_name=testparams['primary_ds_name']+'*')
+       
     def test05(self):
         """Test05 web.DBSReaderModel.listDatasets: basic test"""
-        api.list('datasets', parent_dataset='*')
+        api.list('datasets')
     
     def test06(self):
         """Test06 web.DBSReaderModel.listDatasets: basic test"""
-        api.list('datasets', release_version='*')
+        api.list('datasets', dataset='*')
 
     def test07(self):
         """Test07 web.DBSReaderModel.listDatasets: basic test"""
-        api.list('datasets', pset_hash='*')
+        api.list('datasets', dataset=testparams['dataset'])
 
     def test08(self):
         """Test08 web.DBSReaderModel.listDatasets: basic test"""
-        api.list('datasets', app_name='*')
-    
+        api.list('datasets', dataset=testparams['dataset']+'*')
+
     def test09(self):
         """Test09 web.DBSReaderModel.listDatasets: basic test"""
-	api.list('datasets', output_module_label='*')
-
+        api.list('datasets', parent_dataset='*')
+    
     def test10(self):
         """Test10 web.DBSReaderModel.listDatasets: basic test"""
-	api.list('datasets', dataset='*', 
-                                  parent_dataset='*',
-                                  release_version='*',
-                                  pset_hash='*',
-                                  app_name='*',
-                                  output_module_label='*')
+        api.list('datasets', release_version='*')
+
     def test11(self):
-        """Test11 web.DBSReaderModel.listBlocks: basic test"""
+        """Test11 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', release_version=testparams['release_version'])
+
+    def test12(self):
+        """Test12 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', release_version=testparams['release_version']+'*')
+
+    def test13(self):
+        """Test13 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', pset_hash='*')
+
+    def test14(self):
+        """Test14 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', pset_hash=testparams['pset_hash'])
+
+    def test15(self):
+        """Test15 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', app_name='*')
+
+    def test16(self):
+        """Test16 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', app_name=testparams['app_name'])
+    
+    def test17(self):
+        """Test17 web.DBSReaderModel.listDatasets: basic test"""
+	api.list('datasets', output_module_label='*')
+
+    def test18(self):
+        """Test18 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', output_module_label=testparams['output_module_label'])
+
+    def test19(self):
+        """Test19 web.DBSReaderModel.listDatasets: basic test"""
+	api.list('datasets', dataset=testparams['dataset'], 
+                                  parent_dataset='*',
+                                  release_version=testparams['release_version'],
+                                  pset_hash=testparams['pset_hash'],
+                                  app_name=testparams['app_name'],
+                                  output_module_label=testparams['output_module_label'])
+
+    def test20(self):
+        """Test20 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', dataset=testparams['dataset'],
+                                  release_version=testparams['release_version']
+                                  )
+
+    def test21(self):
+        """Test21 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', release_version=testparams['release_version'],
+                                  pset_hash=testparams['pset_hash'],
+                                  )
+
+    def test22(self):
+        """Test22 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', app_name=testparams['app_name'],
+                             output_module_label=testparams['output_module_label'])
+
+    def test23(self):
+        """Test23 web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', dataset=testparams['dataset'],
+                                  app_name=testparams['app_name'],
+                                  output_module_label=testparams['output_module_label'])
+    def test24(self):
+        """Test24 web.DBSReaderModel.listBlocks: basic test"""
 	try:
 	    api.list('blocks', dataset='*')
         except:
@@ -84,8 +143,20 @@ class DBSReaderModel_t(unittest.TestCase):
 	else:
 	    self.fail("Exception was expected and was not raised.")
 
-    def test12(self):
-        """Test12 web.DBSReaderModel.listBlocks: basic test"""
+    def test25(self):
+        """Test25 web.DBSReaderModel.listBlocks: basic test"""
+	api.list('blocks', dataset=testparams['dataset'])
+
+    def test26(self):
+        """Test26 web.DBSReaderModel.listBlocks: basic test"""
+        api.list('blocks', block_name=testparams['block'])
+
+    def test27(self):
+        """Test27 web.DBSReaderModel.listBlocks: basic test"""
+        api.list('blocks', site_name=testparams['site'])
+
+    def test28(self):
+        """Test28 web.DBSReaderModel.listBlocks: basic test"""
         try:
             api.list('blocks', block_name='*')
         except:
@@ -93,8 +164,8 @@ class DBSReaderModel_t(unittest.TestCase):
         else:
             self.fail("Exception was expected and was not raised.")
 
-    def test13(self):
-        """Test13 web.DBSReaderModel.listBlocks: basic test"""
+    def test29(self):
+        """Test29 web.DBSReaderModel.listBlocks: basic test"""
         try:
             api.list('blocks', site_name='*')
         except:
@@ -102,32 +173,14 @@ class DBSReaderModel_t(unittest.TestCase):
         else:
             self.fail("Exception was expected and was not raised.")
 
-    def test14(self):
-        """Test14 web.DBSReaderModel.listBlocks: basic test"""
-        try:
-            api.list('blocks', dataset='*',
-                                block_name='*',
-                                site_name='*')
-        except:
-            pass
-        else:
-            self.fail("Exception was expected and was not raised.")
-
-
-	    
-    def test15(self):
-        """Test15 web.DBSReaderModel.listBlocks: takes exact dataset name, not pattern"""
-	try:
-	    result=api.list('blocks', dataset='*')
-	    #import pdb
-	    #pdb.set_trace()
-	except:
-	    pass
-	else:
-	    self.fail("Exception was expected and was not raised.")
+    def test30(self):
+        """Test30 web.DBSReaderModel.listBlocks: basic test"""
+        api.list('blocks', dataset=testparams['dataset'],
+                                block_name=testparams['block'],
+                                site_name=testparams['site'])
         
-    def test16(self):
-        """Test16 web.DBSReaderModel.listBlocks: Must raise an exception if no parameter is passed."""
+    def test31(self):
+        """Test31 web.DBSReaderModel.listBlocks: Must raise an exception if no parameter is passed."""
 	
         try:
 	    api.list('blocks')
@@ -136,8 +189,8 @@ class DBSReaderModel_t(unittest.TestCase):
         else: 
 	    self.fail("Exception was expected and was not raised.")
             
-    def test17(self):
-        """Test17 web.DBSReaderModel.listFiles: basic test"""
+    def test32(self):
+        """Test32 web.DBSReaderModel.listFiles: basic test"""
 	try:
 	    api.list('files', dataset='*')
 	except:
@@ -145,8 +198,16 @@ class DBSReaderModel_t(unittest.TestCase):
 	else:
 	    self.fail("Exception was expected and was not raised.")
 
-    def test18(self):
-        """Test18 web.DBSReaderModel.listFiles: basic test"""
+    def test33(self):
+        """Test33 web.DBSReaderModel.listFiles: basic test"""
+	api.list('files', dataset=testparams['dataset'])
+
+    def test34(self):
+        """Test34 web.DBSReaderModel.listFiles: basic test"""
+        api.list('files', dataset=testparams['dataset']+'*')
+
+    def test35(self):
+        """Test35 web.DBSReaderModel.listFiles: basic test"""
 	try:
 	    api.list('files', block_name='*')
 	except:
@@ -154,91 +215,187 @@ class DBSReaderModel_t(unittest.TestCase):
         else:
             self.fail("Exception was expected and was not raised.")
 
+    def test35(self):
+        """Test35 web.DBSReaderModel.listFiles: basic test"""
+	api.list('files', block_name=testparams['block'])
 
-    def test19(self):
-        """Test19 web.DBSReaderModel.listFiles: basic test"""
+    def test36(self):
+        """Test36 web.DBSReaderModel.listFiles: basic test"""
 	try:
 	    api.list('files', logical_file_name='*')
 	except:
             pass
         else:
             self.fail("Exception was expected and was not raised.")
-       
-    def test21(self):
-        """Test21 web.DBSReaderModel.listFiles: Must raise an exception if no parameter is passed."""
+
+    def test36(self):
+        """Test36 web.DBSReaderModel.listFiles: basic test"""
+	#need to be updated
+	api.list('files', logical_file_name='ABC'	
+
+    def test37(self):
+        """Test37 web.DBSReaderModel.listFiles: Must raise an exception if no parameter is passed."""
         try: api.list('files')
         except: pass
         else: self.fail("Exception was expected and was not raised")
             
-    def test22(self):
-        """Test22 web.DBSReaderModel.listDatasetParents: basic test"""
+    def test38(self):
+        """Test38 web.DBSReaderModel.listDatasetParents: basic test"""
         api.list('datasetparents', dataset="*")
+
+    def test39(self):
+        """Test39 web.DBSReaderModel.listDatasetParents: basic test"""
+        api.list('datasetparents', dataset=testparams['dataset'])
+
+    def test40(self):
+        """Test40 web.DBSReaderModel.listDatasetParents: basic test"""
+        api.list('datasetparents', dataset=testparams['dataset']+'*')
         
-    def test23(self):
-        """Test23 web.DBSReaderModel.listDatasetParents: must raise an exception if no parameter is passed"""
+    def test41(self):
+        """Test41 web.DBSReaderModel.listDatasetParents: must raise an exception if no parameter is passed"""
         try: api.list('datasetparents')
         except: 
 	    pass
         else: 
 	    self.fail("Exception was expected and was not raised")
             
-    def test24(self):
-        """Test24 web.DBSReaderModel.listOutputConfigs: basic test"""
+    def test42(self):
+        """Test42 web.DBSReaderModel.listOutputConfigs: basic test"""
 	api.list('outputconfigurations')
     
-    def test25(self):
-        """Test25 web.DBSReaderModel.listOutputConfigs: basic test"""
+    def test43(self):
+        """Test43 web.DBSReaderModel.listOutputConfigs: basic test"""
 	api.list('outputconfigurations', dataset="*")
+
+    def test44(self):
+        """Test44 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', dataset=testparams['dataset'])
+
+    def test45(self):
+        """Test45 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', dataset=testparams['dataset']+"*")
 	
-    def test26(self):
-        """Test26 web.DBSReaderModel.listOutputConfigs: basic test"""
+    def test46(self):
+        """Test46 web.DBSReaderModel.listOutputConfigs: basic test"""
         api.list('outputconfigurations', logical_file_name="*")
 
-    def test27(self):
-        """Test27 web.DBSReaderModel.listOutputConfigs: basic test"""
+    def test47(self):
+        """Test47 web.DBSReaderModel.listOutputConfigs: basic test"""
+	#need to be updated with LFN 
+        api.list('outputconfigurations', logical_file_name="ABC")
+
+    def test48(self):
+        """Test48 web.DBSReaderModel.listOutputConfigs: basic test""" 
+        #need to be updated with LFN 
+        api.list('outputconfigurations', logical_file_name="ABC"+"*")
+
+    def test49(self):
+        """Test49 web.DBSReaderModel.listOutputConfigs: basic test"""
         api.list('outputconfigurations', release_version="*")
 
-    def test28(self):
-        """Test28 web.DBSReaderModel.listOutputConfigs: basic test"""
+    def test50(self):
+        """Test50 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', release_version=testparams['release_version'])
+
+    def test51(self):
+        """Test51 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', release_version=testparams['release_version']+'*')
+
+    def test52(self):
+        """Test52 web.DBSReaderModel.listOutputConfigs: basic test"""
         api.list('outputconfigurations', pset_hash="*")
 
-    def test29(self):
-	"""Test29 web.DBSReaderModel.listOutputConfigs: basic test"""
+    def test53(self):
+        """Test53 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', pset_hash=testparams['pset_hash'])
+
+    def test54(self):
+	"""Test54 web.DBSReaderModel.listOutputConfigs: basic test"""
 	api.list('outputconfigurations', app_name="*")
 
-    def test30(self):
-        """Test30 web.DBSReaderModel.listOutputConfigs: basic test"""
+    def test55(self):
+        """Test55 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', app_name=testparams['app_name'])
+
+    def test56(self):
+        """Test56 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', app_name=testparams['app_name']+"*")
+
+    def test56(self):
+        """Test56 web.DBSReaderModel.listOutputConfigs: basic test"""
 	api.list('outputconfigurations', output_module_label="*")
  
-    def test31(self):
-        """Test31 web.DBSReaderModel.listOutputConfigs: basic test"""
-	api.list('outputconfigurations', dataset="*",
-                                              logical_file_name="*",
-                                              release_version="*",
-                                              pset_hash="*",
-                                              app_name="*",
-                                              output_module_label="*")
+    def test57(self):
+        """Test57 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', output_module_label=testparams['output_module_label'])
 
-    def test32(self):
-        """Test32 web.DBSReaderModel.listFileParents: basic test"""
+    def test58(self):
+        """Test58 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', output_module_label=testparams['output_module_label']+'*')
+
+    def test60(self):
+        """Test60 web.DBSReaderModel.listOutputConfigs: basic test"""
+	api.list('outputconfigurations', dataset=testparams['dataset'],
+                                              logical_file_name="*",
+                                              release_version=testparams['release_version']
+                                              pset_hash=testparams['pset_hash'],
+                                              app_name=testparams['app_name'],
+                                              output_module_label=testparams['output_module_label'])
+
+    def test61(self):
+        """Test61 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', dataset=testparams['dataset'],
+                                              release_version=testparams['release_version']
+                                              output_module_label=testparams['output_module_label'])
+
+    def test62(self):
+        """Test62 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', logical_file_name="*",
+                                              app_name=testparams['app_name'],
+                                              output_module_label=testparams['output_module_label'])
+    def test63(self):
+        """Test63 web.DBSReaderModel.listOutputConfigs: basic test"""
+        api.list('outputconfigurations', dataset=testparams['dataset'],
+                                              release_version=testparams['release_version']
+
+    def test64(self):
+        """Test64 web.DBSReaderModel.listFileParents: basic test"""
         api.list('fileparents', logical_file_name="*")
+
+    def test65(self):
+        """Test65 web.DBSReaderModel.listFileParents: basic test"""
+        api.list('fileparents', logical_file_name="ABC")
     
-    def test33(self):
-        """Test33 web.DBSReaderModel.listFileParents: must raise an exception if no parameter is passed"""
+    def test66(self):
+        """Test66 web.DBSReaderModel.listFileParents: must raise an exception if no parameter is passed"""
         try: api.list('fileparents')
         except: pass
         else: self.fail("Exception was expected and was not raised")
         
-    def test34(self):
-        """Test34 web.DBSReaderModel.listFileLumis: basic test"""
+    def test66(self):
+        """Test66 web.DBSReaderModel.listFileLumis: basic test"""
         api.list('filelumis', logical_file_name="*")
 
-    def test35(self):
-        """Test35 web.DBSReaderModel.listFileLumis: basic test"""
+    def test67(self):
+        """Test67 web.DBSReaderModel.listFileLumis: basic test"""
+	#need to update LFN
+        api.list('filelumis', logical_file_name="ABC")
+
+
+    def test68(self):
+        """Test68 web.DBSReaderModel.listFileLumis: basic test"""
         api.list('filelumis', block_name="*")
 
-    def test36(self):
-        """Test36 web.DBSReaderModel.listFileLumis: must raise an exception if no parameter is passed"""
+    def test69(self):
+        """Test69 web.DBSReaderModel.listFileLumis: basic test"""
+        api.list('filelumis', block_name=testparams['block'])
+
+    def test70(self):
+        """Test70 web.DBSReaderModel.listFileLumis: basic test"""
+        api.list('filelumis', block_name=testparams['block']+'*')
+
+    def test71(self):
+        """Test71 web.DBSReaderModel.listFileLumis: must raise an exception if no parameter is passed"""
         try: api.list('filelumis')
         except: pass
         else: self.fail("Exception was expected and was not raised")
