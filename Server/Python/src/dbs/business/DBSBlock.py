@@ -3,8 +3,8 @@
 This module provides business object class to interact with Block. 
 """
 
-__revision__ = "$Id: DBSBlock.py,v 1.11 2009/12/23 20:35:46 yuyi Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSBlock.py,v 1.12 2009/12/27 13:38:29 akhukhun Exp $"
+__version__ = "$Revision: 1.12 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
@@ -25,11 +25,11 @@ class DBSBlock:
         self.blockin = daofactory(classname = "Block.Insert")
 
 
-    def listBlocks(self, dataset="", block=""):
+    def listBlocks(self, dataset="", block_name=""):
         """
         either dataset or block must be provided.
         """
-        return self.blocklist.execute(dataset=dataset, block=block)
+        return self.blocklist.execute(dataset, block_name)
     
     
     def insertBlock(self, businput):
@@ -37,29 +37,28 @@ class DBSBlock:
         Input dictionary has to have the following keys:
         blockname
 	
-	It may have:
-	open_for_writing, origin_site(name), block_size,
+        It may have:
+        open_for_writing, origin_site(name), block_size,
         file_count, creation_date, create_by, last_modification_date, last_modified_by
         
-	it builds the correct dictionary for dao input and executes the dao
+        it builds the correct dictionary for dao input and executes the dao
 
-	NEED to validate there are no extra keys in the businput
+        NEED to validate there are no extra keys in the businput
         """
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
             businput["dataset_id"] = self.datasetid.execute((businput["block_name"]).split('#')[0], conn, True)
             businput["block_id"] =  self.sm.increment("SEQ_BK", conn, True)
-	    businput["last_modification_date"]=  dbsUtils().getTime()
-	    businput["last_modified_by"] = dbsUtils().getModifiedBy()
-	    if(businput.has_key("origin_site")):
-		businput["origin_site"] = self.siteid.execute(businput["origin_site"], conn, True)
-	    if("create_by" not in businput):
-		businput["create_by"] = dbsUtils().getCreateBy()
-	    if("creation_date" not in businput):
-		businput["creation_date"] = dbsUtils().getTime()
+            businput["last_modification_date"]=  dbsUtils().getTime()
+            businput["last_modified_by"] = dbsUtils().getModifiedBy()
+            if(businput.has_key("origin_site")):
+                businput["origin_site"] = self.siteid.execute(businput["origin_site"], conn, True)
+            if("create_by" not in businput):
+                businput["create_by"] = dbsUtils().getCreateBy()
+            if("creation_date" not in businput):
+                businput["creation_date"] = dbsUtils().getTime()
             self.blockin.execute(businput, conn, True)
-	    
             tran.commit()
         except Exception, e:
             tran.rollback()

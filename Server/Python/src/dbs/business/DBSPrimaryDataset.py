@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.12 2009/12/23 20:07:33 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.13 2009/12/27 13:37:51 akhukhun Exp $"
+__version__ = "$Revision: 1.13 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -24,11 +24,11 @@ class DBSPrimaryDataset:
         self.primdsin = daofactory(classname="PrimaryDataset.Insert")
 
 
-    def listPrimaryDatasets(self, primdsname=""):
+    def listPrimaryDatasets(self, primary_ds_name=""):
         """
-        Returns all primary datasets if primdsname is not passed.
+        Returns all primary datasets if primary_ds_name is not passed.
         """
-        return self.primdslist.execute(primdsname)
+        return self.primdslist.execute(primary_ds_name)
 
 
     def insertPrimaryDataset(self, businput):
@@ -42,23 +42,22 @@ class DBSPrimaryDataset:
         try:
             businput["primary_ds_type_id"] = (self.primdstypeList.execute(businput["primary_ds_type"]))[0]["primary_ds_type_id"] 
             del businput["primary_ds_type"]
-	    businput["primary_ds_id"] = self.sm.increment("SEQ_PDS", conn, True)
-	    
+            businput["primary_ds_id"] = self.sm.increment("SEQ_PDS", conn, True)
             self.primdsin.execute(businput, conn, True)
             tran.commit()
-	except IndexError:
-	    self.logger.exception( "DBS Error: Index error raised")
-	    #self.logger.error( "Index error raised")
-	    raise 
+        except IndexError:
+            self.logger.exception( "DBS Error: Index error raised")
+            #self.logger.error( "Index error raised")
+            raise 
         except Exception, ex:
-                if str(ex).lower().find("unique constraint") != -1 :
-                        # dataset already exists, lets fetch the ID
-                        self.logger.warning("Unique constraint violation being ignored...")
-                        self.logger.warning("%s" % ex)
-                        pass
-                else:
-                        tran.rollback()
-                        self.logger.exception(ex)
-                        raise
+            if str(ex).lower().find("unique constraint") != -1 :
+                # dataset already exists, lets fetch the ID
+                self.logger.warning("Unique constraint violation being ignored...")
+                self.logger.warning("%s" % ex)
+                pass
+            else:
+                tran.rollback()
+                self.logger.exception(ex)
+                raise
         finally:
             conn.close()
