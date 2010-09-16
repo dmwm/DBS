@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.9 2009/11/12 15:19:35 akhukhun Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSModel.py,v 1.10 2009/11/12 22:47:53 afaq Exp $"
+__version__ = "$Revision: 1.10 $"
 
 import re
 import json, cjson
@@ -26,7 +26,7 @@ class DBSModel(RESTModel):
         """
         RESTModel.__init__(self, config)
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
-        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primds'])
+        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets, ['primarydataset'])
         self.addService('GET', 'datasets', self.listDatasets, ['dataset'])
         self.addService('GET', 'blocks', self.listBlocks, ['dataset', 'block'])
         self.addService('GET', 'files', self.listFiles, ['dataset', 'block', 'lfn'])
@@ -46,7 +46,7 @@ class DBSModel(RESTModel):
                                          'validation': validation,
                                          'version': version}
  
-    def listPrimaryDatasets(self, primds = ""):
+    def listPrimaryDatasets(self, primarydataset = ""):
         """
         Example url's:
         http://dbs3/primds/
@@ -54,7 +54,7 @@ class DBSModel(RESTModel):
         http://dbs3/primds/qcd*
         """
         data = {}
-        primds = primds.replace("*","%")
+        primds = primarydataset.replace("*","%")
         bo = DBSPrimaryDataset(self.logger, self.dbi)
         data.update({'result':bo.listPrimaryDatasets(primds)})
         return data
