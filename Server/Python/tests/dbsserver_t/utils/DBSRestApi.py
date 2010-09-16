@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.15 2010/08/01 19:14:10 akhukhun Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.16 2010/08/27 14:19:02 afaq Exp $"
+__version__ = "$Revision: 1.16 $"
 
 import json
 import os, logging
@@ -41,18 +41,28 @@ class DBSRestApi:
         app = wconfig.application
         appconfig = cfg.section_(app)
         dbsconfig = getattr(appconfig.views.active, service)
+	databasecore = cfg.CoreDatabase
+	
 	# Eitehr we change formatter 
 	# OR change the 'Accept' type to application/json (which we don't know how to do at thi moment)	
 	dbsconfig.formatter.object="WMCore.WebTools.RESTFormatter"
         config = Configuration()
+
+	config.section_("CoreDatabase")
+	config.CoreDatabase = databasecore
+	
         config.component_('DBS')
         config.DBS.application = app
 	config.DBS.model       = dbsconfig.model
 	config.DBS.formatter   = dbsconfig.formatter
-        config.DBS.database    = dbsconfig.database
-        config.DBS.dbowner     = dbsconfig.dbowner
         config.DBS.version     = dbsconfig.version
 	config.DBS.default_expires = 300
+	# DBS uses owner name, directly from app section at the moment (does not pick it from CoreDatabse)
+	config.DBS.dbowner     = databasecore.dbowner
+	# Add the CoreDatabase section to DBS
+	config.DBS.database = config.CoreDatabase
+	
+	
         return config
 
     def list1(self, call, params={}):
@@ -65,8 +75,6 @@ class DBSRestApi:
         takes individual parameters
         Example: api.list('files',dataset='/a/b/c')
         """
-	#import pdb
-	#pdb.set_trace()
 	#print "List API call ....."
         request.method = 'GET'
         return self.parseForException(self.rest.default(*args, **kwargs))
