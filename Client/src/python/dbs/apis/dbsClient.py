@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.53 $"
-# $Id: dbsClient.py,v 1.53 2010/08/12 18:52:21 afaq Exp $"
+# $Revision: 1.54 $"
+# $Id: dbsClient.py,v 1.54 2010/08/16 18:43:15 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -95,6 +95,18 @@ class DbsApi:
 		if dataset:
 		    return self.callServer("/primarydatasets?primary_ds_name=%s" %dataset )
 		return self.callServer("/primarydatasets")
+
+	def listAcquisitionEras(self, dataset=""):
+		"""
+		* API to list ALL Acquisition Eras in DBS 
+		"""
+		return self.callServer("/acquisitioneras")
+
+        def listProcessingEras(self, dataset=""):
+                """
+                * API to list ALL Processing Eras in DBS 
+                """
+                return self.callServer("/processingeras")
 
         def insertPrimaryDataset(self, primaryDSObj={}):
                 """
@@ -620,6 +632,8 @@ if __name__ == "__main__":
 	#read_proxy="http://cmsfrontier1.fnal.gov:3128"
 	read_proxy=""
 	api = DbsApi(url=url, proxy=read_proxy)
-	print api.listPrimaryDatasets()
-
+	print api.serverinfo()
+	#print api.listPrimaryDatasets()
+	#print api.listAcquisitionEras()
+	#print api.listProcessingEras()
     
