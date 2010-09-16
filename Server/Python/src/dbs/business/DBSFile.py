@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.18 2010/01/25 18:05:57 yuyi Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: DBSFile.py,v 1.19 2010/01/26 17:41:43 afaq Exp $"
+__version__ = "$Revision: 1.19 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -205,7 +205,7 @@ class DBSFile:
 			    iConfig += 1
 			    fcdao["file_id"] = filein["file_id"]
 			    fcdao["output_mod_config_id"]= self.outconfigid.execute(fc["app_name"], \
-				                        fc["release_version"], fc["pset_hash"], conn, True)
+				                        fc["release_version"], fc["pset_hash"], fc["output_module_label"], conn, True)
 			    fconfigs2insert.append(fcdao)
 			
 		#FIXME: file associations?-- in a later release

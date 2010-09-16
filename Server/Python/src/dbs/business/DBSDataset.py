@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.21 2010/01/25 20:46:45 afaq Exp $"
-__version__ = "$Revision: 1.21 $"
+__revision__ = "$Id: DBSDataset.py,v 1.22 2010/01/26 17:41:43 afaq Exp $"
+__version__ = "$Revision: 1.22 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -129,6 +129,7 @@ class DBSDataset:
 										anOutConfig["pset_hash"], \
 										anOutConfig["output_module_label"], conn, True) 
 		    dsoutconfdaoin["ds_output_mod_conf_id"] = self.sm.increment("SEQ_DC", conn, True)
+		    print "INSERTING output_mod_config_id :::::: %s" %str(dsoutconfdaoin["output_mod_config_id"])
                 try:
                     self.datasetoutmodconfigin.execute(dsoutconfdaoin, conn, True)
                 except Exception, ex:
