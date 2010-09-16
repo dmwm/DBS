@@ -279,7 +279,7 @@ CREATE TABLE `SEQ_DVS` (
 # Add table "SEQ_BLST"                                                   #
 # ---------------------------------------------------------------------- #
 
-CREATE TABLE `SEQ_BLST` (
+CREATE TABLE `SEQ_BLSTS` (
     `ID` INTEGER NOT NULL,
-    CONSTRAINT `PK_SEQ_BLST` PRIMARY KEY (`ID`)
+    CONSTRAINT `PK_SEQ_BLSTS` PRIMARY KEY (`ID`)
 );
