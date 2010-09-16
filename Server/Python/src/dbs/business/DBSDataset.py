@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.27 2010/03/09 16:38:02 afaq Exp $"
-__version__ = "$Revision: 1.27 $"
+__revision__ = "$Id: DBSDataset.py,v 1.28 2010/03/15 14:50:51 yuyi Exp $"
+__version__ = "$Revision: 1.28 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -97,6 +97,8 @@ class DBSDataset:
         """ 
         conn = self.dbi.connection()
         tran = conn.begin()
+	#import pdb
+	#pdb.set_trace()
         try:
 
             dsdaoinput={}
@@ -131,10 +133,10 @@ class DBSDataset:
 
             # See if Processing Era exists
             if businput.has_key("processing_version"):
-                dsdaoinput["processing_version"] = self.proceraid.execute(conn, businput["processing_version"], tran)
+                dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"], tran)
             # See if Acquisition Era exists
             if businput.has_key("acquisition_era_name"):
-                dsdaoinput["acquisition_era_name"] = self.acqeraid.execute(conn, businput["acquisition_era_name"], tran)
+                dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"], tran)
                  
             try:
                 # insert the dataset
@@ -159,7 +161,7 @@ class DBSDataset:
 										anOutConfig["pset_hash"], \
 										anOutConfig["output_module_label"], tran) 
 		    dsoutconfdaoin["ds_output_mod_conf_id"] = self.sm.increment(conn, "SEQ_DC", tran)
-		    print "INSERTING output_mod_config_id :::::: %s" %str(dsoutconfdaoin["output_mod_config_id"])
+		    #print "INSERTING output_mod_config_id :::::: %s" %str(dsoutconfdaoin["output_mod_config_id"])
                 try:
                     self.datasetoutmodconfigin.execute(conn, dsoutconfdaoin, tran)
                 except Exception, ex:
