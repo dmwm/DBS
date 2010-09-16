@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.12 2010/01/26 17:30:32 yuyi Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.13 2010/01/27 23:16:38 dsr Exp $"
+__version__ = "$Revision: 1.13 $"
 
 import os
 import sys
@@ -24,10 +24,10 @@ def uuid():
     lib = CDLL("libuuid.so.1")
     uuid = create_string_buffer(16)
     return lib.uuid_generate(byref(uuid))
-    
-	
+
+
 config = os.environ["DBS_TEST_CONFIG_WRITER"] 
-api = DBSRestApi(config) 
+api = DBSRestApi(config)
 uid = uuid()
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
@@ -55,8 +55,9 @@ outDict={
 "files" : []
 }
 
-
-
+infoout=open("info.dict", "w")
+infoout.write("info="+str(outDict))
+infoout.close()
 
 class DBSWriterModel_t(unittest.TestCase):
 
@@ -281,10 +282,6 @@ class DBSWriterModel_t(unittest.TestCase):
 	data={"files":flist}
 	api.insert('files', data)
 	
-    def test2000(self):
-	infoout=open("info.dict", "w")
-	infoout.write("info="+str(outDict))
-	infoout.close()
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSWriterModel_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
