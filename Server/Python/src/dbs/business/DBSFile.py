@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.9 2009/11/30 09:52:31 akhukhun Exp $"
-__version__ = "$Revision: 1.9 $"
+__revision__ = "$Id: DBSFile.py,v 1.10 2009/12/07 15:46:06 akhukhun Exp $"
+__version__ = "$Revision: 1.10 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -32,7 +32,10 @@ class DBSFile:
         """
         either dataset(and lfn pattern) or block(and lfn pattern) must be specified.
         """
-        return self.filelist.execute(dataset, block, lfn)
+        conn = self.dbi.connection()
+        result = self.filelist.execute(dataset, block, lfn, conn)
+        conn.close()
+        return result
 
 
     def insertFile(self, businput):
