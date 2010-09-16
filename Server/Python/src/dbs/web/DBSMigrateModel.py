@@ -1,81 +1,64 @@
 #!/usr/bin/env python
 """
-DBS Rest Model module
+DBS Migration Service Client Interface Rest Model module
 """
 
-__revision__ = "$Id: DBSMigrateModel.py,v 1.1 2010/04/22 07:47:39 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSMigrateModel.py,v 1.2 2010/06/24 21:38:53 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import re
 import cjson
 import time
-import threading
-import Queue
 import traceback
 
 from cherrypy import request, response, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsUtils import dbsUtils
 
-
 from dbs.business.DBSMigrate import DBSMigrate
-
-	    		
 
 class DBSMigrateModel(RESTModel):
     """
-    DBS3 Server API Documentation 
+    DBS Migration Service Web Model
     """
+    
     def __init__(self, config):
         """
         All parameters are provided through DBSConfig module
         """
         RESTModel.__init__(self, config)
 	
-        self.addService('POST', 'start', self.start)
-        self.addService('GET', 'status', self.status)
+        self.addMethod('POST', 'submit', self.submit)
+        self.addMethod('POST', 'remove', self.remove)
+        self.addMethod('GET',  'status', self.status)
+
 	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
 
-	self.q = Queue.Queue()
-	#Need to subscribe to cherrypy.engine
-	#http://tools.cherrypy.org/wiki/BackgroundTaskQueue
-	for i in xrange(config.nthreads):
-	    threading.Thread(target=self.run).start()
-	
-
-    def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
-        """
-        method that adds services to the DBS rest model
-        """
-        self.methods[verb][methodKey] = {'args': args,
-                                         'call': func,
-                                         'validation': validation,
-                                         'version': version}
-
-    def start(self):
+    def submit(self):
+	"""
+	Interface for submitting a migration request
+	"""
 	body = request.body.read()
 	indata = cjson.decode(body)
-	self.dbsMigrate.insertMigrationRequest(indata)
-	self.q.put(indata)
-	self.logger.debug("REQUEST: %s" % indata)
-	return "Migration request was successfully submitted."
+	indata.update({"creation_date": dbsUtils().getTime(), \
+		"last_modification_date" : dbsUtils().getTime(), \
+		"create_by" : dbsUtils().getCreateBy() , "last_modified_by" : dbsUtils().getCreateBy() })
+	return self.dbsMigrate.insertMigrationRequest(indata)
 
-    def status(self, dataset):
-        dataset = dataset.replace("*", "%")
-	return self.dbsMigrate.listMigrationRequests(dataset)
+    def status(self, migration_id="", block="", dataset="", user=""):
+	"""
+	Interface to query status of a migration request
+	In this preference order of input parameters :-
+	    migration_id, block, dataset, user
+	    (if multi parameters are provided, only the precedence order is followed
+	"""
+	return self.dbsMigrate.listMigrationRequests(migration_id, block, dataset, user)
+    
+    def remove(self, migration_id=""):
+	"""
+	Interface to remove a migration request from the queue
+	Only FAILED, COMPLETED and PENDING requests can be removed
+	(running requests cannot be removed)
+	"""
+	return self.dbsMigrate.removeMigrationRequest(migration_id)
 
-    def run(self):
-	while True:
-	    req = self.q.get()
-	    migration_dataset = req['migration_dataset']
-	    self.dbsMigrate.updateMigrationStatus('RUNNING', migration_dataset)
-	    #here the actual migration goes
-	    try:
-		businput = dict(url=req["migration_url"], dataset=req["migration_dataset"])
-		self.dbsMigrate.migrate(businput)
-		self.dbsMigrate.updateMigrationStatus('COMPLETED', migration_dataset)
-		time.sleep(10)
-	    except Exception, ex:
-		self.dbsMigrate.updateMigrationStatus('FAILED', migration_dataset)
-		print "I AM HERE"
-		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )

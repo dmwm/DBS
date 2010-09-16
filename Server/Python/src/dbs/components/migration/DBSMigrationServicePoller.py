@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 """
-DBS Insert Buffer Polling Module
+DBS Migration Service Polling Module
 """
-__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.1 2010/06/23 21:27:22 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSMigrationServicePoller.py,v 1.2 2010/06/24 21:38:51 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
-
-"""
-Polls FILE_BUFFER table and post entries to FILES (and related) tables
-"""
 
 import threading
 import logging
@@ -21,7 +17,7 @@ from sqlalchemy import exceptions
 from WMCore.WorkerThreads.BaseWorkerThread import BaseWorkerThread
 from WMCore.DAOFactory import DAOFactory
 
-class DBSInsertBufferPoller(BaseWorkerThread) :
+class DBSMigrationServicePoller(BaseWorkerThread) :
 
     """
     Handles poll-based File Inserts
@@ -52,6 +48,26 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	
 	# Setup the DAO objects
 	daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=self.dbowner)
+
+        self.sm		    = daofactory(classname="SequenceManager")
+        self.primdslist	    = daofactory(classname="PrimaryDataset.List")
+	self.datasetlist    = daofactory(classname="Dataset.List")
+	self.blocklist	    = daofactory(classname="Block.List")
+	self.filelist	    = daofactory(classname="File.List")
+	self.fplist	    = daofactory(classname="FileParent.List")
+        self.fllist	    = daofactory(classname="FileLumi.List")
+	self.primdstpid	    = daofactory(classname='PrimaryDSType.GetID')
+	self.tierid	    = daofactory(classname='DataTier.GetID')
+        self.datatypeid	    = daofactory(classname='DatasetType.GetID')
+        self.phygrpid	    = daofactory(classname='PhysicsGroup.GetID')
+        self.procdsid	    = daofactory(classname='ProcessedDataset.GetID')
+        self.procdsin	    = daofactory(classname='ProcessedDataset.Insert')
+        self.primdsin	    = daofactory(classname="PrimaryDataset.Insert")
+        self.datasetin	    = daofactory(classname='Dataset.Insert')
+	
+
+
+	
 	self.sm = daofactory(classname = "SequenceManager")
 	self.filein = daofactory(classname = "File.Insert")
 	self.flumiin = daofactory(classname = "FileLumi.Insert")
@@ -71,6 +87,30 @@ class DBSInsertBufferPoller(BaseWorkerThread) :
 	self.compstatusup = daofactory(classname="ComponentStatus.Update")
 
 	self.insertStatus("STARTED")
+
+
+
+    def run(self):
+	while True:
+	    req = self.q.get()
+	    migration_dataset = req['migration_dataset']
+	    self.dbsMigrate.updateMigrationStatus('RUNNING', migration_dataset)
+	    #here the actual migration goes
+	    try:
+		businput = dict(url=req["migration_url"], dataset=req["migration_dataset"])
+		self.dbsMigrate.migrate(businput)
+		self.dbsMigrate.updateMigrationStatus('COMPLETED', migration_dataset)
+		time.sleep(10)
+	    except Exception, ex:
+		self.dbsMigrate.updateMigrationStatus('FAILED', migration_dataset)
+		print "I AM HERE"
+		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+
+
+
+
+
+
 	
     # called by frk at the termination time
     def terminate(self, params):

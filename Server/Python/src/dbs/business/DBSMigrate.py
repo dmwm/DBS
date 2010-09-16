@@ -3,14 +3,15 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.1 2010/04/22 07:48:37 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.2 2010/06/24 21:38:51 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.DAOFactory import DAOFactory
 
 #temporary thing
 import json, cjson
 import urllib, urllib2
+from sqlalchemy import exceptions
 from sqlalchemy.exceptions import IntegrityError
 
 def pprint(a):
@@ -24,45 +25,117 @@ class DBSMigrate:
 	daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
 	self.logger = logger
 	self.dbi = dbi
-
+	
+	self.sm	= daofactory(classname="SequenceManager")
 	self.mgrlist = daofactory(classname="MigrationRequests.List")
 	self.mgrin   = daofactory(classname="MigrationRequests.Insert")
 	self.mgrup   = daofactory(classname="MigrationRequests.Update")
+	self.blocklist = daofactory(classname="Block.List")
 
-        self.sm		    = daofactory(classname="SequenceManager")
-        self.primdslist	    = daofactory(classname="PrimaryDataset.List")
-	self.datasetlist    = daofactory(classname="Dataset.List")
-	self.blocklist	    = daofactory(classname="Block.List")
-	self.filelist	    = daofactory(classname="File.List")
-	self.fplist	    = daofactory(classname="FileParent.List")
-        self.fllist	    = daofactory(classname="FileLumi.List")
-	self.primdstpid	    = daofactory(classname='PrimaryDSType.GetID')
-	self.tierid	    = daofactory(classname='DataTier.GetID')
-        self.datatypeid	    = daofactory(classname='DatasetType.GetID')
-        self.phygrpid	    = daofactory(classname='PhysicsGroup.GetID')
-        self.procdsid	    = daofactory(classname='ProcessedDataset.GetID')
-        self.procdsin	    = daofactory(classname='ProcessedDataset.Insert')
-        self.primdsin	    = daofactory(classname="PrimaryDataset.Insert")
-        self.datasetin	    = daofactory(classname='Dataset.Insert')
+
+
+
+
+####################### watch for conn management 
+
+
+
+
+
 	
-
-    
+    def handleBlockMigration(self, conn, request):
+	"""
+	    1. see if block already exists at dst (no need to migrate), raise "ALREADY EXISTS"
+	    2. see if block exists at src
+	    3. see if block has parents
+	    4. see if parent blocks are already at dst
+	    5. add 'order' to parent and then this block (ascending)
+	    6. return the ordered list
+	"""
+	ordered_dict={}
+	block_name=request["migration_input"]
+	url=request["migration_url"]
+	order_counter=0	
+	try:
+	    #1.
+	    dstblock = self.blocklist.execute(conn, block_name )
+	    if len(dstblock) > 0:
+		raise Exception("BLOCK %s already exists at destination" % block_name)
+	    #2.
+	    srcblock= self.getSrcBlocks(url, block=block_name)
+	    if len(srcblock) < 1:
+		raise Exception("BLOCK %s does not exist at source dbs %s" %(url, block_name))
+	    ##This block has to be migrated
+	    ordered_dict[order_counter]=[]
+	    ordered_dict[order_counter].append(block_name)
+	    parent_ordered_dict=self.getParentOrderedList(url, conn, block_name, order_counter+1)
+	    if parent_ordered_dict != {}:
+		ordered_dict.update(parent_ordered_dict)
+	    #6.
+	    return ordered_dict
+        except Exception, ex:
+	    raise Exception("Failed to queue block %s for migration, %s" % (block_name, str(ex)))
+ 
+    def getParentOrderedList(self, url, conn, block_name, order_counter):
+	    ordered_dict={}
+	    #3.
+	    parentBlocksInSrc = self.getSrcBlockParents(url, block_name)
+	    parentBlocksInSrcNames = [ y['block_name'] for y in parentBlocksInSrc ]
+	    #4.
+	    if len(parentBlocksInSrcNames) > 0:
+		ordered_dict[order_counter]=[]
+		# check which of these are already at dst
+		# the only way we can do, is to list blocks for parent dataset, and then just check the ones we are interested in
+		parent_dataset=parentBlocksInSrcNames[0].split('#')[0]
+		parentBlocksInDst=self.blocklist.execute(conn, parent_dataset)
+		parentBlocksInDstNames = [ y['block_name'] for y in parentBlocksInDst ]
+		for ablockAtSrc in parentBlocksInSrcNames:
+		    if ablockAtSrc not in parentBlocksInDstNames: #block is not already at dst
+			#5.
+			ordered_dict[order_counter].append(ablockAtSrc)
+			#Also check if it has parents (recurrsion begins)
+			tmp_ordered_dict=self.getParentOrderedList(url, conn, ablockAtSrc, order_counter+1)
+			if tmp_ordered_dict != {}:
+			    ordered_dict[order_counter+1]=self.getParentOrderedList(url, conn, ablockAtSrc, order_counter+1)
+	    return ordered_dict
+	    		
     def insertMigrationRequest(self, request):
-	"""request kyes: migration_url, migration_dataset"""
+	"""request kyes: migration_url, migration_input, migration_block, migration_user"""
 	conn = self.dbi.connection()
 	tran = conn.begin()
+
+	#Determine if its a dataset or block migration
+	if request["migration_input"].find("#") != -1:
+	    ordered_list=self.handleBlockMigration(conn, request)
+	else:
+	    ordered_list=self.handleDatasetMigration(conn, request)
+
 	try:
 	    request.update(migration_status='PENDING')
 	    request['migration_id'] = self.sm.increment(conn, "SEQ_MR", tran)
 	    self.mgrin.execute(conn, request, tran)
 	    tran.commit()
+	    # INSERT the ordered_list
+	    
+
+	    # return things like (X blocks queued for migration)
+	    return {"migration_status" : "PENDING", "migration_details" : request }
+
+	except exceptions.IntegrityError, ex:
+	    tran.rollback()
+	    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+		self.logger.warning("Migration request already exists in DBS")
+		request["migration_status"] = "ALREADY_QUEUED"
+		request["migration_id"] = ""
+		return {"migration_status" : "ALREADY_QUEUED", "migration_details" : request }
+	    else:
+		self.logger.exception(ex)
+	        raise "ENQUEUEING_FAILED reason may be ( %s ) " %ex  
 	except Exception, ex:
 	    tran.rollback()
-	    self.logger.exception(ex)
-	    raise
+	    raise "ENQUEUEING_FAILED reason may be ( %s ) " %ex
 	finally:
 	    conn.close()
-
     
     def listMigrationRequests(self, migration_dataset):
 	"""get the status of the dataset migration"""
@@ -104,11 +177,28 @@ class DBSMigrate:
 	return dict(block=block, dataset=dataset, primds=primds, files=files)
 
 
-    def listBlocks(self, url, dataset):
+    def getSrcBlockParents(self, url, block):
+	"""
+	List block at src DBS
+	"""
+	blockname = block.replace("#",urllib.quote_plus('#'))
+	resturl = "%s/blockparents?block_name=%s" % (url, blockname)
+	req = urllib2.Request(url = resturl)
+	data = urllib2.urlopen(req)
+	ddata = cjson.decode(data.read())
+	return ddata 
+    
+    def getSrcBlocks(self, url, dataset="", block=""):
 	"""Need to list all blocks of the dataset and its parents starting from the top
 	   For now just list the blocks from this dataset.
 	   Client type call..."""
-	resturl = "%s/DBS/blocks?dataset=%s" % (url,dataset)
+	if block:
+	    blockname = block.replace("#",urllib.quote_plus('#'))
+	    resturl = "%s/blocks?block_name=%s" % (url,blockname)
+	elif dataset:
+	    resturl = "%s/blocks?dataset=%s" % (url,dataset)
+	else:
+	    raise "INVALID block or dataset name"
 	req = urllib2.Request(url = resturl)
 	data = urllib2.urlopen(req)
 	ddata = cjson.decode(data.read())
@@ -117,7 +207,7 @@ class DBSMigrate:
     def getBlock(self, url, block_name):
 	"""Client type call to get the block content from the server"""
 	blockname = block_name.replace("#",urllib.quote_plus('#'))
-	resturl = "%s/DBS/blockdump?block_name=%s" % (url, blockname)
+	resturl = "%s/blockdump?block_name=%s" % (url, blockname)
 	req = urllib2.Request(url = resturl)
 	data = urllib2.urlopen(req)
 	ddata = cjson.decode(data.read())
@@ -189,7 +279,7 @@ class DBSMigrate:
 	"""
 	url = businput["url"]
 	dataset = businput["dataset"]
-	blocks = self.listBlocks(url, dataset)
+	blocks = self.listSrcBlocks(url, dataset)
 	for b in blocks:
 	    blockcontent = self.getBlock(url, b['block_name'])
 	    self.putBlock(blockcontent)
