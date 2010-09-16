@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.44 2010/07/02 21:01:37 afaq Exp $"
-__version__ = "$Revision: 1.44 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.45 2010/07/09 18:23:59 yuyi Exp $"
+__version__ = "$Revision: 1.45 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -63,8 +63,6 @@ class DBSReaderModel(RESTModel):
         self.addMethod('GET', 'blockparents', self.listBlockParents)
         self.addMethod('GET', 'blockchildren', self.listBlockChildren)
         self.addMethod('GET', 'blockdump', self.dumpBlock)
-	
-        
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
         self.dbsBlock = DBSBlock(self.logger, self.dbi, config.dbowner)
@@ -273,12 +271,18 @@ class DBSReaderModel(RESTModel):
         """
         return self.dbsFile.listFileLumis(logical_file_name, block_name)
          
-    def listRuns(self, minrun=-1, maxrun=-1):
+    def listRuns(self, minrun=-1, maxrun=-1, logical_file_name="", block_name="", dataset=""):
         """
         http://dbs3/runs?runmin=1&runmax=10
         http://dbs3/runs
         """
-        return self.dbsRun.listRuns(minrun, maxrun)
+	if(logical_file_name):
+	    logical_file_name= logical_file_name.replace("*", "%")
+	if(block_name):
+	    block_name = block_name.replace("*", "%")
+	if(dataset):
+	    dataset = dataset.replace("*", "%")
+        return self.dbsRun.listRuns(minrun, maxrun, logical_file_name, block_name, dataset)
    
     def listSites(self, block_name="", site_name=""):
         """
