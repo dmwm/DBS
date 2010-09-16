@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.8 2010/07/29 22:00:25 yuyi Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.9 2010/08/06 19:39:38 yuyi Exp $"
+__version__ = "$Revision: 1.9 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -30,12 +30,16 @@ class DBSMigrate:
 	self.sm	= daofactory(classname="SequenceManager")
 	self.primdslist     = daofactory(classname="PrimaryDataset.List")
 	self.datasetlist    = daofactory(classname="Dataset.List")
-	self.filelist       = daofactory(classname="File.List") 
-	self.mgrlist = daofactory(classname="MigrationRequests.List")
-	self.mgrin   = daofactory(classname="MigrationRequests.Insert")
-	self.mgrup   = daofactory(classname="MigrationRequests.Update")
-	self.mgrblkin   = daofactory(classname="MigrationBlock.Insert")
-	self.blocklist = daofactory(classname="Block.List")
+	self.filelist       = daofactory(classname="File.MgrtList") 
+	self.fllist         = daofactory(classname="FileLumi.List")
+	self.fplist         = daofactory(classname="FileParent.List")
+	self.aelist         = daofactory(classname="AcquisitionEra.List")
+	self.pelist         = daofactory(classname="ProcessingEra.List")
+	self.mgrlist        = daofactory(classname="MigrationRequests.List")
+	self.mgrin          = daofactory(classname="MigrationRequests.Insert")
+	self.mgrup          = daofactory(classname="MigrationRequests.Update")
+	self.mgrblkin       = daofactory(classname="MigrationBlock.Insert")
+	self.blocklist      = daofactory(classname="Block.List")
 
     def prepareDatasetMigrationList(self, conn, request):
 	"""
@@ -261,16 +265,29 @@ class DBSMigrate:
 	    information on a single block that is being migrated.
 	    Try to return in a format to be ready for insert calls"""
         conn = self.dbi.connection()
-
+        #block name is unique
 	block = self.blocklist.execute(conn, block_name=block_name)[0]
+	#a block only has one dataset and one primary dataset
 	dataset = self.datasetlist.execute(conn,dataset=block["dataset"])[0]
+	acqEra = {}
+	prsEra = {}
+	if(dataset["acquisition_era_name"] != "" ):
+	    acqEra  = self.aelist.execute(conn, acquisitionEra=dataset["acquisition_era_name"])[0] 
+	if(dataset["processing_version"] != "" ):
+            prsEra  = self.pelist.execute(conn, processingV=dataset["processing_version"])[0]
 	primds = self.primdslist.execute(conn, primary_ds_name=dataset["primary_ds_name"])[0]
 	files = self.filelist.execute(conn, block_name=block_name)
 	for f in files:
 	    f.update(file_lumi_list = self.fllist.execute(conn, logical_file_name=f['logical_file_name']),
 		     file_parent_list = self.fplist.execute(conn, logical_file_name=f['logical_file_name']))
-	return dict(block=block, dataset=dataset, primds=primds, files=files)
-
+	del dataset["acquisition_era_name"], dataset["processing_version"]
+	del block["dataset"]
+        result= dict(block=block, dataset=dataset, primds=primds, files=files)
+        if acqEra:
+	    result["acquisition_era"]=acqEra
+	if prsEra:
+	    result["processing_era"]=prsEra
+	return result
     def callDBSService(self, resturl):
 	req = urllib2.Request(url = resturl)
 	data = urllib2.urlopen(req)
