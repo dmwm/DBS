@@ -10,8 +10,11 @@ def echoInfo(configfile):
     appconfig = cfg.section_(app)
     service = list(appconfig.views.active._internal_children)[0]
     dbsconfig = getattr(appconfig.views.active, service)   
-    print dbsconfig.database
-    print dbsconfig.dbowner
+    if len(sys.argv) > 2:
+        print getattr(dbsconfig, sys.argv[2])
+    else:
+        print dbsconfig.database
+        print dbsconfig.dbowner
     
 if __name__ == "__main__":
     echoInfo(sys.argv[1])
