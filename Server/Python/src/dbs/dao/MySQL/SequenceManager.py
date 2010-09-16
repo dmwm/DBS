@@ -3,8 +3,8 @@
 This module manages sequences.
 """
 
-__revision__ = "$Id: SequenceManager.py,v 1.3 2010/02/11 22:52:53 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: SequenceManager.py,v 1.4 2010/02/15 21:11:18 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -23,7 +23,7 @@ class  SequenceManager(DBFormatter):
         """
 	try:
 	    #seqTable = "%sS" %seqName
-	    seqTable = "%s" %seqName
+	    seqTable = "%sS" %seqName
 	    sql = "select ID from %s" % seqTable
 	    result = self.dbi.processData(sql, [], conn, transaction)
 	    resultlist = self.formatDict(result)
