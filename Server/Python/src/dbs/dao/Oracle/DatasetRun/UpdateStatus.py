@@ -2,8 +2,8 @@
 """
 This module provides DatasetRun.UpdateStatus data access object.
 """
-__revision__ = "$Id: UpdateStatus.py,v 1.2 2010/03/15 16:30:05 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: UpdateStatus.py,v 1.3 2010/03/16 17:01:46 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -19,7 +19,7 @@ class UpdateStatus(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = """UPDATE %sDATASET_RUNS SET COMPLETE = :complete where DATASET = :dataset and RUN_NUMBER = :run_number""" %  self.owner 
+        self.sql = """UPDATE %sDATASET_RUNS SET COMPLETE = :complete where DATASET_ID = (select DATASET_ID from DATASETS where DATASET=:dataset) and RUN_NUMBER = :run_number""" %  self.owner 
         
     def execute ( self, conn, dataset="", run_number=-1, complete=1, transaction=False ):
         """
