@@ -2,8 +2,8 @@
 """
 This module provides DatasetParent.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2010/02/18 20:00:39 yuyi Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: List.py,v 1.4 2010/03/05 16:38:28 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -28,14 +28,14 @@ JOIN %sDATASET_PARENTS DP ON DP.PARENT_DATASET_ID = PD.DATASET_ID
 JOIN %sDATASETS D ON  D.DATASET_ID = DP.THIS_DATASET_ID 
 """ % ((self.owner,)*3)
 
-    def execute(self, dataset, conn=None):
+    def execute(self, conn, dataset, transaction=False):
         """ dataset is required parameter"""
         if not conn:
-            conn = self.dbi.connection()
+            raise Exception("dbs/dao/Oracle/DatasetParent/List expects db connection from up layer.")
         sql = self.sql
         sql += "WHERE D.DATASET = :dataset"
         binds = {"dataset":dataset}
-	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	assert len(cursors) == 1, "Dataset parent does not exist"
         result = self.formatCursor(cursors[0])
         conn.close()
