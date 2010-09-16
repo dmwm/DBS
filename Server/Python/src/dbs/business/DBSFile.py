@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.30 2010/03/09 16:45:21 afaq Exp $"
-__version__ = "$Revision: 1.30 $"
+__revision__ = "$Id: DBSFile.py,v 1.31 2010/03/15 16:24:12 yuyi Exp $"
+__version__ = "$Revision: 1.31 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -243,6 +243,8 @@ class DBSFile:
 			fpID = self.sm.increment(conn, "SEQ_FP", transaction=tran, incCount=fpIncrement)
                     
 			for fp in fplist:
+			    import pdb
+			    pdb.set_trace()
 			    if iParent == fpIncrement:
 				fpID = self.sm.increment(conn, "SEQ_FP", transaction=tran, incCount=fpIncrement)
 				iParent  = 0
@@ -250,7 +252,8 @@ class DBSFile:
 			    fpdao["file_parent_id"] = fpID + iParent
 			    iParent += 1 
 			    fpdao["this_file_id"] = filein["file_id"]
-			    lfn = fp["file_parent_lfn"]
+			    #lfn = fp["file_parent_lfn"]
+			    lfn=fp
 			    fpdao["parent_file_id"] = self.fileid.execute(conn, lfn, transaction=tran)
 			    fparents2insert.append(fpdao)
 
