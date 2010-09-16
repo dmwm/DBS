@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.30 $"
-# $Id: dbsClient.py,v 1.30 2010/03/15 16:31:15 afaq Exp $"
+# $Revision: 1.31 $"
+# $Id: dbsClient.py,v 1.31 2010/03/16 18:19:48 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -23,7 +23,7 @@ class DbsApi:
 		self.proxy=proxy
 		self.opener =  urllib2.build_opener()
 
-	def callServer(self, urlplus="", params={}, callmethod='POST'):
+	def callServer(self, urlplus="", params={}, callmethod='GET'):
 		"""
         	* callServer
 		* API to make HTTP call to the DBS Server
@@ -94,14 +94,14 @@ class DbsApi:
                 * API to insert A primary dataset in DBS 
                 * primaryDSObj : primary dataset object of type {}
                 """
-                return self.callServer("/primarydatasets", params = primaryDSObj )
+                return self.callServer("/primarydatasets", params = primaryDSObj, callmethod='POST' )
 
 	def insertOutputConfig(self, outputConfigObj={}):
                 """
                 * API to insert An OutputConfig in DBS 
                 * outputConfigObj : Output Config object of type {}
                 """
-                return self.callServer("/outputconfigs", params = outputConfigObj )
+                return self.callServer("/outputconfigs", params = outputConfigObj , callmethod='POST' )
 
         def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="", output_module_label=""):
                 """
@@ -151,14 +151,14 @@ class DbsApi:
                 * API to insert An Acquisition Era in DBS 
                 * acqEraObj : Acquisition Era object of type {}
                 """
-                return self.callServer("/acquisitionras", params = acqEraObj )
+                return self.callServer("/acquisitionras", params = acqEraObj , callmethod='POST' )
 		
 	def insertProcessingEra(self, procEraObj={}):
                 """
                 * API to insert A Processing Era in DBS 
                 * procEraObj : Processing Era object of type {}
                 """
-                return self.callServer("/processingeras", params = procEraObj )
+                return self.callServer("/processingeras", params = procEraObj , callmethod='POST' )
 
         def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label=""):
                 """
@@ -215,21 +215,21 @@ class DbsApi:
                 * API to list A primary dataset in DBS 
                 * datasetObj : dataset object of type {}
                 """
-                return self.callServer("/datasets", params = datasetObj )
+                return self.callServer("/datasets", params = datasetObj , callmethod='POST' )
 
 	def insertSite(self, siteObj={}):
                 """
                 * API to insert a site in DBS 
                 * siteObj : Site object of type {}
                 """
-                return self.callServer("/sites", params = siteObj )
+                return self.callServer("/sites", params = siteObj , callmethod='POST' )
 
         def insertBlock(self, blockObj={}):
                 """
                 * API to insert a block into DBS 
                 * blockObj : block object
                 """
-                return self.callServer("/blocks", params = blockObj )
+                return self.callServer("/blocks", params = blockObj , callmethod='POST' )
 
         def listBlocks(self, block_name="", dataset="", site_name=""):
                 """
@@ -315,7 +315,7 @@ class DbsApi:
                 * API to insert a list of file into DBS in DBS 
                 * filesList : list of file objects
                 """
-                return self.callServer("/files", params = filesList )
+                return self.callServer("/files", params = filesList , callmethod='POST' )
 
         def listRuns(self, dataset="", block="", lfn="", minRun="", maxRun=""):
                 """
