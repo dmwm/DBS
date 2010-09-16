@@ -3,8 +3,8 @@
 Very simple dbs3 client:
 """
 
-__revision__ = "$Id: DBS3SimpleClient.py,v 1.5 2009/11/12 15:21:43 akhukhun Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBS3SimpleClient.py,v 1.6 2009/11/19 17:38:57 akhukhun Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import sys
 import cjson
@@ -33,7 +33,7 @@ class DBS3Client:
         header['Content-Type'] = 'application/json'
         endata = cjson.encode(indata)
         req = urllib2.Request(url = url, data = endata, headers = header)
-        req.get_method = lambda: 'PUT'
+        req.get_method = lambda: 'POST'
         self.opener.open(req)
 
 if __name__ == "__main__":

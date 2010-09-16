@@ -1,14 +1,18 @@
 """This module provides all basic tests for the server"""
 
-__revision__ = "$Id: TestServer.py,v 1.5 2009/11/12 15:21:43 akhukhun Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: TestServer.py,v 1.6 2009/11/19 17:38:57 akhukhun Exp $"
+__version__ = "$Revision: 1.6 $"
 
-IC = "13"
+IC = "23"
 NFILES = 100
+NLUMIS = 50
+
+
 
 import json
 import unittest
 from DBS3SimpleClient import DBS3Client
+
 
 class TestServer(unittest.TestCase):
     """Server unittests class"""
@@ -19,27 +23,28 @@ class TestServer(unittest.TestCase):
         
     def test01(self):
         """insertPrimaryDataset"""
-        dinput = {"primarydsname":"SUT_%s" % IC,
-                  "primarydstype":"TEST"}
+        dinput = {"PRIMARY_DS_NAME":"SUT_%s" % IC,
+                  "PRIMARY_DS_TYPE":"TEST"}
         self.cli.put("primarydatasets", dinput)
  
     def test02(self):
         """insertDataset"""
-        dinput = {"dataset":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (IC, IC),
-                  "isdatasetvalid":True,
-                  "datasettype":"PRODUCTION",
-                  "acquisitionera":"TEST",
-                  "processingversion":"TEST",
-                  "physicsgroup":"Individual",
-                  "xtcrosssection":234.,
-                  "globaltag":"GLOBALTAG"}
+        dinput = {"PRIMARY_DS_NAME":"SUT_%s" % IC,
+                  "PROCESSED_DATASET_NAME":"SUT_PROCESSED_DATASET_V%s" % IC,
+                  "DATA_TIER_NAME":"GEN-SIM-RECO",
+                  "DATASET":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (IC, IC),
+                  "IS_DATASET_VALID":1,
+                  "DATASET_TYPE":"PRODUCTION",
+                  #"acquisitionera":"TEST",
+                  #"processingversion":"TEST",
+                  "PHYSICS_GROUP_NAME":"Individual",
+                  "XTCROSSSECTION":234.,
+                  "GLOBAL_TAG":"GLOBALTAG"}
         self.cli.put("datasets", dinput)
  
     def test03(self):
         """insertBlock"""
-        dinput = {"blockname":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (IC, IC, IC),
-                  "openforwriting":True,
-                  "originsite":"TEST",
+        dinput = {"BLOCK_NAME":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (IC, IC, IC),
                   "blocksize":345,
                   "filecount":20
                   }
@@ -49,27 +54,51 @@ class TestServer(unittest.TestCase):
         "insertFile"
         sinput = []
         for k in range(NFILES):
-            file = {"logicalfilename":"/store/sut_file_%s_%s.root" % (IC, str(k)),
-                    "isfilevalid":True,
-                    "block":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (IC, IC, IC),
-                    "filetype":"EDM",
-                    "checksum":"999",
-                    "eventcount":10000,
-                    "filesize":1024.,
-                    "branchhash":"TEST",
-                    "adler32":"adler32",
-                    "md5":"md5",
-                    "autocrosssection":1234.}
+            file = {"LOGICAL_FILE_NAME":"/store/sut_file_%s_%s.root" % (IC, str(k)),
+                    "IS_FILE_VALID":True,
+                    "BLOCK":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (IC, IC, IC),
+                    "FILE_TYPE":"EDM",
+                    "CHECK_SUM":"999",
+                    "EVENT_COUNT":10000,
+                    "FILE_SIZE":1024.,
+                    "ADLER32":"adler32",
+                    "MD5":"md5",
+                    "AUTO_CROSS_SECTION":1234.}
             sinput.append(file)
         self.cli.put("files", sinput)
         
     def test05(self):
+        "insert one File with Lumi Sections and file parents"
+        lumilist = []
+        parentlist = []
+        for l in range(NLUMIS):
+            lumilist.append({"RUN_NUM":1000*int(IC)+l,
+                             "LUMI_SECTION_NUM":10000*int(IC)+l})
+        for p in range(NFILES):
+            parentlist.append({"FILE_PARENT_LFN":"/store/sut_file_%s_%s.root" % (IC, str(p))})
+        
+        sinput = {"LOGICAL_FILE_NAME":"/store/sut_file_withlumisandparents_%s.root" % IC,
+                    "IS_FILE_VALID":True,
+                    "BLOCK":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (IC, IC, IC),
+                    "FILE_TYPE":"EDM",
+                    "CHECK_SUM":"999",
+                    "EVENT_COUNT":10000,
+                    "FILE_SIZE":1024.,
+                    "ADLER32":"adler32",
+                    "MD5":"md5",
+                    "AUTO_CROSS_SECTION":1234.,
+                    "FILE_LUMI_LIST":lumilist,
+                    "FILE_PARENT_LIST":parentlist}
+        self.cli.put("files", sinput)
+        
+        
+    def test10(self):
         """listPrimaryDatasets"""
         self.cli.get("primarydatasets")
         res = self.cli.get("primarydatasets/SUT_%s" % IC)
         self.assertEqual(len(res["result"]), 1)
     
-    def test06(self):
+    def test11(self):
         """listDatasets"""
         self.cli.get("datasets")
         params = {"dataset":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (IC, IC)}
@@ -77,7 +106,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(len(res["result"]), 1)
         
         
-    def test07(self):
+    def test12(self):
         "listBlocks"
         params = {"dataset":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (IC, IC)}
         res = self.cli.get("blocks", params)
@@ -86,7 +115,7 @@ class TestServer(unittest.TestCase):
         res = self.cli.get("blocks", params)
         self.assertEqual(len(res["result"]), 1)
 
-    def test08(self):
+    def test13(self):
         "listFiles"
         #params = {"dataset":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (IC, IC)}
         #res = self.cli.get("files", params)
@@ -94,7 +123,7 @@ class TestServer(unittest.TestCase):
         
         params = {"block":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (IC, IC, IC)}
         res = self.cli.get("files", params)
-        self.assertEqual(len(res["result"]), NFILES+1)
+        self.assertEqual(len(res["result"]), NFILES+2)
         
 if __name__ == "__main__":
     
