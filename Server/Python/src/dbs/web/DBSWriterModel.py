@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.5 2009/12/17 17:48:31 yuyi Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.6 2009/12/17 23:13:53 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 import re
 import cjson
@@ -59,28 +59,20 @@ class DBSWriterModel(DBSReaderModel):
         ...
         """
 
-        body = request.body.read()
-        indata = cjson.decode(body)
-            
-        # need proper validation
-        dataset={}
-        dataset['primaryds'] = indata['PRIMARY_DS_NAME']
-        dataset['processedds'] = indata['PROCESSED_DATASET_NAME']
-        dataset['datatier'] = indata['DATA_TIER_NAME']
-        dataset['globaltag'] = indata.get('GLOBAL_TAG', '')
-        dataset['physicsgroup'] = indata.get('PHYSICS_GROUP_NAME', '')
-        dataset['creationdate'] = 1234
-        dataset['createby'] = "me"
-        dataset['datasettype'] = indata.get('DATASET_TYPE', 'test')
-        dataset['lastmodificationdate'] = 1234
-        dataset['lastmodifiedby'] = "me"
-        dataset['isdatasetvalid'] = indata.get('IS_DATASET_VALID', '')
-        dataset['xtcrosssection'] = indata.get('XTCROSSSECTION', '')
-        dataset['dataset'] = indata["DATASET"]
+        try:
+                body = request.body.read()
+                indata = cjson.decode(body)
 
-        self.dbsDataset.insertDataset(dataset)
+                indata.update({"creation_date": dbsUtils().getTime(), \
+				"last_modification_date" : dbsUtils().getTime(), \
+				"create_by" : dbsUtils().getCreateBy() , "last_modified_by" : dbsUtils().getCreateBy() })
+                
+		# need proper validation
+                self.dbsDataset.insertDataset(indata)
 
-        
+        except Exception, ex:
+                raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+
     def insertBlock(self):
         """
         gets the input from cherrypy request body.
