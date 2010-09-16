@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.27 $"
-# $Id: dbsClient.py,v 1.27 2010/02/19 22:54:05 afaq Exp $"
+# $Revision: 1.28 $"
+# $Id: dbsClient.py,v 1.28 2010/03/12 15:16:11 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -73,12 +73,13 @@ class DbsApi:
 		raise Exception("DBS Server raised an exception: %s" %data['message'])
 	    return data
 		
-        def ping(self):
+        def serverinfo(self):
                 """
                 * API to retrieve DAS interface for DQM Catalog Service
-                * getInfo
+                * serverinfo
+		* can be used a PING
                 """
-                return self.callServer("/ping")
+                return self.callServer("/serverinfo")
 
 	def listPrimaryDatasets(self, dataset=""):
 		"""
@@ -316,6 +317,68 @@ class DbsApi:
                 """
                 return self.callServer("/files", params = filesList )
 
+        def listRuns(self, dataset="", block="", lfn="", minRun="", maxRun=""):
+                """
+                * API to list A runs in DBS 
+                * lfn : lfn of file
+		* dataset : dataset
+		* block : block name
+		
+		You can use lfn or dataset or block
+		The presedence order is : dataset, block, lfn
+		* minRun/maxRun : if you want to look for a run range use these 
+		Use minRun=maxRun for a specific run, say for runNumber 2000 use minRun=2000, maxRun=2000
+                """
+
+		add_to_url=""
+		amp=False
+		if dataset: 
+		    add_to_url += "dataset=%s"%dataset
+		    amp=True
+		if block :
+		    parts=block.split('#')
+		    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+		    if amp: add_to_url += "&"
+		    add_to_url += "block_name=%s" %block_name	
+		    amp=True    
+		if lfn : 
+		    if amp: add_to_url += "&"
+		    add_to_url += "logical_file_name=%s" %lfn
+		    amp=True
+		if minRun:
+		    if amp: add_to_url += "&"
+		    dd_to_url += "minRun=%s" %minRun
+		if maxRun:
+		    if amp: add_to_url += "&"
+		    add_to_url += "maxRun=%s" %maxRun
+		if add_to_url:
+		    return self.callServer("/runs?%s" % add_to_url )
+		else:
+		    raise Exception("You must supply parameters to listRuns calls")
+
+	def listStorageElements(self, block_name="", dataset="", site_name=""):
+                """
+                * API to list A block in DBS 
+                * name : name of the block
+                """
+		url_param=""
+		addAnd=False
+		if block_name:
+		    parts=block_name.split('#')
+		    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+		    url_param+="block_name=%s" %block_name
+		    addAnd=True
+		if dataset:
+		    if addAnd: url_param+="&"
+		    url_param="dataset=%s" %dataset
+		    addAnd=True
+		if site_name:
+		    if addAnd: url_param+="&"
+		    url_param += "site_name=%s"%site_name
+		    
+		return self.callServer("/blocks?%s" %url_param)
+
+		
 
 if __name__ == "__main__":
 	# DBS Service URL
