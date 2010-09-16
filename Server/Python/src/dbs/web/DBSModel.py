@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.13 2009/11/16 18:56:36 afaq Exp $"
-__version__ = "$Revision: 1.13 $"
+__revision__ = "$Id: DBSModel.py,v 1.14 2009/11/16 19:30:31 yuyi Exp $"
+__version__ = "$Revision: 1.14 $"
 
 import re
 import json, cjson
@@ -230,13 +230,13 @@ class DBSModel(RESTModel):
             indata = [indata]
         for f  in indata:
             #block = vblock.match(f["block"])
-	    block = f["BLOCK"]
             conditions = ( "LOGICAL_FILE_NAME" in f.keys(),
                           f["IS_FILE_VALID"] in (0,1),
                           "BLOCK" in f.keys(),
                           f["FILE_TYPE"] in ("EDM"))
             for c in conditions:
                 assert c, "One of the input conditions is not satisfied" % conditions
+	    block = f["BLOCK"]
             f.update({"DATASET":block.groups()[0],
                      "CREATION_DATE":12345,
                      "CREATE_BY":"aleko",
