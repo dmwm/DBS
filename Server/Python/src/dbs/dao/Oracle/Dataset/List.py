@@ -3,8 +3,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.29 2010/05/05 16:15:28 afaq Exp $"
-__version__ = "$Revision: 1.29 $"
+__revision__ = "$Id: List.py,v 1.30 2010/05/05 21:07:37 afaq Exp $"
+__version__ = "$Revision: 1.30 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -30,7 +30,7 @@ SELECT D.DATASET_ID, D.DATASET, D.IS_DATASET_VALID,
         P.PRIMARY_DS_NAME,
         PD.PROCESSED_DS_NAME,
         DT.DATA_TIER_NAME,
-        DP.DATASET_ACCESS_TYPE,
+        DP.DATASET_ACCESS_TYPE AS DATASET_TYPE,
         AE.ACQUISITION_ERA_NAME,
         PE.PROCESSING_VERSION,
         PH.PHYSICS_GROUP_NAME, 
