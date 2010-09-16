@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for OutputModuleConfigs table """ 
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: Insert.py,v 1.4 2010/02/11 18:03:27 afaq Exp $ "
+__revision__ = "$Revision: 1.5 $"
+__version__  = "$Id: Insert.py,v 1.5 2010/03/05 19:09:32 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -14,9 +14,10 @@ class Insert(DBFormatter):
 
             self.sql = """INSERT INTO %sOUTPUT_MODULE_CONFIGS ( OUTPUT_MOD_CONFIG_ID, APP_EXEC_ID, RELEASE_VERSION_ID, PARAMETER_SET_HASH_ID, OUTPUT_MODULE_LABEL, CREATION_DATE, CREATE_BY) VALUES (:output_mod_config_id, :app_exec_id, :release_version_id, :parameter_set_hash_id, :output_module_label, :creation_date, :create_by)""" % (self.owner)
 
-    def execute( self, outputModConfigObj, conn=None, transaction=False ):
-            ##binds = self.getBinds( output_module_configsObj )
-            result = self.dbi.processData(self.sql, outputModConfigObj, conn, transaction)
-            return
+    def execute( self, conn, outputModConfigObj, transaction=False ):
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/OutputModuleConfig/Insert expects db connection from up layer.")
+	result = self.dbi.processData(self.sql, outputModConfigObj, conn, transaction)
+	return
 
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ParameterSetHashes table """ 
 
-__revision__ = "$Revision: 1.8 $"
-__version__  = "$Id: Insert.py,v 1.8 2010/02/11 22:52:00 afaq Exp $ "
+__revision__ = "$Revision: 1.9 $"
+__version__  = "$Id: Insert.py,v 1.9 2010/03/05 19:12:32 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -14,7 +14,9 @@ class Insert(DBFormatter):
 
             self.sql = """INSERT INTO %sPARAMETER_SET_HASHES ( PARAMETER_SET_HASH_ID, PSET_HASH, NAME) VALUES (:parameter_set_hash_id, :pset_hash, :name)""" % (self.owner)
 
-    def execute( self, psetHashObj, conn=None, transaction=False ):
+    def execute( self, conn, psetHashObj, transaction=False ):
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/ParameterSetHashe/Insert expects db connection from up layer.")
 	try:
 	    result = self.dbi.processData(self.sql, psetHashObj, conn, transaction)
 	except Exception, ex:

@@ -2,13 +2,13 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: List.py,v 1.14 2010/02/18 20:07:28 yuyi Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: List.py,v 1.15 2010/03/05 19:09:32 yuyi Exp $"
+__version__ = "$Revision: 1.15 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class List(DBFormatter):
     """
-    File GetID DAO class.
+    File List DAO class.
     """
     def __init__(self, logger, dbi, owner):
         """
@@ -31,10 +31,13 @@ class List(DBFormatter):
 	           ON O.PARAMETER_SET_HASH_ID=P.PARAMETER_SET_HASH_ID
 	         """ % ( self.owner, self.owner, self.owner, self.owner )
         
-    def execute(self, dataset="",  logical_file_name="", app="", release_version="", pset_hash="", output_label ="",  conn = None, transaction = False):
+    def execute(self, conn, dataset="",  logical_file_name="", app="", release_version="", pset_hash="", 
+                output_label ="", transaction = False):
         """
         returns id for a given application
         """	
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/OutputModuleConfig/List expects db connection from up layer.")
 	sql=self.sql	
         binds = {}
 	setAnd=False
@@ -82,16 +85,8 @@ class List(DBFormatter):
 		sql += "FS.LOGICAL_FILE_NAME=:logical_file_name"
 		binds["logical_file_name"]=logical_file_name
 		setAnd=True
-	#print sql
-	#print binds
-	#if app == release_version == pset_hash  == "":
-	#    raise Exception("Either app_name, release_version or pset_hash must be provided")	
-
-	if not conn:
-	    conn = self.dbi.connection()
 	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
 	assert len(cursors) == 1, "output module config does not exist"
         result = self.formatCursor(cursors[0])
-        conn.close()
         return result
 	    
