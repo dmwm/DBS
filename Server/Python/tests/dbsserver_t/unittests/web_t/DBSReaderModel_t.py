@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.15 2010/03/19 17:57:40 yuyi Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.16 2010/03/19 19:21:11 yuyi Exp $"
+__version__ = "$Revision: 1.16 $"
 
 import os, sys, imp
 import json
@@ -442,6 +442,39 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('files',  dataset=testparams['dataset'], 
                 release_version=testparams['release_version'] , pset_hash=testparams['pset_hash'], 
                 app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
+
+    def test78(self):
+        print '\n Test78 web.DBSReaderModel.listDatasets with processing era: basic '
+        api.list('datasets', processing_version=testparams['processing_version'],) 
+
+    def test79(self):
+        print '\n Test79 web.DBSReaderModel.listDatasets with acquisition era: basic '
+        api.list('datasets', acquisition_era=testparams['acquisition_era']) 
+
+    def test80(self):
+        print '\n Test80 web.DBSReaderModel.listDataTypes : basic '
+        api.list('datatypes' )
+
+    def test81(self):
+        print '\n Test81 web.DBSReaderModel.listDataTypes : basic '
+        api.list('datatypes', dataset=testparams['dataset'] )
+
+    def test82(self):
+        print '\n Test82 web.DBSReaderModel.listDataTypes : basic '
+        api.list('datatypes', datatype=testparams['primary_ds_type'] )
+
+    def test83(self):
+         print'\n Test83 test for dataset run. Coming after the dao moved to right place' 
+
+    def test84(self):
+         print '\n Test84 test for dataset run. Coming after the dao moved to right place' 
+
+    def test85(self):
+	print '\n Test84 test for dataset run. Coming after the dao moved to right place'
+
+    def test86(self):
+	print '\n Test84 test for dataset run. Coming after the dao moved to right place'
+
       
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSReaderModel_t)
