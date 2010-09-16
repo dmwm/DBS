@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.2 2010/06/23 21:21:23 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: List.py,v 1.3 2010/07/09 14:41:00 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -18,7 +18,7 @@ class List(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
-        self.sql = """SELECT FILE_BLOB FROM %sFILE_BUFFER WHERE BLOCK_ID=:block_id AND rownum < 10""" % self.owner
+        self.sql = """SELECT FILE_BLOB FROM %sFILE_BUFFERS WHERE BLOCK_ID=:block_id AND rownum < 10""" % self.owner
 
     def execute(self, conn, block_id="", transaction=False):
 

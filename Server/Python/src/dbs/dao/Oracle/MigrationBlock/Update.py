@@ -2,8 +2,8 @@
 """
 This module provides Migration.Update data access object.
 """
-__revision__ = "$Id: Update.py,v 1.1 2010/06/29 19:28:46 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: Update.py,v 1.2 2010/07/09 14:41:00 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class Update(DBFormatter):
@@ -19,7 +19,7 @@ class Update(DBFormatter):
         self.sql = \
 """UPDATE %sMIGRATION_BLOCKS
 SET MIGRATION_STATUS=:migration_status 
-WHERE MIGRATION_BLOCK=:migration_block""" %  self.owner 
+WHERE MIGRATION_BLOCK_NAME=:migration_block_name""" %  self.owner 
         
     def execute(self, conn, daoinput, transaction = False):
         """
