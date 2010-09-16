@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.18 2010/02/18 19:56:50 yuyi Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: List.py,v 1.19 2010/03/02 17:28:05 yuyi Exp $"
+__version__ = "$Revision: 1.19 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -18,6 +18,7 @@ class List(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
+	#all listFile APIs should return the same data structure defined by self.sql
         self.sql = \
 """
 SELECT F.FILE_ID, F.LOGICAL_FILE_NAME, F.IS_FILE_VALID, 
@@ -33,21 +34,21 @@ FROM %sFILES F
 JOIN %sFILE_TYPES FT ON  FT.FILE_TYPE_ID = F.FILE_TYPE_ID 
 JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID 
 JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
-WHERE F.IS_FILE_VALID = 1
 """ % ((self.owner,)*4)
 
 
-    def execute(self, dataset="", block_name="", logical_file_name="", 
+    def execute(self, conn, dataset="", block_name="", logical_file_name="", 
 	    release_version="", pset_hash="", app_name="", output_module_label="",
-	    conn=None):
+	    transaction=False):
+
         """
         dataset: /a/b/c
         block_name: /a/b/c#d
         logical_file_name: string
         """	
-        if not conn:
-            conn = self.dbi.connection()
-        sql = self.sql
+        if conn:
+            raise Exception("No Connection to DB for listFile API.\n")
+        sql = self.sql 
         binds = {}
         op = ("=","like")["%" in logical_file_name]
             
@@ -56,7 +57,8 @@ WHERE F.IS_FILE_VALID = 1
 			LEFT OUTER JOIN %sOUTPUT_MODULE_CONFIGS OMC ON OMC.OUTPUT_MOD_CONFIG_ID = FOMC.OUTPUT_MOD_CONFIG_ID
 			LEFT OUTER JOIN %sRELEASE_VERSIONS RV ON RV.RELEASE_VERSION_ID = OMC.RELEASE_VERSION_ID
 			LEFT OUTER JOIN %sPARAMETER_SET_HASHES PSH ON PSH.PARAMETER_SET_HASH_ID = OMC.PARAMETER_SET_HASH_ID
-			LEFT OUTER JOIN %sAPPLICATION_EXECUTABLES AEX ON AEX.APP_EXEC_ID = OMC.APP_EXEC_ID""" % ((self.owner,)*5)
+			LEFT OUTER JOIN %sAPPLICATION_EXECUTABLES AEX ON AEX.APP_EXEC_ID = OMC.APP_EXEC_ID
+			WHERE F.IS_FILE_VALID = 1 """ % ((self.owner,)*5)
         if block_name:
             sql += " AND B.BLOCK_NAME = :block_name"
             binds.update({"block_name":block_name})
@@ -81,17 +83,51 @@ WHERE F.IS_FILE_VALID = 1
         if output_module_label:
             sql += " AND OMC.OUTPUT_MODULE_LABEL  = :output_module_label" 
             binds.update({"output_module_label":output_module_label})
-	if not dataset and not block_name and not logical_file_name and not release_version \
-				    and not pset_hash and not app_name and not output_module_label:
-            raise Exception("Either dataset or block must be provided")
-        """
-        cursor = conn.connection.cursor()
-        cursor.execute(sql, binds)
-	"""
-	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	
+	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	assert len(cursors) == 1, "File does not exist"
 		
         result = self.formatCursor(cursors[0])
-        conn.close()
         return result 
+
+	def executeByRun(self, conn, maxrun, minrun, blockName, transaction=False):
+	    """
+	     Select a list of Files with in minrun and maxrun. The maxrun has to be defined. 
+	     conn has to be passed into the dao object.
+	    """
+	    if conn:
+		raise Exception("No connection to DB")
+	    
+	    binds = {}
+	    sql = self.sql + "JOIN %sFILE_LUMIS FL on  FL.FILE_ID=F.FILE_ID \
+				WHERE F.IS_FILE_VALID = 1 \
+				and FL.RUN_NUM between :minrun and :maxrun \
+				and B.BLOCK_NAME like :blockName " %(self.owner)
+	    binds.update({"minrun":minrun})
+	    binds.update({"maxrun":maxrun})
+	    binds.update({"blockName":blockName})
+	    cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
+	    assert len(cursors) == 1, "File does not exist"
+	    result = self.formatCursor(cursors[0])
+	    return result
+
+	def executeBySite(self, conn, originSite, blockName, transaction=False):
+	    """
+	    Select a list of Files from a dataset/block within the originSite. We treat dataset as 
+             block by using like in the query since block_name=datset_name + #UUID.
+	    """ 
+	    if conn:
+		raise Exception("No connection to DB")
+	    binds = {}
+    	    sql = self.sql + " JOIN %sSITES ST on ST.SITE_ID = B.ORIGIN_SITE \
+	                       WHERE F.IS_FILE_VALID = 1 and \
+			       ST.SITE_NAME = :originSite and B.BLOCK_NAME like :blockName" %(self.owner)
+	    binds.update({"originSite":originSite})
+	    binds.update({"blockName":blockName})
+	    cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
+	    assert len(cursors) == 1, "File does not exist"
+
+	    result = self.formatCursor(cursors[0])
+	    return result
+
 
