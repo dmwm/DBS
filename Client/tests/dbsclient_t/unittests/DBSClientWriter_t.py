@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.16 2010/03/23 16:47:37 afaq Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.17 2010/04/23 16:50:39 afaq Exp $"
+__version__ = "$Revision: 1.17 $"
 
 import os
 import sys
@@ -30,6 +30,8 @@ pset_hash='76e303993a1c2f842159dbfeeed9a0dd'
 release_version='CMSSW_1_2_3'
 site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
+parent_dataset="/%s/parent_%s/%s" % (primary_ds_name, procdataset, tier)
+parent_block="%s#%s" % (parent_dataset, uid)
 acquisition_era_name="acq_era_%s" %uid
 processing_version="%s" %(uid if (uid<9999) else uid%9999)
 flist=[]
@@ -39,13 +41,16 @@ outDict={
 "procdataset" : procdataset,
 "tier" : tier,
 "dataset" : dataset,
+"parent_dataset" : parent_dataset,
 "app_name" : app_name,
 "output_module_label" : output_module_label,
 "pset_hash" : pset_hash,
 "release_version" : release_version,
 "site" : site,
 "block" : block,
+"parent_block" : parent_block,
 "files" : [],
+"parent_files" : [],
 "runs" : [1,2,3],
 "acquisition_era" : acquisition_era_name,
 "processing_version" : processing_version,
@@ -101,6 +106,19 @@ class DBSClientWriter_t(unittest.TestCase):
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insertDataset(datasetObj=data)
+	# insert away the parent dataset as well
+	parentdata = {
+		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
+	        'dataset_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
+		'output_configs': [
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+		    ],
+		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
+		}
+	api.insertDataset(datasetObj=parentdata)
+
 	
     def test09(self):
 	"""test09: web.DBSClientWriter.insertDataset: duplicate insert should be ignored"""
@@ -150,6 +168,9 @@ class DBSClientWriter_t(unittest.TestCase):
 		'origin_site': site }
 		
 	api.insertBlock(blockObj=data)
+	# insert the parent block as well
+	data = {'block_name': parent_block, 'origin_site': site }
+	api.insertBlock(blockObj=data)
 
     def test15(self):
 	"""test15 web.DBSClientWriter.insertBlock: duplicate insert should not raise exception"""
@@ -180,7 +201,7 @@ class DBSClientWriter_t(unittest.TestCase):
                 'file_parent_list': [ ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/parent_%s/%i.root" %(uid, i),
-                'block': block
+                'block': parent_block
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
@@ -213,6 +234,7 @@ class DBSClientWriter_t(unittest.TestCase):
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
+	    outDict['parent_files'].append(f['file_parent_list'][0]['file_parent_lfn'])
 	api.insertFiles(filesList={"files":flist})
 
     def test18(self):

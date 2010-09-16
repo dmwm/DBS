@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.15 2010/03/19 19:39:57 afaq Exp $"
-__version__ = "$Revision: 1.15 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.16 2010/04/23 16:50:39 afaq Exp $"
+__version__ = "$Revision: 1.16 $"
 
 import os
 import json
@@ -334,7 +334,31 @@ class DBSClientReader_t(unittest.TestCase):
     def test70(self):
 	"""test75 web.DBSReaderModel.listFile with original site: basic"""
 	api.listFiles(origin_site=testparams['site'], block=testparams['block'])
-				       
+
+    def test71(self):
+	"""list dataset parents"""
+	api.listDatasetParents(dataset=testparams['dataset'])
+	
+    def test72(self):
+	"""list dataset children"""
+	api.listDatasetChildren(dataset=testparams['parent_dataset'])
+
+    def test73(self):
+	"""list block parents"""
+	api.listBlockParents(block_name=testparams['block'])
+
+    def test74(self):
+	"""list block children"""
+	api.listBlockChildren(block_name=testparams['parent_block'])
+	
+    def test75(self):
+	"""list file parents"""
+	print api.listFileParents(lfn=testparams['files'][0])
+	
+    def test00(self):
+	"""list file children"""
+	api.listFileChildren(lfn=testparams['parent_files'][0])
+
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
