@@ -5,8 +5,8 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database drop script                            #
-# Created on:            2010-02-11 14:21                                #
-# Model version:         Version 2010-02-11                              #
+# Created on:            2010-02-12 08:42                                #
+# Model version:         Version 2010-02-12                              #
 # ---------------------------------------------------------------------- #
 
 
