@@ -3,7 +3,9 @@
 import sys
 from WMCore.Configuration import loadConfigurationFile
 
-def echoInfo(configfile): 
+def echoInfo(configfile):
+    #import pdb
+    #pdb.set_trace()
     cfg = loadConfigurationFile(configfile)
     wconfig = cfg.section_("Webtools")
     app = wconfig.application
@@ -11,7 +13,10 @@ def echoInfo(configfile):
     service = list(appconfig.views.active._internal_children)[0]
     dbsconfig = getattr(appconfig.views.active, service)   
     if sys.argv[2] == "database":
-	print dbsconfig.database
+	if 'database' in dbsconfig._internal_children:
+	    print dbsconfig.database.connectUrl
+	else:
+	    print dbsconfig.database
     elif sys.argv[2] == "dbowner":
 	print dbsconfig.dbowner
     else:
