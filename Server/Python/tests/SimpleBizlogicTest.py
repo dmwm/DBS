@@ -7,18 +7,30 @@ from dbs.business.DBSAcquisitionEra import DBSAcquisitionEra
 from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
+from dbs.business.DBSRun import DBSRun
+
 
 class Test:
 
     
     def __init__(self):
         #url = "oracle://user:password@host:port/sid"
-	url="oracle://anzar:anzar_cms2009@uscmsdb03.fnal.gov:1521/cmscald"
-	self.owner="anzar"
-	#url="mysql://dbs3:dbs3_pass@cmssrv49.fnal.gov:3306/CMS_DBS3"
-	#self.owner="__MYSQL__"
+	#url="oracle://anzar:XXXXXXX@uscmsdb03.fnal.gov:1521/cmscald"
+	#self.owner="anzar"
+	#url="mysql://dbs3:XXXXXXX@cmssrv49.fnal.gov:3306/CMS_DBS3"
+	url="mysql://dbs3:XXXXXXX@cmssrv49.fnal.gov:3306/CMS_DBS3_ANZ_2"
+	self.owner="__MYSQL__"
         self.logger = logging.getLogger("dbs test logger")
         self.dbi = DBFactory(self.logger, url).connect()
+
+    def updateFileStatus(self):
+	bo = DBSFile(self.logger, self.dbi, self.owner)
+	import pdb
+	pdb.set_trace()
+	bo.updateStatus('/store/mc/Winter09/TTbar-madgraph/GEN-SIM-DIGI-RECO/IDEAL_V11_FastSim_v1/0060/0A83790D-71E1-DD11-9732-001EC9AAA058.root', 1)
+    def testRun(self):
+	bo = DBSRun(self.logger, self.dbi, self.owner)
+	print bo.listRuns(minRun=5, maxRun=9)
 
 
     def testPrimary(self):
@@ -134,5 +146,7 @@ test=Test()
 #test.testAcquisitionEra()
 #test.testProcessingEra()
 #test.testBlock()
-test.testFiles()
+#test.testFiles()
+#test.testRun()
+test.updateFileStatus()
     
