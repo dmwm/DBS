@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.14 2010/07/30 09:57:17 akhukhun Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.15 2010/08/01 19:14:10 akhukhun Exp $"
+__version__ = "$Revision: 1.15 $"
 
 import json
 import os, logging
@@ -109,6 +109,11 @@ def options():
     parser.add_option("--app_name", dest='app_name')
     parser.add_option("--output_module_label", dest='output_module_label')
     parser.add_option("--run_num", dest='run_num')
+    parser.add_option("--maxrun", dest='maxrun')
+    parser.add_option("--minrun", dest='minrun')
+    parser.add_option("--lumi_list", dest='lumi_list')
+    parser.add_option("--origin_site_name", dest='origin_site_name')
+    parser.add_option("--detail", dest='detail')
     opts, args = parser.parse_args()
     assert len(args) == 1
     allopts = opts.__dict__
