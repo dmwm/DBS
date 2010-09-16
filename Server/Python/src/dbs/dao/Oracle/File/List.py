@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.21 2010/03/05 17:12:24 yuyi Exp $"
-__version__ = "$Revision: 1.21 $"
+__revision__ = "$Id: List.py,v 1.22 2010/03/10 17:11:17 akhukhun Exp $"
+__version__ = "$Revision: 1.22 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -58,7 +58,8 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 			LEFT OUTER JOIN %sRELEASE_VERSIONS RV ON RV.RELEASE_VERSION_ID = OMC.RELEASE_VERSION_ID
 			LEFT OUTER JOIN %sPARAMETER_SET_HASHES PSH ON PSH.PARAMETER_SET_HASH_ID = OMC.PARAMETER_SET_HASH_ID
 			LEFT OUTER JOIN %sAPPLICATION_EXECUTABLES AEX ON AEX.APP_EXEC_ID = OMC.APP_EXEC_ID
-			WHERE F.IS_FILE_VALID = 1 """ % ((self.owner,)*5)
+			""" % ((self.owner,)*5)
+	sql += """WHERE F.IS_FILE_VALID = 1"""
         if block_name:
             sql += " AND B.BLOCK_NAME = :block_name"
             binds.update({"block_name":block_name})
