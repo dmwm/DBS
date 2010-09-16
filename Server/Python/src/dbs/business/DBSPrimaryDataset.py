@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.18 2010/03/09 16:38:03 afaq Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.19 2010/03/10 19:29:35 yuyi Exp $"
+__version__ = "$Revision: 1.19 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -42,17 +42,19 @@ class DBSPrimaryDataset:
         """
         conn = self.dbi.connection()
         tran = conn.begin()
+	#checking for required fields
+	if "primary_ds_name" not in businput:
+	    self.logger.exception( "DBSException: Primary dataset Name is required for insertPrimaryDataset")
+	    raise Exception ( "DBSException: Primary dataset Name is required for insertPrimaryDataset.")
         try:
-	    #import threading
-	    #a = threading.currentThread()
-	    #self.logger.warning("\n####### %s #######\n" %str(a.dialect))
-            businput["primary_ds_type_id"] = (self.primdstypeList.execute(conn, businput["primary_ds_type"], transaction=tran))[0]["primary_ds_type_id"] 
+            businput["primary_ds_type_id"] = (self.primdstypeList.execute(conn, businput["primary_ds_type"], 
+	                transaction=tran))[0]["primary_ds_type_id"] 
             del businput["primary_ds_type"]
             businput["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS", tran)
             self.primdsin.execute(conn, businput, tran)
             tran.commit()
         except IndexError:
-            self.logger.exception( "DBS Error: Index error raised")
+            self.logger.exception( "DBSError: Index error raised")
             raise 
         except Exception, ex:
             if str(ex).lower().find("unique constraint") != -1 \
