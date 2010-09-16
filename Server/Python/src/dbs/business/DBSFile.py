@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.22 2010/02/17 22:31:31 afaq Exp $"
-__version__ = "$Revision: 1.22 $"
+__revision__ = "$Id: DBSFile.py,v 1.23 2010/02/24 16:51:08 afaq Exp $"
+__version__ = "$Revision: 1.23 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -78,6 +78,7 @@ class DBSFile:
 
 
 	try:
+
 	    # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
 	    #files2insert = []
 	    fidl=[]
@@ -97,7 +98,7 @@ class DBSFile:
 	    file_type_id = self.ftypeid.execute( firstfile.get("file_type", "EDM"), conn, True)
 	    iFile = 0
 	    fileIncrement = 40
-	    fID = self.sm.increment("SEQ_FL", conn, True)
+	    fID = self.sm.increment("SEQ_FL", conn, True, fileIncrement)
 	    #looping over the files, everytime create a new object 'filein' as you never know 
 	    #whats in the original object and we do not want to know
 	    for f in businput:
@@ -122,7 +123,7 @@ class DBSFile:
 		    "last_modified_by" : f["last_modified_by"] 
 		}
 		if iFile == fileIncrement:
-		    fID = self.sm.increment("SEQ_FL", conn, True)
+		    fID = self.sm.increment("SEQ_FL", conn, True, fileIncrement)
 		    iFile = 0
 		filein["file_id"] = fID + iFile
 		iFile += 1
@@ -255,7 +256,7 @@ class DBSFile:
 			try:
 			    self.blkparentin.execute(abp, conn, True)
 			except exceptions.IntegrityError, ex:
-			    if str(ex).find("unique constraint") != -1 :
+			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 				pass
 			    else:
 				raise
@@ -278,13 +279,14 @@ class DBSFile:
 			try:
 			    self.dsparentin.execute(adsp, conn, True)
 			except exceptions.IntegrityError, ex:
-			    if str(ex).find("unique constraint") != -1 :
+			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 				pass
 			    else:
 				raise
 
 		# Update block parameters, file_count, block_size
 		blkParams=self.blkstats.execute(block_id, conn, True)
+		blkParams['block_size']=long(blkParams['block_size'])
 		self.blkstatsin.execute(blkParams, conn, True)
 
 	    # All good ?. 
