@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.46 2010/05/24 15:21:09 yuyi Exp $"
-__version__ = "$Revision: 1.46 $"
+__revision__ = "$Id: DBSFile.py,v 1.47 2010/05/25 20:56:24 afaq Exp $"
+__version__ = "$Revision: 1.47 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -40,6 +40,7 @@ class DBSFile:
 	self.fileparentlist = daofactory(classname="FileParent.List")
 	self.filechildlist = daofactory(classname="FileParent.ListChild")
         self.filelumilist = daofactory(classname="FileLumi.List")
+        self.filebufin = daofactory(classname = "FileBuffer.Insert")
 
     def listFileLumis(self, logical_file_name="", block_name=""): 
         """
@@ -139,8 +140,10 @@ class DBSFile:
 	finally:
 	    conn.close()
 
-    def insertFile(self, businput):
+    def insertFile(self, businput, qInserts=True):
 	"""
+	qInserts : True means that inserts will be queued instead of done immediatley. INSERT QUEUE Manager will perform the inserts, within few minutes.
+	
 	This method supports bulk insert of files
 	performing other operations such as setting Block and Dataset parentages, 
 	setting mapping between OutputConfigModules and File(s) etc.
@@ -172,7 +175,7 @@ class DBSFile:
 	conn = self.dbi.connection()
 	tran = conn.begin()
 	try:
-
+	
 	    # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
 	    #files2insert = []
 	    fidl=[]
@@ -199,6 +202,7 @@ class DBSFile:
 	    #looping over the files, everytime create a new object 'filein' as you never know 
 	    #whats in the original object and we do not want to know
 	    for f in businput:
+	    	file_blob = {}
 		fparents2insert = []
 		fparents2insert = []
 		flumis2insert = []
@@ -233,8 +237,11 @@ class DBSFile:
 		# insert file  -- as decided, one file at a time
 		# filein will be what goes into database
 		try:
-		    self.filein.execute(conn, filein, transaction=tran)
-		    fileInserted=True
+		    if not qInserts:
+			self.filein.execute(conn, filein, transaction=tran)
+			fileInserted=True
+		    else:
+			file_blob['file']=filein
 		except exceptions.IntegrityError, ex:
 		    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			#refresh the file_id from database
@@ -314,18 +321,32 @@ class DBSFile:
 		#
 		# insert file - lumi   
 		if flumis2insert:
-		    self.flumiin.execute(conn, flumis2insert, transaction=tran)
+		    file_blob['file_lumi_list']=flumis2insert
+		    if not qInserts:
+			self.flumiin.execute(conn, flumis2insert, transaction=tran)
 		# insert file parent mapping
 		if fparents2insert:
-		    self.fparentin.execute(conn, fparents2insert, transaction=tran)
+		    file_blob['file_parent_list']=fparents2insert
+		    if not qInserts:
+			self.fparentin.execute(conn, fparents2insert, transaction=tran)
 		# First check to see if these output configs are mapped to THIS dataset as well, if not raise an exception
 		if not set(fileconfigs).issubset(set(dsconfigs)) :
 		    raise Exception("output configs mismatch, output configs known to dataset: %s are different from what are being mapped to file : %s " \
 													  %(firstfile["dataset"], filein["logical_file_name"]))
 		# insert output module config mapping
 		if fconfigs2insert:
-		    self.fconfigin.execute(conn, fconfigs2insert, transaction=tran)    
-
+		    file_blob['file_output_config_list']=fconfigs2insert
+		    if not qInserts:
+			self.fconfigin.execute(conn, fconfigs2insert, transaction=tran)  
+		if qInserts:
+		    try:  
+			self.filebufin.execute(conn, filein['logical_file_name'], block_id, file_blob, transaction=tran)
+		    except exceptions.IntegrityError, ex:
+		        if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+			    pass
+			else:
+			    raise		   
+		
 	    # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
 	    # fpbdlist, returns a dict of {block_id, dataset_id} combination
 	    if fileInserted:
@@ -388,9 +409,10 @@ class DBSFile:
 				raise
 
 		# Update block parameters, file_count, block_size
-		blkParams=self.blkstats.execute(conn, block_id, transaction=tran)
-		blkParams['block_size']=long(blkParams['block_size'])
-		self.blkstatsin.execute(conn, blkParams, transaction=tran)
+		if not qInserts:
+		    blkParams=self.blkstats.execute(conn, block_id, transaction=tran)
+		    blkParams['block_size']=long(blkParams['block_size'])
+		    self.blkstatsin.execute(conn, blkParams, transaction=tran)
 
 	    # All good ?. 
             tran.commit()
