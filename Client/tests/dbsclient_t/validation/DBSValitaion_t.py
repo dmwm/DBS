@@ -3,8 +3,8 @@ DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
 
-__revision__ = "$Id: DBSValitaion_t.py,v 1.4 2010/02/01 17:35:34 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSValitaion_t.py,v 1.5 2010/02/24 16:50:30 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 import os
 import sys
@@ -138,7 +138,7 @@ class DBSValitaion_t(unittest.TestCase):
 	    f={  
 		'adler32': u'NOTSET', 'file_type': 'EDM',
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'file_size': u'201221191', 'auto_cross_section': 0.0, 
                 'check_sum': u'1504266448',
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/parent_%s/%i.root" %(uid, i),
@@ -161,7 +161,7 @@ class DBSValitaion_t(unittest.TestCase):
 			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		    ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'file_size': u'201221191', 'auto_cross_section': 0.0, 
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
@@ -183,7 +183,7 @@ class DBSValitaion_t(unittest.TestCase):
 	for afileInDBS in flList:
 	    self.assertEqual(afileInDBS['block_name'], block)
 	    self.assertEqual(afileInDBS['event_count'], 1619)
-	    self.assertEqual(afileInDBS['file_size'], 2012211901)
+	    self.assertEqual(afileInDBS['file_size'], 201221191)
 	    self.assertEqual(afileInDBS['is_file_valid'], 1)
 	# Get the file parent -- The inserted file must have a parent
 	flParentList=api.listFileParents(lfn="/store/mc/%s/%i.root" %(uid, 0))
@@ -203,8 +203,8 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(blkInDBS['block_name'], block)
 	# 10 files
 	self.assertEqual(blkInDBS['file_count'], 10)
-	# size should be 10 X 2012211901 (file_size) = 20122119010
-	self.assertEqual(blkInDBS['block_size'], 20122119010)
+	# size should be 10 X 2012211901 (file_size) = 2012211910
+	self.assertEqual(blkInDBS['block_size'], 2012211910)
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSValitaion_t)
