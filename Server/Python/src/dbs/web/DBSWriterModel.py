@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.42 2010/06/04 20:40:26 afaq Exp $"
-__version__ = "$Revision: 1.42 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.43 2010/07/02 21:01:37 afaq Exp $"
+__version__ = "$Revision: 1.43 $"
 
 import re
 import cjson
@@ -32,18 +32,18 @@ class DBSWriterModel(DBSReaderModel):
 
         DBSReaderModel.__init__(self, config)
 
-        self.addService('POST', 'primarydatasets', self.insertPrimaryDataset)
-        self.addService('POST', 'outputconfigs', self.insertOutputConfig)
-	self.addService('POST', 'acquisitionras', self.insertAcquisitionEra)
-	self.addService('POST', 'processingeras', self.insertProcessingEra)
-        self.addService('POST', 'datasets', self.insertDataset)
-        self.addService('POST', 'sites', self.insertSite)
-        self.addService('POST', 'blocks', self.insertBlock)
+        self.addMethod('POST', 'primarydatasets', self.insertPrimaryDataset)
+        self.addMethod('POST', 'outputconfigs', self.insertOutputConfig)
+	self.addMethod('POST', 'acquisitionras', self.insertAcquisitionEra)
+	self.addMethod('POST', 'processingeras', self.insertProcessingEra)
+        self.addMethod('POST', 'datasets', self.insertDataset)
+        self.addMethod('POST', 'sites', self.insertSite)
+        self.addMethod('POST', 'blocks', self.insertBlock)
         self.addMethod('POST', 'files', self.insertFile)
-	self.addService('PUT', 'files', self.updateFile)
-	self.addService('PUT', 'datasets', self.updateDataset)
-	self.addService('PUT', 'blocks', self.updateBlock)
-	self.addService('POST', 'datatiers', self.insertDataTier)
+	self.addMethod('PUT', 'files', self.updateFile)
+	self.addMethod('PUT', 'datasets', self.updateDataset)
+	self.addMethod('PUT', 'blocks', self.updateBlock)
+	self.addMethod('POST', 'datatiers', self.insertDataTier)
 
 #self.dbsFileBuffer = DBSFileBuffer(self.logger, self.dbi, config.dbowner)
     

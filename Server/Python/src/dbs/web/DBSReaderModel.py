@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.43 2010/06/23 21:21:27 afaq Exp $"
-__version__ = "$Revision: 1.43 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.44 2010/07/02 21:01:37 afaq Exp $"
+__version__ = "$Revision: 1.44 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -43,28 +43,26 @@ class DBSReaderModel(RESTModel):
 					% (server.base(), config._internal_name))
 
 	self.logger.warning("<<<<<<<<<<<<<DBS SERVER IS CONNECTING TO ::::: %s" % config.database)
-    	
-	#FIXME : addService can be replaced safely with addMethod from Framework
     
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
-	self.addService('GET', 'serverinfo', self.getServerInfo)
-        self.addService('GET', 'primarydatasets', self.listPrimaryDatasets)
-        self.addService('GET', 'datasets', self.listDatasets)
-        self.addService('GET', 'blocks', self.listBlocks)
-        self.addService('GET', 'files', self.listFiles)
-        self.addService('GET', 'datasetparents', self.listDatasetParents)
-        self.addService('GET', 'datasetchildren', self.listDatasetChildren)
-        self.addService('GET', 'outputconfigs', self.listOutputConfigs)
-        self.addService('GET', 'fileparents', self.listFileParents)
-        self.addService('GET', 'filechildren', self.listFileChildren)
-        self.addService('GET', 'filelumis', self.listFileLumis)
-        self.addService('GET', 'runs', self.listRuns)
-        self.addService('GET', 'sites', self.listSites)
-        self.addService('GET', 'datatypes', self.listDataTypes)
-        self.addService('GET', 'datatiers', self.listDataTiers)
-        self.addService('GET', 'blockparents', self.listBlockParents)
-        self.addService('GET', 'blockchildren', self.listBlockChildren)
-        self.addService('GET', 'blockdump', self.dumpBlock)
+	self.addMethod('GET', 'serverinfo', self.getServerInfo)
+        self.addMethod('GET', 'primarydatasets', self.listPrimaryDatasets)
+        self.addMethod('GET', 'datasets', self.listDatasets)
+        self.addMethod('GET', 'blocks', self.listBlocks)
+        self.addMethod('GET', 'files', self.listFiles)
+        self.addMethod('GET', 'datasetparents', self.listDatasetParents)
+        self.addMethod('GET', 'datasetchildren', self.listDatasetChildren)
+        self.addMethod('GET', 'outputconfigs', self.listOutputConfigs)
+        self.addMethod('GET', 'fileparents', self.listFileParents)
+        self.addMethod('GET', 'filechildren', self.listFileChildren)
+        self.addMethod('GET', 'filelumis', self.listFileLumis)
+        self.addMethod('GET', 'runs', self.listRuns)
+        self.addMethod('GET', 'sites', self.listSites)
+        self.addMethod('GET', 'datatypes', self.listDataTypes)
+        self.addMethod('GET', 'datatiers', self.listDataTiers)
+        self.addMethod('GET', 'blockparents', self.listBlockParents)
+        self.addMethod('GET', 'blockchildren', self.listBlockChildren)
+        self.addMethod('GET', 'blockdump', self.dumpBlock)
 	
         
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
@@ -83,7 +81,7 @@ class DBSReaderModel(RESTModel):
 	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
     
 
-    def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
+    def addService_deprecated(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
         method that adds services to the DBS rest model
         """
