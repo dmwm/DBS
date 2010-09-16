@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSPrimaryDataset.py,v 1.4 2009/11/24 10:58:12 akhukhun Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: DBSPrimaryDataset.py,v 1.5 2009/11/27 09:55:02 akhukhun Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -18,13 +18,17 @@ class DBSPrimaryDataset:
         self.dbi = dbi
         self.owner = owner
 
+        self.PrimaryDatasetList = self.daofactory(classname="PrimaryDataset.List")
+        
+        self.SequenceManager = self.daofactory(classname="SequenceManager")
+        self.PrimaryDSTypeGetID = self.daofactory(classname="PrimaryDSType.GetID")
+        self.PrimaryDatasetInsert = self.daofactory(classname="PrimaryDataset.Insert")
+
     def listPrimaryDatasets(self, primdsname=""):
         """
         Returns all primary datasets if primdsname is not passed.
         """
-        primdslist = self.daofactory(classname="PrimaryDataset.List")
-        result = primdslist.execute(primdsname)
-        return result
+        return self.PrimaryDatasetList.execute(primdsname)
 
     def insertPrimaryDataset(self, businput):
         """
@@ -32,21 +36,12 @@ class DBSPrimaryDataset:
         primarydsname, primarydstype, creationdate, createby
         it builds the correct dictionary for dao input and executes the dao
         """
-        primdstpgetid = self.daofactory(classname="PrimaryDSType.GetID")
-        primdsinsert = self.daofactory(classname="PrimaryDataset.Insert")
-        seqmanager = self.daofactory(classname="SequenceManager")
-
-        primdsname = businput["primarydsname"]
-        primdstype = businput["primarydstype"]
-        #primdsObj = businput
-        businput.pop("primarydstype")
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            primdstypeid = primdstpgetid.execute(primdstype) 
-            primdsid = seqmanager.increment("SEQ_PDS", conn, True)
-            businput.update({"primarydstypeid":primdstypeid, "primarydsid":primdsid})
-            primdsinsert.execute(businput, conn, True)
+            businput["primarydstype"] = self.PrimaryDSTypeGetID.execute(businput["primarydstype"]) 
+            businput["primarydsid"] = self.SequenceManager.increment("SEQ_PDS", conn, True)
+            self.PrimaryDatasetInsert.execute(businput, conn, True)
             tran.commit()
         except Exception, e:
             tran.rollback()
