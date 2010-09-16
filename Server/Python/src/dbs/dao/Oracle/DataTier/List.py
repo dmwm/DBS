@@ -2,8 +2,8 @@
 """
 This module provides DataTier.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.1 2010/04/16 21:14:03 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List.py,v 1.2 2010/05/25 21:01:54 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -23,10 +23,14 @@ SELECT DT.DATA_TIER_ID, DT.DATA_TIER_NAME
 FROM %sDATA_TIERS DT 
 """ % (self.owner)
 
-    def execute(self, conn, dataTier, transaction = False):
+    def execute(self, conn, dataTier, transaction = False, cache=None):
         """
         returns id for a given datatier name
         """
+	if cache:
+		ret=cache.get("DATA_TIERS")
+		if not ret==None:
+			return ret
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/DataTier/List expects db connection from up layer.")
         sql = self.sql
