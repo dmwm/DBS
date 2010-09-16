@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.5 2010/06/28 16:09:04 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.6 2010/06/29 19:29:49 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -301,78 +301,4 @@ class DBSMigrate:
 	    raise Exception("INVALID block or dataset name")
 	return self.callDBSService(resturl)
 
-    def getBlock(self, url, block_name):
-	"""Client type call to get the block content from the server"""
-	blockname = block_name.replace("#",urllib.quote_plus('#'))
-	resturl = "%s/blockdump?block_name=%s" % (url, blockname)
-	return self.callDBSService(resturl)
 
-    def putBlock(self, blockcontent):
-	"""Huge method that inserts everything.
-	   Want to do it in one transaction, so that if there is problem it rolls back.
-	   Inserts all data into corresponding tables"""
-	conn = self.dbi.connection()
-        tran = conn.begin()
-
-	#insert primary dataset
-	d = blockcontent["primds"]
-	primds = {}
-	try:
-	    primds["primary_ds_type_id"] = self.primdstpid.execute(conn, d["primary_ds_type"])
-	    primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS", tran)
-	    for k in ("primary_ds_name", "creation_date", "create_by"):
-		primds[k] = d[k]
-
-	    self.primdsin.execute(conn, primds, tran)
-	except IntegrityError:
-	    pass
-	except:
-	    tran.rollback()
-	    conn.close()
-	    raise
-
-	#insert dataset (and processed dataset if it is not already inserted)
-	d = blockcontent["dataset"]
-	dataset = {}
-	dataset["primary_ds_id"]    = primds["primary_ds_id"]
-	dataset["data_tier_id"]     = self.tierid.execute(conn, d["data_tier_name"])
-	dataset["dataset_type_id"]  = self.datatypeid.execute(conn, d["dataset_type"])
-	dataset["physics_group_id"] = self.phygrpid.execute(conn, d["physics_group_name"])
-
-	procid = self.procdsid.execute(conn, d["processed_ds_name"])
-	if procid>0:
-	    dataset["processed_ds_id"] = procid
-	else:
-	    procid = self.sm.increment(conn, "SEQ_PSDS", tran)
-	    procdaoinput = {"processed_ds_name":d["processed_ds_name"],
-                            "processed_ds_id":procid}
-	    self.procdsin.execute(conn, procdaoinput, tran)
-	    dataset["processed_ds_id"] = procid
-        dataset["dataset_id"] = self.sm.increment(conn, "SEQ_DS", tran) 
-	for k in ("dataset", "is_dataset_valid", "global_tag", "xtcrosssection",
-		  "creation_date", "create_by", "last_modification_date", "last_modified_by"):
-	    dataset[k] = d[k]
-	try:
-	    self.datasetin.execute(conn, dataset, tran)
-	except IntegrityError: 
-	    pass
-	except:
-	    tran.rollback()
-	    conn.close()
-	    raise
-	
-	#insert files, etc...
-	tran.commit()
-	conn.close()
-	
-    def migrate(self, businput):
-	""" indata has the following keys:
-	    url:
-	    dataset:
-	"""
-	url = businput["url"]
-	dataset = businput["dataset"]
-	blocks = self.listSrcBlocks(url, dataset)
-	for b in blocks:
-	    blockcontent = self.getBlock(url, b['block_name'])
-	    self.putBlock(blockcontent)
