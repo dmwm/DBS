@@ -3,12 +3,12 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.19 2010/03/02 20:05:23 yuyi Exp $"
-__version__ = "$Revision: 1.19 $"
+__revision__ = "$Id: List.py,v 1.20 2010/03/03 16:45:49 yuyi Exp $"
+__version__ = "$Revision: 1.20 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
-class List1(DBFormatter):
+class List(DBFormatter):
     """
     Dataset List DAO class.
     """
@@ -38,7 +38,7 @@ SELECT D.DATASET_ID, D.DATASET, D.IS_DATASET_VALID,
         OMC.OUTPUT_MODULE_LABEL,
         RV.RELEASE_VERSION,
         PSH.PSET_HASH,
-        AEX.APP_NAME
+        AEX.APP_NAME,
         
 FROM %sDATASETS D
 JOIN %sPRIMARY_DATASETS P ON P.PRIMARY_DS_ID = D.PRIMARY_DS_ID
@@ -63,14 +63,14 @@ WHERE D.IS_DATASET_VALID = 1
 AND DP.DATASET_TYPE <> 'DELETED'
 """ % ((self.owner,)*15)
 
-    def execute(self, dataset="", parent_dataset="", 
+    def execute(self, conn, dataset="", parent_dataset="", 
                 release_version="", pset_hash="", app_name="", output_module_label="", 
-                conn=None):
+                processing_era="", acquisition_era=""):
         """
         dataset key is a wild card parameter
         """	
-        #if not conn:
-        #    conn = self.dbi.connection()
+        if conn:
+	    raise Exception("No connection to DB") 
             
         sql = self.sql
         binds = {}
@@ -98,17 +98,16 @@ AND DP.DATASET_TYPE <> 'DELETED'
 	    op = ("=", "like")["%" in output_module_label]
             sql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label" % op
             binds.update(output_module_label=output_module_label)
-
+	if processing_era:
+	    op = ("=", "like")["%" in processing_era]
+	    sql += "AND PE.PROCESSING_VERSION %s :pversion" % op
+	    binds.update(pversion=processing_era)
+	if acquisition_era:
+	    op = ("=", "like")["%" in acquisition_era]
+	    sql += "AND AE.ACQUISITION_ERA_NAME %s :aera" % op
+	    binds.update(aera=acquisition_era)
 	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
-	#assert len(cursors) == 1, "block does not exist"
+	assert len(cursors) == 1, "block does not exist"
 	result = self.formatCursor(cursors[0])
 	return result
-	
-	"""
-	cursor = conn.connection.cursor()
-        cursor.execute(sql, binds)
-        result = self.formatCursor(cursor)
-        conn.close()
-        return result
-	"""
 	
