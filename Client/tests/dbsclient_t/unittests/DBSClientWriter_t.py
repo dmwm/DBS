@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.12 2010/03/17 21:45:19 afaq Exp $"
-__version__ = "$Revision: 1.12 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.13 2010/03/18 14:40:32 afaq Exp $"
+__version__ = "$Revision: 1.13 $"
 
 import os
 import sys
@@ -252,7 +252,10 @@ class DBSClientWriter_t(unittest.TestCase):
     def test20(self):
 	"""test20 web.DBSClientWriter.updateDatasetRunStatus: should be able to update run status"""
 	api.updateDatasetRunStatus(dataset=dataset, run_number=1, complete=1)
-   
+
+    def test21(self):
+	    """test20 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
+	    api.updateDatasetType(dataset=dataset, dataset_type="production")	 
 	
     def test208(self):
 	"""test18 generating the output file for reader test"""
