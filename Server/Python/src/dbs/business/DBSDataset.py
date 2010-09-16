@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.40 2010/07/09 19:38:10 afaq Exp $"
-__version__ = "$Revision: 1.40 $"
+__revision__ = "$Id: DBSDataset.py,v 1.41 2010/08/01 19:09:53 akhukhun Exp $"
+__version__ = "$Revision: 1.41 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -24,6 +24,7 @@ class DBSDataset:
         self.dbi = dbi
         
         self.datasetlist = daofactory(classname="Dataset.List")
+        self.datasetbrieflist = daofactory(classname="Dataset.BriefList")
         self.datasetid = daofactory(classname="Dataset.GetID")
         self.sm = daofactory(classname="SequenceManager")
         self.primdsid = daofactory(classname='PrimaryDataset.GetID')
@@ -110,7 +111,7 @@ class DBSDataset:
                      pset_hash="", app_name="", output_module_label="",
 		     processing_version="", acquisition_era="", 
 		     run_num=0, physics_group_name="", logical_file_name="", primary_ds_name="",
-                     primary_ds_type="", data_tier_name="", dataset_access_type=""):
+                     primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
         """
         lists all datasets if dataset parameter is not given.
         The parameter can include % character. 
@@ -120,17 +121,21 @@ class DBSDataset:
 	    raise Exception("listDataset API only works with fullly qualified logical_file_name. NO * is allowed in logical_file_name.")
 	try:
 	    conn = self.dbi.connection()
-	    result = self.datasetlist.execute(conn, dataset,
-                                             parent_dataset,
-                                             release_version,
-                                             pset_hash,
-                                             app_name,
-                                             output_module_label,
-                                             processing_version,
-                                             acquisition_era, 
-                                             run_num, physics_group_name, logical_file_name, 
-                                             primary_ds_name, primary_ds_type, data_tier_name, 
-                                             dataset_access_type)	
+
+	    dao = (self.datasetbrieflist, self.datasetlist)[detail]
+
+	    result = dao.execute(conn, 
+				    dataset,
+				    parent_dataset,
+                                    release_version,
+				    pset_hash,
+                                    app_name,
+                                    output_module_label,
+                                    processing_version,
+                                    acquisition_era, 
+                                    run_num, physics_group_name, logical_file_name, 
+                                    primary_ds_name, primary_ds_type, data_tier_name, 
+                                    dataset_access_type)	
 	    conn.close()
 	    return result
         except Exception, ex:

@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.54 2010/08/01 18:31:10 akhukhun Exp $"
-__version__ = "$Revision: 1.54 $"
+__revision__ = "$Id: DBSFile.py,v 1.55 2010/08/01 19:09:49 akhukhun Exp $"
+__version__ = "$Revision: 1.55 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -19,6 +19,7 @@ class DBSFile:
         self.dbi = dbi
 
         self.filelist = daofactory(classname="File.List")
+        self.filebrieflist = daofactory(classname="File.BriefList")
         self.sm = daofactory(classname = "SequenceManager")
         self.filein = daofactory(classname = "File.Insert")
         self.flumiin = daofactory(classname = "FileLumi.Insert")
@@ -110,7 +111,7 @@ class DBSFile:
 	    conn.close()
 
     def listFiles(self, dataset="", block_name="", logical_file_name="", release_version="", 
-	    pset_hash="", app_name="", output_module_label="",  maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[]):
+	    pset_hash="", app_name="", output_module_label="",  maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[], detail=False):
         """
         One of below parameter groups must be presented: 
         non-parttened dataset, non-parttened block , non-parttened dataset with lfn ,  non-parttened block with lfn , 
@@ -132,7 +133,8 @@ class DBSFile:
 	    pass
 	try:
 	    conn = self.dbi.connection()
-	    result = self.filelist.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
+	    dao = (self.filebrieflist, self.filelist)[detail]
+	    result = dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
 			    output_module_label, maxrun, minrun, origin_site_name, lumi_list)
 	    conn.close()
 	    return result
