@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.11 2010/08/12 18:49:34 yuyi Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.12 2010/08/16 18:39:59 yuyi Exp $"
+__version__ = "$Revision: 1.12 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -42,6 +42,7 @@ class DBSMigrate:
 	self.blocklist      = daofactory(classname="Block.List")
 	self.bparentlist    = daofactory(classname="BlockParent.List")
 	self.dsparentlist   = daofactory(classname="DatasetParent.List")
+	self.outputCoflist  = daofactory(classname="OutputModuleConfig.List")
 
     def prepareDatasetMigrationList(self, conn, request):
 	"""
@@ -280,6 +281,8 @@ class DBSMigrate:
 	dsparent = self.dsparentlist.execute(conn, dataset['dataset'])
 	for p in dsparent:
 	    del p['parent_dataset_id'], p['dataset']
+	fparent_list = self.fplist.execute(conn, block_id=block['block_id'])
+	fconfig_list = self.outputCoflist.execute(conn, block_id=block['block_id'])
 	acqEra = {}
 	prsEra = {}
 	if(dataset["acquisition_era_name"] != "" ):
@@ -289,12 +292,15 @@ class DBSMigrate:
 	primds = self.primdslist.execute(conn, primary_ds_name=dataset["primary_ds_name"])[0]
 	files = self.filelist.execute(conn, block_name=block_name)
 	for f in files:
-	    f.update(file_lumi_list = self.fllist.execute(conn, logical_file_name=f['logical_file_name']),
-		     file_parent_list = self.fplist.execute(conn, logical_file_name=f['logical_file_name']))
+	    #There are a trade off between json sorting and db query. We keep lumi sec in a file,
+	    #but the file parentage seperate from file
+	    f.update(file_lumi_list = self.fllist.execute(conn, logical_file_name=f['logical_file_name']))
+		     #file_parent_list = self.fplist.execute(conn, logical_file_name=f['logical_file_name']))
 	del dataset["acquisition_era_name"], dataset["processing_version"]
 	del block["dataset"]
         result= dict(block=block, dataset=dataset, primds=primds, files=files, \
-	             block_parent_list=bparent, ds_parent_list=dsparent)
+	             block_parent_list=bparent, ds_parent_list=dsparent, \
+		     file_conf_list=fconfig_list,   file_parent_list=fparent_list)
         if acqEra:
 	    result["acquisition_era"]=acqEra
 	if prsEra:
