@@ -6,8 +6,8 @@ Given the ID of a File, returns a LIST of the dicts containing IDs
 [{block_id, dataset_id},....] of the Parent BLOCK of the 
 Block containing THIS file.
 """
-__revision__ = "$Id: List.py,v 1.5 2010/02/11 18:03:26 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: List.py,v 1.6 2010/03/05 18:58:49 yuyi Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -23,10 +23,12 @@ class List(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """SELECT B.BLOCK_ID as BLOCK_ID, B.DATASET_ID as DATASET_ID FROM %sBLOCKS B JOIN %sFILES FL ON FL.BLOCK_ID=B.BLOCK_ID LEFT OUTER JOIN %sFILE_PARENTS FP ON FP.PARENT_FILE_ID = FL.FILE_ID WHERE FP.THIS_FILE_ID IN ( """% ((self.owner,)*3)
 
-    def execute(self, file_id_list, conn=None, transaction=False):
+    def execute(self, conn, file_id_list, transaction=False):
 	"""
 	file_id_list : file_id_list 
 	"""
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/FileParentBlock/List expects db connection from up layer.")
 	sql=self.sql
 	binds={}
 	if file_id_list:

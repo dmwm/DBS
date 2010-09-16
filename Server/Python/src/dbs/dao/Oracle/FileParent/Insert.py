@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileParents table """ 
 
-__revision__ = "$Revision: 1.9 $"
-__version__  = "$Id: Insert.py,v 1.9 2010/02/11 18:03:26 afaq Exp $ "
+__revision__ = "$Revision: 1.10 $"
+__version__  = "$Id: Insert.py,v 1.10 2010/03/05 18:56:04 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -19,11 +19,13 @@ INSERT INTO %sFILE_PARENTS
 VALUES (:file_parent_id, :this_file_id, :parent_file_id)
 """ % (self.owner)
 
-    def execute( self, daoinput, conn = None, transaction = False ):
+    def execute( self, conn, daoinput, transaction = False ):
         """
         daoinput must be validated to have the following keys:
         file_parent_id, this_file_id, parent_file_id
         """
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/FileParent/Insert expects db connection from up layer.")
         try:
             self.dbi.processData(self.sql, daoinput, conn, transaction)
         except exceptions.IntegrityError, ex:

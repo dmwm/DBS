@@ -3,8 +3,8 @@
 This module provides FileType.GetID data access object.
 Light dao object to get the id for a given FileType
 """
-__revision__ = "$Id: GetID.py,v 1.3 2010/02/11 18:03:26 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: GetID.py,v 1.4 2010/03/05 19:01:32 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -23,10 +23,12 @@ SELECT FT.FILE_TYPE_ID, FT.FILE_TYPE
 FROM %sFILE_TYPES FT 
 """ %  self.owner 
         
-    def execute(self, name, conn = None, transaction = False):
+    def execute(self, conn, name, transaction = False):
         """
         returns id for a given file type
         """	
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/FileType/GetID expects db connection from up layer.")
         sql = self.sql
         sql += "WHERE FT.FILE_TYPE = :filetype"
         binds = {"filetype":name}

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileTypes table """ 
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: Insert.py,v 1.4 2010/02/11 18:03:26 afaq Exp $ "
+__revision__ = "$Revision: 1.5 $"
+__version__  = "$Id: Insert.py,v 1.5 2010/03/05 19:01:32 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -32,9 +32,10 @@ class Insert(DBFormatter):
                return binds
 
 
-    def execute( self, file_typesObj, conn=None, transaction=False ):
-            ##binds = self.getBinds( file_typesObj )
-            result = self.dbi.processData(self.sql, binds, conn, transaction)
-            return
+    def execute( self, conn, file_typesObj, transaction=False ):
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/FileType/Insert expects db connection from up layer.")
+	result = self.dbi.processData(self.sql, binds, conn, transaction)
+	return
 
 

@@ -2,8 +2,8 @@
 """
 This module provides FileParent.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.4 2010/02/19 17:38:33 yuyi Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: List.py,v 1.5 2010/03/05 18:56:04 yuyi Exp $"
+__version__ = "$Revision: 1.5 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -28,18 +28,16 @@ JOIN %sFILE_PARENTS FP ON FP.PARENT_FILE_ID = PF.FILE_ID
 JOIN %sFILES F ON  F.FILE_ID = FP.THIS_FILE_ID 
 """ % ((self.owner,)*3)
 
-    def execute(self, logical_file_name, conn=None):
+    def execute(self, conn, logical_file_name, transaction=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-            conn = self.dbi.connection()
+            raise Exception("dbs/dao/Oracle/FileParent/List expects db connection from up layer.")
         sql = self.sql
         cursor = conn.connection.cursor()
         sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
         binds = {"logical_file_name":logical_file_name}
-        #cursor.execute(sql, binds)
-	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
         result = self.formatCursor(cursors[0])
-        conn.close()
         return result
