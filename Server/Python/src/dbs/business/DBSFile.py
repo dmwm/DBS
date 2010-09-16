@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.23 2010/02/24 16:51:08 afaq Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: DBSFile.py,v 1.24 2010/02/24 17:36:54 afaq Exp $"
+__version__ = "$Revision: 1.24 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -158,11 +158,11 @@ class DBSFile:
 		    fllist = f["file_lumi_list"]
 		    if(len(fllist) > 0):
 			iLumi = 0
-			flIncrement = 1000
-			flID = self.sm.increment("SEQ_FLM", conn, True)
+			flIncrement = 100
+			flID = self.sm.increment("SEQ_FLM", conn, True, flIncrement)
 			for fl in fllist:
 			    if iLumi == flIncrement:
-				flID =  self.sm.increment("SEQ_FLM", conn, True)
+				flID =  self.sm.increment("SEQ_FLM", conn, True, flIncrement)
 				iLumi = 0
 			    fldao={ 
 				"run_num" : fl["run_num"],
@@ -178,12 +178,12 @@ class DBSFile:
 		    fplist = f["file_parent_list"]
 		    if(len(fplist) > 0):
 			iParent = 0
-			fpIncrement = 120
-			fpID = self.sm.increment("SEQ_FP", conn, True)
+			fpIncrement = 100
+			fpID = self.sm.increment("SEQ_FP", conn, True, fpIncrement)
                     
 			for fp in fplist:
 			    if iParent == fpIncrement:
-				fpID = self.sm.increment("SEQ_FP", conn, True)
+				fpID = self.sm.increment("SEQ_FP", conn, True, fpIncrement)
 				iParent  = 0
 			    fpdao={}
 			    fpdao["file_parent_id"] = fpID + iParent
@@ -199,10 +199,10 @@ class DBSFile:
 		    if(len(foutconfigs) > 0):
 			iConfig = 0
 			fconfigInc = 5
-			fcID = self.sm.increment("SEQ_FC", conn, True)
+			fcID = self.sm.increment("SEQ_FC", conn, True, fconfigInc)
 			for fc in foutconfigs:
 			    if iConfig == fconfigInc:
-				fcID = self.sm.increment("SEQ_FC", conn, True)
+				fcID = self.sm.increment("SEQ_FC", conn, True, fconfigInc)
 				iConfig = 0
 			    fcdao={}
 			    fcdao["file_output_config_id"] = fcID + iConfig
@@ -240,10 +240,10 @@ class DBSFile:
 		    bpdaolist=[]
 		    iPblk = 0
 		    fpblkInc = 10
-		    bpID = self.sm.increment("SEQ_BP", conn, True)
+		    bpID = self.sm.increment("SEQ_BP", conn, True, fpblkInc)
 		    for ablk in fpblks:
 			if iPblk == fpblkInc:
-			    bpID = self.sm.increment("SEQ_BP", conn, True)
+			    bpID = self.sm.increment("SEQ_BP", conn, True, fpblkInc)
 			    iPblk = 0
 			bpdao={ "this_block_id": block_id }
 			bpdao["parent_block_id"] = ablk
@@ -265,10 +265,10 @@ class DBSFile:
 		    dsdaolist=[]
 		    iPds = 0
 		    fpdsInc = 10
-		    pdsID = self.sm.increment("SEQ_DP", conn, True)
+		    pdsID = self.sm.increment("SEQ_DP", conn, True, fpdsInc)
 		    for ads in fpds:
 			if iPds == fpdsInc:
-			    pdsID = self.sm.increment("SEQ_DP", conn, True)
+			    pdsID = self.sm.increment("SEQ_DP", conn, True, fpdsInc)
 			    iPds = 0
 			dsdao={ "this_dataset_id": dataset_id }
 			dsdao["parent_dataset_id"] = ads
