@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.34 2010/04/22 16:05:05 yuyi Exp $"
-__version__ = "$Revision: 1.34 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.35 2010/05/05 20:08:19 afaq Exp $"
+__version__ = "$Revision: 1.35 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -79,7 +79,8 @@ class DBSReaderModel(RESTModel):
         self.methods[verb][methodKey] = {'args': args,
                                          'call': func,
                                          'validation': validation,
-                                         'version': version}
+                                         'version': version,
+					 'expires' : 10000 }
 
     def getServerVersion(self):
         """
@@ -129,7 +130,7 @@ class DBSReaderModel(RESTModel):
 	pset_hash = pset_hash.replace("*", "%")
 	app_name = app_name.replace("*", "%")
 	output_module_label = output_module_label.replace("*", "%")
-        return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, processing_version, acquisition_era)
+	return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, processing_version, acquisition_era)
 
     def listDataTiers(self, data_tier_name=""):
 	"""
