@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.14 2010/08/13 20:33:49 yuyi Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.15 2010/08/19 15:22:18 yuyi Exp $"
+__version__ = "$Revision: 1.15 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -49,7 +49,8 @@ class DBSOutputConfig:
         except Exception, ex:
             raise ex
 	finally:
-	    conn.close()
+	    if conn: 
+		conn.close()
     
     def insertOutputConfig(self, businput):
         """
@@ -107,4 +108,5 @@ class DBSOutputConfig:
 		self.logger.exception(e)
 		raise
         finally:
-            conn.close()
+            if conn:
+		conn.close()
