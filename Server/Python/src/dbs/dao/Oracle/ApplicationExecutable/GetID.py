@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.5 2010/06/23 21:21:18 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
+__revision__ = "$Id: GetID.py,v 1.6 2010/08/02 20:41:14 afaq Exp $"
+__version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -26,11 +26,9 @@ class GetID(DBFormatter):
         """
         returns id for a given application
         """	
-	if not conn:
-	    raise Excpetion("dbs/dao/Oracle/ApplicationExecutable/GetID exception db connection from upper layer") 
         binds = {"app_name":name}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)
-        assert len(plist) == 1, "app %s does not exist" % name
+        if len(plist) < 1 : return -1
         return plist[0]["app_exec_id"]
 
