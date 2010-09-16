@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.11 2010/02/11 22:52:00 afaq Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: List.py,v 1.12 2010/02/18 16:48:03 yuyi Exp $"
+__version__ = "$Revision: 1.12 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -41,9 +41,13 @@ JOIN %sPRIMARY_DS_TYPES PT ON PT.PRIMARY_DS_TYPE_ID = P.PRIMARY_DS_TYPE_ID
             op = ("=", "like")["%" in primary_ds_name]
             sql += "WHERE P.PRIMARY_DS_NAME %s :primary_ds_name" % op
             binds.update(primary_ds_name=primary_ds_name)
-            
+        """    
         cursor = conn.connection.cursor()
         cursor.execute(sql, binds)
-        result = self.formatCursor(cursor)
+	"""
+	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	assert len(cursors) == 1, "primary DS does not exist"
+		
+        result = self.formatCursor(cursors[0])
         conn.close()
         return result
