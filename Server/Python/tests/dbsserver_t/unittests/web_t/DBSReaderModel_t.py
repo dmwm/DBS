@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.8 2010/01/26 20:30:49 yuyi Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.9 2010/01/27 14:56:02 yuyi Exp $"
+__version__ = "$Revision: 1.9 $"
 
 import os, sys, imp
 import json
@@ -40,8 +40,8 @@ class DBSReaderModel_t(unittest.TestCase):
 	api.list('primarydatasets', primary_ds_name='*')
        
     def test03(self):
-	"""Test02 web.DBSReaderModel.listPrimaryDatasets: basic test"""
-	api.list('primarydatasets', primary_ds_name=['primary_ds_name'])
+	"""Test03 web.DBSReaderModel.listPrimaryDatasets: basic test"""
+	api.list('primarydatasets', primary_ds_name=testparams['primary_ds_name'])
 
     def test04(self):
         """Test04 web.DBSReaderModel.listPrimaryDatasets: basic test"""
@@ -153,7 +153,12 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test27(self):
         """Test27 web.DBSReaderModel.listBlocks: basic test"""
-        api.list('blocks', site_name=testparams['site'])
+	try:
+	    api.list('blocks', site_name=testparams['site'])
+	except:
+	    pass
+	else:
+	    self.fail("Exception was expected and was not raised.")
 
     def test28(self):
         """Test28 web.DBSReaderModel.listBlocks: basic test"""
@@ -204,7 +209,12 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test34(self):
         """Test34 web.DBSReaderModel.listFiles: basic test"""
-        api.list('files', dataset=testparams['dataset']+'*')
+	try:
+	    api.list('files', dataset=testparams['dataset']+'*')
+	except:
+	    pass
+	else:
+	    self.fail("Exception was expected and was not raised.")
 
     def test35(self):
         """Test35 web.DBSReaderModel.listFiles: basic test"""
@@ -231,7 +241,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test36(self):
         """Test36 web.DBSReaderModel.listFiles: basic test"""
 	#need to be updated
-	api.list('files', logical_file_name='ABC'	
+	api.list('files', logical_file_name='ABC')	
 
     def test37(self):
         """Test37 web.DBSReaderModel.listFiles: Must raise an exception if no parameter is passed."""
@@ -337,7 +347,7 @@ class DBSReaderModel_t(unittest.TestCase):
         """Test60 web.DBSReaderModel.listOutputConfigs: basic test"""
 	api.list('outputconfigurations', dataset=testparams['dataset'],
                                               logical_file_name="*",
-                                              release_version=testparams['release_version']
+                                              release_version=testparams['release_version'],
                                               pset_hash=testparams['pset_hash'],
                                               app_name=testparams['app_name'],
                                               output_module_label=testparams['output_module_label'])
@@ -345,7 +355,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test61(self):
         """Test61 web.DBSReaderModel.listOutputConfigs: basic test"""
         api.list('outputconfigurations', dataset=testparams['dataset'],
-                                              release_version=testparams['release_version']
+                                              release_version=testparams['release_version'],
                                               output_module_label=testparams['output_module_label'])
 
     def test62(self):
@@ -356,7 +366,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test63(self):
         """Test63 web.DBSReaderModel.listOutputConfigs: basic test"""
         api.list('outputconfigurations', dataset=testparams['dataset'],
-                                              release_version=testparams['release_version']
+                                              release_version=testparams['release_version'])
 
     def test64(self):
         """Test64 web.DBSReaderModel.listFileParents: basic test"""
