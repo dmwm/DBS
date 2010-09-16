@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.6 2010/01/26 22:43:57 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.7 2010/01/26 22:48:26 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 import os
 import sys
@@ -229,6 +229,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	api.insertFiles(filesList={"files":flist})
 	
     def test18(self):
+	"""test18 generating the output file for reader test"
 	infoout=open("info.dict", "w")
 	infoout.write("info="+str(outDict))
 	infoout.close()
