@@ -2,8 +2,8 @@
 dao unittests
 """
 
-__revision__ = "$Id: List_t.py,v 1.2 2010/01/27 21:00:59 dsr Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: List_t.py,v 1.3 2010/03/23 16:26:07 akhukhun Exp $"
+__version__ = "$Revision: 1.3 $"
 
 import os
 import unittest
@@ -19,19 +19,19 @@ class List_t(unittest.TestCase):
         self.logger = logging.getLogger("dbs test logger")
         self.dbowner = os.environ["DBS_TEST_DBOWNER_READER"]
         self.dbi = DBFactory(self.logger, dburl).connect()
-        self.assertTrue(self.dbi.engine.dialect.name == "oracle", \
-                        "Database must be oracle" )
                         
     def test01(self):
         """dao.Oracle.OutputModuleConfig.List: Basic"""
+	conn = self.dbi.connection()
         dao = OutputModuleConfigList(self.logger, self.dbi, self.dbowner)
-        dao.execute()
-        dao.execute(dataset = '%')
-        dao.execute(logical_file_name = '%')
-        dao.execute(release_version = '%')
-        dao.execute(pset_hash = '%')
-        dao.execute(app = '%')
-        dao.execute(output_label = '%')
+        dao.execute(conn)
+        dao.execute(conn, dataset = '%')
+        dao.execute(conn, logical_file_name = '%')
+        dao.execute(conn, release_version = '%')
+        dao.execute(conn, pset_hash = '%')
+        dao.execute(conn, app = '%')
+        dao.execute(conn, output_label = '%')
+	conn.close()
         
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(List_t)

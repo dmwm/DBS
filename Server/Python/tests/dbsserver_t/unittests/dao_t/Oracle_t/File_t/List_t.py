@@ -2,8 +2,8 @@
 dao unittests
 """
 
-__revision__ = "$Id: List_t.py,v 1.1 2010/01/01 19:54:41 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List_t.py,v 1.2 2010/03/23 16:25:55 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import os
 import unittest
@@ -19,24 +19,24 @@ class List_t(unittest.TestCase):
         self.logger = logging.getLogger("dbs test logger")
         self.dbowner = os.environ["DBS_TEST_DBOWNER_READER"]
         self.dbi = DBFactory(self.logger, dburl).connect()
-        self.assertTrue(self.dbi.engine.dialect.name == "oracle", \
-                        "Database must be oracle" )
                         
     def test01(self):
         """dao.Oracle.File.List: Basic"""
+	conn = self.dbi.connection()
         dao = FileList(self.logger, self.dbi, self.dbowner)
         
-        result = dao.execute(dataset="*")
+        result = dao.execute(conn, dataset="*")
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
         
-        result = dao.execute(block_name='*')
+        result = dao.execute(conn, block_name='*')
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
         
-        result = dao.execute(logical_file_name='*')
+        result = dao.execute(conn, logical_file_name='*')
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
+	conn.close()
         
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(List_t)
