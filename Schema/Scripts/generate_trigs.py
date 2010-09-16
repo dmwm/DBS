@@ -34,7 +34,7 @@ trig_tbl_map = {"APPLICATION_EXECUTABLES": "AE",
 "FILE_LUMIS": "FLM",
 "ACQUISITION_ERAS": "AQE",
 "PROCESSING_ERAS": "PE",
-"BLOCK_SITES": "SI",
+"BLOCK_SITES": "BLST",
 "FILE_BUFFERS": "FB",
 "MIGRATION_REQUESTS": "MR",
 "MIGRATION_BLOCKS": "MB",
@@ -144,3 +144,8 @@ for aline in lines:
 
 for (t,z) in trigs : 
 	print z.replace( "__PK__", tbl_pk_map[t] )
+
+
+
+print "REMOVE the FB_TRIG, its NOT REQUIRED"
+
