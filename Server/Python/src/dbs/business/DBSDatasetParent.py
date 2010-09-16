@@ -3,8 +3,8 @@
 This module provides business object class to interact with DatasetParent. 
 """
 
-__revision__ = "$Id: DBSDatasetParent.py,v 1.2 2010/03/08 19:49:01 yuyi Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: DBSDatasetParent.py,v 1.3 2010/03/25 17:06:00 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -28,7 +28,13 @@ class DBSDatasetParent:
         takes required dataset parameter
         returns only parent dataset name
         """
-	conn = self.dbi.connection()
-        result=self.datasetparentlist.execute(conn, dataset)
-	conn.close()
-	return result
+	try:
+	    conn = self.dbi.connection()
+	    result=self.datasetparentlist.execute(conn, dataset)
+	    conn.close()
+	    return result
+        except Exception, ex:
+	    raise ex
+        finally:
+	    conn.close()
+ 

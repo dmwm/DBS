@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.11 2010/03/12 21:07:57 yuyi Exp $"
-__version__ = "$Revision: 1.11 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.12 2010/03/25 17:06:00 afaq Exp $"
+__version__ = "$Revision: 1.12 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -36,16 +36,21 @@ class DBSOutputConfig:
         
     def listOutputConfigs(self, dataset="", logical_file_name="", 
                          release_version="", pset_hash="", app_name="", output_module_label=""):
-	conn=self.dbi.connection()
-        result = self.outputmoduleconfiglist.execute(conn, dataset,
+	try:
+	    conn=self.dbi.connection()
+	    result = self.outputmoduleconfiglist.execute(conn, dataset,
                                                    logical_file_name,
                                                    app_name,
                                                    release_version,
                                                    pset_hash,
                                                    output_module_label)
-	conn.close()
-	return result
-
+	    conn.close()
+	    return result
+        except Exception, ex:
+            raise ex
+	finally:
+	    conn.close()
+    
     def insertOutputConfig(self, businput):
         """
         Method to insert the Output Config

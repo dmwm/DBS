@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.35 2010/03/19 14:18:01 yuyi Exp $"
-__version__ = "$Revision: 1.35 $"
+__revision__ = "$Id: DBSFile.py,v 1.36 2010/03/25 17:06:00 afaq Exp $"
+__version__ = "$Revision: 1.36 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -69,12 +69,17 @@ class DBSFile:
 	    raise Exception("You must specify exact dataset name not pattern")  
         if ('*' in block_name):
 	    raise Exception("You must specify exact block name not pattern")
-	conn = self.dbi.connection()
-	result = self.filelist.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
+	try:
+	    conn = self.dbi.connection()
+	    result = self.filelist.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
 			    output_module_label)
-	conn.close()
-	return result
-
+	    conn.close()
+	    return result
+	except Exception, ex:
+	    raise
+	finally:
+	    conn.close()
+    
     def listFilesByRun(self, maxrun, minrun=1,  block_name="", dataset=""):
 	""" 
 	retuen a list of files that has run number between minrun and maxrun.
@@ -84,13 +89,18 @@ class DBSFile:
 	assert (maxrun), "Maxrun has to be not null"
 	if(not block_name and not dataset):
 	    raise Exception("You must provide block_name or dataset")
-	conn = self.dbi.connection()
-	if(block_name):
-	    result = self.filelist.executeByRun(conn, maxrun, minrun, block_name=block_name)
-	if(dataset):
-	    result = self.filelist.executeByRun(conn, maxrun, minrun, dataset=dataset+'%')
-	conn.close()
-	return result
+	try:
+	    conn = self.dbi.connection()
+	    if(block_name):
+		result = self.filelist.executeByRun(conn, maxrun, minrun, block_name=block_name)
+	    if(dataset):
+		result = self.filelist.executeByRun(conn, maxrun, minrun, dataset=dataset+'%')
+	    conn.close()
+	    return result
+        except Exception, ex:
+	    raise ex
+	finally:
+	    conn.close()
 
     def listFileBySite(self, originSite, block_name="", dataset=""):
 	"""	
@@ -101,14 +111,19 @@ class DBSFile:
 	assert (originSite), "origin_sit has to be provided"
 	if(not block_name and not dataset):
 	    raise Exception("You must provide block_name or dataset")
-	conn = self.dbi.connection()
-	if(block_name):
-	    result=self.filelist.executeBySite(conn, originSite, block_name)
-	if(dataset):
-	    result=self.filelist.executeBySite(conn, originSite, dataset+'%')
-	conn.close()
-	return result
-	
+	try:
+	    conn = self.dbi.connection()
+	    if(block_name):
+		result=self.filelist.executeBySite(conn, originSite, block_name)
+	    if(dataset):
+		result=self.filelist.executeBySite(conn, originSite, dataset+'%')
+	    conn.close()
+	    return result
+	except Exception, ex:
+	    raise ex
+	finally:
+	    conn.close()
+    
 
     def insertFile(self, businput):
 	"""

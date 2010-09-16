@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.31 2010/03/18 20:19:22 afaq Exp $"
-__version__ = "$Revision: 1.31 $"
+__revision__ = "$Id: DBSDataset.py,v 1.32 2010/03/25 17:06:00 afaq Exp $"
+__version__ = "$Revision: 1.32 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -82,9 +82,10 @@ class DBSDataset:
         The parameter can include % character. 
         all other parameters are not wild card ones.
         """
-	conn = self.dbi.connection()
+	try:
+	    conn = self.dbi.connection()
 	
-	result = self.datasetlist.execute(conn, dataset, 
+	    result = self.datasetlist.execute(conn, dataset, 
                                              parent_dataset, 
                                              release_version, 
 					     pset_hash,
@@ -92,19 +93,13 @@ class DBSDataset:
                                              output_module_label,
 					     processing_version,
 					     acquisition_era)
-	conn.close()
-	return result
-    
-	#FIXME: We need to add support for super user
-	#if not (parent_dataset or release_version or pset_hash or app_name or output_module_label):
-	#    return self.datasetlist.execute(dataset)
-	#else:
-	#    return self.datasetlist1.execute(dataset, 
-	#                                     parent_dataset, 
-	#                                     release_version, 
-	# 				     pset_hash,
-	#                                    app_name, 
-	#                                     output_module_label)
+	    conn.close()
+	    return result
+        except Exception, ex:
+	    raise ex
+        finally:
+	    conn.close()
+ 
     
     def insertDataset(self, businput):
         """
