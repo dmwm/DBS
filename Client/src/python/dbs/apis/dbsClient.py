@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.13 $"
-# $Id: dbsClient.py,v 1.13 2009/12/08 19:50:27 afaq Exp $"
+# $Revision: 1.14 $"
+# $Id: dbsClient.py,v 1.14 2009/12/18 15:04:03 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -58,8 +58,15 @@ class DbsApi:
 		return res
 
 		#FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
-		#json_ret=json.loads(res)
-		#return json_ret
+		json_ret=json.loads(res)
+		self.parseForException(json_ret['DBS']['results'])
+		return json_ret
+
+	def parseForException(self, data):
+        	if type(data) == type({}) and data.has_key('exception'):
+                	#print "Service Raised an exception: "+data['exception']
+                	raise Exception("DBS Server raised an exception: " + data['exception'])
+        	return data
 
         def ping(self):
                 """
@@ -73,6 +80,8 @@ class DbsApi:
 		* API to list ALL primary datasets in DBS 
 		"""
 		return self.callServer("/primarydatasets")
+		#ret=self.callServer("/primarydatasets")
+		#return self.parseForException(ret['DBS']['listPrimaryDatasets'])
 
         def listPrimaryDataset(self, dataset):
                 """
