@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.38 2010/05/26 21:34:51 afaq Exp $"
-__version__ = "$Revision: 1.38 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.39 2010/05/27 20:14:30 afaq Exp $"
+__version__ = "$Revision: 1.39 $"
 
 import re
 import cjson
@@ -45,7 +45,7 @@ class DBSWriterModel(DBSReaderModel):
 	self.addService('PUT', 'blocks', self.updateBlock)
 	self.addService('POST', 'datatiers', self.insertDataTier)
 
-	self.dbsFileBuffer = DBSFileBuffer(self.logger, self.dbi, config.dbowner)
+#self.dbsFileBuffer = DBSFileBuffer(self.logger, self.dbi, config.dbowner)
     
 	#following chunk can be removed at a later point, when we are satisfied with the alternate/wmcore-component
 	"""
@@ -254,8 +254,11 @@ class DBSWriterModel(DBSReaderModel):
         """
 
 	try:
-	    # qInserts == True; use the automated queuing, False; DO NOT use the queing
-	    qInserts=False	
+	    # AA, this falg is for testing at the moment, we can do something about tis later
+	    # qInserts == True; Use the automated queuing
+	    #             False; DO NOT use the queing
+	    qInserts=True
+	    
 	    body = request.body.read()
 	    indata = cjson.decode(body)["files"]
         
