@@ -5,13 +5,13 @@
 # Project name:          DBS3                                            #
 # Author:                Yuyi Guo for DBS Group                          #
 # Script type:           Database creation script                        #
-# Created on:            2010-05-06 12:08                                #
+# Created on:            2010-07-08 10:27                                #
 # ---------------------------------------------------------------------- #
-
 
 drop database if exists CMS_DBS3;
 create database CMS_DBS3;
 use CMS_DBS3;
+
 
 # ---------------------------------------------------------------------- #
 # Tables                                                                 #
@@ -494,6 +494,64 @@ CREATE TABLE `BLOCK_SITES` (
 );
 
 # ---------------------------------------------------------------------- #
+# Add table "FILE_BUFFERS"                                               #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `FILE_BUFFERS` (
+    `LOGICAL_FILE_NAME` VARCHAR(700) NOT NULL,
+    `FILE_BLOB` LONGBLOB,
+    `BLOCK_ID` INTEGER,
+    CONSTRAINT `PK_FB` PRIMARY KEY (`LOGICAL_FILE_NAME`)
+);
+
+# ---------------------------------------------------------------------- #
+# Add table "MIGRATION_REQUESTS"                                         #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `MIGRATION_REQUESTS` (
+    `MIGRATION_REQUEST_ID` INTEGER NOT NULL,
+    `MIGRATION_URL` VARCHAR(300),
+    `MIGRATION_INPUT` VARCHAR(700),
+    `MIGRATION_STATUS` VARCHAR(20),
+    `CREATION_DATE` INTEGER,
+    `CREATE_BY` VARCHAR(100),
+    `LAST_MODIFICATION_DATE` INTEGER,
+    `LAST_MODIFIED_BY` VARCHAR(100),
+    CONSTRAINT `PK_MR` PRIMARY KEY (`MIGRATION_REQUEST_ID`),
+    CONSTRAINT `TUC_MR_%column%` UNIQUE (`MIGRATION_URL`, `MIGRATION_INPUT`)
+);
+
+# ---------------------------------------------------------------------- #
+# Add table "MIGRATION_BLOCKS"                                           #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `MIGRATION_BLOCKS` (
+    `MIGRATION_BLOCK_ID` INTEGER NOT NULL,
+    `MIGRATION_REQUEST_ID` INTEGER NOT NULL,
+    `MIGRATION_BLOCK_NAME` VARCHAR(700),
+    `MIGRATION_ORDER` INTEGER,
+    `MIGRATION_STATUS` VARCHAR(20),
+    `CREATION_DATE` INTEGER,
+    `CREATE_BY` VARCHAR(100),
+    `LAST_MODIFICATION_DATE` INTEGER,
+    `LAST_MODIFIED_BY` VARCHAR(100),
+    CONSTRAINT `PK_MB` PRIMARY KEY (`MIGRATION_BLOCK_ID`),
+    CONSTRAINT `TUC_MB_%column%` UNIQUE (`MIGRATION_BLOCK_NAME`, `MIGRATION_REQUEST_ID`)
+);
+
+# ---------------------------------------------------------------------- #
+# Add table "COMPONENT_STATUS"                                           #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `COMPONENT_STATUS` (
+    `COMP_STATUS_ID` INTEGER NOT NULL,
+    `COMPONENT_NAME` VARCHAR(50),
+    `COMPONENT_STATUS` VARCHAR(100),
+    `LAST_CONTACT_TIME` INTEGER,
+    CONSTRAINT `PK_CSS` PRIMARY KEY (`COMP_STATUS_ID`)
+);
+
+# ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
 # ---------------------------------------------------------------------- #
 
@@ -592,3 +650,7 @@ ALTER TABLE `BLOCK_SITES` ADD CONSTRAINT `BK_BLST`
 
 ALTER TABLE `BLOCK_SITES` ADD CONSTRAINT `SI_BLST` 
     FOREIGN KEY (`SITE_ID`) REFERENCES `SITES` (`SITE_ID`);
+
+ALTER TABLE `MIGRATION_BLOCKS` ADD CONSTRAINT `MR_MB` 
+    FOREIGN KEY (`MIGRATION_REQUEST_ID`) REFERENCES `MIGRATION_REQUESTS` (`MIGRATION_REQUEST_ID`);
+

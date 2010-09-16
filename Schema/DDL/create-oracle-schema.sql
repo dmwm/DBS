@@ -5,7 +5,7 @@
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2010-05-06 11:22                                */
+/* Created on:            2010-07-08 10:14                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -276,6 +276,30 @@ CREATE SEQUENCE SEQ_BLST
     NOMAXVALUE
     nocycle
     CACHE 
+    noorder;
+
+CREATE SEQUENCE SEQ_MB
+    START WITH 0
+    INCREMENT BY 1
+    NOMINVALUE
+    NOMAXVALUE
+    nocycle
+    noorder;
+
+CREATE SEQUENCE SEQ_MR
+    START WITH 0
+    INCREMENT BY 1
+    NOMINVALUE
+    NOMAXVALUE
+    nocycle
+    noorder;
+
+CREATE SEQUENCE SEQ_CS
+    START WITH 0
+    INCREMENT BY 1
+    NOMINVALUE
+    NOMAXVALUE
+    nocycle
     noorder;
 
 /* ---------------------------------------------------------------------- */
@@ -843,6 +867,76 @@ GRANT INSERT, UPDATE ON BLOCK_SITES TO CMS_DBS3_WRITE_ROLE;
 GRANT DELETE ON BLOCK_SITES TO CMS_DBS3_ADMIN_ROLE;
 
 /* ---------------------------------------------------------------------- */
+/* Add table "FILE_BUFFERS"                                               */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE FILE_BUFFERS (
+    LOGICAL_FILE_NAME VARCHAR2(700) CONSTRAINT NN_FB_LOGICAL_FILE_NAME NOT NULL,
+    FILE_BLOB BLOB,
+    BLOCK_ID INTEGER,
+    CONSTRAINT PK_FB PRIMARY KEY (LOGICAL_FILE_NAME)
+);
+GRANT SELECT ON FILE_BUFFERS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON FILE_BUFFERS TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON FILE_BUFFERS TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
+/* Add table "MIGRATION_REQUESTS"                                         */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE MIGRATION_REQUESTS (
+    MIGRATION_REQUEST_ID INTEGER CONSTRAINT NN_MR_MIGRATION_REQUEST_ID NOT NULL,
+    MIGRATION_URL VARCHAR2(300),
+    MIGRATION_INPUT VARCHAR2(700),
+    MIGRATION_STATUS VARCHAR2(20),
+    CREATION_DATE INTEGER,
+    CREATE_BY VARCHAR2(100),
+    LAST_MODIFICATION_DATE INTEGER,
+    LAST_MODIFIED_BY VARCHAR2(100),
+    CONSTRAINT PK_MR PRIMARY KEY (MIGRATION_REQUEST_ID),
+    CONSTRAINT TUC_MR_%column% UNIQUE (MIGRATION_URL, MIGRATION_INPUT)
+);
+GRANT SELECT ON MIGRATION_REQUESTS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON MIGRATION_REQUESTS TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON MIGRATION_REQUESTS TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
+/* Add table "MIGRATION_BLOCKS"                                           */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE MIGRATION_BLOCKS (
+    MIGRATION_BLOCK_ID INTEGER CONSTRAINT NN_MB_MIGRATION_BLOCK_ID NOT NULL,
+    MIGRATION_REQUEST_ID INTEGER CONSTRAINT NN_MB_MIGRATION_REQUEST_ID NOT NULL,
+    MIGRATION_BLOCK_NAME VARCHAR2(700),
+    MIGRATION_ORDER INTEGER,
+    MIGRATION_STATUS VARCHAR2(20),
+    CREATION_DATE INTEGER,
+    CREATE_BY VARCHAR2(100),
+    LAST_MODIFICATION_DATE INTEGER,
+    LAST_MODIFIED_BY VARCHAR2(100),
+    CONSTRAINT PK_MB PRIMARY KEY (MIGRATION_BLOCK_ID),
+    CONSTRAINT TUC_MB_%column% UNIQUE (MIGRATION_BLOCK_NAME, MIGRATION_REQUEST_ID)
+);
+GRANT SELECT ON MIGRATION_BLOCKS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON MIGRATION_BLOCKS TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON MIGRATION_BLOCKS TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
+/* Add table "COMPONENT_STATUS"                                           */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE COMPONENT_STATUS (
+    COMP_STATUS_ID INTEGER CONSTRAINT NN_CSS_COMP_STATUS_ID NOT NULL,
+    COMPONENT_NAME VARCHAR2(50),
+    COMPONENT_STATUS VARCHAR2(100),
+    LAST_CONTACT_TIME INTEGER,
+    CONSTRAINT PK_CSS PRIMARY KEY (COMP_STATUS_ID)
+);
+GRANT SELECT ON COMPONENT_STATUS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON COMPONENT_STATUS TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON COMPONENT_STATUS TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
 /* Foreign key constraints                                                */
 /* ---------------------------------------------------------------------- */
 
@@ -942,6 +1036,12 @@ ALTER TABLE BLOCK_SITES ADD CONSTRAINT BK_BLST
 ALTER TABLE BLOCK_SITES ADD CONSTRAINT SI_BLST 
     FOREIGN KEY (SITE_ID) REFERENCES SITES (SITE_ID);
 
+ALTER TABLE MIGRATION_BLOCKS ADD CONSTRAINT MR_MB 
+    FOREIGN KEY (MIGRATION_REQUEST_ID) REFERENCES MIGRATION_REQUESTS (MIGRATION_REQUEST_ID);
+
+GRANT SELECT ON SEQ_CS TO CMS_DBS3_READ_ROLE;
+GRANT SELECT ON SEQ_MB TO CMS_DBS3_READ_ROLE;
+GRANT SELECT ON SEQ_MR TO CMS_DBS3_READ_ROLE;
 GRANT SELECT ON SEQ_AE TO CMS_DBS3_READ_ROLE;
 GRANT SELECT ON SEQ_AF TO CMS_DBS3_READ_ROLE;
 GRANT SELECT ON SEQ_AQE TO CMS_DBS3_READ_ROLE;

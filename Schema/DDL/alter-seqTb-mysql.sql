@@ -1,3 +1,9 @@
+ALTER TABLE `SEQ_CSS` ENGINE = InnoDB;
+
+ALTER TABLE `SEQ_MRS` ENGINE = InnoDB;
+
+ALTER TABLE `SEQ_MBSS` ENGINE = InnoDB;
+
 ALTER TABLE `SEQ_BLSTS` ENGINE = InnoDB;
 
 ALTER TABLE `SEQ_RVS` ENGINE = InnoDB; 
@@ -59,6 +65,13 @@ ALTER TABLE `SEQ_BHS` ENGINE = InnoDB;
 ALTER TABLE `SEQ_DVS` ENGINE = InnoDB;
 
 #
+
+insert into SEQ_CSS(ID) values(100);
+
+insert into SEQ_MRS(ID) values(100);
+
+insert into SEQ_MBS(ID) values(100);
+
 insert into SEQ_RVS(ID) values(100); 
 
 insert into SEQ_PSHS(ID) values(100);

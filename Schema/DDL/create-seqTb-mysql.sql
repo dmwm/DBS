@@ -5,10 +5,9 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2010-04-19 14:34                                #
+# Created on:            2010-07-08 10:57                                #
 # ---------------------------------------------------------------------- #
 
-USE CMS_DBS3;
 
 # ---------------------------------------------------------------------- #
 # Tables                                                                 #
@@ -226,8 +225,8 @@ CREATE TABLE `SEQ_FTS` (
 # ---------------------------------------------------------------------- #
 
 CREATE TABLE `SEQ_SES` (
-    `ID` BIGINT NOT NULL,
-    CONSTRAINT `PK_SEQ_SES` PRIMARY KEY (`ID`)
+    `SE_ID` BIGINT NOT NULL,
+    CONSTRAINT `PK_SEQ_SES` PRIMARY KEY (`SE_ID`)
 );
 
 # ---------------------------------------------------------------------- #
@@ -276,10 +275,37 @@ CREATE TABLE `SEQ_DVS` (
 );
 
 # ---------------------------------------------------------------------- #
-# Add table "SEQ_BLSTS"                                                   #
+# Add table "SEQ_BLSTS"                                                  #
 # ---------------------------------------------------------------------- #
 
 CREATE TABLE `SEQ_BLSTS` (
     `ID` INTEGER NOT NULL,
     CONSTRAINT `PK_SEQ_BLSTS` PRIMARY KEY (`ID`)
+);
+
+# ---------------------------------------------------------------------- #
+# Add table "SEQ_CSS"                                                    #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `SEQ_CSS` (
+    `ID` INTEGER NOT NULL,
+    CONSTRAINT `PK_SEQ_CSS` PRIMARY KEY (`ID`)
+);
+
+# ---------------------------------------------------------------------- #
+# Add table "SEQ_MRS"                                                    #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `SEQ_MRS` (
+    `ID` INTEGER NOT NULL,
+    CONSTRAINT `PK_SEQ_MRS` PRIMARY KEY (`ID`)
+);
+
+# ---------------------------------------------------------------------- #
+# Add table "SEQ_MBS"                                                    #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `SEQ_MBS` (
+    `ID` INTEGER NOT NULL,
+    CONSTRAINT `PK_SEQ_MBS` PRIMARY KEY (`ID`)
 );
