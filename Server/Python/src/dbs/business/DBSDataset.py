@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.25 2010/03/03 16:47:03 yuyi Exp $"
-__version__ = "$Revision: 1.25 $"
+__revision__ = "$Id: DBSDataset.py,v 1.26 2010/03/04 21:02:31 afaq Exp $"
+__version__ = "$Revision: 1.26 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -37,7 +37,24 @@ class DBSDataset:
         self.datasetoutmodconfigin = daofactory(classname='DatasetOutputMod_config.Insert')
         self.proceraid= daofactory(classname='ProcessingEra.GetID')
         self.acqeraid = daofactory(classname='AcquisitionEra.GetID')
+        self.updatestatus = daofactory(classname='Dataset.UpdateStatus')
 
+    def updateStatus(self, dataset, is_dataset_valid):
+        """
+        Used to toggle the status of a dataset  is_dataset_valid=0/1 (invalid/valid)
+        """
+        conn = self.dbi.connection()
+        trans = conn.begin()
+
+        try :
+            self.updatestatus.execute(conn, trans, dataset, is_dataset_valid)
+	except Exception, ex:
+	    trans.rollback()
+            raise ex
+	finally:
+	    trans.close()
+            conn.close()
+    
     def listDatasets(self, dataset="", parent_dataset="", release_version="",
                      pset_hash="", app_name="", output_module_label="",
 		     processing_era="", acquisition_era=""):
@@ -54,8 +71,8 @@ class DBSDataset:
 					     pset_hash,
                                              app_name, 
                                              output_module_label,
-					     processing_era
-					     ,acquisition_era)
+					     processing_era,
+					     acquisition_era)
 	conn.close()
 	return result
     
