@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.23 2010/03/18 20:19:23 afaq Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.24 2010/03/19 15:04:48 afaq Exp $"
+__version__ = "$Revision: 1.24 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -21,6 +21,7 @@ from dbs.business.DBSFileLumi import DBSFileLumi
 from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
 from dbs.business.DBSStorageElement import DBSStorageElement
+from dbs.business.DBSDataType import DBSDataType
 
 __server__version__ = "$Name:  $"
 
@@ -47,6 +48,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'filelumis', self.listFileLumis)#, ['logical_file_name', 'block_name'])
         self.addService('GET', 'runs', self.listRuns)#, ['dataset', 'block_name', 'logical_file_name', 'minrun', 'maxrun'])
         self.addService('GET', 'storage_elements', self.listStorageElements)#, ['block_name', 'se_name'])
+        self.addService('GET', 'datatypes', self.listDataTypes)#, ['block_name', 'se_name'])
         
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
@@ -61,7 +63,8 @@ class DBSReaderModel(RESTModel):
         self.dbsSite = DBSSite(self.logger, self.dbi, config.dbowner)
 	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
 	self.dbsStorageElement = DBSStorageElement(self.logger, self.dbi, config.dbowner)
-    
+	self.dbsDataType = DBSDataType(self.logger, self.dbi, config.dbowner)
+
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
         method that adds services to the DBS rest model
@@ -207,4 +210,14 @@ class DBSReaderModel(RESTModel):
 	http://dbs3/storage_elements?se_name
         """
         return self.dbsStorageElements.listStorageElements(block_name, se_name)
-   
+  
+    def listDataTypes(self, datatype="", dataset=""):
+	"""
+	lists datatypes known to dbs
+	dataset : lists datatype of a dataset
+	"""
+	return  self.dbsDataType.listDataType(dataType=datatype, dataset=dataset)
+
+
+
+	    

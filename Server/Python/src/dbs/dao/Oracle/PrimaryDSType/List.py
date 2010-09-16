@@ -2,8 +2,8 @@
 """
 This module provides PrimaryDSType.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.10 2010/03/08 23:12:49 afaq Exp $"
-__version__ = "$Revision: 1.10 $"
+__revision__ = "$Id: List.py,v 1.11 2010/03/19 15:04:48 afaq Exp $"
+__version__ = "$Revision: 1.11 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -28,7 +28,7 @@ FROM %sPRIMARY_DS_TYPES PDT
         Lists all primary dataset types if no user input is provided.
         """
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/PrimaryDSType/List expects db connection from up layer.")
+	    raise Exception("dbs/dao/Oracle/PrimaryDSType/List expects db connection from upper layer.")
         sql = self.sql
         if not dsType  and not dataset:
             result = self.dbi.processData(sql, conn=conn, transaction=transaction)
@@ -38,9 +38,9 @@ FROM %sPRIMARY_DS_TYPES PDT
             result = self.dbi.processData(sql, binds, conn=conn, transaction=transaction)
 	elif dataset and dsType in ("", None):
 	    op = ("=", "like")["%" in dataset]
-	    sql += "JOIN PRIMARY_DATASETS PDS on PDS.PRIMARY_DS_ID = PDT.PRIMARY_DS_TYPE_ID \
-	            JOIN DATASETS DS ON DS.PRIMARY_DS_ID = PDS.PRIMARY_DS_ID \"\
-	            WHERE DS.DATASET %s :dataset;"  %op
+	    sql += "JOIN PRIMARY_DATASETS PDS on PDS.PRIMARY_DS_TYPE_ID = PDT.PRIMARY_DS_TYPE_ID \
+	            JOIN DATASETS DS ON DS.PRIMARY_DS_ID = PDS.PRIMARY_DS_ID \
+	            WHERE DS.DATASET %s :dataset"  %op
 	    binds={"dataset":dataset}
 	    result = self.dbi.processData(sql, binds, conn=conn, transaction=transaction)
 	else:
