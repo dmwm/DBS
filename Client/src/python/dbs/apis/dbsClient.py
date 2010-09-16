@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.44 $"
-# $Id: dbsClient.py,v 1.44 2010/05/03 20:18:40 afaq Exp $"
+# $Revision: 1.45 $"
+# $Id: dbsClient.py,v 1.45 2010/05/28 21:21:39 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -244,32 +244,40 @@ class DbsApi:
                 """
                 return self.callServer("/blocks", params = blockObj , callmethod='POST' )
 
-        def listBlocks(self, block_name="", dataset="", site_name=""):
+        def listBlocks(self, block_name="", dataset="", logical_file_name="", origin_site_name="", run_num=-1):
                 """
                 * API to list A block in DBS 
                 * name : name of the block
                 """
-		url_param=""
-		addAnd=False
+		add_to_url=""
+		amp=False
 		if block_name:
 		    parts=block_name.split('#')
 		    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
-		    url_param+="block_name=%s" %block_name
-		    addAnd=True
+		    add_to_url+="block_name=%s" %block_name
+		    amp=True
 		if dataset:
-		    if addAnd: url_param+="&"
-		    url_param="dataset=%s" %dataset
-		    addAnd=True
-		if site_name:
-		    if addAnd: url_param+="&"
-		    url_param += "site_name=%s"%site_name
-		    
-		return self.callServer("/blocks?%s" %url_param)
+		    if amp: add_to_url+="&"
+		    add_to_url="dataset=%s" %dataset
+		    amp=True
+		if origin_site_name:
+		    if amp: add_to_url+="&"
+		    add_to_url += "origin_site_name=%s" % origin_site_name
+		if  logical_file_name:
+		    if amp: add_to_url += "&"
+		    add_to_url += "logical_file_name=%s"%logical_file_name
+		    amp=True
+		if run_num:
+		    if amp: add_to_url += "&"
+		    add_to_url += "run_num=%s" %run_num
+		    amp=True
 
-        def listFiles(self, lfn="", dataset="", block="", release_version="", pset_hash="", app_name="", output_module_label="", minrun="", maxrun="", origin_site=""):
+		return self.callServer("/blocks?%s" %add_to_url)
+
+        def listFiles(self, logical_file_name="", dataset="", block="", release_version="", pset_hash="", app_name="", output_module_label="", minrun="", maxrun="", origin_site_name="", lumi_list=[]):
                 """
                 * API to list A file in DBS 
-                * lfn : lfn of file
+                * logical_file_name : logical_file_name of file
 		* dataset : dataset
 		* block : block name
 		* release_version : release version
@@ -278,7 +286,7 @@ class DbsApi:
 		* output_module_label
 		* minrun/maxrun : if you want to look for a run range use these 
 				  Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
-		* origin_site : site where file was created
+		* origin_site_name : site where file was created
                 """
 
 		add_to_url=""
@@ -308,9 +316,9 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "block_name=%s" %block_name	
 		    amp=True    
-		if lfn : 
+		if logical_file_name : 
 		    if amp: add_to_url += "&"
-		    add_to_url += "logical_file_name=%s" %lfn
+		    add_to_url += "logical_file_name=%s" % logical_file_name
 		    amp=True
 		if minrun:
 		    if amp: add_to_url += "&"
@@ -320,35 +328,39 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "maxrun=%s" %maxrun
 		    amp=True
-		if origin_site:
+		if origin_site_name:
 		    if amp: add_to_url += "&"
-		    add_to_url += "origin_site=%s" %origin_site
+		    add_to_url += "origin_site_name=%s" %origin_site_name
 		    amp=True
+		if len(lumi_list) > 0 :
+		    if amp: add_to_url += "&"
+		    add_to_url += "lumi_liste=%s" %lumi_list
+		    print "HOW DO YOU SEND A LIST via URI ???" 
 		if add_to_url:
 		    return self.callServer("/files?%s" % add_to_url )
 		else:
 		    raise Exception("You must supply parameters to listFiles calls")
 		    
-	def listFileParents(self, lfn=""):
+	def listFileParents(self, logical_file_name=""):
 	    """
 	    * API to list file parents
-	    * lfn : lfn of file
+	    * logical_file_name : logical_file_name of file
 	    """
-	    return self.callServer("/fileparents?logical_file_name=%s" %lfn)
+	    return self.callServer("/fileparents?logical_file_name=%s" %logical_file_name)
 
-        def listFileChildren(self, lfn=""):
+        def listFileChildren(self, logical_file_name=""):
 	    """
 	    * API to list file children
-	    * lfn : lfn of file
+	    * logical_file_name : logical_file_name of file
 	    """
-	    return self.callServer("/filechildren?logical_file_name=%s" %lfn)
+	    return self.callServer("/filechildren?logical_file_name=%s" %logical_file_name)
 
-	def listFileLumis(self, lfn=""):#, block_name):
+	def listFileLumis(self, logical_file_name=""):#, block_name):
 	    """
 	    * API to list Lumi for files
-	    * lfn : lfn of file
+	    * logical_file_name : logical_file_name of file
 	    """
-	    return self.callServer("/filelumis?logical_file_name=%s" %lfn)
+	    return self.callServer("/filelumis?logical_file_name=%s" %logical_file_name)
 
         def insertFiles(self, filesList=[]):
                 """
@@ -357,15 +369,15 @@ class DbsApi:
                 """
                 return self.callServer("/files", params = filesList , callmethod='POST' )
 
-        def listRuns(self, dataset="", block="", lfn="", minrun="", maxrun=""):
+        def listRuns(self, dataset="", block="", logical_file_name="", minrun="", maxrun=""):
                 """
                 * API to list A runs in DBS 
-                * lfn : lfn of file
+                * logical_file_name : logical_file_name of file
 		* dataset : dataset
 		* block : block name
 		
-		You can use lfn or dataset or block
-		The presedence order is : dataset, block, lfn
+		You can use logical_file_name or dataset or block
+		The presedence order is : dataset, block, logical_file_name
 		* minrun/maxrun : if you want to look for a run range use these 
 		Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
                 """
@@ -381,9 +393,9 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "block_name=%s" %block_name	
 		    amp=True    
-		if lfn : 
+		if logical_file_name : 
 		    if amp: add_to_url += "&"
-		    add_to_url += "logical_file_name=%s" %lfn
+		    add_to_url += "logical_file_name=%s" %logical_file_name
 		    amp=True
 		if minrun:
 		    if amp: add_to_url += "&"
@@ -404,28 +416,28 @@ class DbsApi:
                 * block_name : name of the block
 		* site_name : name of site
                 """
-		url_param=""
-		addAnd=False
+		add_to_url=""
+		amp=False
 		if block_name:
 		    parts=block_name.split('#')
 		    block_name=parts[0]+urllib.quote_plus('#')+parts[1]
-		    url_param+="block_name=%s" %block_name
-		    addAnd=True
+		    add_to_url+="block_name=%s" %block_name
+		    amp=True
 		if site_name:
-		    if addAnd: url_param+="&"
-		    url_param += "site_name=%s"%site_name
-		if url_param:
-		    return self.callServer("/sites?%s" %url_param)
+		    if amp: add_to_url+="&"
+		    add_to_url += "site_name=%s"%site_name
+		if add_to_url:
+		    return self.callServer("/sites?%s" %add_to_url)
 		else:	    
 		    return self.callServer("/sites")
 
-	def updateFileStatus(self, lfn="", is_file_valid=1):
+	def updateFileStatus(self, logical_file_name="", is_file_valid=1):
 	    """
 	    API to update file status
-	    * lfn : logical_file_name
+	    * logical_file_name : logical_file_name
 	    * is_file_valid : valid=1, invalid=0
 	    """
-	    return self.callServer("/files?logical_file_name=%s&is_file_valid=%s" %(lfn, is_file_valid), params={}, callmethod='PUT')
+	    return self.callServer("/files?logical_file_name=%s&is_file_valid=%s" %(logical_file_name, is_file_valid), params={}, callmethod='PUT')
 
 	def updateDatasetType(self, dataset, dataset_type):
 	    """
@@ -469,22 +481,22 @@ class DbsApi:
 	    API to list data types
 	    """
 
-	    url_param=""
+	    add_to_url=""
 	    if dataset:
-		url_param+="?dataset=%s" %dataset
+		add_to_url+="?dataset=%s" %dataset
 	    
-	    return self.callServer("/datatypes%s" %url_param)
+	    return self.callServer("/datatypes%s" %add_to_url)
 
         def listDataTiers(self, datatier=""):
 	    """
 	    API to list data types
 	    """
 
-	    url_param=""
+	    add_to_url=""
 	    if datatier:
-		url_param+="?data_tier_name=%s" % datatier
+		add_to_url+="?data_tier_name=%s" % datatier
 	    
-	    return self.callServer("/datatiers%s" %url_param)
+	    return self.callServer("/datatiers%s" %add_to_url)
    
 	def listBlockParents(self, block_name=""):
 	    """
