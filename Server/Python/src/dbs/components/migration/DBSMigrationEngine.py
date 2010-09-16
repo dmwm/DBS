@@ -2,8 +2,8 @@
 """
 DBS migration service engine
 """
-__revision__ = "$Id: DBSMigrationEngine.py,v 1.8 2010/08/24 21:36:14 yuyi Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSMigrationEngine.py,v 1.9 2010/08/25 15:01:55 yuyi Exp $"
+__version__ = "$Revision: 1.9 $"
 
 import threading
 import logging
@@ -231,6 +231,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 return request[0]
         except Exception, ex:
             self.logger.exception("DBS Migrate Service Failed to find migration requests")
+            if tran:
+                tran.rollback()
             raise Exception("DBS Migrate Service Failed to find migration requests: %s" %ex)
         
                 
@@ -260,6 +262,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
             self.updateBlockStatus(conn, block_name, 3)
         except Exception, ex:
             #4='FAILED'
+            if tran:
+                tran.rollback()
             self.updateBlockStatus(conn, block_name, 4)
             raise Exception ("Migration of Block %s from DBS %s has failed, Exception trace: \n %s " % (url, block_name, ex ))
 
@@ -308,6 +312,9 @@ class DBSMigrationEngine(BaseWorkerThread) :
             print "insert files"
             self.insertFile(conn,blockcontent,blockId,datasetId)
         except Exception, ex:
+            #update status
+            if tran:
+                tran.rollback()
             raise
     
     def insertFile(self, conn, blockcontent, blockId, datasetId):
@@ -375,6 +382,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                     raise Exception("File parent %s cannot be found" %fileParentList[k]['parent_logical_file_name'])
                 fileParentList[k]['parent_file_id'] = parentId
                 del fileParentList[k]['parent_logical_file_name']
+                del fileParentList[k]['logical_file_name']
             #deal with file config
             for fc in fileConfigList:
                 key=fc['app_name']+':'+fc['release_version']+':'+fc['pset_hash']+':'+fc['output_module_label']
@@ -440,13 +448,15 @@ class DBSMigrationEngine(BaseWorkerThread) :
         if newBlock:
             try:
                 for i in range(len(bpList)):
-                    if(i%intavl==0):
+                    if(i%intval==0):
                         id = self.sm.increment(conn,"SEQ_BP", False, intval)
                     bpList[i]['block_parent_id'] = id
                     id += 1
                     bpList[i]['this_block_id'] = block['block_id']
                     bpList[i]['parent_block_id'] = self.blockid.execute(conn, bpList[i]['block_name'])
                     if bpList[i]['parent_block_id'] <= 0:
+                        if tran:
+                            tran.rollback()
                         raise Exception("Parent block: %s not found in db" %bpList[i]['block_name'])
                     del bpList[i]['block_name']
                 if bpList and newBlock:
@@ -455,9 +465,12 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 self.logger.exception("DBS block parentage inseration exception: %s" %ex)
                 tran.rollback()
                 raise
+        #Ok, we can commit everything.
         try:
             tran.commit()
         except:
+            if tran:
+                tran.rollback()
             raise
         return block['block_id']
 
@@ -661,9 +674,11 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 pera = blockcontent['processing_era']
                 #is there processing era?
                 if pera:
+                    #import pdb
+                    #pdb.set_trace()
                     #check if in cache
                     if pera['processing_version'] in (self.datasetCache['processingVersion']).keys():
-                        dataset['processing_era_id'] = self.datasetCache['processingVersion'][aq['processing_version']]
+                        dataset['processing_era_id'] = self.datasetCache['processingVersion'][pera['processing_version']]
                     else:
                         try:
                             #insert processing era into db
@@ -678,7 +693,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                             self.datasetCache['processingVersion'][pera['processing_version']] = dataset['processing_era_id']
                         except Exception, ex:
                             self.logger.exception("DBS processing era inseration exception: %s" %ex)
-                            tran.rollback
+                            tran.rollback()
                             raise
                 else:
                     #no processing era for this dataset
@@ -686,6 +701,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 #let's committe first 4 db acativties before going on.
                 tran.commit()
             except:
+                if tran:
+                    tran.rollback()
                 raise
         
             #Continue for the rest.
@@ -762,11 +779,11 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 dsParentObjList=[]
                 for p in dsPList:
                     dsParentObj={'dataset_parent_id': self.sm.increment(conn,"SEQ_DP", transaction=tran), 'this_dataset_id': dataset['dataset_id']\
-                                 , 'parent_dataset_id' : self.datasetid(conn, p['parent_dataset'])}
+                                 , 'parent_dataset_id' : self.datasetid.execute(conn, p['parent_dataset'])}
                     dsParentObjList.append(dsParentObj)
                 #insert dataset parentage in bulk
                 if dsParentObjList:
-                    self.dsparentin(conn, dsParentObjList, tran)            
+                    self.dsparentin.execute(conn, dsParentObjList, tran)            
             #10 Before we commit, make dataset and output module configure mapping. 
             #We have to try to fill the map even if dataset is already in dest db
             #import pdb
@@ -782,6 +799,8 @@ class DBSMigrationEngine(BaseWorkerThread) :
                     pass
                 except Exception, ex:
                     self.logger.exception("DBS dataset and output module mapping inseration exception: %s" %ex)
+                    if tran:
+                        tran.rollback()
                     raise 
             tran.commit()
         except Exception, ex:
