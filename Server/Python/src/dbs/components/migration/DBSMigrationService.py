@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 """
-DBS Insert Buffer Component Module
+DBS Migration Service Component Module
 """
-__revision__ = "$Id: DBSMigrationService.py,v 1.1 2010/06/23 21:27:22 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSMigrationService.py,v 1.2 2010/06/23 21:30:02 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
-
-"""
-Polls FILE_BUFFER table and post entries to FILES (and related) tables
-"""
 
 import logging
 import threading
@@ -24,11 +20,10 @@ class DBSInsertBuffer(Harness):
 	# call the base class
 	Harness.__init__(self, config)
 	self.pollTime = 1
-	print "DBSUpload.__init__"
+	print "DBS Migration Service Initialization"
 	
 
     def preInitialization(self):
-	print "DBSUpload.preInitialization"
 					    
 	# use a factory to dynamically load handlers.
 	factory = WMFactory('generic')
@@ -36,9 +31,9 @@ class DBSInsertBuffer(Harness):
 	# Add event loop to worker manager
 	myThread = threading.currentThread()
 
-	pollInterval = self.config.DBSInsertBuffer.pollInterval
-	logging.info("Setting poll interval to %s seconds" % pollInterval)
-	myThread.workerThreadManager.addWorker(DBSInsertBufferPoller(self.config), pollInterval)
+	pollInterval = self.config.DBSMigrationService.pollInterval
+	logging.info("Setting poll interval to %s seconds for the migration service" % pollInterval)
+	myThread.workerThreadManager.addWorker(DBSMigrationServicePoller(self.config), pollInterval)
 	return
 
 
