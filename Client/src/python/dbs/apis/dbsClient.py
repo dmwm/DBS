@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.40 $"
-# $Id: dbsClient.py,v 1.40 2010/04/16 22:05:21 afaq Exp $"
+# $Revision: 1.41 $"
+# $Id: dbsClient.py,v 1.41 2010/04/19 15:39:58 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -481,7 +481,16 @@ class DbsApi:
 	   parts=block_name.split('#')
 	   block_name=parts[0]+urllib.quote_plus('#')+parts[1]
 	   return self.callServer("/blockparents?block_name=%s" %block_name)
-	
+	   
+	def listBlockChildren(self, block_name=""):
+	   """
+	   API to list block children
+	   * block_name : name of block whoes children needs to be found
+	   """
+	   parts=block_name.split('#')
+	   block_name=parts[0]+urllib.quote_plus('#')+parts[1]
+	   return self.callServer("/blockchildren?block_name=%s" %block_name)
+
 if __name__ == "__main__":
 	# DBS Service URL
 	url="http://cmssrv18.fnal.gov:8586/dbs3"
