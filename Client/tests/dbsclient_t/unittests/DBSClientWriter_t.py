@@ -1,33 +1,24 @@
 """
-web unittests
+client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.1 2010/01/22 23:27:52 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.2 2010/01/25 17:15:45 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 import os
 import sys
 import unittest
-from dbsserver_t.utils.DBSRestApi import DBSRestApi
+from dbs.apis.dbsClient import *
 from ctypes import *
-
-class NullDevice:
-    def write(self, s):
-	pass
-
-"""
-This is has to be change everytime running the test. So we need to make it using uuid. YG 1/11/10
-COUNTER = os.environ['DBS_TEST_COUNTER']
-"""
 
 def uuid():
     lib = CDLL("libuuid.so.1")
     uuid = create_string_buffer(16)
     return lib.uuid_generate(byref(uuid))
+
     
-	
-config = os.environ["DBS_TEST_CONFIG_WRITER"] 
-api = DBSRestApi(config) 
+url="http://cmssrv18.fnal.gov:8585/dbs3"
+api = DbsApi(url=url)
 uid = uuid()
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
@@ -41,63 +32,35 @@ site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
 flist=[]
 
-class DBSWriterModel_t(unittest.TestCase):
+class DBSClientWriter_t(unittest.TestCase):
 
     def setUp(self):
         """setup all necessary parameters"""
 
     def test01(self):
-        """test01: web.DBSWriterModel.insertPrimaryDataset: basic test"""
+        """test01: web.DBSClientWriter.insertPrimaryDataset: basic test"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'TEST'}
-        api.insert('primarydatasets', data)
+        api.insertPrimaryDataset(primaryDSObj=data)
 
     def test02(self):
-        """test02: web.DBSWriterModel.insertPrimaryDataset: duplicate should not riase an exception"""
+        """test02: web.DBSClientWriter.insertPrimaryDataset: duplicate should not riase an exception"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'TEST'}
-        api.insert('primarydatasets', data)
+        api.insertPrimaryDataset(primaryDSObj=data)
 	
-    """
-    def test03(self):
-	""test03: web.DBSReaderModel.insertPrimaryDataset: missing 'primary_ds_name, must throw exception""
-	data = {'primary_ds_type':'TEST'}
-	try:
-	    junk = api.insert('primarydatasets', data)
-	except IntegrityError:
-	     pass
-	else:
-	     fail("Exception was expected and was not raised.")
-    """
-
     def test04(self):
-	"""test04: web.DBSWriterModel.insertOutputModule: basic test"""
+	"""test04: web.DBSClientWriter.insertOutputModule: basic test"""
 	data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label}
-	api.insert('outputconfigs', data)
+	api.insertOutputConfig(outputConfigObj=data)
 
     def test05(self):
-        """test05: web.DBSWriterModel.insertOutputModule: re-insertion should not raise any errors"""
+        """test05: web.DBSClientWriter.insertOutputModule: re-insertion should not raise any errors"""
         data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label}
-        api.insert('outputconfigs', data)
+        api.insertOutputConfig(outputConfigObj=data)
 
-	
-    """
-    def test06(self):
-	""test06: web.DBSWriterModel.insertOutputModule: missing parameter must cause an exception""
-	data = {'pset_hash': self.pset_hash, 'app_name': self.app_name, 'output_module_label': self.output_module_label}
-	self.assertRaises(KeyError, self.api.insert, 'outputconfigs', data)
-	"
-	try:
-	    self.api.insert('outputconfigs', data)
-	except:
-	    pass
-	else:
-	    self.fail("Exception was expected and was not raised.")
-    	"
-    """
-    
     def test07(self):
-	"""test07: web.DBSWriterModel.insertDataset: basic test"""
+	"""test07: web.DBSClientWriter.insertDataset: basic test"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
@@ -108,10 +71,10 @@ class DBSWriterModel_t(unittest.TestCase):
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		#'processing_version': '1',  'acquisition_era_name': u'',
 		}
-	api.insert('datasets', data)
+	api.insertDataset(datasetObj=data)
 	
     def test08(self):
-	"""test08: web.DBSWriterModel.insertDataset: duplicate insert should be ignored"""
+	"""test08: web.DBSClientWriter.insertDataset: duplicate insert should be ignored"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
@@ -123,50 +86,10 @@ class DBSWriterModel_t(unittest.TestCase):
 		#'processing_version': '1',  'acquisition_era_name': u'',
 		}
 	
-	api.insert('datasets', data)
+	api.insertDataset(datasetObj=data)
 
-    """	
-    def test09(self):
-	""test09: web.DBSWriterModel.insertDataset: missing primary dataset must raise an error""
-	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset,
-		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
-		],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
-		#'processing_version': '1',  'acquisition_era_name': u'',
-		}
-	try:
-	    api.insert('datasets', data)
-	except:
-	    pass
-	else:
-	    fail("Exception was expected and was not raised.")
-	    
-    def test10(self):
-	""test10: web.DBSWriterModel.insertDataset: missing parameter must raise an error""
-	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset,
-		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
-		],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
-		#'processing_version': '1',  'acquisition_era_name': u'',
-		}
-	try:
-	    api.insert('datasets', data)
-	except:
-	    pass
-	else:
-	    fail("Exception was expected and was not raised.")
-    """
-	    
     def test11(self):
-	"""test11: web.DBSWriterModel.insertDataset: no output_configs, should be fine insert!"""
+	"""test11: web.DBSClientWriter.insertDataset: no output_configs, should be fine insert!"""
 	data = {
 		'dataset': dataset,
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
@@ -175,40 +98,40 @@ class DBSWriterModel_t(unittest.TestCase):
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		#'processing_version': '1',  'acquisition_era_name': u'',
 		}
-	api.insert('datasets', data)
+	api.insertDataset(datasetObj=data)
 
     def test12(self):
-	"""test12: web.DBSWriterModel.insertSite: basic test"""
+	"""test12: web.DBSClientWriter.insertSite: basic test"""
 	data = {
 	     "site_name" : site
 	}
-	api.insert('sites', data)
+	api.insertSite(siteObj=data)
 
 
     def test13(self):
-	"""test13: web.DBSWriterModel.insertSite: duplicate site must not throw any errors"""
+	"""test13: web.DBSClientWriter.insertSite: duplicate site must not throw any errors"""
 	data = {
 	     "site_name" : site
 	}
-        api.insert('sites', data)
+        api.insertSite(siteObj=data)
 	
     def test14(self):
-	"""test14 web.DBSWriterModel.insertBlock: basic test"""
+	"""test14 web.DBSClientWriter.insertBlock: basic test"""
 	data = {'block_name': block,
 		'origin_site': site }
 		
-	api.insert('blocks', data)
+	api.insertBlock(blockObj=data)
 
     def test14(self):
-	"""test14 web.DBSWriterModel.insertBlock: duplicate insert should not raise exception"""
+	"""test14 web.DBSClientWriter.insertBlock: duplicate insert should not raise exception"""
 	data = {'block_name': block,
 		'origin_site': site }
 		
-	api.insert('blocks', data)
+	api.insertBlock(blockObj=data)
 
     def test15(self):
-	"""test15 web.DBSWriterModel.insertFiles: basic test"""
-	data={}
+	"""test15 web.DBSClientWriter.insertFiles: basic test"""
+	
 	flist=[]
  	for i in range(10):
 	    f={  
@@ -232,12 +155,10 @@ class DBSWriterModel_t(unittest.TestCase):
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
-	data={"files":flist}
-	api.insert('files', data)
+	api.insertFiles(filesList={"files":flist})
 
     def test16(self):
-	"""test16 web.DBSWriterModel.insertFiles: duplicate insert file shuld not raise any errors"""
-	data={}
+	"""test16 web.DBSClientWriter.insertFiles: duplicate insert file shuld not raise any errors"""
 	flist=[]
  	for i in range(10):
 	    f={  
@@ -261,10 +182,9 @@ class DBSWriterModel_t(unittest.TestCase):
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
-	data={"files":flist}
-	api.insert('files', data)
+	api.insertFiles(filesList={"files":flist})
  
    
 if __name__ == "__main__":
-    SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSWriterModel_t)
+    SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientWriter_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
