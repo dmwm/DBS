@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.16 2010/08/26 21:06:50 yuyi Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.17 2010/09/14 14:53:54 yuyi Exp $"
+__version__ = "$Revision: 1.17 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -288,9 +288,9 @@ class DBSMigrate:
 	    fconfig_list = self.outputCoflist.execute(conn, block_id=block['block_id'])
 	    acqEra = {}
 	    prsEra = {}
-	    if(dataset["acquisition_era_name"] != "" ):
+	    if(dataset["acquisition_era_name"] not in ( "", None) ):
 		acqEra  = self.aelist.execute(conn, acquisitionEra=dataset["acquisition_era_name"])[0] 
-	    if(dataset["processing_version"] != "" ):
+	    if(dataset["processing_version"] not in ("", None) ):
 		prsEra  = self.pelist.execute(conn, processingV=dataset["processing_version"])[0]
 	    primds = self.primdslist.execute(conn, primary_ds_name=dataset["primary_ds_name"])[0]
 	    del dataset["primary_ds_name"], dataset['primary_ds_type']
