@@ -28,8 +28,8 @@ class migrateDBS2TODBS3:
 	self.block_time_lst=[]
     def migrateWithParents(self, dataset):
 	#list all blocks in this dataset
-	self.dirName="migratelog_"+str(time.time()).split('.')[0]
-#self.dirName="_xml/" + hashlib.md5(dataset).hexdigest()
+	#self.dirName="migratelog_"+str(time.time()).split('.')[0]
+	self.dirName=hashlib.md5(dataset).hexdigest()
 	blocks=self.dbs2api.listBlocks(dataset)
 	for ablock in blocks:
 	    block_time=self.migrateBlock(ablock)
@@ -54,8 +54,10 @@ class migrateDBS2TODBS3:
 	fileName = os.path.join(self.dirName, blockName.replace('/', '_').replace('#', '_') + ".xml")
 	if os.path.exists(fileName):
 		data = open(fileName, "r").read()
+		print "done reading XML input"
+		print time.time()
 	else:	
-		data=self.dbs2api.listDatasetContents(dataset, blockName)
+		#data=self.dbs2api.listDatasetContents(dataset, blockName)
 		fp=open(fileName, "w")
 		fp.write(data)
 		fp.close()
@@ -199,7 +201,17 @@ class migrateDBS2TODBS3:
 					start_time=time.time()
 					#for file in self.files:
 					#	print file
-					self.dbs3api.insertFiles({"files" : self.files})
+
+					filejson=open("filejson.json", "w")
+					filejson.write(str(self.files))
+					filejson.close()
+					print "jsonfile written"
+					print time.time()
+					last=0
+					batchsize=10
+					for i in range (batchsize, len(self.files)+batchsize, batchsize):
+					    self.dbs3api.insertFiles({"files" : self.files[last:i]})
+					    last=i
 					end_time=time.time()
 					block_time['TimeSpent']=end_time-start_time
 					block_time['block_weight']=long(len(self.files))
@@ -216,7 +228,8 @@ class migrateDBS2TODBS3:
 					#print "fin"
 				except Exception, ex:
 					print ex
-				
+	print "Starting parsing XML..."
+	print time.time()	
   	xml.sax.parseString (data, Handler (self.dbs3api))
 	return block_time
 
@@ -231,6 +244,10 @@ if __name__=='__main__':
 	dbs3url=sys.argv[2]
 	dataset=sys.argv[3]
 	# DBS3 migration service 
+
+	print "START: "
+	print time.time()
+
 	mig_srvc=migrateDBS2TODBS3(dbs2url, dbs3url)
 	mig_srvc.migrateWithParents(dataset)
 	block_time_lst=mig_srvc.getStats()
