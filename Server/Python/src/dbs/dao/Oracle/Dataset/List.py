@@ -3,8 +3,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.21 2010/03/03 19:59:46 yuyi Exp $"
-__version__ = "$Revision: 1.21 $"
+__revision__ = "$Id: List.py,v 1.22 2010/03/04 17:33:43 yuyi Exp $"
+__version__ = "$Revision: 1.22 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -38,7 +38,7 @@ SELECT D.DATASET_ID, D.DATASET, D.IS_DATASET_VALID,
         OMC.OUTPUT_MODULE_LABEL,
         RV.RELEASE_VERSION,
         PSH.PSET_HASH,
-        AEX.APP_NAME,
+        AEX.APP_NAME
         
 FROM %sDATASETS D
 JOIN %sPRIMARY_DATASETS P ON P.PRIMARY_DS_ID = D.PRIMARY_DS_ID
