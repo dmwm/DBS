@@ -2,8 +2,8 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.4 2010/01/20 22:02:54 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: GetID.py,v 1.5 2010/01/21 21:10:28 afaq Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
@@ -41,12 +41,12 @@ class GetID(DBFormatter):
 		setAnd=True
 	if not release_version == "":
 		if setAnd : sql += " AND "
-		sql += " R.VERSION=:release_version"
+		sql += " R.RELEASE_VERSION=:release_version"
 		binds["release_version"]=release_version
 		setAnd=True
 	if not pset_hash == "":
 		if setAnd : sql += " AND "
-		sql += " P.HASH=:pset_hash"
+		sql += " P.PSET_HASH=:pset_hash"
 		binds["pset_hash"]=pset_hash
 		setAnd=True
 	if not output_label == "":
