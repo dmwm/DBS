@@ -2,8 +2,8 @@
 """
 This module provides Block.UpdateStats data access object.
 """
-__revision__ = "$Id: UpdateStats.py,v 1.2 2010/01/05 00:24:57 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: UpdateStats.py,v 1.3 2010/01/12 17:37:59 afaq Exp $"
+__version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 class UpdateStats(DBFormatter):
@@ -22,5 +22,4 @@ class UpdateStats(DBFormatter):
         """
         for a given block_id
         """	
-	print self.sql
         result = self.dbi.processData(self.sql, blockStats, conn, transaction)
