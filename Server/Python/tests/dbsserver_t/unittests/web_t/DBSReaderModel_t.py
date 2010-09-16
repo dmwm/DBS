@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.14 2010/03/19 12:57:37 yuyi Exp $"
-__version__ = "$Revision: 1.14 $"
+__revision__ = "$Id: DBSReaderModel_t.py,v 1.15 2010/03/19 17:57:40 yuyi Exp $"
+__version__ = "$Revision: 1.15 $"
 
 import os, sys, imp
 import json
@@ -30,7 +30,6 @@ class DBSReaderModel_t(unittest.TestCase):
             testparams = outDict
 	#import pdb
 	#pdb.set_trace()
-    """
     def test01(self):
         print '\n Test01 web.DBSReaderModel.listPrimaryDatasets: basic test'
         api.list('primarydatasets')
@@ -202,7 +201,7 @@ class DBSReaderModel_t(unittest.TestCase):
 	    pass
 	else:
 	    self.fail("Exception was expected and was not raised.")
-    """
+    
     def test33(self):
         print "\n Test33 web.DBSReaderModel.listFiles: basic test"
 	api.list('files', dataset=testparams['dataset'])
@@ -251,7 +250,6 @@ class DBSReaderModel_t(unittest.TestCase):
         except: pass
         else: self.fail("Exception was expected and was not raised")
        
-    """   
     def test38(self):
         print "\n Test38 web.DBSReaderModel.listDatasetParents: basic test"
         api.list('datasetparents', dataset="*")
@@ -416,8 +414,35 @@ class DBSReaderModel_t(unittest.TestCase):
         try: api.list('filelumis')
         except: pass
         else: self.fail("Exception was expected and was not raised")
-       
-   """    
+ 
+    def test72(self):
+        print '\n Test72 web.DBSReaderModel.listFile with maxrun, minrun: basic '
+        api.list('files', maxrun=testparams['run_num'], minrun=testparams['run_num']-1000, dataset=testparams['dataset'])
+
+    def test73(self):
+        print '\n Test73 web.DBSReaderModel.listFile with maxrun, minrun:basic '
+        api.list('files', maxrun=testparams['run_num'], minrun=testparams['run_num']-1000, block_name=testparams['block'])
+
+    def test74(self):
+        print '\n Test74 web.DBSReaderModel.listFile with original site: basic '
+        api.list('files', origin_site=testparams['site'], dataset=testparams['dataset'])
+
+    def test75(self):
+        print '\n Test75 web.DBSReaderModel.listFile with original site: basic '
+        api.list('files', origin_site=testparams['site'], block_name=testparams['block'])
+
+    def test76(self):
+        print '\n Test76 web.DBSReaderModel.listFile with config info: basic '
+        api.list('files',  block_name=testparams['block'],
+		release_version=testparams['release_version'] , pset_hash=testparams['pset_hash'], 
+		app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
+
+    def test77(self):
+        print '\n Test77 web.DBSReaderModel.listFile with config info: basic '
+        api.list('files',  dataset=testparams['dataset'], 
+                release_version=testparams['release_version'] , pset_hash=testparams['pset_hash'], 
+                app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
+      
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSReaderModel_t)
     infofile=open("info.dict","r")    
