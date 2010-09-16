@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.57 2010/08/12 19:01:05 afaq Exp $"
-__version__ = "$Revision: 1.57 $"
+__revision__ = "$Id: DBSFile.py,v 1.58 2010/08/19 21:25:46 afaq Exp $"
+__version__ = "$Revision: 1.58 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -282,7 +282,7 @@ class DBSFile:
 			    iLumi += 1
 			    fldao["file_id"] = filein["file_id"]
 			    flumis2insert.append(fldao)
-    
+   		 
 		if f.has_key("file_parent_list"):
 		    #file parents    
 		    fplist = f["file_parent_list"]
@@ -301,6 +301,8 @@ class DBSFile:
 			    fpdao["this_file_id"] = filein["file_id"]
 			    lfn = fp["file_parent_lfn"]
 			    #lfn=fp
+			    pflid = self.fileid.execute(conn, lfn, transaction=tran)
+			    if pflid == -1 : raise Exception("The parent file %s for file %s not found in DBS" %(lfn, f["logical_file_name"]) )
 			    fpdao["parent_file_id"] = self.fileid.execute(conn, lfn, transaction=tran)
 			    fparents2insert.append(fpdao)
 
