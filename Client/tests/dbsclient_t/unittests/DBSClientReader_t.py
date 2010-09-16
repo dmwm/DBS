@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSClientReader_t.py,v 1.18 2010/05/05 20:11:08 afaq Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: DBSClientReader_t.py,v 1.19 2010/05/28 21:20:36 afaq Exp $"
+__version__ = "$Revision: 1.19 $"
 
 import os
 import json
@@ -50,42 +50,42 @@ class DBSClientReader_t(unittest.TestCase):
 	api.listDatasets()
     
     def test06(self):
-	"""test06 unittestDBSClientReader_t.listPrimaryDatasets: """
+	"""test06 unittestDBSClientReader_t.listDatasets: """
 	api.listDatasets(dataset=testparams['dataset'])
     
     def test07(self):
-	"""test07 unittestDBSClientReader_t.listPrimaryDatasets: """
+	"""test07 unittestDBSClientReader_t.listDatasets: """
 	api.listDatasets(dataset=testparams['dataset']+"*")
     
     def test08(self):
-	"""test08 unittestDBSClientReader_t.listPrimaryDatasets: """
+	"""test08 unittestDBSClientReader_t.listDatasets: """
 	api.listDatasets(release_version=testparams['release_version'])
     
     
     def test09(self):
-	"""test09 unittestDBSClientReader_t.listPrimaryDatasets: """
+	"""test09 unittestDBSClientReader_t.listDatasets: """
 	api.listDatasets(pset_hash=testparams['pset_hash'])
     
     def test10(self):
-	"""test10 unittestDBSClientReader_t.listPrimaryDatasets: """
+	"""test10 unittestDBSClientReader_t.listDatasets: """
 	api.listDatasets(app_name=testparams['app_name'])
 	
     def test11(self):
-	"""test11 unittestDBSClientReader_t.listPrimaryDatasets: """
+	"""test11 unittestDBSClientReader_t.listDatasets: """
 	api.listDatasets(output_module_label=testparams['output_module_label'])
 
     def test12(self):
-	"""test12 unittestDBSClientReader_t.listPrimaryDatasets: """
+	"""test12 unittestDBSClientReader_t.listDatasets: """
 	api.listDatasets(release_version=testparams['release_version'], pset_hash=testparams['pset_hash'], \
 		app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
 
     def test13(self):
-	"""test13 unittestDBSClientReader_t.listPrimaryDatasets: """
+	"""test13 unittestDBSClientReader_t.listDatasets: """
 	api.listDatasets(dataset=testparams['dataset'], release_version=testparams['release_version'], \
 		pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
 
     def test14(self):
-	"""test14 unittestDBSClientReader_t.listPrimaryDatasets: """
+	"""test14 unittestDBSClientReader_t.listDatasets: """
 	api.listDatasets(dataset=testparams['dataset'], release_version=testparams['release_version'])
 
     def test15(self):
@@ -140,17 +140,17 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test27(self):
 	"""test27 unittestDBSClientReader_t.listBlocks: """
-	api.listBlocks(block_name=testparams['block'], site_name=testparams['site'])
+	api.listBlocks(block_name=testparams['block'], origin_site_name=testparams['site'])
 
     def test28(self):
 	"""test28 unittestDBSClientReader_t.listBlocks: """
-	api.listBlocks(dataset=testparams['dataset'], site_name=testparams['site'])
+	api.listBlocks(dataset=testparams['dataset'], origin_site_name=testparams['site'])
     
     def test29(self):
 	"""test29 unittestDBSClientReader_t.listBlocks: """
-	api.listBlocks(dataset=testparams['dataset'], block_name=testparams['block'], site_name=testparams['site'])
+	api.listBlocks(dataset=testparams['dataset'], block_name=testparams['block'], origin_site_name=testparams['site'])
 	try: 
-	    api.listBlocks(site_name=testparams['site'])
+	    api.listBlocks(origin_site_name=testparams['site'])
 	except:
 	    pass
 	else: 
@@ -174,7 +174,7 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test34(self):
 	"""test34 unittestDBSClientReader_t.listFiles: basic test"""
-	api.listFiles(lfn=testparams['files'][0])	
+	api.listFiles(logical_file_name=testparams['files'][0])	
     
     def test35(self):
 	"""test35 unittestDBSClientReader_t.listFiles: basic test"""
@@ -186,7 +186,7 @@ class DBSClientReader_t(unittest.TestCase):
 		                pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
     def test37(self):
 	"""test37 unittestDBSClientReader_t.listFiles: basic test"""
-	api.listFiles(lfn=testparams['files'][0], pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
+	api.listFiles(logical_file_name=testparams['files'][0], pset_hash=testparams['pset_hash'], app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
     
     def test38(self):
 	"""test38 unittestDBSClientReader_t.listFiles: basic test"""
@@ -198,11 +198,11 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test40(self):
 	"""test40 unittestDBSClientReader_t.listFiles: basic test"""
-	api.listFiles(lfn="doesnotexist")
+	api.listFiles(logical_file_name="doesnotexist")
 
     def test41(self):
 	"""test41 unittestDBSClientReader_t.listFileParents: basic test"""	
-	api.listFileParents(lfn=testparams['files'][0])
+	api.listFileParents(logical_file_name=testparams['files'][0])
     
     def test42(self):
 	"""test42 unittestDBSClientReader_t.listFileParents: basic test"""	
@@ -215,11 +215,11 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test43(self):
 	"""test43 unittestDBSClientReader_t.listFileParents: basic test"""	
-	api.listFileParents(lfn="doesnotexist")
+	api.listFileParents(logical_file_name="doesnotexist")
 
     def test44(self):
 	"""test44 unittestDBSClientReader_t.listFileLumis: basic test"""	
-	api.listFileLumis(lfn=testparams['files'][0])
+	api.listFileLumis(logical_file_name=testparams['files'][0])
     
     def test45(self):
 	"""test45 unittestDBSClientReader_t.listFileLumis: basic test"""	
@@ -232,63 +232,67 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test46(self):
 	"""test46 unittestDBSClientReader_t.listFileLumis: basic test"""	
-	api.listFileLumis(lfn="doesnotexist")
+	api.listFileLumis(logical_file_name="doesnotexist")
 
+    """
     def test47(self):
-	"""test47 unittestDBSClientReader_t.listRuns : basic test"""
+	""test47 unittestDBSClientReader_t.listRuns : basic test""
 	api.listRuns()
     
     def test48(self):
-	"""test48 unittestDBSClientReader_t.listRuns : basic test"""
+	""test48 unittestDBSClientReader_t.listRuns : basic test""
 	api.listRuns(dataset=testparams['dataset'])
 
     def test49(self):
-	"""test49 unittestDBSClientReader_t.listRuns : basic test"""
+	""test49 unittestDBSClientReader_t.listRuns : basic test""
 	api.listRuns(block=testparams['block'])
 	
     def test50(self):
-	"""test50 unittestDBSClientReader_t.listRuns : basic test"""
-	api.listRuns(lfn=testparams['files'][0])
+	""test50 unittestDBSClientReader_t.listRuns : basic test""
+	api.listRuns(logical_file_name=testparams['files'][0])
 	
     def test51(self):
-	"""test51 unittestDBSClientReader_t.listRuns : basic test"""
-	api.listRuns(dataset=testparams['dataset'], block=testparams['block'], lfn=testparams['files'][0])
+	""test51 unittestDBSClientReader_t.listRuns : basic test""
+	api.listRuns(dataset=testparams['dataset'], block=testparams['block'], logical_file_name=testparams['files'][0])
 
     def test52(self):
-	"""test52 unittestDBSClientReader_t.listRuns : basic test"""
-	api.listRuns(block=testparams['block'], lfn=testparams['files'][0])
+	""test52 unittestDBSClientReader_t.listRuns : basic test""
+	api.listRuns(block=testparams['block'], logical_file_name=testparams['files'][0])
 
     def test53(self):
-	"""test53 unittestDBSClientReader_t.listRuns :"""
-	api.listRuns(dataset=testparams['dataset'], lfn=testparams['files'][0])
+	""test53 unittestDBSClientReader_t.listRuns :""
+	api.listRuns(dataset=testparams['dataset'], logical_file_name=testparams['files'][0])
 
     def test54(self):
-        """test54 unittestDBSClientReader_t.listRuns : basic test"""
+        ""test54 unittestDBSClientReader_t.listRuns : basic test""
         api.listRuns(minrun=testparams['runs'][1])
  
     def test55(self):
-        """test55 unittestDBSClientReader_t.listRuns : basic test"""
+        ""test55 unittestDBSClientReader_t.listRuns : basic test""
         api.listRuns(maxrun=testparams['runs'][2])
     
     def test55(self):
-        """test55 unittestDBSClientReader_t.listRuns : basic test"""
+        ""test55 unittestDBSClientReader_t.listRuns : basic test""
         api.listRuns(minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
 
     def test56(self):
-	"""test56 unittestDBSClientReader_t.listRuns : basic test"""
+	""test56 unittestDBSClientReader_t.listRuns : basic test""
 	api.listRuns(dataset=testparams['dataset'], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
 
     def test57(self):
-	"""test57 unittestDBSClientReader_t.listRuns : basic test"""
+	""test57 unittestDBSClientReader_t.listRuns : basic test""
 	api.listRuns(block=testparams['block'], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
 	
     def test58(self):
-	"""test58 unittestDBSClientReader_t.listRuns : basic test"""
-	api.listRuns(lfn=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
+	""test58 unittestDBSClientReader_t.listRuns : basic test""
+	api.listRuns(logical_file_name=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
 
     def test59(self):
-	"""test59 unittestDBSClientReader_t.listRuns : basic test"""
-	api.listRuns(dataset=testparams['dataset'], block=testparams['block'], lfn=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
+	""test59 unittestDBSClientReader_t.listRuns : basic test""
+	api.listRuns(dataset=testparams['dataset'], block=testparams['block'], logical_file_name=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
+
+    """
+
 
     def test60(self):
 	"""test60 unittestDBSClientReader_t.listDatasetParents basic test"""
@@ -304,7 +308,7 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test63(self):
 	"""test63 unittestDBSClientReader_t.listFiles: NOT YET SUPPORTED"""
-	#api.listFiles(lfn=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])	
+	#api.listFiles(logical_file_name=testparams['files'][0], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])	
 	pass
 	
     def test64(self):
@@ -329,11 +333,11 @@ class DBSClientReader_t(unittest.TestCase):
 	
     def test69(self):
 	"""test74 web.DBSReaderModel.listFile with original site: basic"""
-	api.listFiles(origin_site=testparams['site'], dataset=testparams['dataset'])
+	api.listFiles(origin_site_name=testparams['site'], dataset=testparams['dataset'])
 
     def test70(self):
 	"""test75 web.DBSReaderModel.listFile with original site: basic"""
-	api.listFiles(origin_site=testparams['site'], block=testparams['block'])
+	api.listFiles(origin_site_name=testparams['site'], block=testparams['block'])
 
     def test71(self):
 	"""list dataset parents"""
@@ -353,11 +357,11 @@ class DBSClientReader_t(unittest.TestCase):
 	
     def test75(self):
 	"""list file parents"""
-	api.listFileParents(lfn=testparams['files'][0])
+	api.listFileParents(logical_file_name=testparams['files'][0])
 	
     def test76(self):
 	"""list file children"""
-	api.listFileChildren(lfn=testparams['parent_files'][0])
+	api.listFileChildren(logical_file_name=testparams['parent_files'][0])
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)

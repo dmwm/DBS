@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.18 2010/05/27 20:58:18 afaq Exp $"
-__version__ = "$Revision: 1.18 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.19 2010/05/28 21:20:36 afaq Exp $"
+__version__ = "$Revision: 1.19 $"
 
 import os
 import sys
@@ -166,17 +166,17 @@ class DBSClientWriter_t(unittest.TestCase):
     def test14(self):
 	"""test14 web.DBSClientWriter.insertBlock: basic test"""
 	data = {'block_name': block,
-		'origin_site': site }
+		'origin_site_name': site }
 		
 	api.insertBlock(blockObj=data)
 	# insert the parent block as well
-	data = {'block_name': parent_block, 'origin_site': site }
+	data = {'block_name': parent_block, 'origin_site_name': site }
 	api.insertBlock(blockObj=data)
 
     def test15(self):
 	"""test15 web.DBSClientWriter.insertBlock: duplicate insert should not raise exception"""
 	data = {'block_name': block,
-		'origin_site': site }
+		'origin_site_name': site }
 		
 	api.insertBlock(blockObj=data)
 
@@ -271,7 +271,7 @@ class DBSClientWriter_t(unittest.TestCase):
     def test19(self):
 	"""test19 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
 	logical_file_name = "/store/mc/%s/%i.root" %(uid, 1)
-	api.updateFileStatus(lfn=logical_file_name, is_file_valid=0)
+	api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
 
     def test20(self):
 	"""test20 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status"""
