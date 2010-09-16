@@ -16,10 +16,10 @@ export PYTHONPATH=$DBS3_SERVER_ROOT/src:$WTBASE/python:$DBS3_ROOT/External/Cherr
 export WMAGENT_CONFIG=$DBS3_ROOT/DBS/DBS3/Server/Python/control/cms_dbs_writer.py
 
 #start all components as daemons
-$WMCORE_BIN/wmcoreD --start
+#$WMCORE_BIN/wmcoreD --start
 
 #stop all components
-$WMCORE_BIN/wmcoreD --stop
+#$WMCORE_BIN/wmcoreD --stop
 
 #start DBS web services as an none-deamobn
 dbs3_start1(){

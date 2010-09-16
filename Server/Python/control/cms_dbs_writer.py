@@ -70,3 +70,12 @@ config.DBSMigrationMover.pollInterval = 1
 config.DBSMigrationMover.namespace= "dbs.components.migration.DBSMigrationMover"
 config.DBSMigrationMover.componentDir = config.General.workDir + "/Logs/MigrationMover"
 config.DBSMigrationMover.workerThreads = 1
+
+#config file buffer
+config.component_('DBSInsertBuffer')
+config.DBSInsertBuffer.default_expires=300
+config.DBSInsertBuffer.pollInterval = 1
+config.DBSInsertBuffer.namespace= "dbs.components.insertbuffer.DBSInsertBuffer"
+config.DBSInsertBuffer.componentDir = config.General.workDir + "/DBSInsertBuffer"
+config.DBSInsertBuffer.workerThreads = 1
+
