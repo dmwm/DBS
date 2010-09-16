@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for ProcessedDatasets table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2010/02/11 18:03:28 afaq Exp $ "
+__revision__ = "$Revision: 1.8 $"
+__version__  = "$Id: Insert.py,v 1.8 2010/03/05 19:51:41 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -20,11 +20,13 @@ class Insert(DBFormatter):
 		VALUES (:processed_ds_id, :processed_ds_name)
 	""" % self.owner
 
-    def execute( self, daoinput, conn=None, transaction=False ):
+    def execute( self, conn, daoinput, transaction=False ):
         """
         daoinput must be validated to have the following keys:
-        processeddsid, processeddsname"""
-
+        processeddsid, processeddsname
+	"""
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/ProcessedDataset/Insert expects db connection from up layer.")
         try:
             self.dbi.processData(self.sql, daoinput, conn, transaction)
         except exceptions.IntegrityError, ex:

@@ -2,8 +2,8 @@
 """
 This module provides ProcessedDataset.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.4 2010/02/11 18:03:28 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
+__revision__ = "$Id: GetID.py,v 1.5 2010/03/05 19:51:41 yuyi Exp $"
+__version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -23,10 +23,12 @@ SELECT PD.PROCESSED_DS_ID, PD.PROCESSED_DS_NAME
 FROM %sPROCESSED_DATASETS PD 
 """ % (self.owner)
 
-    def execute(self, name, conn = None, transaction = False):
+    def execute(self, conn, name, transaction = False):
         """
         returns id for a given processed dataset name
         """
+	if not conn:
+	    raise Exception("dbs/dao/Oracle/ProcessedDataset/GetID expects db connection from up layer.")
         sql = self.sql
         sql += "WHERE PD.PROCESSED_DS_NAME = :processeddsname" 
         binds = {"processeddsname":name}
