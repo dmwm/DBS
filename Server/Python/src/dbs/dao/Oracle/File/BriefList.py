@@ -2,8 +2,8 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: BriefList.py,v 1.3 2010/08/23 18:08:41 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: BriefList.py,v 1.4 2010/08/30 16:21:44 afaq Exp $"
+__version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -93,15 +93,16 @@ class BriefList(DBFormatter):
 
         # KEEP lumi_list as the LAST CHECK in this DAO, this is a MUST ---  ANZAR 08/23/2010
         if (lumi_list and len(lumi_list) != 0):
-            wheresql += " AND FL.LUMI_SECTION_NUM in :lumi_list"
-            newbinds=[]
+            wheresql += " AND FL.LUMI_SECTION_NUM in ( "
+	    counter=0
             for alumi in lumi_list:
-                cpbinds={}
-                cpbinds.update(binds)
-                cpbinds["lumi_list"]=alumi
-                newbinds.append(cpbinds)
-            binds=newbinds
-	
+		if counter>0:
+		    wheresql += ","
+		wheresql += ":lumi_b%s" %counter
+		binds.update({"lumi_b%s" %counter : alumi})
+		counter+=1
+	    wheresql += ")"
+
 	sql = " ".join((basesql, joinsql, wheresql))
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
