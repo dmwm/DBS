@@ -2,8 +2,8 @@
 """
 This module provides MigrationRequests.List data access object.
 """
-__revision__ = "$Id: FindMigrateableBlocks.py,v 1.2 2010/08/18 20:12:22 yuyi Exp $"
-__version__ = "$Revision: 1.2 $"
+__revision__ = "$Id: FindMigrateableBlocks.py,v 1.3 2010/08/18 21:18:22 yuyi Exp $"
+__version__ = "$Revision: 1.3 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -20,7 +20,7 @@ class FindMigrateableBlocks(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """SELECT MIGRATION_BLOCK_ID, MIGRATION_BLOCK_NAME, MIGRATION_ORDER 
 			FROM %s MIGRATION_BLOCKS 
-			WHERE MIGRATION_REQUEST_ID=:migration_request_id AND MIGRATION_STATUS= 1 ORDER BY MIGRATION_ORDER DESC
+			WHERE MIGRATION_REQUEST_ID=:migration_request_id AND MIGRATION_STATUS= 0 ORDER BY MIGRATION_ORDER DESC
 			""" % (self.owner)
 
     def execute(self, conn, migration_request_id="", transaction=False):
