@@ -3,8 +3,8 @@
 DBS Migration Service Client Interface Rest Model module
 """
 
-__revision__ = "$Id: DBSMigrateModel.py,v 1.3 2010/06/28 16:09:04 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
+__revision__ = "$Id: DBSMigrateModel.py,v 1.4 2010/07/29 22:01:13 yuyi Exp $"
+__version__ = "$Revision: 1.4 $"
 
 import re
 import cjson
@@ -42,7 +42,7 @@ class DBSMigrateModel(RESTModel):
 	indata = cjson.decode(body)
 	indata.update({"creation_date": dbsUtils().getTime(), \
 		"last_modification_date" : dbsUtils().getTime(), \
-		"create_by" : dbsUtils().getCreateBy() , "last_modified_by" : dbsUtils().getCreateBy() })
+		"create_by" : dbsUtils().getCreateBy() , "last_modified_by" : 0 })
 	return self.dbsMigrate.insertMigrationRequest(indata)
 
     def status(self, migration_request_id="", block_name="", dataset="", user=""):

@@ -3,8 +3,8 @@
 This module provides dataset migration business object class. 
 """
 
-__revision__ = "$Id: DBSMigrate.py,v 1.7 2010/07/09 14:44:28 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSMigrate.py,v 1.8 2010/07/29 22:00:25 yuyi Exp $"
+__version__ = "$Revision: 1.8 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -28,6 +28,9 @@ class DBSMigrate:
 	self.dbi = dbi
 	
 	self.sm	= daofactory(classname="SequenceManager")
+	self.primdslist     = daofactory(classname="PrimaryDataset.List")
+	self.datasetlist    = daofactory(classname="Dataset.List")
+	self.filelist       = daofactory(classname="File.List") 
 	self.mgrlist = daofactory(classname="MigrationRequests.List")
 	self.mgrin   = daofactory(classname="MigrationRequests.Insert")
 	self.mgrup   = daofactory(classname="MigrationRequests.Update")
@@ -186,7 +189,7 @@ class DBSMigrate:
 	tran = conn.begin()
 	try:
 	    # insert the request
-	    request.update(migration_status='PENDING')
+	    request.update(migration_status=0)
 	    request['migration_request_id'] = self.sm.increment(conn, "SEQ_MR", tran)
 	    self.mgrin.execute(conn, request, tran)
 	    # INSERT the ordered_list
@@ -194,9 +197,10 @@ class DBSMigrate:
 	    for iter in reversed(range(len(ordered_list))):
 		if len(ordered_list[iter]) > 0:
 		    daoinput = [ {"migration_block_id" : self.sm.increment(conn, "SEQ_MB", tran), "migration_request_id" : request["migration_request_id"], \
-				"migration_block_name" : blk, "migration_order" : iter, "migration_status" : "PENDING", "creation_date": dbsUtils().getTime(), \
+				"migration_block_name" : blk, "migration_order" : iter,
+				"migration_status" : 0, "creation_date": dbsUtils().getTime(), \
 				"last_modification_date" : dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() , \
-				"last_modified_by" : dbsUtils().getCreateBy() } \
+				"last_modified_by" : 0 } \
 						for blk in ordered_list[iter] ]  
 		    self.mgrblkin.execute(conn, daoinput, tran)	
 		    totalQueued+=len(ordered_list[iter])
