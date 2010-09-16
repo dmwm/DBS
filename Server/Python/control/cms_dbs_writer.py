@@ -5,6 +5,14 @@ import os, logging
 from WMCore.Configuration import Configuration
 import WMCore.WMInit
 
+#Oracle
+#databaseOwner='CMS_LUM_OWNER'
+
+#Mysql
+databaseOwner='__MYSQL__'
+
+DBSVersion = 'DBS_3_0_0'
+
 config = Configuration()
 
 #Agent section is required by WMCore
@@ -20,26 +28,24 @@ config.General.workDir = os.environ['DBS3_ROOT']
 #CoreDatabase section is required by WMCore. 
 config.section_("CoreDatabase")
 # User specific parameter
-# mySql
-config.CoreDatabase.dbowner = '__MYSQL__'
-config.CoreDatabase.version = 'DBS_3_0_0'
-config.CoreDatabase.connectUrl = 'mysql://acct:pd@hostname:port#/CMS_DBS3'
+config.CoreDatabase.version = DBSVersion
+config.CoreDatabase.dbowner = databaseOwner
+#mySql
+config.CoreDatabase.connectUrl = 'mysql://user:pd@cmssrv18.fnal.gov:3307/CMS_DBS3'
 config.CoreDatabase.engineParameters = {'pool_size': 50, 'max_overflow': 10, 'pool_timeout':200 }
 #Oracle
-#config.CoreDatabase.dbowner = 'CMS_LUM_OWNER'
-#config.CoreDatabase.version = 'DBS_3_0_0'
-#config.CoreDatabase.connectUrl = 'oracle://acct:pd@cmscald'
+#config.CoreDatabase.connectUrl = 'oracle://user:pd@cmscald'
 #config.CoreDatabase.engineParameters = {'pool_size': 15, 'max_overflow': 10, 'pool_timeout': 200 }
 
 #config web server. These are required fields by WMCore althrough some of them are useless.
 config.webapp_("cmsdbs")
 config.cmsdbs.componentDir = config.General.workDir + "/Logs/DBSServer"
 config.cmsdbs.server.host = "::"
-config.cmsdbs.server.port = 8686
+config.cmsdbs.server.port = 8688
 config.cmsdbs.templates = WMCore.WMInit.getWMBASE() + '/src/templates/WMCore/WebTools'
 config.cmsdbs.admin = "yuyi@fnal.gov"
 config.cmsdbs.title = 'DBS Server'
-config.cmsdbs.dbowner = '__MYSQL__'
+config.cmsdbs.dbowner = databaseOwner
 config.cmsdbs.description = 'CMS DBS Service'
 config.cmsdbs.default_expires=300
 config.cmsdbs.section_('views')
@@ -60,7 +66,7 @@ MIGRATE.section_('model')
 MIGRATE.model.object = 'dbs.web.DBSMigrateModel'
 MIGRATE.section_('formatter')
 MIGRATE.formatter.object = 'WMCore.WebTools.RESTFormatter'
-MIGRATE.version = 'DBS_3_0_0'
+MIGRATE.version = DBSVersion
 MIGRATE.nthreads = 4
 
 #config migration mover
@@ -71,11 +77,10 @@ config.DBSMigrationMover.namespace= "dbs.components.migration.DBSMigrationMover"
 config.DBSMigrationMover.componentDir = config.General.workDir + "/Logs/MigrationMover"
 config.DBSMigrationMover.workerThreads = 1
 
-#config file buffer
+#Config insert buffer
 config.component_('DBSInsertBuffer')
 config.DBSInsertBuffer.default_expires=300
 config.DBSInsertBuffer.pollInterval = 1
 config.DBSInsertBuffer.namespace= "dbs.components.insertbuffer.DBSInsertBuffer"
-config.DBSInsertBuffer.componentDir = config.General.workDir + "/DBSInsertBuffer"
+config.DBSInsertBuffer.componentDir = config.General.workDir + "Logs/DBSInsertBuffer"
 config.DBSInsertBuffer.workerThreads = 1
-
