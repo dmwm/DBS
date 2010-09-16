@@ -3,17 +3,20 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.36 2010/05/03 20:21:10 afaq Exp $"
-__version__ = "$Revision: 1.36 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.37 2010/05/25 19:53:53 afaq Exp $"
+__version__ = "$Revision: 1.37 $"
 
 import re
 import cjson
+import threading
+import time
 
 from cherrypy import request, response, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
 
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.web.DBSReaderModel import DBSReaderModel
+from dbs.business.DBSFileBuffer import DBSFileBuffer
 
 import traceback
 
@@ -22,6 +25,7 @@ class DBSWriterModel(DBSReaderModel):
     DBS3 Server API Documentation 
     """
     def __init__(self, config):
+
         """
         All parameters are provided through DBSConfig module
         """
@@ -41,6 +45,26 @@ class DBSWriterModel(DBSReaderModel):
 	self.addService('PUT', 'blocks', self.updateBlock)
 	self.addService('POST', 'datatiers', self.insertDataTier)
 
+	self.dbsFileBuffer = DBSFileBuffer(self.logger, self.dbi, config.dbowner)
+    
+	threading.Thread(target=self.handleBuffer).start()
+
+    def handleBuffer(self):
+	while True:
+	    try :
+		blks = self.dbsFileBuffer.getBlocks()
+		for ablk_id in blks:
+		    bufferedinput = self.dbsFileBuffer.getBufferedFiles(ablk_id["block_id"])
+		    time.sleep(10)
+		    insertinput = [eval(afile['file_blob'])  for afile in bufferedinput ]
+		    #for afile in insertinput:
+			#self.logger.debug("run_inserts : %s" % afile.keys() )
+			#self.logger.debug("run_inserts : %s" % afile['file_output_config_list'] )
+		    if len(insertinput) > 0:
+			self.dbsFileBuffer.insertBufferedFiles(businput=insertinput)
+	    except Exception, ex:
+	    	raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+	    
     def insertPrimaryDataset(self):
         """
 	Inserts a Primary Dataset in DBS
