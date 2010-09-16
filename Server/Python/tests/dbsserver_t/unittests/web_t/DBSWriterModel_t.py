@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.26 2010/08/24 19:23:12 yuyi Exp $"
-__version__ = "$Revision: 1.26 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.27 2010/08/24 19:48:44 yuyi Exp $"
+__version__ = "$Revision: 1.27 $"
 
 import os
 import sys
@@ -379,6 +379,7 @@ class DBSWriterModel_t(unittest.TestCase):
     def test22(self):
         """test22 web.DBSWriterModel.updateDatasetStatus: Basic test """
         api.update('datasets', dataset=dataset, is_dataset_valid=0)
+        api.update('datasets', dataset=dataset, is_dataset_valid=1)
 
     def test23(self):
         """test23 web.DBSWriterModel.updateDatasetType: Basic test """
