@@ -3,8 +3,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.27 2010/03/23 16:57:43 afaq Exp $"
-__version__ = "$Revision: 1.27 $"
+__revision__ = "$Id: List.py,v 1.28 2010/05/05 14:59:51 yuyi Exp $"
+__version__ = "$Revision: 1.28 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -16,7 +16,7 @@ class List(DBFormatter):
         """
         Add schema owner and sql.
         For now IS_DATASET_VALID = 1 and
-        DP.DATASET_TYPE <> 'DELETED' are hardcoded in self.sql.
+        DP.DATASET_ACCESS_TYPE <> 'DELETED' are hardcoded in self.sql.
         We might need to pass these parameters from outside later
         """
         DBFormatter.__init__(self, logger, dbi)
@@ -30,7 +30,7 @@ SELECT D.DATASET_ID, D.DATASET, D.IS_DATASET_VALID,
         P.PRIMARY_DS_NAME,
         PD.PROCESSED_DS_NAME,
         DT.DATA_TIER_NAME,
-        DP.DATASET_TYPE,
+        DP.DATASET_ACCESS_TYPE,
         AE.ACQUISITION_ERA_NAME,
         PE.PROCESSING_VERSION,
         PH.PHYSICS_GROUP_NAME, 
@@ -60,7 +60,7 @@ LEFT OUTER JOIN %sPARAMETER_SET_HASHES PSH ON PSH.PARAMETER_SET_HASH_ID = OMC.PA
 LEFT OUTER JOIN %sAPPLICATION_EXECUTABLES AEX ON AEX.APP_EXEC_ID = OMC.APP_EXEC_ID
 
 WHERE D.IS_DATASET_VALID = 1
-AND DP.DATASET_TYPE <> 'DELETED'
+AND DP.DATASET_ACCESS_TYPE <> 'DELETED'
 """ % ((self.owner,)*15)
 
     def execute(self, conn, dataset="", parent_dataset="", 
