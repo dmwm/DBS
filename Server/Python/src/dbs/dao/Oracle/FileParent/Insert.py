@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileParents table """ 
 
-__revision__ = "$Revision: 1.11 $"
-__version__  = "$Id: Insert.py,v 1.11 2010/06/23 21:21:24 afaq Exp $ "
+__revision__ = "$Revision: 1.12 $"
+__version__  = "$Id: Insert.py,v 1.12 2010/08/25 21:41:52 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -24,10 +24,4 @@ VALUES (:file_parent_id, :this_file_id, :parent_file_id)
         daoinput must be validated to have the following keys:
         file_parent_id, this_file_id, parent_file_id
         """
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/FileParent/Insert expects db connection from upper layer.")
-        try:
-            self.dbi.processData(self.sql, daoinput, conn, transaction)
-        except exceptions.IntegrityError, ex:
-            self.logger.warning("Unique constraint violation being ignored...")
-            self.logger.warning("%s" % ex)
+        self.dbi.processData(self.sql, daoinput, conn, transaction)

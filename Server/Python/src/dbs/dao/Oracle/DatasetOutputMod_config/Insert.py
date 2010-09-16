@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for DatasetOutputMod_configs table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2010/06/23 21:21:21 afaq Exp $ "
+__revision__ = "$Revision: 1.8 $"
+__version__  = "$Id: Insert.py,v 1.8 2010/08/25 21:41:51 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -17,14 +17,5 @@ class Insert(DBFormatter):
 				VALUES (:ds_output_mod_conf_id, :dataset_id, :output_mod_config_id)""" % (self.owner)
 
     def execute( self, conn, dataset_output_mod_configsObj, transaction=False ):
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/DatasetOutputMod_config/Insert expects db connection from upper layer.")
-	try:
             result = self.dbi.processData(self.sql, dataset_output_mod_configsObj, conn, transaction)
-	except Exception, ex:
-		if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-			self.logger.warning("Unique constraint violation being ignored...")
-			self.logger.warning("%s" % ex)
-		else:
-			raise	
 

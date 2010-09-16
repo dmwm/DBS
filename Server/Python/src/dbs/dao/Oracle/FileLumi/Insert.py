@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileParents table """ 
 
-__revision__ = "$Revision: 1.14 $"
-__version__  = "$Id: Insert.py,v 1.14 2010/06/23 21:21:23 afaq Exp $ "
+__revision__ = "$Revision: 1.15 $"
+__version__  = "$Id: Insert.py,v 1.15 2010/08/25 21:41:52 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -20,14 +20,5 @@ VALUES (:file_lumi_id, :run_num, :lumi_section_num, :file_id)
 """ % (self.owner)
 
     def execute( self, conn, daoinput, transaction = False ):
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/FileLumi/Insert expects db connection from upper layer.")
-	try:
-	    self.dbi.processData(self.sql, daoinput, conn, transaction)
-	except exceptions.IntegrityError, ex:
-	    if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-		self.logger.warning("Unique constraint violation being ignored...")
-		self.logger.warning("%s" % ex)
-	    else: 
-		raise
+	self.dbi.processData(self.sql, daoinput, conn, transaction)
 

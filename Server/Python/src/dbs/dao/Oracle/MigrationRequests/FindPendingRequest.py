@@ -3,8 +3,8 @@
 This class provide the next avaliable pending request. 
 
 """
-__revision__ = "$Id: FindPendingRequest.py,v 1.1 2010/08/18 18:56:48 yuyi Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: FindPendingRequest.py,v 1.2 2010/08/25 21:41:52 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -19,11 +19,15 @@ class FindPendingRequest(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+#	self.sql ="""select MIGRATION_REQUEST_ID, MIGRATION_URL from %sMIGRATION_REQUESTS where MIGRATION_STATUS=0
+# 	             and LAST_MODIFIED_BY=0 
+#                     and MIGRATION_REQUEST_ID=(select min(MIGRATION_REQUEST_ID) FROM %sMIGRATION_REQUESTS 
+#                     WHERE MIGRATION_STATUS=0 )  for update """ % ((self.owner,)*2)
+		     
         self.sql ="""select MIGRATION_REQUEST_ID, MIGRATION_URL from %sMIGRATION_REQUESTS where MIGRATION_STATUS=0
-                     and LAST_MODIFIED_BY=0 
-                     and MIGRATION_REQUEST_ID=(select min(MIGRATION_REQUEST_ID) FROM %sMIGRATION_REQUESTS 
-                     WHERE MIGRATION_STATUS=0 )  for update """ % ((self.owner,)*2)
-
+		     and MIGRATION_REQUEST_ID=(select min(MIGRATION_REQUEST_ID) FROM %sMIGRATION_REQUESTS 
+		     WHERE MIGRATION_STATUS=0 )  for update """ % ((self.owner,)*2)
+									       
     def execute(self, conn, transaction=False):
         """
 	find the pending request

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for FileOutputMod_configs table """ 
 
-__revision__ = "$Revision: 1.8 $"
-__version__  = "$Id: Insert.py,v 1.8 2010/06/23 21:21:24 afaq Exp $ "
+__revision__ = "$Revision: 1.9 $"
+__version__  = "$Id: Insert.py,v 1.9 2010/08/25 21:41:52 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -16,11 +16,4 @@ class Insert(DBFormatter):
             self.sql = """INSERT INTO %sFILE_OUTPUT_MOD_CONFIGS ( FILE_OUTPUT_CONFIG_ID, FILE_ID, OUTPUT_MOD_CONFIG_ID) VALUES (:file_output_config_id, :file_id, :output_mod_config_id)""" % (self.owner)
 
     def execute( self, conn, binds, transaction=False ):
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/FileOutputMod_config/Insert expects db connection from upper layer.")
-	try:
-	    
-            result = self.dbi.processData(self.sql, binds, conn, transaction)
-        except exceptions.IntegrityError, ex:
-	    self.logger.warning("Unique constraint violation being ignored...")
-	    self.logger.warning("%s" % ex)
+        result = self.dbi.processData(self.sql, binds, conn, transaction)
