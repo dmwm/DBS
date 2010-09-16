@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.20 $"
-# $Id: dbsClient.py,v 1.20 2010/01/20 22:45:25 afaq Exp $"
+# $Revision: 1.21 $"
+# $Id: dbsClient.py,v 1.21 2010/01/25 23:20:00 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -66,7 +66,7 @@ class DbsApi:
 		data=json.loads(data)
             if type(data) == type({}) and data.has_key('exception'):
 		#print "Service Raised an exception: "+data['exception']
-		raise Exception("DBS Server raised an exception: " + data['message'])
+		raise Exception("DBS Server raised an exception: %s" %data['message'])
 	    return data
 		
         def ping(self):
@@ -115,10 +115,6 @@ class DbsApi:
 		if dataset: 
 		    add_to_url += "dataset=%s"%dataset
 		    amp=True
-		if parent_dataset: 
-		    if amp: add_to_url += "&"
-		    add_to_url += "logical_file_name=%s"%logical_file_name
-		    amp=True
 		if release_version:
 		    if amp: add_to_url += "&"
 		    add_to_url += "release_version=%s"%release_version
@@ -135,7 +131,11 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "output_module_label=%s"%output_module_label
 		    amp=True
-		
+		if  logical_file_name:
+		    if amp: add_to_url += "&"
+		    add_to_url += "logical_file_name=%s"%logical_file_name
+		    amp=True
+
 		if add_to_url:
 		    return self.callServer("/outputconfigs?%s" % add_to_url )
 		# Default, list all datasets
