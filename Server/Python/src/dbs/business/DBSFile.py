@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.48 2010/05/27 21:24:39 afaq Exp $"
-__version__ = "$Revision: 1.48 $"
+__revision__ = "$Id: DBSFile.py,v 1.49 2010/05/27 21:25:14 afaq Exp $"
+__version__ = "$Revision: 1.49 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -233,12 +233,8 @@ class DBSFile:
 		filein["file_type_id"]=file_type_id
 		#FIXME: Add this later if f.get("branch_hash", "") not in ("", None): 
 		#filein["branch_hash"]=self.fbranchid.execute( f.get("branch_hash"), conn, transaction=tran)
-
 		# insert file  -- as decided, one file at a time
 		# filein will be what goes into database
-
-		self.logger.error("THis is the FILE:::::::::::::::::::::::::::::::::%s " %filein)
-		
 		try:
 		    if not qInserts:
 			self.filein.execute(conn, filein, transaction=tran)
