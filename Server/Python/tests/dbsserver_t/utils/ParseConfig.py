@@ -10,11 +10,12 @@ def echoInfo(configfile):
     appconfig = cfg.section_(app)
     service = list(appconfig.views.active._internal_children)[0]
     dbsconfig = getattr(appconfig.views.active, service)   
-    if len(sys.argv) > 2:
-        print getattr(dbsconfig, sys.argv[2])
+    if sys.argv[2] == "database":
+	print dbsconfig.database.connectUrl
+    elif sys.argv[2] == "dbowner":
+	print dbsconfig.dbowner
     else:
-        print dbsconfig.database
-        print dbsconfig.dbowner
-    
+	print "Unknown config option: %s" % sys.argv[2]
+
 if __name__ == "__main__":
     echoInfo(sys.argv[1])

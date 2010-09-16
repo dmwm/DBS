@@ -3,8 +3,8 @@ This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
 
-__revision__ = "$Id: DBSRestApi.py,v 1.8 2010/03/19 21:46:37 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
+__revision__ = "$Id: DBSRestApi.py,v 1.9 2010/03/23 16:28:14 akhukhun Exp $"
+__version__ = "$Revision: 1.9 $"
 
 import json
 import os, logging
@@ -48,13 +48,11 @@ class DBSRestApi:
         config = Configuration()
         config.component_('DBS')
         config.DBS.application = app
-        config.DBS.section_('model')
-        config.DBS.model.object = dbsconfig.model.object 
-        config.DBS.section_('formatter')
-        config.DBS.formatter.object = dbsconfig.formatter.object
-        config.DBS.database = dbsconfig.database
-        config.DBS.dbowner = dbsconfig.dbowner
-        config.DBS.version = dbsconfig.version
+	config.DBS.model       = dbsconfig.model
+	config.DBS.formatter   = dbsconfig.formatter
+        config.DBS.database    = dbsconfig.database
+        config.DBS.dbowner     = dbsconfig.dbowner
+        config.DBS.version     = dbsconfig.version
         return config
 
     def list1(self, call, params={}):
