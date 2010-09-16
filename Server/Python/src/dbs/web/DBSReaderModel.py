@@ -3,8 +3,8 @@
 DBS Reader Rest Model module
 """
 
-__revision__ = "$Id: DBSReaderModel.py,v 1.16 2010/03/01 21:59:16 afaq Exp $"
-__version__ = "$Revision: 1.16 $"
+__revision__ = "$Id: DBSReaderModel.py,v 1.17 2010/03/01 22:29:10 afaq Exp $"
+__version__ = "$Revision: 1.17 $"
 
 from WMCore.WebTools.RESTModel import RESTModel
 
@@ -19,6 +19,7 @@ from dbs.business.DBSDatasetParent import DBSDatasetParent
 from dbs.business.DBSFileParent import DBSFileParent
 from dbs.business.DBSFileLumi import DBSFileLumi
 from dbs.business.DBSProcessingEra import DBSProcessingEra
+from dbs.business.DBSRun import DBSRun
 
 __server__version__ = "$Name:  $"
 
@@ -43,7 +44,7 @@ class DBSReaderModel(RESTModel):
         self.addService('GET', 'outputconfigs', self.listOutputConfigs, ['dataset', 'logical_file_name', 'release_version', 'pset_hash', 'app_name', 'output_module_label'])
         self.addService('GET', 'fileparents', self.listFileParents, ['logical_file_name'])
         self.addService('GET', 'filelumis', self.listFileLumis, ['logical_file_name', 'block_name'])
-        self.addService('GET', 'runs', self.listFileLumis, ['minRun', 'maxRun'])
+        self.addService('GET', 'runs', self.listRuns, ['dataset', 'block_name', 'logical_file_name', 'minRun', 'maxRun'])
         
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
@@ -56,6 +57,7 @@ class DBSReaderModel(RESTModel):
         self.dbsFileLumi = DBSFileLumi(self.logger, self.dbi, config.dbowner)
         self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi, config.dbowner)
         self.dbsSite = DBSSite(self.logger, self.dbi, config.dbowner)
+	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
     
     def addService(self, verb, methodKey, func, args=[], validation=[], version=1):
         """
@@ -176,7 +178,7 @@ class DBSReaderModel(RESTModel):
         """
         Example url's <br />
         http://dbs3/filelumis?logical_file_name=lfn
-        http://dbs3/filelumis?block_name=block
+        http://dbs3/filelumis?block_name=block_name
         """
         return self.dbsFileLumi.listFileLumis(logical_file_name, block_name)
          
@@ -185,6 +187,9 @@ class DBSReaderModel(RESTModel):
         Example url's <br />
         http://dbs3/runs?runmin=1&runmax=10
         http://dbs3/runs
+	http://dbs3/runs?logical_file_name=lfn
+	http://dbs3/runs?block_name=block_name
+	http://dbs3/runs?dataset=dataset
         """
         return self.dbsRuns.listRuns(dataset, block_name, logical_file_name , minRun, maxRun)
     
