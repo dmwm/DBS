@@ -4,8 +4,8 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: BriefList.py,v 1.1 2010/08/01 19:04:48 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: BriefList.py,v 1.2 2010/08/03 13:35:43 akhukhun Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -140,8 +140,8 @@ class BriefList(DBFormatter):
 	sql = "".join((selectsql, self.basesql, joinsql, wheresql)) 
 	
 
-	print "sql=%s" %sql
-	print "binds=%s" %binds
+	#print "sql=%s" %sql
+	#print "binds=%s" %binds
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         assert len(cursors) == 1, "block does not exist"
         result = self.formatCursor(cursors[0])
