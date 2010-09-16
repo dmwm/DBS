@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSModel.py,v 1.24 2009/12/04 16:35:25 akhukhun Exp $"
-__version__ = "$Revision: 1.24 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.1 2009/12/08 19:28:52 afaq Exp $"
+__version__ = "$Revision: 1.1 $"
 
 import re
 import cjson
@@ -17,7 +17,7 @@ from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
 from dbs.business.DBSFile import DBSFile
 
-class DBSModel(RESTModel):
+class DBSWriterModel(RESTModel):
     """
     DBS3 Server API Documentation 
     """
@@ -98,12 +98,10 @@ class DBSModel(RESTModel):
         """
         lfn = lfn.replace("*", "%")
         result = self.dbsFile.listFiles(dataset = dataset, block = block, lfn = lfn)
-        #return result
-        return [r for r in result]
+        return result
+        #return [r for r in result]
         #for r in result:
         #    yield cjson.encode(r)
-
-
 
        
     def insertPrimaryDataset(self):
