@@ -2,8 +2,8 @@
 """
 This module provides DatasetRun.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.1 2010/02/26 18:48:25 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: List.py,v 1.2 2010/03/01 20:55:52 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -20,15 +20,27 @@ class List(DBFormatter):
         self.sql = \
 	"""
 	SELECT DISTINCT DR.RUN_NUMBER
-	FROM %sDATASET_RUNS"""% (self.owner)
+	FROM %sDATASET_RUNS DR"""% (self.owner)
 	
-    def execute(self, primary_ds_name="", conn=None, trans=False):
+    def execute(self, minRun=-1, maxRun=-1, conn=None, trans=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
-	
+
+	if not conn:
+		raise "database connection error"	
         sql = self.sql
         binds = {}
-	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	if minRun > 0: 
+		sql += " where DR.RUN_NUMBER >= :min_run"
+		binds["min_run"] = minRun
+	if maxRun > 0:
+		if minRun > 0:
+			sql += " AND DR.RUN_NUMBER <= :max_run"
+		else:
+			sql += " where DR.RUN_NUMBER <= :max_run"
+		binds["max_run"] = maxRun
+
+	cursors = self.dbi.processData(sql, binds, conn, transaction=trans, returnCursor=True)
 	result = self.formatCursor(cursors[0])
         return result
