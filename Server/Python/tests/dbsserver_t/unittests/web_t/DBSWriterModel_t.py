@@ -2,8 +2,8 @@
 web unittests
 """
 
-__revision__ = "$Id: DBSWriterModel_t.py,v 1.7 2010/01/19 19:45:20 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
+__revision__ = "$Id: DBSWriterModel_t.py,v 1.8 2010/01/19 22:24:39 afaq Exp $"
+__version__ = "$Revision: 1.8 $"
 
 import os
 import sys
@@ -29,17 +29,18 @@ def uuid():
 config = os.environ["DBS_TEST_CONFIG_WRITER"] 
 api = DBSRestApi(config) 
 uid = uuid()
-print "uid: ", uid
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
-print "primaryDS: ", primary_ds_name
-dataset = 'unittest_web_dataset_%s' % uid 
-print "Dataset: " , dataset
+procdataset = 'unittest_web_dataset_%s' % uid 
 tier = 'GEN-SIM-RAW'
+dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
 app_name='cmsRun'
 output_module_label='Merged'
 pset_hash='76e303993a1c2f842159dbfeeed9a0dd' 
 release_version='CMSSW_1_2_3'
-    
+site="cmssrm.fnal.gov"
+block="%s#%s" % (dataset, uid)
+flist=[]
+
 class DBSWriterModel_t(unittest.TestCase):
 
     def setUp(self):
@@ -51,13 +52,11 @@ class DBSWriterModel_t(unittest.TestCase):
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'TEST'}
         api.insert('primarydatasets', data)
-	print "PrimaryDS: ", primary_ds_name
 
     def test02(self):
         """test02: web.DBSWriterModel.insertPrimaryDataset: duplicate should not riase an exception"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'TEST'}
-	print "primary_ds_name: ", primary_ds_name
         api.insert('primarydatasets', data)
 	
     """
@@ -102,7 +101,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	"""test07: web.DBSWriterModel.insertDataset: basic test"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': 'DBS3_Test_2010', 'primary_ds_name': primary_ds_name,
+	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		    ],
@@ -116,7 +115,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	"""test08: web.DBSWriterModel.insertDataset: duplicate insert should be ignored"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': 'DBS3_Test_2010', 'primary_ds_name': primary_ds_name,
+	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		], 
@@ -124,6 +123,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		#'processing_version': '1',  'acquisition_era_name': u'',
 		}
+	
 	api.insert('datasets', data)
 
     """	
@@ -131,7 +131,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	""test09: web.DBSWriterModel.insertDataset: missing primary dataset must raise an error""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': 'DBS3_Test_2010',
+	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		],
@@ -150,7 +150,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	""test10: web.DBSWriterModel.insertDataset: missing parameter must raise an error""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': 'DBS3_Test_2010',
+	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
 		],
@@ -169,15 +169,103 @@ class DBSWriterModel_t(unittest.TestCase):
     def test11(self):
 	"""test11: web.DBSWriterModel.insertDataset: no output_configs, should be fine insert!"""
 	data = {
-		'dataset': dataset+"_nocfg",
+		'dataset': dataset,
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
-	        'dataset_type': 'PRODUCTION', 'processed_ds_name': 'DBS3_Test_2010',
+	        'dataset_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		#'processing_version': '1',  'acquisition_era_name': u'',
 		}
 	api.insert('datasets', data)
+
+    def test12(self):
+	"""test12: web.DBSWriterModel.insertSite: basic test"""
+	data = {
+	     "site_name" : site
+	}
+	api.insert('sites', data)
+
+
+    def test13(self):
+	"""test13: web.DBSWriterModel.insertSite: duplicate site must not throw any errors"""
+	data = {
+	     "site_name" : site
+	}
+        api.insert('sites', data)
+	
+    def test14(self):
+	"""test14 web.DBSWriterModel.insertBlock: basic test"""
+	data = {'block_name': block,
+		'origin_site': site }
+		
+	api.insert('blocks', data)
+
+    def test14(self):
+	"""test15 web.DBSWriterModel.insertBlock: duplicate insert should not raise exception"""
+	data = {'block_name': block,
+		'origin_site': site }
+		
+	api.insert('blocks', data)
+
+    def test15(self):
+	"""test15 web.DBSWriterModel.insertFiles: basic test"""
+	data={}
+	flist=[]
+ 	for i in range(10):
+	    f={  
+		'adler32': u'NOTSET', 'file_type': 'EDM',
+                'file_output_config_list': 
+		    [ 
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+		    ],
+                'dataset': dataset,
+                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'check_sum': u'1504266448',
+                'file_lumi_list': [
+	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
+		                      {'lumi_section_num': u'26422', 'run_num': u'1'},
+		                      {'lumi_section_num': u'29838', 'run_num': u'1'}
+                                  ],
+                'file_parent_list': [ ],
+                'event_count': u'1619',
+                'logical_file_name': "/store/mc/%i.root" %i,
+                'block': block
+			    #'is_file_valid': 1
+                }
+	    flist.append(f)
+	data={"files":flist}
+	api.insert('files', data)
+
+    def test16(self):
+	"""test16 web.DBSWriterModel.insertFiles: duplicate insert file shuld not raise any errors"""
+	data={}
+	flist=[]
+ 	for i in range(10):
+	    f={  
+		'adler32': u'NOTSET', 'file_type': 'EDM',
+                'file_output_config_list': 
+		    [ 
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+		    ],
+                'dataset': dataset,
+                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'check_sum': u'1504266448',
+                'file_lumi_list': [
+	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
+		                      {'lumi_section_num': u'26422', 'run_num': u'1'},
+		                      {'lumi_section_num': u'29838', 'run_num': u'1'}
+                                  ],
+                'file_parent_list': [ ],
+                'event_count': u'1619',
+                'logical_file_name': "/store/mc/%i.root" %i,
+                'block': block
+			    #'is_file_valid': 1
+                }
+	    flist.append(f)
+	data={"files":flist}
+	api.insert('files', data)
  
+   
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSWriterModel_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
