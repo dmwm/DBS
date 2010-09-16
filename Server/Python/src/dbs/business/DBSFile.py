@@ -3,8 +3,8 @@
 This module provides business object class to interact with File. 
 """
 
-__revision__ = "$Id: DBSFile.py,v 1.20 2010/01/27 16:54:24 afaq Exp $"
-__version__ = "$Revision: 1.20 $"
+__revision__ = "$Id: DBSFile.py,v 1.21 2010/02/11 22:54:21 afaq Exp $"
+__version__ = "$Revision: 1.21 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -137,7 +137,7 @@ class DBSFile:
 		    self.filein.execute(filein, conn, True)
 		    fileInserted=True
 		except exceptions.IntegrityError, ex:
-		    if str(ex).find("unique constraint") != -1 :
+		    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			#refresh the file_id from database
 			#filein["file_id"]=self.fileid.execute(filein["logical_file_name"], conn, True)
 			# Lets move on to NEXT file, we do not want to continue processing this file

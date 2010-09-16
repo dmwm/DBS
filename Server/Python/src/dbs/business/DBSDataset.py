@@ -3,8 +3,8 @@
 This module provides business object class to interact with Dataset. 
 """
 
-__revision__ = "$Id: DBSDataset.py,v 1.23 2010/01/29 20:25:08 afaq Exp $"
-__version__ = "$Revision: 1.23 $"
+__revision__ = "$Id: DBSDataset.py,v 1.24 2010/02/11 22:54:21 afaq Exp $"
+__version__ = "$Revision: 1.24 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -117,7 +117,7 @@ class DBSDataset:
                 # insert the dataset
                 self.datasetin.execute(dsdaoinput, conn, True)
             except Exception, ex:
-                if str(ex).lower().find("unique constraint") != -1 :
+                if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                     # dataset already exists, lets fetch the ID
                     self.logger.warning("Unique constraint violation being ignored...")
                     self.logger.warning("%s" % ex)
@@ -140,7 +140,7 @@ class DBSDataset:
                 try:
                     self.datasetoutmodconfigin.execute(dsoutconfdaoin, conn, True)
                 except Exception, ex:
-                    if str(ex).lower().find("unique constraint") != -1 :
+                    if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                         pass
                     else:
                         raise

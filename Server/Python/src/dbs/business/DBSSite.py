@@ -3,8 +3,8 @@
 This module provides business object class to interact with Primary Dataset. 
 """
 
-__revision__ = "$Id: DBSSite.py,v 1.1 2010/01/12 22:18:23 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
+__revision__ = "$Id: DBSSite.py,v 1.2 2010/02/11 22:54:21 afaq Exp $"
+__version__ = "$Revision: 1.2 $"
 
 from WMCore.DAOFactory import DAOFactory
 
@@ -46,7 +46,7 @@ class DBSSite:
             self.sitein.execute(businput, conn, True)
             tran.commit()
         except Exception, ex:
-            if str(ex).lower().find("unique constraint") != -1 :
+            if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                 # already exists, lets fetch the ID
                 self.logger.warning("Unique constraint violation being ignored...")
                 self.logger.warning("%s" % ex)

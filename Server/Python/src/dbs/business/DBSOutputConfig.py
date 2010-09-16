@@ -3,8 +3,8 @@
 This module provides business object class to interact with OutputConfig. 
 """
 
-__revision__ = "$Id: DBSOutputConfig.py,v 1.6 2010/01/25 23:22:00 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
+__revision__ = "$Id: DBSOutputConfig.py,v 1.7 2010/02/11 22:54:21 afaq Exp $"
+__version__ = "$Revision: 1.7 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
@@ -53,7 +53,6 @@ class DBSOutputConfig:
 
         conn = self.dbi.connection()
         tran = conn.begin()
-
         try:
             try:
                 businput["app_exec_id"] = self.appid.execute(businput["app_name"], conn, True)	
@@ -103,7 +102,7 @@ class DBSOutputConfig:
             tran.commit()
 
 	except exceptions.IntegrityError, ex:
-	    if str(ex).find("unique constraint") != -1 :
+	    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 		pass
 	    else: 
 	        raise

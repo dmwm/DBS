@@ -3,7 +3,7 @@
 This module provides business object class to interact with DBSProcessingEra. 
 """
 
-__revision__ = "$Id: DBSProcessingEra.py,v 1.2 2010/01/19 19:42:52 afaq Exp $"
+__revision__ = "$Id: DBSProcessingEra.py,v 1.3 2010/02/11 22:54:21 afaq Exp $"
 __version__ = "$Revision $"
 
 from WMCore.DAOFactory import DAOFactory
@@ -47,7 +47,7 @@ class DBSProcessingEra:
             self.pein.execute(businput, conn, True)
             tran.commit()
         except Exception, ex:
-                if str(ex).lower().find("unique constraint") != -1 :
+                if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                         # already exist
                         self.logger.warning("Unique constraint violation being ignored...")
                         self.logger.warning("%s" % ex)
