@@ -1,6 +1,6 @@
 # 
-# $Revision: 1.45 $"
-# $Id: dbsClient.py,v 1.45 2010/05/28 21:21:39 afaq Exp $"
+# $Revision: 1.46 $"
+# $Id: dbsClient.py,v 1.46 2010/06/04 15:22:14 afaq Exp $"
 # @author anzar
 #
 import os, sys, socket
@@ -362,11 +362,15 @@ class DbsApi:
 	    """
 	    return self.callServer("/filelumis?logical_file_name=%s" %logical_file_name)
 
-        def insertFiles(self, filesList=[]):
+        def insertFiles(self, filesList=[], qInserts=False):
                 """
                 * API to insert a list of file into DBS in DBS 
                 * filesList : list of file objects
+		* qInserts : (NEVER use this parameter, unless you are TOLD by DBS Team)
                 """
+
+		if qInserts:
+		    return self.callServer("/files?qInserts=%s" % qInserts, params = filesList , callmethod='POST' )    
                 return self.callServer("/files", params = filesList , callmethod='POST' )
 
         def listRuns(self, dataset="", block="", logical_file_name="", minrun="", maxrun=""):
