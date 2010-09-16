@@ -2,8 +2,8 @@
 client writer unittests
 """
 
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.20 2010/07/09 19:38:09 afaq Exp $"
-__version__ = "$Revision: 1.20 $"
+__revision__ = "$Id: DBSClientWriter_t.py,v 1.21 2010/08/20 15:00:50 afaq Exp $"
+__version__ = "$Revision: 1.21 $"
 
 import os
 import sys
@@ -202,7 +202,7 @@ class DBSClientWriter_t(unittest.TestCase):
                 'file_parent_list': [ ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/parent_%s/%i.root" %(uid, i),
-                'block': parent_block
+                'block_name': parent_block
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
@@ -231,7 +231,7 @@ class DBSClientWriter_t(unittest.TestCase):
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/%s/%i.root" %(uid, i),
-                'block': block
+                'block_name': block
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
@@ -260,7 +260,7 @@ class DBSClientWriter_t(unittest.TestCase):
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/%s/%i.root" %(uid, i),
-                'block': block
+                'block_name': block
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
