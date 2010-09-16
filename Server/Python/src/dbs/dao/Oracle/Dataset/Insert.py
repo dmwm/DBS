@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ DAO Object for Datasets table """ 
 
-__revision__ = "$Revision: 1.9 $"
-__version__  = "$Id: Insert.py,v 1.9 2009/12/22 21:52:26 afaq Exp $ "
+__revision__ = "$Revision: 1.10 $"
+__version__  = "$Id: Insert.py,v 1.10 2010/01/19 19:44:38 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
@@ -29,16 +29,12 @@ class Insert(DBFormatter):
 			:last_modification_date, :last_modified_by) """ % self.owner
 
     def processInput(self, daoinput):
-                print daoinput
                 #valid_keys = self.sql.split("VALUES")[1].split('(')[1].split(')')[0].replace(",","").strip().split(":")
                 valid_keys = self.sql.split("VALUES")[1].split('(')[1].split(')')[0].replace(',','').replace(':','').strip().split()
-                print valid_keys
                 for akey in daoinput.keys():
                         if akey not in valid_keys:
                                 del daoinput[akey]
 				self.logger.warning("DROPPING Key: "+akey)
-                print daoinput
-                print self.sql
                 return daoinput
 
     def execute(self, daoinput, conn = None, transaction = False):
