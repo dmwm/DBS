@@ -3,8 +3,8 @@
 DBS Rest Model module
 """
 
-__revision__ = "$Id: DBSWriterModel.py,v 1.26 2010/03/08 20:35:44 afaq Exp $"
-__version__ = "$Revision: 1.26 $"
+__revision__ = "$Id: DBSWriterModel.py,v 1.27 2010/03/12 16:20:58 afaq Exp $"
+__version__ = "$Revision: 1.27 $"
 
 import re
 import cjson
@@ -38,6 +38,7 @@ class DBSWriterModel(DBSReaderModel):
         self.addService('POST', 'files', self.insertFile)
 	self.addService('PUT', 'files', self.updateFileStatus)
 	self.addService('PUT', 'datasets', self.updateDatasetStatus)
+	self.addService('PUT', 'runs', self.updateDatasetRunStatus)
 
     def insertPrimaryDataset(self):
         """
