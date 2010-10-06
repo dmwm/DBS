@@ -192,7 +192,11 @@ class DBSReaderModel(RESTModel):
 	primary_ds_type = primary_ds_type.replace("*", "%")
 	data_tier_name = data_tier_name.replace("*", "%")
 	dataset_access_type = dataset_access_type.replace("*", "%")
-	run_num = int(run_num)
+	run_num = run_num.replace("*", "%")
+	if run_num == '%':
+	    run_num = 0
+	else:
+	    run_num = int(run_num)
 	detail = detail in (True, 1, "True", "1")
 
 	return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, processing_version, acquisition_era,
