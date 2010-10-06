@@ -320,6 +320,10 @@ class DbsApi:
 			* origin_site_name : Origin Site Name --REQUIRED 
                 """
                 return self.callServer("/blocks", params = blockObj , callmethod='POST' )
+        def insertBlockBluk(self, blockDump={}):
+                """
+                """
+                return self.callServer("/bulkblocks", params = blockDump , callmethod='POST' )
 
         def listBlocks(self, block_name="", dataset="", logical_file_name="", origin_site_name="", run_num=-1, detail=False):
                 """

@@ -24,6 +24,8 @@ from dbs.business.DBSDataType import DBSDataType
 from dbs.business.DBSDataTier import DBSDataTier
 from dbs.business.DBSStatus import DBSStatus
 from dbs.business.DBSMigrate import DBSMigrate
+from dbs.business.DBSBlockInsert import DBSBlockInsert
+
 
 import urllib, urllib2
 import re
@@ -83,7 +85,7 @@ class DBSReaderModel(RESTModel):
 	self.dbsDataTier = DBSDataTier(self.logger, self.dbi, config.dbowner)
 	self.dbsStatus = DBSStatus(self.logger, self.dbi, config.dbowner)
 	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
-
+        self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, config.dbowner) 
 	self.dbsUtils = DBSUtils()
     
     def geoLocateThisHost(self, ip):

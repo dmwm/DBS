@@ -44,6 +44,7 @@ class DBSWriterModel(DBSReaderModel):
 	self.addMethod('PUT', 'datasets', self.updateDataset)
 	self.addMethod('PUT', 'blocks', self.updateBlock)
 	self.addMethod('POST', 'datatiers', self.insertDataTier)
+        self.addMethod('POST', 'bulkblocks', self.insertBulkBlock)
 
 #self.dbsFileBuffer = DBSFileBuffer(self.logger, self.dbi, config.dbowner)
     
@@ -195,6 +196,23 @@ class DBSWriterModel(DBSReaderModel):
 		
 	except Exception, ex:
        		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) ) 
+
+    def insertBulkBlock(self):
+        """
+        gets the input from cherrypy request body.
+        input must be a dictionaryi that match blockDump output.
+        """
+
+        try:
+
+            body = request.body.read()
+            indata = cjson.decode(body)
+            #FIXME: what we should check?
+            self.dbsBlockInsert.putBlock(indata)
+
+        except Exception, ex:
+            raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+
 
     def insertBlock(self):
         """
