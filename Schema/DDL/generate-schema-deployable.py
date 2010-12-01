@@ -5,14 +5,14 @@ import fileinput
 import sys
 
 #One has to update these SEVEN DB variables to fit your db accounts before you use this script.
-schema_owner="CMS_LUM_OWNER"
-reader_role_name="CMS_LUM_READER_ROLE"
-writer_role_name="CMS_LUM_WRITER_ROLE"
-admin_role_name="CMS_LUM_ADMIN_ROLE"
+schema_owner="CMS_DBS3_OWNER"
+reader_role_name="CMS_DBS3_READER_ROLE"
+writer_role_name="CMS_DBS3_WRITER_ROLE"
+admin_role_name="CMS_DBS3_ADMIN_ROLE"
 #
-reader_account="CMS_LUM_READER"
-writer_account="CMS_LUM_WRITER"
-admin_account="CMS_LUM_ADMIN"
+reader_account="CMS_DBS3_READER"
+writer_account="CMS_DBS3_WRITER"
+admin_account="CMS_DBS3_ADMIN"
 #
 shutil.copyfile('create-oracle-schema.sql','oracle-deployable.sql')
 for line in fileinput.input("oracle-deployable.sql",inplace=1):

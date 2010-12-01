@@ -7,8 +7,8 @@
 
 #setup initial test counter to construct unique insert data names
 export DBS_TEST_COUNTER=3
-export DBS_TEST_CONFIG_READER=$DBS3_ROOT/Config/${1:-cms_dbs}.py
-export DBS_TEST_CONFIG_WRITER=$DBS3_ROOT/Config/${1:-cms_dbs}_writer.py
+export DBS_TEST_CONFIG_READER=$DBS3_ROOT/DBS/Server/Python/control/${1:-cms_dbs}.py
+export DBS_TEST_CONFIG_WRITER=$DBS3_ROOT/DBS/Server/Python/control/${1:-cms_dbs}_writer.py
 #choose the service name from the configuration files.. In reader and writer it has to be the same
 export DBS_TEST_SERVICE="DBS"
 

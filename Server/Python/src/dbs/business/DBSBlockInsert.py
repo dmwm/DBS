@@ -88,7 +88,7 @@ class DBSBlockInsert :
         self.appin          = daofactory(classname='ApplicationExecutable.Insert')
         self.dcin           = daofactory(classname='DatasetOutputMod_config.Insert')
         self.phygrpin       = daofactory(classname='PhysicsGroup.Insert')
-        self.newBlock = False
+        #self.newBlock = False
 
         # Add a cache that Anzar thinks he needs.
         #Cache is only need for output configure module since it is shared between file and dataset.
@@ -102,22 +102,25 @@ class DBSBlockInsert :
         #YG
         try:
             #1 insert configuration
-            print "insert configuration"
+            #print "insert configuration"
             configList = self.insertOutputModuleConfig( blockcontent['dataset_conf_list'])
             #2 insert dataset
             #print "insert dataset"
             datasetId = self.insertDataset( blockcontent, configList)
             #3 Insert Block. 
             #print "insert Block"
-            blockId = self.insertBlock( blockcontent, datasetId)
+            blockId, newBlock = self.insertBlock( blockcontent, datasetId)
+            #print "Retrieved result for block %s" % str(blockId)
             #4 inser files. If the block is already in db, then we stop inserting the file
-            if self.newBlock:
+            if newBlock:
+                #print "About to insert files for block %s" % str(blockId)
                 #print "insert files"
                 self.insertFile( blockcontent,blockId,datasetId)
         except Exception, ex:
             raise
     
     def insertFile(self, blockcontent, blockId, datasetId):
+        #print  blockcontent
         conn = self.dbi.connection()
         fileLumiList = []
         fileTypeObjs = []
@@ -134,7 +137,8 @@ class DBSBlockInsert :
         intvalfileconf = 1
 
 	donelumi=0
-	
+        #import pdb
+        #pdb.set_trace()
         try:
             for i in range(len(fileList)):
                 if(i%intval==0):
@@ -153,6 +157,7 @@ class DBSBlockInsert :
                 fileList[i]['file_type_id'] = fTypeid
                 del fileList[i]['file_type']
                 #other fields. YG 11/23/2010
+                #print fileList[i]['logical_file_name']
                 fileList[i]['is_file_valid'] = fileList[i].get('is_file_valid', 1)
                 fileList[i]['check_sum'] = fileList[i].get('check_sum', None)
                 fileList[i]['event_count'] = fileList[i].get('event_count', -1)
@@ -245,7 +250,7 @@ class DBSBlockInsert :
         """
 
         block = blockcontent['block']
-        self.newBlock = False
+        newBlock = False
         #Insert the block
         #import pdb
         #pdb.set_trace()
@@ -255,7 +260,7 @@ class DBSBlockInsert :
             block['block_id'] = self.sm.increment(conn,"SEQ_BK",)
             block['dataset_id'] =  datasetId
             self.blockin.execute(conn, block, tran)
-            self.newBlock = True
+            newBlock = True
         except exceptions.IntegrityError:
             #not sure what happends to WMAgent: Does it try to insert a block again? YG 10/05/2010
             #Talked with Matt N: We should stop insertng this block now. This means there is some trouble.
@@ -272,7 +277,7 @@ class DBSBlockInsert :
         #Now handle Block Parenttage
         bpList = blockcontent['block_parent_list']
         intval = 10
-        if self.newBlock:
+        if newBlock:
             try:
                 for i in range(len(bpList)):
                     #updated due to schema update.
@@ -283,7 +288,7 @@ class DBSBlockInsert :
                             tran.rollback()
                         raise Exception("Parent block: %s not found in db" %bpList[i]['block_name'])
                     del bpList[i]['block_name']
-                if bpList and self.newBlock:
+                if bpList and newBlock:
                     self.blkparentin.execute(conn, bpList, tran)
             except Exception, ex:
                 self.logger.exception("DBS block parentage inseration exception: %s" %ex)
@@ -298,7 +303,7 @@ class DBSBlockInsert :
             raise
         finally:
             conn.close()
-        return block['block_id']
+        return block['block_id'], newBlock
 
     def insertOutputModuleConfig(self, remoteConfig):
         """
@@ -392,7 +397,7 @@ class DBSBlockInsert :
                                                   release_version = m["release_version"],
                                                   pset_hash = m["pset_hash"],
                                                   output_label = m["output_module_label"])
-                    tran.rollback()
+                    #tran.rollback()
                 # End the transaction
                 tran.commit()
                 otptIdList.append(cfgid)

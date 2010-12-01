@@ -120,6 +120,7 @@ class DBSDataset:
  	if(logical_file_name and logical_file_name.find("%")!=-1):
 	    raise Exception("listDataset API only works with fullly qualified logical_file_name. NO * is allowed in logical_file_name.")
 	try:
+            conn = None
 	    conn = self.dbi.connection()
 
 	    dao = (self.datasetbrieflist, self.datasetlist)[detail]
@@ -141,7 +142,8 @@ class DBSDataset:
         except Exception, ex:
 	    raise ex
         finally:
-	    conn.close()
+	    if conn:
+                conn.close()
  
     
     def insertDataset(self, businput):

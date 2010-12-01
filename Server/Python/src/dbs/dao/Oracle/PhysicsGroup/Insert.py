@@ -13,7 +13,7 @@ class Insert(DBFormatter):
 	    self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 	    
             self.sql = """INSERT INTO %sPHYSICS_GROUPS ( PHYSICS_GROUP_ID, PHYSICS_GROUP_NAME) 
-                          VALUES (:physicsgroupid, :physicsgroupname)""" % (self.owner)
+                          VALUES (:physics_group_id, :physics_group_name)""" % (self.owner)
 
     def execute( self, conn, physics_groupsObj, transaction=False):
 	if not conn:
