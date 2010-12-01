@@ -6,6 +6,7 @@ __version__  = "$Id: dbsUtils.py,v 1.4 2010/08/09 10:59:14 akhukhun Exp $ "
 
 import cjson
 from time import time
+import getpass
 
 class dbsUtils:
     """dbsUtils class provides time, client names, etc functions."""
@@ -17,7 +18,7 @@ class dbsUtils:
 	return time()
 
     def getCreateBy(self):
-	return "Client Name"
+	return getpass.getuser()
 
     def getModifiedBy(self):
 	return self.getCreateBy()		

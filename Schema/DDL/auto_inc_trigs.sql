@@ -29,9 +29,6 @@ CREATE OR REPLACE TRIGGER PSH_TRIG before insert on PARAMETER_SET_HASHES for eac
 CREATE OR REPLACE TRIGGER DV_TRIG before insert on DBS_VERSIONS for each row begin if :NEW.DBS_VERSION_ID is null then select SEQ_DV.nextval into :NEW.DBS_VERSION_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER SI_TRIG before insert on SITES for each row begin if :NEW.SITE_ID is null then select SEQ_SI.nextval into :NEW.SITE_ID from dual; end if; end;
- /
-
 CREATE OR REPLACE TRIGGER OMC_TRIG before insert on OUTPUT_MODULE_CONFIGS for each row begin if :NEW.OUTPUT_MOD_CONFIG_ID is null then select SEQ_OMC.nextval into :NEW.OUTPUT_MOD_CONFIG_ID from dual; end if; end;
  /
 
@@ -47,16 +44,10 @@ CREATE OR REPLACE TRIGGER DS_TRIG before insert on DATASETS for each row begin i
 CREATE OR REPLACE TRIGGER BK_TRIG before insert on BLOCKS for each row begin if :NEW.BLOCK_ID is null then select SEQ_BK.nextval into :NEW.BLOCK_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER BP_TRIG before insert on BLOCK_PARENTS for each row begin if :NEW.BLOCK_PARENT_ID is null then select SEQ_BP.nextval into :NEW.BLOCK_PARENT_ID from dual; end if; end;
- /
-
 CREATE OR REPLACE TRIGGER FL_TRIG before insert on FILES for each row begin if :NEW.FILE_ID is null then select SEQ_FL.nextval into :NEW.FILE_ID from dual; end if; end;
  /
 
 CREATE OR REPLACE TRIGGER DC_TRIG before insert on DATASET_OUTPUT_MOD_CONFIGS for each row begin if :NEW.DS_OUTPUT_MOD_CONF_ID is null then select SEQ_DC.nextval into :NEW.DS_OUTPUT_MOD_CONF_ID from dual; end if; end;
- /
-
-CREATE OR REPLACE TRIGGER DP_TRIG before insert on DATASET_PARENTS for each row begin if :NEW.DATASET_PARENT_ID is null then select SEQ_DP.nextval into :NEW.DATASET_PARENT_ID from dual; end if; end;
  /
 
 CREATE OR REPLACE TRIGGER DR_TRIG before insert on DATASET_RUNS for each row begin if :NEW.DATASET_RUN_ID is null then select SEQ_DR.nextval into :NEW.DATASET_RUN_ID from dual; end if; end;
@@ -68,9 +59,6 @@ CREATE OR REPLACE TRIGGER FC_TRIG before insert on FILE_OUTPUT_MOD_CONFIGS for e
 CREATE OR REPLACE TRIGGER AF_TRIG before insert on ASSOCIATED_FILES for each row begin if :NEW.ASSOCATED_FILE_ID is null then select SEQ_AF.nextval into :NEW.ASSOCATED_FILE_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER FP_TRIG before insert on FILE_PARENTS for each row begin if :NEW.FILE_PARENT_ID is null then select SEQ_FP.nextval into :NEW.FILE_PARENT_ID from dual; end if; end;
- /
-
 CREATE OR REPLACE TRIGGER FLM_TRIG before insert on FILE_LUMIS for each row begin if :NEW.FILE_LUMI_ID is null then select SEQ_FLM.nextval into :NEW.FILE_LUMI_ID from dual; end if; end;
  /
 
@@ -78,9 +66,6 @@ CREATE OR REPLACE TRIGGER AQE_TRIG before insert on ACQUISITION_ERAS for each ro
  /
 
 CREATE OR REPLACE TRIGGER PE_TRIG before insert on PROCESSING_ERAS for each row begin if :NEW.PROCESSING_ERA_ID is null then select SEQ_PE.nextval into :NEW.PROCESSING_ERA_ID from dual; end if; end;
- /
-
-CREATE OR REPLACE TRIGGER BLST_TRIG before insert on BLOCK_SITES for each row begin if :NEW.BLOCK_SITE_ID is null then select SEQ_BLST.nextval into :NEW.BLOCK_SITE_ID from dual; end if; end;
  /
 
 CREATE OR REPLACE TRIGGER MR_TRIG before insert on MIGRATION_REQUESTS for each row begin if :NEW.MIGRATION_REQUEST_ID is null then select SEQ_MR.nextval into :NEW.MIGRATION_REQUEST_ID from dual; end if; end;

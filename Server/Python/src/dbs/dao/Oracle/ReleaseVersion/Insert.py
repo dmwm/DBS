@@ -20,8 +20,5 @@ class Insert(DBFormatter):
 	try:
             result = self.dbi.processData(self.sql, relVerObj, conn, transaction)
  	except Exception, ex:
-	    if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-		pass
-	    else:
-		raise
+            raise
 

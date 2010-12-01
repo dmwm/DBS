@@ -149,7 +149,7 @@ class DBSDataset:
         input dictionary must have the following keys:
         dataset, is_dataset_valid, primary_ds_name(name), processed_ds(name), data_tier(name),
         dataset_access_type(name), acquisition_era(name), processing_version(name), 
-        physics_group(name), xtcrosssection, global_tag, creation_date, create_by, 
+        physics_group(name), xtcrosssection, creation_date, create_by, 
         last_modification_date, last_modified_by
         """ 
         conn = self.dbi.connection()
@@ -185,7 +185,6 @@ class DBSDataset:
                                "is_dataset_valid" : businput["is_dataset_valid"],
                                "creation_date" : businput["creation_date"],
                                "xtcrosssection" : businput["xtcrosssection"],
-                               "global_tag" : businput["global_tag"],
                                "create_by" : businput["create_by"],
                                "last_modification_date" : businput["last_modification_date"] ,
                                "last_modified_by" : businput["last_modified_by"]})

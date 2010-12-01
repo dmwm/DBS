@@ -225,10 +225,10 @@ class DBSFile:
 		    "adler32" : f.get("adler32", ""), 
 		    "md5" : f.get("md5", ""),
 		    "auto_cross_section" : f.get("auto_cross_section", -1),
-		    "creation_date" : f["creation_date"], 
-		    "create_by": f["create_by"],
-		    "last_modification_date": f["last_modification_date"], 
-		    "last_modified_by" : f["last_modified_by"] 
+		    "creation_date" : f.get("creation_date", None), 
+		    "create_by": f.get("create_by", None),
+		    "last_modification_date": f.get("last_modification_date", None), 
+		    "last_modified_by" : f.get("last_modified_by", None) 
 		}
 		if iFile == fileIncrement:
 		    fID = self.sm.increment(conn, "SEQ_FL", transaction=tran, incCount=fileIncrement)
@@ -286,25 +286,26 @@ class DBSFile:
 		if f.has_key("file_parent_list"):
 		    #file parents    
 		    fplist = f["file_parent_list"]
-		    if(len(fplist) > 0):
-			iParent = 0
-			fpIncrement = 100
-			fpID = self.sm.increment(conn, "SEQ_FP", transaction=tran, incCount=fpIncrement)
+		    #if(len(fplist) > 0):
+			#iParent = 0
+			#fpIncrement = 100
+			#fpID = self.sm.increment(conn, "SEQ_FP", transaction=tran, incCount=fpIncrement)
                     
-			for fp in fplist:
-			    if iParent == fpIncrement:
-				fpID = self.sm.increment(conn, "SEQ_FP", transaction=tran, incCount=fpIncrement)
-				iParent  = 0
-			    fpdao={}
-			    fpdao["file_parent_id"] = fpID + iParent
-			    iParent += 1 
-			    fpdao["this_file_id"] = filein["file_id"]
-			    lfn = fp["file_parent_lfn"]
+                    for fp in fplist:
+			    #if iParent == fpIncrement:
+				#fpID = self.sm.increment(conn, "SEQ_FP", transaction=tran, incCount=fpIncrement)
+				#iParent  = 0
+                        fpdao={}
+			    #fpdao["file_parent_id"] = fpID + iParent
+			    #iParent += 1 
+                        fpdao["this_file_id"] = filein["file_id"]
+                        lfn = fp["file_parent_lfn"]
 			    #lfn=fp
-			    pflid = self.fileid.execute(conn, lfn, transaction=tran)
-			    if pflid == -1 : raise Exception("The parent file %s for file %s not found in DBS" %(lfn, f["logical_file_name"]) )
-			    fpdao["parent_file_id"] = self.fileid.execute(conn, lfn, transaction=tran)
-			    fparents2insert.append(fpdao)
+                        pflid = self.fileid.execute(conn, lfn, transaction=tran)
+                        if pflid == -1 : raise Exception("The parent file %s for file %s not found in DBS" %(lfn, f["logical_file_name"]) )
+                        #fpdao["parent_file_id"] = self.fileid.execute(conn, lfn, transaction=tran)
+                        fpdao["parent_file_id"] = pflid
+                        fparents2insert.append(fpdao)
 
 		if f.has_key("file_output_config_list"):
 		    #file output config modules
@@ -374,15 +375,15 @@ class DBSFile:
 		    # we need to bulk this, number of parents can get big in rare cases
 		    bpdaolist=[]
 		    iPblk = 0
-		    fpblkInc = 10
-		    bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
+		    #fpblkInc = 10
+		    #bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
 		    for ablk in fpblks:
-			if iPblk == fpblkInc:
-			    bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
-			    iPblk = 0
+			#if iPblk == fpblkInc:
+			    #bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
+			    #iPblk = 0
 			bpdao={ "this_block_id": block_id }
 			bpdao["parent_block_id"] = ablk
-			bpdao["block_parent_id"] = bpID
+			#bpdao["block_parent_id"] = bpID
 			bpdaolist.append(bpdao)
 		    # insert them all
 		    # Do this one by one, as its sure to have duplicate in dest table
@@ -398,16 +399,16 @@ class DBSFile:
 		# Update dataset parentage
 		if len(fpds) > 0 :
 		    dsdaolist=[]
-		    iPds = 0
-		    fpdsInc = 10
-		    pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
+		    #iPds = 0
+		    #fpdsInc = 10
+		    #pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
 		    for ads in fpds:
-			if iPds == fpdsInc:
-			    pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
-			    iPds = 0
+			#if iPds == fpdsInc:
+			    #pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
+			    #iPds = 0
 			dsdao={ "this_dataset_id": dataset_id }
 			dsdao["parent_dataset_id"] = ads
-			dsdao["dataset_parent_id"] = pdsID # PK of table 
+			#dsdao["dataset_parent_id"] = pdsID # PK of table 
 			dsdaolist.append(dsdao)
 		    # Do this one by one, as its sure to have duplicate in dest table
 		    for adsp in dsdaolist:

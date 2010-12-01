@@ -172,7 +172,7 @@ class DBSReaderModel(RESTModel):
         return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name, primary_ds_type)
         
     def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", 
-			processing_version="", acquisition_era="", run_num=0, physics_group_name="", logical_file_name="", primary_ds_name="",
+			processing_version="", acquisition_era="", run_num="0", physics_group_name="", logical_file_name="", primary_ds_name="",
 			primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
         """
 	This API lists the dataset paths and associated information.

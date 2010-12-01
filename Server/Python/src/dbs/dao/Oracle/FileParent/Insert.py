@@ -15,8 +15,8 @@ class Insert(DBFormatter):
         self.sql = \
 """
 INSERT INTO %sFILE_PARENTS 
-(FILE_PARENT_ID, THIS_FILE_ID, PARENT_FILE_ID) 
-VALUES (:file_parent_id, :this_file_id, :parent_file_id)
+(THIS_FILE_ID, PARENT_FILE_ID) 
+VALUES (:this_file_id, :parent_file_id)
 """ % (self.owner)
 
     def execute( self, conn, daoinput, transaction = False ):

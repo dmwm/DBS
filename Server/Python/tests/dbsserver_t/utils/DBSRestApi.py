@@ -37,11 +37,13 @@ class DBSRestApi:
 
     def configure(self, configfile, service):
         cfg = loadConfigurationFile(configfile)
-        wconfig = cfg.section_("Webtools")
-        app = wconfig.application
-        appconfig = cfg.section_(app)
-        dbsconfig = getattr(appconfig.views.active, service)
+        #wconfig = cfg.section_("Webtools")
+        #app = wconfig.application
+        #appconfig = cfg.section_(app)
+        #dbsconfig = getattr(appconfig.views.active, service)
 	databasecore = cfg.CoreDatabase
+        webapp = cfg.cmsdbs
+        dbsconfig = getattr(webapp.views.active, service)
 	
 	# Eitehr we change formatter 
 	# OR change the 'Accept' type to application/json (which we don't know how to do at thi moment)	
@@ -52,10 +54,10 @@ class DBSRestApi:
 	config.CoreDatabase = databasecore
 	
         config.component_('DBS')
-        config.DBS.application = app
+        config.DBS.application = "cmsdbs"
 	config.DBS.model       = dbsconfig.model
 	config.DBS.formatter   = dbsconfig.formatter
-        config.DBS.version     = dbsconfig.version
+        config.DBS.version     = databasecore.version
 	config.DBS.default_expires = 300
 	# DBS uses owner name, directly from app section at the moment (does not pick it from CoreDatabse)
 	config.DBS.dbowner     = databasecore.dbowner

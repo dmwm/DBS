@@ -90,8 +90,10 @@ class DBSOutputConfig:
 			"release_version_id" : businput["release_version_id"],
 			"parameter_set_hash_id" : businput["parameter_set_hash_id"],
 			"output_module_label" : businput["output_module_label"], 
-			"creation_date" : businput["creation_date"] , 
-			"create_by" : businput["create_by"]
+                        "global_tag" : businput.get("global_tag", None),
+                        "scenario"   : businput.get("scenario", None),
+			"creation_date" : businput.get("creation_date", None) , 
+			"create_by" : businput.get("create_by", None)
 			}
             omcdaoinput["output_mod_config_id"] = self.sm.increment(conn, "SEQ_OMC", tran)
             self.outmodin.execute(conn, omcdaoinput, tran)

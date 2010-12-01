@@ -87,8 +87,13 @@ class DBSBlockInsert :
         self.psetHashin     = daofactory(classname='ParameterSetHashe.Insert')
         self.appin          = daofactory(classname='ApplicationExecutable.Insert')
         self.dcin           = daofactory(classname='DatasetOutputMod_config.Insert')
-        #self.phygrpin       = daofactory(classname='PhysicsGroup.Insert')
+        self.phygrpin       = daofactory(classname='PhysicsGroup.Insert')
         self.newBlock = False
+
+        # Add a cache that Anzar thinks he needs.
+        #Cache is only need for output configure module since it is shared between file and dataset.
+        #Others go to db in different jobs. YG 11/17/2010
+        self.datasetCache = {'conf': {}}
 
     def putBlock(self, blockcontent):
         """
@@ -125,7 +130,7 @@ class DBSBlockInsert :
             return
         intval = 40
         intvalum = 1000
-        intvalfileparent = 120
+        #intvalfileparent = 120
         intvalfileconf = 1
 
 	donelumi=0
@@ -147,6 +152,19 @@ class DBSBlockInsert :
                     fileTypeObjs.append(ftypeO)
                 fileList[i]['file_type_id'] = fTypeid
                 del fileList[i]['file_type']
+                #other fields. YG 11/23/2010
+                fileList[i]['is_file_valid'] = fileList[i].get('is_file_valid', 1)
+                fileList[i]['check_sum'] = fileList[i].get('check_sum', None)
+                fileList[i]['event_count'] = fileList[i].get('event_count', -1)
+                fileList[i]['file_size'] = fileList[i].get('file_size', -1)
+                fileList[i]['adler32'] = fileList[i].get('adler32', None)
+                fileList[i]['md5'] = fileList[i].get('md5', None)
+                fileList[i]['auto_cross_section'] = fileList[i].get('auto_cross_section', None)
+                fileList[i]['creation_date'] = fileList[i].get('creation_date', None)
+                fileList[i]['create_by'] = fileList[i].get('create_by', None)
+                fileList[i]['last_modification_date'] = fileList[i].get('last_modification_date', None)
+                fileList[i]['last_modified_by'] = fileList[i].get('last_modified_by', None)
+
                 #get lumi info
                 lumi = fileList[i]['file_lumi_list']
                 nlumi = len(lumi)
@@ -168,10 +186,10 @@ class DBSBlockInsert :
             #deal with file parentage
             nfileparent = len(fileParentList)
             for k in range(nfileparent):
-                if(k%intvalfileparent==0):
-                    idfp = self.sm.increment(conn,"SEQ_FP", False, intvalfileparent)
-                fileParentList[k]['file_parent_id'] = idfp 
-                idfp += 1
+                #if(k%intvalfileparent==0):
+                    #idfp = self.sm.increment(conn,"SEQ_FP", False, intvalfileparent)
+                #fileParentList[k]['file_parent_id'] = idfp 
+                #idfp += 1
                 fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
                 parentId = self.fileid.execute(conn, fileParentList[k]['parent_logical_file_name'])
                 if parentId <= 0 :
@@ -240,11 +258,13 @@ class DBSBlockInsert :
             self.newBlock = True
         except exceptions.IntegrityError:
             #not sure what happends to WMAgent: Does it try to insert a block again? YG 10/05/2010
-            #ok, already in db. We should stop the migration of this block now. Should not try to insert the files.
-            #Because we assuem that every migration should migrate all the files.
-            block['block_id'] = self.blockid.execute(conn, block['block_name'], transaction=tran)
+            #Talked with Matt N: We should stop insertng this block now. This means there is some trouble.
+            #Throw exception to let the up layer know. YG 11/17/2010
+            #block['block_id'] = self.blockid.execute(conn, block['block_name'], transaction=tran)
             tran.rollback()
-            return block['block_id']
+            #return block['block_id']
+            self.logger.exception("DBS found Duplicated block: %s" %block['block_name'])
+            raise
         except Exception, ex:
             self.logger.exception("DBS block inseration exception: %s" %ex)
             tran.rollback()
@@ -255,10 +275,7 @@ class DBSBlockInsert :
         if self.newBlock:
             try:
                 for i in range(len(bpList)):
-                    if(i%intval==0):
-                        id = self.sm.increment(conn,"SEQ_BP", False, intval)
-                    bpList[i]['block_parent_id'] = id
-                    id += 1
+                    #updated due to schema update.
                     bpList[i]['this_block_id'] = block['block_id']
                     bpList[i]['parent_block_id'] = self.blockid.execute(conn, bpList[i]['block_name'])
                     if bpList[i]['parent_block_id'] <= 0:
@@ -288,76 +305,141 @@ class DBSBlockInsert :
         Insert Release version, application, parameter set hashes and the map(output module config).
 
         """
+        #import pdb
+        #pdb.set_trace()
         otptIdList = []
         missingList = []
         try:
             conn = self.dbi.connection()
             for c in remoteConfig:
-                cfgid = self.otptModCfgid.execute(conn, c["app_name"], c["release_version"], c["pset_hash"],\
-                   c["output_module_label"])
+                cfgid = self.otptModCfgid.execute(conn, app = c["app_name"],
+                                                  release_version = c["release_version"],
+                                                  pset_hash = c["pset_hash"],
+                                                  output_label = c["output_module_label"])
                 if cfgid <=0 :
                     missingList.append(c)
+                else:
+                    key = c['app_name']+':'+c['release_version']+':'+c['pset_hash']+':'+c['output_module_label']
+                    self.datasetCache['conf'][key] = cfgid
+                    otptIdList.append(cfgid)
+                    #print "About to set cfgid: %s" % str(cfgid)
         except Exception, ex:
             self.logger.exception("DBS output module config  exception: %s" %ex)
             raise
         #Now insert the missing configs
         try:
-            tran = conn.begin()
+            #tran = conn.begin()
             for m in missingList:
-                #get output module config id
-                cfgid = self.sm.increment(conn, "SEQ_OMC")
+                # Start a new transaction
+                # This is to see if we can get better results
+                # by committing early if we're submitting
+                # multiple blocks with similar features
+                tran = conn.begin()
+                #We are trying to commit right after almost every db activity. This may help with mutiple 
+                #jobs running with the same configuration, but will slow done DBS. YG 11/17/2010
+
                 #find release version id
                 reId = self.releaseVid.execute(conn, m["release_version"])
                 if reId <= 0:
                     #not found release version in db, insert it now
                     reId = self.sm.increment(conn, "SEQ_RV")
                     reobj={"release_version": m["release_version"], "release_version_id": reId}
-                    self.releaseVin.execute(conn, reobj, tran)
+                    #in case another job just commit it 1/10000 second earlier. YG 11/17/2010
+                    try:
+                        self.releaseVin.execute(conn, reobj, tran)
+                    except exceptions.IntegrityError:
+                        reId = self.releaseVid.execute(conn, m["release_version"])
                 #find pset hash id
                 pHId = self.psetHashid.execute(conn, m["pset_hash"], transaction=tran)
                 if pHId <= 0:
                     #not found p set hash in db, insert it now
-                    #print m
                     pHId = self.sm.increment(conn, "SEQ_PSH")
                     pHobj={"pset_hash": m["pset_hash"], "parameter_set_hash_id": pHId, 'name':m.get('name', '')}
-                    self.psetHashin.execute(conn, pHobj, tran)
+                    try:
+                        self.psetHashin.execute(conn, pHobj, tran)
+                    except exceptions.IntegrityError:
+                        pHId = self.psetHashid.execute(conn, m["pset_hash"], transaction=tran)
                 #find application id
                 appId = self.appid.execute(conn, m["app_name"])
                 if appId <= 0:
                     #not found application in db, insert it now
                     appId = self.sm.increment(conn, "SEQ_AE")
                     appobj={"app_name": m["app_name"], "app_exec_id": appId}
-                    self.appin.execute(conn, appobj, tran)
+                    try:
+                        self.appin.execute(conn, appobj, tran)
+                    except exceptions.IntegrityError:
+                        appId = self.appid.execute(conn, m["app_name"])
+                tran.commit()
                 #Now insert the config
-                configObj = {'output_mod_config_id':cfgid , 'app_exec_id':appId,  'release_version_id':reId,  \
-                             'parameter_set_hash_id':pHId , 'output_module_label':m['output_module_label'],   \
-                             'creation_date':None, 'create_by':''}
-                self.otptModCfgin.execute(conn, configObj, tran)
+                # Sort out the mess
+                # We're having some problems with different threads
+                # committing different pieces at the same time
+                # This makes the output module config ID wrong
+                # Trying to catch this via exception handling on duplication
+                # Start a new transaction
+                tran = conn.begin()
+                try:
+                    #get output module config id
+                    cfgid = self.sm.increment(conn, "SEQ_OMC")
+                    configObj = {'output_mod_config_id':cfgid , 'app_exec_id':appId,  'release_version_id':reId,  \
+                                 'parameter_set_hash_id':pHId , 'output_module_label':m['output_module_label'],   \
+                                 'global_tag':m.get('global_tag', None), 'scenario':m.get('scenario', None),      \
+                                 'creation_date':m.get('creation_date', None), 'create_by':m.get('create_by', None)}
+                    self.otptModCfgin.execute(conn, configObj, tran)
+                except exceptions.IntegrityError:
+                    #There are another job inserted it just 1/100000 second earlier than you!!  YG 11/17/2010
+                    cfgid = self.otptModCfgid.execute(conn, app = m["app_name"],
+                                                  release_version = m["release_version"],
+                                                  pset_hash = m["pset_hash"],
+                                                  output_label = m["output_module_label"])
+                    tran.rollback()
+                # End the transaction
+                tran.commit()
                 otptIdList.append(cfgid)
-            tran.commit()
-            #Duplicated entries? No, unless another thread insert it ( very small possiblity). It should not because this is the missing list.
-            #If this happends, I'd rather it raises exception.
+                key = m['app_name']+':'+m['release_version']+':'+m['pset_hash']+':'+m['output_module_label']
+                self.datasetCache['conf'][key] = cfgid
         except Exception, ex:
-            self.logger.exception("DBS output module configure inseration exception: %s" %ex)
+            self.logger.exception("DBS output module configure insertion exception: %s" %ex)
             tran.rollback()
             raise
         finally:
             conn.close()
         return otptIdList
 
-
     def insertDataset(self, blockcontent, otptIdList):
         """
-        This method insert a datsset from a block object into dest dbs. When data is not completed in
-        the block object. It will reterive data from the source url. 
+        This method insert a datsset from a block object into dbs.
         """
         #import pdb
         #pdb.set_trace()
         dataset = blockcontent['dataset']
         conn = self.dbi.connection()
+
+        # First, check and see if the dataset exists.
+        datasetID = self.datasetid.execute(conn, dataset['dataset'])
+        dataset['dataset_id'] = datasetID
+        if datasetID > 0:
+            # Then we already have a valid dataset.
+            # Skip to the END
+            try:
+                self.insertDatasetWOannex(dataset = dataset, blockcontent = blockcontent,
+                                       otptIdList = otptIdList, conn = conn,
+                                       insertDataset = False)
+            except Exception:
+                raise
+            finally:
+                conn.close()
+                
+            return datasetID
+
+        # Else, we need to do the work
+
+
+        
         try:
             #Start a new transaction 
             tran = conn.begin()
+            
             #1. Deal with primary dataset. Most primary datasets are perinstalled in db  
             primds = blockcontent["primds"]
             primds["primary_ds_id"] = self.primdsid.execute(conn, primds["primary_ds_name"], transaction=tran)
@@ -368,11 +450,27 @@ class DBSBlockInsert :
                     #primary ds type is not in db yet. Insert it now
                     primds["primary_ds_type_id"] = self.sm.increment(conn,"SEQ_PDT")
                     obj={'primary_ds_type_id':primds["primary_ds_type_id"], 'primary_ds_type':primds["primary_ds_type"]}
-                    self.primdstpin.execute(conn, obj, tran)
+                    try:
+                        self.primdstpin.execute(conn, obj, tran)
+                    except exceptions.IntegrityError:
+                        primds["primary_ds_type_id"] = self.primdstpid.execute(conn, primds["primary_ds_type"],\
+                                                transaction=tran)
+                    except Exception, ex:
+                        self.logger.exception("DBS primary ds type inseration exception: %s" %ex)
+                        tran.rollback
+                        raise
                 #Now inserting primary ds. Clean up dao object befer inserting
                 del primds["primary_ds_type"]
                 primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS")
-                self.primdsin.execute(conn, primds, tran) 
+                try:
+                    self.primdsin.execute(conn, primds, tran)
+                except exceptions.IntegrityError:
+                    primds["primary_ds_id"] = self.primdsid.execute(conn, primds["primary_ds_name"], \
+                                                transaction=tran)
+                except Exception, ex:       
+                    self.logger.exception("DBS primary ds inseration exception: %s" %ex)
+                    tran.rollback
+                    raise
             dataset['primary_ds_id'] = primds["primary_ds_id"]
             #2 Deal with processed ds
             try:
@@ -396,7 +494,6 @@ class DBSBlockInsert :
                 aq = blockcontent['acquisition_era']
             #is there acquisition?
             if aq:
-                #check if acquisition in cache
                 try:
                     #insert acquisition era into db
                     aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
@@ -447,12 +544,18 @@ class DBSBlockInsert :
             phg = dataset['physics_group_name']
             if phg:
                 #Yes, the dataset has physica group. 
-                #find in db since not find it in cache
                 phgId = self.phygrpid.execute(conn, phg, transaction=tran)
                 if phgId <=0 :
                     #not in db yet, insert it
                     phygrp={'physics_group_id':self.sm.increment(conn,"SEQ_PG"), 'physics_group_name':phg}
-                    self.phygrpin.execute(conn, phygrp, tran)
+                    try:
+                        self.phygrpin.execute(conn, phygrp, tran)
+                    except exceptions.IntegrityError:
+                        phgId = self.phygrpid.execute(conn, phg, transaction=tran)
+                    except Exception, ex:
+                        self.logger.exception("DBS physics group inseration exception: %s" %ex)
+                        tran.rollback()
+                        raise
                 dataset['physics_group_id'] = phgId
             else:
                 #no physics gruop for the dataset.
@@ -464,8 +567,15 @@ class DBSBlockInsert :
             if dataTId <= 0 :
                 #not in db. Insert the tier
                 dataTId = self.sm.increment(conn,"SEQ_DT")
-                theTier={'data_tier_id': dataTId,  'data_tier_name': dataT}                    
-                self.tierin.execute(conn, theTier, tran)
+                theTier={'data_tier_id': dataTId,  'data_tier_name': dataT}
+                try:                    
+                    self.tierin.execute(conn, theTier, tran)
+                except exceptions.IntegrityError:
+                    dataTId = self.tierid.execute(conn, dataT, transaction=tran)
+                except Exception, ex:
+                    self.logger.exception("DBS data tier inseration exception: %s" %ex)
+                    tran.rollback()
+                    raise
             dataset['data_tier_id'] = dataTId
             del dataset['data_tier_name']
             #7 Deal with dataset access type. A dataset must have a data type
@@ -475,29 +585,87 @@ class DBSBlockInsert :
                 #not in db. Insert the type
                 dsTpId = self.sm.increment(conn,"SEQ_DTP")
                 theType={'dataset_access_type':dsTp, 'dataset_access_type_id':dsTpId}
-                self.datatypein.execute(conn, theType, tran)
+                try:
+                    self.datatypein.execute(conn, theType, tran)
+                except exceptions.IntegrityError:
+                    dsTpId = self.datatypeid.execute(conn, dsTp, transaction=tran)
+                except Exception, ex:
+                    self.logger.exception("DBS data access type inseration exception: %s" %ex)
+                    tran.rollback()
+                    raise
             dataset['dataset_access_type_id'] = dsTpId
             del dataset['dataset_access_type']
             tran.commit()
         except Exception, ex:
-            self.logger.exception("DBS pre-dataset inseration exception: %s" %ex)
+            self.logger.exception("DBS pre-dataset insertion exception: %s" %ex)
             tran.rollback()
             raise
         try:
+            dataset['dataset_id'] = self.insertDatasetWOannex(dataset = dataset,
+                                                           blockcontent = blockcontent,
+                                                           otptIdList = otptIdList, conn = conn)
+        except Exception:
+            raise
+        finally:
+            conn.close()
+            
+        return dataset['dataset_id']
+
+
+
+    def insertDatasetWOannex(self, dataset, blockcontent, otptIdList, conn, insertDataset = True):
+        """
+        _insertDatasetOnly_
+
+        Insert the dataset and only the dataset
+        Meant to be called after everything else is put into place.
+
+        The insertDataset flag is set to false if the dataset already exists
+        """
+        #import pdb
+        #pdb.set_trace()
+
+
+        try:
             tran = conn.begin()
             #8 Finally, we have everything to insert a dataset
-            dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
-            self.datasetin.execute(conn, dataset, tran)
+            if insertDataset:
+                # Then we have to get a new dataset ID
+                dataset['dataset_id'] = self.datasetid.execute(conn, dataset['dataset'])
+                if dataset['dataset_id'] <= 0:
+                    dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
+                    try:
+                        self.datasetin.execute(conn, dataset, tran)
+                    except exceptions.IntegrityError:
+                        dataset['dataset_id'] = self.datasetid.execute(conn, dataset['dataset'])
+                    except Exception, ex:
+                        self.logger.exception("DBS dataset inseration exception: %s" %ex)
+                        tran.rollback()
+                        if conn:
+                            conn.close()
+                        raise
+                
             #9 Fill Dataset Parentage
             dsPList = blockcontent['ds_parent_list']
             dsParentObjList=[]
             for p in dsPList:
-                dsParentObj={'dataset_parent_id': self.sm.increment(conn,"SEQ_DP"), 'this_dataset_id': dataset['dataset_id']\
+                dsParentObj={'this_dataset_id': dataset['dataset_id']\
                                  , 'parent_dataset_id' : self.datasetid.execute(conn, p['parent_dataset'])}
                 dsParentObjList.append(dsParentObj)
             #insert dataset parentage in bulk
             if dsParentObjList:
-                self.dsparentin.execute(conn, dsParentObjList, tran)            
+                try:
+                    self.dsparentin.execute(conn, dsParentObjList, tran)
+                except exceptions.IntegrityError:
+                    #ok, already in db
+                    #FIXME: What happends when there are partially in db? YG 11/17/2010
+                    pass
+                except Exception, ex:
+                    self.logger.exception("DBS dataset parent mapping inseration exception: %s" %ex)
+                    if tran:
+                        tran.rollback()
+                    raise
+                                    
             #10 Before we commit, make dataset and output module configure mapping. 
             #We have to try to fill the map even if dataset is already in dest db
             #import pdb
@@ -510,6 +678,7 @@ class DBSBlockInsert :
                     self.dcin.execute(conn, dcObj, tran)
                 except exceptions.IntegrityError:
                     #ok, already in db
+                    #FIXME: What happends when there are partially in db? YG 11/17/2010
                     pass
                 except Exception, ex:
                     self.logger.exception("DBS dataset and output module mapping inseration exception: %s" %ex)
@@ -517,10 +686,13 @@ class DBSBlockInsert :
                         tran.rollback()
                     raise 
             tran.commit()
+        except exceptions.IntegrityError:
+            # Then is it already in the database?
+            # Maybe.  See what happens if we ignore
+            pass
         except Exception, ex:
-            self.logger.exception("DBS dataset inseration exception: %s" %ex)
+            self.logger.exception("DBS dataset inseration witu out Annex exception: %s" %ex)
             tran.rollback()
             raise
-        finally:
-            conn.close()
+
         return dataset['dataset_id']

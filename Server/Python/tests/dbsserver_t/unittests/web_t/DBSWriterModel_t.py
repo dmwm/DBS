@@ -25,7 +25,8 @@ def uuid():
 config = os.environ["DBS_TEST_CONFIG_WRITER"] 
 service = os.environ["DBS_TEST_SERVICE"] 
 api = DBSRestApi(config, service)
-uid = uuid()
+#uid = uuid()
+uid=10
 # cannot use python uuid since the generated uuid is too big to fit into some db columns.
 #uid = int(uuid.uuid1())
 #uid = str(uuid.uuid1())
@@ -152,7 +153,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
 		    'output_module_label': output_module_label},
 		    ],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	#import pdb
@@ -165,7 +166,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
 		    'output_module_label': output_module_label},
 		    ],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insert('datasets', childdata)
@@ -182,7 +183,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': 
 		    app_name, 'output_module_label': output_module_label},
 		], 
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		#'processing_version': '1',  'acquisition_era_name': u'',
 		}
 	
@@ -199,7 +200,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		    {'release_version': release_version, 'pset_hash': pset_hash, 
 		    'app_name': app_name, 'output_module_label': output_module_label},
 		],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		}
 	try:
 	    api.insert('datasets', data)
@@ -219,7 +220,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': 
 		    app_name, 'output_module_label': output_module_label},
 		],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	try:
@@ -236,24 +237,23 @@ class DBSWriterModel_t(unittest.TestCase):
 		'dataset': dataset,
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier
 		}
 	api.insert('datasets', data)
+        
+    #def test14(self):
+	#"""test14: web.DBSWriterModel.insertSite: basic test"""
+	#data = {
+	#     "site_name" : site
+	#}
+	#api.insert('sites', data)
 
-    def test14(self):
-	"""test14: web.DBSWriterModel.insertSite: basic test"""
-	data = {
-	     "site_name" : site
-	}
-	api.insert('sites', data)
-
-
-    def test15(self):
-	"""test15: web.DBSWriterModel.insertSite: duplicate site must not throw any errors"""
-	data = {
-	     "site_name" : site
-	}
-        api.insert('sites', data)
+    #def test15(self):
+	#"""test15: web.DBSWriterModel.insertSite: duplicate site must not throw any errors"""
+	#data = {
+	#     "site_name" : site
+	#}
+        #api.insert('sites', data)
 	
     def test16(self):
 	"""test16 web.DBSWriterModel.insertBlock: basic test"""
@@ -278,7 +278,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	flist=[]
  	for i in range(10):
 	    f={  
-		'adler32': u'NOTSET', 'file_type': 'EDM',
+		'adler32': '', 'file_type': 'EDM',
                 'file_output_config_list': 
 		    [ 
 			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
@@ -301,7 +301,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	    flist.append(f)
 	data={"files":flist}
 	api.insert('files', data)
-	time.sleep(10)
+	#time.sleep(10)
 
     def test19(self):
 	"""test19 web.DBSWriterModel.insertFiles: duplicate insert file shuld not raise any errors"""
@@ -309,7 +309,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	flist=[]
  	for i in range(10):
 	    f={  
-		'adler32': u'NOTSET', 'file_type': 'EDM',
+		'adler32': '', 'file_type': 'EDM',
                 'file_output_config_list': 
 		    [ 
 			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
@@ -343,7 +343,7 @@ class DBSWriterModel_t(unittest.TestCase):
         flist=[]
         for i in range(10):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': u'NOSET', 'file_type': 'EDM',
                 'file_output_config_list':
                     [
                         {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,

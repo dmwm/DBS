@@ -18,10 +18,13 @@ class InsertSingle(DBFormatter):
 	sql1 = " insert into %s%s( " %(self.owner, tablename)
 	sql2 =" values("
 	"Now loop over all the input keys. We need to check if all the keys are valid !!!"
-	for key in daoinput:
-	    sql1 += "%s," %key.upper()
-	    sql2 += ":%s," %key.lower()
-	sql = sql1.strip(',') + ') ' + sql2.strip(',') + ' )'
+        try:
+            for key in daoinput:
+                sql1 += "%s," %key.upper()
+                sql2 += ":%s," %key.lower()
+        except Exception:
+            raise 
+        sql = sql1.strip(',') + ') ' + sql2.strip(',') + ' )'
 	try:
 	    #print sql
 	    self.dbi.processData(sql, daoinput, conn, transaction)
