@@ -17,19 +17,17 @@ class GetID(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = \
-"""
-SELECT PG.PHYSICS_GROUP_ID, PG.PHYSICS_GROUP_NAME
-FROM %sPHYSICS_GROUPS PG 
-""" % (self.owner)
+        self.sql = """SELECT pg.physics_group_id, pg.physics_group_name
+                        FROM %sPHYSICS_GROUPS pg
+                        WHERE pg.physics_group_name = :physicsgroup
+                        """ % (self.owner)
 
     def execute(self, conn, name, transaction = False):
         """
         returns id for a given physics group name
         """
         sql = self.sql
-        sql += "WHERE PG.PHYSICS_GROUP_NAME = :physicsgroup" 
-        binds = {"physicsgroup":name}
+        binds = {"physicsgroup": name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
 	if len(plist) < 1: return -1

@@ -21,7 +21,7 @@ class Insert(DBFormatter):
 	    #print self.sql
 	    #print appExeObj
             result = self.dbi.processData(self.sql, appExeObj, conn, transaction)
- 	except Exception, e:
+ 	except Exception, ex:
 	    if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 		pass
 	    else:
