@@ -17,16 +17,21 @@ class GetID(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = """SELECT D.DATASET_ID FROM %sDATASETS D WHERE D.DATASET = :dataset""" % ( self.owner )
+        self.sql = \
+"""
+SELECT D.DATASET_ID
+FROM %sDATASETS D 
+""" % ( self.owner )
         
 	
     def execute(self, conn, dataset, transaction = False):
         """
         returns id for a given dataset = /primds/procds/tier
         """	
-
+        sql = self.sql
+        sql += "WHERE D.DATASET = :dataset"
         binds = {"dataset":dataset}
-        result = self.dbi.processData(self.sql, binds, conn, transaction)
+        result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
 	if len(plist) < 1: return -1
         return plist[0]["dataset_id"]

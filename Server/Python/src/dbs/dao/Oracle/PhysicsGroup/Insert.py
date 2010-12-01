@@ -8,13 +8,11 @@ from WMCore.Database.DBFormatter import DBFormatter
 
 class Insert(DBFormatter):
 
-    def __init__(self, logger, dbi, owner):
+    def __init__(self, logger, dbi):
             DBFormatter.__init__(self, logger, dbi)
 	    self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 	    
             self.sql = """INSERT INTO %sPHYSICS_GROUPS ( PHYSICS_GROUP_ID, PHYSICS_GROUP_NAME, PHYSICS_GROUP_CONVENER) VALUES (:physicsgroupid, :physicsgroupname, :physicsgroupconvener)""" % (self.owner)
-            self.minSQL = """INSERT INTO %sPHYSICS_GROUPS (PHYSICS_GROUP_ID, PHYSICS_GROUP_NAME)
-                               VALUES (:physics_group_id, :physics_group_name) """ % (self.owner)
 
     def getBinds_delme( self, physics_groupsObj ):
             binds = {}
@@ -36,13 +34,10 @@ class Insert(DBFormatter):
                return binds
 
 
-    def execute( self, conn, physics_groupsObj, transaction=False):
+    def execute( self, conn, physics_groupsObj, transaction=False ):
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/PhysicsGroup/Insert expects db connection from upper layer.")
-        if not physics_groupsObj.get('physicsgroupconvener', False):
-            self.dbi.processData(self.minSQL, physics_groupsObj, conn, transaction)
-        else:
-            self.dbi.processData(self.sql, physics_groupsObj, conn, transaction)
+	result = self.dbi.processData(self.sql, physics_groupsObj, conn, transaction)
 	return
 
 
