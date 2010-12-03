@@ -9,7 +9,7 @@ import os
 import sys
 import unittest
 import time
-#import uuid
+import uuid
 from ctypes import *
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
 
@@ -17,19 +17,10 @@ class NullDevice:
     def write(self, s):
         pass
 
-def uuid():
-    lib = CDLL("libuuid.so.1")
-    uuid = create_string_buffer(16)
-    return lib.uuid_generate(byref(uuid))
-
 config = os.environ["DBS_TEST_CONFIG_WRITER"] 
 service = os.environ["DBS_TEST_SERVICE"] 
 api = DBSRestApi(config, service)
-#uid = uuid()
-uid=10
-# cannot use python uuid since the generated uuid is too big to fit into some db columns.
-#uid = int(uuid.uuid1())
-#uid = str(uuid.uuid1())
+uid = uuid.uuid4().time_mid
 print "****uid=%s******" %uid
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
