@@ -11,6 +11,7 @@ from WMCore.WebTools.RESTModel import RESTModel
 from WMCore.DAOFactory import DAOFactory
 from cherrypy import server
 from dbs.utils.dbsUtils import dbsUtils
+from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 import cjson
 from sqlalchemy import exceptions
 
@@ -44,7 +45,10 @@ class DBSServicesRegistry(RESTModel):
 	    result= self.serviceslist.execute(conn)
 	    return result
 	except Exception, ex:
-	    raise ex
+            msg= "%s DBSServicesRegistry/getServices. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+            self.logger.exception(msg )
+            raise Exception ("dbsException-3", msg )
 	finally:
 	    conn.close()
 
@@ -63,14 +67,19 @@ class DBSServicesRegistry(RESTModel):
 	    addthis['service_id'] = self.sm.increment(conn, "SEQ_RS", tran)
 	    addthis['name'] = service.get('NAME', '')
 	    if addthis['name'] == '':
-		raise Exception("Service Must be Named")
+                msg= "%s DBSServicesRegistry/addServices. Service Must be Named\n" \
+                        %DBSEXCEPTIONS['dbsException-3']
+		raise Exception("dbsException-3", msg)
 	    addthis['type'] = service.get('TYPE', 'GENERIC')
 	    addthis['location'] = service.get('LOCATION', 'HYPERSPACE')
 	    addthis['status'] = service.get('STATUS', 'UNKNOWN')
 	    addthis['admin'] = service.get('ADMIN', 'UNADMINISTRATED')
 	    addthis['uri'] = service.get('URI','')
 	    if addthis['uri'] == '':
-		raise Exception("Service URI must be provided")
+                msg = "%s DBSServicesRegistry/addServices. Service URI must be provided.\n" \
+                        %DBSEXCEPTIONS['dbsException-3']
+                self.logger.exception(msg)
+		raise Exception("dbsException-3", msg)
 	    addthis['db'] = service.get('DB', 'NO_DATABASE')
 	    addthis['version'] = service.get('VERSION','UNKNOWN' )
 	    addthis['last_contact'] = dbsUtils().getTime()
@@ -85,10 +94,15 @@ class DBSServicesRegistry(RESTModel):
 		    self.servicesupdate.execute(conn, addthis, tran)
 		    tran.commit()
 		except Exception, ex:
-		    raise
+                    msg = "%s DBSServiceRegistry/addServices. %s\n. Exception trace: \n %s" \
+                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                    self.logger.exception(msg ) 
+                    raise Exception ("dbsException-3", msg )
 	except Exception, ex:
 	    tran.rollback()
-	    raise ex
+            msg = "%s DBSServiceRegistry/addServices. %s\n. Exception trace: \n %s" \
+                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+            self.logger.exception(msg )
+            raise Exception ("dbsException-3", msg )
 	finally:
 	    conn.close() 
-

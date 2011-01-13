@@ -36,7 +36,8 @@ class Insert(DBFormatter):
 
     def execute( self, associated_filesObj, conn, transaction=False ):
 	    if not conn:
-		raise Exception("dbs/dao/Oracle/AssociatedFile/Insert expect db connection from upper layer.")
+		raise Exception("dbsException-1", "%s Oracle/AssociatedFile/Insert. Expect db connection from upper layer.\n"\
+                        %DBSEXCEPTIONS["dbsException-1"])
             ##binds = self.getBinds( associated_filesObj )
             result = self.dbi.processData(self.sql, binds, conn, transaction)
             return

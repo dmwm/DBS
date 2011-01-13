@@ -14,6 +14,7 @@ import urllib, urllib2
 from sqlalchemy import exceptions
 from sqlalchemy.exceptions import IntegrityError
 from dbs.utils.dbsUtils import dbsUtils
+from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 
 def pprint(a):
     print json.dumps(a, sort_keys=True, indent=4)
@@ -68,7 +69,9 @@ class DBSMigrate:
 #	    print ordered_dict
 	    return ordered_dict  
 	except Exception, ex:
-	    raise Exception("Failed to prepare ordered block list of dataset %s for migration, %s" % (srcdataset, str(ex)))
+	    raise Exception('dbsException-2', "%s DBSMigrate/prepareDatasetMigrationList.\
+                    Failed to prepare ordered block list of dataset %s for migration.\n %s" \
+                    %(DBSEXCEPTIONS['dbsException-2'], (srcdataset, str(ex))) )
 
     def processDatasetBlocks(self, url, conn, inputdataset, order_counter):
 	"""
@@ -78,7 +81,9 @@ class DBSMigrate:
 	ordered_dict={}
 	srcblks=self.getSrcBlocks(url, dataset=inputdataset)
 	if len(srcblks) < 0:
-	    raise Exception("Dataset %s not found at source %s" %(inputdataset, url))
+	    raise Exception('dbsException-2', "%s DBSMigrate/processDatasetBlocks.\
+                    Dataset %s not found at source %s" \
+                    %(DBSEXCEPTIONS['dbsException-2'], inputdataset, url) )
 	dstblks=self.blocklist.execute(conn, dataset=inputdataset)
 	blocksInSrcNames = [ y['block_name'] for y in srcblks]
 	blocksInDstNames = [ x['block_name'] for x in dstblks]
@@ -128,11 +133,15 @@ class DBSMigrate:
 	    #1.
 	    dstblock = self.blocklist.execute(conn, block_name=block_name )
 	    if len(dstblock) > 0:
-		raise Exception("BLOCK %s already exists at destination" % block_name)
+		raise Exception('dbsException-2', "%s DBSMigrate/prepareBlockMigrationList. \n \
+                        BLOCK %s already exists at destination" \
+                        %(DBSEXCEPTIONS['dbsException-2'],  block_name) )
 	    #2.
 	    srcblock= self.getSrcBlocks(url, block=block_name)
 	    if len(srcblock) < 1:
-		raise Exception("BLOCK %s does not exist at source dbs %s" %(url, block_name))
+		raise Exception('dbsException-2',  "%s DBSMigrate/prepareBlockMigrationList.\
+                        BLOCK %s does not exist at source dbs %s" \
+                        %(DBSEXCEPTIONS['dbsException-2'], url, block_name))
 	    ##This block has to be migrated
 	    ordered_dict[order_counter]=[]
 	    ordered_dict[order_counter].append(block_name)
@@ -143,7 +152,9 @@ class DBSMigrate:
 	    #print ordered_dict
 	    return ordered_dict
         except Exception, ex:
-	    raise Exception("Failed to prepare ordered migration list of block %s for migration, %s" % (block_name, str(ex)))
+	    raise Exception('dbsException-2', "%s DBSMigrate/prepareBlockMigrationList. \
+                    Failed to prepare ordered migration list of block %s for migration, %s" \
+                    % (DBSEXCEPTIONS['dbsException-2'], block_name, str(ex)) )
  
     def getParentBlocksOrderedList(self, url, conn, block_name, order_counter):
 	    ordered_dict={}
@@ -179,8 +190,11 @@ class DBSMigrate:
 	    if len(alreadyqueued) > 0:
 		return {"migration_report" : "REQUEST ALREADY QUEUED", "migration_details" : alreadyqueued[0] }
 	except Exception, ex:
+            self.logger.exception("%s DBSMigrate/insertMigrationRequest. ENQUEUEING_FAILED reason may be %s\n." \
+                    %(DBSEXCEPTIONS['dbsException-2'], ex) )
 	    conn.close()
-	    raise Exception("ENQUEUEING_FAILED reason may be ( %s ) " %ex)
+	    raise Exception("dbsException-2", "%s DBSMigrate/insertMigrationRequest. ENQUEUEING_FAILED reason may be ( %s ) " \
+                    %(DBSEXCEPTIONS['dbsException-2'], ex) )
 	   
 	try: 
 	    # not already queued	    
@@ -191,6 +205,7 @@ class DBSMigrate:
 		ordered_list=self.prepareDatasetMigrationList(conn, request)
 	    # now we have the blocks that need to be queued (ordered)
 	except Exception, ex:
+            self.logger.exception("%s DBSMigrate/insertMigrationRequest. %s" %(DBSEXCEPTIONS['dbsException-2'], ex) )
 	    raise
     	    
 	tran = conn.begin()
@@ -222,11 +237,12 @@ class DBSMigrate:
 		request["migration_request_id"] = ""
 		return {"migration_report" : "REQUEST ALREADY QUEUED", "migration_details" : request }
 	    else:
-		self.logger.exception(ex)
-	        raise Exception("ENQUEUEING_FAILED reason may be ( %s ) " %ex)  
+	        raise Exception("dbsException-2", "%s DBSMigrate/insertMigrationRequest. ENQUEUEING_FAILED reason may be ( %s ) "\
+                    %(DBSEXCEPTIONS['dbsException-2'], ex) )  
 	except Exception, ex:
 	    tran.rollback()
-	    raise Exception("ENQUEUEING_FAILED reason may be ( %s ) " %ex)
+	    raise Exception("dbsException-2", "%s DBSMigrate/insertMigrationRequest. ENQUEUEING_FAILED reason may be ( %s ) " \
+                    %(DBSEXCEPTIONS['dbsException-2'],  ex) )
 	finally:
 	    conn.close()
     
@@ -239,15 +255,16 @@ class DBSMigrate:
 	conn = self.dbi.connection()
 	migratee=""
 	try:
-	   if block_name:
-		migratee=block_name
-	   elif dataset:
-		migratee=dataset
-	   result = self.mgrlist.execute(conn, migration_url="", migration_input=migratee, create_by=user, migration_request_id="")
-	   conn.close()
-	   return result
-	except:
-	    raise
+            if block_name:
+                migratee=block_name
+            elif dataset:
+                migratee=dataset
+            result = self.mgrlist.execute(conn, migration_url="", migration_input=migratee, create_by=user, migration_request_id="")
+            conn.close()
+            return result
+	except  Exception, ex :
+            self.logger.exception("%s DBSMigrate/listMigrationRequest. %s" %(DBSEXCEPTIONS['dbsException-2'], ex) ) 
+            raise ex
 	finally:
 	    conn.close()
 
@@ -256,8 +273,9 @@ class DBSMigrate:
 	try:
 	    upst = dict(migration_status=migration_status, migration_dataset=migration_dataset)
 	    self.mgrup.execute(conn,upst)
-	except:
-	    raise
+	except  Exception, ex:
+            self.logger.exception("%s DBSMigrate/listMigrationRequest. %s" %(DBSEXCEPTIONS['dbsException-2'], ex) )
+	    raise ex
 	finally:
 	    conn.close()
 
@@ -313,8 +331,9 @@ class DBSMigrate:
 	    if prsEra:
 		result["processing_era"]=prsEra
 	    return result
-	except:
-	    raise
+	except  Exception, ex:
+            self.logger.exception("%s DBSMigrate/dumpBlock. %s" %(DBSEXCEPTIONS['dbsException-2'], ex) )
+	    raise ex
 	finally:
 	    conn.close()
 	
@@ -349,7 +368,8 @@ class DBSMigrate:
 	elif dataset:
 	    resturl = "%s/blocks?dataset=%s" % (url,dataset)
 	else:
-	    raise Exception("INVALID block or dataset name")
+	    raise Exception('dbsException-2', "%s DBSMigrate/getSrcBlocks. INVALID block or dataset name: %s or %s"\
+                    %(DBSEXCEPTIONS['dbsException-2'], block, dataset)  )
 	return self.callDBSService(resturl)
 
 

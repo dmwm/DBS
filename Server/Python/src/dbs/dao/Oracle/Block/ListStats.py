@@ -30,7 +30,8 @@ class ListStats(DBFormatter):
         returns id for a given block = /primds/procds/tier#block
         """	
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Block/ListStatus expects db connection from upper layer.")
+            raise Excpetion("dbsException-1", "%s Oracle/Block/ListStats.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
         binds = {"block_id": block_id}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)

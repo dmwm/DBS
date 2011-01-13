@@ -26,7 +26,8 @@ class UpdateStatus(DBFormatter):
         for a given file
         """	
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Dataset/ListStatus expects db connection from upper layer.")
+            raise Excpetion("dbsException-1", "%s Oracle/Dataset/UpdateStatus.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
 	binds = { "dataset" : dataset , "is_dataset_valid" : is_dataset_valid}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

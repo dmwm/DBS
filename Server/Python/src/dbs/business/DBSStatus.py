@@ -7,6 +7,7 @@ __revision__ = "$Id: DBSStatus.py,v 1.1 2010/06/14 15:09:50 afaq Exp $"
 __version__ = "$Revision: 1.1 $"
 
 from WMCore.DAOFactory import DAOFactory
+from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 
 class DBSStatus:
     """
@@ -31,6 +32,8 @@ class DBSStatus:
 	    ret = self.compstatus.execute(conn)
 	    return ret
 	except Exception, ex:
+            self.logger.exception("%s DBSStatus/getComponentStatus. %s" \
+                    %(DBSEXCEPTIONS['dbsException-2'], ex) )
 	    raise ex
 	finally:
 		conn.close()
@@ -44,6 +47,8 @@ class DBSStatus:
 	ret = self.dbsstatus.execute(conn)
 	return ret
       except Exception, ex:
+        self.logger.exception("%s DBSStatus/getSchemaStatus. %s" \
+                %(DBSEXCEPTIONS['dbsException-2'], ex) )
 	raise ex
       finally:
 	conn.close()

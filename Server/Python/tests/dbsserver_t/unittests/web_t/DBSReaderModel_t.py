@@ -61,7 +61,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test007(self):
         """test007: web.DBSReaderModel.listDatasets: basic test"""
-        api.list('datasets', run_num=testparams['run_num'])
+        api.list('datasets', run_num=str(testparams['run_num']))
 
     def test008(self):
         """test008: web.DBSReaderModel.listDatasets: basic test"""

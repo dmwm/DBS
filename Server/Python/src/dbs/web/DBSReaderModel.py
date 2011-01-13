@@ -8,9 +8,10 @@ __version__ = "$Revision: 1.50 $"
 
 import cjson
 import inspect
+from cherrypy import request, response, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
-from dbs.utils.dbsUtils import dbsUtils as DBSUtils 
-
+from dbs.utils.dbsUtils import dbsUtils
+from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
@@ -26,7 +27,7 @@ from dbs.business.DBSStatus import DBSStatus
 from dbs.business.DBSMigrate import DBSMigrate
 from dbs.business.DBSBlockInsert import DBSBlockInsert
 
-
+import traceback
 import urllib, urllib2
 import re
 import threading
@@ -46,6 +47,7 @@ class DBSReaderModel(RESTModel):
         All parameters are provided through DBSConfig module
         """
         RESTModel.__init__(self, config)
+        self.dbsUtils2 = dbsUtils()
         self.version = self.getServerVersion()
 	self.register()
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
@@ -61,7 +63,7 @@ class DBSReaderModel(RESTModel):
         self.addMethod('GET', 'filechildren', self.listFileChildren)
         self.addMethod('GET', 'filelumis', self.listFileLumis)
         self.addMethod('GET', 'runs', self.listRuns)
-        self.addMethod('GET', 'sites', self.listSites)
+        #self.addMethod('GET', 'sites', self.listSites)
         self.addMethod('GET', 'datatypes', self.listDataTypes)
         self.addMethod('GET', 'datatiers', self.listDataTiers)
         self.addMethod('GET', 'blockparents', self.listBlockParents)
@@ -86,7 +88,6 @@ class DBSReaderModel(RESTModel):
 	self.dbsStatus = DBSStatus(self.logger, self.dbi, config.dbowner)
 	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
         self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, config.dbowner) 
-	self.dbsUtils = DBSUtils()
     
     def geoLocateThisHost(self, ip):
 	"""
@@ -110,13 +111,15 @@ class DBSReaderModel(RESTModel):
 	    addthis['TYPE'] = self.__class__.__name__
 	    addthis['LOCATION'] = self.geoLocateThisHost(socket.gethostbyname(socket.gethostname()))
 	    addthis['STATUS'] = "WORKING"
-	    addthis['ADMIN'] = self.config.admin
+	    #addthis['ADMIN'] = self.config.admin
 	    addthis['URI'] = "%s/%s" % (server.base(), self.config._internal_name)
-	    addthis['DB'] = self.config.database.connectUrl  #<<<<<<<<<<<remove password
+            #addthis['DB'] = self.config.CoreDatabase.connectUrl  #<<<<<<<<<<<remove password
+	    #addthis['DB'] = self.config.database.connectUrl  #<<<<<<<<<<<remove password
 	    addthis['VERSION'] = self.getServerVersion()
-	    addthis['LAST_CONTACT'] = dbsUtils().getTime()
+	    addthis['LAST_CONTACT'] = self.dbsUtils2.getTime()
 	    addthis['COMMENTS'] = "DBS Service"
-	    self.logger.warning("REGISTERING DBS: %s" %str(addthis))
+	    self.logger.warning("DBS Web DBSReaderModel/register. REGISTERING DBS: %s\n" \
+                    %str(addthis) )
 	    params = cjson.encode(addthis)
 	    headers =  {"Content-type": "application/json", "Accept": "application/json" }
 	    self.opener =  urllib2.build_opener()
@@ -124,7 +127,8 @@ class DBSReaderModel(RESTModel):
 	    req.get_method = lambda: 'POST'
 	    data = self.opener.open(req)
 	except Exception, ex:
-	    print ex
+	    self.logger.exception("%s DBSReaderModel/register. %s\n EXception Trace: \n %s.\n" \
+                    %(DBSEXCEPTIONS['dbsException-3'],ex, traceback.format_exc()) )
 	    pass
 
     def getServerVersion(self):
@@ -169,8 +173,16 @@ class DBSReaderModel(RESTModel):
         """
         primary_ds_name = primary_ds_name.replace("*","%")
 	primary_ds_type = primary_ds_type.replace("*","%")
-        return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name, primary_ds_type)
-        
+        try:
+            return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name, primary_ds_type)
+        except Exception, ex:
+            print "**********ex in reader: %s\n" %ex
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(401, ("%s" %ex))
+            else:
+                raise ex
+
+
     def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", 
 			processing_version="", acquisition_era="", run_num="0", physics_group_name="", logical_file_name="", primary_ds_name="",
 			primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
@@ -272,7 +284,7 @@ class DBSReaderModel(RESTModel):
 	minrun = int(minrun)
 	if lumi_list:
 	    #lumi_list = cjson.decode(lumi_list)
-	    lumi_list = self.dbsUtils.decodeLumiIntervals(lumi_list)
+	    lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
 	detail = detail in (True, 1, "True", "1")
 	output_module_label = output_module_label.replace("*", "%")
 	return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
@@ -339,23 +351,33 @@ class DBSReaderModel(RESTModel):
         http://dbs3/runs?runmin=1&runmax=10
         http://dbs3/runs
         """
-	if(logical_file_name):
-	    logical_file_name= logical_file_name.replace("*", "%")
-	if(block_name):
-	    block_name = block_name.replace("*", "%")
-	if(dataset):
-	    dataset = dataset.replace("*", "%")
-        return self.dbsRun.listRuns(minrun, maxrun, logical_file_name, block_name, dataset)
-   
-    def listSites(self, block_name="", site_name=""):
-        """
-        Example url's <br />
-        http://dbs3/sites
-	http://dbs3/sites?block_name=block_name
-	http://dbs3/sites?site_name=T1_FNAL
-        """
-        return self.dbsSite.listSites(block_name, site_name)
-  
+        try:
+            if(logical_file_name):
+                logical_file_name= logical_file_name.replace("*", "%")
+                #print ("LFN=%s\n" %logical_file_name) 
+            if(block_name):
+                block_name = block_name.replace("*", "%")
+                #print("Block=%s\n" %block_name)
+            if(dataset):
+                dataset = dataset.replace("*", "%")
+                #print("ds=%s\n" %dataset)
+            #print ("maxrun=%s, minrun=%s\n" %(maxrun, minrun) )
+            return self.dbsRun.listRuns(minrun, maxrun, logical_file_name, block_name, dataset)
+        except Exception, ex:
+            self.logger.exception("%s DBSReaderModel/listRun. %s\n EXception Trace: \n %s.\n" \
+                        %(DBSEXCEPTIONS['dbsException-3'],ex, traceback.format_exc()) )
+            raise ex
+
+    #def listSites(self, block_name="", site_name=""):
+    #    """
+    #    Example url's <br />
+    #    http://dbs3/sites
+    #	http://dbs3/sites?block_name=block_name
+    #	http://dbs3/sites?site_name=T1_FNAL
+    #    """
+    #    return self.dbsSite.listSites(block_name, site_name)
+
+
     def listDataTypes(self, datatype="", dataset=""):
 	"""
 	lists datatypes known to dbs

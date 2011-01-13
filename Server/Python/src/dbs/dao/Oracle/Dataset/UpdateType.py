@@ -27,7 +27,8 @@ class UpdateType(DBFormatter):
         for a given file
         """	
 	if not conn:
-	    raise Exception("No database connection")
+            raise Excpetion("dbsException-1", "%s Oracle/Dataset/UpdateType.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
 	binds = { "dataset" : dataset , "dataset_access_type" : dataset_access_type }
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

@@ -34,7 +34,8 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 	block: /a/b/c#d
 	"""	
 	if not conn:
-	    raise Exception("dbs/dao/Oarcle/Block/List expects db connection from upper layer.")
+            raise Excpetion("dbsException-1", "%s Oracle/Block/List.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
 	sql = self.sql
 	binds = {}
 

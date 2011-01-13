@@ -10,7 +10,9 @@ import sys
 import unittest
 import time
 import uuid
+import traceback
 from ctypes import *
+from cherrypy import request, response, HTTPError
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
 
 class NullDevice:
@@ -69,19 +71,19 @@ class DBSWriterModel_t(unittest.TestCase):
         """setup all necessary parameters"""
 
     def test01(self):
-        """test01: web.DBSWriterModel.insertPrimaryDataset: basic test"""
+        """test01: web.DBSWriterModel.insertPrimaryDataset: basic test\n"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':primary_ds_type}
         api.insert('primarydatasets', data)
 
     def test02(self):
-        """test02: web.DBSWriterModel.insertPrimaryDataset: duplicate should not riase an exception"""
+        """test02: web.DBSWriterModel.insertPrimaryDataset: duplicate should not riase an exception\n"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':primary_ds_type}
         api.insert('primarydatasets', data)
 	
     def test03(self):
-	"""test03: web.DBSWriterModel.insertPrimaryDataset: missing primary_ds_name, must throw exception"""
+	"""test03: web.DBSWriterModel.insertPrimaryDataset: missing primary_ds_name, must throw exception\n"""
 	#import pdb
 	#pdb.set_trace()
 		
@@ -89,9 +91,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	try:
 	    junk = api.insert('primarydatasets', data)
 	except Exception, ex:
-	    #print "**** "
-	    #print ex
-	    #print "****"
+            #print traceback.format_exc()
 	    if "Primary dataset Name is required for insertPrimaryDataset" in ex.args[0]:
 		pass
 	    else :
@@ -206,7 +206,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
 	        #'dataset_access_type': 'PRODUCTION', 
-		'processed_ds_name': procdataset,
+		'processed_ds_name': procdataset, 'dataset':dataset,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': 
 		    app_name, 'output_module_label': output_module_label},
@@ -217,6 +217,9 @@ class DBSWriterModel_t(unittest.TestCase):
 	try:
 	    api.insert('datasets', data)
 	except Exception, ex:
+            #print "*****"
+            #print ex
+            #print "****"
 	    if 'dataset_access_type' in ex.args[0]:
 		pass
 	    else:
@@ -363,7 +366,7 @@ class DBSWriterModel_t(unittest.TestCase):
     def test21(self):
 	"""test21 web.DBSWriterModel.updateFileStatus: Basic test """
 	lfn = "/store/mc/%s-child/%i.root" %(uid, 1)
-	print lfn
+	#print lfn
 	api.update('files', logical_file_name=lfn, is_file_valid=0)
 
 

@@ -8,6 +8,7 @@ __version__ = "$Revision: 1.15 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
+from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 
 class DBSOutputConfig:
     """
@@ -47,6 +48,8 @@ class DBSOutputConfig:
 	    conn.close()
 	    return result
         except Exception, ex:
+            self.logger.exception("%s DBSOutputConfig/listOutputConfigs. %s"\
+                    %(DBSEXCEPTIONS['dbsException-2'], ex) )
             raise ex
 	finally:
 	    if conn: 
@@ -57,8 +60,13 @@ class DBSOutputConfig:
         Method to insert the Output Config
         It first checks if release, app, and pset_hash exists, if not insert them,
         and then insert the output module
-		
+
+	Updated Jan 12, 2011	
         """
+        if not (businput.has_key("app_name")  and businput.has_key("release_version")\
+            and businput.has_key("pset_hash") and businput.has_key("output_module_label")):
+            raise Exception("dbsException-7", "%s business/DBSOutputConfig/insertOutputConfig require:\
+                app_name, release_version, pset_hash and output_module_label" %DBSEXCEPTIONS['dbsException-7'])
 
         conn = self.dbi.connection()
         tran = conn.begin()
@@ -102,12 +110,15 @@ class DBSOutputConfig:
 	except exceptions.IntegrityError, ex:
 	    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 		pass
-	    else: 
+	    else:
+                self.logger.exception("%s DBSOutputConfig/insertOutputConfigs. %s"\
+                        %(DBSEXCEPTIONS['dbsException-2'], ex) )
 	        raise
 		
         except Exception, e:
 		tran.rollback()
-		self.logger.exception(e)
+		self.logger.exception("%s DBSOutputConfig/insertOutputConfigs. %s"\
+                    %(DBSEXCEPTIONS['dbsException-2'], e) )
 		raise
         finally:
             if conn:

@@ -14,7 +14,7 @@ import traceback
 from cherrypy import request, response, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsUtils import dbsUtils
-
+from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from dbs.business.DBSMigrate import DBSMigrate
 
 class DBSMigrateModel(RESTModel):

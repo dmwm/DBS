@@ -32,18 +32,18 @@ class List(DBFormatter):
         sql = self.sql
         binds = {}
 	if logical_file_name and "%" not in logical_file_name:
-	    sql += """ inner join FILES on FILES.FILE_ID = FL.FILE_ID
-		    WHERE FILES.LOGICAL_FILE_NAME = :logical_file_name"""
+	    sql += """ inner join %sFILES FILES on FILES.FILE_ID = FL.FILE_ID
+		    WHERE FILES.LOGICAL_FILE_NAME = :logical_file_name"""%(self.owner)
 	    binds["logical_file_name"] = logical_file_name
 	elif block_name and "%" not in block_name:
-            sql += """ inner join FILES on FILES.FILE_ID = FL.FILE_ID
-		    inner join BLOCKS on BLOCKS.BLOCK_ID = FILES.BLOCK_ID
-		    WHERE BLOCKS.BLOCK_NAME = :block_name """
+            sql += """ inner join %sFILES FILES on FILES.FILE_ID = FL.FILE_ID
+		    inner join %sBLOCKS BLOCKS on BLOCKS.BLOCK_ID = FILES.BLOCK_ID
+		    WHERE BLOCKS.BLOCK_NAME = :block_name """%(self.owner, self.owner)
             binds["block_name"] =  block_name
 	elif dataset and "%" not in dataset:
-	    sql += """ inner join FILES on FILES.FILE_ID = FL.FILE_ID
-	    inner join DATASETS on DATASETS.DATASET_ID = FILES.DATASET_ID
-	    WHERE DATASETS.DATASET = :dataset """
+	    sql += """ inner join %sFILES FILES on FILES.FILE_ID = FL.FILE_ID
+	    inner join %sDATASETS DATASETS on DATASETS.DATASET_ID = FILES.DATASET_ID
+	    WHERE DATASETS.DATASET = :dataset """%(self.owner, self.owner)
 	    binds["dataset"] = dataset
 	else:
 	    pass

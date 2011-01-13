@@ -17,7 +17,8 @@ class Insert(DBFormatter):
 
     def execute( self, conn, binds, transaction=False ):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/BranchHashes expects db connection from upper layer.")
+           raise Excpetion("dbsException-1", "%s Oracle/BranchHashes/Insert.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])     
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
 	return
 

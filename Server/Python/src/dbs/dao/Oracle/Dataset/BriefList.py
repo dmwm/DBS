@@ -30,8 +30,8 @@ class BriefList(DBFormatter):
                 primary_ds_type="", data_tier_name="", dataset_access_type="", transaction=False):
 
         if not conn:
-            raise Exception("dbs/dao/Oracle/Dataset/List expects db connection from upper layer.")
-
+            raise Excpetion("dbsException-1", "%s Oracle/Dataset/BriefList.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
 	selectsql = 'SELECT '
 	joinsql = ''
 	wheresql = self.wheresql

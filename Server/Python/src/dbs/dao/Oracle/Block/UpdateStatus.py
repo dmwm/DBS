@@ -26,7 +26,8 @@ class UpdateStatus(DBFormatter):
         for a given file
         """	
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Block/UpdateStatus expects db connection from upper layer.")
+            raise Excpetion("dbsException-1", "%s Oracle/Block/UpdateStatus.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
 	binds = { "block_name" : block_name , "open_for_writing" : open_for_writing }
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

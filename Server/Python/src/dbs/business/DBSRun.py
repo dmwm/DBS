@@ -7,6 +7,7 @@ __revision__ = "$Id: DBSRun.py,v 1.11 2010/07/09 18:23:27 yuyi Exp $"
 __version__ = "$Revision: 1.11 $"
 
 from WMCore.DAOFactory import DAOFactory
+from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 
 class DBSRun:
     """
@@ -33,6 +34,7 @@ class DBSRun:
 		return ret
 
 	except Exception, ex:
+                self.logger.exception("%s DBSRun/listRuns. %s\n" %(DBSEXCEPTIONS['dbsException-2'], ex) )
 		raise ex
 		
 	finally:

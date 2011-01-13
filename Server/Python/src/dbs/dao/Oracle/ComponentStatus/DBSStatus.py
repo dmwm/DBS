@@ -18,7 +18,8 @@ class DBSStatus(DBFormatter):
 	
     def execute(self, conn, transaction = False):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/ComponentStatus/DBSStatus expects db connection from upper layer.")
+            raise Excpetion("dbsException-1", "%s Oracle/ComponentStatus/DBSStatus.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"]) 
 	binds={}
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
         return self.formatDict(result)

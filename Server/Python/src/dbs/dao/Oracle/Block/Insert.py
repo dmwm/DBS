@@ -19,7 +19,8 @@ class Insert(InsertSingle):
         file_count, creation_date, create_by, lastmodification_date, lastmodified_by
         """
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Block/Insert expects db connection from upper layer.")
+            raise Excpetion("dbsException-1", "%s Oracle/Block/Insert.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
         self.executeSingle(conn, daoinput, "BLOCKS", transaction)
             
 

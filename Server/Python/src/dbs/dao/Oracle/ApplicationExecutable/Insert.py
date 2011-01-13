@@ -16,7 +16,8 @@ class Insert(DBFormatter):
 
     def execute( self, conn, appExeObj, transaction=False ):
 	if not conn:
-	    raise Excpetion("dbs/dao/Oracle/ApplicationExecutable/Insert expects db connection from upper layer.")
+	    raise Excpetion("dbsException-1", "%s Oracle/ApplicationExecutable/Insert.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
 	try:
 	    #print self.sql
 	    #print appExeObj

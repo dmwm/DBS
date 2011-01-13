@@ -147,7 +147,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
         Performs the handleMigration method, called by frwk over and over (until terminate is called)
         """
         logging.debug("Running dbs migration algorithm")
-        print "Running dbs migration algorithm"
+        #print "Running dbs migration algorithm"
         
         #here is the excitment starting.
         self.handleMigration()        
@@ -174,26 +174,26 @@ class DBSMigrationEngine(BaseWorkerThread) :
         requestID=-1
         try :
             #1 get a migration request in 0 (PENDING) STATUS & Change its status to 1 (RUNNING)
-            print "get a migration request in 0 (PENDING) STATUS & Change its status to 1 (RUNNING)"
+            logging.debug("get a migration request in 0 (PENDING) STATUS & Change its status to 1 (RUNNING)")
             conn = self.dbi.connection()
             #connx is for sequence table only.
             connx = self.dbi.connection()
             request = self.getMigrationRequest(conn)
-            print "request = %s" %request
+            logging.debug("request = %s" %request)
             if not request:
                 return 
             
             #2 find the highest order pending block                    
-            print "find the highest order pending block"
+            logging.debug("find the highest order pending block")
             requestID=request["migration_request_id"]
             #import pdb
             #pdb.set_trace()
             blocks = self.fmb.execute(conn, requestID)
             for ablock in blocks:
-                print "migrate block by block!"
+                logging.debug("migrate block by block!")
                 self.migrateBlock(conn, connx, ablock['migration_block_name'], request["migration_url"])
             #Finally mark the request as 3=Completed
-            print "Finally mark the request as 3=Completed"
+            logging.debug("Finally mark the request as 3=Completed")
             tran = conn.begin()
             self.urs.execute(conn, requestID, 3, self.threadID, dbsUtils().getTime(), transaction=tran)
             tran.commit();
@@ -317,17 +317,17 @@ class DBSMigrationEngine(BaseWorkerThread) :
                 datasetInCache = True
             if not datasetInCache:    
                 #1 insert configuration
-                print "insert configuration"
+                logging.debug("insert configuration")
                 configList = self.insertOutputModuleConfig(conn, connx, blockcontent['dataset']['dataset'], url)
                 #2 insert dataset
-                print "insert dataset"
+                logging.debug("insert dataset")
                 datasetId = self.insertDataset(conn, connx, blockcontent, configList,  url)
             #3 Insert Block. 
-            print "insert Block"
+            logging.debug("insert Block")
             blockId = self.insertBlock(conn, connx, blockcontent, datasetId)
             #4 inser files. If the block is already in db, then we stop inserting the file
             if self.newBlock:
-                print "insert files"
+                logging.debug("insert files")
                 self.insertFile(conn, connx, blockcontent,blockId,datasetId)
         except Exception, ex:
             #update status
@@ -546,7 +546,7 @@ class DBSMigrationEngine(BaseWorkerThread) :
                     pHId = self.psetHashid.execute(conn, m["pset_hash"], transaction=tran)
                     if pHId <= 0:
                         #not found p set hash in db, insert it now
-			print m
+			#print m
                         pHId = self.sm.increment(connx, "SEQ_PSH")
                         pHobj={"pset_hash": m["pset_hash"], "parameter_set_hash_id": pHId, 'name':m.get('name', '')}
                         self.psetHashin.execute(conn, pHobj, tran)

@@ -7,6 +7,7 @@ __revision__ = "$Id: DBSDataType.py,v 1.3 2010/06/23 21:21:17 afaq Exp $"
 __version__ = "$Revision: 1.3 $"
 
 from WMCore.DAOFactory import DAOFactory
+from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 
 class DBSDataType:
     """
@@ -27,11 +28,13 @@ class DBSDataType:
 	try:
 	    conn = self.dbi.connection()
 	    if dataset and dataType:
-		raise Exception("Data Type can be only queried by data_type or by dataset, not both.")
+		raise Exception('dbsException-2', "%s DBSDataType/listDataType. Data Type can be only searched by data_type or by dataset, not both.")\
+                                    %( DBSEXCEPTIONS['dbsException-2'])
 	    else:
 		result=self.dataType.execute(conn, dataType, dataset)
 	    return result
 	except Exception, ex:
+            self.logger.exception("%s DBSDataType/listDataType. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()

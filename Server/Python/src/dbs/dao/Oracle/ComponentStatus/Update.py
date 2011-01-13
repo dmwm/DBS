@@ -18,5 +18,6 @@ class Update(DBFormatter):
 	
     def execute(self, conn, daoinput, transaction = False):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/ComponentStatus/Update expects db connection from upper layer.")
+            raise Excpetion("dbsException-1", "%s Oracle/ComponentStatus/Update.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
 	self.dbi.processData(self.sql, daoinput, conn, transaction)

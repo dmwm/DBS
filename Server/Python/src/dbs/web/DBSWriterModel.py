@@ -13,8 +13,8 @@ import time
 
 from cherrypy import request, response, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
-
-from dbs.utils.dbsUtils import dbsUtils
+from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsUtils import dbsUtils 
 from dbs.web.DBSReaderModel import DBSReaderModel
 #from dbs.business.DBSFileBuffer import DBSFileBuffer
 
@@ -31,7 +31,6 @@ class DBSWriterModel(DBSReaderModel):
         """
 
         DBSReaderModel.__init__(self, config)
-
         self.addMethod('POST', 'primarydatasets', self.insertPrimaryDataset)
         self.addMethod('POST', 'outputconfigs', self.insertOutputConfig)
 	self.addMethod('POST', 'acquisitioneras', self.insertAcquisitionEra)
@@ -76,10 +75,10 @@ class DBSWriterModel(DBSReaderModel):
         primary_ds_name, primary_ds_type
         """
 
-
 	userDN = request.headers.get('Ssl-Client-S-Dn', None)
 	access = request.headers.get('Ssl-Client-Verify', None)
 	if userDN != '(null)' and access == 'SUCCESS':
+            self.logger.warning("DBS Web DBSWriterMOdel\n")
 	    self.logger.warning("<<<<<<<<<<<<<<<<<<<<<<<<<NO USER DN specified>>>>>>>>>>>>>>>>>>>>>>>")
 	    # Means that the user certificate was authenticated by the frontend
 	else:
@@ -93,12 +92,14 @@ class DBSWriterModel(DBSReaderModel):
         	self.dbsPrimaryDataset.insertPrimaryDataset(indata)
 		
 	except Exception, ex:
-		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-		#response.status = 400
-		#response.reason="DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc())
-		#return {"Exception" : "DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc())}
-       		#raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) ) 
-
+                #print "Throw HTTPError exception = %s" %(ex)
+                if "dbsException-7" in ex.args[0]:
+                    raise HTTPError(400, str(ex))
+                else:
+                    msg = "%s DBSWriterModel/insertPrimaryDataset. %s\n. Exception trace: \n %s" \
+                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                    self.logger.exception(msg) 
+                    raise Exception ("dbsException-3", msg) 
 
     def insertOutputConfig(self):
         """
@@ -118,8 +119,13 @@ class DBSWriterModel(DBSReaderModel):
                 self.dbsOutputConfig.insertOutputConfig(indata)
 
         except Exception, ex:
-                raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-
+                if "dbsException-7" in ex.args[0]:
+                    raise HTTPError(400, str(ex))
+                else:
+                    msg = "%s DBSWriterModel/insertOutputConfig. %s\n. Exception trace: \n %s" \
+                            %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                    self.logger.exception( msg )
+                    raise Exception ("dbsException-3", msg )
 
     def insertAcquisitionEra(self):
         """
@@ -137,8 +143,10 @@ class DBSWriterModel(DBSReaderModel):
                 self.dbsAcqEra.insertAcquisitionEra(indata)
 
         except Exception, ex:
-                raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-
+                msg = "%s DBSWriterModel/insertAcquisitionEra. %s\n. Exception trace: \n %s" \
+                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
     def insertProcessingEra(self):
 	"""
@@ -155,8 +163,10 @@ class DBSWriterModel(DBSReaderModel):
                 self.dbsProcEra.insertProcessingEra(indata)
 
         except Exception, ex:
-                    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-			    
+                    msg = "%s DBSWriterModel/insertProcessingEra. %s\n. Exception trace: \n %s" \
+                            %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                    self.logger.exception( msg )
+                    raise Exception ("dbsException-3", msg )
 		
     def insertDataset(self):
         """
@@ -178,8 +188,13 @@ class DBSWriterModel(DBSReaderModel):
                 self.dbsDataset.insertDataset(indata)
 
         except Exception, ex:
-                raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-
+                if "dbsException-7" in ex.args[0]:
+                    raise HTTPError(400, str(ex))
+                else:
+                    msg = "%s DBSWriterModel/insertDataset. %s\n. Exception trace: \n %s" \
+                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                    self.logger.exception(msg )
+                    raise Exception ("dbsException-3", msg )
 		
     def insertSite(self):
         """
@@ -195,7 +210,10 @@ class DBSWriterModel(DBSReaderModel):
         	self.dbsSite.insertSite(indata)
 		
 	except Exception, ex:
-       		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) ) 
+                msg = "%s DBSWriterMOdel/insertSite. %s\n. Exception trace: \n %s" \
+                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception(msg )
+                raise Exception ("dbsException-3", msg )
 
     def insertBulkBlock(self):
         """
@@ -211,8 +229,10 @@ class DBSWriterModel(DBSReaderModel):
             self.dbsBlockInsert.putBlock(indata)
 
         except Exception, ex:
-            raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-
+            msg = "%s DBSWriterModel/insertBulkBlock. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc()) 
+            self.logger.exception(msg )
+            raise Exception ("dbsException-3", msg )
 
     def insertBlock(self):
         """
@@ -247,7 +267,10 @@ class DBSWriterModel(DBSReaderModel):
 	    self.dbsBlock.insertBlock(block)
     
 	except Exception, ex:
-	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+            msg = "%s DBSWriterModel/insertBlock. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+            self.logger.exception(msg )
+            raise Exception ("dbsException-3", msg )
 	    
     def insertFile(self, qInserts=True):
         """
@@ -294,7 +317,10 @@ class DBSWriterModel(DBSReaderModel):
 	    self.dbsFile.insertFile(businput, qInserts)
     
 	except Exception, ex:
-	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+            msg = "%s DBSWriterModel/insertFile. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+            self.logger.exception(msg )
+            raise Exception ("dbsException-3", msg )
    
     def updateFile(self, logical_file_name="", is_file_valid=1):
 	"""
@@ -303,7 +329,10 @@ class DBSWriterModel(DBSReaderModel):
 	try:
 	    self.dbsFile.updateStatus(logical_file_name, is_file_valid)
 	except Exception, ex:
-	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+            msg = "%s DBSWriterModel/updateFile. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+            self.logger.exception(msg )
+            raise Exception ("dbsException-3", msg )
 
     def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_access_type=""):
 	"""
@@ -316,7 +345,9 @@ class DBSWriterModel(DBSReaderModel):
 		if is_dataset_valid != -1:
 		    self.dbsDataset.updateStatus(dataset, is_dataset_valid)
 	except Exception, ex:
-	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+            msg = "%s DBSWriterModel\updateDataset. %s\n. Exception trace: \n %s" %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+            self.logger.exception(msg )
+            raise Exception ("dbsException-3", msg )
 
     def updateBlock(self, block_name="", open_for_writing=0):
 	"""
@@ -325,7 +356,9 @@ class DBSWriterModel(DBSReaderModel):
 	try:
 	    self.dbsBlock.updateStatus(block_name, open_for_writing)
 	except Exception, ex:
-	    raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
+            msg = "%s DBSWriterModel\updateStatus. %s\n. Exception trace: \n %s" %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+            self.logger.exception(msg )
+            raise Exception ("dbsException-3", msg )
 
     def insertDataTier(self):
 	"""
@@ -338,6 +371,7 @@ class DBSWriterModel(DBSReaderModel):
 		indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
 		self.dbsDataTier.insertDataTier(indata)
 	except Exception, ex:
-		raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-
-
+                msg = "%s DBSWriterModel\insertDataTier. %s\n. Exception trace: \n %s" \
+                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception(msg )
+                raise Exception ("dbsException-3", msg )

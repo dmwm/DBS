@@ -30,6 +30,8 @@ class List(DBFormatter):
         block: /a/b/c#d
         """	
 	if not conn:
+            raise Excpetion("dbsException-1", "%s Oracle/BlockParent/List.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
 	    raise Exception("dbs/dao/Oarcle/BlockParent/List expects db connection from upper layer.")
         sql = self.sql
         binds = {}

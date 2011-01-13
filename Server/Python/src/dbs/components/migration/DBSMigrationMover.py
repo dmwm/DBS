@@ -20,7 +20,7 @@ class DBSMigrationMover(Harness):
 	# call the base class
 	Harness.__init__(self, config)
 	self.pollTime = 1
-	print "DBS Migration Service Initialization"
+	print("DBS Migration Service Initialization")
 	
 
     def preInitialization(self):

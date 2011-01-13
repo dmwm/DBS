@@ -26,7 +26,8 @@ class Insert(InsertSingle):
 	last_modification_date, last_modified_by
 	"""
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Dataset/Insert expects db connection from upper layer.")
+            raise Excpetion("dbsException-1", "%s Oracle/Dataset/Inert.  Expects db connection from upper layer.\n"\
+                    %DBSEXCEPTIONS["dbsException-1"])
         if daoinput == {}:
             # Nothing to do
             return
