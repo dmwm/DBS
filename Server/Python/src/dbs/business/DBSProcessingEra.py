@@ -2,10 +2,6 @@
 """
 This module provides business object class to interact with DBSProcessingEra. 
 """
-
-__revision__ = "$Id: DBSProcessingEra.py,v 1.6 2010/08/12 19:52:24 afaq Exp $"
-__version__ = "$Revision $"
-
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 
@@ -33,8 +29,8 @@ class DBSProcessingEra:
             conn.close()
             return result
         except Exception, ex:
-            self.logger.exception("%s DBSProcessingEra/listProcessingEras. %s\n " \
-                    %(DBSEXCEPTIONS['dbsException-2'], ex) )
+            #self.logger.exception("%s DBSProcessingEra/listProcessingEras. %s\n " \
+                    #%(DBSEXCEPTIONS['dbsException-2'], ex) )
             raise ex
         finally:
             conn.close()
@@ -65,8 +61,8 @@ class DBSProcessingEra:
 			pass
 		else:
             		tran.rollback()
-            		self.logger.exception("%s DBSProcessingEra/insertProcessingEras. %s\n" \
-                                %(DBSEXCEPTIONS['dbsException-2'], ex) )
+            		#self.logger.exception("%s DBSProcessingEra/insertProcessingEras. %s\n" \
+                                #%(DBSEXCEPTIONS['dbsException-2'], ex) )
             		raise
         finally:
             conn.close()

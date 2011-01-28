@@ -34,7 +34,7 @@ class DBSRun:
 		return ret
 
 	except Exception, ex:
-                self.logger.exception("%s DBSRun/listRuns. %s\n" %(DBSEXCEPTIONS['dbsException-2'], ex) )
+                #self.logger.exception("%s DBSRun/listRuns. %s\n" %(DBSEXCEPTIONS['dbsException-2'], ex) )
 		raise ex
 		
 	finally:

@@ -45,7 +45,7 @@ class DBSBlock:
 	    self.updatestatus.execute(conn, block_name, open_for_writing, trans)
 	    trans.commit()
 	except Exception, ex:
-            self.logger.exception("%s DBSBlock/updateStatus. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSBlock/updateStatus. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    trans.rollback()
 	    raise ex
 		
@@ -57,13 +57,16 @@ class DBSBlock:
 	"""
 	list parents of a block
 	"""
+        if ( block_name=="" ):
+            raise Exception( "dbsException-7", "\n %s DBSBlock/listBlockParents. \
+                Block_name must be provided.\n" %DBSEXCEPTIONS['dbsException-7'] )
 	try:
 	    conn = self.dbi.connection()
 	    results = self.blockparentlist.execute(conn, block_name)
 	    conn.close()
 	    return results
 	except Exception, ex:
-            self.logger.exception("%s DBSBlock/listBlockParents. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSBlock/listBlockParents. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -72,13 +75,16 @@ class DBSBlock:
 	"""
 	list parents of a block
 	"""
+        if ( block_name=="" ):
+            raise Exception( "dbsException-7", "\n %s DBSBlock/listBlockChildren. \
+                Block_name must be provided.\n" %DBSEXCEPTIONS['dbsException-7'] )
 	try:
 	    conn = self.dbi.connection()
 	    results = self.blockchildlist.execute(conn, block_name)
 	    conn.close()
 	    return results
 	except Exception, ex:
-            self.logger.exception("%s DBSBlock/listBlockChildren. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSBlock/listBlockChildren. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -100,7 +106,7 @@ class DBSBlock:
 	    conn.close()
 	    return result
         except Exception, ex:
-            self.logger.exception("%s DBSBlock/listBlocks. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSBlock/listBlocks. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
         finally:
 	    conn.close()
@@ -151,7 +157,7 @@ class DBSBlock:
 		pass
 	    else:
 		tran.rollback()
-                self.logger.exception("%s DBSBlock/insertBlock. %s\n." %(DBSEXCEPTIONS['dbsException-2'], e))
+                #self.logger.exception("%s DBSBlock/insertBlock. %s\n." %(DBSEXCEPTIONS['dbsException-2'], e))
 		raise
 		
         finally:

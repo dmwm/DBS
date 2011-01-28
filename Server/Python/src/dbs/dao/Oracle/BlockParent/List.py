@@ -32,13 +32,13 @@ class List(DBFormatter):
 	if not conn:
             raise Excpetion("dbsException-1", "%s Oracle/BlockParent/List.  Expects db connection from upper layer.\n"\
                     %DBSEXCEPTIONS["dbsException-1"])
-	    raise Exception("dbs/dao/Oarcle/BlockParent/List expects db connection from upper layer.")
         sql = self.sql
         binds = {}
 	if block_name:
 	    binds.update(block_name = block_name)
         else: 
-            raise Exception("block_name must be provided")
+            raise Exception("dbsException-1", "%s Oracle/BlockParent/List. block_name must be provided\n"\
+                %DBSEXCEPTIONS["dbsException-1"] )
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = self.formatCursor(cursors[0])
         return result

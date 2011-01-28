@@ -44,5 +44,6 @@ FROM %sPRIMARY_DS_TYPES PDT
 	    binds={"dataset":dataset}
 	    result = self.dbi.processData(sql, binds, conn=conn, transaction=transaction)
 	else:
-	    raise Exception("Wrong user input for dao Primary_DS_TYPE List.")
+	    raise Exception('dbsException-2', "%s Wrong user input for dao Primary_DS_TYPE List."\
+                %DBSEXCEPTIONS['dbsException-2'] )
         return self.formatDict(result)

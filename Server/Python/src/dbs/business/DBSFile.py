@@ -2,10 +2,6 @@
 """
 This module provides business object class to interact with File. 
 """
-
-__revision__ = "$Id: DBSFile.py,v 1.58 2010/08/19 21:25:46 afaq Exp $"
-__version__ = "$Revision: 1.58 $"
-
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from sqlalchemy import exceptions
@@ -49,19 +45,23 @@ class DBSFile:
         optional parameter: logical_file_name, block_name
         returns: logical_file_name, file_lumi_id, run_num, lumi_section_num
         """
+        if(logical_file_name=='' and block_name==""):
+            raise Exception('dbsException-7', "%s DBSFile/listFileLumis. \
+                logical_file_name or  block_name is required" \
+                 %DBSEXCEPTIONS['dbsException-7'] )
 	try:
 	    conn=self.dbi.connection()
 	    result=self.filelumilist.execute(conn, logical_file_name, block_name)
 	    conn.close()
 	    return result
         except Exception, ex:
-            self.logger.exception("%s DBSFile/listFileLumis. %s\n." \
-                    %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSFile/listFileLumis. %s\n." \
+                    #%(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
  
-    def listFileParents(self, logical_file_name): 
+    def listFileParents(self, logical_file_name=""): 
         """
         required parameter: logical_file_name
         returns: logical_file_name, parent_logical_file_name, parent_file_id
@@ -76,8 +76,8 @@ class DBSFile:
 	    conn.close()
 	    return result
         except Exception, ex:
-            self.logger.exception("%s DBSFile/listFileParents. %s\n." \
-                    %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSFile/listFileParents. %s\n." \
+                    #%(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -97,8 +97,8 @@ class DBSFile:
 	    conn.close()
 	    return result
         except Exception, ex:
-            self.logger.exception("%s DBSFile/listFileChildren. %s\n." \
-                    %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSFile/listFileChildren. %s\n." \
+                    #%(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -114,8 +114,8 @@ class DBSFile:
 	    self.updatestatus.execute(conn, logical_file_name, is_file_valid, trans)
 	    trans.commit()
 	except Exception, ex:
-            self.logger.exception("%s DBSFile/updateStatus. %s\n." \
-                    %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSFile/updateStatus. %s\n." \
+                    #%(DBSEXCEPTIONS['dbsException-2'], ex))
 	    trans.rollback()
 	    raise ex
 		
@@ -157,7 +157,7 @@ class DBSFile:
 	    conn.close()
 	    return result
 	except Exception, ex:
-            self.logger.exception("%s DBSFile/listFiles. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSFile/listFiles. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise
 	finally:
 	    conn.close()
@@ -281,7 +281,7 @@ class DBSFile:
                                             %(DBSEXCEPTIONS['dbsException-2'], filein["logical_file_name"]) )
 			continue
 		    else:
-                        self.logger.exception("%s DBSFile/insertFile. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                        #self.logger.exception("%s DBSFile/insertFile. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 			raise	
 	        # Saving the id for later use
 		#files2insert.append(filein)
@@ -390,7 +390,7 @@ class DBSFile:
 		        if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			    pass
 			else:
-                            self.logger.exception("%s DBSFile/insertFile. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                            #self.logger.exception("%s DBSFile/insertFile. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                             raise		   
 		
 	    # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
@@ -429,8 +429,8 @@ class DBSFile:
 			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 				pass
 			    else:
-                                self.logger.exception("%s DBSFile/insertFile/update block parentage. %s\n." \
-                                        %(DBSEXCEPTIONS['dbsException-2'], ex))
+                                #self.logger.exception("%s DBSFile/insertFile/update block parentage. %s\n." \
+                                        #%(DBSEXCEPTIONS['dbsException-2'], ex))
 				raise
 		# Update dataset parentage
 		if len(fpds) > 0 :
@@ -454,8 +454,8 @@ class DBSFile:
 			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 				pass
 			    else:
-                                self.logger.exception("%s DBSFile/insertFile/update dataset parentage. %s\n." \
-                                        %(DBSEXCEPTIONS['dbsException-2'], ex))
+                                #self.logger.exception("%s DBSFile/insertFile/update dataset parentage. %s\n." \
+                                        #%(DBSEXCEPTIONS['dbsException-2'], ex))
 				raise
 
 		# Update block parameters, file_count, block_size
@@ -468,7 +468,7 @@ class DBSFile:
             tran.commit()
 
 	except Exception, ex:
-            self.logger.exception("%s DBSFile/insertFile. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSFile/insertFile. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    tran.rollback()
 	    raise
 

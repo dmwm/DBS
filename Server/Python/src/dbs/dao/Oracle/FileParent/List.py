@@ -44,7 +44,7 @@ JOIN %sFILES F ON  F.FILE_ID = FP.THIS_FILE_ID
 	else:
 	    return{}
 	cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
-	if len(cursors) != 1:
-	    raise Exception("File Parents does not exist.")
+	#if len(cursors) != 1:
+	    #raise Exception("File Parents does not exist.")
         result = self.formatCursor(cursors[0])
         return result

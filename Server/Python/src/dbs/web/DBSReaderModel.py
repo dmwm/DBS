@@ -49,7 +49,7 @@ class DBSReaderModel(RESTModel):
         RESTModel.__init__(self, config)
         self.dbsUtils2 = dbsUtils()
         self.version = self.getServerVersion()
-	self.register()
+	#self.register() Need to figure out details befer to trun on it. YG 1/26/11
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 	self.addMethod('GET', 'serverinfo', self.getServerInfo)
         self.addMethod('GET', 'primarydatasets', self.listPrimaryDatasets)
@@ -176,16 +176,18 @@ class DBSReaderModel(RESTModel):
         try:
             return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name, primary_ds_type)
         except Exception, ex:
-            print "**********ex in reader: %s\n" %ex
             if "dbsException-7" in ex.args[0]:
-                raise HTTPError(401, ("%s" %ex))
+                raise HTTPError(400, str(ex) )
             else:
-                raise ex
+                msg="%s DBSReader/listPrimaryDatasets. %s.\n Exception trace: \n %s."\
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc() )
+                raise Exception ("dbsException-3", msg)
 
 
-    def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", 
-			processing_version="", acquisition_era="", run_num="0", physics_group_name="", logical_file_name="", primary_ds_name="",
-			primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
+    def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", \
+        app_name="", output_module_label="", processing_version="", acquisition_era="", \
+        run_num="0", physics_group_name="", logical_file_name="", primary_ds_name="",
+        primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
         """
 	This API lists the dataset paths and associated information.
 	If no parameter is given, all datasets will be returned.
@@ -212,9 +214,19 @@ class DBSReaderModel(RESTModel):
 	else:
 	    run_num = int(run_num)
 	detail = detail in (True, 1, "True", "1")
-
-	return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, processing_version, acquisition_era,
-	    run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, data_tier_name, dataset_access_type, detail)
+        try:
+            return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, \
+                app_name, output_module_label, processing_version, acquisition_era,\
+                run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, \
+                data_tier_name, dataset_access_type, detail)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listDatasets. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
     def listDataTiers(self, data_tier_name=""):
 	"""
@@ -223,7 +235,16 @@ class DBSReaderModel(RESTModel):
 	    http://dbs3/datatiers?data_tier_name=...
 	"""
 	data_tier_name = data_tier_name.replace("*","%")
-	return self.dbsDataTier.listDataTiers(data_tier_name)
+        try:
+            return self.dbsDataTier.listDataTiers(data_tier_name)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listDataTiers. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 	
     def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num=-1, detail=False):
         """
@@ -240,7 +261,17 @@ class DBSReaderModel(RESTModel):
 	origin_site_name = origin_site_name.replace("*","%")
 	run_num = int(run_num)
 	detail = detail in (True, 1, "True", "1")
-        return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num, detail)
+        try:
+            return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num, detail)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
+
 
     def listBlockParents(self, block_name=""):
         """
@@ -248,7 +279,16 @@ class DBSReaderModel(RESTModel):
         http://dbs3/blockparents?block_name=/a/b/c%23*d <br />
         """
         block_name = block_name.replace("*","%")
-        return self.dbsBlock.listBlockParents(block_name)
+        try:
+            return self.dbsBlock.listBlockParents(block_name)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listBlockParents. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
   
     def listBlockChildren(self, block_name=""):
         """
@@ -256,7 +296,16 @@ class DBSReaderModel(RESTModel):
         http://dbs3/blockchildren?block_name=/a/b/c%23*d <br />
         """
         block_name = block_name.replace("*","%")
-        return self.dbsBlock.listBlockChildren(block_name)
+        try:
+            return self.dbsBlock.listBlockChildren(block_name)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listBlockChildren. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
  
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", 
 	pset_hash="", app_name="", output_module_label="", minrun=-1, maxrun=-1,
@@ -287,22 +336,49 @@ class DBSReaderModel(RESTModel):
 	    lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
 	detail = detail in (True, 1, "True", "1")
 	output_module_label = output_module_label.replace("*", "%")
-	return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
+        try:
+            return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
 					output_module_label, maxrun, minrun, origin_site_name, lumi_list, detail)
-    
-    def listDatasetParents(self, dataset):
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listFiles. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
+
+    def listDatasetParents(self, dataset=''):
         """
         Example url's <br />
         http://dbs3/datasetparents?dataset=/a/b/c
         """
-        return self.dbsDataset.listDatasetParents(dataset)
+        try:
+            return self.dbsDataset.listDatasetParents(dataset)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listDatasetParents. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
     def listDatasetChildren(self, dataset):
         """
         Example url's <br />
         http://dbs3/datasetchildren?dataset=/a/b/c
         """
-        return self.dbsDataset.listDatasetChildren(dataset)
+        try:
+            return self.dbsDataset.listDatasetChildren(dataset)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listDatasetChildren. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
     
     def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="",
     output_module_label="", block_id=0):
@@ -320,23 +396,49 @@ class DBSReaderModel(RESTModel):
 	pset_hash = pset_hash.replace("*", "%")
 	app_name = app_name.replace("*", "%")
 	output_module_label = output_module_label.replace("*", "%")
-	return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, release_version, pset_hash, app_name,
-	output_module_label, block_id)
+        try:
+            return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, release_version, pset_hash, app_name,
+                output_module_label, block_id)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listOutputConfigs. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
     
-    def listFileParents(self, logical_file_name):
+    def listFileParents(self, logical_file_name=''):
         """
         Example url's <br />
         http://dbs3/fileparents?logical_file_name=lfn
         """
-        return self.dbsFile.listFileParents(logical_file_name)
+        try:
+            return self.dbsFile.listFileParents(logical_file_name)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listFileParents. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
     def listFileChildren(self, logical_file_name):
         """
         Example url's <br />
         http://dbs3/filechildren?logical_file_name=lfn
         """
-        return self.dbsFile.listFileChildren(logical_file_name)
-       
+        try:
+            return self.dbsFile.listFileChildren(logical_file_name)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listFileChildren. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
     def listFileLumis(self, logical_file_name="", block_name=""):
         """
@@ -344,7 +446,16 @@ class DBSReaderModel(RESTModel):
         http://dbs3/filelumis?logical_file_name=lfn
         http://dbs3/filelumis?block_name=block_name
         """
-        return self.dbsFile.listFileLumis(logical_file_name, block_name)
+        try:
+            return self.dbsFile.listFileLumis(logical_file_name, block_name)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "\n%s DBSReaderModel/listFileLumis. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
          
     def listRuns(self, minrun=-1, maxrun=-1, logical_file_name="", block_name="", dataset=""):
         """
@@ -364,9 +475,13 @@ class DBSReaderModel(RESTModel):
             #print ("maxrun=%s, minrun=%s\n" %(maxrun, minrun) )
             return self.dbsRun.listRuns(minrun, maxrun, logical_file_name, block_name, dataset)
         except Exception, ex:
-            self.logger.exception("%s DBSReaderModel/listRun. %s\n EXception Trace: \n %s.\n" \
-                        %(DBSEXCEPTIONS['dbsException-3'],ex, traceback.format_exc()) )
-            raise ex
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listRun. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
     #def listSites(self, block_name="", site_name=""):
     #    """
@@ -383,25 +498,61 @@ class DBSReaderModel(RESTModel):
 	lists datatypes known to dbs
 	dataset : lists datatype of a dataset
 	"""
-	return  self.dbsDataType.listDataType(dataType=datatype, dataset=dataset)
+        try:
+            return  self.dbsDataType.listDataType(dataType=datatype, dataset=dataset)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listDataTypes. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
     def dumpBlock(self, block_name):
 	"""
 	Returns all information related with the block_name
 	"""
-	return self.dbsMigrate.dumpBlock(block_name)
+        try:
+            return self.dbsMigrate.dumpBlock(block_name)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listBlockParents. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
     def listAcquisitionEras(self):
 	"""
 	lists acquisition eras known to dbs
 	"""
-	return  self.dbsAcqEra.listAcquisitionEras()
+        try:
+            return  self.dbsAcqEra.listAcquisitionEras()
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listAcquisitionEras. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
     def listProcessingEras(self):
 	"""
 	lists acquisition eras known to dbs
 	"""
-	return  self.dbsProcEra.listProcessingEras()
+        try:
+            return  self.dbsProcEra.listProcessingEras()
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listProcessingEras. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
 
 
 	    

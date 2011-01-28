@@ -2,10 +2,6 @@
 """
 This module provides business object class to interact with datatiers table. 
 """
-
-__revision__ = "$Id: DBSDataTier.py,v 1.2 2010/05/03 20:21:09 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
-
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 
@@ -32,7 +28,7 @@ class DBSDataTier:
 	    result = self.dataTier.execute(conn, data_tier_name)
 	    return result
 	except Exception, ex:
-            self.logger.exception("%s DBSDataTier/listDataTiers. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSDataTier/listDataTiers. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -59,7 +55,7 @@ class DBSDataTier:
                         self.logger.warning("%s" % ex)
 			pass
 		else:
-                        self.logger.exception("%s DBSDataTier/insertDataTiers. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                        #self.logger.exception("%s DBSDataTier/insertDataTiers. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             		tran.rollback()
             		raise
         finally:

@@ -2,10 +2,6 @@
 """
 This module provides business object class to interact with Dataset. 
 """
-
-__revision__ = "$Id: DBSDataset.py,v 1.42 2010/08/03 21:06:23 afaq Exp $"
-__version__ = "$Revision: 1.42 $"
-
 from WMCore.DAOFactory import DAOFactory
 
 from exceptions import Exception
@@ -45,18 +41,21 @@ class DBSDataset:
         self.datasetparentlist = daofactory(classname="DatasetParent.List")
         self.datasetchildlist = daofactory(classname="DatasetParent.ListChild")
 
-    def listDatasetParents(self, dataset):
+    def listDatasetParents(self, dataset=""):
         """
         takes required dataset parameter
         returns only parent dataset name
         """
+        if( dataset == "" ):
+            raise Exception ("dbsException-7", "%s DBSDataset/listDatasetParents. Child Dataset name is required\n."\
+                %DBSEXCEPTIONS['dbsException-7'] )
 	try:
 	    conn = self.dbi.connection()
 	    result=self.datasetparentlist.execute(conn, dataset)
 	    conn.close()
 	    return result
         except Exception, ex:
-            self.logger.exception("%s DBSDataset/listDatasetParents. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSDataset/listDatasetParents. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
         finally:
 	    conn.close()
@@ -66,13 +65,16 @@ class DBSDataset:
         takes required dataset parameter
         returns only children dataset name
         """
+        if( dataset == "" ):
+            raise Exception ("dbsException-7", "%s DBSDataset/listDatasetChildren. Parent Dataset name is required\n."\
+                %DBSEXCEPTIONS['dbsException-7'] )
 	try:
 	    conn = self.dbi.connection()
 	    result=self.datasetchildlist.execute(conn, dataset)
 	    conn.close()
 	    return result
         except Exception, ex:
-            self.logger.exception("%s DBSDataset/listDatasetChildren. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSDataset/listDatasetChildren. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
         finally:
 	    conn.close()
@@ -88,7 +90,7 @@ class DBSDataset:
             self.updatestatus.execute(conn, dataset, is_dataset_valid, trans)
 	    trans.commit()
 	except Exception, ex:
-            self.logger.exception("%s DBSDataset/updateStatus. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSDataset/updateStatus. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    trans.rollback()
             raise ex
 	finally:
@@ -106,7 +108,7 @@ class DBSDataset:
             self.updatetype.execute(conn, dataset, dataset_access_type, trans)
 	    trans.commit()
 	except Exception, ex:
-            self.logger.exception("%s DBSDataset/updateType. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSDataset/updateType. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    trans.rollback()
             raise ex
 	finally:
@@ -147,7 +149,7 @@ class DBSDataset:
 	    conn.close()
 	    return result
         except Exception, ex:
-            self.logger.exception("%s DBSDataset/listDatasets. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSDataset/listDatasets. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
         finally:
 	    if conn:
@@ -236,7 +238,7 @@ class DBSDataset:
                     if dsdaoinput["dataset_id"] == -1 : raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Strange error, the dataset %s does not exist ?" 
                                                     %(DBSEXCEPTIONS['dbsException-2'], ds) )
                 else:
-                    self.logger.exception("%s DBSDataset/insertDataset. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                    #self.logger.exception("%s DBSDataset/insertDataset. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     raise	
 
             #FIXME : What about the READ-only status of the dataset
@@ -250,7 +252,7 @@ class DBSDataset:
 										anOutConfig["pset_hash"], \
 										anOutConfig["output_module_label"], tran) 
 		    if dsoutconfdaoin["output_mod_config_id"] == -1 : 
-                        self.logger.exception("%s DBSDataset/insertDataset.\n." %(DBSEXCEPTIONS['dbsException-2']))
+                        #self.logger.exception("%s DBSDataset/insertDataset.\n." %(DBSEXCEPTIONS['dbsException-2']))
                         raise Exception ("dbsException-2", "%s DBSDataset/insertDataset: Output config (%s, %s, %s, %s) not found" \
                                                                                 %( DBSEXCEPTIONS['dbsException-2'], anOutConfig["app_name"], \
                                                                                 anOutConfig["release_version"], \
@@ -264,14 +266,14 @@ class DBSDataset:
 			if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			    pass
 			else:
-                            self.logger.exception("%s DBSDataset/insertDataset & output config mapping. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                            #self.logger.exception("%s DBSDataset/insertDataset & output config mapping. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 			    raise
             # Dataset parentage will NOT be added by this API it will be set by insertFiles()--deduced by insertFiles
             # Dataset  runs will NOT be added by this API they will be set by insertFiles()--deduced by insertFiles OR insertRun API call
             tran.commit()
         except Exception, e:
             tran.rollback()
-            self.logger.exception("%s DBSDataset/insertDataset. %s\n." %(DBSEXCEPTIONS['dbsException-2'], e))
+            #self.logger.exception("%s DBSDataset/insertDataset. %s\n." %(DBSEXCEPTIONS['dbsException-2'], e))
             raise
         finally:
             conn.close()

@@ -48,8 +48,8 @@ class DBSOutputConfig:
 	    conn.close()
 	    return result
         except Exception, ex:
-            self.logger.exception("%s DBSOutputConfig/listOutputConfigs. %s"\
-                    %(DBSEXCEPTIONS['dbsException-2'], ex) )
+            #self.logger.exception("%s DBSOutputConfig/listOutputConfigs. %s"\
+                    #%(DBSEXCEPTIONS['dbsException-2'], ex) )
             raise ex
 	finally:
 	    if conn: 
@@ -111,14 +111,14 @@ class DBSOutputConfig:
 	    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 		pass
 	    else:
-                self.logger.exception("%s DBSOutputConfig/insertOutputConfigs. %s"\
-                        %(DBSEXCEPTIONS['dbsException-2'], ex) )
+                #self.logger.exception("%s DBSOutputConfig/insertOutputConfigs. %s"\
+                        #%(DBSEXCEPTIONS['dbsException-2'], ex) )
 	        raise
 		
         except Exception, e:
 		tran.rollback()
-		self.logger.exception("%s DBSOutputConfig/insertOutputConfigs. %s"\
-                    %(DBSEXCEPTIONS['dbsException-2'], e) )
+		#self.logger.exception("%s DBSOutputConfig/insertOutputConfigs. %s"\
+                    #%(DBSEXCEPTIONS['dbsException-2'], e) )
 		raise
         finally:
             if conn:

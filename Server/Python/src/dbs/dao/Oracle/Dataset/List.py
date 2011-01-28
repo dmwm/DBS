@@ -172,7 +172,8 @@ class List(DBFormatter):
 		binds.update(run_num = run_num)
 		sql += wheresql
 	else:
-		raise Exception("Proper parameters are not provided for listDatasets call---we will modify this message")
+                raise Excpetion("dbsException-7", "%s Oracle/Dataset/List. Proper parameters are not provided for listDatasets call\n"\
+                                    %DBSEXCEPTIONS["dbsException-7"])
 
 #	print "sql=%s" %sql
 #       print "binds=%s" %binds

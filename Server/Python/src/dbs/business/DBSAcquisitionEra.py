@@ -33,7 +33,7 @@ class DBSAcquisitionEra:
             conn.close()
             return result
         except Exception, ex:
-            self.logger.exception("%s DBSAcquisitionEra/listAcquisitionEras. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSAcquisitionEra/listAcquisitionEras. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             raise ex
         finally:
             conn.close()
@@ -61,7 +61,7 @@ class DBSAcquisitionEra:
 			pass
 		else:
             		tran.rollback()
-                        self.logger.exception("%s DBSAcquisitionEra/insertAcquisitionEras. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                        #self.logger.exception("%s DBSAcquisitionEra/insertAcquisitionEras. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             		raise
         finally:
             conn.close()

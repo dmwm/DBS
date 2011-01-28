@@ -36,8 +36,8 @@ class DBSPrimaryDataset:
 	    conn.close()
 	    return result
         except Exception, ex:
-            self.logger.exception("%s DBSPrimaryDataset/listPrimaryDatasets. %s\n." \
-                    %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSPrimaryDataset/listPrimaryDatasets. %s\n." \
+                    #%(DBSEXCEPTIONS['dbsException-2'], ex))
 
             raise ex
 	finally:
@@ -69,8 +69,8 @@ class DBSPrimaryDataset:
             self.primdsin.execute(conn, businput, tran)
             tran.commit()
         except IndexError:
-            self.logger.exception("%s DBSPrimaryDataset/insertPrimaryDataset. Index error raised.\n"\
-                    %DBSEXCEPTIONS['dbsException-2'] )
+            #self.logger.exception("%s DBSPrimaryDataset/insertPrimaryDataset. Index error raised.\n"\
+                    #%DBSEXCEPTIONS['dbsException-2'] )
             raise 
         except Exception, ex:
             if str(ex).lower().find("unique constraint") != -1 \
@@ -82,8 +82,8 @@ class DBSPrimaryDataset:
                 pass
             else:
                 tran.rollback()
-                self.logger.exception("%s DBSPrimaryDataset/insertPrimaryDataset. ex\n" \
-                        %DBSEXCEPTIONS['dbsException-2'] )
+                #self.logger.exception("%s DBSPrimaryDataset/insertPrimaryDataset. ex\n" \
+                        #%DBSEXCEPTIONS['dbsException-2'] )
                 raise 
         finally:
             conn.close()

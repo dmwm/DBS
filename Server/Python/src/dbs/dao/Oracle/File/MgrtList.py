@@ -67,8 +67,8 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	if len(cursors) != 1 :
-	    raise Exception("File does not exist.")
+	#if len(cursors) != 1 :
+	    #raise Exception("File does not exist.")
 
 	result = self.formatCursor(cursors[0])
 	return result

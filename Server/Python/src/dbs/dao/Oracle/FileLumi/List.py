@@ -43,10 +43,12 @@ SELECT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 		      WHERE B.BLOCK_NAME = :block_name"""  % ((self.owner,)*3)
             binds = {'block_name': block_name}
         else:
-            raise Exception("Either logocal_file_name or block_name must be provided.")
+            raise Exception('dbsException-7', "%s FileLumi/List: Either logocal_file_name or \
+                block_name must be provided." %DBSEXCEPTIONS['dbsException-7'] )
         
 	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
 	if len(cursors) != 1:
-	    raise Exception("file lumi does not exist.")
+	    raise Exception('dbsException-1', "%s FileLumi/List: file lumi does not exist."\
+                %DBSEXCEPTIONS['dbsException-1'] )
         result = self.formatCursor(cursors[0])
         return result

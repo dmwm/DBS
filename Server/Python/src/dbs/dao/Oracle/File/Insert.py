@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 """ DAO Object for Files table """ 
 
-__revision__ = "$Revision: 1.14 $"
-__version__  = "$Id: Insert.py,v 1.14 2010/06/23 21:21:23 afaq Exp $ "
-
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
 
@@ -61,15 +58,6 @@ class Insert(DBFormatter):
     def execute(self, conn, daoinput, transaction = False):
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/File/Insert expects db connection from upper layer.")
-        """
-        try:
-            if type(daoinput) == list:
-                binds = self.formatBinds(daoinput = daoinput)
-            else:
-                binds = daoinput
-        except KeyError, ex:
-            raise Exception("Missing critical key in binds in Files.Insert: %s" % str(ex))
-        """
         #print "About to insert file with dataset id"
         #print binds[0]['dataset_id']
         try:

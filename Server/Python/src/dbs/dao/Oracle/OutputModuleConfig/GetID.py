@@ -54,7 +54,8 @@ class GetID(DBFormatter):
 		sql += " O.OUTPUT_MODULE_LABEL=:output_module_label"
 		binds["output_module_label"]=output_label
 	if app == release_version == pset_hash  == "":
-            raise Exception("Either app_name, release_version or pset_hash must be provided")	
+            raise Exception('dbsException-7', "%s Either app_name, release_version or pset_hash must be provided"\
+                     %DBSEXCEPTIONS['dbsException-7'])	
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
 	if len(plist) < 1: return -1

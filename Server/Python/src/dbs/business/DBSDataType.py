@@ -2,10 +2,6 @@
 """
 This module provides business object class to interact with primary_ds_types table. 
 """
-
-__revision__ = "$Id: DBSDataType.py,v 1.3 2010/06/23 21:21:17 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
-
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 
@@ -34,7 +30,7 @@ class DBSDataType:
 		result=self.dataType.execute(conn, dataType, dataset)
 	    return result
 	except Exception, ex:
-            self.logger.exception("%s DBSDataType/listDataType. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSDataType/listDataType. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()

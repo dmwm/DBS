@@ -1,10 +1,6 @@
 """
 web unittests
 """
-
-__revision__ = "$Id: DBSReaderModel_t.py,v 1.25 2010/08/30 18:04:20 afaq Exp $"
-__version__ = "$Revision: 1.25 $"
-
 import os, sys, imp
 import json
 import unittest
@@ -188,10 +184,11 @@ class DBSReaderModel_t(unittest.TestCase):
         """test031: web.DBSReaderModel.listBlocks: basic negative test"""
 	try:
 	    api.list('blocks', dataset='*')
-        except:
-	    pass
-	else:
-	    self.fail("Exception was expected and was not raised.")
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                self.fail("Exception was expected and was not raised.")
 
     def test032(self):
         """test032: web.DBSReaderModel.listBlocks: basic test"""
@@ -205,10 +202,11 @@ class DBSReaderModel_t(unittest.TestCase):
         """test034: web.DBSReaderModel.listBlocks: basic negative test"""
 	try:
 	    api.list('blocks', origin_site_name=testparams['site'])
-	except:
-	    pass
-	else:
-	    self.fail("Exception was expected and was not raised.")
+	except Exception, ex:
+	    if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                self.fail("Exception was expected and was not raised.")
     
     def test035(self):
 	"""test035: web.DBSReaderModel.listBlocks: basic test"""
@@ -219,19 +217,21 @@ class DBSReaderModel_t(unittest.TestCase):
         """test036: web.DBSReaderModel.listBlocks: basic negative test"""
         try:
             api.list('blocks', block_name='*')
-        except:
-            pass
-        else:
-            self.fail("Exception was expected and was not raised.")
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                self.fail("Exception was expected and was not raised.")
 
     def test037(self):
         """test037: web.DBSReaderModel.listBlocks: basic negative test"""
         try:
             api.list('blocks', origin_site_name='*')
-        except:
-            pass
-        else:
-            self.fail("Exception was expected and was not raised.")
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                self.fail("Exception was expected and was not raised.")
     
     def test038(self):
 	 """test038: web.DBSReaderModel.listBlocks: basic test"""
@@ -254,19 +254,21 @@ class DBSReaderModel_t(unittest.TestCase):
 	
         try:
 	    api.list('blocks')
-        except: 
-	    pass
-        else: 
-	    self.fail("Exception was expected and was not raised.")
+        except Exception, ex: 
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else: 
+                self.fail("Exception was expected and was not raised.")
             
     def test042(self):
         """test042: web.DBSReaderModel.listFiles: basic negative test"""
 	try:
 	    api.list('files', dataset='*')
-	except:
-	    pass
-	else:
-	    self.fail("Exception was expected and was not raised.")
+	except Exception, ex:
+	    if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                self.fail("Exception was expected and was not raised.")
 	    
     def test043(self):
 	"""test043: web.DBSReaderModel.listFiles: basic test"""
@@ -288,12 +290,13 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test046(self):
         """test046: web.DBSReaderModel.listFiles: basic negative test"""
-	try:
+        try:
 	    api.list('files', dataset=testparams['dataset']+'*')
-	except:
-	    pass
-	else:
-	    self.fail("Exception was expected and was not raised.")
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                self.fail("Exception was expected and was not raised.")        
 
     def test047(self):
         """test047: web.DBSReaderModel.listFiles: basic test"""
@@ -301,137 +304,146 @@ class DBSReaderModel_t(unittest.TestCase):
 
 
     def test048(self):
-        """test048: web.DBSReaderModel.listFiles: basic negative test"""
-	try:
+        """test048: web.DBSReaderModel.listFiles: basic negative test """
+	
+        try:
 	    api.list('files', block_name='*')
-	except:
-            pass
-        else:
-            self.fail("Exception was expected and was not raised.")
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                self.fail("Exception was expected and was not raised.")
 
     def test049(self):
-        """test049: web.DBSReaderModel.listFiles: basic test"""
+        """test049: web.DBSReaderModel.listFiles: basic test """
 	api.list('files', block_name=testparams['block'])
 
     def test050(self):
-        """test050: web.DBSReaderModel.listFiles: basic negative test"""
+        """test050: web.DBSReaderModel.listFiles: basic negative test """
 	try:
 	    api.list('files', logical_file_name='*')
-	except:
-            pass
-        else:
-            self.fail("Exception was expected and was not raised.")
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                self.fail("Exception was expected and was not raised.")
 
     def test051(self):
-        """test051: web.DBSReaderModel.listFiles: basic test"""
+        """test051: web.DBSReaderModel.listFiles: basic test """
 	lfn= testparams['files'][1]
 	api.list('files', logical_file_name=lfn)	
 
     def test052(self):
-        """test052: web.DBSReaderModel.listFiles: Must raise an exception if no parameter is passed."""
-        try: api.list('files')
-        except: pass
-        else: self.fail("Exception was expected and was not raised")
+        """test052: web.DBSReaderModel.listFiles: Must raise an exception if no parameter is passed. """
+        try: 
+            api.list('files')
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                self.fail("Exception was expected and was not raised.")
        
     def test053(self):
-        """test053: web.DBSReaderModel.listDatasetParents: basic test"""
+        """test053: web.DBSReaderModel.listDatasetParents: basic test """
         api.list('datasetparents', dataset="*")
 
     def test054(self):
-        """test054: web.DBSReaderModel.listDatasetParents: basic test"""
+        """test054: web.DBSReaderModel.listDatasetParents: basic test """
         api.list('datasetparents', dataset=testparams['dataset'])
 
     def test055(self):
-        """test055: web.DBSReaderModel.listDatasetParents: basic test"""
+        """test055: web.DBSReaderModel.listDatasetParents: basic test """
         api.list('datasetparents', dataset=testparams['dataset']+'*')
         
     def test056(self):
-        """test056: web.DBSReaderModel.listDatasetParents: must raise an exception if no parameter is passed"""
+        """test056: web.DBSReaderModel.listDatasetParents: must raise an exception if no parameter is passed """
         try: 
 	    api.list('datasetparents')
-        except: 
-	    pass
-        else: 
-	    self.fail("Exception was expected and was not raised")
-            
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                print ex
+                self.fail("Exception was expected and was not raised.")            
+ 
     def test057(self):
-        """test057: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test057: web.DBSReaderModel.listOutputConfigs: basic test """
 	api.list('outputconfigs')
     
     def test058(self):
-        """test058: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test058: web.DBSReaderModel.listOutputConfigs: basic test """
 	api.list('outputconfigs', dataset="*")
 
     def test059(self):
-        """test059: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test059: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', dataset=testparams['dataset'])
 
     def test060(self):
-        """test060: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test060: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', dataset=testparams['dataset']+"*")
 	
     def test061(self):
-        """test061: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test061: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', logical_file_name="*")
 
     def test062(self):
-        """test062: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test062: web.DBSReaderModel.listOutputConfigs: basic test """
 	#need to be updated with LFN
 	lfn= testparams['files'][1]
         api.list('outputconfigs', logical_file_name=lfn)
 
     def test063(self):
-        """test063: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test063: web.DBSReaderModel.listOutputConfigs: basic test """
         #need to be updated with LFN 
 	lfn= testparams['files'][1]
         api.list('outputconfigs', logical_file_name=lfn+"*")
 
     def test064(self):
-        """test064: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test064: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', release_version="*")
 
     def test065(self):
-        """test065: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test065: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', release_version=testparams['release_version'])
 
     def test066(self):
-        """test066: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test066: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', release_version=testparams['release_version']+'*')
 
     def test067(self):
-        """test067: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test067: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', pset_hash="*")
 
     def test068(self):
-        """test068: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test068: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', pset_hash=testparams['pset_hash'])
 
     def test069(self):
-	"""test069: web.DBSReaderModel.listOutputConfigs: basic test"""
+	"""test069: web.DBSReaderModel.listOutputConfigs: basic test """
 	api.list('outputconfigs', app_name="*")
 
     def test070(self):
-        """test070: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test070: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', app_name=testparams['app_name'])
 
     def test071(self):
-        """test071: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test071: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', app_name=testparams['app_name']+"*")
 
     def test072(self):
-        """test072: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test072: web.DBSReaderModel.listOutputConfigs: basic test """
 	api.list('outputconfigs', output_module_label="*")
  
     def test073(self):
-        """test073: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test073: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', output_module_label=testparams['output_module_label'])
 
     def test074(self):
-        """test074: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test074: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', output_module_label=testparams['output_module_label']+'*')
 
     def test075(self):
-        """test075: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test075: web.DBSReaderModel.listOutputConfigs: basic test """
 	api.list('outputconfigs', dataset=testparams['dataset'],
                                   logical_file_name="*",
                                   release_version=testparams['release_version'],
@@ -440,63 +452,72 @@ class DBSReaderModel_t(unittest.TestCase):
                                   output_module_label=testparams['output_module_label'])
 
     def test076(self):
-        """test076: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test076: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', dataset=testparams['dataset'],
                                   release_version=testparams['release_version'],
                                   output_module_label=testparams['output_module_label'])
 
     def test077(self):
-        """test077: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test077: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', logical_file_name="*",
                                   app_name=testparams['app_name'],
                                   output_module_label=testparams['output_module_label'])
     def test078(self):
-        """test078: web.DBSReaderModel.listOutputConfigs: basic test"""
+        """test078: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', dataset=testparams['dataset'],
                                   release_version=testparams['release_version'])
 
     def test079(self):
-        """test079: web.DBSReaderModel.listFileParents: basic test"""
+        """test079: web.DBSReaderModel.listFileParents: basic test """
         api.list('fileparents', logical_file_name="*")
 
     def test080(self):
-        """test080: web.DBSReaderModel.listFileParents: basic test"""
+        """test080: web.DBSReaderModel.listFileParents: basic test """
         api.list('fileparents', logical_file_name="ABC")
     
     def test081(self):
-        """test081: web.DBSReaderModel.listFileParents: must raise an exception if no parameter is passed"""
-        try: api.list('fileparents')
-        except: pass
-        else: self.fail("Exception was expected and was not raised")
-        
+        """test081: web.DBSReaderModel.listFileParents: must raise an exception if no parameter is passed """
+        try: 
+            api.list('fileparents')
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                print ex
+                self.fail("Exception was expected and was not raised.")    
+    
     def test082(self):
-        """test082: web.DBSReaderModel.listFileLumis: basic test"""
+        """test082: web.DBSReaderModel.listFileLumis: basic test """
         api.list('filelumis', logical_file_name="*")
 
     def test083(self):
-        """test083: web.DBSReaderModel.listFileLumis: basic test"""
+        """test083: web.DBSReaderModel.listFileLumis: basic test """
 	#need to update LFN
 	lfn= testparams['files'][1]
         api.list('filelumis', logical_file_name=lfn)
 
 
     def test084(self):
-        """test084: web.DBSReaderModel.listFileLumis: basic test"""
+        """test084: web.DBSReaderModel.listFileLumis: basic test """
         api.list('filelumis', block_name="*")
 
     def test085(self):
-        """test085: web.DBSReaderModel.listFileLumis: basic test"""
+        """test085: web.DBSReaderModel.listFileLumis: basic test """
         api.list('filelumis', block_name=testparams['block'])
 
     def test086(self):
-        """test086: web.DBSReaderModel.listFileLumis: basic test"""
+        """test086: web.DBSReaderModel.listFileLumis: basic test """
         api.list('filelumis', block_name=testparams['block']+'*')
 
     def test087(self):
-        """test087: web.DBSReaderModel.listFileLumis: must raise an exception if no parameter is passed"""
-        try: api.list('filelumis')
-        except: pass
-        else: self.fail("Exception was expected and was not raised")
+        """test087: web.DBSReaderModel.listFileLumis: must raise an exception if no parameter is passed """
+        try: 
+            api.list('filelumis')
+        except Exception, ex:
+            #print "****%s****" %ex
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else: self.fail("Exception was expected and was not raised")
  
     def test088(self):
         """test088: web.DBSReaderModel.listFile with maxrun, minrun: basic """
