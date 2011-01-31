@@ -272,7 +272,7 @@ class DBSWriterModel(DBSReaderModel):
             self.logger.exception(msg )
             raise Exception ("dbsException-3", msg )
 	    
-    def insertFile(self, qInserts=True):
+    def insertFile(self, qInserts=False):
         """
         gets the input from cherrypy request body
         input must be a (list of) dictionary with the following keys: <br />
