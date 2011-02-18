@@ -11,7 +11,7 @@ import cjson
 import threading
 import time
 
-from cherrypy import request, response, HTTPError
+from cherrypy import request, response, HTTPError, tools
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from dbs.utils.dbsUtils import dbsUtils 
@@ -19,6 +19,45 @@ from dbs.web.DBSReaderModel import DBSReaderModel
 #from dbs.business.DBSFileBuffer import DBSFileBuffer
 
 import traceback
+
+def authInsert(user,role,group,site):
+    """
+    Authorization function for general insert  
+    """
+    """
+    user = {
+        'dn': '/DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=fakeuser/CN=123456/CN=Fake User',
+        'method': 'X509Cert',
+        'login': 'fakeuser',
+        'name': 'Fake User',
+        'roles': {
+            'admin':   {'site': set(['t2-br-uerj', 't1-ch-cern']), 
+                        'group': set(['cms', 'ph-users'])},
+            'dev':     {'site': set(['t1-ch-cern']), 
+                        'group': set(['dmwm'])},
+            'shifter': {'site': set(['t0-ch-cern']), 
+                        'group': set(['facop','ph-users'])}
+        } 
+    }
+
+    """
+    for k, v in user['roles'].iteritems():
+        for g in v['group']:
+            if g=='dbs' and k=='dbsoperator':
+                return True
+            elif g=='dataops' and k=='production-operator':
+                return True
+    return False
+
+def authKeyInsert(user,role,group,site):
+    """
+    Authorization function for keys' insertion, such as insert into DATA_TIERS and so on.
+    """
+    for k, v in user['roles'].iteritems():
+        for g in v['group']:
+            if g=='dbs' and k=='dbsoperator':
+                return True
+    return False
 
 class DBSWriterModel(DBSReaderModel):
     """
@@ -66,7 +105,7 @@ class DBSWriterModel(DBSReaderModel):
 	    except Exception, ex:
 	    	raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
     """
-    
+    @tools.secmodv2(authzfunc=authInsert) 
     def insertPrimaryDataset(self):
         """
 	Inserts a Primary Dataset in DBS
@@ -74,7 +113,7 @@ class DBSWriterModel(DBSReaderModel):
         input must be a dictionary with the following two keys:
         primary_ds_name, primary_ds_type
         """
-
+        """
 	userDN = request.headers.get('Ssl-Client-S-Dn', None)
 	access = request.headers.get('Ssl-Client-Verify', None)
 	if userDN != '(null)' and access == 'SUCCESS':
@@ -84,7 +123,8 @@ class DBSWriterModel(DBSReaderModel):
 	else:
 	    self.logger.warning("<<<<<<<<<<<<<<<<<<<<<<<<<USER DN %s specified>>>>>>>>>>>>>>>>>>>>>>>" %userDN)
 
-	
+	"""
+        #print "----insertPrimaryDataset----"
 	try :
         	body = request.body.read()
         	indata = cjson.decode(body)
@@ -100,7 +140,8 @@ class DBSWriterModel(DBSReaderModel):
                         %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                     self.logger.exception(msg) 
                     raise Exception ("dbsException-3", msg) 
-
+    
+    @tools.secmodv2(authzfunc=authInsert)
     def insertOutputConfig(self):
         """
         Insert an output configuration (formely known as algorithm config) in DBS
@@ -127,6 +168,7 @@ class DBSWriterModel(DBSReaderModel):
                     self.logger.exception( msg )
                     raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2(authzfunc=authInsert)
     def insertAcquisitionEra(self):
         """
         Insert an AcquisitionEra in DBS
@@ -148,6 +190,7 @@ class DBSWriterModel(DBSReaderModel):
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2(authzfunc=authInsert)
     def insertProcessingEra(self):
 	"""
 	Insert an ProcessingEra in DBS
@@ -167,7 +210,8 @@ class DBSWriterModel(DBSReaderModel):
                             %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                     self.logger.exception( msg )
                     raise Exception ("dbsException-3", msg )
-		
+
+    @tools.secmodv2(authzfunc=authInsert)                
     def insertDataset(self):
         """
         gets the input from cherrypy request body.
@@ -214,7 +258,8 @@ class DBSWriterModel(DBSReaderModel):
                         %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception(msg )
                 raise Exception ("dbsException-3", msg )
-
+    
+    @tools.secmodv2(authzfunc=authInsert)
     def insertBulkBlock(self):
         """
         gets the input from cherrypy request body.
@@ -234,6 +279,7 @@ class DBSWriterModel(DBSReaderModel):
             self.logger.exception(msg )
             raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2(authzfunc=authInsert)
     def insertBlock(self):
         """
         gets the input from cherrypy request body.
@@ -271,7 +317,8 @@ class DBSWriterModel(DBSReaderModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
             self.logger.exception(msg )
             raise Exception ("dbsException-3", msg )
-	    
+	
+    @tools.secmodv2(authzfunc=authInsert)    
     def insertFile(self, qInserts=False):
         """
         gets the input from cherrypy request body
@@ -321,7 +368,8 @@ class DBSWriterModel(DBSReaderModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
             self.logger.exception(msg )
             raise Exception ("dbsException-3", msg )
-   
+  
+    @tools.secmodv2(authzfunc=authInsert)    
     def updateFile(self, logical_file_name="", is_file_valid=1):
 	"""
 	API to update file status
@@ -334,6 +382,7 @@ class DBSWriterModel(DBSReaderModel):
             self.logger.exception(msg )
             raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2(authzfunc=authInsert)
     def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_access_type=""):
 	"""
 	API to update dataset status
@@ -349,6 +398,7 @@ class DBSWriterModel(DBSReaderModel):
             self.logger.exception(msg )
             raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2(authzfunc=authInsert)
     def updateBlock(self, block_name="", open_for_writing=0):
 	"""
 	API to update file status
@@ -360,6 +410,7 @@ class DBSWriterModel(DBSReaderModel):
             self.logger.exception(msg )
             raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2(authzfunc=authKeyInsert)
     def insertDataTier(self):
 	"""
 	Inserts a data tier in DBS

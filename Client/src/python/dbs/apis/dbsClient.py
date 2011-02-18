@@ -1,8 +1,3 @@
-# 
-# $Revision: 1.54 $"
-# $Id: dbsClient.py,v 1.54 2010/08/16 18:43:15 afaq Exp $"
-# @author anzar
-#
 import os, sys, socket
 import urllib, urllib2
 from httplib import HTTPConnection
@@ -46,6 +41,7 @@ class DbsApi:
 			if self.proxy not in (None, ""):
 				proxies = { 'http': self.proxy }
 			#print calling
+                        #print "****callmethod=%s" %callmethod
 			if params == {} and not callmethod in ('POST', 'PUT') :
 				#data = urllib.urlopen(calling, proxies=proxies)
 				#data = urllib2.urlopen(calling)
@@ -55,14 +51,20 @@ class DbsApi:
 				params = cjson.encode(params)
 				req = urllib2.Request(url=calling, data=params, headers = headers)
 				req.get_method = lambda: callmethod
+                                #print "**** req.get_data %s" % req.get_data()
+                                #print "**** req.get_method %s" % req.get_method()
 				data = self.opener.open(req)
 			res = data.read()
+                        #print "*********res=%s" %res 
 		except urllib2.HTTPError, httperror:
-			self.parseForException(json.loads(httperror.read()))
-			
+                        #print "httperror=%s" %httperror
+			#self.parseForException(json.loads(httperror.read()))
+			self.parseForException(str(httperror))
 			#HTTPError(req.get_full_url(), code, msg, hdrs, fp)
 		except urllib2.URLError, urlerror:
 			raise urlerror
+                except Exception, e:
+                    raise e
 		
 		#FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
 		json_ret=json.loads(res)
@@ -74,6 +76,8 @@ class DbsApi:
 	    An internal method, should not be used by clients
 	    """
 	    if type(data)==type("abc"):
+                if "HTTP Error" in data:
+                    raise Exception ("DBS Server received: :%s" %data)
 		data=json.loads(data)
             if type(data) == type({}) and data.has_key('exception'):
 		#print "Service Raised an exception: "+data['exception']

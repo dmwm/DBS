@@ -9,6 +9,7 @@ __version__ = "$Revision: 1.50 $"
 import cjson
 import inspect
 from cherrypy import request, response, HTTPError
+from cherrypy import expose, tools
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
@@ -130,7 +131,7 @@ class DBSReaderModel(RESTModel):
 	    self.logger.exception("%s DBSReaderModel/register. %s\n EXception Trace: \n %s.\n" \
                     %(DBSEXCEPTIONS['dbsException-3'],ex, traceback.format_exc()) )
 	    pass
-
+    
     def getServerVersion(self):
         """
         Reading from __version__ tag, determines the version of the DBS Server
@@ -162,7 +163,8 @@ class DBSReaderModel(RESTModel):
         ret["schema"] = self.dbsStatus.getSchemaStatus()
 	ret["components"] = self.dbsStatus.getComponentStatus()
         return ret
-
+    
+    @tools.secmodv2()
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
         Example url's: <br />
@@ -174,6 +176,7 @@ class DBSReaderModel(RESTModel):
         primary_ds_name = primary_ds_name.replace("*","%")
 	primary_ds_type = primary_ds_type.replace("*","%")
         try:
+            #print"-----ListPrimaryDatasets___"
             return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name, primary_ds_type)
         except Exception, ex:
             if "dbsException-7" in ex.args[0]:
@@ -183,7 +186,8 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc() )
                 raise Exception ("dbsException-3", msg)
 
-
+    #@expose
+    @tools.secmodv2()
     def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", \
         app_name="", output_module_label="", processing_version="", acquisition_era="", \
         run_num="0", physics_group_name="", logical_file_name="", primary_ds_name="",
@@ -227,7 +231,8 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
-
+ 
+    @tools.secmodv2()
     def listDataTiers(self, data_tier_name=""):
 	"""
 	Example url's:
@@ -245,7 +250,8 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
-	
+
+    @tools.secmodv2()
     def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num=-1, detail=False):
         """
         Example url's:
@@ -272,7 +278,7 @@ class DBSReaderModel(RESTModel):
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
 
-
+    @tools.secmodv2()
     def listBlockParents(self, block_name=""):
         """
         Example url's:
@@ -289,7 +295,8 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
-  
+    
+    @tools.secmodv2()
     def listBlockChildren(self, block_name=""):
         """
         Example url's:
@@ -306,7 +313,8 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
- 
+
+    @tools.secmodv2()
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", 
 	pset_hash="", app_name="", output_module_label="", minrun=-1, maxrun=-1,
 	origin_site_name="", lumi_list="", detail=False):
@@ -348,6 +356,7 @@ class DBSReaderModel(RESTModel):
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2()
     def listDatasetParents(self, dataset=''):
         """
         Example url's <br />
@@ -363,7 +372,8 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
-
+   
+    @tools.secmodv2()
     def listDatasetChildren(self, dataset):
         """
         Example url's <br />
@@ -379,7 +389,8 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
-    
+   
+    @tools.secmodv2()
     def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="",
     output_module_label="", block_id=0):
         """
@@ -408,6 +419,7 @@ class DBSReaderModel(RESTModel):
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
     
+    @tools.secmodv2()
     def listFileParents(self, logical_file_name=''):
         """
         Example url's <br />
@@ -424,6 +436,7 @@ class DBSReaderModel(RESTModel):
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2()
     def listFileChildren(self, logical_file_name):
         """
         Example url's <br />
@@ -439,7 +452,8 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
-
+    
+    @tools.secmodv2()
     def listFileLumis(self, logical_file_name="", block_name=""):
         """
         Example url's <br />
@@ -456,7 +470,8 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
-         
+
+    @tools.secmodv2()     
     def listRuns(self, minrun=-1, maxrun=-1, logical_file_name="", block_name="", dataset=""):
         """
         http://dbs3/runs?runmin=1&runmax=10
@@ -492,7 +507,7 @@ class DBSReaderModel(RESTModel):
     #    """
     #    return self.dbsSite.listSites(block_name, site_name)
 
-
+    @tools.secmodv2()
     def listDataTypes(self, datatype="", dataset=""):
 	"""
 	lists datatypes known to dbs
@@ -508,7 +523,7 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
-
+    @tools.secmodv2()
     def dumpBlock(self, block_name):
 	"""
 	Returns all information related with the block_name
@@ -524,6 +539,7 @@ class DBSReaderModel(RESTModel):
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2()
     def listAcquisitionEras(self):
 	"""
 	lists acquisition eras known to dbs
@@ -539,6 +555,7 @@ class DBSReaderModel(RESTModel):
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
 
+    @tools.secmodv2()
     def listProcessingEras(self):
 	"""
 	lists acquisition eras known to dbs
