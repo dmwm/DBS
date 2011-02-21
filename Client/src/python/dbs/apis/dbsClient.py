@@ -59,25 +59,27 @@ class DbsApi:
 		except urllib2.HTTPError, httperror:
                         #print "httperror=%s" %httperror
 			#self.parseForException(json.loads(httperror.read()))
-			self.parseForException(str(httperror))
-			#HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+			#self.parseForException(str(httperror))
+			#HTTPError(req.get_full_url(), code, msg, hdrs, fpa)
+                        raise httperror
 		except urllib2.URLError, urlerror:
 			raise urlerror
                 except Exception, e:
                     raise e
 		
 		#FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
-		json_ret=json.loads(res)
-		self.parseForException(json_ret)
-		return json_ret
+		try:
+                    json_ret=json.loads(res)
+                    self.parseForException(json_ret)
+                    return json_ret
+                except Exception, e:
+                    raise e
 		
 	def parseForException(self, data):
 	    """
 	    An internal method, should not be used by clients
 	    """
 	    if type(data)==type("abc"):
-                if "HTTP Error" in data:
-                    raise Exception ("DBS Server received: :%s" %data)
 		data=json.loads(data)
             if type(data) == type({}) and data.has_key('exception'):
 		#print "Service Raised an exception: "+data['exception']

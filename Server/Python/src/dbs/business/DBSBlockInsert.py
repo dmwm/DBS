@@ -129,7 +129,10 @@ class DBSBlockInsert :
         logicalFileName ={}
         fileList = blockcontent['files']
         fileConfigList = blockcontent['file_conf_list']
-        fileParentList = blockcontent['file_parent_list']
+        if blockcontent.has_key('file_parent_list'):
+            fileParentList = blockcontent['file_parent_list']
+        else:
+            fileParentList=[]
         if not fileList:
             return
         intval = 40
@@ -276,25 +279,26 @@ class DBSBlockInsert :
             tran.rollback()
             raise
         #Now handle Block Parenttage
-        bpList = blockcontent['block_parent_list']
-        intval = 10
-        if newBlock:
-            try:
-                for i in range(len(bpList)):
-                    #updated due to schema update.
-                    bpList[i]['this_block_id'] = block['block_id']
-                    bpList[i]['parent_block_id'] = self.blockid.execute(conn, bpList[i]['block_name'])
-                    if bpList[i]['parent_block_id'] <= 0:
-                        if tran:
-                            tran.rollback()
-                        raise Exception("Parent block: %s not found in db" %bpList[i]['block_name'])
-                    del bpList[i]['block_name']
-                if bpList and newBlock:
-                    self.blkparentin.execute(conn, bpList, tran)
-            except Exception, ex:
-                #self.logger.exception("%s DBSBlockInsert/block parentage. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
-                tran.rollback()
-                raise
+        if blockcontent.has_key('block_parent_list'):
+            bpList = blockcontent['block_parent_list']
+            intval = 10
+            if newBlock:
+                try:
+                    for i in range(len(bpList)):
+                        #updated due to schema update.
+                        bpList[i]['this_block_id'] = block['block_id']
+                        bpList[i]['parent_block_id'] = self.blockid.execute(conn, bpList[i]['block_name'])
+                        if bpList[i]['parent_block_id'] <= 0:
+                            if tran:
+                                tran.rollback()
+                            raise Exception("Parent block: %s not found in db" %bpList[i]['block_name'])
+                        del bpList[i]['block_name']
+                    if bpList and newBlock:
+                        self.blkparentin.execute(conn, bpList, tran)
+                except Exception, ex:
+                    #self.logger.exception("%s DBSBlockInsert/block parentage. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                    tran.rollback()
+                    raise
         #Ok, we can commit everything.
         try:
             tran.commit()
@@ -652,25 +656,26 @@ class DBSBlockInsert :
                         raise
                 
             #9 Fill Dataset Parentage
-            dsPList = blockcontent['ds_parent_list']
-            dsParentObjList=[]
-            for p in dsPList:
-                dsParentObj={'this_dataset_id': dataset['dataset_id']\
+            if blockcontent.has_key('ds_parent_list'):
+                dsPList = blockcontent['ds_parent_list']
+                dsParentObjList=[]
+                for p in dsPList:
+                    dsParentObj={'this_dataset_id': dataset['dataset_id']\
                                  , 'parent_dataset_id' : self.datasetid.execute(conn, p['parent_dataset'])}
-                dsParentObjList.append(dsParentObj)
-            #insert dataset parentage in bulk
-            if dsParentObjList:
-                try:
-                    self.dsparentin.execute(conn, dsParentObjList, tran)
-                except exceptions.IntegrityError:
-                    #ok, already in db
-                    #FIXME: What happends when there are partially in db? YG 11/17/2010
-                    pass
-                except Exception, ex:
-                    #self.logger.exception("%s DBSBlockInsert/dataset parent mapping insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
-                    if tran:
-                        tran.rollback()
-                    raise
+                    dsParentObjList.append(dsParentObj)
+                #insert dataset parentage in bulk
+                if dsParentObjList:
+                    try:
+                        self.dsparentin.execute(conn, dsParentObjList, tran)
+                    except exceptions.IntegrityError:
+                        #ok, already in db
+                        #FIXME: What happends when there are partially in db? YG 11/17/2010
+                        pass
+                    except Exception, ex:
+                        #self.logger.exception("%s DBSBlockInsert/dataset parent mapping insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                        if tran:
+                            tran.rollback()
+                        raise
                                     
             #10 Before we commit, make dataset and output module configure mapping. 
             #We have to try to fill the map even if dataset is already in dest db
