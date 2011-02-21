@@ -28,9 +28,9 @@ class DBSMigrateModel(RESTModel):
         """
         RESTModel.__init__(self, config)
 	
-        self.addMethod('POST', 'submit', self.submit)
-        self.addMethod('POST', 'remove', self.remove)
-        self.addMethod('GET',  'status', self.status)
+        self._addMethod('POST', 'submit', self.submit)
+        self._addMethod('POST', 'remove', self.remove)
+        self._addMethod('GET',  'status', self.status)
 
 	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
 
