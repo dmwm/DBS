@@ -13,6 +13,7 @@ from optparse import OptionParser
 
 from WMCore.Configuration import Configuration, loadConfigurationFile
 from WMCore.WebTools.RESTApi import RESTApi
+import traceback
 
 class FileLike(object):    
     """FileLike Object class with two methods:
@@ -37,32 +38,41 @@ class DBSRestApi:
 
     def configure(self, configfile, service):
         cfg = loadConfigurationFile(configfile)
-        #wconfig = cfg.section_("Webtools")
-        #app = wconfig.application
-        #appconfig = cfg.section_(app)
-        #dbsconfig = getattr(appconfig.views.active, service)
-	databasecore = cfg.CoreDatabase
-        webapp = cfg.cmsdbs
-        dbsconfig = getattr(webapp.views.active, service)
+        wconfig = cfg.section_("Webtools")
+        app = wconfig.application
+        appconfig = cfg.section_(app)
+        dbsconfig = getattr(appconfig.views.active, service)
+	#databasecore = cfg.CoreDatabase
+        #webapp = cfg.cmsdbs
+        #dbsconfig = getattr(webapp.views.active, service)
 	
 	# Eitehr we change formatter 
 	# OR change the 'Accept' type to application/json (which we don't know how to do at thi moment)	
 	dbsconfig.formatter.object="WMCore.WebTools.RESTFormatter"
         config = Configuration()
+         
+        config.component_('SecurityModule')
+        config.SecurityModule.dangerously_insecure = True
 
-	config.section_("CoreDatabase")
-	config.CoreDatabase = databasecore
+
+	#config.section_("CoreDatabase")
+	#config.CoreDatabase = databasecore
 	
         config.component_('DBS')
-        config.DBS.application = "cmsdbs"
+        #config.DBS.application = "cmsdbs"
+        config.DBS.application = app
 	config.DBS.model       = dbsconfig.model
 	config.DBS.formatter   = dbsconfig.formatter
-        config.DBS.version     = databasecore.version
+        config.DBS.database    = dbsconfig.database 
+        config.DBS.dbowner     = dbsconfig.dbowner
+        config.DBS.version     = dbsconfig.version
+        #config.DBS.version     = databasecore.version
 	config.DBS.default_expires = 300
-	# DBS uses owner name, directly from app section at the moment (does not pick it from CoreDatabse)
-	config.DBS.dbowner     = databasecore.dbowner
+	# DBS uses owner name, directly from app section at the moment 
+        #(does not pick it from CoreDatabse)
+	#config.DBS.dbowner     = databasecore.dbowner
 	# Add the CoreDatabase section to DBS
-	config.DBS.database = config.CoreDatabase
+	#config.DBS.database = config.CoreDatabase
 	
 	
         return config
@@ -84,6 +94,8 @@ class DBSRestApi:
     def insert(self, call, params={}):
         request.method = 'POST'
         request.body = FileLike(params)
+        #import pdb
+        #pdb.set_trace()
 	#Forcing NO use of insert buffer during the unit tests
 	if call=='files':
 	    ret=self.rest.default(*[call, False])
@@ -100,6 +112,7 @@ class DBSRestApi:
 	    data=json.loads(data)	
 	if type(data) == type({}):
 	    if type(data) == type({}) and data.has_key('exception'):
+                print traceback.format_exc()
 		raise Exception("DBS Server raised an exception: " + (data['message']))
 	return data
 

@@ -207,7 +207,7 @@ class DBSClientReader_t(unittest.TestCase):
     def test42(self):
 	"""test42 unittestDBSClientReader_t.listFileParents: basic test"""	
 	try:
-	    api.listFileParents()
+	    print api.listFileParents()
 	except:
 	    pass
 	else:
@@ -224,7 +224,7 @@ class DBSClientReader_t(unittest.TestCase):
     def test45(self):
 	"""test45 unittestDBSClientReader_t.listFileLumis: basic test"""	
 	try:
-	    api.listFileLumis()
+	    print api.listFileLumis()
 	except:
 	    pass
 	else:

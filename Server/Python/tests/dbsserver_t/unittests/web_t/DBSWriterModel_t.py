@@ -14,6 +14,15 @@ import traceback
 from ctypes import *
 from cherrypy import request, response, HTTPError
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
+import cherrypy
+from WMCore.WebTools.FrontEndAuth import FrontEndAuth
+
+def FakeAuth(*a, **b):
+    def actD(f):
+        return f
+    return actD
+
+cherrypy.tools.secmodv2 = FakeAuth 
 
 class NullDevice:
     def write(self, s):
@@ -75,6 +84,7 @@ class DBSWriterModel_t(unittest.TestCase):
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':primary_ds_type}
         api.insert('primarydatasets', data)
+
 
     def test02(self):
         """test02: web.DBSWriterModel.insertPrimaryDataset: duplicate should not riase an exception\n"""

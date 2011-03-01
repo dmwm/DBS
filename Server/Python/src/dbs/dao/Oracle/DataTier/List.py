@@ -23,7 +23,7 @@ SELECT DT.DATA_TIER_ID, DT.DATA_TIER_NAME, DT.CREATION_DATE, DT.CREATE_BY
 FROM %sDATA_TIERS DT 
 """ % (self.owner)
 
-    def execute(self, conn, dataTier, transaction = False, cache=None):
+    def execute(self, conn, dataTier='', transaction = False, cache=None):
         """
         returns id for a given datatier name
         """

@@ -81,8 +81,14 @@ class DBSValitaion_t(unittest.TestCase):
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
-	api.insertDataset(datasetObj=data)
-	dsList = api.listDatasets(dataset=dataset, detail=True)
+        try:
+            #print data['dataset']
+            api.insertDataset(datasetObj=data)
+            #print dataset
+            dsList = api.listDatasets(dataset=dataset, detail=True, dataset_access_type='PRODUCTION')
+        except Exception, e:
+            print e
+        #print dsList
 	self.assertEqual(len(dsList), 1)
 	dsInDBS=dsList[0]
 	self.assertEqual(dsInDBS['dataset'], dataset)
@@ -182,7 +188,10 @@ class DBSValitaion_t(unittest.TestCase):
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
-	api.insertFiles(filesList={"files":flist}, qInserts=False)
+	#import pdb
+        api.insertFiles(filesList={"files":flist}, qInserts=False)
+        #pdb.set_trace()
+
 	### Lets begin the validation now
 	# our block, 'block' now has these 10 files, and that is basis of our validation
 	flList=api.listFiles(block=block, detail=True)
@@ -193,9 +202,10 @@ class DBSValitaion_t(unittest.TestCase):
 	    self.assertEqual(afileInDBS['file_size'], 201221191)
 	    self.assertEqual(afileInDBS['is_file_valid'], 1)
 	# Get the file parent -- The inserted file must have a parent
-	flParentList=api.listFileParents(logical_file_name="/store/mc/%s/%i.root" %(uid, 0))
+        logical_file_name = "/store/mc/%s/%i.root" %(uid, 0)
+	flParentList=api.listFileParents(logical_file_name=logical_file_name)
 	self.assertEqual(len(flParentList), 1)
-	self.assertEqual(flParentList[0]['parent_logical_file_name'], "/store/mc/parent_%s/%i.root" %(uid, 0))
+	self.assertEqual(flParentList[0][logical_file_name][0], "/store/mc/parent_%s/%i.root" %(uid, 0))
 	# Get the dataset parent -- due to fact that files had parents, dataset parentage is also inserted
 	dsParentList=api.listDatasetParents(dataset=dataset)
 	self.assertEqual(len(dsParentList), 1)
@@ -226,16 +236,16 @@ class DBSValitaion_t(unittest.TestCase):
     def test09(self):
 	"""test09 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status and validate it"""
 	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=1)
-	dsInDBS=api.listDatasets(dataset=dataset, detail=True)
+	dsInDBS=api.listDatasets(dataset=dataset,  dataset_access_type="PRODUCTION", detail=True)
 	self.assertEqual(len(dsInDBS), 1)
 	self.assertEqual(dsInDBS[0]['is_dataset_valid'], 1)
 	
     def test10(self):
 	"""test10 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-	api.updateDatasetType(dataset=dataset, dataset_access_type="PRODUCTION")
+	api.updateDatasetType(dataset=dataset, dataset_access_type="READONLY")
 	dsInDBS=api.listDatasets(dataset=dataset, detail=True)
-	self.assertEqual(len(dsInDBS), 1)
-	self.assertEqual(dsInDBS[0]['dataset_access_type'], "PRODUCTION")
+        self.assertEqual(len(dsInDBS), 1)
+	self.assertEqual(dsInDBS[0]['dataset_access_type'], "READONLY")
 
 
 	

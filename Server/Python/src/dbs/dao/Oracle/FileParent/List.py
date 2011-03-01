@@ -20,15 +20,14 @@ class List(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
-SELECT PF.LOGICAL_FILE_NAME parent_logical_file_name, 
-       PF.FILE_ID parent_file_id,
-       F.LOGICAL_FILE_NAME
+SELECT F.LOGICAL_FILE_NAME, PF.LOGICAL_FILE_NAME parent_logical_file_name, 
+       PF.FILE_ID parent_file_id
 FROM %sFILES PF
 JOIN %sFILE_PARENTS FP ON FP.PARENT_FILE_ID = PF.FILE_ID
 JOIN %sFILES F ON  F.FILE_ID = FP.THIS_FILE_ID 
 """ % ((self.owner,)*3)
 
-    def execute(self, conn, logical_file_name='', block_id=0, transaction=False):
+    def execute(self, conn, logical_file_name='', block_id=0, block_name='', transaction=False):
         """
         return {} if condition is not provided.
         """
@@ -41,8 +40,12 @@ JOIN %sFILES F ON  F.FILE_ID = FP.THIS_FILE_ID
 	elif block_id != 0:
 	    sql += "WHERE F.BLOCK_ID = :block_id"
 	    binds ={'block_id':block_id}
+        elif block_name:
+            sql += "JOIN %sBLOCKS B on B.BLOCK_ID = F.BLOCK_ID Where B.BLOCK_NAME= :block_name" %self.owner
+            binds ={'block_name':block_name}
 	else:
 	    return{}
+        self.logger.debug(sql)
 	cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
 	#if len(cursors) != 1:
 	    #raise Exception("File Parents does not exist.")

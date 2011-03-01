@@ -17,6 +17,7 @@ class DBSFile:
 
         self.filelist = daofactory(classname="File.List")
         self.filebrieflist = daofactory(classname="File.BriefList")
+        self.filesummarylist = daofactory(classname="File.SummaryList")
         self.sm = daofactory(classname = "SequenceManager")
         self.filein = daofactory(classname = "File.Insert")
         self.flumiin = daofactory(classname = "FileLumi.Insert")
@@ -60,21 +61,55 @@ class DBSFile:
 	    raise ex
 	finally:
 	    conn.close()
- 
-    def listFileParents(self, logical_file_name=""): 
+
+    def listFileSummary(self, block_name="", dataset=""):
         """
-        required parameter: logical_file_name
+        required parameter: full block_name or dataset name. No wildcards allowed.
+        """
+        try:
+            conn=self.dbi.connection()
+            if not block_name and not dataset:
+                raise Exception('dbsException-7', "%s DBSFile/listFileSummary. \
+                        block_name or dataset is required for listFileSummary API" \
+                        %DBSEXCEPTIONS['dbsException-7'] )
+            if '%' in block_name or '%' in dataset:
+                raise Exception('dbsException-7', "%s DBSFile/listFileSummary. \
+                        No waildcard is allowed in block_name or dataset for listFileSummary API" \
+                        %DBSEXCEPTIONS['dbsException-7'] ) 
+            result = self.filesummarylist.execute(conn,block_name, dataset)
+            conn.close()
+            return result
+        except Exception, ex:
+            raise ex
+        finally:
+            conn.close()
+
+    def listFileParents(self, logical_file_name="", block_id=0, block_name=""): 
+        """
+        required parameter: logical_file_name or block_name
         returns: logical_file_name, parent_logical_file_name, parent_file_id
         """
 	try:
 	    conn=self.dbi.connection()
-	    if not logical_file_name:
+            self.logger.debug("lfn %s, block_name %s, block_id :%s" %(logical_file_name, block_name,block_id))
+	    if not logical_file_name and not block_name and not block_id:
 		raise Exception('dbsException-7', "%s DBSFile/listFileParents. \
-                        logical_file_name is required for listFileParents api" \
+                        logical_file_name, block_id or block_name is required for listFileParents api" \
                         %DBSEXCEPTIONS['dbsException-7'] )
-	    result= self.fileparentlist.execute(conn,logical_file_name)
+	    sqlresult= self.fileparentlist.execute(conn,logical_file_name, block_id, block_name)
 	    conn.close()
-	    return result
+            result=[]
+            d={}
+            #self.logger.warning(sqlresult)
+            for i in range(len(sqlresult)):
+                k=sqlresult[i]['logical_file_name']
+                v=sqlresult[i]['parent_logical_file_name']
+                if k in d:
+                    d[k].append(v)
+                else:
+                    d[k]=[v]
+	    result.append(d)
+            return result
         except Exception, ex:
             #self.logger.exception("%s DBSFile/listFileParents. %s\n." \
                     #%(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -162,7 +197,7 @@ class DBSFile:
 	finally:
 	    conn.close()
 
-    def insertFile(self, businput, qInserts=True):
+    def insertFile(self, businput, qInserts=False):
 	"""
 	qInserts : True means that inserts will be queued instead of done immediatley. INSERT QUEUE Manager will perform the inserts, within few minutes.
 	
@@ -249,8 +284,8 @@ class DBSFile:
 		    "adler32" : f.get("adler32", ""), 
 		    "md5" : f.get("md5", ""),
 		    "auto_cross_section" : f.get("auto_cross_section", -1),
-		    "creation_date" : f.get("creation_date", None), 
-		    "create_by": f.get("create_by", None),
+		    #"creation_date" : f.get("creation_date", None),  See Ticket #965 YG. 
+		    #"create_by": f.get("create_by", None),
 		    "last_modification_date": f.get("last_modification_date", None), 
 		    "last_modified_by" : f.get("last_modified_by", None) 
 		}

@@ -25,10 +25,12 @@ SELECT B.BLOCK_ID, B.BLOCK_NAME, B.OPEN_FOR_WRITING,
         B.DATASET_ID, DS.DATASET,
         B.ORIGIN_SITE_NAME, B.CREATION_DATE, B.CREATE_BY
 FROM %sBLOCKS B
-JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
+JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID 
     """ % ((self.owner,)*2)
 #
-    def execute(self, conn, dataset="", block_name="", origin_site_name="", logical_file_name="", run_num=-1, transaction = False):
+    def execute(self, conn, dataset="", block_name="", origin_site_name="", logical_file_name="", 
+                run_num=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,  ldate=0,
+                transaction = False):
 	"""
 	dataset: /a/b/c
 	block: /a/b/c#d
@@ -39,77 +41,108 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 	sql = self.sql
 	binds = {}
 
-	if logical_file_name and logical_file_name != "%":
+        if logical_file_name and logical_file_name != "%":
 	    op = ("=", "like")["%" in logical_file_name] 
-	    sql += " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID" %(self.owner)
+	    sql += " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID " %(self.owner)
 	    if run_num and run_num !=-1:
-		sql += " JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID" %(self.owner)
-	    sql += " WHERE LOGICAL_FILE_NAME %s :logical_file_name" % op
+		sql += " JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID " %(self.owner)
+	    sql += " WHERE LOGICAL_FILE_NAME %s :logical_file_name " % op
 	    binds.update( logical_file_name = logical_file_name)
 	    if run_num and run_num !=-1:
-		sql += " AND RUN_NUM = :run_num"
+		sql += " AND RUN_NUM = :run_num "
 		binds.update(run_num = run_num)
 	    if  block_name and  block_name !="%":
 		op = ("=", "like")["%" in block_name]
-		sql += " AND B.BLOCK_NAME %s :block_name" % op
+		sql += " AND B.BLOCK_NAME %s :block_name " % op
 		binds.update({"block_name":block_name})
 		if dataset and dataset !="%": 
 		    op = ("=", "like")["%" in dataset]
-		    sql += " AND DS.DATASET %s :dataset" %op
+		    sql += " AND DS.DATASET %s :dataset " %op
 		    binds.update(dataset=dataset)
 		if origin_site_name and  origin_site_name != "%":
 		    op = ("=", "like")["%" in origin_site_name]
-		    sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		    sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
 		    binds.update(origin_site_name = origin_site_name)	
-	    elif dataset and dataset !="%": 
+            elif dataset and dataset !="%": 
 		op = ("=", "like")["%" in dataset]
-		sql += " AND DS.DATASET %s :dataset" %op
+		sql += " AND DS.DATASET %s :dataset " %op
 		binds.update(dataset=dataset)
 		if origin_site_name and  origin_site_name != "%":
 		    op = ("=", "like")["%" in origin_site_name]
-		    sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		    sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
 		    binds.update(origin_site_name = origin_site_name)
 	    elif origin_site_name and  origin_site_name != "%": 
 		op = ("=", "like")["%" in origin_site_name] 
-		sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
 		binds.update(origin_site_name = origin_site_name)
 	elif block_name and  block_name !="%":
 	    if run_num and run_num !=-1:
 		sql += """ JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID
-		            JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID
+		            JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID 
 			""" %((self.owner,)*2)
 	    op = ("=", "like")["%" in block_name]
-	    sql += " WHERE B.BLOCK_NAME %s :block_name" % op
+	    sql += " WHERE B.BLOCK_NAME %s :block_name " % op
 	    binds.update({"block_name":block_name}) 
 	    if run_num and run_num !=-1:
-                sql += " AND RUN_NUM = :run_num"
+                sql += " AND RUN_NUM = :run_num "
                 binds.update(run_num = run_num)
 	    if dataset and dataset !="%": 
 		op = ("=", "like")["%" in dataset]
-		sql += " AND DS.DATASET %s :dataset" %op
+		sql += " AND DS.DATASET %s :dataset " %op
 		binds.update(dataset=dataset)
 	    if origin_site_name and  origin_site_name != "%":
 		op = ("=", "like")["%" in origin_site_name]
-		sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
 		binds.update(origin_site_name = origin_site_name)	
 	elif dataset and dataset !="%":
 	    if run_num and run_num !=-1:
                 sql += """ JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID 
-		            JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID
+		            JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID 
 			""" %((self.owner,)*2)
 	    op = ("=", "like")["%" in dataset] 
-	    sql += " WHERE DS.DATASET %s :dataset" %op
+	    sql += " WHERE DS.DATASET %s :dataset " %op
 	    binds.update(dataset=dataset) 
 	    if run_num and run_num !=-1:
-		sql += " AND RUN_NUM = :run_num"
+		sql += " AND RUN_NUM = :run_num "
                 binds.update(run_num = run_num)
 	    if origin_site_name and  origin_site_name != "%": 
 		op = ("=", "like")["%" in origin_site_name] 
-		sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name" %op
+		sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
 		binds.update(origin_site_name = origin_site_name)
-
+        #date search cannot work alone. YG
+        if "WHERE" in sql:
+            if cdate != 0:
+                 sql += "AND B.CREATION_DATE = :cdate "
+                 binds.update(cdate = cdate)
+            elif min_cdate != 0 and max_cdate != 0:
+                sql += "AND B.CREATION_DATE BETWEEN :min_cdate and :max_cdate "
+                binds.update(min_cdate = min_cdate)
+                binds.update(max_cdate = max_cdate)
+            elif min_cdate != 0 and max_cdate == 0:
+                sql += "AND B.CREATION_DATE > :min_cdate "
+                binds.update(min_cdate = min_cdate)
+            elif min_cdate ==0 and max_cdate != 0:
+                sql += "AND B.CREATION_DATE < :max_cdate "
+                binds.update(max_cdate = max_cdate)
+            else:
+                pass
+            if ldate != 0:
+                sql += "AND B.LAST_MODIFICATION_DATE = :ldate "
+                binds.update(ldate = ldate)
+            elif min_ldate != 0 and max_ldate != 0:
+                sql += "AND B.LAST_MODIFICATION_DATE BETWEEN :min_ldate and :max_ldate "
+                binds.update(min_ldate = min_ldate)
+                binds.update(max_ldate = max_ldate)
+            elif min_ldate != 0 and max_ldate == 0:
+                sql += "AND B.LAST_MODIFICATION_DATE > :min_ldate "
+                binds.update(min_ldate = min_ldate)
+            elif min_cdate ==0 and max_cdate != 0:
+                sql += "AND B.LAST_MODIFICATION_DATE < :max_ldate "
+                binds.update(max_ldate = max_ldate)
+            else:
+                pass    
 	if run_num and run_num !=-1:
-	    sql = sql.replace("SELECT", "SELECT DISTINCT")
+	    sql = sql.replace("SELECT ", "SELECT DISTINCT ")
 
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds

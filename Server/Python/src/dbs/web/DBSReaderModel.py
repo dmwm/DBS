@@ -50,30 +50,45 @@ class DBSReaderModel(RESTModel):
         RESTModel.__init__(self, config)
         self.dbsUtils2 = dbsUtils()
         self.version = self.getServerVersion()
+        #self.warning("DBSReaderModle")
+        #self.logger.warning("DBSReaderModle")
 	#self.register() Need to figure out details befer to trun on it. YG 1/26/11
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 	self._addMethod('GET', 'serverinfo', self.getServerInfo)
-        self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets)
-        self._addMethod('GET', 'datasets', self.listDatasets)
-        self._addMethod('GET', 'blocks', self.listBlocks)
-        self._addMethod('GET', 'files', self.listFiles)
-        self._addMethod('GET', 'datasetparents', self.listDatasetParents)
-        self._addMethod('GET', 'datasetchildren', self.listDatasetChildren)
-        self._addMethod('GET', 'outputconfigs', self.listOutputConfigs)
-        self._addMethod('GET', 'fileparents', self.listFileParents)
-        self._addMethod('GET', 'filechildren', self.listFileChildren)
-        self._addMethod('GET', 'filelumis', self.listFileLumis)
-        self._addMethod('GET', 'runs', self.listRuns)
+        self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
+        self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',\
+                                'pset_hash', 'app_name', 'output_module_label', 'processing_version', \
+                                'acquisition_era', 'run_num','physics_group_name', 'logical_file_name', \
+                                'primary_ds_name', 'primary_ds_type', 'data_tier_name', 'dataset_access_type', \
+                                'is_dataset_valid', 'min_cdate, max_cdate', 'min_ldate', 'max_ldate', \
+                                'cdate', 'ldate', 'detail'])
+        self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'origin_site_name', \
+                        'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate', \
+                        'max_ldate', 'cdate', 'ldate', 'detail'])
+        self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',\
+                        'release_version', 'pset_hash', 'app_name', 'output_module_label', 'minrun', 'maxrun',\
+                        'origin_site_name', 'lumi_list', 'detail'])
+        self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name','dataset'])
+        self._addMethod('GET', 'datasetparents', self.listDatasetParents, args=['dataset'])
+        self._addMethod('GET', 'datasetchildren', self.listDatasetChildren, args=['dataset'])
+        self._addMethod('GET', 'outputconfigs', self.listOutputConfigs, args=['dataset', 'logical_file_name',\
+                        'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id'])
+        self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id', \
+                        'block_name'])
+        self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name'])
+        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name'])
+        self._addMethod('GET', 'runs', self.listRuns, args=['minrun', 'maxrun', 'logical_file_name', \
+                        'block_name', 'dataset'])
         #self._addMethod('GET', 'sites', self.listSites)
-        self._addMethod('GET', 'datatypes', self.listDataTypes)
-        self._addMethod('GET', 'datatiers', self.listDataTiers)
-        self._addMethod('GET', 'blockparents', self.listBlockParents)
-        self._addMethod('GET', 'blockchildren', self.listBlockChildren)
-        self._addMethod('GET', 'blockdump', self.dumpBlock)
-        self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras)
-        self._addMethod('GET', 'processingeras', self.listProcessingEras)
-	self._addMethod('GET', 'help', self.getHelp)
-	self._addMethod('GET', 'register', self.register)
+        self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'])
+        self._addMethod('GET', 'datatiers', self.listDataTiers, args=['data_tier_name'])
+        self._addMethod('GET', 'blockparents', self.listBlockParents, args=['block_name'])
+        self._addMethod('GET', 'blockchildren', self.listBlockChildren, args=['block_name'])
+        self._addMethod('GET', 'blockdump', self.dumpBlock, args=['block_name'])
+        self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=[])
+        self._addMethod('GET', 'processingeras', self.listProcessingEras, args=[])
+	self._addMethod('GET', 'help', self.getHelp, args=['call'])
+	self._addMethod('GET', 'register', self.register, args=[])
 
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
@@ -188,10 +203,13 @@ class DBSReaderModel(RESTModel):
 
     #@expose
     @tools.secmodv2()
-    def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", \
-        app_name="", output_module_label="", processing_version="", acquisition_era="", \
-        run_num="0", physics_group_name="", logical_file_name="", primary_ds_name="",
-        primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
+    def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1, release_version="", pset_hash="",\
+        app_name="", output_module_label="", processing_version="", acquisition_era="",\
+        run_num="0", physics_group_name="", logical_file_name="", primary_ds_name="",\
+        primary_ds_type="", data_tier_name="", dataset_access_type="READONLY",\
+        min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0', ldate='0', detail=False):
+        #import pdb
+        #pdb.set_trace()
         """
 	This API lists the dataset paths and associated information.
 	If no parameter is given, all datasets will be returned.
@@ -212,17 +230,48 @@ class DBSReaderModel(RESTModel):
 	primary_ds_type = primary_ds_type.replace("*", "%")
 	data_tier_name = data_tier_name.replace("*", "%")
 	dataset_access_type = dataset_access_type.replace("*", "%")
-	run_num = run_num.replace("*", "%")
-	if run_num == '%':
-	    run_num = 0
-	else:
-	    run_num = int(run_num)
+        try:
+            run_num = run_num.replace("*", "%")
+            if run_num == '%':
+                run_num = 0
+            else:
+                run_num = int(run_num)
+            if '*' in min_cdate or '%' in min_cdate:
+                min_cdate = 0
+            else:
+                min_cdate = int(min_cdate)
+            if '*' in max_cdate or '%' in max_cdate:
+                max_cdate = 0
+            else:
+                max_cdate = int(max_cdate)
+            if '*' in min_ldate or '%' in min_ldate:
+                min_ldate = 0
+            else:
+                min_ldate = int(min_ldate)
+            if '*' in max_ldate or '%' in max_ldate:
+                max_ldate = 0
+            else:
+                max_ldate = int(max_ldate)
+            if '*' in cdate or '%' in cdate:
+                cdate = 0
+            else:
+                cdate = int(cdate)
+            if '*' in ldate or '%' in ldate:
+                ldate = 0
+            else:
+                ldate = int(ldate)
+        except Exception, e:
+            self.debug(str(e))
+            self.debug(traceback.format_exc())
+            raise HTTPError(400, str(e))
+    
 	detail = detail in (True, 1, "True", "1")
         try:
-            return self.dbsDataset.listDatasets(dataset, parent_dataset, release_version, pset_hash, \
+            return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash, \
                 app_name, output_module_label, processing_version, acquisition_era,\
                 run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, \
-                data_tier_name, dataset_access_type, detail)
+                data_tier_name, dataset_access_type, \
+                min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
         except Exception, ex:
             if "dbsException-7" in ex.args[0]:
                 raise HTTPError(400, str(ex))
@@ -252,7 +301,8 @@ class DBSReaderModel(RESTModel):
                 raise Exception ("dbsException-3", msg )
 
     @tools.secmodv2()
-    def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num=-1, detail=False):
+    def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num='-1',\
+                   min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',  ldate='0', detail=False):
         """
         Example url's:
         http://dbs3/blocks?dataset=myDataset ||?origin_site_name=mySite <br />
@@ -265,10 +315,45 @@ class DBSReaderModel(RESTModel):
         block_name = block_name.replace("*","%")
 	logical_file_name = logical_file_name.replace("*","%")
 	origin_site_name = origin_site_name.replace("*","%")
-	run_num = int(run_num)
+        run_num = str(run_num)
+        try:
+            run_num = run_num.replace("*", "%")
+            if run_num == '%':
+                run_num = 0
+            else:
+                run_num = int(run_num)
+            if '*' in min_cdate or '%' in min_cdate:
+                min_cdate = 0
+            else:
+                min_cdate = int(min_cdate)
+            if '*' in max_cdate or '%' in max_cdate:
+                max_cdate = 0
+            else:
+                max_cdate = int(max_cdate)
+            if '*' in min_ldate or '%' in min_ldate:
+                min_ldate = 0
+            else:
+                min_ldate = int(min_ldate)
+            if '*' in max_ldate or '%' in max_ldate:
+                max_ldate = 0
+            else:
+                max_ldate = int(max_ldate)
+            if '*' in cdate or '%' in cdate:
+                cdate = 0
+            else:
+                cdate = int(cdate)
+            if '*' in ldate or '%' in ldate:
+                ldate = 0
+            else:
+                ldate = int(ldate)
+        except Exception, e:
+            self.debug(str(e))
+            self.debug(traceback.format_exc())
+            raise HTTPError(400, str(e)) 
 	detail = detail in (True, 1, "True", "1")
         try:
-            return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num, detail)
+            return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num, \
+                min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
         except Exception, ex:
             if "dbsException-7" in ex.args[0]:
                 raise HTTPError(400, str(ex))
@@ -357,6 +442,26 @@ class DBSReaderModel(RESTModel):
                 raise Exception ("dbsException-3", msg )
 
     @tools.secmodv2()
+    def listFileSummaries(self, block_name='', dataset=''):
+        """
+        Example url's <br />
+        http://dbs3/filesummaries?dataset=/a/b/c
+        http://dbs3/filesummaries?block_name=/a/b/c#1234
+        Both block_name and dataset will not allow wildcards.
+        Return: number of files, event counts and number of lumi sections in a given block or dataset. 
+        """
+        try:
+            return self.dbsFile.listFileSummary(block_name, dataset)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listFileSummaries. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
+
+    @tools.secmodv2()
     def listDatasetParents(self, dataset=''):
         """
         Example url's <br />
@@ -420,13 +525,13 @@ class DBSReaderModel(RESTModel):
                 raise Exception ("dbsException-3", msg )
     
     @tools.secmodv2()
-    def listFileParents(self, logical_file_name=''):
+    def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
         """
         Example url's <br />
         http://dbs3/fileparents?logical_file_name=lfn
         """
         try:
-            return self.dbsFile.listFileParents(logical_file_name)
+            return self.dbsFile.listFileParents(logical_file_name, block_id, block_name)
         except Exception, ex:
             if "dbsException-7" in ex.args[0]:
                 raise HTTPError(400, str(ex))

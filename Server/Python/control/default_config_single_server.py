@@ -16,6 +16,12 @@ config.Webtools.access_log_file = os.environ['DBS3_ROOT'] +"/Logs/single/cms_dbs
 config.Webtools.error_log_file = os.environ['DBS3_ROOT'] +"/Logs/single/cms_dbs_writer_error.log"
 #for debugging. Everything goes to screen
 config.Webtools.log_screen = True
+"""
+#below three settting is for code debugging.
+config.Webtools.environment = "develop"
+config.Webtools.autoreload = True
+config.Webtools.show_tracebacks = True
+"""
 config.Webtools.application = 'cms_dbs'
 
 config.component_('cms_dbs')

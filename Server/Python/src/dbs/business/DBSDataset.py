@@ -115,27 +115,34 @@ class DBSDataset:
 	    trans.close()
             conn.close()
    
-    def listDatasets(self, dataset="", parent_dataset="", release_version="",
+    def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1, release_version="",
                      pset_hash="", app_name="", output_module_label="",
 		     processing_version="", acquisition_era="", 
 		     run_num=0, physics_group_name="", logical_file_name="", primary_ds_name="",
-                     primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
+                     primary_ds_type="", data_tier_name="", dataset_access_type="READONLY", 
+                     min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, ldate=0,
+                     detail=False):
         """
         lists all datasets if dataset parameter is not given.
         The parameter can include % character. 
         all other parameters are not wild card ones.
         """
+        #import pdb
+        #pdb.set_trace()
+        #self.logger.warning("I am in listDataset businese")
  	if(logical_file_name and logical_file_name.find("%")!=-1):
 	    raise Exception("dbsException-7", "%s DBSDataset/listDatasets API only works with fullly qualified logical_file_name. NO * is allowed in logical_file_name."
                              %(DBSEXCEPTIONS['dbsException-7']))
 	try:
             conn = None
 	    conn = self.dbi.connection()
+            #import pdb
+            #pdb.set_trace()
 
 	    dao = (self.datasetbrieflist, self.datasetlist)[detail]
 
 	    result = dao.execute(conn, 
-				    dataset,
+				    dataset, is_dataset_valid,
 				    parent_dataset,
                                     release_version,
 				    pset_hash,
@@ -145,7 +152,8 @@ class DBSDataset:
                                     acquisition_era, 
                                     run_num, physics_group_name, logical_file_name, 
                                     primary_ds_name, primary_ds_type, data_tier_name, 
-                                    dataset_access_type)	
+                                    dataset_access_type, min_cdate, max_cdate, min_ldate,
+                                    max_ldate, cdate, ldate)	
 	    conn.close()
 	    return result
         except Exception, ex:

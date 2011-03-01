@@ -8,19 +8,17 @@ __version__ = "$Revision: 1.21 $"
 import os
 import sys
 import time
+import uuid
 import unittest
 from dbs.apis.dbsClient import *
 from ctypes import *
 
-def uuid():
-    lib = CDLL("libuuid.so.1")
-    uuid = create_string_buffer(16)
-    return lib.uuid_generate(byref(uuid))
-    
+uid = uuid.uuid4().time_mid
+print "****uid=%s******" %uid
+
 url=os.environ['DBS_WRITER_URL']     
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
 api = DbsApi(url=url)
-uid = uuid()
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
 tier = 'GEN-SIM-RAW'
@@ -148,21 +146,6 @@ class DBSClientWriter_t(unittest.TestCase):
 		}
 	api.insertDataset(datasetObj=data)
 
-    def test12(self):
-	"""test12: web.DBSClientWriter.insertSite: basic test"""
-	data = {
-	     "site_name" : site
-	}
-	api.insertSite(siteObj=data)
-
-
-    def test13(self):
-	"""test13: web.DBSClientWriter.insertSite: duplicate site must not throw any errors"""
-	data = {
-	     "site_name" : site
-	}
-        api.insertSite(siteObj=data)
-	
     def test14(self):
 	"""test14 web.DBSClientWriter.insertBlock: basic test"""
 	data = {'block_name': block,

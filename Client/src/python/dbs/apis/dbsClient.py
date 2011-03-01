@@ -195,8 +195,12 @@ class DbsApi:
                 """
                 return self.callServer("/processingeras", params = procEraObj , callmethod='POST' )
 
-        def listDatasets(self, dataset="", parent_dataset="", release_version="", pset_hash="", app_name="", output_module_label="", processing_version="", acquisition_era="",
-		run_num="", physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="", data_tier_name="", dataset_access_type="", detail=False):
+        def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid='', release_version="", pset_hash="", 
+            app_name="", output_module_label="", processing_version="", acquisition_era="",
+            run_num='', physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="", 
+            data_tier_name="", dataset_access_type="", 
+            min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, ldate=0,
+            detail=False):
                 """
                 * API to list dataset(s) in DBS 
                 * dataset : Full dataset (path) of the dataset
@@ -224,6 +228,10 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "parent_dataset=%s"%parent_dataset
 		    amp=True
+                if is_dataset_valid:
+                    if amp: add_to_url += "&"
+                    add_to_url += "is_dataset_valid=%s"%is_dataset_valid
+                    amp=True
 		if release_version:
 		    if amp: add_to_url += "&"
 		    add_to_url += "release_version=%s"%release_version
@@ -247,6 +255,12 @@ class DbsApi:
 		if acquisition_era:
 		    add_to_url += "acquisition_era=%s"%acquisition_era
 		    amp=True
+                if run_num:
+                    add_to_url += "run_num=%s"%run_num
+                    amp=True
+                if physics_group_name:
+                    add_to_url += "physics_group_name=%s"%physics_group_name
+                    amp=True
 		if logical_file_name : 
 		    if amp: add_to_url += "&"
 		    add_to_url += "logical_file_name=%s" % logical_file_name
@@ -259,14 +273,38 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "data_tier_name=%s" % data_tier_name
 		    amp=True
-		if dataset_access_type : 
+		if primary_ds_type : 
 		    if amp: add_to_url += "&"
-		    add_to_url += "dataset_access_type=%s" % dataset_access_type
+		    add_to_url += "primary_ds_type=%s" % primary_ds_type
 		    amp=True
 		if dataset_access_type : 
 		    if amp: add_to_url += "&"
 		    add_to_url += "dataset_access_type=%s" % dataset_access_type
 		    amp=True
+                if cdate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "cdate=%s" % cdate
+                    amp=True
+                if min_cdate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "min_cdate=%s" % min_cdate
+                    amp=True
+                if max_cdate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "max_cdate=%s" % max_cdate
+                    amp=True
+                if ldate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "ldate=%s" % ldate
+                    amp=True
+                if min_ldate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "min_ldate=%s" % min_ldate
+                    amp=True
+                if max_ldate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "ldate=%s" % max_ldate
+                    amp=True
 		if detail: 
 		    if amp: add_to_url += "&"
 		    add_to_url += "detail=%s" % detail
@@ -307,14 +345,6 @@ class DbsApi:
                 """
                 return self.callServer("/datasets", params = datasetObj , callmethod='POST' )
 
-	def insertSite(self, siteObj={}):
-                """
-                * API to insert a site in DBS 
-                * siteObj : Site object of type {}, with key(s) :-
-		    site_name : Site Name (T1_CMS_FNAL) 
-                """
-                return self.callServer("/sites", params = siteObj , callmethod='POST' )
-
         def insertBlock(self, blockObj={}):
                 """
                 * API to insert a block into DBS 
@@ -331,7 +361,9 @@ class DbsApi:
                 """
                 return self.callServer("/bulkblocks", params = blockDump , callmethod='POST' )
 
-        def listBlocks(self, block_name="", dataset="", logical_file_name="", origin_site_name="", run_num=-1, detail=False):
+        def listBlocks(self, block_name="", dataset="", logical_file_name="", origin_site_name="", run_num='', 
+                        min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,  ldate=0,
+                        detail=False):
                 """
                 * API to list A block in DBS 
                 * block_name : name of the block
@@ -362,6 +394,30 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "run_num=%s" %run_num
 		    amp=True
+                if cdate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "cdate=%s" % cdate
+                    amp=True
+                if min_cdate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "min_cdate=%s" % min_cdate
+                    amp=True
+                if max_cdate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "max_cdate=%s" % max_cdate
+                    amp=True
+                if ldate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "ldate=%s" % ldate
+                    amp=True
+                if min_ldate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "min_ldate=%s" % min_ldate
+                    amp=True
+                if max_ldate:
+                    if amp: add_to_url += "&"
+                    add_to_url += "ldate=%s" % max_ldate
+                    amp=True
 		if detail: 
 		    if amp: add_to_url += "&"
 		    add_to_url += "detail=%s" % detail
@@ -440,12 +496,21 @@ class DbsApi:
 		else:
 		    raise Exception("You must supply parameters to listFiles calls")
 		    
-	def listFileParents(self, logical_file_name=""):
+	def listFileParents(self, logical_file_name="", block_id=0, block_name=''):
 	    """
 	    * API to list file parents
 	    * logical_file_name : logical_file_name of file
 	    """
-	    return self.callServer("/fileparents?logical_file_name=%s" %logical_file_name)
+            if logical_file_name:
+                return self.callServer("/fileparents?logical_file_name=%s" %logical_file_name)
+            elif block_id > 0: 
+                return self.callServer("/fileparents?block_id=%s"%block_id)
+            elif block_name:
+                return self.callServer("/fileparents?name=%s"%block_name)
+            else:
+                raise Exception("DBS Client Exception", "Invalid input: API listFileParents: \
+                                except one of the following inputs from the client: logical_file_name, \
+                                block_id or block_name")
 
         def listFileChildren(self, logical_file_name=""):
 	    """
@@ -454,14 +519,31 @@ class DbsApi:
 	    """
 	    return self.callServer("/filechildren?logical_file_name=%s" %logical_file_name)
 
-	def listFileLumis(self, logical_file_name=""):#, block_name):
+	def listFileLumis(self, logical_file_name="", block_name=''):
 	    """
 	    * API to list Lumi for files
 	    * logical_file_name : logical_file_name of file
 	    """
-	    return self.callServer("/filelumis?logical_file_name=%s" %logical_file_name)
+            if logical_file_name: 
+                return self.callServer("/filelumis?logical_file_name=%s" %logical_file_name)
+            elif block_name:
+                return self.callServer("/filelumis?block_name=%s" %block_name)
+            else:
+                raise Exception("DBS Client Exception", "Invalid input: API listFileLumi excepts \
+                logical_file_name or block_name as one of the inputs")
+        
+        def listFileSummaries(self, block_name='', dataset=''):
+            """
+            * API to list number of files, event counts and number of lumis in a given block of dataset
+            """
+            if block_name:
+                return self.callServer("/filesummaries?block_name=%s" %block_name)
+            elif dataset:
+                return self.callServer("/filesummaries?dataset=%s" %dataset)
+            else:
+                return []
 
-        def insertFiles(self, filesList=[], qInserts=True):
+        def insertFiles(self, filesList=[], qInserts=False):
                 """
                 * API to insert a list of file into DBS in DBS 
                 * filesList : list of file objects

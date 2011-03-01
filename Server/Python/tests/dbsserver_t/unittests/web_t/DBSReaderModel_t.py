@@ -6,6 +6,14 @@ import json
 import unittest
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
 from DBSWriterModel_t import outDict
+import cherrypy
+
+def FakeAuth(*a, **b):
+    def actD(f):
+        return f
+    return actD
+
+cherrypy.tools.secmodv2 = FakeAuth
 
 def importCode(code,name,add_to_sys_modules=0):
     module = imp.new_module(name)
@@ -627,6 +635,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test106(self):
         """test106: web.DBSReaderModel.listBlockChildren: basic"""
+        print testparams['block']
         api.list('blockchildren', block_name=testparams['block'])
         
     def test107(self):

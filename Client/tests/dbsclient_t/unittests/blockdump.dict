@@ -36,32 +36,32 @@ u'app_name': 'cmsRun', u'output_module_label': 'Merged'}],
 [{u'check_sum': '1504266448', 'file_lumi_list': [{u'lumi_section_num':
 27414, u'run_num': 1}, {u'lumi_section_num': 26422, u'run_num': 2},
 {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32': 'NOTSET',
-u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'Client Name',
-u'last_modified_by': 'Client Name', u'creation_date': 1279912089,
+u'event_count': 1619, u'file_type': 'EDM',
+u'last_modified_by': 'Client Name', 
 u'logical_file_name': '/store/mc/141441/9.root', u'file_size': 2012211901,
 u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
 0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':
 [{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,
-u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'ClientName', u'last_modified_by': 'Client Name', u'creation_date': 1279912089,
+u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Client Name', 
 u'logical_file_name': '/store/mc/141441/0.root', u'file_size': 2012211901,
 u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
 0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':
 [{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,
-u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'ClientName', u'last_modified_by': 'Client Name', u'creation_date': 1279912089,
+u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Client Name',
 u'logical_file_name': '/store/mc/141441/1.root', u'file_size': 2012211901,
 u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
 0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':
 [{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,
-u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'ClientName', u'last_modified_by': 'Client Name', u'creation_date': 1279912089,
+u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Client Name',
 u'logical_file_name': '/store/mc/141441/2.root', u'file_size': 2012211901,
 u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
 0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':
 [{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,
-u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'ClientName', u'last_modified_by': 'Client Name', u'creation_date': 1279912089, u'logical_file_name': '/store/mc/141441/3.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
-0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'ClientName', u'last_modified_by': 'Client Name', u'creation_date': 1279912089,
+u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Client Name', u'logical_file_name': '/store/mc/141441/3.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
+0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Client Name',
 u'logical_file_name': '/store/mc/141441/4.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':
-'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'ClientName', u'last_modified_by': 'Client Name', u'creation_date': 1279912089,u'logical_file_name': '/store/mc/141441/5.root', u'file_size': 2012211901,
-u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'ClientName', u'last_modified_by': 'Client Name', u'creation_date': 1279912089,u'logical_file_name': '/store/mc/141441/6.root', u'file_size': 2012211901, u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'ClientName', u'last_modified_by': 'Client Name', u'creation_date': 1279912089,u'logical_file_name': '/store/mc/141441/7.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'create_by': 'ClientName', u'last_modified_by': 'Client Name', u'creation_date': 1279912089,u'logical_file_name': '/store/mc/141441/8.root', u'file_size': 2012211901,
+'NOTSET', u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Client Name',u'logical_file_name': '/store/mc/141441/5.root', u'file_size': 2012211901,
+u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Client Name',u'logical_file_name': '/store/mc/141441/6.root', u'file_size': 2012211901, u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM',  u'last_modified_by': 'Client Name', u'logical_file_name': '/store/mc/141441/7.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Client Name',u'logical_file_name': '/store/mc/141441/8.root', u'file_size': 2012211901,
 u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
 0.0, u'is_file_valid': 1}], 
 
