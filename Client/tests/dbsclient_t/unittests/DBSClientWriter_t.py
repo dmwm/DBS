@@ -23,8 +23,10 @@ primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = 'unittest_web_dataset_%s' % uid 
 tier = 'GEN-SIM-RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
+dataset2="%s_2" %dataset
 app_name='cmsRun'
 output_module_label='Merged'
+global_tag='my-cms-gtag_%s' % uid
 pset_hash='76e303993a1c2f842159dbfeeed9a0dd' 
 release_version='CMSSW_1_2_3'
 site="cmssrm.fnal.gov"
@@ -43,6 +45,7 @@ outDict={
 "parent_dataset" : parent_dataset,
 "app_name" : app_name,
 "output_module_label" : output_module_label,
+"global_tag" : global_tag,
 "pset_hash" : pset_hash,
 "release_version" : release_version,
 "site" : site,
@@ -74,12 +77,14 @@ class DBSClientWriter_t(unittest.TestCase):
 	
     def test04(self):
 	"""test04: web.DBSClientWriter.insertOutputModule: basic test"""
-	data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label}
+	data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                'output_module_label': output_module_label, 'global_tag':global_tag}
 	api.insertOutputConfig(outputConfigObj=data)
 
     def test05(self):
         """test05: web.DBSClientWriter.insertOutputModule: re-insertion should not raise any errors"""
-        data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label}
+        data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                'output_module_label': output_module_label, 'global_tag':global_tag}
         api.insertOutputConfig(outputConfigObj=data)
     
     def test06(self):
@@ -98,22 +103,28 @@ class DBSClientWriter_t(unittest.TestCase):
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                    'output_module_label': output_module_label, 'global_tag':global_tag}
 		    ],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "testuer",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
+        #import pdb
+        #pdb.set_trace()
 	api.insertDataset(datasetObj=data)
 	# insert away the parent dataset as well
+        #import pdb
+        #pdb.set_trace()
 	parentdata = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
+		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': parent_dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                        'output_module_label': output_module_label, 'global_tag':global_tag}
 		    ],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "testuser",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insertDataset(datasetObj=parentdata)
@@ -125,9 +136,10 @@ class DBSClientWriter_t(unittest.TestCase):
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                    'output_module_label': output_module_label, 'global_tag':global_tag},
 		], 
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
@@ -137,11 +149,12 @@ class DBSClientWriter_t(unittest.TestCase):
     def test11(self):
 	"""test11: web.DBSClientWriter.insertDataset: no output_configs, should be fine insert!"""
 	data = {
-		'dataset': dataset,
+		'dataset': dataset2,
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'creation_date' : 1234, 'create_by' : 'testuser', "last_modification_date" : 1234, "last_modified_by"
+                : "testuser",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insertDataset(datasetObj=data)
@@ -165,16 +178,19 @@ class DBSClientWriter_t(unittest.TestCase):
 
     def test16(self):
 	"""test16 web.DBSClientWriter.insertFiles: insert parent file for later use : basic test"""
-	
+        #import pdb
+        #pdb.set_trace()
+
 	flist=[]
  	for i in range(10):
 	    f={  
 		'adler32': u'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list': 
 		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                            'output_module_label': output_module_label,'global_tag':global_tag },
 		    ],
-                'dataset': dataset,
+                'dataset': parent_dataset,
                 'file_size': u'2012211901', 'auto_cross_section': 0.0, 
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
@@ -189,6 +205,8 @@ class DBSClientWriter_t(unittest.TestCase):
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
+        #import pdb
+        #pdb.set_trace()
 	api.insertFiles(filesList={"files":flist})
 	time.sleep(10)
 
@@ -201,7 +219,8 @@ class DBSClientWriter_t(unittest.TestCase):
 		'adler32': u'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list': 
 		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                        'output_module_label': output_module_label, 'global_tag':global_tag},
 		    ],
                 'dataset': dataset,
                 'file_size': u'2012211901', 'auto_cross_section': 0.0, 
@@ -230,7 +249,8 @@ class DBSClientWriter_t(unittest.TestCase):
 		'adler32': u'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list': 
 		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                        'output_module_label': output_module_label, 'global_tag':global_tag},
 		    ],
                 'dataset': dataset,
                 'file_size': u'2012211901', 'auto_cross_section': 0.0, 

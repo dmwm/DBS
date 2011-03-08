@@ -72,7 +72,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'datasetparents', self.listDatasetParents, args=['dataset'])
         self._addMethod('GET', 'datasetchildren', self.listDatasetChildren, args=['dataset'])
         self._addMethod('GET', 'outputconfigs', self.listOutputConfigs, args=['dataset', 'logical_file_name',\
-                        'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id'])
+                        'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id', 'global_tag'])
         self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id', \
                         'block_name'])
         self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name'])
@@ -497,7 +497,7 @@ class DBSReaderModel(RESTModel):
    
     @tools.secmodv2()
     def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="",
-    output_module_label="", block_id=0):
+    output_module_label="", block_id=0, global_tag=''):
         """
         Example url's: <br />
         http://dbs3/outputconfigurations <br />
@@ -514,7 +514,7 @@ class DBSReaderModel(RESTModel):
 	output_module_label = output_module_label.replace("*", "%")
         try:
             return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, release_version, pset_hash, app_name,
-                output_module_label, block_id)
+                output_module_label, block_id, global_tag)
         except Exception, ex:
             if "dbsException-7" in ex.args[0]:
                 raise HTTPError(400, str(ex))

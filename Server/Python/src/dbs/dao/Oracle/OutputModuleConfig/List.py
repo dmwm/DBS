@@ -21,7 +21,8 @@ class List(DBFormatter):
 	SELECT R.RELEASE_VERSION,
 	    P.PSET_HASH,
 	    A.APP_NAME,
-	    O.OUTPUT_MODULE_LABEL
+	    O.OUTPUT_MODULE_LABEL,
+            O.GLOBAL_TAG
 	"""
 	self.sql2 = \
 	"""
@@ -35,7 +36,7 @@ class List(DBFormatter):
 	         """ % ( self.owner, self.owner, self.owner, self.owner )
         
     def execute(self, conn, dataset="",  logical_file_name="", app="", release_version="", pset_hash="", 
-                output_label ="", block_id=0, transaction = False):
+                output_label ="", block_id=0, global_tag='', transaction = False):
         """
         returns id for a given application
         """	
@@ -79,6 +80,13 @@ class List(DBFormatter):
 	        sql += " O.OUTPUT_MODULE_LABEL %s :output_module_label" % op
 	        binds["output_module_label"]=output_label
 		setAnd=True
+            if not global_tag == "":
+                op = ("=", "like")["%" in global_tag]
+                if setAnd : sql += " AND "
+                else : sql += " WHERE "
+                sql += " O.GLOBAL_TAG %s :global_tag" % op
+                binds["global_tag"]=global_tag
+                setAnd=True
 	    if dataset:
 		if setAnd : sql += " AND "
 		else : sql += " WHERE "

@@ -457,7 +457,8 @@ class DBSReaderModel_t(unittest.TestCase):
                                   release_version=testparams['release_version'],
                                   pset_hash=testparams['pset_hash'],
                                   app_name=testparams['app_name'],
-                                  output_module_label=testparams['output_module_label'])
+                                  output_module_label=testparams['output_module_label'],
+                                  global_tag=testparams['global_tag'])
 
     def test076(self):
         """test076: web.DBSReaderModel.listOutputConfigs: basic test """
@@ -473,7 +474,9 @@ class DBSReaderModel_t(unittest.TestCase):
     def test078(self):
         """test078: web.DBSReaderModel.listOutputConfigs: basic test """
         api.list('outputconfigs', dataset=testparams['dataset'],
-                                  release_version=testparams['release_version'])
+                                  release_version=testparams['release_version'],
+                                  global_tag=testparams['global_tag']
+                                  )
 
     def test079(self):
         """test079: web.DBSReaderModel.listFileParents: basic test """

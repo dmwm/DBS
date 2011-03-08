@@ -134,7 +134,8 @@ class DbsApi:
                 """
                 return self.callServer("/outputconfigs", params = outputConfigObj , callmethod='POST' )
 
-        def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="", output_module_label=""):
+        def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="", \
+                                output_module_label="", global_tag=''):
                 """
                 * API to list OutputConfigs in DBS 
                 * dataset : Full dataset (path) of the dataset
@@ -168,6 +169,10 @@ class DbsApi:
 		    if amp: add_to_url += "&"
 		    add_to_url += "output_module_label=%s"%output_module_label
 		    amp=True
+                if  global_tag:
+                    if amp: add_to_url += "&"
+                    add_to_url += "global_tag=%s"%global_tag
+                    amp=True
 		if  logical_file_name:
 		    if amp: add_to_url += "&"
 		    add_to_url += "logical_file_name=%s"%logical_file_name

@@ -21,6 +21,7 @@ tier = 'GEN-SIM-RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
 app_name='cmsRun'
 output_module_label='Merged'
+global_tag='dbs-client-validation-%s' %uid
 pset_hash='76e303993a1c2f842159dbfeeed9a0dd%s' %uid 
 release_version='CMSSW_1_2_3'
 site="cmssrm.fnal.gov"
@@ -48,16 +49,19 @@ class DBSValitaion_t(unittest.TestCase):
 
     def test02(self):
 	"""test02: web.DBSClientWriter.OutputModule: validation test"""
-	data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label}
+	data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+            'output_module_label': output_module_label, 'global_tag':global_tag}
 	api.insertOutputConfig(outputConfigObj=data)
 	confList=api.listOutputConfigs(release_version=release_version, pset_hash=pset_hash, \
-	                 app_name=app_name, output_module_label=output_module_label)
+	                 app_name=app_name, output_module_label=output_module_label,\
+                         global_tag=global_tag)
 	self.assertEqual(len(confList), 1)
 	confInDBS=confList[0]
 	self.assertEqual(confInDBS['release_version'], release_version)
 	self.assertEqual(confInDBS['pset_hash'], pset_hash)
 	self.assertEqual(confInDBS['app_name'], app_name)
 	self.assertEqual(confInDBS['output_module_label'], output_module_label)
+        self.assertEqual(confInDBS['global_tag'], global_tag)
 
     def test03(self):
 	"""test03: web.DBSWriterModel.insertAcquisitionEra: Basic test """
@@ -75,7 +79,8 @@ class DBSValitaion_t(unittest.TestCase):
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, \
+                    'output_module_label': output_module_label, 'global_tag' : global_tag},
 		    ],
 		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
@@ -134,9 +139,10 @@ class DBSValitaion_t(unittest.TestCase):
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset+"_parent", 'primary_ds_name': primary_ds_name+"_parent",
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, \
+                    'output_module_label': output_module_label, 'global_tag':global_tag},
 		    ],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
@@ -171,7 +177,8 @@ class DBSValitaion_t(unittest.TestCase):
 		'adler32': u'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list': 
 		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label},
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                        'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
                 'dataset': dataset,
                 'file_size': u'201221191', 'auto_cross_section': 0.0, 

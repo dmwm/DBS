@@ -1,36 +1,37 @@
 blockDump={'dataset_conf_list': [{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'app_name': 'cmsRun', u'output_module_label': 'Merged'}],
+'76e303993a1c2f842159dbfeeed9a0dd', u'app_name': 'cmsRun', u'output_module_label': 'Merged', 
+u'global_tag': 'my-cms-gtag'}],
 
 'file_conf_list': [{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/0.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'},
+u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
 {u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/1.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'},
+u'app_name': 'cmsRun', u'output_module_label': 'Merged' , u'global_tag': 'my-cms-gtag'},
 {u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/2.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'},
+u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
 {u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/3.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'},
+u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
 {u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/4.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'},
+u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
 {u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/5.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'},
+u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
 {u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/6.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'},
+u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
 {u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/7.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'},
+u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
 {u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/8.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'},
+u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
 {u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/9.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged'}], 
+u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'}], 
 
 'files':
 [{u'check_sum': '1504266448', 'file_lumi_list': [{u'lumi_section_num':

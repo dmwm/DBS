@@ -227,6 +227,8 @@ class DBSFile:
 	# If user wants to insert over 10 files in one shot, we run into risks of locking the database 
 	# tables for longer time, and in case of error, it will be hard to see where error occured 
 	#qInserts=False
+        #import pdb
+        #pdb.set_trace()
 	if len(businput) > 10:
 	    raise Exception('dbsException-2', "%s DBSFile/insertFile. DBS cannot insert \
                     more than 10 files in one bulk call" %DBSEXCEPTIONS['dbsException-2'] )
@@ -386,7 +388,8 @@ class DBSFile:
 			    iConfig += 1
 			    fcdao["file_id"] = filein["file_id"]
 			    fcdao["output_mod_config_id"]= self.outconfigid.execute(conn, fc["app_name"], \
-                                    fc["release_version"], fc["pset_hash"], fc["output_module_label"], transaction=tran)
+                                    fc["release_version"], fc["pset_hash"], fc["output_module_label"], \
+                                    fc["global_tag"],transaction=tran)
 			    if fcdao["output_mod_config_id"] == -1 : 
                                 raise Exception ('dbsException-7', "%s DBSFile/insertFile.\
                                         Output module config (%s, %s, %s, %s) \
@@ -407,6 +410,8 @@ class DBSFile:
 		    if not qInserts:
 			self.fparentin.execute(conn, fparents2insert, transaction=tran)
 		# First check to see if these output configs are mapped to THIS dataset as well, if not raise an exception
+                #import pdb
+                #pdb.set_trace()
 		if not set(fileconfigs).issubset(set(dsconfigs)) :
 		    raise Exception('dbsException-2', "%s DBSFile/insertFile. Output configs mismatch, \
                             output configs known to dataset: \

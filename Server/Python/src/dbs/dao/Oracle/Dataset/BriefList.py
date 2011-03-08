@@ -172,7 +172,7 @@ class BriefList(DBFormatter):
 	sql = "".join((selectsql, self.basesql, joinsql, wheresql)) 
 	
 
-	self.logger.warning( sql)
+	#self.logger.warning( sql)
 	#print "binds=%s" %binds
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         assert len(cursors) == 1, "block does not exist"

@@ -258,14 +258,16 @@ class DBSDataset:
                     dsoutconfdaoin["output_mod_config_id"] = self.outconfigid.execute(conn, anOutConfig["app_name"], \
 										anOutConfig["release_version"], \
 										anOutConfig["pset_hash"], \
-										anOutConfig["output_module_label"], tran) 
+										anOutConfig["output_module_label"], \
+                                                                                anOutConfig["global_tag"], tran) 
 		    if dsoutconfdaoin["output_mod_config_id"] == -1 : 
                         #self.logger.exception("%s DBSDataset/insertDataset.\n." %(DBSEXCEPTIONS['dbsException-2']))
                         raise Exception ("dbsException-2", "%s DBSDataset/insertDataset: Output config (%s, %s, %s, %s) not found" \
                                                                                 %( DBSEXCEPTIONS['dbsException-2'], anOutConfig["app_name"], \
                                                                                 anOutConfig["release_version"], \
                                                                                 anOutConfig["pset_hash"], \
-                                                                                anOutConfig["output_module_label"] ))
+                                                                                anOutConfig["output_module_label"], \
+                                                                                anOutConfig["global_tag"]))
 		    dsoutconfdaoin["ds_output_mod_conf_id"] = self.sm.increment(conn, "SEQ_DC", tran)
 		    #print "INSERTING output_mod_config_id :::::: %s" %str(dsoutconfdaoin["output_mod_config_id"])
 		    try:

@@ -2,9 +2,6 @@
 """
 This module provides ApplicationExecutable.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.9 2010/08/02 21:49:59 afaq Exp $"
-__version__ = "$Revision: 1.9 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
     """
@@ -16,6 +13,7 @@ class GetID(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.logger = logger
         self.sql = \
 	"""
 	SELECT O.OUTPUT_MOD_CONFIG_ID
@@ -28,7 +26,8 @@ class GetID(DBFormatter):
 		    ON O.PARAMETER_SET_HASH_ID=P.PARAMETER_SET_HASH_ID
 		WHERE """ % ( self.owner, self.owner, self.owner, self.owner )
         
-    def execute(self, conn, app="", release_version="", pset_hash="", output_label="", transaction = False):
+    def execute(self, conn, app="", release_version="", pset_hash="", output_label="", 
+                global_tag='', transaction = False):
         """
         returns id for a given application
         """	
@@ -53,9 +52,16 @@ class GetID(DBFormatter):
 		if setAnd : sql += " AND "
 		sql += " O.OUTPUT_MODULE_LABEL=:output_module_label"
 		binds["output_module_label"]=output_label
-	if app == release_version == pset_hash  == "":
-            raise Exception('dbsException-7', "%s Either app_name, release_version or pset_hash must be provided"\
+                setAnd=True
+        if not global_tag == "":
+                if setAnd : sql += " AND "
+                sql += " O.GLOBAL_TAG=:global_tag"
+                binds["global_tag"]=global_tag
+	if app == release_version == pset_hash  == global_tag == "":
+            raise Exception('dbsException-7', "%s Either app_name, release_version, pset_hash or global_tag must be provided"\
                      %DBSEXCEPTIONS['dbsException-7'])	
+        #import pdb
+        #pdb.set_trace()
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
 	if len(plist) < 1: return -1

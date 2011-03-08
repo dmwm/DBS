@@ -36,7 +36,7 @@ class DBSOutputConfig:
         self.outmodin = daofactory(classname='OutputModuleConfig.Insert')
         
     def listOutputConfigs(self, dataset="", logical_file_name="", 
-                         release_version="", pset_hash="", app_name="", output_module_label="", block_id=0):
+                         release_version="", pset_hash="", app_name="", output_module_label="", block_id=0, global_tag=''):
 	try:
 	    conn=self.dbi.connection()
 	    result = self.outputmoduleconfiglist.execute(conn, dataset,
@@ -44,7 +44,7 @@ class DBSOutputConfig:
                                                    app_name,
                                                    release_version,
                                                    pset_hash,
-                                                   output_module_label, block_id)
+                                                   output_module_label, block_id, global_tag)
 	    conn.close()
 	    return result
         except Exception, ex:
@@ -64,9 +64,10 @@ class DBSOutputConfig:
 	Updated Jan 12, 2011	
         """
         if not (businput.has_key("app_name")  and businput.has_key("release_version")\
-            and businput.has_key("pset_hash") and businput.has_key("output_module_label")):
+            and businput.has_key("pset_hash") and businput.has_key("output_module_label")
+            and businput.has_key("global_tag")):
             raise Exception("dbsException-7", "%s business/DBSOutputConfig/insertOutputConfig require:\
-                app_name, release_version, pset_hash and output_module_label" %DBSEXCEPTIONS['dbsException-7'])
+                app_name, release_version, pset_hash, output_module_label and global_tag" %DBSEXCEPTIONS['dbsException-7'])
 
         conn = self.dbi.connection()
         tran = conn.begin()

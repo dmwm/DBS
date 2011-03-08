@@ -40,6 +40,7 @@ dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
 child_dataset="/%s/child_%s/%s" % (primary_ds_name, procdataset, tier)
 app_name='cmsRun'
 output_module_label='Merged-%s' %uid
+global_tag='my_tag-%s'%uid
 pset_hash='76e303993a1c2f842159dbfeeed9a0dd' 
 release_version='CMSSW_1_2_%s' % uid
 site="cmssrm-%s.fnal.gov" %uid
@@ -61,6 +62,7 @@ outDict={
 "child_dataset" : child_dataset,
 "app_name" : app_name,
 "output_module_label" : output_module_label,
+"global_tag": global_tag,
 "pset_hash" : pset_hash,
 "release_version" : release_version,
 "site" : site,
@@ -110,12 +112,13 @@ class DBSWriterModel_t(unittest.TestCase):
     def test04(self):
 	"""test04: web.DBSWriterModel.insertOutputModule: basic test"""
 	data = {'release_version': release_version, 'pset_hash': pset_hash, 
-	'app_name': app_name, 'output_module_label': output_module_label}
+	'app_name': app_name, 'output_module_label': output_module_label, 'global_tag':global_tag}
 	api.insert('outputconfigs', data)
 
     def test05(self):
         """test05: web.DBSWriterModel.insertOutputModule: re-insertion should not raise any errors"""
-        data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 'output_module_label': output_module_label}
+        data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                'output_module_label': output_module_label, 'global_tag':global_tag}
         api.insert('outputconfigs', data)
 
 	
@@ -152,10 +155,10 @@ class DBSWriterModel_t(unittest.TestCase):
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
-		    'output_module_label': output_module_label},
+		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
+		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name
 		}
 	#import pdb
 	#pdb.set_trace()
@@ -165,7 +168,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "child_"+procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
-		    'output_module_label': output_module_label},
+		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
@@ -182,7 +185,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': 
-		    app_name, 'output_module_label': output_module_label},
+		    app_name, 'output_module_label': output_module_label, 'global_tag': global_tag},
 		], 
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		#'processing_version': '1',  'acquisition_era_name': u'',
@@ -199,7 +202,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 
-		    'app_name': app_name, 'output_module_label': output_module_label},
+		    'app_name': app_name, 'output_module_label': output_module_label, 'global_tag': global_tag},
 		],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		}
@@ -219,7 +222,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		'processed_ds_name': procdataset, 'dataset':dataset,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': 
-		    app_name, 'output_module_label': output_module_label},
+		    app_name, 'output_module_label': output_module_label, 'global_tag': global_tag},
 		],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
@@ -286,7 +289,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'file_output_config_list': 
 		    [ 
 			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
-			'output_module_label': output_module_label},
+			'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
                 'dataset': dataset,
                 'file_size': u'2012211901', 'auto_cross_section': 0.0, 
@@ -317,7 +320,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'file_output_config_list': 
 		    [ 
 			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
-			'output_module_label': output_module_label},
+			'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
                 'dataset': dataset,
                 'file_size': u'2012211901', 'auto_cross_section': 0.0, 
@@ -351,7 +354,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'file_output_config_list':
                     [
                         {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
-                        'output_module_label': output_module_label},
+                        'output_module_label': output_module_label, 'global_tag': global_tag},
                     ],
                 'dataset': child_dataset,
                 'file_size': u'2012211901', 'auto_cross_section': 0.0,

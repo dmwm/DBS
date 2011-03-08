@@ -25,9 +25,10 @@ class GetIDForBlockInsert(DBFormatter):
                          AND R.RELEASE_VERSION=:release_version
                          AND P.PSET_HASH=:pset_hash
                          AND O.OUTPUT_MODULE_LABEL=:output_module_label
+                         AND O.GLOBAL_TAG =:global_tag
                          """ % ( self.owner, self.owner, self.owner, self.owner )
         
-    def execute(self, conn, app, release_version, pset_hash, output_label, transaction = False):
+    def execute(self, conn, app, release_version, pset_hash, output_label, global_tag, transaction = False):
         """
         returns id for a given application
 
@@ -39,6 +40,7 @@ class GetIDForBlockInsert(DBFormatter):
         binds["release_version"]=release_version
         binds["pset_hash"]=pset_hash
         binds["output_module_label"]=output_label
+        binds["global_tag"]=global_tag
 
         result = self.dbi.processData(self.sql, binds, conn, transaction)
 
