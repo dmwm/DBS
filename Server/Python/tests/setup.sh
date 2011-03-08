@@ -5,8 +5,8 @@ if [ -z "$DBS3_SERVER_ROOT" ]; then
 else
     #setup initial test counter to construct unique insert data names
     export DBS_TEST_COUNTER=3
-    export DBS_TEST_CONFIG_READER=$DBS3_SERVER_ROOT/control/${1:-cms_dbs}_writer_single_server-local2.py
-    export DBS_TEST_CONFIG_WRITER=$DBS3_SERVER_ROOT/control/${1:-cms_dbs}_writer_single_server-local2.py
+    export DBS_TEST_CONFIG_READER=$DBS3_SERVER_ROOT/control/${1:-cms_dbs}_writer_single_server.py
+    export DBS_TEST_CONFIG_WRITER=$DBS3_SERVER_ROOT/control/${1:-cms_dbs}_writer_single_server.py
     #choose the service name from the configuration files.. In reader and writer it has to be the same
     export DBS_TEST_SERVICE="DBS"
     if [ -f $DBS_TEST_CONFIG_READER ] && [ -f $DBS_TEST_CONFIG_WRITER ]; then

@@ -208,11 +208,12 @@ class DBSBlockInsert :
                 del fileParentList[k]['logical_file_name']
             #deal with file config
             for fc in fileConfigList:
-                key=fc['app_name']+':'+fc['release_version']+':'+fc['pset_hash']+':'+fc['output_module_label']
+                key=fc['app_name']+':'+fc['release_version']+':'+fc['pset_hash']+':'\
+                    +fc['output_module_label'] +':'+fc['global_tag']
                 if not key in (self.datasetCache['conf']).keys():
                     #we expect the config is inserted when the dataset is in.
-                    raise Exception("Configuration application name, release version and pset hash: %s, %s ,%s not found" \
-                                %(fc['app_name'], fc['release_version'], fc['pset_hash']))
+                    raise Exception("Configuration application name, release version, pset hash and global tag: %s, %s ,%s,%s not found" \
+                                %(fc['app_name'], fc['release_version'], fc['pset_hash'], fc['global_tag']))
                 fcObj={'file_output_config_id':self.sm.increment(conn,"SEQ_FC"), 'file_id':logicalFileName[fc['lfn']]
                        , 'output_mod_config_id': self.datasetCache['conf'][key] }
                 fileConfObjs.append(fcObj)
@@ -325,11 +326,13 @@ class DBSBlockInsert :
                 cfgid = self.otptModCfgid.execute(conn, app = c["app_name"],
                                                   release_version = c["release_version"],
                                                   pset_hash = c["pset_hash"],
-                                                  output_label = c["output_module_label"])
+                                                  output_label = c["output_module_label"],
+                                                  global_tag=c['global_tag'])
                 if cfgid <=0 :
                     missingList.append(c)
                 else:
-                    key = c['app_name']+':'+c['release_version']+':'+c['pset_hash']+':'+c['output_module_label']
+                    key = c['app_name']+':'+c['release_version']+':'+c['pset_hash']+':'\
+                          +c['output_module_label'] +':'+c['global_tag']
                     self.datasetCache['conf'][key] = cfgid
                     otptIdList.append(cfgid)
                     #print "About to set cfgid: %s" % str(cfgid)
@@ -387,13 +390,14 @@ class DBSBlockInsert :
                 # This makes the output module config ID wrong
                 # Trying to catch this via exception handling on duplication
                 # Start a new transaction
+                #global_tag is now required. YG 03/08/2011
                 tran = conn.begin()
                 try:
                     #get output module config id
                     cfgid = self.sm.increment(conn, "SEQ_OMC")
                     configObj = {'output_mod_config_id':cfgid , 'app_exec_id':appId,  'release_version_id':reId,  \
                                  'parameter_set_hash_id':pHId , 'output_module_label':m['output_module_label'],   \
-                                 'global_tag':m.get('global_tag', None), 'scenario':m.get('scenario', None),      \
+                                 'global_tag':m['global_tag'], 'scenario':m.get('scenario', None),      \
                                  'creation_date':m.get('creation_date', None), 'create_by':m.get('create_by', None)}
                     self.otptModCfgin.execute(conn, configObj, tran)
                 except exceptions.IntegrityError:
@@ -401,12 +405,14 @@ class DBSBlockInsert :
                     cfgid = self.otptModCfgid.execute(conn, app = m["app_name"],
                                                   release_version = m["release_version"],
                                                   pset_hash = m["pset_hash"],
-                                                  output_label = m["output_module_label"])
+                                                  output_label = m["output_module_label"],
+                                                  global_tag=m['global_tag'])
                     #tran.rollback()
                 # End the transaction
                 tran.commit()
                 otptIdList.append(cfgid)
-                key = m['app_name']+':'+m['release_version']+':'+m['pset_hash']+':'+m['output_module_label']
+                key = m['app_name']+':'+m['release_version']+':'+m['pset_hash']+':'\
+                      +m['output_module_label'] +':'+m['global_tag']
                 self.datasetCache['conf'][key] = cfgid
         except Exception, ex:
             #self.logger.exception("%s DBSBlockInsert/output module config insertion. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
