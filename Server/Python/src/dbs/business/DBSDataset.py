@@ -52,7 +52,6 @@ class DBSDataset:
 	try:
 	    conn = self.dbi.connection()
 	    result=self.datasetparentlist.execute(conn, dataset)
-	    conn.close()
 	    return result
         except Exception, ex:
             #self.logger.exception("%s DBSDataset/listDatasetParents. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -71,7 +70,6 @@ class DBSDataset:
 	try:
 	    conn = self.dbi.connection()
 	    result=self.datasetchildlist.execute(conn, dataset)
-	    conn.close()
 	    return result
         except Exception, ex:
             #self.logger.exception("%s DBSDataset/listDatasetChildren. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -105,7 +103,7 @@ class DBSDataset:
         trans = conn.begin()
 
         try :
-            self.updatetype.execute(conn, dataset, dataset_access_type, trans)
+            self.updatetype.execute(conn, dataset, dataset_access_type.upper(), trans)
 	    trans.commit()
 	except Exception, ex:
             #self.logger.exception("%s DBSDataset/updateType. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -119,7 +117,7 @@ class DBSDataset:
                      pset_hash="", app_name="", output_module_label="",
 		     processing_version="", acquisition_era="", 
 		     run_num=0, physics_group_name="", logical_file_name="", primary_ds_name="",
-                     primary_ds_type="", data_tier_name="", dataset_access_type="READONLY", 
+                     primary_ds_type="", data_tier_name="", dataset_access_type="RO", 
                      min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, ldate=0,
                      detail=False):
         """
@@ -148,13 +146,12 @@ class DBSDataset:
 				    pset_hash,
                                     app_name,
                                     output_module_label,
-                                    processing_version,
-                                    acquisition_era, 
+                                    processing_version.upper(),
+                                    acquisition_era.upper(), 
                                     run_num, physics_group_name, logical_file_name, 
-                                    primary_ds_name, primary_ds_type, data_tier_name, 
-                                    dataset_access_type, min_cdate, max_cdate, min_ldate,
+                                    primary_ds_name, primary_ds_type, data_tier_name.upper(), 
+                                    dataset_access_type.upper(), min_cdate, max_cdate, min_ldate,
                                     max_ldate, cdate, ldate)	
-	    conn.close()
 	    return result
         except Exception, ex:
             #self.logger.exception("%s DBSDataset/listDatasets. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -189,10 +186,10 @@ class DBSDataset:
             dsdaoinput["primary_ds_id"] = self.primdsid.execute(conn, businput["primary_ds_name"], tran)
 	    if dsdaoinput["primary_ds_id"] == -1: raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Primary Dataset: %s not found" 
                                                                                     %(DBSEXCEPTIONS['dbsException-2'], businput["primary_ds_name"]) )
-            dsdaoinput["data_tier_id"] = self.tierid.execute(conn, businput["data_tier_name"], tran)
+            dsdaoinput["data_tier_id"] = self.tierid.execute(conn, businput["data_tier_name"].upper(), tran)
 	    if dsdaoinput["data_tier_id"] == -1: raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Data Tier: %s not found" 
                                                                                     %(DBSEXCEPTIONS['dbsException-2'], businput["data_tier_name"]) )
-            dsdaoinput["dataset_access_type_id"] = self.datatypeid.execute(conn, businput["dataset_access_type"], tran)
+            dsdaoinput["dataset_access_type_id"] = self.datatypeid.execute(conn, businput["dataset_access_type"].upper(), tran)
 	    if dsdaoinput["dataset_access_type_id"] == -1: raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Dataset Access Type : %s not found" 
                                                                                     %(DBSEXCEPTIONS['dbsException-2'], businput["dataset_access_type"]) )
             dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
@@ -214,7 +211,7 @@ class DBSDataset:
 
             # we are better off separating out what we need for the dataset DAO
             dsdaoinput.update({ 
-                               "dataset" : "/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"]),
+                               "dataset" : "/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"].upper()),
                                "is_dataset_valid" : businput["is_dataset_valid"],
                                "creation_date" : businput["creation_date"],
                                "xtcrosssection" : businput["xtcrosssection"],
@@ -224,12 +221,12 @@ class DBSDataset:
 
             # See if Processing Era exists
             if businput.has_key("processing_version"):
-                dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"], tran)
+                dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"].upper(), tran)
 		if dsdaoinput["processing_era_id"] == -1 : raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Processing Era : %s not found" 
                                                         %(DBSEXCEPTIONS['dbsException-2'], businput["processing_version"]) )
             # See if Acquisition Era exists
             if businput.has_key("acquisition_era_name"):
-                dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"], tran)
+                dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"].upper(), tran)
 		if dsdaoinput["acquisition_era_id"] == -1 : raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Acquisition Era : %s not found" 
                                                         %(DBSEXCEPTIONS['dbsException-2'], dsdaoinput["acquisition_era_id"])  )
                  
@@ -241,7 +238,7 @@ class DBSDataset:
                     # dataset already exists, lets fetch the ID
                     self.logger.warning("Unique constraint violation being ignored...")
                     self.logger.warning("%s" % ex)
-		    ds = "/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"])
+		    ds = "/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"].upper())
                     dsdaoinput["dataset_id"] = self.datasetid.execute(conn, ds , tran)
                     if dsdaoinput["dataset_id"] == -1 : raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Strange error, the dataset %s does not exist ?" 
                                                     %(DBSEXCEPTIONS['dbsException-2'], ds) )

@@ -26,7 +26,6 @@ class DBSProcessingEra:
         try:
             conn=self.dbi.connection()
             result= self.pelst.execute(conn)
-            conn.close()
             return result
         except Exception, ex:
             #self.logger.exception("%s DBSProcessingEra/listProcessingEras. %s\n " \
@@ -49,6 +48,7 @@ class DBSProcessingEra:
 	    assert businput["description"]
 	    assert businput["creation_date"]
 	    assert businput["create_by"]
+            businput["processing_version"] = businput["processing_version"].upper()
             self.pein.execute(conn, businput, tran)
             tran.commit()
         except Exception, ex:

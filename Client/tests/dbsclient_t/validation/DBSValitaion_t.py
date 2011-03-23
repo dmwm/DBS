@@ -108,7 +108,7 @@ class DBSValitaion_t(unittest.TestCase):
 	#self.assertEqual(dsInDBS['output_module_label'], output_module_label)
 	self.assertEqual(dsInDBS['xtcrosssection'], 123)
 	self.assertEqual(dsInDBS['processing_version'], processing_version)
-	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name)
+	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name.upper())
 
     def test06(self):
 	"""test06 web.DBSClientWriter.Block: validation test"""
@@ -212,7 +212,7 @@ class DBSValitaion_t(unittest.TestCase):
         logical_file_name = "/store/mc/%s/%i.root" %(uid, 0)
 	flParentList=api.listFileParents(logical_file_name=logical_file_name)
 	self.assertEqual(len(flParentList), 1)
-	self.assertEqual(flParentList[0][logical_file_name][0], "/store/mc/parent_%s/%i.root" %(uid, 0))
+	self.assertEqual(flParentList[0]['parent_logical_file_name'][0], "/store/mc/parent_%s/%i.root" %(uid, 0))
 	# Get the dataset parent -- due to fact that files had parents, dataset parentage is also inserted
 	dsParentList=api.listDatasetParents(dataset=dataset)
 	self.assertEqual(len(dsParentList), 1)
@@ -249,10 +249,10 @@ class DBSValitaion_t(unittest.TestCase):
 	
     def test10(self):
 	"""test10 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-	api.updateDatasetType(dataset=dataset, dataset_access_type="READONLY")
+	api.updateDatasetType(dataset=dataset, dataset_access_type="RO")
 	dsInDBS=api.listDatasets(dataset=dataset, detail=True)
         self.assertEqual(len(dsInDBS), 1)
-	self.assertEqual(dsInDBS[0]['dataset_access_type'], "READONLY")
+	self.assertEqual(dsInDBS[0]['dataset_access_type'], "RO")
 
 
 	

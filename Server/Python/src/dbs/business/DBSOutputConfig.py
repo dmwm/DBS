@@ -45,7 +45,6 @@ class DBSOutputConfig:
                                                    release_version,
                                                    pset_hash,
                                                    output_module_label, block_id, global_tag)
-	    conn.close()
 	    return result
         except Exception, ex:
             #self.logger.exception("%s DBSOutputConfig/listOutputConfigs. %s"\

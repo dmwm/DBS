@@ -33,7 +33,6 @@ class DBSPrimaryDataset:
 	try:
 	    conn=self.dbi.connection()
 	    result= self.primdslist.execute(conn, primary_ds_name, primary_ds_type)
-	    conn.close()
 	    return result
         except Exception, ex:
             #self.logger.exception("%s DBSPrimaryDataset/listPrimaryDatasets. %s\n." \

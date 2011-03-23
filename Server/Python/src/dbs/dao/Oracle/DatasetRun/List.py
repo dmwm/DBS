@@ -59,6 +59,7 @@ class List(DBFormatter):
 		else:
 		    sql += " where FL.RUN_NUM <= :max_run"
 		binds["max_run"] = maxrun
+        self.logger.debug(sql)
 	cursors = self.dbi.processData(sql, binds, conn, transaction=trans, returnCursor=True)
 	result = self.formatCursor(cursors[0])
         return result

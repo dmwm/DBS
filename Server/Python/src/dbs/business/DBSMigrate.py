@@ -192,9 +192,10 @@ class DBSMigrate:
 	except Exception, ex:
             self.logger.exception("%s DBSMigrate/insertMigrationRequest. ENQUEUEING_FAILED reason may be %s\n." \
                     %(DBSEXCEPTIONS['dbsException-2'], ex) )
-	    conn.close()
 	    raise Exception("dbsException-2", "%s DBSMigrate/insertMigrationRequest. ENQUEUEING_FAILED reason may be ( %s ) " \
                     %(DBSEXCEPTIONS['dbsException-2'], ex) )
+        finally:
+            conn.close()
 	   
 	try: 
 	    # not already queued	    
@@ -260,7 +261,6 @@ class DBSMigrate:
             elif dataset:
                 migratee=dataset
             result = self.mgrlist.execute(conn, migration_url="", migration_input=migratee, create_by=user, migration_request_id="")
-            conn.close()
             return result
 	except  Exception, ex :
             self.logger.exception("%s DBSMigrate/listMigrationRequest. %s" %(DBSEXCEPTIONS['dbsException-2'], ex) ) 

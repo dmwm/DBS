@@ -42,7 +42,7 @@ class DBSBlock:
 	    raise Exception("dbsException-7", "%s DBSBlock/updateStatus. open_for_writing can only be 0 or 1 : passed %s" 
                                                     %(DBSEXCEPTIONS['dbsException-7']. open_for_writing) )
 	try :
-	    self.updatestatus.execute(conn, block_name, open_for_writing, trans)
+	    self.updatestatus.execute(conn, block_name, open_for_writing, dbsUtils().getTime(), trans)
 	    trans.commit()
 	except Exception, ex:
             #self.logger.exception("%s DBSBlock/updateStatus. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -63,7 +63,6 @@ class DBSBlock:
 	try:
 	    conn = self.dbi.connection()
 	    results = self.blockparentlist.execute(conn, block_name)
-	    conn.close()
 	    return results
 	except Exception, ex:
             #self.logger.exception("%s DBSBlock/listBlockParents. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -81,7 +80,6 @@ class DBSBlock:
 	try:
 	    conn = self.dbi.connection()
 	    results = self.blockchildlist.execute(conn, block_name)
-	    conn.close()
 	    return results
 	except Exception, ex:
             #self.logger.exception("%s DBSBlock/listBlockChildren. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -105,7 +103,6 @@ class DBSBlock:
 	    dao = (self.blockbrieflist, self.blocklist)[detail]
 	    result = dao.execute(conn, dataset, block_name, origin_site_name, logical_file_name, run_num,
                                  min_cdate, max_cdate, min_ldate, max_ldate, cdate,  ldate)
-	    conn.close()
 	    return result
         except Exception, ex:
             #self.logger.exception("%s DBSBlock/listBlocks. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))

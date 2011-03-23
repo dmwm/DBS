@@ -27,6 +27,8 @@ from dbs.business.DBSDataTier import DBSDataTier
 from dbs.business.DBSStatus import DBSStatus
 from dbs.business.DBSMigrate import DBSMigrate
 from dbs.business.DBSBlockInsert import DBSBlockInsert
+from dbs.business.DBSReleaseVersion import DBSReleaseVersion
+from dbs.business.DBSDatasetAccessType import DBSDatasetAccessType
 
 import traceback
 import urllib, urllib2
@@ -87,6 +89,8 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'blockdump', self.dumpBlock, args=['block_name'])
         self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=[])
         self._addMethod('GET', 'processingeras', self.listProcessingEras, args=[])
+        self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version'])
+        self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'])
 	self._addMethod('GET', 'help', self.getHelp, args=['call'])
 	self._addMethod('GET', 'register', self.register, args=[])
 
@@ -104,6 +108,8 @@ class DBSReaderModel(RESTModel):
 	self.dbsStatus = DBSStatus(self.logger, self.dbi, config.dbowner)
 	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
         self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, config.dbowner) 
+        self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, config.dbowner)
+        self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, config.dbowner)
     
     def geoLocateThisHost(self, ip):
 	"""
@@ -206,7 +212,7 @@ class DBSReaderModel(RESTModel):
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1, release_version="", pset_hash="",\
         app_name="", output_module_label="", processing_version="", acquisition_era="",\
         run_num="0", physics_group_name="", logical_file_name="", primary_ds_name="",\
-        primary_ds_type="", data_tier_name="", dataset_access_type="READONLY",\
+        primary_ds_type="", data_tier_name="", dataset_access_type="RO",\
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0', ldate='0', detail=False):
         #import pdb
         #pdb.set_trace()
@@ -265,7 +271,7 @@ class DBSReaderModel(RESTModel):
             self.debug(traceback.format_exc())
             raise HTTPError(400, str(e))
     
-	detail = detail in (True, 1, "True", "1")
+	detail = detail in (True, 1, "True", "1", 'true')
         try:
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash, \
                 app_name, output_module_label, processing_version, acquisition_era,\
@@ -350,7 +356,7 @@ class DBSReaderModel(RESTModel):
             self.debug(str(e))
             self.debug(traceback.format_exc())
             raise HTTPError(400, str(e)) 
-	detail = detail in (True, 1, "True", "1")
+	detail = detail in (True, 1, "True", "1", 'true')
         try:
             return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num, \
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
@@ -427,7 +433,7 @@ class DBSReaderModel(RESTModel):
 	if lumi_list:
 	    #lumi_list = cjson.decode(lumi_list)
 	    lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
-	detail = detail in (True, 1, "True", "1")
+	detail = detail in (True, 1, "True", "1", 'true')
 	output_module_label = output_module_label.replace("*", "%")
         try:
             return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
@@ -542,7 +548,7 @@ class DBSReaderModel(RESTModel):
                 raise Exception ("dbsException-3", msg )
 
     @tools.secmodv2()
-    def listFileChildren(self, logical_file_name):
+    def listFileChildren(self, logical_file_name=''):
         """
         Example url's <br />
         http://dbs3/filechildren?logical_file_name=lfn
@@ -676,5 +682,38 @@ class DBSReaderModel(RESTModel):
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
 
-
-	    
+    @tools.secmodv2()
+    def listReleaseVersions(self, release_version=''):
+        """
+        lists release versions known to dbs
+        """
+        if release_version:
+            release_version = release_version.replace("*","%")
+        try:
+            return  self.dbsReleaseVersion.listReleaseVersions(release_version)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listReleaseVersions. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
+    
+    @tools.secmodv2()
+    def listDatasetAccessTypes(self, dataset_access_type=''):
+        """
+        lists dataset access types known to dbs
+        """
+        if dataset_access_type:
+            dataset_access_type = dataset_access_type.replace("*","%")
+        try:
+            return  self.dbsDatasetAccessType.listDatasetAccessTypes(dataset_access_type)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listDatasetAccessTypes. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )

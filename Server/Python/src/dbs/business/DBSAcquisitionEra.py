@@ -30,7 +30,6 @@ class DBSAcquisitionEra:
         try:
             conn=self.dbi.connection()
             result= self.acqlst.execute(conn)
-            conn.close()
             return result
         except Exception, ex:
             #self.logger.exception("%s DBSAcquisitionEra/listAcquisitionEras. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -51,6 +50,7 @@ class DBSAcquisitionEra:
 	    assert businput["acquisition_era_name"]
 	    assert businput["creation_date"]
 	    assert businput["create_by"]
+            businput["acquisition_era_name"] = businput["acquisition_era_name"].upper()
             self.acqin.execute(conn, businput, tran)
             tran.commit()
         except Exception, ex:

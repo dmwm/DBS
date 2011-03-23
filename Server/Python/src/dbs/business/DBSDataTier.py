@@ -25,7 +25,7 @@ class DBSDataTier:
 	"""
 	try:
 	    conn = self.dbi.connection()
-	    result = self.dataTier.execute(conn, data_tier_name)
+	    result = self.dataTier.execute(conn, data_tier_name.upper())
 	    return result
 	except Exception, ex:
             #self.logger.exception("%s DBSDataTier/listDataTiers. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
@@ -46,6 +46,7 @@ class DBSDataTier:
 	    assert businput["data_tier_name"]
 	    assert businput["creation_date"]
 	    assert businput["create_by"]
+            businput["data_tier_name"] = businput["data_tier_name"].upper()
             self.dtin.execute(conn, businput, tran)
             tran.commit()
         except Exception, ex:

@@ -53,7 +53,6 @@ class DBSFile:
 	try:
 	    conn=self.dbi.connection()
 	    result=self.filelumilist.execute(conn, logical_file_name, block_name)
-	    conn.close()
 	    return result
         except Exception, ex:
             #self.logger.exception("%s DBSFile/listFileLumis. %s\n." \
@@ -77,7 +76,6 @@ class DBSFile:
                         No waildcard is allowed in block_name or dataset for listFileSummary API" \
                         %DBSEXCEPTIONS['dbsException-7'] ) 
             result = self.filesummarylist.execute(conn,block_name, dataset)
-            conn.close()
             return result
         except Exception, ex:
             raise ex
@@ -97,10 +95,9 @@ class DBSFile:
                         logical_file_name, block_id or block_name is required for listFileParents api" \
                         %DBSEXCEPTIONS['dbsException-7'] )
 	    sqlresult= self.fileparentlist.execute(conn,logical_file_name, block_id, block_name)
-	    conn.close()
             result=[]
             d={}
-            #self.logger.warning(sqlresult)
+            #self.logger.debug(sqlresult)
             for i in range(len(sqlresult)):
                 k=sqlresult[i]['logical_file_name']
                 v=sqlresult[i]['parent_logical_file_name']
@@ -108,7 +105,9 @@ class DBSFile:
                     d[k].append(v)
                 else:
                     d[k]=[v]
-	    result.append(d)
+            for k, v in d.iteritems():
+                r={'logical_file_name':k, 'parent_logical_file_name': v}
+                result.append(r)
             return result
         except Exception, ex:
             #self.logger.exception("%s DBSFile/listFileParents. %s\n." \
@@ -117,7 +116,7 @@ class DBSFile:
 	finally:
 	    conn.close()
 
-    def listFileChildren(self, logical_file_name): 
+    def listFileChildren(self, logical_file_name=''): 
         """
         required parameter: logical_file_name
         returns: logical_file_name, child_logical_file_name, parent_file_id
@@ -126,10 +125,21 @@ class DBSFile:
 	    conn=self.dbi.connection()
 	    if not logical_file_name:
 		raise Exception("dbsException-7", "%s DBSFile/listFileChildren.\
-                        logical_file_name is required for listFileParents api"\
+                        logical_file_name is required for listFileChildren api"\
                         %DBSEXCEPTIONS['dbsException-7'])
-	    result = self.filechildlist.execute(conn,logical_file_name)
-	    conn.close()
+	    sqlresult = self.filechildlist.execute(conn,logical_file_name)
+            d={}
+            result=[]
+            for i in range(len(sqlresult)):
+                k=sqlresult[i]['logical_file_name']
+                v=sqlresult[i]['child_logical_file_name']
+                if k in d:
+                    d[k].append(v)
+                else:
+                    d[k]=[v]
+            for k, v in d.iteritems():
+                r={'logical_file_name':k, 'child_logical_file_name': v}
+                result.append(r)
 	    return result
         except Exception, ex:
             #self.logger.exception("%s DBSFile/listFileChildren. %s\n." \
@@ -189,7 +199,6 @@ class DBSFile:
 	    dao = (self.filebrieflist, self.filelist)[detail]
 	    result = dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
 			    output_module_label, maxrun, minrun, origin_site_name, lumi_list)
-	    conn.close()
 	    return result
 	except Exception, ex:
             #self.logger.exception("%s DBSFile/listFiles. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))

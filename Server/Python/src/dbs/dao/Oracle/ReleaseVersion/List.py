@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-This module provides DataTier.List data access object.
+This module provides ReleaseVersion.List data access object.
 """
 __revision__ = "$Id: List.py,v 1.5 2010/08/09 18:43:08 yuyi Exp $"
 __version__ = "$Revision: 1.5 $"
@@ -9,7 +9,7 @@ from WMCore.Database.DBFormatter import DBFormatter
 
 class List(DBFormatter):
     """
-    DataTier List DAO class.
+    ReleaseVersion List DAO class.
     """
     def __init__(self, logger, dbi, owner):
         """
@@ -19,26 +19,18 @@ class List(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
-SELECT DT.DATA_TIER_ID, DT.DATA_TIER_NAME, DT.CREATION_DATE, DT.CREATE_BY  
-FROM %sDATA_TIERS DT 
+SELECT RV.RELEASE_VERSION FROM %sRELEASE_VERSIONS RV 
 """ % (self.owner)
 
-    def execute(self, conn, dataTier='', transaction = False, cache=None):
-        """
-        returns id for a given datatier name
-        """
-	if cache:
-		ret=cache.get("DATA_TIERS")
-		if not ret==None:
-			return ret
+    def execute(self, conn, releaseVersion='', transaction = False):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/DataTier/List expects db connection from upper layer.")
+	    raise Exception("dbs/dao/Oracle/ReleaseVersion/List expects db connection from upper layer.")
         sql = self.sql
 	binds={}
-	if dataTier:
-            op = ('=', 'like')['%' in dataTier]
-	    sql += "WHERE DT.DATA_TIER_NAME %s :datatier" %op 
-	    binds = {"datatier":dataTier}
+	if releaseVersion:
+            op = ("=", "like")["%" in releaseVersion]
+	    sql += "WHERE RV.RELEASE_VERSION %s :release_version" %op 
+	    binds = {"release_version":releaseVersion}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
         return plist

@@ -513,11 +513,12 @@ class DBSBlockInsert :
                 try:
                     #insert acquisition era into db
                     aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
+                    aq['acquisition_era_name'] = aq['acquisition_era_name'].upper()
                     self.acqin.execute(conn, aq, tran)
                     dataset['acquisition_era_id'] = aq['acquisition_era_id']
                 except exceptions.IntegrityError:
                     #ok, already in db
-                    dataset['acquisition_era_id'] = self.acqid.execute(conn, aq['acquisition_era_name'])
+                    dataset['acquisition_era_id'] = self.acqid.execute(conn, aq['acquisition_era_name'].upper())
                 except Exception, ex:
                     #self.logger.exception("%s DBSBlockInsert/acquisition era insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     tran.rollback
@@ -534,6 +535,7 @@ class DBSBlockInsert :
                 try:
                     #insert processing era into db
                     pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE")
+                    pera['processing_version'] = pera['processing_version'].upper()
                     self.procsingin.execute(conn, pera, tran)
                     dataset['processing_era_id'] = pera['processing_era_id']
                 except exceptions.IntegrityError:
@@ -578,7 +580,7 @@ class DBSBlockInsert :
                 pass
             del dataset['physics_group_name']
             #6 Deal with Data tier. A dataset must has a data tier
-            dataT = dataset['data_tier_name']
+            dataT = dataset['data_tier_name'].upper()
             dataTId = self.tierid.execute(conn, dataT, transaction=tran)
             if dataTId <= 0 :
                 #not in db. Insert the tier
@@ -595,7 +597,7 @@ class DBSBlockInsert :
             dataset['data_tier_id'] = dataTId
             del dataset['data_tier_name']
             #7 Deal with dataset access type. A dataset must have a data type
-            dsTp = dataset['dataset_access_type']
+            dsTp = dataset['dataset_access_type'].upper()
             dsTpId = self.datatypeid.execute(conn, dsTp, transaction=tran)
             if dsTpId <= 0 :
                 #not in db. Insert the type
