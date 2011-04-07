@@ -23,13 +23,13 @@ class DBSAcquisitionEra:
         self.acqlst = daofactory(classname="AcquisitionEra.List")
         self.sm = daofactory(classname="SequenceManager")
 
-    def listAcquisitionEras(self):
+    def listAcquisitionEras(self, acq=''):
         """
         Returns all acquistion eras in dbs
         """
         try:
             conn=self.dbi.connection()
-            result= self.acqlst.execute(conn)
+            result= self.acqlst.execute(conn,acq)
             return result
         except Exception, ex:
             #self.logger.exception("%s DBSAcquisitionEra/listAcquisitionEras. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))

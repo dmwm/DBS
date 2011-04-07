@@ -29,6 +29,7 @@ from dbs.business.DBSMigrate import DBSMigrate
 from dbs.business.DBSBlockInsert import DBSBlockInsert
 from dbs.business.DBSReleaseVersion import DBSReleaseVersion
 from dbs.business.DBSDatasetAccessType import DBSDatasetAccessType
+from dbs.business.DBSPhysicsGroup import DBSPhysicsGroup
 
 import traceback
 import urllib, urllib2
@@ -60,7 +61,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',\
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version', \
-                                'acquisition_era', 'run_num','physics_group_name', 'logical_file_name', \
+                                'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name', \
                                 'primary_ds_name', 'primary_ds_type', 'data_tier_name', 'dataset_access_type', \
                                 'is_dataset_valid', 'min_cdate, max_cdate', 'min_ldate', 'max_ldate', \
                                 'cdate', 'ldate', 'detail'])
@@ -78,7 +79,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id', \
                         'block_name'])
         self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name'])
-        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name'])
+        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num'])
         self._addMethod('GET', 'runs', self.listRuns, args=['minrun', 'maxrun', 'logical_file_name', \
                         'block_name', 'dataset'])
         #self._addMethod('GET', 'sites', self.listSites)
@@ -87,10 +88,11 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'blockparents', self.listBlockParents, args=['block_name'])
         self._addMethod('GET', 'blockchildren', self.listBlockChildren, args=['block_name'])
         self._addMethod('GET', 'blockdump', self.dumpBlock, args=['block_name'])
-        self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=[])
-        self._addMethod('GET', 'processingeras', self.listProcessingEras, args=[])
-        self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version'])
+        self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=['acquisition_era_name'])
+        self._addMethod('GET', 'processingeras', self.listProcessingEras, args=['processing_version'])
+        self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version', 'dataset'])
         self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'])
+        self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'])
 	self._addMethod('GET', 'help', self.getHelp, args=['call'])
 	self._addMethod('GET', 'register', self.register, args=[])
 
@@ -110,6 +112,7 @@ class DBSReaderModel(RESTModel):
         self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, config.dbowner) 
         self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, config.dbowner)
         self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, config.dbowner)
+        self.dbsPhysicsGroup =DBSPhysicsGroup(self.logger, self.dbi, config.dbowner)
     
     def geoLocateThisHost(self, ip):
 	"""
@@ -210,7 +213,7 @@ class DBSReaderModel(RESTModel):
     #@expose
     @tools.secmodv2()
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1, release_version="", pset_hash="",\
-        app_name="", output_module_label="", processing_version="", acquisition_era="",\
+        app_name="", output_module_label="", processing_version="", acquisition_era_name="",\
         run_num="0", physics_group_name="", logical_file_name="", primary_ds_name="",\
         primary_ds_type="", data_tier_name="", dataset_access_type="RO",\
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0', ldate='0', detail=False):
@@ -236,9 +239,11 @@ class DBSReaderModel(RESTModel):
 	primary_ds_type = primary_ds_type.replace("*", "%")
 	data_tier_name = data_tier_name.replace("*", "%")
 	dataset_access_type = dataset_access_type.replace("*", "%")
+        acquisition_era_name = acquisition_era_name.replace("*", "%")
+        processing_version =  processing_version.replace("*", "%")
         try:
-            run_num = run_num.replace("*", "%")
-            if run_num == '%':
+            #run_num = run_num.replace("*", "%")
+            if '*' in run_num or '%' in run_num:
                 run_num = 0
             else:
                 run_num = int(run_num)
@@ -274,7 +279,7 @@ class DBSReaderModel(RESTModel):
 	detail = detail in (True, 1, "True", "1", 'true')
         try:
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash, \
-                app_name, output_module_label, processing_version, acquisition_era,\
+                app_name, output_module_label, processing_version, acquisition_era_name,\
                 run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, \
                 data_tier_name, dataset_access_type, \
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
@@ -323,8 +328,8 @@ class DBSReaderModel(RESTModel):
 	origin_site_name = origin_site_name.replace("*","%")
         run_num = str(run_num)
         try:
-            run_num = run_num.replace("*", "%")
-            if run_num == '%':
+            #run_num = run_num.replace("*", "%")
+            if '%' in run_num or '*' in run_num:
                 run_num = 0
             else:
                 run_num = int(run_num)
@@ -565,14 +570,18 @@ class DBSReaderModel(RESTModel):
                 raise Exception ("dbsException-3", msg )
     
     @tools.secmodv2()
-    def listFileLumis(self, logical_file_name="", block_name=""):
+    def listFileLumis(self, logical_file_name="", block_name="", run_num='0'):
         """
         Example url's <br />
         http://dbs3/filelumis?logical_file_name=lfn
         http://dbs3/filelumis?block_name=block_name
         """
+        if '*' in run_num or '%' in run_num:
+            run_num=0
+        else:
+            run_num = int(run_num)
         try:
-            return self.dbsFile.listFileLumis(logical_file_name, block_name)
+            return self.dbsFile.listFileLumis(logical_file_name, block_name, run_num )
         except Exception, ex:
             if "dbsException-7" in ex.args[0]:
                 raise HTTPError(400, str(ex))
@@ -651,12 +660,13 @@ class DBSReaderModel(RESTModel):
                 raise Exception ("dbsException-3", msg )
 
     @tools.secmodv2()
-    def listAcquisitionEras(self):
+    def listAcquisitionEras(self, acquisition_era_name=''):
 	"""
 	lists acquisition eras known to dbs
 	"""
         try:
-            return  self.dbsAcqEra.listAcquisitionEras()
+            acquisition_era_name = acquisition_era_name.replace('*', '%')
+            return  self.dbsAcqEra.listAcquisitionEras(acquisition_era_name)
         except Exception, ex:
             if "dbsException-7" in ex.args[0]:
                 raise HTTPError(400, str(ex))
@@ -667,12 +677,13 @@ class DBSReaderModel(RESTModel):
                 raise Exception ("dbsException-3", msg )
 
     @tools.secmodv2()
-    def listProcessingEras(self):
+    def listProcessingEras(self, processing_version=''):
 	"""
 	lists acquisition eras known to dbs
 	"""
         try:
-            return  self.dbsProcEra.listProcessingEras()
+            processing_version = processing_version.replace("*", "%")
+            return  self.dbsProcEra.listProcessingEras(processing_version)
         except Exception, ex:
             if "dbsException-7" in ex.args[0]:
                 raise HTTPError(400, str(ex))
@@ -683,14 +694,14 @@ class DBSReaderModel(RESTModel):
                 raise Exception ("dbsException-3", msg )
 
     @tools.secmodv2()
-    def listReleaseVersions(self, release_version=''):
+    def listReleaseVersions(self, release_version='', dataset=''):
         """
         lists release versions known to dbs
         """
         if release_version:
             release_version = release_version.replace("*","%")
         try:
-            return  self.dbsReleaseVersion.listReleaseVersions(release_version)
+            return  self.dbsReleaseVersion.listReleaseVersions(release_version,dataset )
         except Exception, ex:
             if "dbsException-7" in ex.args[0]:
                 raise HTTPError(400, str(ex))
@@ -717,3 +728,22 @@ class DBSReaderModel(RESTModel):
                     %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
                 self.logger.exception( msg )
                 raise Exception ("dbsException-3", msg )
+
+    @tools.secmodv2()
+    def listPhysicsGroups(self, physics_group_name=''):
+        """
+        List physics group names know to DBS.
+        """
+        if physics_group_name:
+            physics_group_name = physics_group_name.replace('*', '%')
+        try:
+            return self.dbsPhysicsGroup.listPhysicsGroups(physics_group_name)
+        except Exception, ex:
+            if "dbsException-7" in ex.args[0]:
+                raise HTTPError(400, str(ex))
+            else:
+                msg = "%s DBSReaderModel/listPhysicsGroups. %s\n. Exception trace: \n %s" \
+                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
+                self.logger.exception( msg )
+                raise Exception ("dbsException-3", msg )
+

@@ -29,7 +29,8 @@ FROM %sPROCESSING_ERAS PE
         sql = self.sql
 	binds={}
 	if processingV:
-	    sql += "WHERE PE.PROCESSING_VERSION = :processingV" 
+            op = ("=", "like")["%" in  processingV]
+	    sql += "WHERE PE.PROCESSING_VERSION %s :processingV" %op 
 	    binds = {"processingV":processingV}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)

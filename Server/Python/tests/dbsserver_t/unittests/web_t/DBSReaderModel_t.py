@@ -499,7 +499,14 @@ class DBSReaderModel_t(unittest.TestCase):
     
     def test082(self):
         """test082: web.DBSReaderModel.listFileLumis: basic test """
-        api.list('filelumis', logical_file_name="*")
+        try:
+            api.list('filelumis', logical_file_name="*")
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                print ex
+
 
     def test083(self):
         """test083: web.DBSReaderModel.listFileLumis: basic test """
@@ -510,7 +517,13 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test084(self):
         """test084: web.DBSReaderModel.listFileLumis: basic test """
-        api.list('filelumis', block_name="*")
+        try:
+            api.list('filelumis', block_name="*")
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                print ex
 
     def test085(self):
         """test085: web.DBSReaderModel.listFileLumis: basic test """
@@ -518,7 +531,13 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test086(self):
         """test086: web.DBSReaderModel.listFileLumis: basic test """
-        api.list('filelumis', block_name=testparams['block']+'*')
+        try:
+            api.list('filelumis', block_name=testparams['block']+'*')
+        except Exception, ex:
+            if 'dbsException-7' in ex.args[0]:
+                pass
+            else:
+                print ex
 
     def test087(self):
         """test087: web.DBSReaderModel.listFileLumis: must raise an exception if no parameter is passed """

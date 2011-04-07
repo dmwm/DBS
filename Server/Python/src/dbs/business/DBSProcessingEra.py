@@ -19,13 +19,13 @@ class DBSProcessingEra:
         self.pelst = daofactory(classname="ProcessingEra.List")
         self.sm = daofactory(classname="SequenceManager")
 
-    def listProcessingEras(self):
+    def listProcessingEras(self, processing_version=''):
         """
         Returns all processing eras in dbs
         """
         try:
             conn=self.dbi.connection()
-            result= self.pelst.execute(conn)
+            result= self.pelst.execute(conn,processing_version)
             return result
         except Exception, ex:
             #self.logger.exception("%s DBSProcessingEra/listProcessingEras. %s\n " \

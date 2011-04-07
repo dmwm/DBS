@@ -29,7 +29,8 @@ FROM %sACQUISITION_ERAS AE
         sql = self.sql
 	binds={}
 	if acquisitionEra:
-	    sql += "WHERE AE.ACQUISITION_ERA_NAME = :acquisitionEra" 
+            op = ("=", "like")["%" in acquisitionEra]
+	    sql += "WHERE AE.ACQUISITION_ERA_NAME %s :acquisitionEra" %op 
 	    binds = {"acquisitionEra":acquisitionEra}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)

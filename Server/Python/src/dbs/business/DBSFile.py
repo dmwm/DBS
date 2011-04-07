@@ -41,18 +41,19 @@ class DBSFile:
         self.filelumilist = daofactory(classname="FileLumi.List")
         self.filebufin = daofactory(classname = "FileBuffer.Insert")
 
-    def listFileLumis(self, logical_file_name="", block_name=""): 
+    def listFileLumis(self, logical_file_name="", block_name="", run_num=0): 
         """
         optional parameter: logical_file_name, block_name
         returns: logical_file_name, file_lumi_id, run_num, lumi_section_num
         """
-        if(logical_file_name=='' and block_name==""):
+        if((logical_file_name=='' or '*'in logical_file_name or '%' in logical_file_name) \
+            and (block_name=="" or '*' in block_name or '%' in block_name)):
             raise Exception('dbsException-7', "%s DBSFile/listFileLumis. \
-                logical_file_name or  block_name is required" \
+                fully specified logical_file_name or block_name is required. No wildcards are allowed." \
                  %DBSEXCEPTIONS['dbsException-7'] )
 	try:
 	    conn=self.dbi.connection()
-	    result=self.filelumilist.execute(conn, logical_file_name, block_name)
+	    result=self.filelumilist.execute(conn, logical_file_name, block_name, run_num)
 	    return result
         except Exception, ex:
             #self.logger.exception("%s DBSFile/listFileLumis. %s\n." \

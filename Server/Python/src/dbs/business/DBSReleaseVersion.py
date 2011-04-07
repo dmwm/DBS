@@ -17,13 +17,16 @@ class DBSReleaseVersion:
 
 	self.releaseVersion = daofactory(classname="ReleaseVersion.List")
 
-    def listReleaseVersions(self, release_version=""):
+    def listReleaseVersions(self, release_version="",dataset=''):
 	"""
 	List release versions
 	"""
+        if dataset and ('%' in dataset or '*' in dataset):
+             raise Exception ("dbsException-7", "%s DBSReleaseVersion/listReleaseVersions. No wildcards are\
+             allowed in dataset.\n." %DBSEXCEPTIONS['dbsException-7'] )
 	try:
 	    conn = self.dbi.connection()
-	    plist = self.releaseVersion.execute(conn, release_version.upper())
+	    plist = self.releaseVersion.execute(conn, release_version.upper(),dataset )
             result=[{}]
             if plist:
                 t=[]

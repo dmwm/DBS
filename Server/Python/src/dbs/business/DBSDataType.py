@@ -28,7 +28,7 @@ class DBSDataType:
                                     %( DBSEXCEPTIONS['dbsException-2'])
 	    else:
 		result=self.dataType.execute(conn, dataType, dataset)
-	    return result
+                return result
 	except Exception, ex:
             #self.logger.exception("%s DBSDataType/listDataType. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
