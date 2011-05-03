@@ -13,6 +13,7 @@ from cherrypy import expose, tools
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.business.DBSDoNothing import DBSDoNothing
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
 from dbs.business.DBSBlock import DBSBlock
@@ -58,6 +59,7 @@ class DBSReaderModel(RESTModel):
 	#self.register() Need to figure out details befer to trun on it. YG 1/26/11
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 	self._addMethod('GET', 'serverinfo', self.getServerInfo)
+        self._addMethod('GET', 'donothing', self.donothing)
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',\
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version', \
@@ -96,6 +98,7 @@ class DBSReaderModel(RESTModel):
 	self._addMethod('GET', 'help', self.getHelp, args=['call'])
 	self._addMethod('GET', 'register', self.register, args=[])
 
+        self.dbsDoNothing = DBSDoNothing(self.logger, self.dbi, config.dbowner)
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
         self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
         self.dbsBlock = DBSBlock(self.logger, self.dbi, config.dbowner)
@@ -187,6 +190,9 @@ class DBSReaderModel(RESTModel):
         ret["schema"] = self.dbsStatus.getSchemaStatus()
 	ret["components"] = self.dbsStatus.getComponentStatus()
         return ret
+
+    def donothing(self):
+        return self.dbsDoNothing.listNone()
     
     @tools.secmodv2()
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
