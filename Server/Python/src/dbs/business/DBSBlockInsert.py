@@ -571,11 +571,11 @@ class DBSBlockInsert :
                     except exceptions.IntegrityError:
                         phgId = self.phygrpid.execute(conn, phg, transaction=tran)
                     except Exception, ex:
-                        self.logger.exception("%s DBSBlockInsert/physics group insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                        #self.logger.exception("%s DBSBlockInsert/physics group insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                         tran.rollback()
                         raise
                 dataset['physics_group_id'] = phgId
-                self.logger.debug("***PHYSICS_GROUP_ID=%s***" %phgId)
+                #self.logger.debug("***PHYSICS_GROUP_ID=%s***" %phgId)
             else:
                 #no physics gruop for the dataset.
                 pass
@@ -616,11 +616,11 @@ class DBSBlockInsert :
             del dataset['dataset_access_type']
             tran.commit()
         except Exception, ex:
-            self.logger.exception("%s DBSBlockInsert/pre-dataset insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+            #self.logger.exception("%s DBSBlockInsert/pre-dataset insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             tran.rollback()
             raise
         try:
-            self.logger.debug("*** Trying to insert the dataset***")
+            #self.logger.debug("*** Trying to insert the dataset***")
             dataset['dataset_id'] = self.insertDatasetWOannex(dataset = dataset,
                                                            blockcontent = blockcontent,
                                                            otptIdList = otptIdList, conn = conn)
@@ -642,8 +642,8 @@ class DBSBlockInsert :
 
         The insertDataset flag is set to false if the dataset already exists
         """
-        import pdb
-        pdb.set_trace()
+        #import pdb
+        #pdb.set_trace()
 
 
         try:
@@ -659,7 +659,7 @@ class DBSBlockInsert :
                     except exceptions.IntegrityError:
                         dataset['dataset_id'] = self.datasetid.execute(conn, dataset['dataset'])
                     except Exception, ex:
-                        self.logger.exception("%s DBSBlockInsert/dataset insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
+                        #self.logger.exception("%s DBSBlockInsert/dataset insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                         tran.rollback()
                         if conn:
                             conn.close()
