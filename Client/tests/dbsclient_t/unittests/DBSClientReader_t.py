@@ -35,15 +35,15 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test02(self):
 	"""test02 unittestDBSClientReader_t.listPrimaryDatasets: """
-        api.listPrimaryDatasets('*')
+        api.listPrimaryDatasets(primary_ds_name='*')
 
     def test03(self):
 	"""test03 unittestDBSClientReader_t.listPrimaryDatasets: """
-	api.listPrimaryDatasets(testparams['primary_ds_name'])
+	api.listPrimaryDatasets(primary_ds_name=testparams['primary_ds_name'])
 
     def test04(self):
 	"""test04 unittestDBSClientReader_t.listPrimaryDatasets: """
-	api.listPrimaryDatasets(testparams['primary_ds_name']+"*")
+	api.listPrimaryDatasets(primary_ds_name=testparams['primary_ds_name']+"*")
 
     def test05(self):
 	"""test05 unittestDBSClientReader_t.listDatasets: basic test"""
@@ -170,7 +170,7 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test33(self):
 	"""test33 unittestDBSClientReader_t.listFiles: basic test"""
-	api.listFiles(block=testparams['block'])
+	api.listFiles(block_name=testparams['block'])
     
     def test34(self):
 	"""test34 unittestDBSClientReader_t.listFiles: basic test"""
@@ -194,7 +194,7 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test39(self):
 	"""test39 unittestDBSClientReader_t.listFiles: basic test"""
-	api.listFiles(block="doesnotexist#123")
+	api.listFiles(block_name="doesnotexist#123")
     
     def test40(self):
 	"""test40 unittestDBSClientReader_t.listFiles: basic test"""
@@ -304,7 +304,7 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test62(self):
 	"""test62 unittestDBSClientReader_t.listFiles: basic test"""
-	api.listFiles(block=testparams['block'], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
+	api.listFiles(block_name=testparams['block'], minrun=testparams['runs'][0], maxrun=testparams['runs'][2])
     
     def test63(self):
 	"""test63 unittestDBSClientReader_t.listFiles: NOT YET SUPPORTED"""
@@ -332,36 +332,81 @@ class DBSClientReader_t(unittest.TestCase):
 	api.listDataTypes(dataset=testparams['dataset'])
 	
     def test69(self):
-	"""test74 web.DBSReaderModel.listFile with original site: basic"""
+	"""test69 web.DBSReaderModel.listFile with original site: basic"""
 	api.listFiles(origin_site_name=testparams['site'], dataset=testparams['dataset'])
 
     def test70(self):
-	"""test75 web.DBSReaderModel.listFile with original site: basic"""
-	api.listFiles(origin_site_name=testparams['site'], block=testparams['block'])
+	"""test70 web.DBSReaderModel.listFile with original site: basic"""
+	api.listFiles(origin_site_name=testparams['site'], block_name=testparams['block'])
 
     def test71(self):
-	"""list dataset parents"""
+	"""test71 web.DBSReaderModel.listDatasetParents with dataset"""
 	api.listDatasetParents(dataset=testparams['dataset'])
 	
     def test72(self):
-	"""list dataset children"""
+	"""test72 web.DBSReaderModel.listDatasetChildren with dataset"""
 	api.listDatasetChildren(dataset=testparams['parent_dataset'])
 
     def test73(self):
-	"""list block parents"""
+	"""test73 web.DBSReaderModel.listBlockParents with block"""
 	api.listBlockParents(block_name=testparams['block'])
 
     def test74(self):
-	"""list block children"""
+	"""test74 web.DBSReaderModel.listBlockChildren with block_name"""
 	api.listBlockChildren(block_name=testparams['parent_block'])
 	
     def test75(self):
-	"""list file parents"""
+	"""test75 web.DBSReaderModel.listFileParents with logical_file_name"""
 	api.listFileParents(logical_file_name=testparams['files'][0])
 	
     def test76(self):
-	"""list file children"""
+	"""test76 web.DBSReaderModel.listFileChildren with logical_file_name"""
 	api.listFileChildren(logical_file_name=testparams['parent_files'][0])
+
+    def test77(self):
+        """test77: call help method"""
+        api.help()
+
+    def test78(self):
+        """test78 call help method with datatiers"""
+        api.help(call="datatiers")
+
+    def test79(self):
+        """test79 web.DBSReaderModel.listReleaseVersions"""
+        api.listReleaseVersions()
+        
+    def test80(self):
+        """test80 web.DBSReaderModel.listReleaseVersion with release_version=CMSSW_1_2_3"""
+        api.listReleaseVersions(release_version="CMSSW_1_2_3")
+
+    def test81(self):
+        """test81 web.DBSReaderModel.listPhysicsGroups"""
+        api.listPhysicsGroups()
+
+    def test82(self):
+        """test82: web.DBSReaderModel.listPhysicsGroup with physics_group_name"""
+        api.listPhysicsGroups(physics_group_name="Tracker")
+
+    def test83(self):
+        """test83: web.DBSReaderModel.listDatasetAccessType"""
+        api.listDatasetAccessTypes()
+
+    def test84(self):
+        """test84: web.DBSReaderModel.listDatasetAccessType with dataset_access_type"""
+        api.listDatasetAccessTypes(dataset_access_type="PRODUCTION")
+
+    def test85(self):
+        """test85: web.DBSReaderModel.blockDump"""
+        try:
+            api.blockDump()
+        except:
+            pass
+        else:
+            self.fail("exception was excepted, was not raised")
+
+    def test86(self):
+        """test86: web.DBSReaderModel.blockDump with block_name"""
+        api.blockDump(block_name="/unittest_web_primary_ds_name_64682/unittest_web_dataset_64682/GEN-SIM-RAW#64682")
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)

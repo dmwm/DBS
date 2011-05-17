@@ -71,7 +71,7 @@ u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
 '4145', 'description': 'this is a test', 'creation_date': 1279912078},
 
 'primds':
-{u'create_by': 'Client Name', u'primary_ds_type': 'TEST', u'primary_ds_id':
+{u'create_by': 'Client Name', u'primary_ds_type': 'test', u'primary_ds_id':
 15, u'primary_ds_name': 'unittest_web_primary_ds_name_14144',
 u'creation_date': 1279912078}, 
 

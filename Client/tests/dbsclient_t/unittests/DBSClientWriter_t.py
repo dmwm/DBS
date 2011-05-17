@@ -66,13 +66,13 @@ class DBSClientWriter_t(unittest.TestCase):
     def test01(self):
         """test01: web.DBSClientWriter.insertPrimaryDataset: basic test"""
         data = {'primary_ds_name':primary_ds_name,
-                'primary_ds_type':'TEST'}
+                'primary_ds_type':'test'}
         api.insertPrimaryDataset(primaryDSObj=data)
 
     def test02(self):
         """test02: web.DBSClientWriter.insertPrimaryDataset: duplicate should not riase an exception"""
         data = {'primary_ds_name':primary_ds_name,
-                'primary_ds_type':'TEST'}
+                'primary_ds_type':'test'}
         api.insertPrimaryDataset(primaryDSObj=data)
 	
     def test04(self):

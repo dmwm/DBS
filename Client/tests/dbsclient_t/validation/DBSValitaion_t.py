@@ -38,14 +38,14 @@ class DBSValitaion_t(unittest.TestCase):
     def test01(self):
         """test01: web.DBSClientWriter.PrimaryDataset: validation test"""
         data = {'primary_ds_name':primary_ds_name,
-                'primary_ds_type':'TEST'}
+                'primary_ds_type':'test'}
         #print "data=%s" %data        
         api.insertPrimaryDataset(primaryDSObj=data)
-	primaryList = api.listPrimaryDatasets(primary_ds_name)
+	primaryList = api.listPrimaryDatasets(primary_ds_name=primary_ds_name)
 	self.assertEqual(len(primaryList), 1)
 	primaryInDBS=primaryList[0]
 	self.assertEqual(primaryInDBS['primary_ds_name'], primary_ds_name)
-	self.assertEqual(primaryInDBS['primary_ds_type'], 'TEST')
+	self.assertEqual(primaryInDBS['primary_ds_type'], 'test')
 
     def test02(self):
 	"""test02: web.DBSClientWriter.OutputModule: validation test"""
@@ -116,7 +116,7 @@ class DBSValitaion_t(unittest.TestCase):
 		'origin_site_name': site }
 		
 	api.insertBlock(blockObj=data)
-	blkList = api.listBlocks(block, detail=True)
+	blkList = api.listBlocks(block_name=block, detail=True)
 	self.assertEqual(len(blkList), 1)
 	blkInDBS=blkList[0]
 	self.assertEqual(blkInDBS['origin_site_name'], site )
@@ -133,7 +133,7 @@ class DBSValitaion_t(unittest.TestCase):
 	# This first part just inserts a parent primary, dataset and block, with parent files
 	# That is later used in inserting files in 'block', that are then 'validated'
 	pridata = {'primary_ds_name':primary_ds_name+"_parent",
-	                    'primary_ds_type':'TEST'}
+	                    'primary_ds_type':'test'}
 	api.insertPrimaryDataset(primaryDSObj=pridata)
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
@@ -201,7 +201,7 @@ class DBSValitaion_t(unittest.TestCase):
 
 	### Lets begin the validation now
 	# our block, 'block' now has these 10 files, and that is basis of our validation
-	flList=api.listFiles(block=block, detail=True)
+	flList=api.listFiles(block_name=block, detail=True)
 	self.assertEqual(len(flList), 10)
 	for afileInDBS in flList:
 	    self.assertEqual(afileInDBS['block_name'], block)
@@ -218,7 +218,7 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(len(dsParentList), 1)
 	self.assertEqual(dsParentList[0]['parent_dataset'], "/%s/%s/%s" % (primary_ds_name+"_parent", procdataset+"_parent", tier) )
 	# block parameters, such as file_count must also be updated, lets validate
-    	blkList = api.listBlocks(block, detail=True)
+    	blkList = api.listBlocks(block_name=block, detail=True)
 	self.assertEqual(len(blkList), 1)
 	blkInDBS=blkList[0]
 	self.assertEqual(blkInDBS['origin_site_name'], site )
