@@ -9,8 +9,6 @@ class Test:
 
     def __init__(self):
         url = "oracle://user:password@host:port/sid"
-	url="oracle://anzar:anzar_cms2009@uscmsdb03.fnal.gov:1521/cmscald"
-	url="mysql://dbs3:dbs3_pass@cmssrv49.fnal.gov:3306/CMS_DBS3"
         self.logger = logging.getLogger("dbs test logger")
         self.dbi = DBFactory(self.logger, url).connect()
 

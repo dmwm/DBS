@@ -105,7 +105,7 @@ class DBS2SqlApi(object):
                         """SELECT PDS.ID dataset_access_type_id,
                         PDS.STATUS dataset_access_type
                         FROM %s.PROCDSSTATUS PDS
-                        WHERE PDS.ID!=2 AND PDS.ID!=61
+                        WHERE PDS.ID!=1 AND PDS.ID!=2 AND PDS.ID!=61
                         ORDER BY dataset_access_type_id
                         """ % (owner),
                         ##############################################

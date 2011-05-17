@@ -22,18 +22,9 @@ config.section_("General")
 config.General.workDir = "/uscms/home/anzar/devDBS3/DBS3_ROOT"
 
 config.section_("CoreDatabase")
-config.CoreDatabase.connectUrl = 'oracle://CMS_LUM_WRITER:every1needsLumi!@cmscald'
+config.CoreDatabase.connectUrl = 'oracle://owner:password@instance'
 config.CoreDatabase.dialect = "oracle"
-config.CoreDatabase.dbowner = 'CMS_LUM_OWNER'
-
-"""
-config.section_("CoreDatabase")
-config.CoreDatabase.connectUrl = "mysql://dbs3:dbs3_pass@cmssrv49.fnal.gov:3306/CMS_DBS3_ANZ_3"
-config.CoreDatabase.dialect = "mysql"
-config.CoreDatabase.dbowner = '__MYSQL__'
-#config.CoreDatabase.socket = os.getenv("DBSOCK")
-"""
-
+config.CoreDatabase.dbowner = 'DBOwmer'
 
 config.component_('DBSInsertBuffer')
 config.DBSInsertBuffer.default_expires=300
@@ -42,4 +33,3 @@ config.DBSInsertBuffer.namespace= "dbs.components.insertbuffer.DBSInsertBuffer"
 config.DBSInsertBuffer.componentDir = config.General.workDir + "/DBSInsertBuffer"
 #config.DBSInsertBuffer.dbowner = '__MYSQL__'
 config.DBSInsertBuffer.workerThreads = 1
-

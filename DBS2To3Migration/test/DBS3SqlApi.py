@@ -110,7 +110,7 @@ class DBS3SqlApi(object):
                         """SELECT DAT.DATASET_ACCESS_TYPE_ID,
                         DAT.DATASET_ACCESS_TYPE
                         FROM %s.DATASET_ACCESS_TYPES DAT
-                        WHERE DAT.DATASET_ACCESS_TYPE_ID!=99
+                        WHERE DAT.DATASET_ACCESS_TYPE_ID!=100
                         ORDER BY DATASET_ACCESS_TYPE_ID
                         """ % (ownerDBS3),
                         ##############################################

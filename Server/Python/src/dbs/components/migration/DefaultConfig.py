@@ -22,7 +22,7 @@ config.section_("General")
 config.General.workDir = "/uscms/home/anzar/devDBS3/DBS3_ROOT"
 
 config.section_("CoreDatabase")
-config.CoreDatabase.connectUrl = "mysql://dbs3:dbs3_pass@cmssrv49.fnal.gov:3306/CMS_DBS3_ANZ_3"
+config.CoreDatabase.connectUrl = "mysql://user:passwd@host:3306/Database"
 config.CoreDatabase.dialect = "mysql"
 config.CoreDatabase.dbowner = '__MYSQL__'
 #config.CoreDatabase.socket = os.getenv("DBSOCK")

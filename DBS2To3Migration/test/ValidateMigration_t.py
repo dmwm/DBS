@@ -59,17 +59,11 @@ def diffKeys(resultDBS2,resultDBS3):
 class CompareDBS2ToDBS3(unittest.TestCase):
     
     def setUp(self):
-        #ownerDBS3 = 'owner'
-        #connectUrlDBS3 = 'oracle://owner:passwd@instance'
+        ownerDBS3 = 'owner'
+        connectUrlDBS3 = 'oracle://owner:passwd@instance'
 
-        #ownerDBS2 = 'owner'
-        #connectUrlDBS2 = 'oracle://owner:passwd@instance'
-
-        ownerDBS3 = 'cms_dbs3_local2'
-        connectUrlDBS3 = 'oracle://cms_dbs3_local2:ylxnseyjh?@int2r_lb'
-
-        ownerDBS2 = 'CMS_DBS_PROD_GLOBAL'
-        connectUrlDBS2 = 'oracle://cms_dbs_prod_global:dbs3test112010@int2r_lb'
+        ownerDBS2 = 'owner'
+        connectUrlDBS2 = 'oracle://owner:passwd@instance'
 
         logger = logging.getLogger()
 
@@ -155,7 +149,7 @@ class CompareDBS2ToDBS3(unittest.TestCase):
         
     def test_file_output_mod_configs(self):
         resultsUnion = self.dbs3sqlapi.fileOutputModConfigs(sort=False)
-                    
+        
         self.assertEqual(len(resultsUnion),0)
     
     def test_file_parents(self):
