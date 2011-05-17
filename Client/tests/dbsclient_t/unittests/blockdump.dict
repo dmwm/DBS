@@ -1,92 +1,18 @@
-blockDump={'dataset_conf_list': [{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'app_name': 'cmsRun', u'output_module_label': 'Merged', 
-u'global_tag': 'my-cms-gtag'}],
-
-'file_conf_list': [{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/0.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
-{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/1.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged' , u'global_tag': 'my-cms-gtag'},
-{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/2.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
-{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/3.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
-{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/4.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
-{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/5.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
-{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/6.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
-{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/7.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
-{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/8.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'},
-{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
-'76e303993a1c2f842159dbfeeed9a0dd', u'lfn': '/store/mc/141441/9.root',
-u'app_name': 'cmsRun', u'output_module_label': 'Merged', u'global_tag': 'my-cms-gtag'}], 
-
-'files':
-[{u'check_sum': '1504266448', 'file_lumi_list': [{u'lumi_section_num':
-27414, u'run_num': 1}, {u'lumi_section_num': 26422, u'run_num': 2},
-{u'lumi_section_num': 29838, u'run_num': 3}], u'adler32': 'NOTSET',
-u'event_count': 1619, u'file_type': 'EDM',
-u'last_modified_by': 'Client Name', 
-u'logical_file_name': '/store/mc/141441/9.root', u'file_size': 2012211901,
-u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
-0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':
-[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,
-u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Client Name', 
-u'logical_file_name': '/store/mc/141441/0.root', u'file_size': 2012211901,
-u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
-0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':
-[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,
-u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Client Name',
-u'logical_file_name': '/store/mc/141441/1.root', u'file_size': 2012211901,
-u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
-0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':
-[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,
-u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Client Name',
-u'logical_file_name': '/store/mc/141441/2.root', u'file_size': 2012211901,
-u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
-0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':
-[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,
-u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Client Name', u'logical_file_name': '/store/mc/141441/3.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
-0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Client Name',
-u'logical_file_name': '/store/mc/141441/4.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':
-'NOTSET', u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Client Name',u'logical_file_name': '/store/mc/141441/5.root', u'file_size': 2012211901,
-u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Client Name',u'logical_file_name': '/store/mc/141441/6.root', u'file_size': 2012211901, u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM',  u'last_modified_by': 'Client Name', u'logical_file_name': '/store/mc/141441/7.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0, u'is_file_valid': 1}, {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Client Name',u'logical_file_name': '/store/mc/141441/8.root', u'file_size': 2012211901,
-u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
-0.0, u'is_file_valid': 1}], 
-
-
-'processing_era': {'create_by': 'Client Name', 'processing_version':
-'4145', 'description': 'this is a test', 'creation_date': 1279912078},
-
-'primds':
-{u'create_by': 'Client Name', u'primary_ds_type': 'test', u'primary_ds_id':
-15, u'primary_ds_name': 'unittest_web_primary_ds_name_14144',
-u'creation_date': 1279912078}, 
-
-'dataset': {u'is_dataset_valid': 1,
-u'physics_group_name': 'Tracker', u'create_by': 'Client Name',
-u'dataset_access_type': 'PRODUCTION', u'data_tier_name': 'GEN-SIM-RAW',
-u'last_modified_by': 'Client Name', u'creation_date': 1279912078,
-u'processed_ds_name': 'unittest_web_dataset_14144',
-u'xtcrosssection': 123.0, u'last_modification_date': 1279912078,
-u'dataset_id': 21, u'dataset':
-'/unittest_web_primary_ds_name_14144/unittest_web_dataset_14144/GEN-SIM-RAW'},
-
-'block': {u'block_id': 18, u'create_by': 'Client Name', u'creation_date':
-1279912079, u'open_for_writing': 1, u'block_name':
-'/unittest_web_primary_ds_name_14144/unittest_web_dataset_14144/GEN-SIM-RAW#141444',
-u'file_count': 10, u'origin_site_name': 'cmssrm.fnal.gov', u'dataset_id':
-21, u'block_size': 20122119010}, 
-}
+blockDump={'file_conf_list': [{'app_name': 'ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039',
+'output_module_label': 'RECO', 'pset_hash': 'GIBBERISH', 'lfn':
+'ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039-malpaquet-1', 'release_version': 'CMSSW_3_1_1',
+'global_tag': 'globalTag'}], 'dataset_conf_list': [{'release_version': 'CMSSW_3_1_1', 'pset_hash':
+'GIBBERISH', 'app_name': 'ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039', 'output_module_label':
+'RECO', 'global_tag': 'globalTag'}], 'block_parent_list': [], 'physics_group_name': {},
+'processing_era': {'processing_version': 'v0'}, 'dataset': {'dataset':
+'/ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039/ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039/RECO',
+'is_dataset_valid': 1, 'physics_group_name': 'DBS3Test', 'processed_ds_name':
+'ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039', 'dataset_access_type': 'PROCESSING',
+'data_tier_name': 'RECO'}, 'block': {'block_name':
+'/ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039/ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039/RECO#51fb3906-7ffd-11e0-b6f0-00163e010039',
+'open_for_writing': 0, 'origin_site_name': 'malpaquet'}, 'acquisition_era': {'acquisition_era_name':
+'DBS3Test'}, 'primds': {'primary_ds_type': 'DATA', 'primary_ds_name':
+'ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039'}, 'ds_parent_list': [], 'files': [{'check_sum':
+'1', 'file_lumi_list': [{'lumi_section_num': 1L, 'run_num': 1L}], 'event_count': 20L, 'file_type':
+'EDM', 'logical_file_name': 'ThisIsATest_50bcd0cc-7ffd-11e0-b6f0-00163e010039-malpaquet-1',
+'file_size': 1024L}], 'file_parent_list': []} 
