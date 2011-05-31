@@ -11,6 +11,7 @@ systems = \
   {
     'srcdir': 'Client/src/python',
     'bin': ['Client/cmdline/dbs.py'],
+    'pythonmods': ['dbs.__init__'],
     'pythonpkg': ['dbs.apis', 'dbs.exceptions'],
     'examples': ['Client/utils/*.py']
   },

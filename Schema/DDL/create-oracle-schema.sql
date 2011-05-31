@@ -5,7 +5,7 @@
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2011-03-03 11:50                                */
+/* Created on:            2011-05-31 10:59                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -26,7 +26,7 @@ CREATE SEQUENCE SEQ_RV
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_PSH
@@ -35,7 +35,7 @@ CREATE SEQUENCE SEQ_PSH
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_DR
@@ -44,7 +44,7 @@ CREATE SEQUENCE SEQ_DR
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_PG
@@ -53,6 +53,7 @@ CREATE SEQUENCE SEQ_PG
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_DT
@@ -61,6 +62,7 @@ CREATE SEQUENCE SEQ_DT
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_PDS
@@ -69,6 +71,7 @@ CREATE SEQUENCE SEQ_PDS
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_PDT
@@ -77,6 +80,7 @@ CREATE SEQUENCE SEQ_PDT
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_OMC
@@ -85,7 +89,7 @@ CREATE SEQUENCE SEQ_OMC
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_DC
@@ -94,7 +98,7 @@ CREATE SEQUENCE SEQ_DC
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 10
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_DP
@@ -103,7 +107,7 @@ CREATE SEQUENCE SEQ_DP
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 10
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_DTP
@@ -112,6 +116,7 @@ CREATE SEQUENCE SEQ_DTP
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_DS
@@ -120,7 +125,7 @@ CREATE SEQUENCE SEQ_DS
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 10
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_AE
@@ -129,6 +134,7 @@ CREATE SEQUENCE SEQ_AE
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_BP
@@ -137,7 +143,7 @@ CREATE SEQUENCE SEQ_BP
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 10
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_PSDS
@@ -146,7 +152,7 @@ CREATE SEQUENCE SEQ_PSDS
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_AQE
@@ -155,6 +161,7 @@ CREATE SEQUENCE SEQ_AQE
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_PE
@@ -163,6 +170,7 @@ CREATE SEQUENCE SEQ_PE
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_FLM
@@ -171,7 +179,7 @@ CREATE SEQUENCE SEQ_FLM
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 20
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_BK
@@ -180,7 +188,7 @@ CREATE SEQUENCE SEQ_BK
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_SI
@@ -189,6 +197,7 @@ CREATE SEQUENCE SEQ_SI
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_SE
@@ -197,6 +206,7 @@ CREATE SEQUENCE SEQ_SE
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_BSE
@@ -205,7 +215,7 @@ CREATE SEQUENCE SEQ_BSE
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_FL
@@ -214,7 +224,7 @@ CREATE SEQUENCE SEQ_FL
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 20
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_FP
@@ -223,7 +233,7 @@ CREATE SEQUENCE SEQ_FP
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 20
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_FT
@@ -232,6 +242,7 @@ CREATE SEQUENCE SEQ_FT
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_AF
@@ -240,7 +251,7 @@ CREATE SEQUENCE SEQ_AF
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 20
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_BH
@@ -249,7 +260,7 @@ CREATE SEQUENCE SEQ_BH
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_FC
@@ -258,7 +269,7 @@ CREATE SEQUENCE SEQ_FC
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 20
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_DV
@@ -267,6 +278,7 @@ CREATE SEQUENCE SEQ_DV
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_BLST
@@ -275,7 +287,7 @@ CREATE SEQUENCE SEQ_BLST
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_MB
@@ -284,6 +296,7 @@ CREATE SEQUENCE SEQ_MB
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_MR
@@ -292,6 +305,7 @@ CREATE SEQUENCE SEQ_MR
     NOMINVALUE
     NOMAXVALUE
     nocycle
+    CACHE 5000
     noorder;
 
 CREATE SEQUENCE SEQ_CS
@@ -300,7 +314,7 @@ CREATE SEQUENCE SEQ_CS
     NOMINVALUE
     NOMAXVALUE
     nocycle
-    CACHE 5
+    CACHE 5000
     noorder;
 
 /* ---------------------------------------------------------------------- */
