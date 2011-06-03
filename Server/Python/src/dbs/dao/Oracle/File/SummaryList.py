@@ -18,7 +18,7 @@ class SummaryList(DBFormatter):
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
 
-    def execute(self, conn, block_name="", dataset="",  transaction=False):
+    def execute(self, conn, block_name="", dataset="",  run_num=0, transaction=False):
 	if not conn:
 	    raise Exception("dbs/dao/Oracle/File/List expects db connection from upper layer.")
         binds = {}
@@ -26,7 +26,45 @@ class SummaryList(DBFormatter):
         #pdb.set_trace()
 
         if block_name:
-            sql = """
+            if run_num > 0:
+                #
+                sql = """
+                    select 
+                   (select count(f.file_id)  from %sfiles f 
+                     join %sblocks b on b.BLOCK_ID = f.block_id
+                     where b.BLOCK_NAME=:block_name
+                     and f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)   
+                    ) as num_file,
+                    
+                    (select sum(f.event_count) event_count from %sfiles f 
+                     join %sblocks b on b.BLOCK_ID = f.block_id
+                     where b.BLOCK_NAME=:block_name and
+                     f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)   
+                    ) as num_event,
+
+                    (select sum(f.file_size) file_size from %sfiles f 
+                     join %sblocks b on b.BLOCK_ID = f.block_id
+                     where b.BLOCK_NAME=:block_name and 
+                     f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)
+                    ) as file_size,
+                    
+                   (select count(distinct b.block_id) from %sblocks b 
+                   join %sfiles f on f.block_id=b.block_id
+                   where b.block_name=:block_name and  
+                   f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)
+                   )as num_block, 
+                    
+                   (select count(*) from (select distinct l.lumi_section_num, l.run_num from %sfiles f
+                    join %sfile_lumis l on l.file_id=f.file_id 
+                    join %sblocks b on b.BLOCK_ID = f.block_id
+                    where b.BLOCK_NAME=:block_name and l.run_num=:run_num)
+                   ) as num_lumi
+                   from dual
+                    """ %((self.owner,)*15)
+                binds.update({"block_name":block_name})
+                binds.update({"run_num":run_num})
+            else:
+                sql = """
                     select 
                    (select count(f.file_id)  from %sfiles f 
                      join %sblocks b on b.BLOCK_ID = f.block_id
@@ -36,7 +74,15 @@ class SummaryList(DBFormatter):
                     (select sum(f.event_count) event_count from %sfiles f 
                      join %sblocks b on b.BLOCK_ID = f.block_id
                      where b.BLOCK_NAME=:block_name
-                    ) as event_count,
+                    ) as num_event,
+
+                    (select sum(f.file_size) file_size from %sfiles f 
+                     join %sblocks b on b.BLOCK_ID = f.block_id
+                     where b.BLOCK_NAME=:block_name
+                    ) as file_size,
+                    
+                    (select count(block_id) from %sblocks where block_name=:block_name
+                    ) as num_block, 
                     
                    (select count(*) from (select distinct l.lumi_section_num, l.run_num from %sfiles f
                     join %sfile_lumis l on l.file_id=f.file_id 
@@ -44,36 +90,80 @@ class SummaryList(DBFormatter):
                     where b.BLOCK_NAME=:block_name)
                    ) as num_lumi
                    from dual
+                    """ %((self.owner,)*10)
+                binds.update({"block_name":block_name})
 
-                  """ %((self.owner,)*7)
-            binds.update({"block_name":block_name})
+        elif dataset:
+            if run_num >0:
+                sql = """
+                    select 
+                    (select count(f.file_id)  from %sfiles f 
+                     join %sdatasets d on d.DATASET_ID = f.dataset_id
+                     where d.dataset=:dataset and
+                     f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)   
+                    ) as num_file,
+                       
+                    (select sum(f.event_count) event_count from %sfiles f 
+                     join %sdatasets d on d.DATASET_ID = f.dataset_id
+                     where d.dataset=:dataset and
+                     f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)
+                    ) as num_event,
+     
+                    (select sum(f.file_size) file_size from %sfiles f 
+                     join %sdatasets d on d.DATASET_ID = f.dataset_id
+                     where d.dataset=:dataset and
+                     f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)
+                    ) as file_size,
 
-        elif dataset: 
-            sql = """
+                    (select count(distinct b.block_id) from %sblocks b 
+                     join %sdatasets d on d.dataset_id = b.dataset_id 
+                     join %sfiles f on f.block_id = b.block_id
+                     where d.dataset=:dataset and 
+                     f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)
+                    ) as num_block, 
+
+                   (select count(*) from (select distinct l.lumi_section_num, l.run_num from %sfiles f
+                    join %sfile_lumis l on l.file_id=f.file_id 
+                    join %sdatasets d on d.DATASET_ID = f.dataset_id
+                    where d.dataset=:dataset and l.run_num = :run_num)
+                   ) as num_lumi 
+                    from dual
+                    """ %((self.owner,)*16)
+                binds.update({"dataset":dataset})
+                binds.update({"run_num":run_num})
+            else:
+                sql = """
                     select 
                    (select count(f.file_id)  from %sfiles f 
                      join %sdatasets d on d.DATASET_ID = f.dataset_id
                      where d.dataset=:dataset
                     ) as num_file,
-                    
+                       
                     (select sum(f.event_count) event_count from %sfiles f 
                      join %sdatasets d on d.DATASET_ID = f.dataset_id
                      where d.dataset=:dataset
-                    ) as event_count,
-                    
+                    ) as num_event,
+     
+                    (select sum(f.file_size) file_size from %sfiles f 
+                     join %sdatasets d on d.DATASET_ID = f.dataset_id
+                     where d.dataset=:dataset
+                    ) as file_size,
+
+                    (select count(b.block_id) from %sblocks b 
+                     join %sdatasets d on d.dataset_id = b.dataset_id 
+                     where d.dataset=:dataset
+                    ) as num_block, 
+
                    (select count(*) from (select distinct l.lumi_section_num, l.run_num from %sfiles f
                     join %sfile_lumis l on l.file_id=f.file_id 
                     join %sdatasets d on d.DATASET_ID = f.dataset_id
                     where d.dataset=:dataset)
-                   ) as num_lumi
-                   from dual
-
-                  """ %((self.owner,)*7)
-
-            binds.update({"dataset":dataset})
+                   ) as num_lumi 
+                    from dual
+                    """ %((self.owner,)*11)
+                binds.update({"dataset":dataset})
         else:
             return []
-
 
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds

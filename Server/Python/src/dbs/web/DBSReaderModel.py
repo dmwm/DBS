@@ -31,6 +31,8 @@ from dbs.business.DBSBlockInsert import DBSBlockInsert
 from dbs.business.DBSReleaseVersion import DBSReleaseVersion
 from dbs.business.DBSDatasetAccessType import DBSDatasetAccessType
 from dbs.business.DBSPhysicsGroup import DBSPhysicsGroup
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 import traceback
 import urllib, urllib2
@@ -56,10 +58,9 @@ class DBSReaderModel(RESTModel):
         self.version = self.getServerVersion()
         #self.warning("DBSReaderModle")
         #self.logger.warning("DBSReaderModle")
-	#self.register() Need to figure out details befer to trun on it. YG 1/26/11
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 	self._addMethod('GET', 'serverinfo', self.getServerInfo)
-        self._addMethod('GET', 'donothing', self.donothing)
+        #self._addMethod('GET', 'donothing', self.donothing)
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',\
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version', \
@@ -73,7 +74,8 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',\
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'minrun', 'maxrun',\
                         'origin_site_name', 'lumi_list', 'detail'])
-        self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name','dataset'])
+        self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name','dataset',\
+                        'run_num'])
         self._addMethod('GET', 'datasetparents', self.listDatasetParents, args=['dataset'])
         self._addMethod('GET', 'datasetchildren', self.listDatasetChildren, args=['dataset'])
         self._addMethod('GET', 'outputconfigs', self.listOutputConfigs, args=['dataset', 'logical_file_name',\
@@ -84,7 +86,6 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num'])
         self._addMethod('GET', 'runs', self.listRuns, args=['minrun', 'maxrun', 'logical_file_name', \
                         'block_name', 'dataset'])
-        #self._addMethod('GET', 'sites', self.listSites)
         self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'])
         self._addMethod('GET', 'datatiers', self.listDataTiers, args=['data_tier_name'])
         self._addMethod('GET', 'blockparents', self.listBlockParents, args=['block_name'])
@@ -96,7 +97,6 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'])
         self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'])
 	self._addMethod('GET', 'help', self.getHelp, args=['call'])
-	self._addMethod('GET', 'register', self.register, args=[])
 
         self.dbsDoNothing = DBSDoNothing(self.logger, self.dbi, config.dbowner)
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
@@ -116,48 +116,6 @@ class DBSReaderModel(RESTModel):
         self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, config.dbowner)
         self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, config.dbowner)
         self.dbsPhysicsGroup =DBSPhysicsGroup(self.logger, self.dbi, config.dbowner)
-    
-    def geoLocateThisHost(self, ip):
-	"""
-	Locate the host, otherwise return 'UNKNOWN'
-	"""
-	response = urllib.urlopen('http://api.hostip.info/get_html.php?ip=%s' % ip).read()
-	m = re.search('City: (.*)', response)
-	if m:
-	    return m.group(1)
-	return "UNKNOWN"
-    
-    def register(self):
-	"""
-	Method that attempts to register this service with Service Registry.
-	NO Error is thrown, if the registry is inaccessible for any reason
-	"""
-	try:
-	    srvcregistry="http://cmssrv18.fnal.gov:8686/SRVCREGISTRY/services"
-	    addthis={}
-	    addthis['NAME'] = self.config._internal_name
-	    addthis['TYPE'] = self.__class__.__name__
-	    addthis['LOCATION'] = self.geoLocateThisHost(socket.gethostbyname(socket.gethostname()))
-	    addthis['STATUS'] = "WORKING"
-	    #addthis['ADMIN'] = self.config.admin
-	    addthis['URI'] = "%s/%s" % (server.base(), self.config._internal_name)
-            #addthis['DB'] = self.config.CoreDatabase.connectUrl  #<<<<<<<<<<<remove password
-	    #addthis['DB'] = self.config.database.connectUrl  #<<<<<<<<<<<remove password
-	    addthis['VERSION'] = self.getServerVersion()
-	    addthis['LAST_CONTACT'] = self.dbsUtils2.getTime()
-	    addthis['COMMENTS'] = "DBS Service"
-	    self.logger.warning("DBS Web DBSReaderModel/register. REGISTERING DBS: %s\n" \
-                    %str(addthis) )
-	    params = cjson.encode(addthis)
-	    headers =  {"Content-type": "application/json", "Accept": "application/json" }
-	    self.opener =  urllib2.build_opener()
-	    req = urllib2.Request(url=srvcregistry, data=params, headers = headers)
-	    req.get_method = lambda: 'POST'
-	    data = self.opener.open(req)
-	except Exception, ex:
-	    self.logger.exception("%s DBSReaderModel/register. %s\n EXception Trace: \n %s.\n" \
-                    %(DBSEXCEPTIONS['dbsException-3'],ex, traceback.format_exc()) )
-	    pass
     
     def getServerVersion(self):
         """
@@ -191,9 +149,11 @@ class DBSReaderModel(RESTModel):
 	ret["components"] = self.dbsStatus.getComponentStatus()
         return ret
 
+    """
+    Used for Stress test. 
     def donothing(self):
         return self.dbsDoNothing.listNone()
-    
+    """
     @tools.secmodv2()
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
@@ -371,14 +331,13 @@ class DBSReaderModel(RESTModel):
         try:
             return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num, \
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
+        except dbsException as de:
+           dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message) 
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "%s DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
+                    %(dbsExceptionCode['dbsException-web'], ex, traceback.format_exc())
+            msg = "%s DBSReaderModel/listBlocks. %s" %(dbsExceptionCode['dbsException-web'], ex)
+            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
 
     @tools.secmodv2()
     def listBlockParents(self, block_name=""):
@@ -459,7 +418,7 @@ class DBSReaderModel(RESTModel):
                 raise Exception ("dbsException-3", msg )
 
     @tools.secmodv2()
-    def listFileSummaries(self, block_name='', dataset=''):
+    def listFileSummaries(self, block_name='', dataset='', run_num=0):
         """
         Example url's <br />
         http://dbs3/filesummaries?dataset=/a/b/c
@@ -468,15 +427,14 @@ class DBSReaderModel(RESTModel):
         Return: number of files, event counts and number of lumi sections in a given block or dataset. 
         """
         try:
-            return self.dbsFile.listFileSummary(block_name, dataset)
+            return self.dbsFile.listFileSummary(block_name, dataset, run_num)
+        except dbsException as de:
+           dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listFileSummaries. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "%s DBSReaderModel/listFileSummaries. %s\n. Exception trace: \n %s" \
+                    %(dbsExceptionCode['dbsException-web'], ex, traceback.format_exc())
+            msg = "%s DBSReaderModel/listFileSummaries. %s" %(dbsExceptionCode['dbsException-web'], ex)
+            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
 
     @tools.secmodv2()
     def listDatasetParents(self, dataset=''):

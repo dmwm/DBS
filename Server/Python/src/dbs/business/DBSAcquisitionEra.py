@@ -7,7 +7,8 @@ __revision__ = "$Id: DBSAcquisitionEra.py,v 1.6 2010/08/12 19:52:24 afaq Exp $"
 __version__ = "$Revision $"
 
 from WMCore.DAOFactory import DAOFactory
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
 class DBSAcquisitionEra:
     """
@@ -27,12 +28,13 @@ class DBSAcquisitionEra:
         """
         Returns all acquistion eras in dbs
         """
+        if type(acq) is not str:
+            dbsExceptionHandler('dbsException-invalid-input', 'Acquistion era name given is not valid: %s' %acq)
         try:
             conn=self.dbi.connection()
             result= self.acqlst.execute(conn,acq)
             return result
         except Exception, ex:
-            #self.logger.exception("%s DBSAcquisitionEra/listAcquisitionEras. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             raise ex
         finally:
             conn.close()
@@ -47,21 +49,19 @@ class DBSAcquisitionEra:
         tran = conn.begin()
         try:
 	    businput["acquisition_era_id"] = self.sm.increment(conn, "SEQ_AQE", tran)
-	    assert businput["acquisition_era_name"]
-	    assert businput["creation_date"]
-	    assert businput["create_by"]
             businput["acquisition_era_name"] = businput["acquisition_era_name"].upper()
             self.acqin.execute(conn, businput, tran)
             tran.commit()
+        except KeyError, ke:
+            dbsExceptionHandler('dbsException-invalid-input', "Invalid input: "+ke.args[0])
         except Exception, ex:
-                if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-                        # already exists
-                        self.logger.warning("DBSAcquisitionEra/insertAcquisitionEra: Unique constraint violation being ignored...")
-                        self.logger.warning("%s" % ex)
-			pass
-		else:
-            		tran.rollback()
-                        #self.logger.exception("%s DBSAcquisitionEra/insertAcquisitionEras. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
-            		raise
+            if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                # already exists
+                self.logger.warning("DBSAcquisitionEra/insertAcquisitionEra: Unique constraint violation being ignored...")
+                self.logger.warning("%s" % ex)
+                pass
+            else:
+                tran.rollback()
+                raise
         finally:
             conn.close()

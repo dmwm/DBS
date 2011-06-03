@@ -10,6 +10,7 @@ DBSEXCEPTIONS = {
     'dbsException-4' : 'dbsException in dbsUtil: ',
     'dbsException-5' : 'dbsException in Migration: ', 
     'dbsException-6' : 'dbsException in FileBuffer: ',
-    'dbsException-7' : 'dbsException due to invalid client input: '
+    'dbsException-7' : 'dbsException due to invalid client input: ',
+    'dbsException-8' : 'dbsException required pre-existing data NOT in DBS: '
 }
 

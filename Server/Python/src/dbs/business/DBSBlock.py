@@ -4,8 +4,10 @@ This module provides business object class to interact with Block.
 """
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from sqlalchemy import exceptions
+import re
 
 class DBSBlock:
     """
@@ -21,7 +23,6 @@ class DBSBlock:
 
         self.sm = daofactory(classname = "SequenceManager")
         self.datasetid = daofactory(classname = "Dataset.GetID")
-        #self.siteid = daofactory(classname = "Site.GetID")
         self.blockin = daofactory(classname = "Block.Insert")
 	self.updatestatus = daofactory(classname='Block.UpdateStatus')
         self.blockparentlist = daofactory(classname="BlockParent.List")
@@ -32,23 +33,22 @@ class DBSBlock:
 	"""
 	Used to toggle the status of a block open_for_writing=1, open for writing, open_for_writing=0, closed
 	"""
-
-	open_for_writing=int(open_for_writing)
-        conn = self.dbi.connection()
-	trans = conn.begin()
 	if not len(block_name) > 1:
-	    raise Exception("dbsException-7", "%s DBSBlock/updateStatus. Provide a valid block_name" %DBSEXCEPTIONS['dbsException-7'])
-	if (open_for_writing < 0)  or (open_for_writing > 1) :
-	    raise Exception("dbsException-7", "%s DBSBlock/updateStatus. open_for_writing can only be 0 or 1 : passed %s" 
-                                                    %(DBSEXCEPTIONS['dbsException-7']. open_for_writing) )
+	    msg="%s DBSBlock/updateStatus. Invalid block_name" %dbsExceptionCode['dbsException-invalid-input']
+            dbsExceptionHandler('dbsException-invalid-input', msg)
+	if open_for_writing not in [1, 0, '1','0']:
+	    msg = "%s DBSBlock/updateStatus. open_for_writing can only be 0 or 1 : passed %s."\
+                   %(dbsExceptionCode['dbsException-invalid-input'],  open_for_writing) 
+            dbsExceptionHandler('dbsException-invalid-input', msg)
+        conn = self.dbi.connection()
+        trans = conn.begin()
 	try :
+            open_for_writing=int(open_for_writing)
 	    self.updatestatus.execute(conn, block_name, open_for_writing, dbsUtils().getTime(), trans)
 	    trans.commit()
 	except Exception, ex:
-            #self.logger.exception("%s DBSBlock/updateStatus. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    trans.rollback()
 	    raise ex
-		
 	finally:
 	    trans.close()
 	    conn.close()
@@ -57,15 +57,14 @@ class DBSBlock:
 	"""
 	list parents of a block
 	"""
-        if ( block_name=="" ):
-            raise Exception( "dbsException-7", "\n %s DBSBlock/listBlockParents. \
-                Block_name must be provided.\n" %DBSEXCEPTIONS['dbsException-7'] )
+        if (not block_name) or re.search('^%%*$', block_name):
+            msg = " %s DBSBlock/listBlockParents. Block_name must be provided.\n" %dbsExceptionCode['dbsException-invalid-input']
+            dbsExceptionHandler('dbsException-invalid-input', msg)
 	try:
 	    conn = self.dbi.connection()
 	    results = self.blockparentlist.execute(conn, block_name)
 	    return results
 	except Exception, ex:
-            #self.logger.exception("%s DBSBlock/listBlockParents. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -74,15 +73,14 @@ class DBSBlock:
 	"""
 	list parents of a block
 	"""
-        if ( block_name=="" ):
-            raise Exception( "dbsException-7", "\n %s DBSBlock/listBlockChildren. \
-                Block_name must be provided.\n" %DBSEXCEPTIONS['dbsException-7'] )
+        if (not block_name) or re.search('^%%*$', block_name):
+            msg = " %s DBSBlock/listBlockChildren. Block_name must be provided.\n" %dbsExceptionCode['dbsException-invalid-input'] 
+            dbsExceptionHandler('dbsException-invalid-input', msg)
 	try:
 	    conn = self.dbi.connection()
 	    results = self.blockchildlist.execute(conn, block_name)
 	    return results
 	except Exception, ex:
-            #self.logger.exception("%s DBSBlock/listBlockChildren. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -92,12 +90,12 @@ class DBSBlock:
         """
         dataset, block_name, or logical_file_name must be passed.
         """
-	if (not dataset) or dataset=='%':
-	    if (not block_name) or block_name=='%':
-		if (not logical_file_name) or logical_file_name =='%':
-			raise Exception("dbsException-7", "%s DBSBlock/listBlock. You must specify at least one parameter\
-                                          (dataset, block_name, logical_file_name) with listBlocks api"  %DBSEXCEPTIONS['dbsException-7'])
-	
+	if (not dataset) or re.search('^%%*$', dataset):
+	    if (not block_name) or re.search('^%%*$', block_name):
+		if (not logical_file_name) or re.search('^%%*$', logical_file_name) :
+			msg = "%s DBSBlock/listBlock. You must specify at least one parameter(dataset, block_name, logical_file_name)\
+                            with listBlocks api"  %dbsExceptionCode['dbsException-invalid-input']
+                        dbsExceptionHandler('dbsException-invalid-input', msg)
 	try:
 	    conn = self.dbi.connection()
 	    dao = (self.blockbrieflist, self.blocklist)[detail]
@@ -105,7 +103,6 @@ class DBSBlock:
                                  min_cdate, max_cdate, min_ldate, max_ldate, cdate,  ldate)
 	    return result
         except Exception, ex:
-            #self.logger.exception("%s DBSBlock/listBlocks. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
         finally:
 	    conn.close()
@@ -125,8 +122,8 @@ class DBSBlock:
         NEED to validate there are no extra keys in the businput
         """
         if not (businput.has_key("block_name") and businput.has_key("origin_site_name")  ):
-            raise Exception ('dbsException-7',\
-                "%s business/DBSBlock/insertBlock must have block_name and origin_site_name as input" %DBSEXCEPTIONS['dbsException-7'])
+            msg = "%s business/DBSBlock/insertBlock must have block_name and origin_site_name as input" %dbsExceptionCode['dbsException-invalid-input']
+            dbsExceptionHandler('dbsException-invalid-input', msg)
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
@@ -142,11 +139,12 @@ class DBSBlock:
 	    }
 	    ds_name = businput["block_name"].split('#')[0]
             blkinput["dataset_id"] = self.datasetid.execute(conn,  ds_name, tran)
-	    if blkinput["dataset_id"] == -1 : raise Exception("dbsException-2", "%s DBSBlock/insertBlock. Dataset %s does not exists" 
-                                                                    %(DBSEXCEPTIONS['dbsException-2'], ds_name) )
+	    if blkinput["dataset_id"] == -1 : 
+                msg = "%s DBSBlock/insertBlock. Dataset %s does not exists"\
+                    %(dbsExceptionCode['dbsException-missing-data'], ds_name)
+                dbsExceptionHandler('dbsException-missing-data', msg)
             blkinput["block_id"] =  self.sm.increment(conn, "SEQ_BK", tran)
             if(businput.has_key("origin_site_name")):
-                #blkinput["origin_site"] = self.siteid.execute(conn, businput["origin_site"], tran)
 		blkinput["origin_site_name"] = businput["origin_site_name"]
             self.blockin.execute(conn, blkinput, tran)
 
@@ -156,7 +154,6 @@ class DBSBlock:
 		pass
 	    else:
 		tran.rollback()
-                #self.logger.exception("%s DBSBlock/insertBlock. %s\n." %(DBSEXCEPTIONS['dbsException-2'], e))
 		raise
 		
         finally:

@@ -6,6 +6,7 @@ import json
 import unittest
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
 from DBSWriterModel_t import outDict
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
 import cherrypy
 
 def FakeAuth(*a, **b):
@@ -193,7 +194,7 @@ class DBSReaderModel_t(unittest.TestCase):
 	try:
 	    api.list('blocks', dataset='*')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'invalid client input' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -211,7 +212,7 @@ class DBSReaderModel_t(unittest.TestCase):
 	try:
 	    api.list('blocks', origin_site_name=testparams['site'])
 	except Exception, ex:
-	    if 'dbsException-7' in ex.args[0]:
+	    if 'invalid client input' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -226,7 +227,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
             api.list('blocks', block_name='*')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'invalid client input' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -236,7 +237,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
             api.list('blocks', origin_site_name='*')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'invalid client input' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -263,9 +264,9 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
 	    api.list('blocks')
         except Exception, ex: 
-            if 'dbsException-7' in ex.args[0]:
+            if 'invalid client input' in ex.args[0]: 
                 pass
-            else: 
+            else:
                 self.fail("Exception was expected and was not raised.")
             
     def test042(self):

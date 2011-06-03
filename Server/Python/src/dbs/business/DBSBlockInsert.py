@@ -556,6 +556,8 @@ class DBSBlockInsert :
             raise
         
         #Continue for the rest.
+        #import pdb
+        #pdb.set_trace()
         try:
             tran=conn.begin()
             #5 Deal with physics gruop
@@ -565,13 +567,13 @@ class DBSBlockInsert :
                 phgId = self.phygrpid.execute(conn, phg, transaction=tran)
                 if phgId <=0 :
                     #not in db yet, insert it
-                    phygrp={'physics_group_id':self.sm.increment(conn,"SEQ_PG"), 'physics_group_name':phg}
+                    phgId = self.sm.increment(conn,"SEQ_PG")
+                    phygrp={'physics_group_id':phgId, 'physics_group_name':phg}
                     try:
                         self.phygrpin.execute(conn, phygrp, tran)
                     except exceptions.IntegrityError:
                         phgId = self.phygrpid.execute(conn, phg, transaction=tran)
                     except Exception, ex:
-                        #self.logger.exception("%s DBSBlockInsert/physics group insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                         tran.rollback()
                         raise
                 dataset['physics_group_id'] = phgId

@@ -3,6 +3,8 @@
 This module provides business object class to interact with File. 
 """
 from WMCore.DAOFactory import DAOFactory
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from sqlalchemy import exceptions
 
@@ -62,21 +64,21 @@ class DBSFile:
 	finally:
 	    conn.close()
 
-    def listFileSummary(self, block_name="", dataset=""):
+    def listFileSummary(self, block_name="", dataset="", run_num=0):
         """
-        required parameter: full block_name or dataset name. No wildcards allowed.
+        required parameter: full block_name or dataset name. No wildcards allowed. run_num is optional.
         """
         try:
             conn=self.dbi.connection()
             if not block_name and not dataset:
-                raise Exception('dbsException-7', "%s DBSFile/listFileSummary. \
-                        block_name or dataset is required for listFileSummary API" \
-                        %DBSEXCEPTIONS['dbsException-7'] )
+                msg =  "%s DBSFile/listFileSummary.  block_name or dataset is required for listFileSummary API"\
+                    %dbsExceptionCode['dbsException-invalid-input']
+                dbsExceptionHandler('dbsException-invalid-input', msg)
             if '%' in block_name or '%' in dataset:
-                raise Exception('dbsException-7', "%s DBSFile/listFileSummary. \
-                        No waildcard is allowed in block_name or dataset for listFileSummary API" \
-                        %DBSEXCEPTIONS['dbsException-7'] ) 
-            result = self.filesummarylist.execute(conn,block_name, dataset)
+                msg = "%s DBSFile/listFileSummary. No wildcard is allowed in block_name or dataset for listFileSummary API" \
+                    %dbsExceptionCode['dbsException-invalid-input']
+                dbsExceptionHandler('dbsException-invalid-input', msg)
+            result = self.filesummarylist.execute(conn,block_name, dataset, run_num)
             return result
         except Exception, ex:
             raise ex
