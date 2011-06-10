@@ -18,7 +18,7 @@ class List(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = """SELECT BP.BLOCK_NAME FROM %sBLOCKS BP
+        self.sql = """SELECT BC.BLOCK_NAME as THIS_BLOCK_NAME, BP.BLOCK_NAME as PARENT_BLOCK_NAME FROM %sBLOCKS BP
 			JOIN %sBLOCK_PARENTS BPRTS
 			    ON BPRTS.PARENT_BLOCK_ID = BP.BLOCK_ID
 			JOIN %sBLOCKS BC
@@ -30,15 +30,21 @@ class List(DBFormatter):
         block: /a/b/c#d
         """	
 	if not conn:
-            raise Excpetion("dbsException-1", "%s Oracle/BlockParent/List.  Expects db connection from upper layer.\n"\
-                    %DBSEXCEPTIONS["dbsException-1"])
+            msg='%s Oracle/BlockParent/List. No DB connection found' %dbsExceptionCode['dbsException-dao']
+            dbsExceptionHandler('dbsException-dao', mag)
         sql = self.sql
-        binds = {}
-	if block_name:
-	    binds.update(block_name = block_name)
+	if type(block_name) is str:
+	    binds = {'block_name' :block_name}
+        elif type(block_name) is list:
+            binds = [{'block_name':x} for x in block_name]
         else: 
-            raise Exception("dbsException-1", "%s Oracle/BlockParent/List. block_name must be provided\n"\
-                %DBSEXCEPTIONS["dbsException-1"] )
+            msg = "%s Oracle/BlockParent/List. Block_name must be provided either as a string or as a list. "\
+                %dbsExceptionCode['dbsException-dao']
+            dbsExceptionHandler('dbsException-dao', mag)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        result = self.formatCursor(cursors[0])
+        result = []
+        for i in cursors:
+            d = self.formatCursor(i)
+            if d:
+                result += d
         return result

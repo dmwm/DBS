@@ -2,11 +2,12 @@
 """
 This module provides business object class to interact with Dataset. 
 """
+import cjson
 from WMCore.DAOFactory import DAOFactory
-
 from exceptions import Exception
-
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class DBSDataset:
     """
@@ -129,8 +130,9 @@ class DBSDataset:
         #pdb.set_trace()
         #self.logger.warning("I am in listDataset businese")
  	if(logical_file_name and logical_file_name.find("%")!=-1):
-	    raise Exception("dbsException-7", "%s DBSDataset/listDatasets API only works with fullly qualified logical_file_name. NO * is allowed in logical_file_name."
-                             %(DBSEXCEPTIONS['dbsException-7']))
+	    dbsExceptionHandler('dbsException-invalid-input', '%s DBSDataset/listDatasets API requires \
+                fullly qualified logical_file_name. NO wildcard is allowed in logical_file_name.'\
+                %dbsExceptionCode['dbsException-invalid-input'])
 	try:
             conn = None
 	    conn = self.dbi.connection()
@@ -154,12 +156,48 @@ class DBSDataset:
                                     max_ldate, cdate, ldate)	
 	    return result
         except Exception, ex:
-            #self.logger.exception("%s DBSDataset/listDatasets. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
         finally:
 	    if conn:
                 conn.close()
- 
+
+    def listDatasetArray(self, inputdata=None):
+        if not inputdata:
+            dbsExceptionHandler('dbsException-invalid-input', '%s DBSDataset/listDatasetArray API requires \
+                at least a list of dataset.' %dbsExceptionCode['dbsException-invalid-input'])
+        else:
+            try:
+                dataset=inputdata["dataset"]
+                if inputdata.has_key("is_dataset_valid"):
+                    is_dataset_valid=inputdata["is_dataset_valid"]
+                else:
+                    is_dataset_valid = 1
+                if inputdata.has_key("dataset_access_type"):
+                    dataset_access_type=inputdata["dataset_access_type"]
+                else:
+                    dataset_access_type = "RO" 
+                if inputdata.has_key("detail"):
+                    detail=inputdata["detail"]
+                else:
+                    detail = False 
+                conn = None
+                conn = self.dbi.connection()
+                #import pdb
+                #pdb.set_trace()
+
+                dao = (self.datasetbrieflist, self.datasetlist)[detail]   
+                result = dao.execute(conn, dataset=dataset, is_dataset_valid=is_dataset_valid,\
+                    dataset_access_type=dataset_access_type, transaction=False)
+                return result                        
+            except cjson.DecodeError, de:
+                msg = "%s business/listDatasetArray requires at least a list of dataset. %s"\
+                    %(dbsExceptionCode['dbsException-invalid-input'], de)
+                dbsExceptionHandler('dbsException-invalid-input', msg)
+            except Exception, ex:
+                raise ex
+            finally:
+                if conn:
+                    conn.close()
     
     def insertDataset(self, businput):
         """

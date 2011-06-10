@@ -14,6 +14,9 @@ def dbsExceptionHandler(eCode='', message='', logger=None , serverError=''):
             logger(eCode + ": " +  serverError)
             #print (eCode + ": " +  serverError)
             raise HTTPError(404, message)
+        elif eCode == "dbsException-invalid-input2":
+            logger(eCode + ": " +  serverError)
+            raise HTTPError(404, message)
         else:
             #client gets httperror 500 for server internal error
             #print eCode + ": " +  serverError

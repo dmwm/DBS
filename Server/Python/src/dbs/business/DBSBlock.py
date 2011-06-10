@@ -57,8 +57,21 @@ class DBSBlock:
 	"""
 	list parents of a block
 	"""
-        if (not block_name) or re.search('^%%*$', block_name):
-            msg = " %s DBSBlock/listBlockParents. Block_name must be provided.\n" %dbsExceptionCode['dbsException-invalid-input']
+        if not block_name:
+            msg = " %s DBSBlock/listBlockParents. Block_name must be provided as a string or a list.\
+                No wildcards allowed in block_name/s."%dbsExceptionCode['dbsException-invalid-input']
+        elif type(block_name) is str:
+            if '%' in block_name or '*' in block_name:
+                dbsExceptionHandler('dbsException-invalid-input', '%s.DBSReaderModel/listBlocksParents:\
+                    NO WILDCARDS allowed in block_name.'%dbsExceptionCode['dbsException-invalid-input'])
+        elif type(block_name) is list:
+            for b in block_name:
+                if '%' in b or '*' in b:
+                        dbsExceptionHandler('dbsException-invalid-input', '%s.DBSReaderModel/listBlocksParents:\
+                            NO WILDCARDS allowed in block_name.'%dbsExceptionCode['dbsException-invalid-input'])
+        else:
+            msg = " %s DBSBlock/listBlockParents. Block_name must be provided as a string or a list.\
+                No wildcards allowed in block_name/s ."%dbsExceptionCode['dbsException-invalid-input']
             dbsExceptionHandler('dbsException-invalid-input', msg)
 	try:
 	    conn = self.dbi.connection()

@@ -17,6 +17,7 @@ dbsExceptionCode = {
     'dbsException-migration' : 'dbsException in Migration: ',
     'dbsException-fileBuffer' : 'dbsException in FileBuffer: ',
     'dbsException-invalid-input' : 'dbsException due to invalid client input: ',
+    'dbsException-invalid-input2' : 'dbsException due to invalid client input: ',
     'dbsException-missing-data' : 'dbsException required pre-existing data NOT in DBS: '
 }
 
