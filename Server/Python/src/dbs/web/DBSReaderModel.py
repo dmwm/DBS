@@ -62,6 +62,7 @@ class DBSReaderModel(RESTModel):
 	self._addMethod('GET', 'serverinfo', self.getServerInfo)
         #self._addMethod('GET', 'donothing', self.donothing)
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
+        self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'])
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',\
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version', \
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name', \
@@ -170,18 +171,41 @@ class DBSReaderModel(RESTModel):
         http://dbs3/primarydatasets?primary_ds_name=qcd* <br />
 	http://dbs3/primarydatasets?primary_ds_type=qcd* <br />
         """
+        #import pdb
+        #pdb.set_trace()
         primary_ds_name = primary_ds_name.replace("*","%")
 	primary_ds_type = primary_ds_type.replace("*","%")
         try:
             #print"-----ListPrimaryDatasets___"
             return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name, primary_ds_type)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex) )
-            else:
-                msg="%s DBSReader/listPrimaryDatasets. %s.\n Exception trace: \n %s."\
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc() )
-                raise Exception ("dbsException-3", msg)
+                sError="%s DBSReaderModel/listPrimaryDatasets.\n Exception trace: \n %s."\
+                    %(dbsExceptionCode['dbsException-web'], traceback.format_exc() )
+                msg = "%s DBSReaderModel/listPrimaryDatasets. %s" %(dbsExceptionCode['dbsException-web'], ex)
+                dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+
+    @tools.secmodv2()
+    def listPrimaryDsTypes(self, primary_ds_type="", dataset=""):
+        """
+        Example URL's <br />
+        http://dbs3/primarydstypes <br />
+        http://dbs3/primarydstypes?primary_ds_type=qcd* <br />
+        """
+        if primary_ds_type:
+            primary_ds_type = primary_ds_type.replace("*","%")
+        if dataset:
+            dataset = dataset.replace("*","%")
+        try:
+            return self.dbsPrimaryDataset.listPrimaryDSTypes(primary_ds_type, dataset)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except Exception, ex:
+            sError = "%s DBSReaderModel/listPrimaryDsTypes. \n. Exception trace: \n %s" \
+                %(dbsExceptionCode['dbsException-web'], traceback.format_exc())
+            msg = "%s DBSReaderModel/listPrimaryDSTypes. %s" %(dbsExceptionCode['dbsException-web'], ex)
+            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
 
     #@expose
     @tools.secmodv2()

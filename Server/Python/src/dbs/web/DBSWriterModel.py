@@ -16,7 +16,8 @@ from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from dbs.utils.dbsUtils import dbsUtils 
 from dbs.web.DBSReaderModel import DBSReaderModel
-#from dbs.business.DBSFileBuffer import DBSFileBuffer
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 import traceback
 
@@ -83,28 +84,7 @@ class DBSWriterModel(DBSReaderModel):
 	self._addMethod('PUT', 'blocks', self.updateBlock, args=['block_name', 'open_for_writing'])
 	self._addMethod('POST', 'datatiers', self.insertDataTier)
         self._addMethod('POST', 'bulkblocks', self.insertBulkBlock)
-
-#self.dbsFileBuffer = DBSFileBuffer(self.logger, self.dbi, config.dbowner)
     
-	#following chunk can be removed at a later point, when we are satisfied with the alternate/wmcore-component
-	"""
-	threading.Thread(target=self.handleBuffer).start()
-    def handleBuffer(self):
-	while True:
-	    try :
-		blks = self.dbsFileBuffer.getBlocks()
-		for ablk_id in blks:
-		    bufferedinput = self.dbsFileBuffer.getBufferedFiles(ablk_id["block_id"])
-		    time.sleep(10)
-		    insertinput = [eval(afile['file_blob'])  for afile in bufferedinput ]
-		    #for afile in insertinput:
-			#self.logger.debug("run_inserts : %s" % afile.keys() )
-			#self.logger.debug("run_inserts : %s" % afile['file_output_config_list'] )
-		    if len(insertinput) > 0:
-			self.dbsFileBuffer.insertBufferedFiles(businput=insertinput)
-	    except Exception, ex:
-	    	raise Exception ("DBS Server Exception: %s \n. Exception trace: \n %s " % (ex, traceback.format_exc()) )
-    """
     @tools.secmodv2(authzfunc=authInsert) 
     def insertPrimaryDataset(self):
         """
@@ -113,34 +93,19 @@ class DBSWriterModel(DBSReaderModel):
         input must be a dictionary with the following two keys:
         primary_ds_name, primary_ds_type
         """
-        """
-	userDN = request.headers.get('Ssl-Client-S-Dn', None)
-	access = request.headers.get('Ssl-Client-Verify', None)
-	if userDN != '(null)' and access == 'SUCCESS':
-            self.logger.warning("DBS Web DBSWriterMOdel\n")
-	    self.logger.warning("<<<<<<<<<<<<<<<<<<<<<<<<<NO USER DN specified>>>>>>>>>>>>>>>>>>>>>>>")
-	    # Means that the user certificate was authenticated by the frontend
-	else:
-	    self.logger.warning("<<<<<<<<<<<<<<<<<<<<<<<<<USER DN %s specified>>>>>>>>>>>>>>>>>>>>>>>" %userDN)
-
-	"""
-        #print "----insertPrimaryDataset----"
 	try :
         	body = request.body.read()
         	indata = cjson.decode(body)
         	indata.update({"creation_date": dbsUtils().getTime(), "create_by": dbsUtils().getCreateBy() })
         	self.dbsPrimaryDataset.insertPrimaryDataset(indata)
-		
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
 	except Exception, ex:
-                #print "Throw HTTPError exception = %s" %(ex)
-                if "dbsException-7" in ex.args[0]:
-                    raise HTTPError(400, str(ex))
-                else:
-                    msg = "%s DBSWriterModel/insertPrimaryDataset. %s\n. Exception trace: \n %s" \
-                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                    self.logger.exception(msg) 
-                    raise Exception ("dbsException-3", msg) 
-    
+            sError = "%s DBSWriterModel/insertPrimaryDataset. Exception trace: \n %s" \
+                        %(dbsExceptionCode['dbsException-web'], traceback.format_exc())
+            msg = "%s DBSWriterModel/insertPrimaryDataset. %s" %(dbsExceptionCode['dbsException-web'], ex)
+            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+
     @tools.secmodv2(authzfunc=authInsert)
     def insertOutputConfig(self):
         """
