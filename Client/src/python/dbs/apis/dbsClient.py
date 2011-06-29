@@ -2,7 +2,7 @@ import os, sys, socket
 import urllib, urllib2
 from httplib import HTTPConnection
 from StringIO import StringIO
-from exceptions import Exception
+from dbs.exceptions.dbsClientException import dbsClientException
 import cjson
 
 try:
@@ -15,7 +15,7 @@ except:
 def checkInputParameter(method,parameters,validParameters,requiredParameters=None):
     for parameter in parameters:
         if parameter not in validParameters:
-            raise Exception("DBS Client Exception","Invalid input: API %s: API does not support parameter %s. Supported parameters are %s" % (method, parameter, validParameters))
+            raise dbsClientException("Invalid input", "API %s does not support parameter %s. Supported parameters are %s" % (method, parameter, validParameters))
 
     if requiredParameters is not None:
         if requiredParameters.has_key('multiple'):
@@ -25,12 +25,12 @@ def checkInputParameter(method,parameters,validParameters,requiredParameters=Non
                     match = True
                     break
             if not match:
-                raise Exception("DBS Client Exception","Invalid input: API %s: API does require one of the parameters %" % (method, requiredParameters['multiple']))
+                raise dbsClientException("Invalid input", "API %s does require one of the parameters %s" % (method, requiredParameters['multiple']))
                 
         if requiredParameters.has_key('forced'):
             for requiredParameter in requiredParameters['forced']:
                 if requiredParameter not in parameters:
-                    raise Exception("DBS Client Exception","Invalid input: API %s: API does require the parameter %s. Forced required parameters are %s" % (method, requiredParameter,requiredParameters['forced']))
+                    raise dbsClientException("Invalid input", "API %s does require the parameter %s. Forced required parameters are %s" % (method, requiredParameter,requiredParameters['forced']))
 
         if requiredParameters.has_key('standalone'):
             overlap = []
@@ -38,13 +38,13 @@ def checkInputParameter(method,parameters,validParameters,requiredParameters=Non
                 if requiredParameter in parameters:
                     overlap.append(requiredParameter)
             if len(overlap)!=1:
-                raise Exception("DBS Client Exception","Invalid input: API %s: API does requires only *one* of the parameters %s." % (method, requiredParameters['single']))
+                raise dbsClientException("Invalid input", "API %s does requires only *one* of the parameters %s." % (method, requiredParameters['standalone']))
                         
 class DbsApi(object):
     def __init__(self, url="", proxy=""):
         """
         * DbsApi CTOR
-        url: serevr URL
+        url: server URL
         proxy: http proxy; this feature is TURNED OFF at the moemnt
         """
         self.url=url
@@ -85,13 +85,8 @@ class DbsApi(object):
             res = data.read()
             
         except urllib2.HTTPError, httperror:
-            #print "httperror=%s" %httperror
-            #self.__parseForException(json.loads(httperror.read()))
-            #self.__parseForException(str(httperror))
-            #HTTPError(req.get_full_url(), code, msg, hdrs, fpa)
-            raise httperror
+            self.__parseForException(httperror)
         except urllib2.URLError, urlerror:
-
             raise urlerror
         except Exception, e:
             raise e
@@ -99,21 +94,24 @@ class DbsApi(object):
         #FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
         try:
             json_ret=json.loads(res)
-            self.__parseForException(json_ret)
-            return json_ret
         except Exception, e:
             raise e
+        finally:
+            return json_ret
 		
-    def __parseForException(self, data):
+    def __parseForException(self, httperror):
         """
         An internal method, should not be used by clients
         """
+        data = httperror.read()
         if type(data)==type("abc"):
             data=json.loads(data)
-        if type(data) == type({}) and data.has_key('exception'):
-            raise Exception("DBS Server raised an exception: %s" %data['message'])
-        return data
-    
+            
+        if type(data) == type({}) and data.has_key('exception'):# re-raise more details with more details
+            raise urllib2.HTTPError(httperror.geturl(),data['exception'],data['message'],httperror.headers,httperror.fp)
+        
+        raise httperror
+        
     def blockDump(self,**kwargs):
         """
         * API the list all information related with the block_name
@@ -244,7 +242,7 @@ class DbsApi(object):
         """
         validParameters=['block_name']
 
-        requiredParameters={'strict':validParameters}
+        requiredParameters={'forced':validParameters}
 
         checkInputParameter(method="listBlockChildren",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
         
@@ -257,7 +255,7 @@ class DbsApi(object):
         """
         validParameters=['block_name']
 
-        requiredParameters={'strict':validParameters}
+        requiredParameters={'forced':validParameters}
 
         checkInputParameter(method="listBlockParents",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
 
@@ -277,11 +275,13 @@ class DbsApi(object):
                            'max_cdate','min_ldate','max_ldate',
                            'cdate','ldate','detail']
 
+        requiredParameters={'multiple':validParameters}
+
         #set defaults
         if 'detail' not in kwargs.keys():
             kwargs['detail']=False
             
-        checkInputParameter(method="listBlocks",parameters=kwargs.keys(),validParameters=validParameters)
+        checkInputParameter(method="listBlocks",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
 
         return self.__callServer("/blocks",params=kwargs)
 
@@ -337,7 +337,7 @@ class DbsApi(object):
         * dataset : dataset --REQUIRED
         """
         validParameters = ['dataset']
-        requiredParameters = {'multiple':validParameters}
+        requiredParameters = {'forced':validParameters}
 
         checkInputParameter(method="listDatasetChildren",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
 
@@ -349,7 +349,7 @@ class DbsApi(object):
         * dataset : dataset --REQUIRED
         """
         validParameters = ['dataset']
-        requiredParameters = {'multiple':validParameters}
+        requiredParameters = {'forced':validParameters}
 
         checkInputParameter(method="listDatasetParents",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
         
@@ -384,7 +384,7 @@ class DbsApi(object):
         """
         validParameters = ['logical_file_name']
 
-        requiredParameters = {'strict':validParameters}
+        requiredParameters = {'forced':validParameters}
 
         checkInputParameter(method="listFileChildren",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
         
@@ -397,7 +397,7 @@ class DbsApi(object):
         """
         validParameters = ['logical_file_name','block_name']
 
-        requiredParameters = {'single':validParameters}
+        requiredParameters = {'standalone':validParameters}
 
         checkInputParameter(method="listFileLumis",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
                 
@@ -410,7 +410,7 @@ class DbsApi(object):
         """
         validParameters = ['logical_file_name','block_id','block_name']
 
-        requiredParameters = {'single':validParameters}
+        requiredParameters = {'standalone':validParameters}
 
         checkInputParameter(method="listFileParents",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
 
@@ -451,7 +451,7 @@ class DbsApi(object):
         """
         validParameters = ['block_name','dataset']
 
-        requiredParameters = {'single':validParameters}
+        requiredParameters = {'standalone':validParameters}
 
         checkInputParameter(method="listFileSummaries",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
         

@@ -1,0 +1,24 @@
+[
+    {
+        "file_type_id": 1, 
+        "check_sum": "382784337", 
+        "adler32": "d929c455", 
+        "block_id": 2545814, 
+        "event_count": 113, 
+        "file_type": "EDM", 
+        "create_by": "cmsdataops@cmssrv112.fnal.gov", 
+        "branch_hash_id": null, 
+        "last_modified_by": "/DC=org/DC=doegrids/OU=Services/CN=uscmspilot-test/cmssrv38.fnal.gov", 
+        "dataset": "/JetMETTau/Run2010A-Dec22ReReco_v1/AOD", 
+        "block_name": "/JetMETTau/Run2010A-Dec22ReReco_v1/AOD#fe7240b6-505d-4624-be0b-68f525697638", 
+        "is_file_valid": 1, 
+        "file_id": 27183119, 
+        "file_size": 9059836, 
+        "last_modification_date": 1294701478, 
+        "dataset_id": 1229446, 
+        "creation_date": 1294665957, 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AEA4A191-BC1C-E011-9912-003048678FD6.root", 
+        "auto_cross_section": null, 
+        "md5": "NOTSET"
+    }
+]

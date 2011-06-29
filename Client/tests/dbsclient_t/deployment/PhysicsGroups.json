@@ -1,0 +1,173 @@
+[
+    {
+        "physics_group_name": "ALLGROUP"
+    }, 
+    {
+        "physics_group_name": "Analysis"
+    }, 
+    {
+        "physics_group_name": "AnalysisOps"
+    }, 
+    {
+        "physics_group_name": "Any"
+    }, 
+    {
+        "physics_group_name": "BoostedTop"
+    }, 
+    {
+        "physics_group_name": "Bphys"
+    }, 
+    {
+        "physics_group_name": "Btag"
+    }, 
+    {
+        "physics_group_name": "COMMON"
+    }, 
+    {
+        "physics_group_name": "CSA07"
+    }, 
+    {
+        "physics_group_name": "DPG"
+    }, 
+    {
+        "physics_group_name": "DataOOps"
+    }, 
+    {
+        "physics_group_name": "DataOps"
+    }, 
+    {
+        "physics_group_name": "Diffraction"
+    }, 
+    {
+        "physics_group_name": "EWK"
+    }, 
+    {
+        "physics_group_name": "Egamma"
+    }, 
+    {
+        "physics_group_name": "FastSim"
+    }, 
+    {
+        "physics_group_name": "Generator"
+    }, 
+    {
+        "physics_group_name": "Generators"
+    }, 
+    {
+        "physics_group_name": "HCAL"
+    }, 
+    {
+        "physics_group_name": "HI"
+    }, 
+    {
+        "physics_group_name": "HeavyIon"
+    }, 
+    {
+        "physics_group_name": "HeavyIonPhysics"
+    }, 
+    {
+        "physics_group_name": "Higgs"
+    }, 
+    {
+        "physics_group_name": "Individual"
+    }, 
+    {
+        "physics_group_name": "JetMet"
+    }, 
+    {
+        "physics_group_name": "Maarten"
+    }, 
+    {
+        "physics_group_name": "Muons"
+    }, 
+    {
+        "physics_group_name": "NoGroup"
+    }, 
+    {
+        "physics_group_name": "OnSel"
+    }, 
+    {
+        "physics_group_name": "PFlowTau"
+    }, 
+    {
+        "physics_group_name": "PhysVal"
+    }, 
+    {
+        "physics_group_name": "Physics"
+    }, 
+    {
+        "physics_group_name": "QCD"
+    }, 
+    {
+        "physics_group_name": "RelVal"
+    }, 
+    {
+        "physics_group_name": "SUSYBSM"
+    }, 
+    {
+        "physics_group_name": "TEST"
+    }, 
+    {
+        "physics_group_name": "TOP"
+    }, 
+    {
+        "physics_group_name": "Tier0"
+    }, 
+    {
+        "physics_group_name": "Top"
+    }, 
+    {
+        "physics_group_name": "Tracker"
+    }, 
+    {
+        "physics_group_name": "Trigger"
+    }, 
+    {
+        "physics_group_name": "UCSD"
+    }, 
+    {
+        "physics_group_name": "b-physics"
+    }, 
+    {
+        "physics_group_name": "b-tagging"
+    }, 
+    {
+        "physics_group_name": "data"
+    }, 
+    {
+        "physics_group_name": "dataOps"
+    }, 
+    {
+        "physics_group_name": "e-gamma_ecal"
+    }, 
+    {
+        "physics_group_name": "ewk"
+    }, 
+    {
+        "physics_group_name": "exotica"
+    }, 
+    {
+        "physics_group_name": "heavy-ions"
+    }, 
+    {
+        "physics_group_name": "higgs"
+    }, 
+    {
+        "physics_group_name": "jets-met_hcal"
+    }, 
+    {
+        "physics_group_name": "muon"
+    }, 
+    {
+        "physics_group_name": "susy"
+    }, 
+    {
+        "physics_group_name": "tau-pflow"
+    }, 
+    {
+        "physics_group_name": "test"
+    }, 
+    {
+        "physics_group_name": "tracker-pog"
+    }
+]

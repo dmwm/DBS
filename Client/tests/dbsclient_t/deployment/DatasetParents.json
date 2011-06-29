@@ -1,0 +1,7 @@
+[
+    {
+        "parent_dataset_id": 563786, 
+        "parent_dataset": "/MinBias_TuneD6T_7TeV-pythia6/Summer10-START36_V10_SP10-v1/GEN-SIM-RAWDEBUG", 
+        "dataset": "/MinBias_TuneD6T_7TeV-pythia6/Summer10-START36_V10_SP10-v1/GEN-SIM-RECODEBUG"
+    }
+]

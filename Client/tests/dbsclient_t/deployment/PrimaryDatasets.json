@@ -1,0 +1,30 @@
+[
+    {
+        "create_by": "/DC=org/DC=doegrids/OU=People/CN=Vijay Sekhri 316706", 
+        "primary_ds_type": "mc", 
+        "primary_ds_id": 473, 
+        "primary_ds_name": "W_Tau3Mu", 
+        "creation_date": 1177086464
+    }, 
+    {
+        "create_by": "/C=BE/O=BEGRID/OU=IIHE(VUB)/OU=DNTK/CN=Maes Joris", 
+        "primary_ds_type": "mc", 
+        "primary_ds_id": 2582, 
+        "primary_ds_name": "WTau3Mu", 
+        "creation_date": 1182167828
+    }, 
+    {
+        "create_by": "/DC=org/DC=doegrids/OU=People/CN=Vijay Sekhri 316706", 
+        "primary_ds_type": "mc", 
+        "primary_ds_id": 474, 
+        "primary_ds_name": "Zantiparticle_Tau3Mu", 
+        "creation_date": 1177086469
+    }, 
+    {
+        "create_by": "/DC=org/DC=doegrids/OU=People/CN=Vijay Sekhri 316706", 
+        "primary_ds_type": "mc", 
+        "primary_ds_id": 475, 
+        "primary_ds_name": "Zparticle_Tau3Mu", 
+        "creation_date": 1177086483
+    }
+]

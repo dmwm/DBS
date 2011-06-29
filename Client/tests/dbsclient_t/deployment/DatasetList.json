@@ -1,0 +1,20 @@
+[
+    {
+        "is_dataset_valid": 1, 
+        "primary_ds_name": "JetMETTau", 
+        "physics_group_name": "DPG", 
+        "acquisition_era_name": "Run2010A", 
+        "create_by": "/DC=ch/DC=cern/OU=computers/CN=vocms39.cern.ch", 
+        "processing_version": null, 
+        "creation_date": 1274338714, 
+        "last_modified_by": "/DC=ch/DC=cern/OU=computers/CN=vocms39.cern.ch", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW", 
+        "processed_ds_name": "Run2010A-v1", 
+        "dataset_id": 474427, 
+        "xtcrosssection": null, 
+        "last_modification_date": 1274339247, 
+        "primary_ds_type": "data", 
+        "dataset_access_type": "UNKNOWN_DBS2_TYPE", 
+        "data_tier_name": "RAW"
+    }
+]

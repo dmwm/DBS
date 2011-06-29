@@ -1,0 +1,3031 @@
+[
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/754/4EEE0371-A978-DF11-866F-000423D94A20.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/74E7E343-BA1C-E011-A363-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/303/9E3CD603-F989-DF11-A722-003048F118C6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/BE6478EA-B71C-E011-B60A-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/700/9628A426-1981-DF11-A5F4-003048F118DE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1CFCD569-BD1C-E011-B50B-00261894386C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/085/12A86589-AA8E-DF11-8615-003048F1C836.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/085/468F47DD-A98E-DF11-93ED-003048F118D2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/58513EB7-BC1C-E011-A5B5-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/094/604C8355-3172-DF11-B1BA-0030487C8CBE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4EA28E06-BD1C-E011-88E8-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/919/26071C23-7583-DF11-86F3-0030487CAEAC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0076/8E0BEF86-AC1B-E011-8923-0026189438F2.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/385/1ED0B5CD-A692-DF11-AC22-003048D375AA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B0CB0070-BA1C-E011-9F29-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/441/B00E6CB7-3593-DF11-9F29-003048CFB40C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/42509900-BC1C-E011-BEB1-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/360/B27ADD2E-EA73-DF11-B962-0030487C7E18.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/B4A1E5B7-B81C-E011-B34D-002618943945.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/751/A0EDFE5B-AE78-DF11-954B-0030487CD6DA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7E92DE43-BA1C-E011-AE0E-0018F3D09634.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/635/C4810DDC-6C78-DF11-AB09-000423D94E1C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0E82A0DA-B91C-E011-A05A-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/877/A0158573-0471-DF11-A068-001D09F28D4A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7CDF8B30-BC1C-E011-93BD-001A928116DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/352/AADA2DDC-396A-DF11-BDAB-0030487C778E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/D871770B-BC1C-E011-A611-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/281/30FA46AF-8F73-DF11-9E94-0030487CD7C6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/44B45E2E-B81C-E011-A331-002618943920.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/934/0A4C29F2-7064-DF11-9F4A-003048D2BCA2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/805B6D02-BB1C-E011-A362-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/041/1849D400-3671-DF11-880D-0030487CD17C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/58844E23-BD1C-E011-89DF-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/330/FA02EFEA-C973-DF11-BBC8-0030487CD718.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/1685EB8F-B81C-E011-B74F-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/524/6A1CE032-E874-DF11-A48F-0030487C7828.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/EA7F6753-B91C-E011-91CE-0026189438E9.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/565/1C5F0CA7-0180-DF11-8955-003048F117EC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EA50D461-BD1C-E011-8927-003048678FEA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/232/A88B00B3-1E73-DF11-81A9-000423D9970C.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/232/B2A3BD69-1F73-DF11-91C4-001D09F2437B.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/12918EB8-B71C-E011-A542-00261894390E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/016/342668FD-3565-DF11-8813-001D09F24DDA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0E6C8224-BD1C-E011-8D03-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/617/7455C9A5-3C77-DF11-9D18-0019B9F72BAA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/E097D9AF-B91C-E011-BB97-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/457/1A859C2B-8E88-DF11-9C55-0030487CD7E0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/D81CF6E4-B81C-E011-B924-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/154/2632387F-2968-DF11-A6FC-000423D98AF0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/169C2BEE-BC1C-E011-94DD-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/497/E0200865-5E6B-DF11-811A-0030487C7392.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0E1B1AC6-BB1C-E011-99EA-003048679044.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/243/BAC8ED6E-2173-DF11-A9AA-001D09F2AF1E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/2EEAF6B7-B71C-E011-B8DB-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/124/74B45366-848F-DF11-BE0D-003048F110BE.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/124/605D28C8-4F8F-DF11-89E8-001D09F2AF96.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/40302C72-941B-E011-BF87-002618943821.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/944/AE8FA8FE-9364-DF11-BE32-001D09F24934.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1E1BAD8B-BC1C-E011-B3EC-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/432/409B7A57-297F-DF11-AA95-00304879EDEA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F0438329-BC1C-E011-B851-0026189438E7.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/042/425A5734-F58D-DF11-AF96-003048F118C6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/40DBCD8D-BC1C-E011-B3F7-0018F3D095EE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/256/5896277A-7069-DF11-BABD-0030487C778E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/E8282DAF-B91C-E011-9B17-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/560/EC841B25-6175-DF11-8F6E-0030487A17B8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/F0B2A379-B91C-E011-94B5-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/289/BAB541BD-BE73-DF11-8C4C-0030487C8CBE.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/289/1295DA48-BD73-DF11-BB0A-0030487C7E18.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/D09DE126-B81C-E011-A4AA-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/169/76C79CA0-0490-DF11-AC77-003048F117B6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2A993325-BD1C-E011-922E-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/561/44AE6132-2C6C-DF11-AB0E-001D09F2AF1E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/8C41F87D-BD1C-E011-9B95-001A928116DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/937/CA61454F-7264-DF11-BAA9-0015C5FDE067.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/937/7C3BF139-7364-DF11-9231-0030487CD7E0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4EB2BA84-BC1C-E011-9C27-0026189438E7.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/370/1224EA33-6B87-DF11-AA69-001D09F29321.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0076/88A7F957-A41B-E011-8748-0018F3D095F0.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/871/BC166ADC-9C9A-DF11-A82C-001D09F24934.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/42E7946F-BA1C-E011-A710-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/402/76F60159-2974-DF11-8873-000423D987E0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/0E007EE4-B81C-E011-BF99-00261894386F.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/734/321A9786-9470-DF11-BDB9-001D09F29538.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/734/3C2CC117-9570-DF11-85FF-001617DBD316.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A809212D-BB1C-E011-B968-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/020/1A417449-5E70-DF11-981C-001D09F27067.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/84907E10-BD1C-E011-8318-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/244/EE9E5BF1-F468-DF11-ADFE-000423D99BF2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0CB0C465-BB1C-E011-B6AF-00261894383F.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/525/F4D3F3A5-4775-DF11-93BE-0030487CD178.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/4ED05754-B91C-E011-BCDB-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/825/C2E189D6-E363-DF11-AF0C-000423D991D4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/805EFEAF-BA1C-E011-BFA6-00261894391D.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/728/7EE95AA1-7E78-DF11-A940-0030487A3232.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2CAB680C-BA1C-E011-A1D3-0018F3D09634.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/880/3EF34A3C-BC9A-DF11-A5E1-003048F117EC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/16396911-9D1B-E011-B60F-003048679228.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/271/6E8D993A-5586-DF11-A368-003048F1C424.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/54D576B8-B71C-E011-B7A4-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/496/C4AD659F-BF74-DF11-B951-0019B9F72BFF.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/02F59754-B91C-E011-838B-00261894390E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/960/B45F635E-1F7A-DF11-8BE2-0030487C5CE2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/9AA122DE-BA1C-E011-B7C8-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/331/F4EC17EF-D669-DF11-8F2F-000423D9A2AE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/66D32DC5-BB1C-E011-9434-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/909/90B68A44-4A64-DF11-BFC3-0030487CD7EE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/180BE57B-B91C-E011-8DB8-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/818/A4AFDD65-5A6E-DF11-9A5B-000423D98930.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/647F9CC5-BB1C-E011-BF37-0018F3D09680.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/428/6420C647-8B6A-DF11-9CCE-000423D99614.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/6E84CB68-BC1C-E011-976C-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/013/48963628-2C65-DF11-A39F-001D09F25208.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0E4A3D04-BD1C-E011-AC36-0018F3D095EE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/036/EA931066-2771-DF11-B0F1-003048D2BB58.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C2748E42-BD1C-E011-BA12-001A92971B9C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/124/98B272A1-448F-DF11-975A-00304879FA4A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0076/A82B52EB-AA1B-E011-9729-001A92810ADE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/054/0663E4B1-5E8E-DF11-866A-001617C3B706.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/12B2767C-BD1C-E011-B3FF-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/294/4C303391-9886-DF11-8BE4-003048F11942.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/A28A2AE8-B71C-E011-9F82-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/407/96C78963-2888-DF11-B407-003048F024C2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/0A5A33BB-B81C-E011-9CE0-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/363/D8839134-3E87-DF11-B7C5-001617C3B6CE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/262FE149-B81C-E011-B8A1-003048679044.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/126/9E849E74-5E8F-DF11-A1F7-001D09F2AD4D.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/2ABCFA50-991B-E011-AC58-003048679168.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/378/4C2D5B69-5392-DF11-BBF5-0030487C7392.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7CCA47FE-BA1C-E011-ACDA-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/563/6697219C-0180-DF11-BFC3-0030487CD6F2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/5491D24F-BD1C-E011-B430-0026189438E7.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/451/AC496F38-5C7F-DF11-BAB9-003048F1C424.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2A8A2165-BC1C-E011-B15B-002618943884.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/166/6C03CE69-3C68-DF11-B8C4-0030487CAF5E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/D47AB8EB-BD1C-E011-A066-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/030/BAE81D58-3071-DF11-85DB-001D09F24353.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B8A3A641-BD1C-E011-BA52-00261894392B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/715/143D3FCA-2E81-DF11-8852-0030487C6090.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/16820D99-BD1C-E011-B150-002618943884.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/168/E0FF91B6-0190-DF11-A1A7-0030487C912E.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/168/D604A4E1-0090-DF11-A270-003048D37514.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/42BFC612-BD1C-E011-A085-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/252/8EED1500-2469-DF11-B43E-00304879EDEA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4AD84E61-BB1C-E011-827E-003048678FEA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/972/B8A2C95B-F76F-DF11-BB03-001D09F295A1.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E02FBE8F-BC1C-E011-BB54-001A928116DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/300/4097531C-9C86-DF11-BE45-003048F117B4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/5032C8E5-B71C-E011-8006-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/739/408F2690-6C81-DF11-A8AD-001D09F2525D.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/739/B6C68E86-6A81-DF11-97C7-003048D2C16E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/1ED0BE39-9E1B-E011-B08D-001A92810AD2.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/931/1CF6E7E0-7064-DF11-ADBC-000423D6B42C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C63ED9D6-BA1C-E011-BFEE-001A928116DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/724/6A985470-7A78-DF11-BAD9-0019B9F730D2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/269EB617-BA1C-E011-8F21-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/290/2273BAC6-9E69-DF11-A13C-0030487A195C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/6CD0518A-BB1C-E011-83B4-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/007/B4DA67F8-2465-DF11-B17E-0030487CD7CA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A6443F42-BD1C-E011-AEB6-002618943884.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/223/BA50D518-1C73-DF11-A467-0030487C6A66.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/147B02B8-B71C-E011-9F05-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/821/3CD6527E-4479-DF11-BB6F-000423D98844.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/583DDC9D-BA1C-E011-867A-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/808/92F044D4-8F70-DF11-AFB0-001D09F254CE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/D2489388-BB1C-E011-BB96-00261894388D.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/702/C82A5FD5-5D7B-DF11-A59C-001D09F24EAC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BE3B8BE0-B91C-E011-B3EB-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/055/588397E0-328E-DF11-B17D-001617E30F48.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/5AA301D7-BC1C-E011-90B7-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/466/660AF07A-B088-DF11-A8E0-003048F1BF66.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/08219219-B91C-E011-805D-0018F3D09680.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/785/92585764-4470-DF11-A9AC-001D09F2525D.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A0636F8C-BB1C-E011-BB48-0026189438E7.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/086/A47845F1-3667-DF11-8D32-000423D99EEE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/80EFE85B-BB1C-E011-9F16-001A928116DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/865/BAA9D6F5-999A-DF11-946F-001617E30CC2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C4101049-BA1C-E011-8ED4-001BFCDBD166.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/295/58E74FBE-9A86-DF11-B091-003048F110BE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/582416E9-B71C-E011-89B2-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/559/82B014A1-5C75-DF11-8059-001D09F2438A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/F062697C-B91C-E011-AD45-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/788/BE4C5123-418B-DF11-A31F-001D09F29597.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/D2F49B48-BA1C-E011-AA48-001A92971B9C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/372/CC0CB479-9087-DF11-9174-001617C3B66C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/562C1B97-B81C-E011-8920-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/998/543293D0-6E66-DF11-809A-001D09F2438A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/8028FD25-BD1C-E011-B05D-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/966/0AC98960-FC64-DF11-9989-001D09F29597.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/18348E29-BC1C-E011-89D9-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/514/FAB241C9-AA7F-DF11-ACB4-000423D94908.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1E17358F-BC1C-E011-9C0E-003048679044.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/527/9ADFCA93-0375-DF11-B8BB-0030487C7E18.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/38795956-B91C-E011-9122-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/077/4605DBDE-8A66-DF11-A423-0030487CD16E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3076728C-BB1C-E011-B91D-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/728/C020BBF2-4A81-DF11-A5E9-0030487CD7C0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C2D4B0AB-BD1C-E011-BE20-0018F3D09634.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/562/92469F34-0680-DF11-9664-00304879BAB2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/34E525EC-BC1C-E011-9AD8-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/081/62AE0D56-E871-DF11-A4CE-000423D951D4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7EB7D2B8-BD1C-E011-A68D-00304867900C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/333/1CBA193D-DD69-DF11-B5C1-000423D985B0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4CCFD5C7-BB1C-E011-A910-0018F3D095EE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/704/6E0B088A-517B-DF11-B9E5-00304879FC6C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/087ADCDE-B91C-E011-84F8-00261894388D.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/517/26BBAF50-DC74-DF11-9D8B-0030487C6A66.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/507E8549-B91C-E011-AA96-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/637/D67A1019-6D78-DF11-A6F4-0030487CD13A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/521E8AD9-B91C-E011-A44C-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/977/EAF72183-9B8D-DF11-87BB-0030487C8CBE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/ECDB30A3-BA1C-E011-A773-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/939/F62A4708-9483-DF11-A309-000423D98B6C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/5274222A-BC1C-E011-9935-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/139/4A99BF9F-6F8F-DF11-9FBD-003048F11942.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B69CE3FD-BD1C-E011-B83C-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/739/64FBBC84-6581-DF11-8CCE-000423D987E0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0076/AE447C64-B11B-E011-830F-002618943963.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/394/124A7454-B792-DF11-979D-001D09F23A34.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B28B08C3-BB1C-E011-96BA-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/266/6E177661-4E73-DF11-A56E-001D09F23C73.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/7A48C327-B81C-E011-BBF0-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/400/FCC095B1-646A-DF11-A9F5-0030487CF41E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4453045E-BC1C-E011-95EA-0018F3D095EE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/781/8293FEA4-3D8C-DF11-9D8C-0030487C7392.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/781/C2560B8F-3E8C-DF11-8E2C-0030487CD7C0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0631501F-BA1C-E011-BE6C-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/718/360304A8-7A78-DF11-9E2C-001D09F25401.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0819A616-BA1C-E011-B4C4-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/489/E2A23D04-A17F-DF11-B165-0030487A1990.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3E76628D-BC1C-E011-AFEB-00261894386C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/506/8C680483-6E6B-DF11-9D09-000423D9890C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/622B32C1-BC1C-E011-A097-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/125/DEFDCA0F-568F-DF11-ACC7-003048F024DC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/86ACD4BF-BC1C-E011-B641-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/215/1EB944C6-8D68-DF11-95C4-0030487CD840.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/94D4C206-BB1C-E011-9091-0026189438EF.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/133/9C81092D-6D8F-DF11-84BA-003048F1BF66.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/8408A0AD-BD1C-E011-BB3E-002618943884.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/767/B2C71592-0471-DF11-8E14-001D09F29538.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4E39D25F-BB1C-E011-9ADA-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/305/9E393C18-A386-DF11-AE6D-003048F0258C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/0EA18E24-B81C-E011-8CCD-002618943960.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/062/EAE0B6D0-6E71-DF11-ADCB-0030487CD17C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/32F9C985-BD1C-E011-B390-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/724/E6B193E8-5181-DF11-9B39-003048F1C424.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/942873A0-BD1C-E011-90AD-00248C0BE018.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/341/E02B1D07-DA73-DF11-84D5-00304879BAB2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/12E95890-B81C-E011-B49D-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/164/7616B1BF-7272-DF11-AA8D-001D09F2AF96.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7CC28828-BC1C-E011-98A6-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/545/AE9B4510-D77F-DF11-8A88-0019B9F730D2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/164CB402-BB1C-E011-AF69-0018F3D09634.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/365/92851B08-1092-DF11-B63C-001617E30CC8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4E55C28F-BB1C-E011-9596-001A92971BB4.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/524/6CAB13B1-BD7F-DF11-BBFE-003048F1182E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2043B7D4-BC1C-E011-97A0-00261894386C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/264/D8B7F984-4273-DF11-97B8-000423D94E70.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/6E5A5526-B81C-E011-A37F-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/448/4E228317-537F-DF11-A733-0019DB29C5FC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/08A5AC27-BC1C-E011-9B51-00304867900C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/297/CA9D24C1-9A86-DF11-BE39-003048F1C832.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/EC61B4E7-B71C-E011-B308-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/931/5072F40F-067A-DF11-99E8-00304879BAB2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/9AC3ECDD-BA1C-E011-9983-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/993/2C8602EA-0B65-DF11-A039-00304879EDEA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/842F85C5-BC1C-E011-909F-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/455/4CF23BA8-8C88-DF11-8AC5-001617E30F48.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/CE1AE5E3-B81C-E011-B0C8-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/248/4409CFD2-0C69-DF11-A62A-0030487C6062.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/860B7963-BB1C-E011-AECF-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/236/96A70804-C668-DF11-8C37-0030487C635A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1C81462B-BB1C-E011-838B-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/878/C6F252CD-B49A-DF11-926F-001D09F29849.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/8CEE1B6F-BA1C-E011-8614-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/040/945229CC-3F71-DF11-ADD6-0030487D05B0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C6F3790B-BD1C-E011-9EC4-001A92971BB4.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/997/C2FA6DD5-6266-DF11-9DAE-000423D95220.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/6AE9CB33-BD1C-E011-ACD9-0026189438E7.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/694/20A9A6F4-FC80-DF11-B6C7-003048F1C424.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A868D972-BD1C-E011-B404-0018F3D0968A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/066/846FDC57-8071-DF11-A94D-000423D94A20.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1A538EA7-BD1C-E011-B4E5-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/829/F2269A69-616E-DF11-80FF-0030487C90EE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/90EF01C9-BB1C-E011-BAC5-0018F3D0968A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/821/02703157-D963-DF11-A424-0030487CAEAC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/70654BA3-BA1C-E011-8B02-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/094/1E6BC253-AF84-DF11-98FF-003048F118E0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/6E09481B-BD1C-E011-8286-00261894392B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/734/023F8052-9278-DF11-B4D1-001D09F2A49C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CAB37215-BA1C-E011-92CF-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/786/C21AC3C2-256E-DF11-A341-001D09F23D1D.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7E916E8B-BB1C-E011-BF3B-003048678B08.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/407/623AFFDC-2C74-DF11-94D3-0030487C5CE2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/809599E4-B81C-E011-BDA6-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/171/CCE73370-0490-DF11-8C0C-003048F118DE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/5456A2E8-BC1C-E011-8215-0026189437E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/887/C0B538C9-019B-DF11-9BB3-001617E30D52.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/62F6AD6D-BA1C-E011-8687-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/793/50BBB663-3479-DF11-A4A3-0030487CD718.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/DA02EA6B-BA1C-E011-9DED-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/066/BE50C5D6-6266-DF11-BAE6-000423D94494.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F28D38E6-BC1C-E011-807F-00261894387C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/488/18147DEB-9B7F-DF11-9D0E-0030487CD17C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B40CA88B-BC1C-E011-A4FE-00261894392B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/768/7817B309-D778-DF11-81EB-000423D944F8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2EB07340-BA1C-E011-BBE9-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/425/00DEBDF7-4888-DF11-BC71-003048F1BF66.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/EA8871B9-B81C-E011-AF60-002618943967.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/037/B6934065-2771-DF11-8C29-001D09F2426D.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B8CB8BEE-BC1C-E011-9AE2-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/346/B0087783-336A-DF11-B95A-0030487CD7C6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BE968B00-BC1C-E011-B8FE-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/773/E68D8421-2279-DF11-8F2A-0030487CD7C6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B2134942-BA1C-E011-A66A-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/087/FC549E03-0A72-DF11-B04F-001D09F29538.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F69B2092-BC1C-E011-9190-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/652/2ED5DFF3-B66D-DF11-802C-0030487C5CE2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/D6FF10A1-BA1C-E011-A9BD-00261894393C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/255/D62054FE-2A69-DF11-868B-0030487A1FEC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/42053164-BB1C-E011-B341-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/936/040E78A3-7364-DF11-8BDC-000423D33970.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0291B78B-BC1C-E011-9DEF-0026189437E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/156/0C1B104D-C98F-DF11-8D99-0030487D0D3A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/FED9EDF0-BD1C-E011-9B4F-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/068/B882EE84-7D66-DF11-8925-0030487C90C2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/50316D66-BB1C-E011-807A-001A92811730.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/561/B8AC803F-6175-DF11-8656-0030487CD76A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/644EF37E-B91C-E011-8C0E-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/942/78D212CB-0D7A-DF11-9CFB-0030487CD7EA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/025C2CDA-BA1C-E011-8CC3-00261894386C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/739/F259386A-6881-DF11-A9EE-0019B9F730D2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0076/5CC40560-B31B-E011-B506-002618943951.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/747/C8769C83-7F81-DF11-B8B6-003048F024DC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/B2A78C32-9E1B-E011-8D95-002354EF3BDB.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/909/8630097A-F76F-DF11-B50D-0030486780B8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/40EA8D28-BC1C-E011-8348-0026189438DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/582/8E85EDE3-EF6C-DF11-9A25-0030487C5CFA.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/582/F892EE2D-F16C-DF11-8DD8-000423D98634.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/80690A89-BB1C-E011-B92F-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/058/44BC7C38-B865-DF11-AACE-001D09F2432B.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EA9C4C62-BC1C-E011-8879-003048678FDE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/455/925C8B05-667F-DF11-8DAB-0030487CAEAC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/6AB33664-BC1C-E011-8C46-001A928116DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/069/5EF71A7A-9071-DF11-B93D-0030487CD77E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4EAEA92C-BB1C-E011-BB75-00248C0BE018.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/515/243486E3-D26B-DF11-AE5D-001D09F253C0.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/515/C65494BA-256C-DF11-B6D6-0030487C6090.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/515/E4371398-1D6C-DF11-B4B4-001617E30E28.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/28E28DAF-B91C-E011-9A2F-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/955/C2E6F137-D364-DF11-821E-0030487C6A66.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/08A04192-BC1C-E011-A816-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/978/B4F7AE25-F76F-DF11-8457-000423D174FE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/34F34AC4-BB1C-E011-9702-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/124/42DBFA44-FB8E-DF11-AB3A-0030487CD6F2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/86443933-9E1B-E011-A088-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/694/62E6E886-7A78-DF11-B36E-001D09F24600.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/8483BFE4-B91C-E011-A3D3-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/426/98E65B45-167F-DF11-8081-003048F1C836.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4A1E8228-BC1C-E011-948E-0026189437E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/331/2C78993F-4791-DF11-A9DF-001D09F26509.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/DC7FC8E1-971B-E011-B200-0018F3D096A6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/521/D2BD4FED-E174-DF11-8A74-000423D98AF0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/16B99853-B91C-E011-8803-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/124/000204FF-0B68-DF11-9203-0030487C8CBE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/8E5D4CC7-BB1C-E011-9F22-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/495/8CDF6F28-5A6B-DF11-9329-000423D991D4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AA9F962E-BB1C-E011-83C2-001A92811730.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/482/D2F1472F-B574-DF11-AEC5-001D09F2B2CF.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/E853EE18-B91C-E011-A39F-0026189438B3.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/796/DE6A6990-558B-DF11-AC53-003048F117EC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AC03C941-BA1C-E011-9218-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/105/F061EAD0-6C72-DF11-A658-000423D944FC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F6827794-BD1C-E011-8341-0018F3D09634.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/091/7A1A3109-7567-DF11-AA70-000423D9A2AE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4028FD83-BD1C-E011-B6B9-00248C0BE018.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/499/06AEFEAA-BF74-DF11-B4C8-001D09F24DDA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/90A57655-B91C-E011-B4DC-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/927/E4ABA978-F76F-DF11-BAE4-003048D2BDD8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4A03F962-BC1C-E011-839C-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/626/4A9BE699-3C77-DF11-86CD-0030487CD180.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/F268D8BE-B91C-E011-B0E6-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/418/1CB3A51A-8E6A-DF11-B7F6-00304879FBB2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/44932A66-BC1C-E011-87C6-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/692/2281AE76-6578-DF11-B010-001D09F28F11.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/6056B4DC-B91C-E011-8FB6-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/433/6C88633A-266B-DF11-AF2D-0030487CD7B4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/681E6667-BC1C-E011-884F-0026189438E7.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/618/544432C3-3C77-DF11-B0DC-001D09F242EA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/2ADB9FB1-B91C-E011-A8C0-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/483/20E7D7B6-4A6B-DF11-B966-000423D98E6C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/FE3606C4-BB1C-E011-AE42-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/311/340F9102-B169-DF11-BFF5-0030487C7392.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1C5014C5-BB1C-E011-BB2F-00261894396E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/714/2E20A6CD-3581-DF11-B949-0030487CAF5E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A83C5BA4-BD1C-E011-93EE-0026189437E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/483/84FA1015-B574-DF11-B6A0-001D09F24EAC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/FAF5031D-B91C-E011-A86B-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/436/A452131A-8674-DF11-8AAA-0030487C8E02.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/2A9D1B1A-B91C-E011-9309-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/394/7E7C3211-0888-DF11-A580-001D09F25393.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/D40B8192-B81C-E011-B3C1-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/981/50216F56-457A-DF11-8C7D-001D09F2512C.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/981/AAA5A6AD-467A-DF11-B88B-001D09F28EA3.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CA0B6CE2-B91C-E011-BAF0-0018F3D095EE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/314/8253B356-B769-DF11-BF60-0030487CBD0A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EC7CDBC4-BB1C-E011-BF05-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/551/CA800265-5675-DF11-867E-000423D9970C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/EA1E2079-B91C-E011-99C5-0026189438E9.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/302/927D3CF3-9E86-DF11-9A91-0030487CD716.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/AE8AB5E7-B71C-E011-A204-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/379/9079215E-5892-DF11-BFDD-0030487CD6DA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/5ABB1205-991B-E011-941A-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/794/DC6C085F-4470-DF11-86B0-001D09F244DE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F285408D-BB1C-E011-BD4E-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/412/E6551B4F-037F-DF11-ACBF-000423D98B6C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A622ADFD-BA1C-E011-AEA9-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/632/7E00E79E-8E77-DF11-8D33-0030487C7E18.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/D2166ADB-B91C-E011-A959-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/789/26411524-488B-DF11-8459-0030487A195C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/DE577244-BA1C-E011-B660-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/026/5607FF6F-1D71-DF11-AABD-001617E30F4C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/D881C73B-BD1C-E011-BD01-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/951/F6F0CD82-B964-DF11-B75B-000423D99996.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B2AF7C8E-BC1C-E011-B644-0018F3D09698.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/123/F274DF97-3C72-DF11-822A-0030487CAF0E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/72250B7E-BD1C-E011-A5EF-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/782/9CF4DE8D-216E-DF11-B8E9-000423D985B0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EA2C368A-BB1C-E011-9BE9-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/397/428A23BC-1C74-DF11-94E5-000423D99BF2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/EEC1B4E8-B81C-E011-93C5-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/911/1E64925C-F76F-DF11-8C10-000423D99AA2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EA567827-BC1C-E011-96E6-0030486791AA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/492/460CE42A-616B-DF11-909A-0030487CD76A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/06BFBB40-BD1C-E011-B7CB-003048679044.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/485/90E53616-B574-DF11-A459-000423D33970.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/08E5DA1B-B91C-E011-97D3-0018F3D096EA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/949/566DE9D9-B064-DF11-A836-0030487CD812.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/ECBCA52E-BB1C-E011-A6B3-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/245/B6C7815D-2673-DF11-9F2D-0030487D0D3A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/C2F70FE4-B71C-E011-B97B-0026189438A7.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/485/D6017FA3-4F6B-DF11-8C43-0030487CD7C0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/FA11FCBE-BC1C-E011-B327-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/528/7CC477E5-3875-DF11-AC1B-000423D99896.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/0E370B7A-B91C-E011-8F5E-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/124/7C723E81-2C8F-DF11-857B-001D09F24664.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/AA7537D8-961B-E011-B335-0018F3D09616.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/119/30F46D05-E98E-DF11-8DC0-0030487A3232.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/84515304-BB1C-E011-812D-00261894396E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/363/74D3E75E-1D9B-DF11-B5CC-003048F118C2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/2CDEC1B8-B81C-E011-864B-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/393/28550B4F-506A-DF11-AEB4-0030487CD77E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/36393D8A-BB1C-E011-8171-0018F3D09680.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/023/8EB84DE6-6A70-DF11-9E8E-001D09F29533.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/287EE12C-BB1C-E011-B6C4-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/065/EC7191C6-2566-DF11-9D3A-001D09F2A49C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/24A5E28E-BC1C-E011-BB62-003048678FDE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/464/4AD50384-2F6B-DF11-A663-000423D98B5C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/000E8C8C-BC1C-E011-B92B-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/893/50D1E78F-996E-DF11-AEB3-000423D996B4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E22B49C6-BB1C-E011-8FD9-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/469/B40EB9E2-406B-DF11-91CD-0030487CD6D8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CE27670F-BD1C-E011-917D-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/086/5CB48E03-0A72-DF11-80C6-001D09F2AF96.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/DC133ED4-BD1C-E011-97CB-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/664/A20B57F1-9498-DF11-9701-003048F1C420.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/D077EC77-B91C-E011-8F5A-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/760/98261441-0371-DF11-8160-001617E30E28.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/22FF1A5F-BB1C-E011-B616-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/957/A2EAF287-157A-DF11-94B2-0030487C60AE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/628EB7CB-BA1C-E011-AC09-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/059/3A0030A5-448E-DF11-B4C3-001D09F251FE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/C28BDE57-9C1B-E011-9481-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/436/FC6B4F68-5388-DF11-8675-0030487A3232.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/FE80C2B6-B81C-E011-913F-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/973/F07D5CE0-8B8D-DF11-9A82-003048F11C58.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BE2314A1-BA1C-E011-97C4-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/889/DC15C1CD-4D8C-DF11-9156-003048F118D2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/DC5C17A1-BA1C-E011-B350-0018F3D09680.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/340/806CFE74-CD73-DF11-B45D-00304879BAB2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/D6C69D90-B81C-E011-B227-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/047/5077C77D-5A71-DF11-A199-0030487CD6DA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/981D6BF6-BC1C-E011-8DB0-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/035/CE9EEC36-2771-DF11-BC95-000423D98834.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C210E955-BD1C-E011-A056-001A92811730.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/510/3EDB5C91-D474-DF11-854F-0030487CD7C6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/7A803E55-B91C-E011-82D8-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/784/16A1B41B-2E8C-DF11-A6FC-003048F1C58C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7E55EE1B-BA1C-E011-B891-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/352/5E368480-E491-DF11-A12E-001D09F24691.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/DE3FC35F-BB1C-E011-AF09-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/749/9A532591-A381-DF11-9139-001D09F2910A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E02A6903-BC1C-E011-8A46-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/083/4649CAC4-F771-DF11-9927-0019B9F72BFF.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C4C674C1-BD1C-E011-99D4-0026189437E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/856/5636AC63-4470-DF11-A4B2-00304879EE3E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BCEBA001-BC1C-E011-8EB8-001A92971BDC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/480/FA770102-436B-DF11-A650-0030487CD7EE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/58CD06BE-BC1C-E011-8CD5-00261894392B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/061/8601598F-0766-DF11-9B06-000423D6006E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/48F93569-BC1C-E011-86B6-00261894383F.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/729/1CC373C6-8778-DF11-BA46-000423D94494.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/38A6CD18-BA1C-E011-B452-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/307/82857617-A386-DF11-8245-003048F1110E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/80C91D28-B81C-E011-952C-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/771/B8267CF0-0271-DF11-8E78-0030487A1884.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/362F3461-BB1C-E011-ADF5-0026189437E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/787/DE520546-308B-DF11-A152-003048D2C1C4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E6CE4218-BA1C-E011-A5B7-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/743/4E20DBC8-7181-DF11-B1FC-001D09F244BB.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EC49C1B0-BD1C-E011-B3C6-002618943943.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/529/14364813-EA6B-DF11-816A-000423D9A212.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/529/30CAE50F-2C6C-DF11-BF35-001D09F2512C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E2C26D36-BD1C-E011-B9A9-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/960/D804C07B-C464-DF11-867B-000423D98920.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3C35A5BF-BC1C-E011-AFEB-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/103/5CC90679-E584-DF11-91B2-0030487CD178.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/84FEB2CC-961B-E011-94A7-002618943966.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/859/723D9E71-4470-DF11-933F-0030487CF41E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/9ED3FCFE-BB1C-E011-AB85-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/731/44A588CA-8778-DF11-9F7A-001D09F24664.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3A93C018-BA1C-E011-B2AA-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/872/F2883A03-0070-DF11-B31D-000423D9880C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2275DF00-BC1C-E011-8D5F-003048678FEA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/498/E2119B07-C374-DF11-92D7-0030487C912E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/5A445158-B91C-E011-A5B6-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/335/6E96FA58-2F6A-DF11-B15C-000423D98834.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/425D21C6-BB1C-E011-B69B-00248C0BE018.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/529/D6165AB3-0E89-DF11-8613-001D09F27067.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/EA9FC417-B91C-E011-9CDE-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/181/B0BBE674-0D90-DF11-9D1D-00304867342C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/28DF627F-BD1C-E011-B0C9-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/019/B08B94FE-5C70-DF11-B2EC-0030487CAF5E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B678E4EF-BC1C-E011-8793-00261894386C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/088/1C573B01-1B72-DF11-930F-001617C3B69C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/6E16BF8D-BC1C-E011-BE2D-0018F3D0968A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/563/2E3FDD4E-B971-DF11-904D-000423D6B444.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/78009726-BC1C-E011-824C-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/363/FAEFE4AB-436A-DF11-A067-000423D99996.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E2851500-BB1C-E011-ACA8-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/056/FE536554-2F8E-DF11-B9BD-0030487A3DE0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/6CBF04A3-BA1C-E011-9038-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/010/B6A485C2-2065-DF11-B0B8-000423D9880C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/72E734D4-BC1C-E011-9A68-003048678B08.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/089/0CB2C0E5-1A72-DF11-BA12-000423D9863C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A2F05D26-BD1C-E011-8C85-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/712/0E325851-7178-DF11-AF01-001D09F252F3.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/24E7C8E1-B91C-E011-82CA-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/031/F8872691-3971-DF11-9C7E-0030487C778E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A098930E-BD1C-E011-ABEC-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/836/DA6E9460-F563-DF11-905F-000423D98834.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1A24F9A0-BA1C-E011-831A-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/239/26472747-E468-DF11-80AD-0030487A18D8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CA642330-BB1C-E011-A8BC-00261894392B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/239/4AD7948F-FD85-DF11-9533-001617C3B69C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/028AB148-9F1B-E011-BDE2-0018F3D096A6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/977/36B4234F-F76F-DF11-A0D9-001D09F242EF.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4EEB9D90-BC1C-E011-A717-001A92971B9C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/039/56349215-3F71-DF11-AD8F-0030487CD7C0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/D6FD062A-BB1C-E011-A03E-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/705/C03F6F53-597B-DF11-A3A5-001D09F24353.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A47D66E2-B91C-E011-9856-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/237/30C4E2FF-C568-DF11-8889-0030487CD184.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/90A0CB2B-BB1C-E011-91C1-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/554/9C29DA99-F67F-DF11-923F-001D09F244BB.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/16AAAAC0-BC1C-E011-8168-0026189438DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/783/FA63C890-308C-DF11-9908-0030487C7828.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/783/64D3F546-3C8C-DF11-AC62-000423D9A212.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/783/36A5C4F1-3C8C-DF11-9B77-0030487CBD0A.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/783/6A56A868-3E8C-DF11-8A4E-003048F11942.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/5ABFB117-BA1C-E011-AED7-00261894388D.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/631/7E28B70D-8277-DF11-9728-000423D98634.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2809C6B9-B91C-E011-AF88-0018F3D096C6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/073/9E1FB638-7F8E-DF11-8300-001D09F25041.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/766840B7-BC1C-E011-BF26-0026189437E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/699/4E546C06-0B81-DF11-803B-003048F024E0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BE9EE08D-BD1C-E011-BB0D-0018F3D0968A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/409/98678A3D-3D88-DF11-AF2C-0019B9F581C9.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/5416D0B8-B81C-E011-9ADC-00261894390E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/999/404ECA7C-F76F-DF11-8327-001D09F2AD7F.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/623E0464-BC1C-E011-AB39-001A92971BDC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/100/66FD9543-DA84-DF11-9929-001D09F2426D.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/9E78C9A4-BD1C-E011-A9CA-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/297/EE5565C7-A869-DF11-84CD-000423D944F8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/208F138D-BB1C-E011-BD72-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/939/4AF5616D-7464-DF11-BD53-0030487CD180.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/922D9090-BC1C-E011-A377-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/935/44D4FEDC-7064-DF11-93C1-000423D6C8E6.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/935/481B5445-7264-DF11-994B-001D09F2AD84.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B0926394-BC1C-E011-BDCF-0018F3D096C6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/331/CCDF5319-5191-DF11-B5B6-001D09F24F1F.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/D874BECE-961B-E011-BE2D-0018F3D09634.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/486/2EE72308-C374-DF11-BDDB-0030487A322E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/262B9318-B91C-E011-BF57-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/433/60597F91-7674-DF11-9781-001D09F27003.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/66C4661B-B91C-E011-B196-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/976/B8EB672D-948D-DF11-BEDC-003048D3756A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0CAE53A2-BA1C-E011-B357-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/978/544504EE-FB64-DF11-B659-001D09F24763.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/96864A02-BB1C-E011-9D3F-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/405/0C70FDDB-1D88-DF11-90DE-000423D9997E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/AA79ED91-B81C-E011-B7A4-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/806/CE45A3B3-0671-DF11-8648-000423D6B42C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1C278389-BB1C-E011-91C8-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/329/90CB8FDF-C169-DF11-AC6E-0030487CAEAC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BC4777C5-BB1C-E011-AF48-001A92971BDC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/365/348FE894-4287-DF11-91A3-001D09F2B2CF.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/AAADC54E-B81C-E011-9CA6-00261894393C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/790/0A665491-286E-DF11-B6E1-000423D33970.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/74E8B489-BB1C-E011-B66D-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/100/C27D27BD-CF84-DF11-94FE-001D09F2437B.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/BCF25EDA-971B-E011-99A9-0026189438F9.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/829/92B6C844-EC63-DF11-B6A6-0030487A18A4.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/829/429E6D95-EB63-DF11-B907-0030487CD178.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3CE66AA0-BA1C-E011-9D1E-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/995/EE677136-F76F-DF11-8056-001D09F24024.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A6C214DB-BC1C-E011-AC88-0018F3D09698.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/842/A675CE52-4470-DF11-B5CD-001D09F251BD.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/842/32351AE3-4470-DF11-ACE9-0030487A1884.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B88479C6-BB1C-E011-9F02-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/869/5CB8ACD5-9C9A-DF11-B7C9-001617C3B778.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0678D66F-BA1C-E011-9BE8-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/284/129D0601-8C86-DF11-B842-003048F11C5C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/644DE6B6-B71C-E011-AED0-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/289/A01CD4A7-9569-DF11-B910-000423D98930.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F01B068E-BB1C-E011-B91E-00261894393C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/077/8AE68654-8A8E-DF11-8ABF-0030487C5CFA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/9C7E45B7-BC1C-E011-A842-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/968/5201359B-688D-DF11-9ABA-001617C3B69C.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/968/72AC0B71-698D-DF11-97E9-001D09F2462D.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CC1015A5-BA1C-E011-BF01-001A92811730.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/044/A075641F-FC8D-DF11-BD00-0030487CD6D8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CCD6D573-BA1C-E011-A903-001A92811730.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/923/689B6B9B-8683-DF11-B5D0-0030487C90C4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/82CD7F2F-BC1C-E011-BD7C-0018F3D095EE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/304/50C76E62-A086-DF11-869A-003048F118E0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/C2BBD6EA-B71C-E011-8B96-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/872/A4568181-9F9A-DF11-98BF-001D09F23A20.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C8E16D70-BA1C-E011-B5F5-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/803/9C5DAAE6-3879-DF11-8B9D-0030487CD7CA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/8417E66A-BA1C-E011-8948-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/921/4235E23C-8C83-DF11-AA58-001617DBD5AC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BA44A604-BC1C-E011-9286-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/971/D2A72C64-7C8D-DF11-AEF7-003048678098.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BA61B1A6-BA1C-E011-9DF7-001A92971BDC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/868/A44B64E6-999A-DF11-98F2-003048F1C58C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F4D14C43-BA1C-E011-9688-003048679044.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/779/EE49E06E-118B-DF11-89FA-001D09F28E80.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1C7AE219-BA1C-E011-A87C-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/085/D0A296FE-B484-DF11-962D-0030487C8CB6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BE645625-BD1C-E011-868B-0018F3D09698.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/939/7E6F9D59-F76F-DF11-B0A6-001D09F26509.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E22FAC6D-BC1C-E011-BA66-002618943983.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/079/EA807026-9D66-DF11-AD19-000423D94C68.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0A00F373-BD1C-E011-8499-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/619/4AF772BB-3C77-DF11-97F9-0030487C6088.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/8CF839BB-B91C-E011-A86D-0018F3D09634.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/509/100254E5-CC74-DF11-8765-0030487C6088.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/D6464B53-B91C-E011-8D12-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/349/DACB5618-1487-DF11-8AFF-001617E30D40.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/52E93E47-B81C-E011-AE20-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/974/64344B3D-F76F-DF11-8535-000423D33970.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7C808C93-BC1C-E011-9F8B-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/411/2C96EBC9-7374-DF11-AD2F-001D09F24DDA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/1EE650E4-B81C-E011-A00F-002618943843.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/180/965A8B66-1090-DF11-8120-003048F118D2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EC47F36C-BD1C-E011-8358-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/059/565F2E37-488E-DF11-9663-0030487A1990.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/BC315A03-991B-E011-A07C-0018F3D096BA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/437/3877F3B4-8974-DF11-90BB-0030487C6A66.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/B44ADB18-B91C-E011-A7C9-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/124/3A14AC92-208F-DF11-AA03-0030487CD17C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/60435326-9A1B-E011-A4C7-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/553/605C835A-EB7F-DF11-A9B8-001D09F251B8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/502F22D0-BC1C-E011-9C42-00261894387C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/024/CAA97DDA-8270-DF11-BD25-000423D985B0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/02F03F5F-BB1C-E011-8112-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/981/8A0767B4-B68D-DF11-93ED-003048F117B4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/ECF1E9DD-BA1C-E011-B3AC-0018F3D09680.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/937/DE3FAFE2-087A-DF11-A94F-000423D98950.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AA883CDC-BA1C-E011-81DA-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/386/2A3E630E-A392-DF11-B757-0030487CD6F2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1E2D3571-BA1C-E011-BFDB-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/366/DCB8ABDF-4987-DF11-A7DE-003048D2BC30.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/781E9C4D-B81C-E011-B6BC-003048678FE0.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/920/F88A67F4-7A83-DF11-B0F9-001D09F24303.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/621E8B02-BC1C-E011-9FC6-00261894388D.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/123/06FD0D86-F88E-DF11-A40D-001D09F29321.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C8BA9B36-BB1C-E011-9F58-0018F34D0D62.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/581/D08DEE96-B56C-DF11-9A47-000423D98930.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/568FE05A-BD1C-E011-AC49-0018F3D0968A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/998/1490D461-F76F-DF11-AD47-003048D2BB58.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BEDB0B63-BC1C-E011-903D-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/359/E010103E-3087-DF11-BCC7-001617E30D40.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/32FCEA48-B81C-E011-BEE3-002354EF3BD0.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/862/2241C6B1-0471-DF11-9CC5-000423D98FBC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AECE0C02-BC1C-E011-9736-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/701/665060CA-5D7B-DF11-AF14-0030487C912E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F69C12DE-B91C-E011-A911-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/532/E6339F8A-4C75-DF11-932F-0030487C7E18.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/CA84A779-B91C-E011-B4A2-00261894390E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/070/EE1B7E56-1A8F-DF11-A46B-001617C3B6DE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2EF919C2-BC1C-E011-9157-002618943884.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/231/0C5FE59D-BD68-DF11-BD3A-001D09F2432B.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E6F4E034-BB1C-E011-942E-00304867900C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/287/B21339E4-A973-DF11-85DD-0030487CD812.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/4AC10529-B81C-E011-AF4B-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/124/16EE33F7-2D8F-DF11-BA2C-001617E30E28.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/186E3861-9C1B-E011-9142-001A92810ADE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/546/724DA07F-5175-DF11-B04E-0030487A18F2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/E08DE17A-B91C-E011-8E44-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/287/2A7A73F7-9286-DF11-B148-003048F024E0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/B08588B8-B71C-E011-B773-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/938/0EDEF115-6764-DF11-AD13-000423D996B4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/FED5688A-BC1C-E011-B5E5-002618943884.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/993/BCABBC42-F76F-DF11-A360-001D09F29146.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3C90E6CD-BC1C-E011-9732-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/487/10C1ED43-927F-DF11-80D9-001D09F24FEC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2AF96F66-BC1C-E011-B4E9-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/782/2A4958DB-3079-DF11-A180-00304879BAB2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0CDBE86C-BA1C-E011-8FCD-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/415/94707725-7C74-DF11-BED0-000423D98B5C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/04BC85E4-B81C-E011-BC26-00261894390E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/364/64AA4E59-4087-DF11-B65F-000423D9A2AE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/C6BC7E4C-B81C-E011-BFC1-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/269/94D300BD-4A86-DF11-B03D-0030487C912E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/80A56BB8-B71C-E011-92E7-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/096/42400FFB-BC84-DF11-B8DF-0030487CD704.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EE6CE89B-BD1C-E011-8446-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/907/1C8F48A7-928C-DF11-950C-003048F1110E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2AB247A0-BA1C-E011-BD5F-00304867C026.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/356/C4915EB4-3387-DF11-BAE8-000423D98B6C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/F0273B4B-B81C-E011-A3A7-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/505/0C4095AF-C874-DF11-807F-0030487A3232.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/58A24D55-B91C-E011-BB5A-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/492/34830505-AB7F-DF11-A124-001D09F24DA8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7EA8E78B-BC1C-E011-B9F5-003048678B08.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/965/6287569F-5C8D-DF11-9A49-000423D33970.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/86328CA7-BA1C-E011-9767-003048679044.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/837/42E3E9AA-8F70-DF11-99C2-001D09F27003.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F87BF2C5-BB1C-E011-A640-0018F3D09698.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/457/4085E70A-7E7F-DF11-92C4-0030487CD6D8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CACEC266-BC1C-E011-A852-00248C0BE018.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/509/A2F72852-C16B-DF11-81EA-000423D174FE.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/509/9E7735A3-236C-DF11-88EF-001D09F24D8A.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/509/90CF6C38-086C-DF11-A6DC-001D09F29524.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/509/DC1EE799-096C-DF11-AB5D-001D09F24489.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/669B1424-BD1C-E011-80F5-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/876/9061FF5D-B29A-DF11-B491-001D09F24FEC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0094D573-BA1C-E011-A459-00248C0BE018.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/076/5CD0E45E-938E-DF11-B8CE-003048F11114.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A6486190-BC1C-E011-B454-003048D3C010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/571/30FA2967-0680-DF11-9E10-0030487CD6DA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A074E017-BD1C-E011-80CE-0018F3D0968A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/916/2E62AC53-6F83-DF11-B87F-003048F1BF66.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C03A3204-BC1C-E011-AD39-001BFCDBD166.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/130/306A80F7-4472-DF11-9EE2-00304879EDEA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A4D99A5D-BD1C-E011-8AEC-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/460/945A1AC4-4A93-DF11-90A0-003048F11C5C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B48AC203-BB1C-E011-BCCD-0018F3D09698.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/330/DE755110-D769-DF11-9079-000423D99614.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/50C2A0C4-BB1C-E011-B46A-0030486792B8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/583/62B4A2D6-EF6C-DF11-8E92-0030487CD7B4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7EBD66ED-BC1C-E011-82B8-0018F3D095EE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/001/02BA8FD0-6E66-DF11-8782-001D09F24F65.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/001/A218ABA1-6F66-DF11-8AC9-001D09F24682.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C2574DF6-BC1C-E011-840F-0018F3D09698.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/546/621A03A2-DC7F-DF11-B650-001617C3B6CE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CE51DDBF-BC1C-E011-B796-003048678B08.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/253/74D5D3E4-2169-DF11-883D-0030487CD13A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F4C27460-BB1C-E011-98D3-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/207/C2C5D9E2-6768-DF11-AB0A-000423D99996.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7AAD2B02-BB1C-E011-8A7D-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/294/548CA592-A169-DF11-9CFC-000423D98E6C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/983FDB8D-BB1C-E011-AD73-0018F3D0968A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/740/C2D4954B-9778-DF11-B554-0030487CD700.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/5C24A715-BA1C-E011-9B77-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/084/025F5B0B-0372-DF11-A099-001D09F244DE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/BE41CA57-BC1C-E011-A28B-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/651/0A7B9B79-7A78-DF11-A4C2-001D09F24448.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F88D64DA-B91C-E011-885B-0018F3D096C6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/722/2E33614F-4081-DF11-BE76-0030487CAF0E.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/722/903C04AB-3F81-DF11-9CDF-0030487C6090.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/086FE3A7-BD1C-E011-8ADA-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/033/FC30B80F-3671-DF11-947C-001D09F28D54.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0A8F0F05-BD1C-E011-A4BF-002618943943.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/429/2030684A-247F-DF11-AD57-003048F11DE2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/8C2C1A27-BC1C-E011-820F-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/195/F2F5E170-A485-DF11-AE0F-003048F11DE2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A82CE28E-BB1C-E011-905C-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/461/16195866-2F6B-DF11-A7BC-0030487CD6D2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E46A545C-BB1C-E011-99B7-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/388/DC2B8214-AC92-DF11-A9D1-00304879FA4C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CE7C8A8E-BB1C-E011-8CE4-00261894396E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/259/6A83B42F-7F69-DF11-91FD-0030487CD76A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/26667C60-BB1C-E011-A3B6-0018F3D09680.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/334/D8231F8A-6091-DF11-9A60-0019B9F7312C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/16E4A22B-BB1C-E011-8EF2-00304867C026.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/119/4A76E751-1268-DF11-B8BA-0030487C8E02.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4EB7EC03-BB1C-E011-BDEB-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/446/5A8CDC05-4F7F-DF11-80CA-0030487A18D8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/80E85027-BC1C-E011-A1D5-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/587/1A6099D6-EF6C-DF11-9243-000423D944F8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/00324389-BC1C-E011-BA32-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/413/8E7B2F09-726A-DF11-8E1C-000423D94A20.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E0859A6C-BC1C-E011-BB25-00261894388D.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/028/B64AF2D7-1971-DF11-BAE1-0030487A195C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/629EED29-BC1C-E011-B4A9-003048678FEA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/866/F28E4BEE-969A-DF11-B3D9-0030487CAEAC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/DE154D42-BA1C-E011-B74C-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/405/80E7CD02-726A-DF11-A91E-0030487A18A4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4686CD64-BC1C-E011-9C2E-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/530/78B073D4-3D75-DF11-A1D9-0030487CD718.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/005D8B7D-B91C-E011-BAC6-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/017/DE0A2AA1-1D70-DF11-B330-001D09F292D1.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EC1085C7-BC1C-E011-B385-003048679044.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/570/A6ED90AA-0B80-DF11-9895-003048F1C58C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B4B4A9FF-BC1C-E011-81FA-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/249/12218A21-1869-DF11-9EB0-0030487C6088.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E80A8F5F-BB1C-E011-AEA1-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/441/D66126EF-1F6B-DF11-AE1C-0030487CD162.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/946FF68B-BC1C-E011-A2A3-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/737/26E67F61-5A81-DF11-BDC2-001D09F2462D.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/54D3DCD9-971B-E011-9480-0026189438D7.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/272/B495DDA1-7E86-DF11-83FF-003048F118C4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/52DC24BA-B71C-E011-84D9-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/531/0A45C6D3-3D75-DF11-A7F8-001D09F2437B.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/C409F278-B91C-E011-8D4D-002618943831.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/634/0C1231D8-7478-DF11-B5B7-0030487CD16E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/68AEF1DA-B91C-E011-B8EA-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/362/061AA144-3787-DF11-8E56-001D09F291D7.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/5A21564F-B81C-E011-A7CA-002618943945.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/015/F4550228-2C65-DF11-A0CE-0030487A1FEC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/468DDC2A-BD1C-E011-857F-00248C0BE018.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/696/5CE02913-0681-DF11-BE9B-003048F110BE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/66ED0A6D-BD1C-E011-A5D2-002618943868.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/771/54AC792B-E778-DF11-B5BE-0030487CD7CA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F8403141-BA1C-E011-B8EE-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/966/D2C8054D-628D-DF11-B4AF-001D09F24DDF.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CC0D5BA8-BA1C-E011-816B-0018F3D095EE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/509/608953FE-AE7F-DF11-9B4E-001617C3B710.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/0A7081E3-B81C-E011-950C-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/971/D6454461-1F7A-DF11-8984-00304879EE3E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/488240DC-BA1C-E011-BF4A-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/024/E0D570FD-3565-DF11-9ADF-001D09F2525D.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CC8CFF01-BB1C-E011-8FEA-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/526/441E98E2-C67F-DF11-8375-0030487C8E00.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C65421D1-BC1C-E011-A510-0026189437E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/185/C0A39F21-4B68-DF11-A871-0030487C7392.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7AA55265-BB1C-E011-9C5A-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/308/AC1B9004-AF86-DF11-8949-003048F117EC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/8CD4E124-B81C-E011-B324-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/940/8CCF822D-7764-DF11-BF84-0030487C8CB8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B267AB8E-BC1C-E011-A136-00261894387C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/442/9684DF05-4F7F-DF11-A9D7-000423D94908.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/88863632-BC1C-E011-9E78-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/327/ECE19A9F-BB69-DF11-952E-00304879EDEA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2E1A56C5-BB1C-E011-95D2-00261894393C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/410/1A14F7A2-EB7E-DF11-8543-0030487CD6D8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0A45BD24-BC1C-E011-B2F9-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/609/5A9019B7-BE6D-DF11-9255-0030487A17B8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/38A60871-BD1C-E011-B143-0026189438E7.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/076/529BCA9F-9266-DF11-A80C-000423D99BF2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4A2D2142-BD1C-E011-A272-0018F3D09698.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/933/62EBFF2E-7064-DF11-83D2-001D09F23A20.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/933/568D0ADE-7064-DF11-9C61-001D09F24F65.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/EE743518-BA1C-E011-936E-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/102/06EC1420-2672-DF11-8487-0030487A18F2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A236FF70-BD1C-E011-A75F-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/756/14DE785B-C178-DF11-A775-003048D2BE12.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A2356447-BA1C-E011-A888-001A928116DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/653/C411DED7-0371-DF11-812E-003048673374.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B269302C-BB1C-E011-8116-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/792/D49EB5B3-4D8B-DF11-9112-001617C3B654.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2C209C40-BA1C-E011-80B9-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/873/EEF75C49-A29A-DF11-904F-000423D98950.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F0722073-BA1C-E011-8826-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/196/14381E9F-AD85-DF11-B297-003048F024F6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/30B62A7E-BD1C-E011-B47E-00261894386C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/395/22ACF1F7-B092-DF11-A3B3-003048CFB40C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/18EDC5C5-BB1C-E011-B362-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/216/3C6AE824-9968-DF11-909D-000423D99660.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4C336502-BB1C-E011-A8D4-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/267/80F9EAA3-8E69-DF11-8EE5-0030487CAF5E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A669FF8B-BB1C-E011-AAC6-0018F3D09698.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/072/340C7AF7-7E8E-DF11-BAB7-0030487C778E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/24C2CE11-BD1C-E011-84F8-002618943884.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/341/F6AF45F0-2D6A-DF11-AE34-0030487CD7CA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CEDB67FC-BB1C-E011-8289-0026189438DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/294/0C4A68EA-C073-DF11-8482-001D09F24399.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/7861234C-B81C-E011-A960-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/955/8490EC4C-F76F-DF11-9B81-001D09F231B0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C831109F-BC1C-E011-A9C1-002618943899.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/285/8A1479D8-A673-DF11-9FCF-0030487A195C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/3E3B1C27-B81C-E011-B656-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/396/B235A512-1074-DF11-BE60-000423D98B5C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/8C2564E2-B81C-E011-B846-0026189438B3.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/323/CEDDE57D-B969-DF11-9FA1-000423D944FC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/A8BEEFC6-BB1C-E011-B04E-001A928116DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/948/969DBF31-A464-DF11-91B6-001617DBD556.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/72CA078E-BB1C-E011-95B3-0026189438DC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/772/E65938F4-FC78-DF11-A42B-000423D99996.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/0E325345-BA1C-E011-8837-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/549/846CDD62-E67F-DF11-8A88-0030487C7828.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B447CCC2-BC1C-E011-8665-00261894386C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/411/3492EE8A-4788-DF11-92AF-003048F1183E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/0CEED0C3-B81C-E011-9659-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/221/F2E6953A-B768-DF11-BF2A-0030487CD906.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/48D6AB08-BB1C-E011-A648-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/925/16F2EA23-F76F-DF11-9384-000423D9890C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/26260404-BC1C-E011-A024-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/060/E2C8FF91-E565-DF11-B8B7-003048D2BE08.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/060/1A22CC47-E665-DF11-964D-000423D60FF6.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/96FF7764-BC1C-E011-AC92-00304867900C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/941/2E6288A3-7164-DF11-9A3C-001617DBD5AC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2888042D-BB1C-E011-83E0-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/393/E86A3864-0B88-DF11-98D3-0019DB29C5FC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/B4A8D890-B81C-E011-9D85-00261894390E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/250/D855F292-1B69-DF11-BB1E-0030487C6062.root", 
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/250/A4619D41-1C69-DF11-A0C7-000423D951D4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/344EB95F-BB1C-E011-A9D6-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/008/D807254F-1F65-DF11-9E0E-00304879FBB2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/48079F3C-BD1C-E011-B7FD-00261894383F.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/965/989D90D4-227A-DF11-8268-000423D98844.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/7018E2DB-BA1C-E011-8464-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/588/F04359E0-BB6D-DF11-B404-0030487CD76A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/DEC5852E-BD1C-E011-8939-00261894392B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/605/DC9145AD-3C77-DF11-B33D-0019B9F72BFF.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/D6859DB2-B91C-E011-83C9-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/089/D06F1D68-6567-DF11-B2B3-0030487CAEAC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AA73F6C2-BB1C-E011-A897-00261894388D.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/268/9C523CC5-3E86-DF11-900B-001617E30D4A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/66B408B8-B71C-E011-9AD5-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/095/CA06AAEA-9C67-DF11-B420-0030487CD162.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/5ABEA05F-BB1C-E011-B3D9-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/233/F049022E-D368-DF11-B65D-000423D98750.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B2B8BD2C-BB1C-E011-A0D3-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/450/021046E7-8388-DF11-A002-001D09F297EF.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/3CBC82E6-B81C-E011-B032-0018F3D09680.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/400/86DF0F58-1988-DF11-8D23-00304867342C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/3E089991-B81C-E011-A04F-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/361/E26B16C0-EF91-DF11-B0DF-001D09F24EAC.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/780C4301-991B-E011-B46E-002618943916.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/075/6089D22B-8F66-DF11-BE20-001D09F2915A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3A66FD6A-BC1C-E011-924E-002618FDA287.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/783/D6801549-4470-DF11-8D57-0030487A18D8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/545EAC87-BB1C-E011-99AA-002618943843.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/879/90E18147-B79A-DF11-BAAD-003048F11DE2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/9237136F-BA1C-E011-9561-0026189438CC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/439/7007AC6F-946A-DF11-B247-0030487C6090.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2A9BBD62-BC1C-E011-8113-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/092/DEA1357D-2E72-DF11-B6EB-0030487D05B0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B01858F1-BC1C-E011-A2A1-00261894393B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/899/28B34081-BD6E-DF11-A397-0019B9F72BFF.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/44491C2D-BC1C-E011-B5A3-00261894387B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/564/B2D1DA16-0180-DF11-AE0D-001D09F295FB.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3E572A25-BD1C-E011-AD1B-002618943884.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/015/EEBF290E-2870-DF11-AED1-000423D94990.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/68E282C2-BC1C-E011-9AE4-0018F3D09698.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/071/CE57BD00-848E-DF11-B674-001617C3B778.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/C223F3C5-BC1C-E011-86D0-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/488/08E0358C-546B-DF11-B82E-000423D98950.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/6853D360-BC1C-E011-8C29-003048D15DDA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/404/02574DA4-646A-DF11-A0A0-0030487C635A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/56F6CC62-BC1C-E011-A45E-0026189437E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/865/382FC4EF-486F-DF11-8483-001D09F292D1.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/443F4509-BC1C-E011-8595-00248C0BE013.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/633/F4B81FB7-BE6D-DF11-B102-0030487C90C4.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/34CE6392-BD1C-E011-8387-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/248/C6EF02C4-3373-DF11-9644-0030487C8CB8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/2EBD17EC-B71C-E011-842C-001A92971B80.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/446/DEFA68C0-8974-DF11-8A6B-0030487CD13A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/34412517-B91C-E011-AA84-00261894386F.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/887/8A4181C7-966E-DF11-916A-0030487C90EE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B8C7212B-BC1C-E011-8FA3-003048D15DDA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/094/A4AC6164-A067-DF11-87DD-000423D174FE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/360F0987-BD1C-E011-A9FE-003048679164.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/352/84CDD040-D991-DF11-8A71-001D09F24498.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0075/905FEB01-991B-E011-A24B-0026189438D6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/009/CCFF943C-8470-DF11-AB6F-0030486780A8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/CC3B53C1-BC1C-E011-8FB9-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/010/1C4B6530-8470-DF11-A749-0030487CD16E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/9E048E00-BC1C-E011-94EF-003048678FDE.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/664/5C9C9B7D-6E8A-DF11-9E2E-0030487CD6D8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/9C1B54B4-B91C-E011-8126-00261894396E.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/135/922/5EC6D351-6664-DF11-BFB6-0030487C6A66.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/4C0583E0-BA1C-E011-9969-003048678B30.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/440/D0E9C105-A16A-DF11-9E44-000423D98EC8.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/F4667164-BC1C-E011-B117-0030486791AA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/140/074/DEE78FD2-8A8E-DF11-8826-003048CFB40C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/5E00A1D1-BC1C-E011-AF6C-00261894392B.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/261/0867063B-3773-DF11-8642-000423D94E1C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/EC613D27-B81C-E011-9DAC-003048D3FC94.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/441/58101C78-6788-DF11-85DB-001D09F241B9.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/247E23BA-B81C-E011-9BA5-003048679084.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/965/A8672726-F76F-DF11-AF69-0019B9F70607.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/FE60FA8B-BC1C-E011-832C-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/245/96DAE453-0269-DF11-8060-0030487C90C2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3A316F61-BB1C-E011-8CDA-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/298/8C7E2837-9C86-DF11-830E-003048F024DE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/1841DBE7-B71C-E011-BE3C-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/056/5A9673D2-6771-DF11-89BD-0030487A3DE0.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/80CB3BA8-BD1C-E011-B921-00304867900C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/368/64FD6BFF-EC73-DF11-B0BC-000423D9863C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/60AD04BE-B81C-E011-8A8C-0018F3D0965A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/141/870/9EFAD2C1-9C9A-DF11-BBB3-001D09F2423B.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/04056B73-BA1C-E011-88DD-0018F3D09634.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/139/360/72A4F92E-3587-DF11-9DD6-001617E30D00.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/E6425147-B81C-E011-865F-001A928116E8.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/352/6AA966E3-E373-DF11-BC55-0030487CD180.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0087/AA1CEB91-B81C-E011-85DD-00248C55CC3C.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/924/625D9E17-8A83-DF11-A6BE-00304879FA4C.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/B6173132-BC1C-E011-965D-00261894391D.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/143/FED85CB5-1368-DF11-AEAA-000423D6006E.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/1C6BF06D-BC1C-E011-B9CD-003048679010.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/744/3618A350-A078-DF11-AC64-000423D9A2AE.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/2EBAB940-BA1C-E011-9FED-002618943919.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/137/046/C4EA00D8-4D71-DF11-9F8C-0030487C5CFA.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/D268450C-BB1C-E011-BEDD-0018F3D09680.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/958/B0D98949-F76F-DF11-8A4B-001D09F24303.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/9CBC3E8A-BC1C-E011-BD8A-003048D15DDA.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/441/5A815A5A-327F-DF11-A338-00304879BAB2.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/E431B029-BC1C-E011-AA8B-001A92971BDC.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/138/934/4C47C162-8E83-DF11-A501-001617C3B79A.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/92E8582B-BC1C-E011-8590-0018F3D0968A.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AEA4A191-BC1C-E011-9912-003048678FD6.root"
+    }, 
+    {
+        "parent_logical_file_name": [
+            "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/935/9AF59D5C-F76F-DF11-821D-001D09F28EA3.root"
+        ], 
+        "logical_file_name": "/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/3E6A4665-BC1C-E011-AAFD-0018F3D09698.root"
+    }
+]

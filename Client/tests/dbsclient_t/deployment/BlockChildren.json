@@ -1,0 +1,122 @@
+[
+    {
+        "block_name": "/JetMETTau/Run2010A-PromptReco-v1/RECO#c737f664-42f3-49f5-8e3c-6f930eae6b0c"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-HcalCalDijets-v1/ALCARECO#02643e71-23db-4f6b-adbe-d433861bcb7d"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-May27thReReco_v1/RECO#5928b99e-4c4b-49a0-94b6-c3c711cbabda"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-HcalCalDijets-May27thReReco_v1/ALCARECO#7ceb9740-8baa-4fbe-98b5-311869a6d864"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-DQM-May27thReReco_v1/DQM#e5993f72-5138-4000-bf5c-217d26bd7a91"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-HcalCalDijets-Jun9thReReco_v1/ALCARECO#9396c9d1-7ed6-431c-b42e-e8e83db97906"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Jun9thReReco_v1/RECO#1422caf9-5340-4974-9be3-3faf9663ee3b"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Jun9thReReco_v1/DQM#7781bcd2-9b21-4991-8a90-c1a2ceb12a8d"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-HcalCalDijets-Jun14thReReco_v2/ALCARECO#078a0d95-53c1-4608-93c7-efa673af151a"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Jun14thReReco_v2/RECO#99affa77-20e5-4199-a0d8-3ea2e9707fc7"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-DQM-Jun14thReReco_v2/DQM#5159d129-d144-46b6-a7f1-49078c397b72"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-v2/DQM#a3f827ea-51f2-4214-9e73-1b02c3a58910"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-v2/RECO#913cee82-694d-4a00-bdf0-36980256882c"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Sep17ReReco_v2/DQM#3a8645ec-97c2-419b-b9af-c03ef7db3afb"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Sep17ReReco_v2/RECO#74e6cbf6-3436-4261-adf2-f416d4b0a8b0"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Nov4ReReco_v1/RECO#ef8b51e0-b289-436a-877d-bb99f3707a20"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Nov4ReReco_v1/AOD#fb3c5a66-ecf2-4ca1-af1e-08043e2226a7"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Nov4ReReco_v1/DQM#bea77430-8638-4d6c-806f-b75424aad15d"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Dec4ReReco_v1/RECO#79b8185b-09c5-43f5-a28c-c09fc891078c"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Dec4ReReco_v1/AOD#e1a7672c-a4fc-4755-bc63-24920298be87"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Dec4ReReco_v1/DQM#5982c27b-d30a-4800-bc88-e43c6224b5dc"
+    }, 
+    {
+        "block_name": "/JetMETTau/PenguinsPenguinsEverywhere-BenVanderbiltChinstrapPenguins-v5/RECO#3e923a32-025c-11e0-b37f-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/PenguinsPenguinsEverywhere-BenVanderbiltChinstrapPenguins-v5/AOD#fb7d4afa-0258-11e0-b37f-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/PenguinsPenguinsEverywhere-BenVanderbiltChinstrapPenguins-v5/DQM#49a0641e-0818-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/RECO#b8b34558-0a23-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/AOD#a587cd1a-0a1d-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/RECO#00e077d6-0a2b-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/RECO#e52a86aa-0a2d-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/RECO#bf2fc8c6-0a31-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/RECO#6ba841cc-0a33-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/RECO#d5345978-0a33-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/AOD#36b97874-0a32-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/DQM#9cde52ae-0a15-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v1/AOD#60ab7670-0a3f-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/MorePenguins-v13/RECO#84fa0a9a-0a90-11e0-8ca8-00304867921e"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Dec22ReReco_v1/AOD#fe7240b6-505d-4624-be0b-68f525697638"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Dec22ReReco_v1/DQM#23e8f3b7-4055-4c27-9bab-de856dcdc14f"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Dec22ReReco_v1/RECO#3a65d992-e8e5-4900-812a-a7ff407451cb"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Apr21ReReco-v1/RECO#16ea0cd2-6f92-11e0-a537-003048f1c5d0"
+    }, 
+    {
+        "block_name": "/JetMETTau/Run2010A-Apr21ReReco-v1/AOD#1718ef16-6f92-11e0-a537-003048f1c5d0"
+    }
+]

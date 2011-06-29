@@ -1,0 +1,9 @@
+[
+    {
+        "release_version": "CMSSW_3_5_7", 
+        "pset_hash": "NO_PSET_HASH", 
+        "app_name": "cmsRun", 
+        "output_module_label": "1061", 
+        "global_tag": "UNKNOWN"
+    }
+]

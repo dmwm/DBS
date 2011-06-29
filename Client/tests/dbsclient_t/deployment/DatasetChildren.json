@@ -1,0 +1,167 @@
+[
+    {
+        "child_dataset_id": 505383, 
+        "child_dataset": "/JetMETTau/Run2010A-HcalCalDijets-May27thReReco_v1/ALCARECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 505384, 
+        "child_dataset": "/JetMETTau/Run2010A-May27thReReco_v1/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 509532, 
+        "child_dataset": "/JetMETTau/Run2010A-DQM-May27thReReco_v1/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 548820, 
+        "child_dataset": "/JetMETTau/Run2010A-HcalCalDijets-Jun9thReReco_v1/ALCARECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 548913, 
+        "child_dataset": "/JetMETTau/Run2010A-Jun9thReReco_v1/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 548946, 
+        "child_dataset": "/JetMETTau/Run2010A-Jun9thReReco_v1/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 556999, 
+        "child_dataset": "/JetMETTau/Run2010A-362_HLTtest_v1/USER", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 563032, 
+        "child_dataset": "/JetMETTau/Run2010A-357hltp4_HLTtest_v1/USER", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 568266, 
+        "child_dataset": "/JetMETTau/Run2010A-HcalCalDijets-Jun14thReReco_v2/ALCARECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 568286, 
+        "child_dataset": "/JetMETTau/Run2010A-Jun14thReReco_v2/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 568326, 
+        "child_dataset": "/JetMETTau/Run2010A-DQM-Jun14thReReco_v2/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 626478, 
+        "child_dataset": "/JetMETTau/Run2010A-Jul6thReReco_v1/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 626479, 
+        "child_dataset": "/JetMETTau/Run2010A-Jul6thReReco_v1/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 653146, 
+        "child_dataset": "/JetMETTau/Run2010A-Jul16thReReco-v1/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 653480, 
+        "child_dataset": "/JetMETTau/Run2010A-Jul15thReReco-v1/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 653528, 
+        "child_dataset": "/JetMETTau/Run2010A-Jul15thReReco-v1/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 654906, 
+        "child_dataset": "/JetMETTau/Run2010A-Jul16thReReco-v1/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 679308, 
+        "child_dataset": "/JetMETTau/Run2010A-Jul23ReReco_PreProd_v1/RAW", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 681822, 
+        "child_dataset": "/JetMETTau/Run2010A-Jul26thReReco-v1/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 681823, 
+        "child_dataset": "/JetMETTau/Run2010A-Jul26thReReco-v1/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 836246, 
+        "child_dataset": "/JetMETTau/Run2010A-v2/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 836286, 
+        "child_dataset": "/JetMETTau/Run2010A-v2/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 848328, 
+        "child_dataset": "/JetMETTau/Run2010A-Sep17ReReco_v2/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 848510, 
+        "child_dataset": "/JetMETTau/Run2010A-Sep17ReReco_v2/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 1085546, 
+        "child_dataset": "/JetMETTau/Run2010A-Nov4ReReco_v1/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 1085787, 
+        "child_dataset": "/JetMETTau/Run2010A-Nov4ReReco_v1/AOD", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 1086106, 
+        "child_dataset": "/JetMETTau/Run2010A-Nov4ReReco_v1/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 1182606, 
+        "child_dataset": "/JetMETTau/Run2010A-Dec4ReReco_v1/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 1182766, 
+        "child_dataset": "/JetMETTau/Run2010A-Dec4ReReco_v1/AOD", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 1182886, 
+        "child_dataset": "/JetMETTau/Run2010A-Dec4ReReco_v1/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 1229446, 
+        "child_dataset": "/JetMETTau/Run2010A-Dec22ReReco_v1/AOD", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 1229506, 
+        "child_dataset": "/JetMETTau/Run2010A-Dec22ReReco_v1/DQM", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }, 
+    {
+        "child_dataset_id": 1229561, 
+        "child_dataset": "/JetMETTau/Run2010A-Dec22ReReco_v1/RECO", 
+        "dataset": "/JetMETTau/Run2010A-v1/RAW"
+    }
+]
