@@ -7,6 +7,7 @@ __version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from WMCore.Database.MySQLCore import  MySQLInterface
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -28,19 +29,19 @@ class List(DBFormatter):
     def execute(self, conn, block_name="", transaction = False):
         """
         block: /a/b/c#d
-        """	
-	if not conn:
-            msg='%s Oracle/BlockParent/List. No DB connection found' %dbsExceptionCode['dbsException-dao']
-            dbsExceptionHandler('dbsException-dao', mag)
+        """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/BlockParent/List. Expects db connection from upper layer.")
+
         sql = self.sql
+        
 	if type(block_name) is str:
 	    binds = {'block_name' :block_name}
         elif type(block_name) is list:
             binds = [{'block_name':x} for x in block_name]
         else: 
-            msg = "%s Oracle/BlockParent/List. Block_name must be provided either as a string or as a list. "\
-                %dbsExceptionCode['dbsException-dao']
-            dbsExceptionHandler('dbsException-dao', mag)
+            msg = "Oracle/BlockParent/List. Block_name must be provided either as a string or as a list."
+            dbsExceptionHandler('dbsException-invalid-input', msg)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []
         for i in cursors:

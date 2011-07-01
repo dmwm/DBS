@@ -7,6 +7,7 @@ __version__ = "$Revision: 1.24 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from WMCore.Database.MySQLCore import  MySQLInterface
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -36,8 +37,7 @@ JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 	block: /a/b/c#d
 	"""	
 	if not conn:
-            raise Excpetion("dbsException-1", "%s Oracle/Block/List.  Expects db connection from upper layer.\n"\
-                    %DBSEXCEPTIONS["dbsException-1"])
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Block/List.  Expects db connection from upper layer.")
 	sql = self.sql
 	binds = {}
 

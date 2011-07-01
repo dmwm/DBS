@@ -6,6 +6,7 @@ __revision__ = "$Id: List.py,v 1.3 2010/08/12 19:46:02 afaq Exp $"
 __version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -25,7 +26,7 @@ FROM %sACQUISITION_ERAS AE
 
     def execute(self, conn, acquisitionEra="", transaction = False):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/AcquisitionEra/List expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/AcquisitionEra/List. Expects db connection from upper layer.")
         sql = self.sql
 	binds={}
 	if acquisitionEra:

@@ -9,6 +9,7 @@ __version__ = "$Revision: 1.12 $"
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class List(DBFormatter):
     """
     PrimaryDSType List DAO class.
@@ -30,8 +31,7 @@ FROM %sPRIMARY_DS_TYPES PDT
         Lists all primary dataset types if no user input is provided.
         """
 	if not conn:
-	    dbsExceptionHandler("dbsException-dao", "%s. PrimaryDSType/List expects db connection from upper\
-                layer."%dbsExceptionCode["dbsException-dao"])
+	    dbsExceptionHandler("dbsException-db-conn-failed", "PrimaryDSType/List expects db connection from upper layer.")
         sql = self.sql
         binds={}
         if not dsType  and not dataset:
@@ -55,8 +55,8 @@ FROM %sPRIMARY_DS_TYPES PDT
                     %(self.owner, self.owner,op1, op)
             binds = {"primdstype":dsType, "dataset":dataset}
 	else:
-	    dbsExceptionHandler('dbsException-invalid-input', "%s DAO Primary_DS_TYPE List accepts no input, or\
-            dataset,primary_ds_type as input." %dbsExceptionCode["dbsException-invalid-input"])
+	    dbsExceptionHandler('dbsException-invalid-input', "DAO Primary_DS_TYPE List accepts no input, or\
+            dataset,primary_ds_type as input.")
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         if len(cursors) == 0 :
             return []

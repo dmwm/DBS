@@ -5,8 +5,9 @@ This module provides PrimaryDSType.List data access object.
 __revision__ = "$Id: List.py,v 1.6 2010/06/23 21:21:26 afaq Exp $"
 __version__ = "$Revision: 1.6 $"
 
-
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class List(DBFormatter):
     """
     PrimaryDSType List DAO class.
@@ -28,7 +29,8 @@ FROM %sSITES S
         Lists all sites types if site_name is not provided.
         """
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Site/List expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/Site/List. Expects db connection from upper layer.")
+
         sql = self.sql
         if site_name == "":
             result = self.dbi.processData(sql, conn=conn, transaction=transaction)

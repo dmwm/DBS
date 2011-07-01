@@ -5,6 +5,8 @@ __revision__ = "$Revision: 1.9 $"
 __version__  = "$Id: Insert.py,v 1.9 2010/08/25 21:41:52 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 from sqlalchemy import exceptions
 
 class Insert(DBFormatter):
@@ -16,4 +18,7 @@ class Insert(DBFormatter):
             self.sql = """INSERT INTO %sFILE_OUTPUT_MOD_CONFIGS ( FILE_OUTPUT_CONFIG_ID, FILE_ID, OUTPUT_MOD_CONFIG_ID) VALUES (:file_output_config_id, :file_id, :output_mod_config_id)""" % (self.owner)
 
     def execute( self, conn, binds, transaction=False ):
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileOutputMod_config/Insert. Expects db connection from upper layer.")
+            
         result = self.dbi.processData(self.sql, binds, conn, transaction)

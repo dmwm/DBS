@@ -7,6 +7,7 @@ Given the ID of a File, returns a LIST of the dicts containing IDs
 Block containing THIS file.
 """
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -25,7 +26,8 @@ class List(DBFormatter):
 	file_id_list : file_id_list 
 	"""
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/FileParentBlock/List expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileParentBlock/List. Expects db connection from upper layer.")
+
 	sql=self.sql
 	binds={}
 	if file_id_list:
@@ -36,9 +38,9 @@ class List(DBFormatter):
 		binds.update({"file_id_%s" %count : an_id})
 		count+=1
 	    sql += ")"
-	else :
-	    raise Exception('dbsException-7', "%s Oracle/FileParentBlock/List. this_file_id not provided"\
-                 %DBSEXCEPTIONS['dbsException-7'] )
+	else:
+            dbsExceptionHandler('dbsException-invalid-input', "Oracle/FileParentBlock/List. this_file_id not provided")
+            
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
 	return plist

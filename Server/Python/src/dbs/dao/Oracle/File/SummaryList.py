@@ -6,6 +6,7 @@ dataset name.
 """
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class SummaryList(DBFormatter):
     """
@@ -19,11 +20,10 @@ class SummaryList(DBFormatter):
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
 
     def execute(self, conn, block_name="", dataset="",  run_num=0, transaction=False):
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/File/List expects db connection from upper layer.")
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/SummaryList. Expects db connection from upper layer.")
+
         binds = {}
-        #import pdb
-        #pdb.set_trace()
 
         if block_name:
             if run_num > 0:
@@ -168,7 +168,6 @@ class SummaryList(DBFormatter):
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	#if len(cursors) != 1 :
-	#    raise Exception("File does not exist.")
+
 	result = self.formatCursor(cursors[0])
 	return result

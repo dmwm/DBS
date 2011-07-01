@@ -6,6 +6,7 @@ __revision__ = "$Id: GetID.py,v 1.7 2010/08/02 21:50:02 afaq Exp $"
 __version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class GetID(DBFormatter):
     """
@@ -27,6 +28,9 @@ FROM %sPRIMARY_DS_TYPES PT
         """
         returns id for a give primdstype
         """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/PrimaryDSType/GetID. Expects db connection from upper layer.")
+
         sql = self.sql
         sql += "WHERE PT.PRIMARY_DS_TYPE = :primdstype" 
         binds = {"primdstype":name}

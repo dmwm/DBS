@@ -6,8 +6,8 @@ This module manages sequences.
 __revision__ = "$Id: SequenceManager.py,v 1.8 2010/06/29 19:28:46 afaq Exp $"
 __version__ = "$Revision: 1.8 $"
 
-
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class  SequenceManager(DBFormatter):
     """
@@ -26,9 +26,9 @@ class  SequenceManager(DBFormatter):
         """
 
 	#FIXME: Do we need to lock the tables here?
-	
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/SequenceManager expects db connection from up layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/SequenceManager. Expects db connection from upper layer.")
+
         sql = "select %s%s.nextval as val from dual" % (self.owner, seqName)
         result = self.dbi.processData(sql, conn=conn, transaction=transaction)
         resultlist = self.formatDict(result)

@@ -5,6 +5,8 @@ __revision__ = "$Revision: 1.2 $"
 __version__  = "$Id: DBSStatus.py,v 1.2 2010/06/23 21:21:19 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 from sqlalchemy import exceptions
 
 class DBSStatus(DBFormatter):
@@ -17,9 +19,9 @@ class DBSStatus(DBFormatter):
         self.sql = """SELECT SCHEMA_VERSION, DBS_RELEASE_VERSION, INSTANCE_NAME, INSTANCE_TYPE, CREATION_DATE, LAST_MODIFICATION_DATE FROM %sDBS_VERSIONS""" % self.owner
 	
     def execute(self, conn, transaction = False):
-	if not conn:
-            raise Excpetion("dbsException-1", "%s Oracle/ComponentStatus/DBSStatus.  Expects db connection from upper layer.\n"\
-                    %DBSEXCEPTIONS["dbsException-1"]) 
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ComponentStatus/DBSStatus. Expects db connection from upper layer.")
+            
 	binds={}
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
         return self.formatDict(result)

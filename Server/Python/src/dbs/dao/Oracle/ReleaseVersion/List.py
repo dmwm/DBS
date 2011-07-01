@@ -6,6 +6,7 @@ __revision__ = "$Id: List.py,v 1.5 2010/08/09 18:43:08 yuyi Exp $"
 __version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -24,7 +25,8 @@ SELECT RV.RELEASE_VERSION FROM %sRELEASE_VERSIONS RV
 
     def execute(self, conn, releaseVersion='', dataset='', transaction = False):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/ReleaseVersion/List expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ReleaseVersion/List. Expects db connection from upper layer.")
+
         sql = self.sql
 	binds={}
 	if releaseVersion and not dataset:

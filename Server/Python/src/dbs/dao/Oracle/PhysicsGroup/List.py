@@ -3,6 +3,7 @@
 This module provides PhysicsGroup.List data access object.
 """
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -23,6 +24,9 @@ class List(DBFormatter):
         """
         returns id for a given physics group name
         """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/PhysicsGroup/List. Expects db connection from upper layer.")
+
         binds={}
         if name:
             op = ('=', 'like')['%' in name]

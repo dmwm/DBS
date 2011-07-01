@@ -7,6 +7,8 @@ __revision__ = "$Id: GetID.py,v 1.7 2010/08/02 21:49:47 afaq Exp $"
 __version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class GetID(DBFormatter):
     """
     FileType GetID DAO class.
@@ -26,7 +28,10 @@ FROM %sBRANCH_HASHES BH
     def execute(self, conn, name, transaction = False):
         """
         returns id for a given branch hash
-        """	
+        """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/BranchHashe/GetID. Expects db connection from upper layer.")
+            
         sql = self.sql
         sql += "WHERE BH.HASH = :branch_hash"
         binds = {"branch_hash":name}

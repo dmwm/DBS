@@ -2,9 +2,6 @@
 """
 DBS  block insertion for WMAgent
 """
-__revision__ = "$Id:$"
-__version__ = "$Revision: $"
-
 import threading
 import logging
 import traceback
@@ -20,6 +17,8 @@ import json, cjson
 import urllib, urllib2
 
 from dbs.utils.dbsUtils import dbsUtils
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
 class DBSBlockInsert :
 
@@ -117,7 +116,6 @@ class DBSBlockInsert :
                 #print "insert files"
                 self.insertFile( blockcontent,blockId,datasetId)
         except Exception, ex:
-            #self.logger.exception("%s DBSBlockInsert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             raise
     
     def insertFile(self, blockcontent, blockId, datasetId):
@@ -189,7 +187,6 @@ class DBSBlockInsert :
                 del fileList[i]['file_lumi_list']
                 id += 1
         except Exception, ex:
-            #self.logger.exception("%s DBSBlockInsert/File. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             raise
         try:        
             #deal with file parentage
@@ -202,7 +199,7 @@ class DBSBlockInsert :
                 fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
                 parentId = self.fileid.execute(conn, fileParentList[k]['parent_logical_file_name'])
                 if parentId <= 0 :
-                    raise Exception("File parent %s cannot be found" %fileParentList[k]['parent_logical_file_name'])
+                    dbsExceptionHandler('dbsException-missing-data', 'File parent %s cannot be found in db. ' %fileParentList[k]['parent_logical_file_name'])
                 fileParentList[k]['parent_file_id'] = parentId
                 del fileParentList[k]['parent_logical_file_name']
                 del fileParentList[k]['logical_file_name']
@@ -212,13 +209,13 @@ class DBSBlockInsert :
                     +fc['output_module_label'] +':'+fc['global_tag']
                 if not key in (self.datasetCache['conf']).keys():
                     #we expect the config is inserted when the dataset is in.
-                    raise Exception("Configuration application name, release version, pset hash and global tag: %s, %s ,%s,%s not found" \
-                                %(fc['app_name'], fc['release_version'], fc['pset_hash'], fc['global_tag']))
+                    dbsExceptionHandler('dbsException-missing-data', 'Required Configuration application name, release version,\
+                        pset hash and global tag: %s, %s\
+                        ,%s,%s not found in DB' %(fc['app_name'], fc['release_version'], fc['pset_hash'], fc['global_tag']))
                 fcObj={'file_output_config_id':self.sm.increment(conn,"SEQ_FC"), 'file_id':logicalFileName[fc['lfn']]
                        , 'output_mod_config_id': self.datasetCache['conf'][key] }
                 fileConfObjs.append(fcObj)
         except Exception, ex:
-            #self.logger.exception("%s DBSBlockInsert/file parentage. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             raise
         try:
             #now we build everything to insert the files.
@@ -241,7 +238,6 @@ class DBSBlockInsert :
                 self.fconfigin.execute(conn, fileConfObjs, tran)
             tran.commit()
         except Exception, ex:
-            #self.logger.exception("%s DBSBlockInsert/file insertion. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             tran.rollback()
             raise
         finally:
@@ -276,7 +272,6 @@ class DBSBlockInsert :
             #self.logger.exception("%s DBSBlockInsert/insertBlock found Duplicated block: %s" %block['block_name'])
             raise
         except Exception, ex:
-            #self.logger.exception("%s DBSBlockInsert/insertBlock. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             tran.rollback()
             raise
         #Now handle Block Parenttage
@@ -292,12 +287,11 @@ class DBSBlockInsert :
                         if bpList[i]['parent_block_id'] <= 0:
                             if tran:
                                 tran.rollback()
-                            raise Exception("Parent block: %s not found in db" %bpList[i]['block_name'])
+                            dbsExceptionHandler('dbsException-missing-data', 'Required parent block: %s not found in db' %bpList[i]['block_name'])
                         del bpList[i]['block_name']
                     if bpList and newBlock:
                         self.blkparentin.execute(conn, bpList, tran)
                 except Exception, ex:
-                    #self.logger.exception("%s DBSBlockInsert/block parentage. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     tran.rollback()
                     raise
         #Ok, we can commit everything.
@@ -337,7 +331,6 @@ class DBSBlockInsert :
                     otptIdList.append(cfgid)
                     #print "About to set cfgid: %s" % str(cfgid)
         except Exception, ex:
-            #self.logger.exception("%s DBSBlockInsert/outputModuleConfig. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             raise
         #Now insert the missing configs
         try:
@@ -415,7 +408,6 @@ class DBSBlockInsert :
                       +m['output_module_label'] +':'+m['global_tag']
                 self.datasetCache['conf'][key] = cfgid
         except Exception, ex:
-            #self.logger.exception("%s DBSBlockInsert/output module config insertion. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             tran.rollback()
             raise
         finally:
@@ -472,7 +464,6 @@ class DBSBlockInsert :
                         primds["primary_ds_type_id"] = self.primdstpid.execute(conn, primds["primary_ds_type"],\
                                                 transaction=tran)
                     except Exception, ex:
-                        #self.logger.exception("%s DBSBlockInsert/Primary ds type insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                         tran.rollback
                         raise
                 #Now inserting primary ds. Clean up dao object befer inserting
@@ -484,7 +475,6 @@ class DBSBlockInsert :
                     primds["primary_ds_id"] = self.primdsid.execute(conn, primds["primary_ds_name"], \
                                                 transaction=tran)
                 except Exception, ex:   
-                    #self.logger.exception("%s DBSBlockInsert/primary ds insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     tran.rollback
                     raise
             dataset['primary_ds_id'] = primds["primary_ds_id"]
@@ -499,7 +489,6 @@ class DBSBlockInsert :
                 #Ok, it is in db already. Get the ID
                 dataset['processed_ds_id'] = self.procdsid.execute(conn, dataset['processed_ds_name'])
             except Exception, ex:
-                #self.logger.exception("%s DBSBlockInsert/processed ds insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                 tran.rollback
                 raise
             #
@@ -520,7 +509,6 @@ class DBSBlockInsert :
                     #ok, already in db
                     dataset['acquisition_era_id'] = self.acqid.execute(conn, aq['acquisition_era_name'].upper())
                 except Exception, ex:
-                    #self.logger.exception("%s DBSBlockInsert/acquisition era insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     tran.rollback
                     raise
             else:
@@ -542,7 +530,6 @@ class DBSBlockInsert :
                     #ok, already in db
                     dataset['processing_era_id'] = self.procsingid.execute(conn, pera['processing_version'])
                 except Exception, ex:
-                    #self.logger.exception("%s DBSBlockInsert/processing era insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     tran.rollback()
                     raise
             else:
@@ -594,7 +581,6 @@ class DBSBlockInsert :
                 except exceptions.IntegrityError:
                     dataTId = self.tierid.execute(conn, dataT, transaction=tran)
                 except Exception, ex:
-                    #self.logger.exception("%s DBSBlockInsert/data tier insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     tran.rollback()
                     raise
             dataset['data_tier_id'] = dataTId
@@ -611,14 +597,12 @@ class DBSBlockInsert :
                 except exceptions.IntegrityError:
                     dsTpId = self.datatypeid.execute(conn, dsTp, transaction=tran)
                 except Exception, ex:
-                    #self.logger.exception("%s DBSBlockInsert/data access type insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     tran.rollback()
                     raise
             dataset['dataset_access_type_id'] = dsTpId
             del dataset['dataset_access_type']
             tran.commit()
         except Exception, ex:
-            #self.logger.exception("%s DBSBlockInsert/pre-dataset insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             tran.rollback()
             raise
         try:
@@ -661,7 +645,6 @@ class DBSBlockInsert :
                     except exceptions.IntegrityError:
                         dataset['dataset_id'] = self.datasetid.execute(conn, dataset['dataset'])
                     except Exception, ex:
-                        #self.logger.exception("%s DBSBlockInsert/dataset insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                         tran.rollback()
                         if conn:
                             conn.close()
@@ -684,7 +667,6 @@ class DBSBlockInsert :
                         #FIXME: What happends when there are partially in db? YG 11/17/2010
                         pass
                     except Exception, ex:
-                        #self.logger.exception("%s DBSBlockInsert/dataset parent mapping insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                         if tran:
                             tran.rollback()
                         raise
@@ -704,7 +686,6 @@ class DBSBlockInsert :
                     #FIXME: What happends when there are partially in db? YG 11/17/2010
                     pass
                 except Exception, ex:
-                    #self.logger.exception("%s DBSBlockInsert/ds & output module mapping insert. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     if tran:
                         tran.rollback()
                     raise 
@@ -714,7 +695,6 @@ class DBSBlockInsert :
             # Maybe.  See what happens if we ignore
             pass
         except Exception, ex:
-            #self.logger.exception("%s DBSBlockInsert/ds insert w/o Annex. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
             tran.rollback()
             raise
 

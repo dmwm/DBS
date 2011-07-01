@@ -5,6 +5,7 @@ __revision__ = "$Revision: 1.6 $"
 __version__  = "$Id: Insert.py,v 1.6 2010/06/23 21:21:19 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class Insert(DBFormatter):
 
@@ -34,8 +35,9 @@ class Insert(DBFormatter):
 
 
     def execute( self, conn, block_storage_elementsObj, transaction=False ):
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/BlockStorageElement/Insert expects db connection from upper layer.")
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/BlockStorageElement/Insert. Expects db connection from upper layer.")
+	
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
 	return
 

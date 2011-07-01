@@ -5,6 +5,8 @@ __revision__ = "$Revision: 1.15 $"
 __version__  = "$Id: Insert.py,v 1.15 2010/08/25 21:41:52 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 from sqlalchemy import exceptions
 
 class Insert(DBFormatter):
@@ -20,5 +22,8 @@ VALUES (:file_lumi_id, :run_num, :lumi_section_num, :file_id)
 """ % (self.owner)
 
     def execute( self, conn, daoinput, transaction = False ):
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/Insert. Expects db connection from upper layer.")
+
 	self.dbi.processData(self.sql, daoinput, conn, transaction)
 

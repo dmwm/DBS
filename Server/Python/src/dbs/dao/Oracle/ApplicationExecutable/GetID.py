@@ -6,6 +6,8 @@ __revision__ = "$Id: GetID.py,v 1.6 2010/08/02 20:41:14 afaq Exp $"
 __version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class GetID(DBFormatter):
     """
     File GetID DAO class.
@@ -25,7 +27,10 @@ class GetID(DBFormatter):
     def execute(self, conn, name,transaction = False):
         """
         returns id for a given application
-        """	
+        """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ApplicationExecutable/GetID. Expects db connection from upper layer.")
+            
         binds = {"app_name":name}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)

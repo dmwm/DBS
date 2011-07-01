@@ -5,6 +5,7 @@ To be used with block Insertion
 """
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class GetIDForBlockInsert(DBFormatter):
     """
@@ -34,7 +35,10 @@ class GetIDForBlockInsert(DBFormatter):
 
         This always requires all four variables to be set, because
         you better have them in blockInsert
-        """	
+        """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/OutputModuleConfig/GetIDForBlockInsert. Expects db connection from upper layer.")
+
         binds = {}
         binds["app_name"]=app
         binds["release_version"]=release_version

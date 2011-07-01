@@ -6,6 +6,7 @@ __vision__ = "$Id: MgrtList.py,v 1.1 2010/08/06 18:30:23 yuyi Exp $"
 __reversion__ = "$Revision: 1.1 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class MgrtList(DBFormatter):
     """
@@ -34,8 +35,9 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 
     def execute(self, conn, block_name="", logical_file_name="",
 	    maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[], transaction=False):
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/File/List expects db connection from upper layer.")
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/MgrtList. Expects db connection from upper layer.")
+
 	sql = self.sql 
         binds = {}
 	if (minrun and minrun != -1) and (maxrun and maxrun != -1):
@@ -67,8 +69,6 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	#if len(cursors) != 1 :
-	    #raise Exception("File does not exist.")
 
 	result = self.formatCursor(cursors[0])
 	return result

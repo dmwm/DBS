@@ -34,11 +34,10 @@ class DBSBlock:
 	Used to toggle the status of a block open_for_writing=1, open for writing, open_for_writing=0, closed
 	"""
 	if not len(block_name) > 1:
-	    msg="%s DBSBlock/updateStatus. Invalid block_name" %dbsExceptionCode['dbsException-invalid-input']
-            dbsExceptionHandler('dbsException-invalid-input', msg)
+            dbsExceptionHandler('dbsException-invalid-input', "DBSBlock/updateStatus. Invalid block_name")
 	if open_for_writing not in [1, 0, '1','0']:
-	    msg = "%s DBSBlock/updateStatus. open_for_writing can only be 0 or 1 : passed %s."\
-                   %(dbsExceptionCode['dbsException-invalid-input'],  open_for_writing) 
+	    msg = "DBSBlock/updateStatus. open_for_writing can only be 0 or 1 : passed %s."\
+                   %open_for_writing 
             dbsExceptionHandler('dbsException-invalid-input', msg)
         conn = self.dbi.connection()
         trans = conn.begin()
@@ -58,20 +57,21 @@ class DBSBlock:
 	list parents of a block
 	"""
         if not block_name:
-            msg = " %s DBSBlock/listBlockParents. Block_name must be provided as a string or a list.\
-                No wildcards allowed in block_name/s."%dbsExceptionCode['dbsException-invalid-input']
+            msg = " DBSBlock/listBlockParents. Block_name must be provided as a string or a list.\
+                No wildcards allowed in block_name/s."
+            dbsExceptionHandler('dbsException-invalid-input', msg)
         elif type(block_name) is str:
             if '%' in block_name or '*' in block_name:
-                dbsExceptionHandler('dbsException-invalid-input', '%s.DBSReaderModel/listBlocksParents:\
-                    NO WILDCARDS allowed in block_name.'%dbsExceptionCode['dbsException-invalid-input'])
+                dbsExceptionHandler('dbsException-invalid-input', 'DBSReaderModel/listBlocksParents:\
+                    NO WILDCARDS allowed in block_name.')
         elif type(block_name) is list:
             for b in block_name:
                 if '%' in b or '*' in b:
-                        dbsExceptionHandler('dbsException-invalid-input', '%s.DBSReaderModel/listBlocksParents:\
-                            NO WILDCARDS allowed in block_name.'%dbsExceptionCode['dbsException-invalid-input'])
+                        dbsExceptionHandler('dbsException-invalid-input', 'DBSReaderModel/listBlocksParents:\
+                            NO WILDCARDS allowed in block_name.')
         else:
-            msg = " %s DBSBlock/listBlockParents. Block_name must be provided as a string or a list.\
-                No wildcards allowed in block_name/s ."%dbsExceptionCode['dbsException-invalid-input']
+            msg = "DBSBlock/listBlockParents. Block_name must be provided as a string or a list.\
+                No wildcards allowed in block_name/s ."
             dbsExceptionHandler('dbsException-invalid-input', msg)
 	try:
 	    conn = self.dbi.connection()
@@ -87,8 +87,7 @@ class DBSBlock:
 	list parents of a block
 	"""
         if (not block_name) or re.search('^%%*$', block_name):
-            msg = " %s DBSBlock/listBlockChildren. Block_name must be provided.\n" %dbsExceptionCode['dbsException-invalid-input'] 
-            dbsExceptionHandler('dbsException-invalid-input', msg)
+            dbsExceptionHandler('dbsException-invalid-input', "DBSBlock/listBlockChildren. Block_name must be provided." )
 	try:
 	    conn = self.dbi.connection()
 	    results = self.blockchildlist.execute(conn, block_name)
@@ -106,8 +105,8 @@ class DBSBlock:
 	if (not dataset) or re.search('^%%*$', dataset):
 	    if (not block_name) or re.search('^%%*$', block_name):
 		if (not logical_file_name) or re.search('^%%*$', logical_file_name) :
-			msg = "%s DBSBlock/listBlock. You must specify at least one parameter(dataset, block_name, logical_file_name)\
-                            with listBlocks api"  %dbsExceptionCode['dbsException-invalid-input']
+			msg = "DBSBlock/listBlock. You must specify at least one parameter(dataset, block_name, logical_file_name)\
+                            with listBlocks api" 
                         dbsExceptionHandler('dbsException-invalid-input', msg)
 	try:
 	    conn = self.dbi.connection()
@@ -135,8 +134,7 @@ class DBSBlock:
         NEED to validate there are no extra keys in the businput
         """
         if not (businput.has_key("block_name") and businput.has_key("origin_site_name")  ):
-            msg = "%s business/DBSBlock/insertBlock must have block_name and origin_site_name as input" %dbsExceptionCode['dbsException-invalid-input']
-            dbsExceptionHandler('dbsException-invalid-input', msg)
+            dbsExceptionHandler('dbsException-invalid-input', "business/DBSBlock/insertBlock must have block_name and origin_site_name as input")
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
@@ -153,8 +151,7 @@ class DBSBlock:
 	    ds_name = businput["block_name"].split('#')[0]
             blkinput["dataset_id"] = self.datasetid.execute(conn,  ds_name, tran)
 	    if blkinput["dataset_id"] == -1 : 
-                msg = "%s DBSBlock/insertBlock. Dataset %s does not exists"\
-                    %(dbsExceptionCode['dbsException-missing-data'], ds_name)
+                msg = "DBSBlock/insertBlock. Dataset %s does not exists"%ds_name
                 dbsExceptionHandler('dbsException-missing-data', msg)
             blkinput["block_id"] =  self.sm.increment(conn, "SEQ_BK", tran)
             if(businput.has_key("origin_site_name")):

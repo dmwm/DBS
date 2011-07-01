@@ -5,8 +5,8 @@ This module provides MigrationRequests.List data access object.
 __revision__ = "$Id: List.py,v 1.4 2010/06/28 16:09:04 afaq Exp $"
 __version__ = "$Revision: 1.4 $"
 
-
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -31,6 +31,9 @@ FROM %sMIGRATION_REQUESTS MR
         """
         Lists all primary datasets if pattern is not provided.
         """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/List. Expects db connection from upper layer.")
+
         sql = self.sql
         binds = {}
 	if migration_request_id:

@@ -27,9 +27,9 @@ class List(DBFormatter):
         Lists all storage elements.
 	se_name can be a pattern as well
         """
-
 	if not conn:
-		raise Exception("dbs/dao/Oracle/StorageElement/List expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/StorageElement/List. Expects db connection from upper layer.")
+
 	sql = self.sql
 	
 	if se_name:

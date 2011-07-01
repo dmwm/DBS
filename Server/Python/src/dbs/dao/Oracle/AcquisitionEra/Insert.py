@@ -9,14 +9,13 @@ from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from sqlalchemy import exceptions
 from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
 
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class Insert(InsertSingle):
     """ ACQUISITION_ERAS Insert DAO Class"""
     def execute(self, conn, daoinput, transaction = False):
-	if not conn:
-	    raise Exception("dbsException-1","%s Oracle/AcquisitionEra/Insert. Expects db connection from upper layer.\n "\
-                    %DBSEXCEPTIONS["dbsException-1"])
-        try:
-            self.executeSingle(conn, daoinput, "ACQUISITION_ERAS", transaction)
-        except Exception:
-            raise
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/AcquisitionEra/Insert. Expects db connection from upper layer.")
 
+        self.executeSingle(conn, daoinput, "ACQUISITION_ERAS", transaction)
+        

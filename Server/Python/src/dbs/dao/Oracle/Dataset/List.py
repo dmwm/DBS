@@ -8,6 +8,7 @@ __revision__ = "$Id: List.py,v 1.36 2010/07/09 19:38:10 afaq Exp $"
 __version__ = "$Revision: 1.36 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -59,8 +60,7 @@ class List(DBFormatter):
         #import pdb
         #pdb.set_trace()
         if not conn:
-            raise Excpetion("dbsException-dao", "%s Oracle/Dataset/List.  Expects db connection from upper layer.\n"\
-                    %DBSEXCEPTIONS["dbsException-dao"])
+            dbsExceptionHandler("dbsException-db-conn-failed", "%s Oracle/Dataset/List.  Expects db connection from upper layer.")
 	sql = ""
 	basesql=self.basesql
         binds = {}
@@ -210,8 +210,8 @@ class List(DBFormatter):
     		binds.update(run_num = run_num)
     		sql += wheresql
             else:
-                raise dbsExcpetionHandler("dbsException-invalid-input", "%s Oracle/Dataset/List. Proper parameters are not\
-                    provided for listDatasets call." %dbsExceptionCode['dbsException-invalid-input'])
+                dbsExceptionHandler("dbsException-invalid-input", "Oracle/Dataset/List. Proper parameters are not\
+                    provided for listDatasets call.")
         #import pdb
         #pdb.set_trace()
         self.logger.debug( sql)

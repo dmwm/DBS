@@ -4,6 +4,7 @@ __revision__ = "$Revision: 1.2 $"
 __version__  = "$Id: Insert.py,v 1.2 2010/07/09 14:41:00 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class Insert(DBFormatter):
     """ Migration Insert DAO Class"""
@@ -24,4 +25,7 @@ VALUES(:migration_block_id, :migration_request_id, :migration_block_name, :migra
         """
 	insert into MIGRATION_BLOCKS
         """
+        if not conn:
+            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationBlock/Insert. Expects db connection from upper layer.")
+
         self.dbi.processData(self.sql, daoinput, conn, transaction)

@@ -5,8 +5,8 @@ This module provides FileParent.List data access object.
 __revision__ = "$Id: List.py,v 1.9 2010/08/13 14:04:22 yuyi Exp $"
 __version__ = "$Revision: 1.9 $"
 
-
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -32,7 +32,8 @@ JOIN %sFILES F ON  F.FILE_ID = FP.THIS_FILE_ID
         return {} if condition is not provided.
         """
         if not conn:
-            raise Exception("dbs/dao/Oracle/FileParent/List expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileParent/List. Expects db connection from upper layer.")
+        
         sql = self.sql
 	if logical_file_name:
 	    sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
@@ -47,7 +48,5 @@ JOIN %sFILES F ON  F.FILE_ID = FP.THIS_FILE_ID
 	    return{}
         self.logger.debug(sql)
 	cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
-	#if len(cursors) != 1:
-	    #raise Exception("File Parents does not exist.")
-        result = self.formatCursor(cursors[0])
+	result = self.formatCursor(cursors[0])
         return result

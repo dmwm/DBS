@@ -113,7 +113,7 @@ class DBSRestApi:
 	if type(data) == type({}):
 	    if type(data) == type({}) and data.has_key('exception'):
                 print traceback.format_exc()
-		raise Exception("DBS Server raised an exception: " + (data['message']))
+		raise Exception("DBS Server raised an exception: HTTPError %s :" %data['exception'] + (data['message']))
 	return data
 
 def options():

@@ -7,6 +7,7 @@ __version__  = "$Id: Insert.py,v 1.15 2010/07/09 19:38:10 afaq Exp $ "
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
 from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class Insert(InsertSingle):
     """ Dataset Insert DAO Class"""
@@ -26,13 +27,11 @@ class Insert(InsertSingle):
 	last_modification_date, last_modified_by
 	"""
 	if not conn:
-            raise Excpetion("dbsException-1", "%s Oracle/Dataset/Inert.  Expects db connection from upper layer.\n"\
-                    %DBSEXCEPTIONS["dbsException-1"])
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/Insert.  Expects db connection from upper layer.")
         if daoinput == {}:
             # Nothing to do
             return
-        try:
-            self.executeSingle(conn, daoinput, "DATASETS", transaction)
-        except Exception:
-            raise
+
+        self.executeSingle(conn, daoinput, "DATASETS", transaction)
+        
 					

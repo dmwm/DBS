@@ -8,7 +8,9 @@ __version__ = "$Revision: 1.15 $"
 
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
+
 
 class DBSOutputConfig:
     """
@@ -47,8 +49,6 @@ class DBSOutputConfig:
                                                    output_module_label, block_id, global_tag)
 	    return result
         except Exception, ex:
-            #self.logger.exception("%s DBSOutputConfig/listOutputConfigs. %s"\
-                    #%(DBSEXCEPTIONS['dbsException-2'], ex) )
             raise ex
 	finally:
 	    if conn: 
@@ -65,8 +65,8 @@ class DBSOutputConfig:
         if not (businput.has_key("app_name")  and businput.has_key("release_version")\
             and businput.has_key("pset_hash") and businput.has_key("output_module_label")
             and businput.has_key("global_tag")):
-            raise Exception("dbsException-7", "%s business/DBSOutputConfig/insertOutputConfig require:\
-                app_name, release_version, pset_hash, output_module_label and global_tag" %DBSEXCEPTIONS['dbsException-7'])
+            dbsExceptionHandler('dbsException-invalid-input', "business/DBSOutputConfig/insertOutputConfig require:\
+                app_name, release_version, pset_hash, output_module_label and global_tag")
 
         conn = self.dbi.connection()
         tran = conn.begin()
@@ -111,14 +111,10 @@ class DBSOutputConfig:
 	    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 		pass
 	    else:
-                #self.logger.exception("%s DBSOutputConfig/insertOutputConfigs. %s"\
-                        #%(DBSEXCEPTIONS['dbsException-2'], ex) )
 	        raise
 		
         except Exception, e:
 		tran.rollback()
-		#self.logger.exception("%s DBSOutputConfig/insertOutputConfigs. %s"\
-                    #%(DBSEXCEPTIONS['dbsException-2'], e) )
 		raise
         finally:
             if conn:

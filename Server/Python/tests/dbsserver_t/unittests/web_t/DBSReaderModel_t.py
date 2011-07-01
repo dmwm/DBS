@@ -194,7 +194,7 @@ class DBSReaderModel_t(unittest.TestCase):
 	try:
 	    api.list('blocks', dataset='*')
         except Exception, ex:
-            if 'invalid client input' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -212,7 +212,7 @@ class DBSReaderModel_t(unittest.TestCase):
 	try:
 	    api.list('blocks', origin_site_name=testparams['site'])
 	except Exception, ex:
-	    if 'invalid client input' in ex.args[0]:
+	    if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -227,7 +227,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
             api.list('blocks', block_name='*')
         except Exception, ex:
-            if 'invalid client input' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -237,7 +237,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
             api.list('blocks', origin_site_name='*')
         except Exception, ex:
-            if 'invalid client input' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -264,7 +264,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
 	    api.list('blocks')
         except Exception, ex: 
-            if 'invalid client input' in ex.args[0]: 
+            if 'HTTPError 400' in ex.args[0]: 
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -274,7 +274,7 @@ class DBSReaderModel_t(unittest.TestCase):
 	try:
 	    api.list('files', dataset='*')
 	except Exception, ex:
-	    if 'dbsException-7' in ex.args[0]:
+	    if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -302,7 +302,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
 	    api.list('files', dataset=testparams['dataset']+'*')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")        
@@ -318,7 +318,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
 	    api.list('files', block_name='*')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -332,7 +332,7 @@ class DBSReaderModel_t(unittest.TestCase):
 	try:
 	    api.list('files', logical_file_name='*')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -347,7 +347,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try: 
             api.list('files')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 self.fail("Exception was expected and was not raised.")
@@ -369,7 +369,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try: 
 	    api.list('datasetparents')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 print ex
@@ -492,7 +492,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try: 
             api.list('fileparents')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 print ex
@@ -503,7 +503,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
             api.list('filelumis', logical_file_name="*")
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 print ex
@@ -521,7 +521,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
             api.list('filelumis', block_name="*")
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 print ex
@@ -535,7 +535,7 @@ class DBSReaderModel_t(unittest.TestCase):
         try:
             api.list('filelumis', block_name=testparams['block']+'*')
         except Exception, ex:
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else:
                 print ex
@@ -546,7 +546,7 @@ class DBSReaderModel_t(unittest.TestCase):
             api.list('filelumis')
         except Exception, ex:
             #print "****%s****" %ex
-            if 'dbsException-7' in ex.args[0]:
+            if 'HTTPError 400' in ex.args[0]:
                 pass
             else: self.fail("Exception was expected and was not raised")
  

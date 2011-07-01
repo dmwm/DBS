@@ -29,7 +29,7 @@ class DBSAcquisitionEra:
         Returns all acquistion eras in dbs
         """
         if type(acq) is not str:
-            dbsExceptionHandler('dbsException-invalid-input', 'Acquistion era name given is not valid: %s' %acq)
+            dbsExceptionHandler('dbsException-invalid-input', 'Acquistion era name given is not valid : %s' %acq)
         try:
             conn=self.dbi.connection()
             result= self.acqlst.execute(conn,acq)
@@ -37,7 +37,7 @@ class DBSAcquisitionEra:
         except Exception, ex:
             raise ex
         finally:
-            conn.close()
+            if conn: conn.close()
 
     def insertAcquisitionEra(self, businput):
         """
@@ -53,7 +53,7 @@ class DBSAcquisitionEra:
             self.acqin.execute(conn, businput, tran)
             tran.commit()
         except KeyError, ke:
-            dbsExceptionHandler('dbsException-invalid-input', "Invalid input: "+ke.args[0])
+            dbsExceptionHandler('dbsException-invalid-input', "Invalid input:"+ke.args[0])
         except Exception, ex:
             if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                 # already exists

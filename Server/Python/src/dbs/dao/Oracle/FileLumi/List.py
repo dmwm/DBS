@@ -7,6 +7,7 @@ __version__ = "$Revision: 1.7 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -28,9 +29,8 @@ SELECT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
         """
         Lists lumi section numbers with in a file or a block.
         """
-        if not conn:
-            raise Exception("dbs/dao/Oracle/FileLumi/List expects db connection from upper layer.")
-            
+	if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/List. Expects db connection from upper layer.")            
         #sql = self.sql
         
         if logical_file_name:
@@ -56,12 +56,10 @@ SELECT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
                     WHERE B.BLOCK_NAME = :block_name and  FL.RUN_NUM=:run_num"""  % ((self.owner,)*3)
                 binds = {'block_name': block_name, 'run_num':run_num}
         else:
-            raise Exception('dbsException-7', "%s FileLumi/List: Either logocal_file_name, \
-                or block_name must be provided." %DBSEXCEPTIONS['dbsException-7'] )
+            dbsExceptionHandler('dbsException-invalid-input', "FileLumi/List: Either logocal_file_name or block_name must be provided.")
         self.logger.debug(sql) 
 	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
 	if len(cursors) != 1:
-	    raise Exception('dbsException-1', "%s FileLumi/List: file lumi does not exist."\
-                %DBSEXCEPTIONS['dbsException-1'] )
+            dbsExceptionHandler('dbsException-missing-data', "FileLumi/List: file lumi does not exist.")
         result = self.formatCursor(cursors[0])
         return result

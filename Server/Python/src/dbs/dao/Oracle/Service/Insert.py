@@ -6,6 +6,8 @@ __revision__ = "$Revision: 1.1 $"
 __version__  = "$Id: Insert.py,v 1.1 2010/08/02 20:41:18 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 from sqlalchemy import exceptions
 
 class Insert(DBFormatter):
@@ -19,7 +21,8 @@ class Insert(DBFormatter):
 		    VALUES (:service_id, :name, :type, :location, :status, :admin, :uri, :db, :version, :last_contact, :alias, :comments) """ % self.owner
 
     def execute(self, conn, daoinput, transaction = False):
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/iServices/Insert expects db connection from upper layer.")
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/Service/Insert. Expects db connection from upper layer.")
+
 	self.dbi.processData(self.sql, daoinput, conn, transaction)
 

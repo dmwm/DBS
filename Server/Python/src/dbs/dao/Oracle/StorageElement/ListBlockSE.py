@@ -6,6 +6,7 @@ __revision__ = "$Id: ListBlockSE.py,v 1.4 2010/06/23 21:21:27 afaq Exp $"
 __version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class ListBlockSE(DBFormatter):
     """
@@ -31,9 +32,9 @@ class ListBlockSE(DBFormatter):
         """
         Lists all storage elements for the block.
         """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/StorageElement/ListBlockSE. Expects db connection from upper layer.")
 
-	if not conn:
-		raise Exception("dbs/dao/Oracle//Insert expects db connection from upper layer.")
 	sql = self.sql
 
 	binds={ "block_name" : block_name }

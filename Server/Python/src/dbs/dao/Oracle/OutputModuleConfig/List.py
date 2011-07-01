@@ -6,6 +6,8 @@ __revision__ = "$Id: List.py,v 1.18 2010/08/16 18:50:16 yuyi Exp $"
 __version__ = "$Revision: 1.18 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class List(DBFormatter):
     """
     File List DAO class.
@@ -39,9 +41,10 @@ class List(DBFormatter):
                 output_label ="", block_id=0, global_tag='', transaction = False):
         """
         returns id for a given application
-        """	
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/OutputModuleConfig/List expects db connection from upper layer.")
+        """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/OutputModuleConfig/List. Expects db connection from upper layer.")
+
 	#sql=self.sql	
         binds = {}
 	setAnd=False

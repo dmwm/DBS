@@ -4,7 +4,6 @@ This module provides business object class to test the speed of dbs w/o access a
 """
 
 from WMCore.DAOFactory import DAOFactory
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from sqlalchemy import exceptions
 
 class DBSDoNothing:

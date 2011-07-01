@@ -7,6 +7,7 @@ __revision__ = "$Id: ListStats.py,v 1.6 2010/06/23 21:21:18 afaq Exp $"
 __version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class ListStats(DBFormatter):
     """
@@ -30,8 +31,7 @@ class ListStats(DBFormatter):
         returns id for a given block = /primds/procds/tier#block
         """	
 	if not conn:
-            raise Excpetion("dbsException-1", "%s Oracle/Block/ListStats.  Expects db connection from upper layer.\n"\
-                    %DBSEXCEPTIONS["dbsException-1"])
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Block/ListStats.  Expects db connection from upper layer.")
         binds = {"block_id": block_id}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)

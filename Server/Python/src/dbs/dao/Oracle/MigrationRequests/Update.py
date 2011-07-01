@@ -6,6 +6,8 @@ __revision__ = "$Id: Update.py,v 1.2 2010/06/28 21:29:24 afaq Exp $"
 __version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class Update(DBFormatter):
     """
     Migration Update DAO class.
@@ -25,5 +27,8 @@ WHERE MIGRATION_REQUEST_ID=:migration_request_id""" %  self.owner
         """
 	    daoinput keys:
 	    migration_status, migration_request_id
-        """	
+        """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/Update. Expects db connection from upper layer.")
+
         result = self.dbi.processData(self.sql, daoinput, conn, transaction)

@@ -7,6 +7,7 @@ __version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from WMCore.Database.MySQLCore import  MySQLInterface
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class ListChild(DBFormatter):
     """
@@ -29,16 +30,17 @@ class ListChild(DBFormatter):
         """
         block: /a/b/c#d
         """	
-	if not conn:
-            raise Excpetion("dbsException-1", "%s Oracle/BlockParent/ListChild.  Expects db connection from upper layer.\n"\
-                                %DBSEXCEPTIONS["dbsException-1"])
+        if not conn:
+            msg='Oracle/BlockParent/List. No DB connection found'
+            dbsExceptionHandler('dbsException-db-conn-failed', msg)
+
         sql = self.sql
         binds = {}
 	if block_name:
 	    binds.update(block_name = block_name)
         else:
-            raise Excpetion("dbsException-1", "%s Oracle/BlockParent/ListChild. block_name must be provided.\n"\
-                    %DBSEXCEPTIONS["dbsException-1"])
+            dbsExceptionHandler("dbsException-invalid-input", "Oracle/BlockParent/ListChild. block_name must be provided.")
+
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = self.formatCursor(cursors[0])
         return result

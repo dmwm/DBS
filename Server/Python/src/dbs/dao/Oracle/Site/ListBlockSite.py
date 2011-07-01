@@ -6,6 +6,7 @@ __revision__ = "$Id: ListBlockSite.py,v 1.3 2010/06/23 21:21:26 afaq Exp $"
 __version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class ListBlockSite(DBFormatter):
     """
@@ -27,9 +28,9 @@ class ListBlockSite(DBFormatter):
         """
         Lists all sites for the block.
         """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/Site/ListBlockSite. Expects db connection from upper layer.")
 
-	if not conn:
-		raise Exception("dbs/dao/Oracle/Site/ListBlockSite expects db connection from upper layer.")
 	sql = self.sql
 
 	binds={ "block_name" : block_name }

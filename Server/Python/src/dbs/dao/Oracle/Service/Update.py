@@ -6,6 +6,8 @@ __revision__ = "$Revision: 1.1 $"
 __version__  = "$Id: Update.py,v 1.1 2010/08/02 20:41:18 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 from sqlalchemy import exceptions
 
 class Update(DBFormatter):
@@ -18,6 +20,8 @@ class Update(DBFormatter):
         self.sql = """UPDATE %sSERVICES SET TYPE=:type, LOCATION=:location, STATUS=:status, ADMIN=:admin, URI=:uri, DB=:db, VERSION=:version, LAST_CONTACT=:last_contact, ALIAS=:alias, COMMENTS=:comments WHERE NAME=:name """ % self.owner
 
     def execute(self, conn, daoinput, transaction = False):
-	print self.sql
-	self.dbi.processData(self.sql, daoinput, conn, transaction)
+        if not conn:
+            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/Service/Update. Expects db connection from upper layer.")
+
+        self.dbi.processData(self.sql, daoinput, conn, transaction)
 

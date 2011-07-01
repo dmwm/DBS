@@ -6,6 +6,8 @@ __revision__ = "$Id: UpdateStats.py,v 1.8 2010/06/23 21:21:18 afaq Exp $"
 __version__ = "$Revision: 1.8 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class UpdateStats(DBFormatter):
     """
     Block UpdateStats DAO class.
@@ -23,5 +25,5 @@ class UpdateStats(DBFormatter):
         for a given block_id
         """	
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Block/UpdateStatus expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "dbs/dao/Oracle/Block/UpdateStatus expects db connection from upper layer.")
         result = self.dbi.processData(self.sql, blockStats, conn, transaction)

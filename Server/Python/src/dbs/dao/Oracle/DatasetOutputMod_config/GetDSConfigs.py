@@ -7,6 +7,7 @@ __revision__ = "$Id: GetDSConfigs.py,v 1.4 2010/06/23 21:21:21 afaq Exp $"
 __version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class GetDSConfigs(DBFormatter):
     """
@@ -33,7 +34,8 @@ class GetDSConfigs(DBFormatter):
         returns id for a given dataset = /primds/procds/tier
         """	
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/Dataset/GetID expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DatasetOutputMod_config/GetDSConfigs. Expects db connection from upper layer.")
+
         sql = self.sql
         binds = {"dataset":dataset}
         result = self.dbi.processData(sql, binds, conn, transaction)

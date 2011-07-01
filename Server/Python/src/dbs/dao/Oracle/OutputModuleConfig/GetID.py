@@ -3,6 +3,8 @@
 This module provides ApplicationExecutable.GetID data access object.
 """
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class GetID(DBFormatter):
     """
     File GetID DAO class.
@@ -30,7 +32,10 @@ class GetID(DBFormatter):
                 global_tag='', transaction = False):
         """
         returns id for a given application
-        """	
+        """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/OutputModuleConfig/GetID. Expects db connection from upper layer.")
+
 	sql = self.sql
         binds = {}
 	setAnd=False
@@ -58,10 +63,8 @@ class GetID(DBFormatter):
                 sql += " O.GLOBAL_TAG=:global_tag"
                 binds["global_tag"]=global_tag
 	if app == release_version == pset_hash  == global_tag == "":
-            raise Exception('dbsException-7', "%s Either app_name, release_version, pset_hash or global_tag must be provided"\
-                     %DBSEXCEPTIONS['dbsException-7'])	
-        #import pdb
-        #pdb.set_trace()
+            dbsExceptionHandler('dbsException-invalid-input', "%s Either app_name, release_version, pset_hash or global_tag must be provided")	
+
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
 	if len(plist) < 1: return -1

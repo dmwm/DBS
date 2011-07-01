@@ -6,7 +6,7 @@ __revision__ = "$Id: DeleteDuplicates.py,v 1.3 2010/07/09 14:41:00 afaq Exp $"
 __version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
-
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class DeleteDuplicates(DBFormatter):
     """
@@ -21,12 +21,12 @@ class DeleteDuplicates(DBFormatter):
         self.sql = """DELETE FROM %sFILE_BUFFERS WHERE LOGICAL_FILE_NAME=:logical_file_name""" % self.owner
 
     def execute(self, conn, logical_file_name, transaction=False):
-
         """
 	simple execute
         """	
-        if not conn:
-            raise Exception("dbs/dao/Oracle/FileBuffer/DeleteFiles expects db connection from upper layer.")
+	if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileBuffer/DeleteDupicates. Expects db connection from upper layer.")
+
 	print self.sql
         self.dbi.processData(self.sql, logical_file_name, conn, transaction)
 

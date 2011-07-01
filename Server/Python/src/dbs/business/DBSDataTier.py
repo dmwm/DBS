@@ -3,7 +3,8 @@
 This module provides business object class to interact with datatiers table. 
 """
 from WMCore.DAOFactory import DAOFactory
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
 class DBSDataTier:
     """
@@ -23,12 +24,13 @@ class DBSDataTier:
 	"""
 	List data tier(s)
 	"""
+        if type(data_tier_name) is not str:
+            dbsExceptionHandler('dbsException-invalid-input', 'data_tier_name given is not valid : %s' %data_tier_name)
 	try:
 	    conn = self.dbi.connection()
 	    result = self.dataTier.execute(conn, data_tier_name.upper())
 	    return result
 	except Exception, ex:
-            #self.logger.exception("%s DBSDataTier/listDataTiers. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -43,22 +45,20 @@ class DBSDataTier:
         tran = conn.begin()
         try:
 	    businput["data_tier_id"] = self.sm.increment(conn, "SEQ_DT", tran)
-	    assert businput["data_tier_name"]
-	    assert businput["creation_date"]
-	    assert businput["create_by"]
             businput["data_tier_name"] = businput["data_tier_name"].upper()
             self.dtin.execute(conn, businput, tran)
             tran.commit()
+        except KeyError, ke:
+            dbsExceptionHandler('dbsException-invalid-input', "Invalid input:"+ke.args[0])
         except Exception, ex:
-                if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-                        # already exist
-                        self.logger.warning("Unique constraint violation being ignored...")
-                        self.logger.warning("%s" % ex)
-			pass
-		else:
-                        #self.logger.exception("%s DBSDataTier/insertDataTiers. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
-            		tran.rollback()
-            		raise
+            if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                # already exist
+                self.logger.warning("Unique constraint violation being ignored...")
+                self.logger.warning("%s" % ex)
+                pass
+            else:
+                tran.rollback()
+                raise
         finally:
             conn.close()
 

@@ -6,6 +6,7 @@ __revision__ = "$Id: BriefList.py,v 1.4 2010/08/30 16:21:44 afaq Exp $"
 __version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class BriefList(DBFormatter):
     """
@@ -23,8 +24,9 @@ class BriefList(DBFormatter):
     def execute(self, conn, dataset="", block_name="", logical_file_name="",
             release_version="", pset_hash="", app_name="", output_module_label="",
 	    maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[], transaction=False):
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/File/List expects db connection from upper layer.")
+        if not conn:
+            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/BriefList. Expects db connection from upper layer.")
+
         binds = {}
 	basesql = self.sql
 	joinsql = ""
@@ -107,7 +109,6 @@ class BriefList(DBFormatter):
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	#if len(cursors) != 1 :
-	#    raise Exception("File does not exist.")
+
 	result = self.formatCursor(cursors[0])
 	return result

@@ -35,11 +35,9 @@ JOIN %sPRIMARY_DS_TYPES PT ON PT.PRIMARY_DS_TYPE_ID = P.PRIMARY_DS_TYPE_ID
     def execute(self, conn, primary_ds_name="", primary_ds_type="", transaction=False):
         """
         Lists all primary datasets if pattern is not provided.
-        """
-	
+        """	
 	if not conn:
-	    dbsExceptionHandler(dbsExceptionCode['dbsException-dao'], 
-                "ParimaryDataset/List expects db connection from upper layer.")	    
+	    dbsExceptionHandler('dbsException-db-conn-failed', "ParimaryDataset/List expects db connection from upper layer.")	    
         sql = self.sql
         binds = {}
         #import pdb

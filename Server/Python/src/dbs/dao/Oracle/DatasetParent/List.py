@@ -5,8 +5,8 @@ This module provides DatasetParent.List data access object.
 __revision__ = "$Id: List.py,v 1.6 2010/08/12 18:39:11 yuyi Exp $"
 __version__ = "$Revision: 1.6 $"
 
-
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -31,7 +31,8 @@ JOIN %sDATASETS D ON  D.DATASET_ID = DP.THIS_DATASET_ID
     def execute(self, conn, dataset, transaction=False):
         """ dataset is required parameter"""
         if not conn:
-            raise Exception("dbs/dao/Oracle/DatasetParent/List expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DatasetParent/List. Expects db connection from upper layer.")
+            
         sql = self.sql
         sql += "WHERE D.DATASET = :dataset"
         binds = {"dataset":dataset}

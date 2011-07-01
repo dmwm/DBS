@@ -6,6 +6,7 @@ __revision__ = "$Id: GetID.py,v 1.8 2010/08/02 21:50:10 afaq Exp $"
 __version__ = "$Revision: 1.8 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class GetID(DBFormatter):
     """
@@ -28,6 +29,9 @@ class GetID(DBFormatter):
         """
         returns id for a given processing version name
         """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ProcessingEra/GetID. Expects db connection from upper layer.")
+
         binds = {"processing_version":name}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)

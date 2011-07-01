@@ -5,6 +5,8 @@ __revision__ = "$Revision: 1.10 $"
 __version__  = "$Id: Insert.py,v 1.10 2010/08/20 15:55:57 yuyi Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 from sqlalchemy import exceptions
 
 class Insert(DBFormatter):
@@ -25,10 +27,7 @@ class Insert(DBFormatter):
         daoinput must be validated to have the following keys:
         processeddsid, processeddsname
 	"""
-	#if not conn:
-	    #raise Exception("dbs/dao/Oracle/ProcessedDataset/Insert expects db connection from upper layer.")
-        #try:
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ProcessedDataset/Insert. Expects db connection from upper layer.")
+
 	self.dbi.processData(self.sql, daoinput, conn, transaction)
-        #except exceptions.IntegrityError, ex:
-            #self.logger.warning("Unique constraint violation being ignored...")
-            #self.logger.warning("%s" % ex)

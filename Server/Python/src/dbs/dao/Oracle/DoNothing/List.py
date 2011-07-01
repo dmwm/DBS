@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -15,5 +16,6 @@ class List(DBFormatter):
 
     def execute(self, conn, transaction = False):
 	if not conn:
-	    raise Exception("dbs/dao/Oracle/DoNothing/List expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DoNothing/List. Expects db connection from upper layer.")
+
         return []

@@ -3,7 +3,9 @@
 This module provides business object class to interact with DATASET_ACCESS_TYPES table. 
 """
 from WMCore.DAOFactory import DAOFactory
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
+
 
 class DBSDatasetAccessType:
     """
@@ -21,6 +23,8 @@ class DBSDatasetAccessType:
 	"""
 	List dataset access types
 	"""
+        if type(dataset_access_type) is not str:
+            dbsExceptionHandler('dbsException-invalid-input', 'dataset_access_type given is not valid : %s' %dataset_access_type)
 	try:
 	    conn = self.dbi.connection()
 	    plist = self.datasetAccessType.execute(conn, dataset_access_type.upper())

@@ -6,7 +6,7 @@ __revision__ = "$Id: UpdateStatus.py,v 1.5 2010/06/23 21:21:21 afaq Exp $"
 __version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
-
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 class UpdateStatus(DBFormatter):
 
     """
@@ -26,8 +26,7 @@ class UpdateStatus(DBFormatter):
         for a given file
         """	
 	if not conn:
-            raise Excpetion("dbsException-1", "%s Oracle/Dataset/UpdateStatus.  Expects db connection from upper layer.\n"\
-                    %DBSEXCEPTIONS["dbsException-1"])
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/UpdateStatus.  Expects db connection from upper layer.")
 	binds = { "dataset" : dataset , "is_dataset_valid" : is_dataset_valid}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

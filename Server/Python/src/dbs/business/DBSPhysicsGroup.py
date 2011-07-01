@@ -3,7 +3,8 @@
 This module provides business object class to interact with Physics Groups. 
 """
 from WMCore.DAOFactory import DAOFactory
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
 class DBSPhysicsGroup:
     """
@@ -22,6 +23,8 @@ class DBSPhysicsGroup:
         """
         Returns all physics groups if physics group names are not passed.
         """
+        if type(physics_group_name) is not str:
+            dbsExceptionHandler('dbsException-invalid-input', 'physics group name given is not valid : %s' %physics_group_name)
 	try:
 	    conn=self.dbi.connection()
 	    result= self.pglist.execute(conn, physics_group_name)

@@ -7,6 +7,7 @@ __version__  = "$Id: Insert.py,v 1.11 2010/06/23 21:21:18 afaq Exp $ "
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
 from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class Insert(InsertSingle):
     """Block Insert DAO Class"""
@@ -19,8 +20,7 @@ class Insert(InsertSingle):
         file_count, creation_date, create_by, lastmodification_date, lastmodified_by
         """
 	if not conn:
-            raise Excpetion("dbsException-1", "%s Oracle/Block/Insert.  Expects db connection from upper layer.\n"\
-                    %DBSEXCEPTIONS["dbsException-1"])
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Block/Insert.  Expects db connection from upper layer.")
         self.executeSingle(conn, daoinput, "BLOCKS", transaction)
             
 

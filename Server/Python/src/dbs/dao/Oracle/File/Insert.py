@@ -2,6 +2,8 @@
 """ DAO Object for Files table """ 
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 from sqlalchemy import exceptions
 
 class Insert(DBFormatter):
@@ -57,12 +59,10 @@ class Insert(DBFormatter):
         #return binds
 
     def execute(self, conn, daoinput, transaction = False):
-	if not conn:
-	    raise Exception("dbs/dao/Oracle/File/Insert expects db connection from upper layer.")
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/Insert. Expects db connection from upper layer.")
+	
         #print "About to insert file with dataset id"
         #print binds[0]['dataset_id']
-        try:
-            #self.dbi.processData(self.sql, binds, conn, transaction)
-            self.dbi.processData(self.sql, daoinput, conn, transaction)
-        except Exception:
-            raise
+        self.dbi.processData(self.sql, daoinput, conn, transaction)
+        

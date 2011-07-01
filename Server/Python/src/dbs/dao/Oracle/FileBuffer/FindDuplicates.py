@@ -6,7 +6,7 @@ __revision__ = "$Id: FindDuplicates.py,v 1.3 2010/07/09 14:41:00 afaq Exp $"
 __version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
-
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class FindDuplicates(DBFormatter):
     """
@@ -21,13 +21,13 @@ class FindDuplicates(DBFormatter):
         self.sql = """SELECT FLBUF.LOGICAL_FILE_NAME FROM %sFILE_BUFFERS FLBUF JOIN %sFILES FL ON FL.LOGICAL_FILE_NAME=FLBUF.LOGICAL_FILE_NAME""" % (2*(self.owner,))
 
     def execute(self, conn, transaction=False):
-
         """
 	simple execute
         """	
 	binds={}
-        if not conn:
-            raise Exception("dbs/dao/Oracle/FileBuffer/DeleteFiles expects db connection from upper layer.")
+	if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileBuffer/FindDuplicates. Expects db connection from upper layer.")
+
 	print self.sql
         cursors=self.dbi.processData(self.sql, binds, conn, transaction, returnCursor=True)
         result = self.formatCursor(cursors[0])

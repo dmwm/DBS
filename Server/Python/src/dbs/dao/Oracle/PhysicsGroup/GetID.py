@@ -6,6 +6,7 @@ __revision__ = "$Id: GetID.py,v 1.6 2010/08/02 21:50:01 afaq Exp $"
 __version__ = "$Revision: 1.6 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class GetID(DBFormatter):
     """
@@ -26,6 +27,9 @@ class GetID(DBFormatter):
         """
         returns id for a given physics group name
         """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/PhysicsGroup/GetID. Expects db connection from upper layer.")
+
         sql = self.sql
         binds = {"physicsgroup": name}
         result = self.dbi.processData(sql, binds, conn, transaction)

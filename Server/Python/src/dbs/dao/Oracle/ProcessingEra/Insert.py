@@ -6,6 +6,7 @@ __version__  = "$Id: Insert.py,v 1.6 2010/06/23 21:21:26 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class Insert(InsertSingle):
 
@@ -14,10 +15,9 @@ class Insert(InsertSingle):
             self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 
     def execute( self, conn, binds, transaction=False ):
-        if not conn:
-            raise Exception("dbs/dao/Oracle/ProcessingEra/Insert expects db connection from upper layer.")
-        try:
-            self.executeSingle(conn, binds, "PROCESSING_ERAS", transaction)
-        except Exception:
-            raise 
+	if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ProcessingEra/Insert. Expects db connection from upper layer.")
+
+        self.executeSingle(conn, binds, "PROCESSING_ERAS", transaction)
+        
 	return

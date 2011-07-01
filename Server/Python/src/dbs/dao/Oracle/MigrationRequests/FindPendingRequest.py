@@ -6,8 +6,8 @@ This class provide the next avaliable pending request.
 __revision__ = "$Id: FindPendingRequest.py,v 1.2 2010/08/25 21:41:52 afaq Exp $"
 __version__ = "$Revision: 1.2 $"
 
-
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class FindPendingRequest(DBFormatter):
     """
@@ -32,6 +32,8 @@ class FindPendingRequest(DBFormatter):
         """
 	find the pending request
         """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/FindPendingRequest. Expects db connection from upper layer.")
 
         binds = {}
 	result = self.dbi.processData(self.sql, binds, conn, transaction)

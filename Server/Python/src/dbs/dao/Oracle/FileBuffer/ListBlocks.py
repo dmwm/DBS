@@ -6,7 +6,7 @@ __revision__ = "$Id: ListBlocks.py,v 1.3 2010/07/09 14:41:00 afaq Exp $"
 __version__ = "$Revision: 1.3 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
-
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class ListBlocks(DBFormatter):
     """
@@ -24,9 +24,10 @@ class ListBlocks(DBFormatter):
 
         """
 	simple execute
-        """	
+        """
         if not conn:
-            raise Exception("dbs/dao/Oracle/FileBuffer/List expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileBuffer/ListBlocks. Expects db connection from upper layer.")
+        
         binds = {}
         cursors = self.dbi.processData(self.sql, binds, conn, transaction, returnCursor=True)
         result = self.formatCursor(cursors[0])

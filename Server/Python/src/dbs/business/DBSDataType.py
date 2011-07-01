@@ -3,7 +3,7 @@
 This module provides business object class to interact with primary_ds_types table. 
 """
 from WMCore.DAOFactory import DAOFactory
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class DBSDataType:
     """
@@ -24,13 +24,11 @@ class DBSDataType:
 	try:
 	    conn = self.dbi.connection()
 	    if dataset and dataType:
-		raise Exception('dbsException-2', "%s DBSDataType/listDataType. Data Type can be only searched by data_type or by dataset, not both.")\
-                                    %( DBSEXCEPTIONS['dbsException-2'])
+                dbsExceptionHandler('dbsException-invalid-input',"DBSDataType/listDataType. Data Type can be only searched by data_type or by dataset, not both.")
 	    else:
 		result=self.dataType.execute(conn, dataType, dataset)
                 return result
 	except Exception, ex:
-            #self.logger.exception("%s DBSDataType/listDataType. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()

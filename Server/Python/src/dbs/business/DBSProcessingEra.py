@@ -3,7 +3,8 @@
 This module provides business object class to interact with DBSProcessingEra. 
 """
 from WMCore.DAOFactory import DAOFactory
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
 class DBSProcessingEra:
     """
@@ -23,13 +24,13 @@ class DBSProcessingEra:
         """
         Returns all processing eras in dbs
         """
+        if type(processing_version) is not str:
+            dbsExceptionHandler('dbsException-invalid-input', 'processing version given is not valid : %s' %processing_version)
         try:
             conn=self.dbi.connection()
             result= self.pelst.execute(conn,processing_version)
             return result
         except Exception, ex:
-            #self.logger.exception("%s DBSProcessingEra/listProcessingEras. %s\n " \
-                    #%(DBSEXCEPTIONS['dbsException-2'], ex) )
             raise ex
         finally:
             conn.close()
@@ -44,25 +45,20 @@ class DBSProcessingEra:
         tran = conn.begin()
         try:
 	    businput["processing_era_id"] = self.sm.increment(conn, "SEQ_PE", tran)
-	    assert businput["processing_version"]
-	    assert businput["description"]
-	    assert businput["creation_date"]
-	    assert businput["create_by"]
             businput["processing_version"] = businput["processing_version"].upper()
             self.pein.execute(conn, businput, tran)
             tran.commit()
+        except KeyError, ke:
+            dbsExceptionHandler('dbsException-invalid-input', "Invalid input:"+ke.args[0])
         except Exception, ex:
-                if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+            if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                         # already exist
-                        self.logger.warning("%s DBSProcessingEra/insertProcessingEras. \
-                                Unique constraint violation being ignored..."\
-                                %DBSEXCEPTIONS['dbsException-2'] )
-                        self.logger.warning("%s" % ex)
-			pass
-		else:
-            		tran.rollback()
-            		#self.logger.exception("%s DBSProcessingEra/insertProcessingEras. %s\n" \
-                                #%(DBSEXCEPTIONS['dbsException-2'], ex) )
-            		raise
+                self.logger.warning("DBSProcessingEra/insertProcessingEras. \
+                                Unique constraint violation being ignored...")
+                self.logger.warning("%s" % ex)
+                pass
+            else:
+                tran.rollback()
+                raise
         finally:
             conn.close()

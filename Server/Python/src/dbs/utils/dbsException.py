@@ -10,15 +10,13 @@ import logging
 import traceback
 
 dbsExceptionCode = {
-    'dbsException-dao' : 'dbsException in dao: ',
-    'dbsException-business' : 'dbsException in business: ',
-    'dbsException-web' : 'dbsException in web: ',
-    'dbsException-util' : 'dbsException in dbsUtil: ',
-    'dbsException-migration' : 'dbsException in Migration: ',
-    'dbsException-fileBuffer' : 'dbsException in FileBuffer: ',
+    'dbsException-db-conn-failed' : 'dbsException due to db connection failed: ',
+    'dbsException-server-error' : 'dbsException due to internal server error: ',
+    'dbsException-input-too-large' : "dbsException due to input exceeds a API's max limit : ",
     'dbsException-invalid-input' : 'dbsException due to invalid client input: ',
     'dbsException-invalid-input2' : 'dbsException due to invalid client input: ',
-    'dbsException-missing-data' : 'dbsException required pre-existing data NOT in DBS: '
+    'dbsException-missing-data' : 'dbsException required pre-existing data NOT in DBS: ',
+    'dbsException-conflict-data' : 'dbsException due to data conflict between existing and input: '
 }
 
 class dbsException(exceptions.Exception):

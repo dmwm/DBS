@@ -8,6 +8,7 @@ __revision__ = "$Id: BriefList.py,v 1.2 2010/08/03 13:35:43 akhukhun Exp $"
 __version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class BriefList(DBFormatter):
     """
@@ -30,8 +31,7 @@ class BriefList(DBFormatter):
                 transaction=False):
 
         if not conn:
-            raise dbsExcpetionHandler("dbsException-dao", "%s Oracle/Dataset/BriefList.  Expects db connection from upper layer.\n"\
-                    %dbsExceptionCode["dbsException-dao"])
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/BriefList.  Expects db connection from upper layer.")
 	selectsql = 'SELECT '
 	joinsql = ''
         binds = {}

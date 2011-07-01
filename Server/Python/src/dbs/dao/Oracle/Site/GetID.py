@@ -5,8 +5,9 @@ This module provides Site.GetID data access object.
 __revision__ = "$Id: GetID.py,v 1.8 2010/08/02 21:50:14 afaq Exp $"
 __version__ = "$Revision: 1.8 $"
 
-
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+
 class GetID(DBFormatter):
     """
     Site GetID DAO class.
@@ -27,6 +28,9 @@ FROM %sSITES S
         """
         returns id for a give site
         """
+        if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/Site/GetID. Expects db connection from upper layer.")
+
         sql = self.sql
         sql += " WHERE S.SITE_NAME = :site_name" 
         binds = {"site_name":name}

@@ -6,6 +6,7 @@ __revision__ = "$Id: List.py,v 1.1 2010/08/02 20:41:18 afaq Exp $"
 __version__ = "$Revision: 1.1 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
     """
@@ -30,7 +31,8 @@ class List(DBFormatter):
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-	    raise Exception("dbs/dao/Oracle/Services/List expects db connection from upper layer.")	    
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/Service/List. Expects db connection from upper layer.")
+
         sql = self.sql
         binds = {}
         

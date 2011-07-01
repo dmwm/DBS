@@ -12,7 +12,6 @@ from cherrypy import request, response, HTTPError
 from cherrypy import expose, tools
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsUtils import dbsUtils
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from dbs.business.DBSDoNothing import DBSDoNothing
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
@@ -181,11 +180,9 @@ class DBSReaderModel(RESTModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-                sError="%s DBSReaderModel/listPrimaryDatasets.\n Exception trace: \n %s."\
-                    %(dbsExceptionCode['dbsException-web'], traceback.format_exc() )
-                msg = "%s DBSReaderModel/listPrimaryDatasets. %s" %(dbsExceptionCode['dbsException-web'], ex)
-                dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
-
+            sError="DBSReaderModel/listPrimaryDatasets. %s\n Exception trace: \n %s."\
+                    %(ex, traceback.format_exc() )
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     @tools.secmodv2()
     def listPrimaryDsTypes(self, primary_ds_type="", dataset=""):
         """
@@ -202,11 +199,9 @@ class DBSReaderModel(RESTModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            sError = "%s DBSReaderModel/listPrimaryDsTypes. \n. Exception trace: \n %s" \
-                %(dbsExceptionCode['dbsException-web'], traceback.format_exc())
-            msg = "%s DBSReaderModel/listPrimaryDSTypes. %s" %(dbsExceptionCode['dbsException-web'], ex)
-            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
-
+            sError = "DBSReaderModel/listPrimaryDsTypes. %s\n. Exception trace: \n %s" \
+                %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     #@expose
     @tools.secmodv2()
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1, release_version="", pset_hash="",\
@@ -271,10 +266,9 @@ class DBSReaderModel(RESTModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            sError = "%s DBSReaderModel/listDatasets. \n. Exception trace: \n %s" \
-                %(dbsExceptionCode['dbsException-web'], traceback.format_exc())
-            msg = "%s DBSReaderModel/listDatasets. %s" %(dbsExceptionCode['dbsException-web'], ex)
-            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+            sError = "DBSReaderModel/listDatasets.  %s \n. Exception trace: \n %s" \
+                %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 	#
         detail = detail in (True, 1, "True", "1", 'true')
         try:
@@ -286,10 +280,8 @@ class DBSReaderModel(RESTModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            sError = "%s DBSReaderModel/listdatasets.\n. Exception trace: \n %s" \
-                %(dbsExceptionCode['dbsException-web'], traceback.format_exc())
-            msg = "%s DBSReaderModel/datasets. %s" %(dbsExceptionCode['dbsException-web'], ex)
-            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+            sError = "DBSReaderModel/listdatasets. %s.\n Exception trace: \n %s"%(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()
     def listDatasetArray(self):
@@ -305,10 +297,9 @@ class DBSReaderModel(RESTModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            sError = "%s DBSReaderModel/listDatasetArray.\n. Exception trace: \n %s" \
-                    %(dbsExceptionCode['dbsException-web'], traceback.format_exc())
-            msg = "%s DBSReaderModel/listDatasetArray. %s" %(dbsExceptionCode['dbsException-web'], ex)
-            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+            sError = "DBSReaderModel/listDatasetArray. %s \n Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
  
     @tools.secmodv2()
     def listDataTiers(self, data_tier_name=""):
@@ -320,14 +311,12 @@ class DBSReaderModel(RESTModel):
 	data_tier_name = data_tier_name.replace("*","%")
         try:
             return self.dbsDataTier.listDataTiers(data_tier_name)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listDataTiers. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listDataTiers. %s\n. Exception trace: \n %s" \
+                    %( ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()
     def listBlocks(self, dataset="", block_name="", origin_site_name="", logical_file_name="",run_num='-1',\
@@ -375,21 +364,21 @@ class DBSReaderModel(RESTModel):
                 ldate = 0
             else:
                 ldate = int(ldate)
-        except Exception, e:
-            self.debug(str(e))
-            self.debug(traceback.format_exc())
-            raise HTTPError(400, str(e)) 
+        except Exception, ex:
+            sError = "DBSReaderModel/listBlocks.\n. %s \n Exception trace: \n %s" \
+                                %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-invalid-input2',  str(ex), self.logger.exception, sError )
 	detail = detail in (True, 1, "True", "1", 'true')
         try:
             return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name,run_num, \
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
+
         except dbsException as de:
            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message) 
         except Exception, ex:
-            sError = "%s DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
-                    %(dbsExceptionCode['dbsException-web'], ex, traceback.format_exc())
-            msg = "%s DBSReaderModel/listBlocks. %s" %(dbsExceptionCode['dbsException-web'], ex)
-            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+            sError = "DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()
     def listBlockParents(self, block_name=""):
@@ -402,10 +391,9 @@ class DBSReaderModel(RESTModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            sError = "%s DBSReaderModel/listBlockParents. \n. Exception trace: \n %s" \
-                    %(dbsExceptionCode['dbsException-web'], traceback.format_exc())
-            msg = "%s DBSReaderModel/listBlockParents. %s" %(dbsExceptionCode['dbsException-web'], ex)
-            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+            sError = "DBSReaderModel/listBlockParents. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'],  self.logger.exception, sError)
 
     @tools.secmodv2()
     def listBlocksParents(self):
@@ -419,15 +407,14 @@ class DBSReaderModel(RESTModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except cjson.DecodeError, de:
-            sError = "%s DBSReaderModel/listBlockParents.\n. Exception trace: \n %s" \
-                    %(dbsExceptionCode['dbsException-invalid-input'], traceback.format_exc())
-            msg = "%s DBSReaderModel/listBlockParents. %s" %(dbsExceptionCode['dbsException-invalid-input'], de)
+            sError = "DBSReaderModel/listBlockParents. %s\n. Exception trace: \n %s" \
+                    %(de, traceback.format_exc())
+            msg = "DBSReaderModel/listBlockParents. %s" %de
             dbsExceptionHandler('dbsException-invalid-input2', msg, self.logger.exception, sError)
         except Exception, ex:
-            sError = "%s DBSReaderModel/listBlockParents. %s\n. Exception trace: \n %s" \
-                    %(dbsExceptionCode['dbsException-web'], ex, traceback.format_exc())
-            msg = "%s DBSReaderModel/listBlockParents. %s" %(dbsExceptionCode['dbsException-web'], ex)
-            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+            sError = "DBSReaderModel/listBlockParents. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
             
     @tools.secmodv2()
     def listBlockChildren(self, block_name=""):
@@ -438,14 +425,11 @@ class DBSReaderModel(RESTModel):
         block_name = block_name.replace("*","%")
         try:
             return self.dbsBlock.listBlockChildren(block_name)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listBlockChildren. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listBlockChildren. %s\n. Exception trace: \n %s" %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "", release_version="", 
@@ -480,14 +464,13 @@ class DBSReaderModel(RESTModel):
         try:
             return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
 					output_module_label, maxrun, minrun, origin_site_name, lumi_list, detail)
+
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listFiles. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listFiles. %s \n Exception trace: \n %s" %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
+                    self.logger.exception, sError)
 
     @tools.secmodv2()
     def listFileSummaries(self, block_name='', dataset='', run_num=0):
@@ -501,12 +484,11 @@ class DBSReaderModel(RESTModel):
         try:
             return self.dbsFile.listFileSummary(block_name, dataset, run_num)
         except dbsException as de:
-           dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            sError = "%s DBSReaderModel/listFileSummaries. %s\n. Exception trace: \n %s" \
-                    %(dbsExceptionCode['dbsException-web'], ex, traceback.format_exc())
-            msg = "%s DBSReaderModel/listFileSummaries. %s" %(dbsExceptionCode['dbsException-web'], ex)
-            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+            sError = "DBSReaderModel/listFileSummaries. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],self.logger.exception, sError)
 
     @tools.secmodv2()
     def listDatasetParents(self, dataset=''):
@@ -516,14 +498,12 @@ class DBSReaderModel(RESTModel):
         """
         try:
             return self.dbsDataset.listDatasetParents(dataset)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listDatasetParents. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listDatasetParents. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],self.logger.exception, sError)
    
     @tools.secmodv2()
     def listDatasetChildren(self, dataset):
@@ -533,14 +513,12 @@ class DBSReaderModel(RESTModel):
         """
         try:
             return self.dbsDataset.listDatasetChildren(dataset)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listDatasetChildren. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listDatasetChildren. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
    
     @tools.secmodv2()
     def listOutputConfigs(self, dataset="", logical_file_name="", release_version="", pset_hash="", app_name="",
@@ -562,14 +540,12 @@ class DBSReaderModel(RESTModel):
         try:
             return self.dbsOutputConfig.listOutputConfigs(dataset, logical_file_name, release_version, pset_hash, app_name,
                 output_module_label, block_id, global_tag)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listOutputConfigs. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listOutputConfigs. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
     @tools.secmodv2()
     def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
@@ -579,14 +555,12 @@ class DBSReaderModel(RESTModel):
         """
         try:
             return self.dbsFile.listFileParents(logical_file_name, block_id, block_name)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listFileParents. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listFileParents. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()
     def listFileChildren(self, logical_file_name=''):
@@ -596,14 +570,12 @@ class DBSReaderModel(RESTModel):
         """
         try:
             return self.dbsFile.listFileChildren(logical_file_name)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listFileChildren. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listFileChildren. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
     @tools.secmodv2()
     def listFileLumis(self, logical_file_name="", block_name="", run_num='0'):
@@ -618,14 +590,12 @@ class DBSReaderModel(RESTModel):
             run_num = int(run_num)
         try:
             return self.dbsFile.listFileLumis(logical_file_name, block_name, run_num )
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "\n%s DBSReaderModel/listFileLumis. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listFileLumis. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()     
     def listRuns(self, minrun=-1, maxrun=-1, logical_file_name="", block_name="", dataset=""):
@@ -645,14 +615,12 @@ class DBSReaderModel(RESTModel):
                 #print("ds=%s\n" %dataset)
             #print ("maxrun=%s, minrun=%s\n" %(maxrun, minrun) )
             return self.dbsRun.listRuns(minrun, maxrun, logical_file_name, block_name, dataset)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listRun. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listRun. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     #def listSites(self, block_name="", site_name=""):
     #    """
@@ -671,14 +639,13 @@ class DBSReaderModel(RESTModel):
 	"""
         try:
             return  self.dbsDataType.listDataType(dataType=datatype, dataset=dataset)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listDataTypes. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listDataTypes. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+    
     @tools.secmodv2()
     def dumpBlock(self, block_name):
 	"""
@@ -686,14 +653,12 @@ class DBSReaderModel(RESTModel):
 	"""
         try:
             return self.dbsMigrate.dumpBlock(block_name)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/dumpBlock. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/dumpBlock. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()
     def listAcquisitionEras(self, acquisition_era_name=''):
@@ -703,14 +668,11 @@ class DBSReaderModel(RESTModel):
         try:
             acquisition_era_name = acquisition_era_name.replace('*', '%')
             return  self.dbsAcqEra.listAcquisitionEras(acquisition_era_name)
-        except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listAcquisitionEras. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except Exception as ex:
+            sError = "DBSReaderModel/listAcquisitionEras. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()
     def listProcessingEras(self, processing_version=''):
@@ -720,14 +682,12 @@ class DBSReaderModel(RESTModel):
         try:
             processing_version = processing_version.replace("*", "%")
             return  self.dbsProcEra.listProcessingEras(processing_version)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listProcessingEras. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listProcessingEras. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()
     def listReleaseVersions(self, release_version='', dataset=''):
@@ -738,14 +698,12 @@ class DBSReaderModel(RESTModel):
             release_version = release_version.replace("*","%")
         try:
             return  self.dbsReleaseVersion.listReleaseVersions(release_version,dataset )
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listReleaseVersions. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listReleaseVersions. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
     @tools.secmodv2()
     def listDatasetAccessTypes(self, dataset_access_type=''):
@@ -756,14 +714,12 @@ class DBSReaderModel(RESTModel):
             dataset_access_type = dataset_access_type.replace("*","%")
         try:
             return  self.dbsDatasetAccessType.listDatasetAccessTypes(dataset_access_type)
+        except dbsException as de:
+           dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listDatasetAccessTypes. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = "DBSReaderModel/listDatasetAccessTypes. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2()
     def listPhysicsGroups(self, physics_group_name=''):
@@ -774,12 +730,9 @@ class DBSReaderModel(RESTModel):
             physics_group_name = physics_group_name.replace('*', '%')
         try:
             return self.dbsPhysicsGroup.listPhysicsGroups(physics_group_name)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            if "dbsException-7" in ex.args[0]:
-                raise HTTPError(400, str(ex))
-            else:
-                msg = "%s DBSReaderModel/listPhysicsGroups. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
-
+            sError = "DBSReaderModel/listPhysicsGroups. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)

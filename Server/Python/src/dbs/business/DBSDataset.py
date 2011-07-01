@@ -48,14 +48,12 @@ class DBSDataset:
         returns only parent dataset name
         """
         if( dataset == "" ):
-            raise Exception ("dbsException-7", "%s DBSDataset/listDatasetParents. Child Dataset name is required\n."\
-                %DBSEXCEPTIONS['dbsException-7'] )
+            dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/listDatasetParents. Child Dataset name is required.")
 	try:
 	    conn = self.dbi.connection()
 	    result=self.datasetparentlist.execute(conn, dataset)
 	    return result
         except Exception, ex:
-            #self.logger.exception("%s DBSDataset/listDatasetParents. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
         finally:
 	    conn.close()
@@ -66,14 +64,12 @@ class DBSDataset:
         returns only children dataset name
         """
         if( dataset == "" ):
-            raise Exception ("dbsException-7", "%s DBSDataset/listDatasetChildren. Parent Dataset name is required\n."\
-                %DBSEXCEPTIONS['dbsException-7'] )
+            dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/listDatasetChildren. Parent Dataset name is required.")
 	try:
 	    conn = self.dbi.connection()
 	    result=self.datasetchildlist.execute(conn, dataset)
 	    return result
         except Exception, ex:
-            #self.logger.exception("%s DBSDataset/listDatasetChildren. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
         finally:
 	    conn.close()
@@ -89,7 +85,6 @@ class DBSDataset:
             self.updatestatus.execute(conn, dataset, is_dataset_valid, trans)
 	    trans.commit()
 	except Exception, ex:
-            #self.logger.exception("%s DBSDataset/updateStatus. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    trans.rollback()
             raise ex
 	finally:
@@ -107,7 +102,6 @@ class DBSDataset:
             self.updatetype.execute(conn, dataset, dataset_access_type.upper(), trans)
 	    trans.commit()
 	except Exception, ex:
-            #self.logger.exception("%s DBSDataset/updateType. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    trans.rollback()
             raise ex
 	finally:
@@ -130,9 +124,8 @@ class DBSDataset:
         #pdb.set_trace()
         #self.logger.warning("I am in listDataset businese")
  	if(logical_file_name and logical_file_name.find("%")!=-1):
-	    dbsExceptionHandler('dbsException-invalid-input', '%s DBSDataset/listDatasets API requires \
-                fullly qualified logical_file_name. NO wildcard is allowed in logical_file_name.'\
-                %dbsExceptionCode['dbsException-invalid-input'])
+	    dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasets API requires \
+                fullly qualified logical_file_name. NO wildcard is allowed in logical_file_name.')
 	try:
             conn = None
 	    conn = self.dbi.connection()
@@ -163,8 +156,8 @@ class DBSDataset:
 
     def listDatasetArray(self, inputdata=None):
         if not inputdata:
-            dbsExceptionHandler('dbsException-invalid-input', '%s DBSDataset/listDatasetArray API requires \
-                at least a list of dataset.' %dbsExceptionCode['dbsException-invalid-input'])
+            dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasetArray API requires \
+                at least a list of dataset.')
         else:
             try:
                 dataset=inputdata["dataset"]
@@ -190,8 +183,7 @@ class DBSDataset:
                     dataset_access_type=dataset_access_type, transaction=False)
                 return result                        
             except cjson.DecodeError, de:
-                msg = "%s business/listDatasetArray requires at least a list of dataset. %s"\
-                    %(dbsExceptionCode['dbsException-invalid-input'], de)
+                msg = "business/listDatasetArray requires at least a list of dataset. %s"%de
                 dbsExceptionHandler('dbsException-invalid-input', msg)
             except Exception, ex:
                 raise ex
@@ -209,12 +201,12 @@ class DBSDataset:
         """ 
         if not (businput.has_key("primary_ds_name") and businput.has_key("dataset")\
                 and businput.has_key("is_dataset_valid") and businput.has_key("processed_ds_name") ):
-            raise Exception('dbsException-7', "%s business/DBSDataset/insertDataset must have dataset,\
-            is_dataset_valid, primary_ds_name, processed_ds_name as input" %DBSEXCEPTIONS['dbsException-7'])
+            dbsExceptionHandler('dbsException-invalid-input', "business/DBSDataset/insertDataset must have dataset,\
+            is_dataset_valid, primary_ds_name, processed_ds_name as input")
 
         if not (businput.has_key("data_tier_name") and businput.has_key("dataset_access_type") ):
-             raise Exception('dbsException-7', "%s business/DBSDataset/insertDataset must have data_tier(name),\
-             dataset_access_type as input.\n" %DBSEXCEPTIONS['dbsException-7'])
+             dbsExceptionHandler('dbsException-invalid-input', "business/DBSDataset/insertDataset must have data_tier(name),\
+             dataset_access_type as input.")
 
         conn = self.dbi.connection()
         tran = conn.begin()
@@ -222,17 +214,17 @@ class DBSDataset:
 
             dsdaoinput={}
             dsdaoinput["primary_ds_id"] = self.primdsid.execute(conn, businput["primary_ds_name"], tran)
-	    if dsdaoinput["primary_ds_id"] == -1: raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Primary Dataset: %s not found" 
-                                                                                    %(DBSEXCEPTIONS['dbsException-2'], businput["primary_ds_name"]) )
+	    if dsdaoinput["primary_ds_id"] == -1: dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Primary Dataset: %s not found"\
+                                                                                    %businput["primary_ds_name"]) 
             dsdaoinput["data_tier_id"] = self.tierid.execute(conn, businput["data_tier_name"].upper(), tran)
-	    if dsdaoinput["data_tier_id"] == -1: raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Data Tier: %s not found" 
-                                                                                    %(DBSEXCEPTIONS['dbsException-2'], businput["data_tier_name"]) )
+	    if dsdaoinput["data_tier_id"] == -1: dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Data Tier: %s not found"\
+                                                                                    %businput["data_tier_name"]) 
             dsdaoinput["dataset_access_type_id"] = self.datatypeid.execute(conn, businput["dataset_access_type"].upper(), tran)
-	    if dsdaoinput["dataset_access_type_id"] == -1: raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Dataset Access Type : %s not found" 
-                                                                                    %(DBSEXCEPTIONS['dbsException-2'], businput["dataset_access_type"]) )
+	    if dsdaoinput["dataset_access_type_id"] == -1: dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Dataset Access Type : %s not found"\
+                                                                                    %businput["dataset_access_type"] )
             dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
-	    if dsdaoinput["physics_group_id"]  == -1: raise Exception ("dbsException-2",  "%s DBSDataset/insertDataset. Physics Group : %s Not found" 
-                                                                                    %(DBSEXCEPTIONS['dbsException-2'], businput["physics_group_name"]) )
+	    if dsdaoinput["physics_group_id"]  == -1:dbsExceptionHandler("dbsException-missing-data",  "DBSDataset/insertDataset. Physics Group : %s Not found"\
+                                                                                    %businput["physics_group_name"]) 
 
             # See if processed dataset exists, if not, add one
             procid = self.procdsid.execute(conn, businput["processed_ds_name"], tran)
@@ -260,13 +252,13 @@ class DBSDataset:
             # See if Processing Era exists
             if businput.has_key("processing_version"):
                 dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"].upper(), tran)
-		if dsdaoinput["processing_era_id"] == -1 : raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Processing Era : %s not found" 
-                                                        %(DBSEXCEPTIONS['dbsException-2'], businput["processing_version"]) )
+		if dsdaoinput["processing_era_id"] == -1 : dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Processing Era : %s not found"\
+                                                        %businput["processing_version"]) 
             # See if Acquisition Era exists
             if businput.has_key("acquisition_era_name"):
                 dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"].upper(), tran)
-		if dsdaoinput["acquisition_era_id"] == -1 : raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Acquisition Era : %s not found" 
-                                                        %(DBSEXCEPTIONS['dbsException-2'], dsdaoinput["acquisition_era_id"])  )
+		if dsdaoinput["acquisition_era_id"] == -1 : dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Acquisition Era : %s not found"\
+                                                        %dsdaoinput["acquisition_era_id"])
                  
             try:
                 # insert the dataset
@@ -278,10 +270,9 @@ class DBSDataset:
                     self.logger.warning("%s" % ex)
 		    ds = "/%s/%s/%s" %(businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"].upper())
                     dsdaoinput["dataset_id"] = self.datasetid.execute(conn, ds , tran)
-                    if dsdaoinput["dataset_id"] == -1 : raise Exception ("dbsException-2", "%s DBSDataset/insertDataset. Strange error, the dataset %s does not exist ?" 
-                                                    %(DBSEXCEPTIONS['dbsException-2'], ds) )
+                    if dsdaoinput["dataset_id"] == -1 : dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Strange error, the dataset %s does not exist ?" 
+                                                    %ds )
                 else:
-                    #self.logger.exception("%s DBSDataset/insertDataset. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                     raise	
 
             #FIXME : What about the READ-only status of the dataset
@@ -296,29 +287,25 @@ class DBSDataset:
 										anOutConfig["output_module_label"], \
                                                                                 anOutConfig["global_tag"], tran) 
 		    if dsoutconfdaoin["output_mod_config_id"] == -1 : 
-                        #self.logger.exception("%s DBSDataset/insertDataset.\n." %(DBSEXCEPTIONS['dbsException-2']))
-                        raise Exception ("dbsException-2", "%s DBSDataset/insertDataset: Output config (%s, %s, %s, %s) not found" \
-                                                                                %( DBSEXCEPTIONS['dbsException-2'], anOutConfig["app_name"], \
+                        dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: Output config (%s, %s, %s, %s) not found" \
+                                                                                %(anOutConfig["app_name"], \
                                                                                 anOutConfig["release_version"], \
                                                                                 anOutConfig["pset_hash"], \
                                                                                 anOutConfig["output_module_label"], \
                                                                                 anOutConfig["global_tag"]))
 		    dsoutconfdaoin["ds_output_mod_conf_id"] = self.sm.increment(conn, "SEQ_DC", tran)
-		    #print "INSERTING output_mod_config_id :::::: %s" %str(dsoutconfdaoin["output_mod_config_id"])
 		    try:
 			self.datasetoutmodconfigin.execute(conn, dsoutconfdaoin, tran)
 		    except Exception, ex:
 			if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			    pass
 			else:
-                            #self.logger.exception("%s DBSDataset/insertDataset & output config mapping. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 			    raise
             # Dataset parentage will NOT be added by this API it will be set by insertFiles()--deduced by insertFiles
             # Dataset  runs will NOT be added by this API they will be set by insertFiles()--deduced by insertFiles OR insertRun API call
             tran.commit()
         except Exception, e:
             tran.rollback()
-            #self.logger.exception("%s DBSDataset/insertDataset. %s\n." %(DBSEXCEPTIONS['dbsException-2'], e))
             raise
         finally:
             conn.close()

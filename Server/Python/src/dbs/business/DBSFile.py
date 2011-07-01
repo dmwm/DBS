@@ -5,7 +5,6 @@ This module provides business object class to interact with File.
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from sqlalchemy import exceptions
 
 class DBSFile:
@@ -50,16 +49,13 @@ class DBSFile:
         """
         if((logical_file_name=='' or '*'in logical_file_name or '%' in logical_file_name) \
             and (block_name=="" or '*' in block_name or '%' in block_name)):
-            raise Exception('dbsException-7', "%s DBSFile/listFileLumis. \
-                fully specified logical_file_name or block_name is required. No wildcards are allowed." \
-                 %DBSEXCEPTIONS['dbsException-7'] )
+            dbsExceptionHandler('dbsException-invalid-input', "DBSFile/listFileLumis. \
+                fully specified logical_file_name or block_name is required. No wildcards are allowed." )
 	try:
 	    conn=self.dbi.connection()
 	    result=self.filelumilist.execute(conn, logical_file_name, block_name, run_num)
 	    return result
         except Exception, ex:
-            #self.logger.exception("%s DBSFile/listFileLumis. %s\n." \
-                    #%(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -71,12 +67,10 @@ class DBSFile:
         try:
             conn=self.dbi.connection()
             if not block_name and not dataset:
-                msg =  "%s DBSFile/listFileSummary.  block_name or dataset is required for listFileSummary API"\
-                    %dbsExceptionCode['dbsException-invalid-input']
+                msg =  "DBSFile/listFileSummary.  block_name or dataset is required for listFileSummary API"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
             if '%' in block_name or '%' in dataset:
-                msg = "%s DBSFile/listFileSummary. No wildcard is allowed in block_name or dataset for listFileSummary API" \
-                    %dbsExceptionCode['dbsException-invalid-input']
+                msg = "DBSFile/listFileSummary. No wildcard is allowed in block_name or dataset for listFileSummary API" 
                 dbsExceptionHandler('dbsException-invalid-input', msg)
             result = self.filesummarylist.execute(conn,block_name, dataset, run_num)
             return result
@@ -94,9 +88,8 @@ class DBSFile:
 	    conn=self.dbi.connection()
             self.logger.debug("lfn %s, block_name %s, block_id :%s" %(logical_file_name, block_name,block_id))
 	    if not logical_file_name and not block_name and not block_id:
-		raise Exception('dbsException-7', "%s DBSFile/listFileParents. \
-                        logical_file_name, block_id or block_name is required for listFileParents api" \
-                        %DBSEXCEPTIONS['dbsException-7'] )
+                dbsExceptionHandler('dbsException-invalid-input', "DBSFile/listFileParents. \
+                        logical_file_name, block_id or block_name is required for listFileParents api" )
 	    sqlresult= self.fileparentlist.execute(conn,logical_file_name, block_id, block_name)
             result=[]
             d={}
@@ -113,8 +106,6 @@ class DBSFile:
                 result.append(r)
             return result
         except Exception, ex:
-            #self.logger.exception("%s DBSFile/listFileParents. %s\n." \
-                    #%(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -127,9 +118,8 @@ class DBSFile:
 	try:
 	    conn=self.dbi.connection()
 	    if not logical_file_name:
-		raise Exception("dbsException-7", "%s DBSFile/listFileChildren.\
-                        logical_file_name is required for listFileChildren api"\
-                        %DBSEXCEPTIONS['dbsException-7'])
+                dbsExceptionHandler('dbsException-invalid-input', "DBSFile/listFileChildren.\
+                        logical_file_name is required for listFileChildren api")
 	    sqlresult = self.filechildlist.execute(conn,logical_file_name)
             d={}
             result=[]
@@ -145,8 +135,6 @@ class DBSFile:
                 result.append(r)
 	    return result
         except Exception, ex:
-            #self.logger.exception("%s DBSFile/listFileChildren. %s\n." \
-                    #%(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise ex
 	finally:
 	    conn.close()
@@ -162,8 +150,6 @@ class DBSFile:
 	    self.updatestatus.execute(conn, logical_file_name, is_file_valid, trans)
 	    trans.commit()
 	except Exception, ex:
-            #self.logger.exception("%s DBSFile/updateStatus. %s\n." \
-                    #%(DBSEXCEPTIONS['dbsException-2'], ex))
 	    trans.rollback()
 	    raise ex
 		
@@ -179,22 +165,18 @@ class DBSFile:
 	no-patterned lfn 
         """
 	if ('%' in block_name):
-	    raise Exception("dbsException-7", "%s DBSFile/listFiles. You must specify exact block name not a pattern"\
-                    %DBSEXCEPTIONS['dbsException-7'] )
+	    dbsExceptionHandler('dbsException-invalid-input', "DBSFile/listFiles. You must specify exact block name not a pattern")
 	elif ('%' in dataset):
-	    raise Exception("dbsException-7", "%s DBSFile/listFiles. You must specify exact dataset name not a pattern"\
-                    %DBSEXCEPTIONS['dbsException-7'] )
+	    dbsExceptionHandler('dbsException-invalid-input', "DBSFile/listFiles. You must specify exact dataset name not a pattern")
 	elif (not dataset  and not block_name and (not logical_file_name or '%'in logical_file_name)):
-	    raise Exception ("dbsException-7", """%s DBSFile/listFiles. You must specify one of the parameter groups:  \
+	    dbsExceptionHandler('dbsException-invalid-input', """DBSFile/listFiles. You must specify one of the parameter groups:  \
                     non-pattern dataset, \
                     non-pattern block , non-pattern dataset with lfn ,\
-                    non-pattern block with lfn or no-pattern lfn. """\
-                    %DBSEXCEPTIONS['dbsException-7'] )
+                    non-pattern block with lfn or no-pattern lfn. """)
 	elif (lumi_list and len(lumi_list) != 0):
-	    #if (not maxrun or maxrun ==-1) and (not minrun or minrun == -1) and (minrun!=maxrun): #if neither is provided, it will pass this condition
 	    if (maxrun==-1 and minrun==-1) or (minrun!=maxrun):
-		raise Exception("dbsException-7", "%s DBSFile/listFiles. lumi list must accompany A single run number, \
-                        use minrun==maxrun" %DBSEXCEPTIONS['dbsException-7'] )
+		dbsExceptionHandler('dbsException-invalid-input', "DBSFile/listFiles. lumi list must accompany A single run number, \
+                        use minrun==maxrun")
 	else:
 	    pass
 	try:
@@ -204,7 +186,6 @@ class DBSFile:
 			    output_module_label, maxrun, minrun, origin_site_name, lumi_list)
 	    return result
 	except Exception, ex:
-            #self.logger.exception("%s DBSFile/listFiles. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    raise
 	finally:
 	    conn.close()
@@ -242,8 +223,8 @@ class DBSFile:
         #import pdb
         #pdb.set_trace()
 	if len(businput) > 10:
-	    raise Exception('dbsException-2', "%s DBSFile/insertFile. DBS cannot insert \
-                    more than 10 files in one bulk call" %DBSEXCEPTIONS['dbsException-2'] )
+	    dbsExceptionHandler('dbsException-input-too-large', "DBSFile/insertFile. DBS cannot insert \
+                    more than 10 files in one bulk call")
 	    return
 	conn = self.dbi.connection()
 	tran = conn.begin()
@@ -259,8 +240,8 @@ class DBSFile:
 	    # and block exists that files are suppose to be going to and is OPEN for writing
 	    dataset_id = self.datasetid.execute(conn, dataset=firstfile["dataset"], transaction=tran)
 	    if dataset_id == -1 :
-                raise Exception('dbsException-2', "%s DBSFile/insertFile. Dataset : %s does not exist"\
-                        %(DBSEXCEPTIONS['dbsException-2'], firstfile["dataset"]) )
+                dbsExceptionHandler('dbsException-missing-data', "DBSFile/insertFile. Requored Dataset %s does not exist"\
+                        %firstfile["dataset"] )
 	    # get the list of configs in for this dataset
 	    dsconfigs = [x['output_mod_config_id'] for x in self.dsconfigids.execute(conn, dataset=firstfile["dataset"], transaction=tran)]
 	    fileconfigs=[] # this will hold file configs that we will list in the insert file logic below	
@@ -270,11 +251,12 @@ class DBSFile:
 	    assert block_info["block_id"] 
 	    assert block_info["open_for_writing"]==1 
 	    block_id = block_info["block_id"]
-	    
+	   
+            #make the default file_type=EDM
 	    file_type_id = self.ftypeid.execute( conn, firstfile.get("file_type", "EDM"), transaction=tran)
 	    if file_type_id == -1: 
-                raise Exception ('dbsException-7', "%s DBSFile/insertFile. Unknown file type : %s, not found in DBS"\
-                        %(DBSEXCEPTIONS['dbsException-7'],  firstfile.get("file_type", "EDM")) )
+                dbsExceptionHandler('dbsException-missing-data', "DBSFile/insertFile. Required file type %s not found in DBS"\
+                        %firstfile.get("file_type", "EDM") )
 
 	    iFile = 0
 	    fileIncrement = 40
@@ -326,11 +308,10 @@ class DBSFile:
 			#refresh the file_id from database
 			#filein["file_id"]=self.fileid.execute(filein["logical_file_name"], conn, transaction=tran)
 			# Lets move on to NEXT file, we do not want to continue processing this file
-			self.logger.warning("%s DBSFile/insertFile. File already exists in DBS, not changing it: %s" 
-                                            %(DBSEXCEPTIONS['dbsException-2'], filein["logical_file_name"]) )
+			self.logger.warning("DBSFile/insertFile. File already exists in DBS, not changing it: %s" 
+                                            %filein["logical_file_name"] )
 			continue
 		    else:
-                        #self.logger.exception("%s DBSFile/insertFile. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 			raise	
 	        # Saving the id for later use
 		#files2insert.append(filein)
@@ -378,9 +359,8 @@ class DBSFile:
 			    #lfn=fp
                         pflid = self.fileid.execute(conn, lfn, transaction=tran)
                         if pflid == -1 : 
-                            raise Exception('dbsException-7', "%s DBSFile/insertFile. The parent file %s for file %s\
-                                    not found in DBS" %(DBSEXCEPTIONS['dbsException-7'], lfn, f["logical_file_name"]) )
-                        #fpdao["parent_file_id"] = self.fileid.execute(conn, lfn, transaction=tran)
+                            dbsExceptionHandler('dbsException-missing-data', "DBSFile/insertFile. The parent file %s for file %s\
+                                    not found in DBS" %(lfn, f["logical_file_name"]) )
                         fpdao["parent_file_id"] = pflid
                         fparents2insert.append(fpdao)
 
@@ -403,9 +383,9 @@ class DBSFile:
                                     fc["release_version"], fc["pset_hash"], fc["output_module_label"], \
                                     fc["global_tag"],transaction=tran)
 			    if fcdao["output_mod_config_id"] == -1 : 
-                                raise Exception ('dbsException-7', "%s DBSFile/insertFile.\
+                                dbsExceptionHandler('dbsException-missing-data', "DBSFile/insertFile.\
                                         Output module config (%s, %s, %s, %s) \
-                                        not found" %(DBSEXCEPTIONS['dbsException-7'], fc["app_name"], \
+                                        not found" %(fc["app_name"], \
                                         fc["release_version"], fc["pset_hash"], fc["output_module_label"]) )
                             fileconfigs.append(fcdao["output_mod_config_id"]) 
 			    fconfigs2insert.append(fcdao)
@@ -425,10 +405,10 @@ class DBSFile:
                 #import pdb
                 #pdb.set_trace()
 		if not set(fileconfigs).issubset(set(dsconfigs)) :
-		    raise Exception('dbsException-2', "%s DBSFile/insertFile. Output configs mismatch, \
+		    dbsExceptionHandler('dbsException-conflict-data', "DBSFile/insertFile. Output configs mismatch, \
                             output configs known to dataset: \
                             %s are different from what are being mapped to file : %s " \
-                            %(DBSEXCEPTIONS['dbsException-2'], firstfile["dataset"], filein["logical_file_name"]) )
+                            %(firstfile["dataset"], filein["logical_file_name"]) )
 		# insert output module config mapping
 		if fconfigs2insert:
 		    file_clob['file_output_config_list']=fconfigs2insert
@@ -442,7 +422,6 @@ class DBSFile:
 		        if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 			    pass
 			else:
-                            #self.logger.exception("%s DBSFile/insertFile. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
                             raise		   
 		
 	    # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
@@ -481,8 +460,6 @@ class DBSFile:
 			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 				pass
 			    else:
-                                #self.logger.exception("%s DBSFile/insertFile/update block parentage. %s\n." \
-                                        #%(DBSEXCEPTIONS['dbsException-2'], ex))
 				raise
 		# Update dataset parentage
 		if len(fpds) > 0 :
@@ -506,8 +483,6 @@ class DBSFile:
 			    if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
 				pass
 			    else:
-                                #self.logger.exception("%s DBSFile/insertFile/update dataset parentage. %s\n." \
-                                        #%(DBSEXCEPTIONS['dbsException-2'], ex))
 				raise
 
 		# Update block parameters, file_count, block_size
@@ -520,7 +495,6 @@ class DBSFile:
             tran.commit()
 
 	except Exception, ex:
-            #self.logger.exception("%s DBSFile/insertFile. %s\n." %(DBSEXCEPTIONS['dbsException-2'], ex))
 	    tran.rollback()
 	    raise
 

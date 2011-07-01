@@ -13,7 +13,6 @@ import time
 
 from cherrypy import request, response, HTTPError, tools
 from WMCore.WebTools.RESTModel import RESTModel
-from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from dbs.utils.dbsUtils import dbsUtils 
 from dbs.web.DBSReaderModel import DBSReaderModel
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
@@ -76,7 +75,6 @@ class DBSWriterModel(DBSReaderModel):
 	self._addMethod('POST', 'acquisitioneras', self.insertAcquisitionEra)
 	self._addMethod('POST', 'processingeras', self.insertProcessingEra)
         self._addMethod('POST', 'datasets', self.insertDataset)
-        self._addMethod('POST', 'sites', self.insertSite)
         self._addMethod('POST', 'blocks', self.insertBlock)
         self._addMethod('POST', 'files', self.insertFile, args=['qInserts'])
 	self._addMethod('PUT', 'files', self.updateFile, args=['logical_file_name', 'is_file_valid'])
@@ -101,10 +99,9 @@ class DBSWriterModel(DBSReaderModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
 	except Exception, ex:
-            sError = "%s DBSWriterModel/insertPrimaryDataset. Exception trace: \n %s" \
-                        %(dbsExceptionCode['dbsException-web'], traceback.format_exc())
-            msg = "%s DBSWriterModel/insertPrimaryDataset. %s" %(dbsExceptionCode['dbsException-web'], ex)
-            dbsExceptionHandler('dbsException-web', msg, self.logger.exception, sError)
+            sError = "DBSWriterModel/insertPrimaryDataset. %s\n Exception trace: \n %s" \
+                        %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2(authzfunc=authInsert)
     def insertOutputConfig(self):
@@ -123,15 +120,12 @@ class DBSWriterModel(DBSReaderModel):
                                 "create_by" : dbsUtils().getCreateBy() , "last_modified_by" : dbsUtils().getCreateBy() })
                 # need proper validation
                 self.dbsOutputConfig.insertOutputConfig(indata)
-
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-                if "dbsException-7" in ex.args[0]:
-                    raise HTTPError(400, str(ex))
-                else:
-                    msg = "%s DBSWriterModel/insertOutputConfig. %s\n. Exception trace: \n %s" \
-                            %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                    self.logger.exception( msg )
-                    raise Exception ("dbsException-3", msg )
+            sError = "DBSWriterModel/insertOutputConfig. %s\n. Exception trace: \n %s" \
+                            %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2(authzfunc=authInsert)
     def insertAcquisitionEra(self):
@@ -144,16 +138,16 @@ class DBSWriterModel(DBSReaderModel):
         """
 
         try:
-                body = request.body.read()
-                indata = cjson.decode(body)
-                indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
-                self.dbsAcqEra.insertAcquisitionEra(indata)
-
+            body = request.body.read()
+            indata = cjson.decode(body)
+            indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
+            self.dbsAcqEra.insertAcquisitionEra(indata)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-                msg = "%s DBSWriterModel/insertAcquisitionEra. %s\n. Exception trace: \n %s" \
-                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception( msg )
-                raise Exception ("dbsException-3", msg )
+            sError = " DBSWriterModel/insertAcquisitionEra. %s\n. Exception trace: \n %s" \
+                        %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2(authzfunc=authInsert)
     def insertProcessingEra(self):
@@ -165,17 +159,16 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-                body = request.body.read()
-                indata = cjson.decode(body)
-                indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
-                self.dbsProcEra.insertProcessingEra(indata)
-
+            body = request.body.read()
+            indata = cjson.decode(body)
+            indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
+            self.dbsProcEra.insertProcessingEra(indata)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-                    msg = "%s DBSWriterModel/insertProcessingEra. %s\n. Exception trace: \n %s" \
-                            %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                    self.logger.exception( msg )
-                    raise Exception ("dbsException-3", msg )
-
+            sError = "DBSWriterModel/insertProcessingEra. %s\n. Exception trace: \n %s" \
+                            %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     @tools.secmodv2(authzfunc=authInsert)                
     def insertDataset(self):
         """
@@ -195,35 +188,13 @@ class DBSWriterModel(DBSReaderModel):
                 
 		# need proper validation
                 self.dbsDataset.insertDataset(indata)
-
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-                if "dbsException-7" in ex.args[0]:
-                    raise HTTPError(400, str(ex))
-                else:
-                    msg = "%s DBSWriterModel/insertDataset. %s\n. Exception trace: \n %s" \
-                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                    self.logger.exception(msg )
-                    raise Exception ("dbsException-3", msg )
+            sError = " DBSWriterModel/insertDataset. %s\n. Exception trace: \n %s" \
+                        %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 		
-    def insertSite(self):
-        """
-	Inserts a Site in DBS
-        Gets the input from cherrypy request body.
-        input must be a dictionary with the following two keys:
-        site_name
-        """
-	
-	try :
-        	body = request.body.read()
-        	indata = cjson.decode(body)
-        	self.dbsSite.insertSite(indata)
-		
-	except Exception, ex:
-                msg = "%s DBSWriterMOdel/insertSite. %s\n. Exception trace: \n %s" \
-                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception(msg )
-                raise Exception ("dbsException-3", msg )
-    
     @tools.secmodv2(authzfunc=authInsert)
     def insertBulkBlock(self):
         """
@@ -235,14 +206,13 @@ class DBSWriterModel(DBSReaderModel):
 
             body = request.body.read()
             indata = cjson.decode(body)
-            #FIXME: what we should check?
             self.dbsBlockInsert.putBlock(indata)
-
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
-            msg = "%s DBSWriterModel/insertBulkBlock. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc()) 
-            self.logger.exception(msg )
-            raise Exception ("dbsException-3", msg )
+            sError = "DBSWriterModel/insertBulkBlock. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc()) 
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2(authzfunc=authInsert)
     def insertBlock(self):
@@ -276,12 +246,12 @@ class DBSWriterModel(DBSReaderModel):
                       })
 
 	    self.dbsBlock.insertBlock(block)
-    
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
 	except Exception, ex:
-            msg = "%s DBSWriterModel/insertBlock. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-            self.logger.exception(msg )
-            raise Exception ("dbsException-3", msg )
+            sError = "DBSWriterModel/insertBlock. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 	
     @tools.secmodv2(authzfunc=authInsert)    
     def insertFile(self, qInserts=False):
@@ -327,12 +297,12 @@ class DBSWriterModel(DBSReaderModel):
                      "file_output_config_list":f.get("file_output_config_list",[])})
 		businput.append(f)
 	    self.dbsFile.insertFile(businput, qInserts)
-    
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
 	except Exception, ex:
-            msg = "%s DBSWriterModel/insertFile. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-            self.logger.exception(msg )
-            raise Exception ("dbsException-3", msg )
+            sError = "DBSWriterModel/insertFile. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
   
     @tools.secmodv2(authzfunc=authInsert)    
     def updateFile(self, logical_file_name="", is_file_valid=1):
@@ -341,11 +311,12 @@ class DBSWriterModel(DBSReaderModel):
 	"""
 	try:
 	    self.dbsFile.updateStatus(logical_file_name, is_file_valid)
-	except Exception, ex:
-            msg = "%s DBSWriterModel/updateFile. %s\n. Exception trace: \n %s" \
-                    %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-            self.logger.exception(msg )
-            raise Exception ("dbsException-3", msg )
+	except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except Exception, ex:
+            sError = "DBSWriterModel/updateFile. %s\n. Exception trace: \n %s" \
+                    %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2(authzfunc=authInsert)
     def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_access_type=""):
@@ -358,10 +329,11 @@ class DBSWriterModel(DBSReaderModel):
 	    else: 
 		if is_dataset_valid != -1:
 		    self.dbsDataset.updateStatus(dataset, is_dataset_valid)
-	except Exception, ex:
-            msg = "%s DBSWriterModel\updateDataset. %s\n. Exception trace: \n %s" %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-            self.logger.exception(msg )
-            raise Exception ("dbsException-3", msg )
+	except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except Exception, ex:
+            sError = "DBSWriterModel\updateDataset. %s\n. Exception trace: \n %s" %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2(authzfunc=authInsert)
     def updateBlock(self, block_name="", open_for_writing=0):
@@ -370,10 +342,11 @@ class DBSWriterModel(DBSReaderModel):
 	"""
 	try:
 	    self.dbsBlock.updateStatus(block_name, open_for_writing)
-	except Exception, ex:
-            msg = "%s DBSWriterModel\updateStatus. %s\n. Exception trace: \n %s" %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-            self.logger.exception(msg )
-            raise Exception ("dbsException-3", msg )
+	except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except Exception, ex:
+            sError = "DBSWriterModel\updateStatus. %s\n. Exception trace: \n %s" %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2(authzfunc=authKeyInsert)
     def insertDataTier(self):
@@ -382,12 +355,13 @@ class DBSWriterModel(DBSReaderModel):
 	"""
 
 	try:
-		body = request.body.read()
-		indata = cjson.decode(body)
-		indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
-		self.dbsDataTier.insertDataTier(indata)
-	except Exception, ex:
-                msg = "%s DBSWriterModel\insertDataTier. %s\n. Exception trace: \n %s" \
-                        %(DBSEXCEPTIONS['dbsException-3'], ex, traceback.format_exc())
-                self.logger.exception(msg )
-                raise Exception ("dbsException-3", msg )
+            body = request.body.read()
+            indata = cjson.decode(body)
+            indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
+            self.dbsDataTier.insertDataTier(indata)
+	except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except Exception, ex:
+            sError = " DBSWriterModel\insertDataTier. %s\n. Exception trace: \n %s" \
+                        %(ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)

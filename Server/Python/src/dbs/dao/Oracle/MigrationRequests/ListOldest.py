@@ -5,8 +5,8 @@ This module provides MigrationRequests.ListOldest data access object.
 __revision__ = "$Id: ListOldest.py,v 1.2 2010/06/29 19:23:39 afaq Exp $"
 __version__ = "$Revision: 1.2 $"
 
-
 from WMCore.Database.DBFormatter import DBFormatter
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class ListOldest(DBFormatter):
     """
@@ -24,6 +24,8 @@ class ListOldest(DBFormatter):
         """
         Lists the oldest request queued 
         """
+	if not conn:
+	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/ListOldest. Expects db connection from upper layer.")
 
         binds = {}
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
