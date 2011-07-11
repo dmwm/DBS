@@ -22,12 +22,12 @@ class  SequenceManager(DBFormatter):
         """
         increments the sequence `seqName` by default `Incremented by`
         and returns its value
-	incCount: is UNUSED variable in Oracle implementation
+        incCount: is UNUSED variable in Oracle implementation
         """
 
-	#FIXME: Do we need to lock the tables here?
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/SequenceManager. Expects db connection from upper layer.")
+        #FIXME: Do we need to lock the tables here?
+        if not conn:
+            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/SequenceManager. Expects db connection from upper layer.")
 
         sql = "select %s%s.nextval as val from dual" % (self.owner, seqName)
         result = self.dbi.processData(sql, conn=conn, transaction=transaction)

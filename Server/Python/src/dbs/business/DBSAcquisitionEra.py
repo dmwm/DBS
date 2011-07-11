@@ -8,14 +8,14 @@ __version__ = "$Revision $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
-from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
 class DBSAcquisitionEra:
     """
     DBSAcqusition Era business object class
     """
     def __init__(self, logger, dbi, owner):
-        daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
+        daofactory = DAOFactory(package='dbs.dao', logger=logger,
+                                dbinterface=dbi, owner=owner)
         self.logger = logger
         self.dbi = dbi
         self.owner = owner
@@ -31,13 +31,14 @@ class DBSAcquisitionEra:
         if type(acq) is not str:
             dbsExceptionHandler('dbsException-invalid-input', 'Acquistion era name given is not valid : %s' %acq)
         try:
-            conn=self.dbi.connection()
-            result= self.acqlst.execute(conn,acq)
+            conn = self.dbi.connection()
+            result = self.acqlst.execute(conn, acq)
             return result
         except Exception, ex:
             raise ex
         finally:
-            if conn: conn.close()
+            if conn:
+                conn.close()
 
     def insertAcquisitionEra(self, businput):
         """
@@ -45,10 +46,10 @@ class DBSAcquisitionEra:
         acquisition_era_name, creation_date, create_by
         it builds the correct dictionary for dao input and executes the dao
         """
-	conn = self.dbi.connection()
+        conn = self.dbi.connection()
         tran = conn.begin()
         try:
-	    businput["acquisition_era_id"] = self.sm.increment(conn, "SEQ_AQE", tran)
+            businput["acquisition_era_id"] = self.sm.increment(conn, "SEQ_AQE", tran)
             businput["acquisition_era_name"] = businput["acquisition_era_name"].upper()
             self.acqin.execute(conn, businput, tran)
             tran.commit()
@@ -59,7 +60,6 @@ class DBSAcquisitionEra:
                 # already exists
                 self.logger.warning("DBSAcquisitionEra/insertAcquisitionEra: Unique constraint violation being ignored...")
                 self.logger.warning("%s" % ex)
-                pass
             else:
                 tran.rollback()
                 raise

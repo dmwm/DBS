@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-This module provides business object class to test the speed of dbs w/o access any data. 
+This module provides business object class to test the speed of dbs w/o access
+any data. 
 """
 
 from WMCore.DAOFactory import DAOFactory
-from sqlalchemy import exceptions
 
 class DBSDoNothing:
     """
@@ -20,8 +20,8 @@ class DBSDoNothing:
 
     def listNone(self):
         try:
-            conn=self.dbi.connection()
-            result= self.lst.execute(conn)
+            conn = self.dbi.connection()
+            result = self.lst.execute(conn)
             return result
         except Exception, ex:
             raise ex

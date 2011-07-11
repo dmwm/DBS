@@ -1,6 +1,7 @@
 #!/usr/bin/env python
+#pylint: disable=C0103
 """
-This module provides business object class to interact with Primary Dataset. 
+This module provides business object class to interact with Site table
 """
 
 __revision__ = "$Id: DBSSite.py,v 1.6 2010/04/21 19:50:01 afaq Exp $"
@@ -13,7 +14,8 @@ class DBSSite:
     Site business object class
     """
     def __init__(self, logger, dbi, owner):
-        daofactory = DAOFactory(package='dbs.dao', logger=logger, dbinterface=dbi, owner=owner)
+        daofactory = DAOFactory(package='dbs.dao', logger=logger,
+                                dbinterface=dbi, owner=owner)
         self.logger = logger
         self.dbi = dbi
         self.owner = owner
@@ -27,18 +29,16 @@ class DBSSite:
         """
         Returns sites.
         """
-	try:
-	    conn = self.dbi.connection()
-	    if block_name:
-		result=self.blksitelist.execute(conn, block_name)
-	    else:
-		result=self.sitelist.execute(conn, site_name)
-	    conn.close()
-	    return result
-        except Exception, ex:
-            raise ex
-	finally:
-	    conn.close()
+        try:
+            conn = self.dbi.connection()
+            if block_name:
+                result = self.blksitelist.execute(conn, block_name)
+            else:
+                result = self.sitelist.execute(conn, site_name)
+            conn.close()
+            return result
+        finally:
+            conn.close()
 
     def insertSite(self, businput):
         """
@@ -49,18 +49,18 @@ class DBSSite:
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-	    siteobj={
-		"site_name" : businput["site_name"]
-	    }
+            siteobj = { # FIXME: unused?
+                "site_name" : businput["site_name"]
+            }
             businput["site_id"] = self.sm.increment(conn, "SEQ_SI", tran)
             self.sitein.execute(conn, businput, tran)
             tran.commit()
         except Exception, ex:
-            if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+            if (str(ex).lower().find("unique constraint") != -1 or
+                str(ex).lower().find("duplicate") != -1):
                 # already exists, lets fetch the ID
-                self.logger.warning("Unique constraint violation being ignored...")
-                self.logger.warning("%s" % ex)
-                pass
+                self.logger.warning("Ignoring unique constraint violation")
+                self.logger.warning(ex)
             else:
                 tran.rollback()
                 self.logger.exception(ex)
