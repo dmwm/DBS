@@ -9,7 +9,7 @@ import os
 import unittest
 import logging
 from WMCore.Database.DBFactory import DBFactory
-from dbs.business.DBSFileLumi import DBSFileLumi
+from dbs.business.DBSFile import DBSFile
 
 class DBSFileLumi_t(unittest.TestCase):
     """ Insert should go first - test01...
@@ -24,10 +24,10 @@ class DBSFileLumi_t(unittest.TestCase):
         dburl = os.environ["DBS_TEST_DBURL_READER"] 
         dbowner = os.environ["DBS_TEST_DBOWNER_READER"]
         dbi = DBFactory(self.logger, dburl).connect()
-        bo = DBSFileLumi(self.logger, dbi, dbowner)
+        bo = DBSFile(self.logger, dbi, dbowner)
 
-        bo.listFileLumis(logical_file_name='%')
-        result = bo.listFileLumis(block_name='%')
+        bo.listFileLumis(logical_file_name='foo')
+        result = bo.listFileLumis(block_name='foo')
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
         

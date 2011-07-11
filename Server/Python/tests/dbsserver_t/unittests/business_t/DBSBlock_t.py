@@ -32,7 +32,7 @@ class DBSBlock_t(unittest.TestCase):
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
         
-        result = bo.listBlocks(dataset = '/%', site_name='%')
+        result = bo.listBlocks(dataset = '/%', origin_site_name='%')
         self.assertTrue(type(result) == list)
         
 if __name__ == "__main__":

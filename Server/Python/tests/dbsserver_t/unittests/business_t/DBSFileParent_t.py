@@ -9,7 +9,7 @@ import os
 import unittest
 import logging
 from WMCore.Database.DBFactory import DBFactory
-from dbs.business.DBSFileParent import DBSFileParent
+from dbs.business.DBSFile import DBSFile
 
 class DBSFileParent_t(unittest.TestCase):
     """ Insert should go first - test01...
@@ -24,7 +24,7 @@ class DBSFileParent_t(unittest.TestCase):
         dburl = os.environ["DBS_TEST_DBURL_READER"] 
         dbowner = os.environ["DBS_TEST_DBOWNER_READER"]
         dbi = DBFactory(self.logger, dburl).connect()
-        bo = DBSFileParent(self.logger, dbi, dbowner)
+        bo = DBSFile(self.logger, dbi, dbowner)
 
         result = bo.listFileParents(logical_file_name='%')
         self.assertTrue(type(result) == list)

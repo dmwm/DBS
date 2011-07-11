@@ -9,7 +9,7 @@ import os
 import unittest
 import logging
 from WMCore.Database.DBFactory import DBFactory
-from dbs.business.DBSDatasetParent import DBSDatasetParent
+from dbs.business.DBSDataset import DBSDataset
 
 class DBSDatasetParent_t(unittest.TestCase):
     """ Insert should go first - test01...
@@ -24,7 +24,7 @@ class DBSDatasetParent_t(unittest.TestCase):
         dburl = os.environ["DBS_TEST_DBURL_READER"] 
         dbowner = os.environ["DBS_TEST_DBOWNER_READER"]
         dbi = DBFactory(self.logger, dburl).connect()
-        bo = DBSDatasetParent(self.logger, dbi, dbowner)
+        bo = DBSDataset(self.logger, dbi, dbowner)
 
         result = bo.listDatasetParents(dataset='%')
         self.assertTrue(type(result) == list)

@@ -24,19 +24,19 @@ class DBSFile_t(unittest.TestCase):
         dbi = DBFactory(self.logger, dburl).connect()
         bo = DBSFile(self.logger, dbi, dbowner)
 
-        result = bo.listFiles('NoSuchFile%')
+        result = bo.listFiles('NoSuchFile')
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
         
-        result = bo.listFiles(dataset='NoSuchDataset%')
+        result = bo.listFiles(dataset='NoSuchDataset')
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
         
-        result = bo.listFiles(block_name='NoSuchBlock%')
+        result = bo.listFiles(block_name='NoSuchBlock')
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
         
-        result = bo.listFiles(logical_file_name='NoSuchLFN%')
+        result = bo.listFiles(logical_file_name='NoSuchLFN')
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
         

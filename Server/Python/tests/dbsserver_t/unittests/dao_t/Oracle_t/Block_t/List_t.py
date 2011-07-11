@@ -26,7 +26,7 @@ class List_t(unittest.TestCase):
         dao = BlockList(self.logger, self.dbi, self.dbowner)
         dao.execute(conn, dataset="*")
         dao.execute(conn, block_name='*')
-        dao.execute(conn, site_name='*')
+        dao.execute(conn, origin_site_name='*')
         result = dao.execute(conn, block_name='*')
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
