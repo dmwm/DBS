@@ -40,4 +40,5 @@ class DBSReleaseVersion:
                 result[0]['release_version'] = t
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()

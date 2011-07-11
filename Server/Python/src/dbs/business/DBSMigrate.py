@@ -221,7 +221,8 @@ class DBSMigrate:
                             DBSEXCEPTIONS['dbsException-2'] +
                             " ENQUEUEING_FAILED reason may be ( %s ) " % ex)
         finally:
-            conn.close()
+            if conn:
+                conn.close()
            
         try: 
             # not already queued            
@@ -285,13 +286,17 @@ class DBSMigrate:
                                 DBSEXCEPTIONS['dbsException-2'] +
                                 " ENQUEUEING_FAILED reason may be (%s) " % ex)
         except Exception, ex:
-            tran.rollback()
+            if tran:
+                tran.rollback()
             raise Exception("dbsException-2",
                             "%s DBSMigrate/insertMigrationRequest." %
                             DBSEXCEPTIONS['dbsException-2'] +
                             " ENQUEUEING_FAILED reason may be (%s) " % ex)
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()
     
     def listMigrationRequests(self, migration_request_id="", block_name="",
                               dataset="", user=""):
@@ -312,7 +317,8 @@ class DBSMigrate:
                     migration_request_id="")
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def updateMigrationStatus(self, migration_status, migration_dataset):
         conn = self.dbi.connection()
@@ -321,7 +327,8 @@ class DBSMigrate:
                         migration_dataset=migration_dataset)
             self.mgrup.execute(conn, upst)
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     ##-- below are the actual migration methods
 
@@ -385,7 +392,8 @@ class DBSMigrate:
                 result["processing_era"] = prsEra
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
         
     def callDBSService(self, resturl):
         req = urllib2.Request(url = resturl)

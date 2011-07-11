@@ -52,10 +52,9 @@ class DBSDataset:
             conn = self.dbi.connection()
             result = self.datasetparentlist.execute(conn, dataset)
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def listDatasetChildren(self, dataset):
         """
@@ -68,10 +67,9 @@ class DBSDataset:
             conn = self.dbi.connection()
             result = self.datasetchildlist.execute(conn, dataset)
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def updateStatus(self, dataset, is_dataset_valid):
         """
@@ -84,11 +82,14 @@ class DBSDataset:
             self.updatestatus.execute(conn, dataset, is_dataset_valid, trans)
             trans.commit()
         except Exception, ex:
-            trans.rollback()
+            if trans:
+                trans.rollback()
             raise ex
         finally:
-            trans.close()
-            conn.close()
+            if trans:
+                trans.close()
+            if conn:
+                conn.close()
     
     def updateType(self, dataset, dataset_access_type):
         """
@@ -101,11 +102,14 @@ class DBSDataset:
             self.updatetype.execute(conn, dataset, dataset_access_type.upper(), trans)
             trans.commit()
         except Exception, ex:
-            trans.rollback()
+            if trans:
+                trans.rollback()
             raise ex
         finally:
-            trans.close()
-            conn.close()
+            if trans:
+                trans.close()
+            if conn:
+                conn.close()
    
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
                      release_version="", pset_hash="", app_name="",
@@ -149,8 +153,6 @@ class DBSDataset:
                                  min_cdate, max_cdate, min_ldate, max_ldate,
                                  cdate, ldate)    
             return result
-        except Exception, ex:
-            raise ex
         finally:
             if conn:
                 conn.close()
@@ -186,8 +188,6 @@ class DBSDataset:
             except cjson.DecodeError, de:
                 msg = "business/listDatasetArray requires at least a list of dataset. %s" % de
                 dbsExceptionHandler('dbsException-invalid-input', msg)
-            except Exception, ex:
-                raise ex
             finally:
                 if conn:
                     conn.close()
@@ -323,7 +323,11 @@ class DBSDataset:
             # Dataset  runs will NOT be added by this API they will be set by insertFiles()--deduced by insertFiles OR insertRun API call
             tran.commit()
         except Exception:
-            tran.rollback()
+            if tran:
+                tran.rollback()
             raise
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()

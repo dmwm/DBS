@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#pylint: disable=C0103
 """
 This module provides business layer for the file buffer 
 """
@@ -43,7 +44,8 @@ class DBSFileBuffer:
             result = self.buflistblks.execute(conn)
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
     
     def getBufferedFiles(self, block_id):
         """
@@ -55,7 +57,8 @@ class DBSFileBuffer:
             result = self.buflist.execute(conn, block_id)
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
     
     def insertBufferedFiles(self, businput):
         """
@@ -191,10 +194,14 @@ class DBSFileBuffer:
             tran.commit()
 
         except Exception, e:
-            tran.rollback()
+            if tran:
+                tran.rollback()
             self.logger.exception(e)
             raise
 
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()
 

@@ -61,7 +61,11 @@ class DBSAcquisitionEra:
                 self.logger.warning("DBSAcquisitionEra/insertAcquisitionEra: Unique constraint violation being ignored...")
                 self.logger.warning("%s" % ex)
             else:
-                tran.rollback()
+                if tran:
+                    tran.rollback()
                 raise
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()

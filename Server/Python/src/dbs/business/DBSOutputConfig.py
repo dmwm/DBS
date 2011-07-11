@@ -51,8 +51,6 @@ class DBSOutputConfig:
                                                    pset_hash,
                                                    output_module_label, block_id, global_tag)
             return result
-        except Exception, ex:
-            raise ex
         finally:
             if conn: 
                 conn.close()
@@ -129,8 +127,11 @@ class DBSOutputConfig:
                 raise
                 
         except Exception, e:
-            tran.rollback()
+            if tran:
+                tran.rollback()
             raise
         finally:
+            if tran:
+                tran.close()
             if conn:
                 conn.close()

@@ -33,4 +33,5 @@ class DBSPhysicsGroup:
             result = self.pglist.execute(conn, physics_group_name)
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()

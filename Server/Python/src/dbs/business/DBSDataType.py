@@ -32,4 +32,5 @@ class DBSDataType:
                 result = self.dataType.execute(conn, dataType, dataset)
                 return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()

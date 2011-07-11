@@ -46,11 +46,14 @@ class DBSBlock:
             self.updatestatus.execute(conn, block_name, open_for_writing, dbsUtils().getTime(), trans)
             trans.commit()
         except Exception, ex:
-            trans.rollback()
+            if trans:
+                trans.rollback()
             raise ex
         finally:
-            trans.close()
-            conn.close()
+            if trans:
+                trans.close()
+            if conn:
+                conn.close()
     
     def listBlockParents(self, block_name=""):
         """
@@ -77,10 +80,9 @@ class DBSBlock:
             conn = self.dbi.connection()
             results = self.blockparentlist.execute(conn, block_name)
             return results
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def listBlockChildren(self, block_name=""):
         """
@@ -92,10 +94,9 @@ class DBSBlock:
             conn = self.dbi.connection()
             results = self.blockchildlist.execute(conn, block_name)
             return results
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def listBlocks(self, dataset="", block_name="", origin_site_name="",
                    logical_file_name="",run_num=-1, min_cdate=0, max_cdate=0,
@@ -115,10 +116,9 @@ class DBSBlock:
             result = dao.execute(conn, dataset, block_name, origin_site_name, logical_file_name, run_num,
                                  min_cdate, max_cdate, min_ldate, max_ldate, cdate,  ldate)
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
     
     
     def insertBlock(self, businput):
@@ -164,8 +164,12 @@ class DBSBlock:
             if str(e).lower().find("unique constraint") != -1 or str(e).lower().find("duplicate") != -1:
                 pass
             else:
-                tran.rollback()
+                if tran:
+                    tran.rollback()
                 raise
                 
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()

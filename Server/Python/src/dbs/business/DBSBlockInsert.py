@@ -227,10 +227,14 @@ class DBSBlockInsert :
                 self.fconfigin.execute(conn, fileConfObjs, tran)
             tran.commit()
         except Exception, ex:
-            tran.rollback()
+            if tran:
+                tran.rollback()
             raise
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()
 
 
     def insertBlock(self, blockcontent, datasetId):
@@ -290,7 +294,10 @@ class DBSBlockInsert :
                 tran.rollback()
             raise
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()
         return block['block_id'], newBlock
 
     def insertOutputModuleConfig(self, remoteConfig):
@@ -414,10 +421,14 @@ class DBSBlockInsert :
                        m['global_tag'])
                 self.datasetCache['conf'][key] = cfgid
         except Exception, ex:
-            tran.rollback()
+            if tran:
+                tran.rollback()
             raise
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()
         return otptIdList
 
     def insertDataset(self, blockcontent, otptIdList):
@@ -440,10 +451,9 @@ class DBSBlockInsert :
                                         blockcontent = blockcontent,
                                         otptIdList = otptIdList, conn = conn,
                                         insertDataset = False)
-            except Exception:
-                raise
             finally:
-                conn.close()
+                if conn:
+                    conn.close()
                 
             return datasetID
 
@@ -626,7 +636,8 @@ class DBSBlockInsert :
             del dataset['dataset_access_type']
             tran.commit()
         except Exception, ex:
-            tran.rollback()
+            if tran:
+                tran.rollback()
             raise
         try:
             #self.logger.debug("*** Trying to insert the dataset***")
@@ -634,10 +645,11 @@ class DBSBlockInsert :
                                            blockcontent = blockcontent,
                                            otptIdList = otptIdList,
                                            conn = conn)
-        except Exception:
-            raise
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()
             
         return dataset['dataset_id']
 
@@ -672,7 +684,8 @@ class DBSBlockInsert :
                         dataset['dataset_id'] = self.datasetid.execute(conn,
                                                         dataset['dataset'])
                     except Exception, ex:
-                        tran.rollback()
+                        if tran:
+                            tran.rollback()
                         if conn:
                             conn.close()
                         raise

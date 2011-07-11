@@ -32,10 +32,9 @@ class DBSDataTier:
             conn = self.dbi.connection()
             result = self.dataTier.execute(conn, data_tier_name.upper())
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def insertDataTier(self, businput):
         """
@@ -58,8 +57,11 @@ class DBSDataTier:
                 self.logger.warning("Unique constraint violation being ignored...")
                 self.logger.warning("%s" % ex)
             else:
-                tran.rollback()
+                if tran:
+                    tran.rollback()
                 raise
         finally:
-            conn.close()
-
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()

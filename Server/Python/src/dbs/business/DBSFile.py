@@ -57,10 +57,9 @@ class DBSFile:
             conn = self.dbi.connection()
             result = self.filelumilist.execute(conn, logical_file_name, block_name, run_num)
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def listFileSummary(self, block_name="", dataset="", run_num=0):
         """
@@ -77,7 +76,8 @@ class DBSFile:
             result = self.filesummarylist.execute(conn, block_name, dataset, run_num)
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def listFileParents(self, logical_file_name="", block_id=0, block_name=""):
         """
@@ -105,10 +105,9 @@ class DBSFile:
                 r = {'logical_file_name':k, 'parent_logical_file_name': v}
                 result.append(r)
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def listFileChildren(self, logical_file_name=''): 
         """
@@ -134,10 +133,9 @@ class DBSFile:
                 r = {'logical_file_name':k, 'child_logical_file_name': v}
                 result.append(r)
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def updateStatus(self, logical_file_name, is_file_valid):
         """
@@ -150,12 +148,15 @@ class DBSFile:
             self.updatestatus.execute(conn, logical_file_name, is_file_valid, trans)
             trans.commit()
         except Exception, ex:
-            trans.rollback()
+            if trans:
+                trans.rollback()
             raise ex
                 
         finally:
-            trans.close()
-            conn.close()
+            if trans:
+                trans.close()
+            if conn:
+                conn.close()
 
     def listFiles(self, dataset="", block_name="", logical_file_name="",
                   release_version="", pset_hash="", app_name="",
@@ -188,7 +189,8 @@ class DBSFile:
                             output_module_label, maxrun, minrun, origin_site_name, lumi_list)
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def insertFile(self, businput, qInserts=False):
         """
@@ -489,8 +491,12 @@ class DBSFile:
             tran.commit()
 
         except Exception, ex:
-            tran.rollback()
+            if tran:
+                tran.rollback()
             raise
 
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()

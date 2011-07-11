@@ -35,10 +35,10 @@ class DBSSite:
                 result = self.blksitelist.execute(conn, block_name)
             else:
                 result = self.sitelist.execute(conn, site_name)
-            conn.close()
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def insertSite(self, businput):
         """
@@ -62,8 +62,12 @@ class DBSSite:
                 self.logger.warning("Ignoring unique constraint violation")
                 self.logger.warning(ex)
             else:
-                tran.rollback()
+                if tran:
+                    tran.rollback()
                 self.logger.exception(ex)
                 raise
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()

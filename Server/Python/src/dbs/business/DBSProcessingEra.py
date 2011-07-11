@@ -34,7 +34,8 @@ class DBSProcessingEra:
             result = self.pelst.execute(conn, processing_version)
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def insertProcessingEra(self, businput):
         """
@@ -60,7 +61,11 @@ class DBSProcessingEra:
                                 "Unique constraint violation being ignored...")
                 self.logger.warning(ex)
             else:
-                tran.rollback()
+                if tran:
+                    tran.rollback()
                 raise
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()

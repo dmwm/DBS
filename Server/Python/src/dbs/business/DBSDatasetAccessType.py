@@ -38,8 +38,7 @@ class DBSDatasetAccessType:
                         t.append(v)
                 result[0]['dataset_access_type'] = t
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 

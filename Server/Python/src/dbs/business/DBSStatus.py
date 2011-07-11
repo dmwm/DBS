@@ -28,10 +28,9 @@ class DBSStatus:
             conn = self.dbi.connection()
             ret = self.compstatus.execute(conn)
             return ret
-        except Exception, ex:
-            raise ex
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def getSchemaStatus(self):
         """
@@ -42,4 +41,5 @@ class DBSStatus:
             ret = self.dbsstatus.execute(conn)
             return ret
         finally:
-            conn.close()
+            if conn:
+                conn.close()

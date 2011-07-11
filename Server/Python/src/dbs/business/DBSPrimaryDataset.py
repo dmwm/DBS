@@ -35,7 +35,8 @@ class DBSPrimaryDataset:
             result = self.primdslist.execute(conn, primary_ds_name, primary_ds_type)
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def listPrimaryDSTypes(self, primary_ds_type="", dataset=""):
         """
@@ -46,7 +47,8 @@ class DBSPrimaryDataset:
             result = self.primdstypeList.execute(conn, primary_ds_type, dataset)
             return result
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def insertPrimaryDataset(self, businput):
         """
@@ -84,7 +86,11 @@ class DBSPrimaryDataset:
                         " Unique constraint violation being ignored...")
                 self.logger.warning(ex)
             else:
-                tran.rollback()
+                if tran:
+                    tran.rollback()
                 raise 
         finally:
-            conn.close()
+            if tran:
+                tran.close()
+            if conn:
+                conn.close()
