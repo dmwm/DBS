@@ -11,6 +11,8 @@ import cjson
 import inspect
 import traceback
 
+from cherrypy.lib import profiler
+import cProfile
 from cherrypy import request, tools
 
 from WMCore.WebTools.RESTModel import RESTModel
@@ -27,7 +29,6 @@ from dbs.business.DBSOutputConfig import DBSOutputConfig
 from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
 from dbs.business.DBSDataType import DBSDataType
-from dbs.business.DBSDataTier import DBSDataTier
 from dbs.business.DBSStatus import DBSStatus
 from dbs.business.DBSMigrate import DBSMigrate
 from dbs.business.DBSBlockInsert import DBSBlockInsert
@@ -36,6 +37,8 @@ from dbs.business.DBSDatasetAccessType import DBSDatasetAccessType
 from dbs.business.DBSPhysicsGroup import DBSPhysicsGroup
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.DBSInputValidation import *
+from WMCore.DAOFactory import DAOFactory
 
 __server__version__ = "$Name:  $"
 
@@ -53,7 +56,11 @@ class DBSReaderModel(RESTModel):
         #self.warning("DBSReaderModle")
         #self.logger.warning("DBSReaderModle")
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
-        self._addMethod('GET', 'serverinfo', self.getServerInfo)
+
+        self.daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=config.dbowner)
+        self.dbsDataTierListDAO = self.daofactory(classname="DataTier.List")
+        
+	self._addMethod('GET', 'serverinfo', self.getServerInfo)
         #self._addMethod('GET', 'donothing', self.donothing)
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
         self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'])
@@ -83,7 +90,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'runs', self.listRuns, args=['minrun', 'maxrun', 'logical_file_name',
                         'block_name', 'dataset'])
         self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'])
-        self._addMethod('GET', 'datatiers', self.listDataTiers, args=['data_tier_name'])
+        self._addMethod('GET','datatiers',self.listDataTiers, args=['data_tier_name'])
         self._addMethod('GET', 'blockparents', self.listBlockParents, args=['block_name'])
         self._addMethod('POST', 'blockparents', self.listBlocksParents)
         self._addMethod('GET', 'blockchildren', self.listBlockChildren, args=['block_name'])
@@ -107,11 +114,10 @@ class DBSReaderModel(RESTModel):
         self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi,
             config.dbowner)
         self.dbsSite = DBSSite(self.logger, self.dbi, config.dbowner)
-        self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
-        self.dbsDataType = DBSDataType(self.logger, self.dbi, config.dbowner)
-        self.dbsDataTier = DBSDataTier(self.logger, self.dbi, config.dbowner)
+	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
+	self.dbsDataType = DBSDataType(self.logger, self.dbi, config.dbowner)
         self.dbsStatus = DBSStatus(self.logger, self.dbi, config.dbowner)
-        self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
+	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
         self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, config.dbowner) 
         self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, config.dbowner)
         self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, config.dbowner)
@@ -159,6 +165,8 @@ class DBSReaderModel(RESTModel):
     def donothing(self):
         return self.dbsDoNothing.listNone()
     """
+
+    @inputChecks(primary_ds_name=str, primary_ds_type=str)
     @tools.secmodv2()
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
@@ -181,6 +189,8 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listPrimaryDatasets. %s\n Exception trace: \n %s." \
                     % (ex, traceback.format_exc() )
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+    
+    @inputChecks(primary_ds_type=str, dataset=str)
     @tools.secmodv2()
     def listPrimaryDsTypes(self, primary_ds_type="", dataset=""):
         """
@@ -200,7 +210,13 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listPrimaryDsTypes. %s\n. Exception trace: \n %s" \
                 % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+    
     #@expose
+    @inputChecks(dataset=str, parent_dataset=str, is_dataset_valid=(str,int),release_version=str, pset_hash=str,
+                 app_name=str, output_module_label=str,  processing_version=str, acquisition_era_name=str,
+                 run_num=(long,int,str), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
+                 primary_ds_type=str, data_tier_name=str, dataset_access_type=str, min_cdate=(int,str), max_cdate=(int,str),
+                 min_ldate=(int,str), max_ldate=(int, str), cdate=(int,str), ldate=(int,str), detail=bool)
     @tools.secmodv2()
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="",
@@ -302,24 +318,45 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listDatasetArray. %s \n Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
- 
+    """
+    @inputChecks(data_tier_name=str)
     @tools.secmodv2()
     def listDataTiers(self, data_tier_name=""):
-        """
-        Example url's:
-            http://dbs3/datatiers
-            http://dbs3/datatiers?data_tier_name=...
-        """
-        data_tier_name = data_tier_name.replace("*","%")
+        p2 = profiler.Profiler("/uscms/home/yuyi/dbs3-test/DBS/Server/Python/control")
+        p3=1
+        p2.run(self._listDataTiers, data_tier_name)
+    """
+    @inputChecks(data_tier_name=str)
+    @tools.secmodv2()
+    def listDataTiers(self, data_tier_name=""):
+	"""
+	Example url's:
+	    http://dbs3/datatiers
+	    http://dbs3/datatiers?data_tier_name=...
+	"""
+	data_tier_name = data_tier_name.replace("*","%")
+
         try:
-            return self.dbsDataTier.listDataTiers(data_tier_name)
+            conn = self.dbi.connection()
+            return self.dbsDataTierListDAO.execute(conn,data_tier_name.upper())
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except ValueError as ve:
+            dbsExceptionHandler("dbsException-invalid-input", "Invalid Input Data",  self.logger.exception, ve.message)
+        except TypeError as te:
+            dbsExceptionHandler("dbsException-invalid-input", "Invalid Input DataType",  self.logger.exception, te.message)
+        except NameError as ne:
+            dbsExceptionHandler("dbsException-invalid-input", "Invalid Input Searching Key",  self.logger.exception, ne.message)
         except Exception, ex:
             sError = "DBSReaderModel/listDataTiers. %s\n. Exception trace: \n %s" \
                     % ( ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+        finally:
+            if conn:
+                conn.close()
 
+    @inputChecks(dataset=str, block_name=str, origin_site_name=str, logical_file_name=str ,run_num=(long,int,str), min_cdate=(int,str), \
+                 max_cdate=(int, str), min_ldate=(int,str), max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), detail=bool)
     @tools.secmodv2()
     def listBlocks(self, dataset="", block_name="", origin_site_name="",
         logical_file_name="",run_num='-1', min_cdate='0', max_cdate='0',
@@ -382,6 +419,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(block_name=str)
     @tools.secmodv2()
     def listBlockParents(self, block_name=""):
         """
@@ -396,6 +434,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listBlockParents. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'],  self.logger.exception, sError)
+
 
     @tools.secmodv2()
     def listBlocksParents(self):
@@ -417,7 +456,8 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listBlockParents. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-            
+           
+    @inputChecks(block_name=str)       
     @tools.secmodv2()
     def listBlockChildren(self, block_name=""):
         """
@@ -433,6 +473,8 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listBlockChildren. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(dataset =str, block_name=str, logical_file_name =str, release_version=str, pset_hash=str, app_name=str,\
+                 output_module_label=str, minrun=(long, int, str), maxrun=(long, int,str), origin_site_name=str, lumi_list=list, detail=bool)
     @tools.secmodv2()
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "",
         release_version="", pset_hash="", app_name="", output_module_label="",
@@ -474,6 +516,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
                     self.logger.exception, sError)
 
+    @inputChecks(block_name=str, dataset=str, run_num=(long,int, str))
     @tools.secmodv2()
     def listFileSummaries(self, block_name='', dataset='', run_num=0):
         """
@@ -492,6 +535,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(dataset=str)
     @tools.secmodv2()
     def listDatasetParents(self, dataset=''):
         """
@@ -507,6 +551,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
    
+    @inputChecks(dataset=str)
     @tools.secmodv2()
     def listDatasetChildren(self, dataset):
         """
@@ -521,7 +566,9 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listDatasetChildren. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-   
+  
+    @inputChecks(dataset=str, logical_file_name=str, release_version=str, pset_hash=str, app_name=str,\
+                 output_module_label=str, block_id=(int,str), global_tag=str)
     @tools.secmodv2()
     def listOutputConfigs(self, dataset="", logical_file_name="", 
                           release_version="", pset_hash="", app_name="",
@@ -550,7 +597,8 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listOutputConfigs. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    
+   
+    @inputChecks(logical_file_name=str, block_id=(int,str), block_name=str)
     @tools.secmodv2()
     def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
         """
@@ -566,6 +614,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(logical_file_name=str)
     @tools.secmodv2()
     def listFileChildren(self, logical_file_name=''):
         """
@@ -581,6 +630,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
+    @inputChecks(logical_file_name=str, block_name=str, run_num=(long,int,str))
     @tools.secmodv2()
     def listFileLumis(self, logical_file_name="", block_name="", run_num='0'):
         """
@@ -601,6 +651,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(minrun=(long, int,str), maxrun=(long, int,str), logical_file_name=str, block_name=str, dataset=str)
     @tools.secmodv2()     
     def listRuns(self, minrun=-1, maxrun=-1, logical_file_name="",
                  block_name="", dataset=""):
@@ -636,6 +687,7 @@ class DBSReaderModel(RESTModel):
     #    """
     #    return self.dbsSite.listSites(block_name, site_name)
 
+    @inputChecks(datatype=str, dataset=str)
     @tools.secmodv2()
     def listDataTypes(self, datatype="", dataset=""):
         """
@@ -651,6 +703,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
+    @inputChecks(block_name=str)
     @tools.secmodv2()
     def dumpBlock(self, block_name):
         """
@@ -665,6 +718,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(acquisition_era_name=str)
     @tools.secmodv2()
     def listAcquisitionEras(self, acquisition_era_name=''):
         """
@@ -679,6 +733,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listAcquisitionEras. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(processing_version=str)
     @tools.secmodv2()
     def listProcessingEras(self, processing_version=''):
         """
@@ -694,6 +749,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(release_version=str, dataset=str)
     @tools.secmodv2()
     def listReleaseVersions(self, release_version='', dataset=''):
         """
@@ -710,6 +766,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
+    @inputChecks(dataset_access_type=str)
     @tools.secmodv2()
     def listDatasetAccessTypes(self, dataset_access_type=''):
         """
@@ -718,7 +775,7 @@ class DBSReaderModel(RESTModel):
         if dataset_access_type:
             dataset_access_type = dataset_access_type.replace("*","%")
         try:
-            return  self.dbsDatasetAccessType.listDatasetAccessTypes(dataset_access_type)
+            return self.dbsDatasetAccessType.listDatasetAccessTypes(dataset_access_type)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
@@ -726,6 +783,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(physics_group_name=str)
     @tools.secmodv2()
     def listPhysicsGroups(self, physics_group_name=''):
         """

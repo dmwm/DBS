@@ -44,7 +44,7 @@ class BriefList(DBFormatter):
                 wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op
                 binds = [{'dataset_access_type':dataset_access_type, 'is_dataset_valid':is_dataset_valid, 'dataset': x } for x in
                         dataset]
-                self.logger.debug(binds)
+                #self.logger.debug(binds)
             else:
                 binds = [{'is_dataset_valid':is_dataset_valid, 'dataset': x } for x in dataset]
         else: #for the GET method
@@ -181,7 +181,7 @@ class BriefList(DBFormatter):
                 binds.update(run_num = run_num)
 
 	sql = "".join((selectsql, self.basesql, joinsql, wheresql)) 
-	self.logger.debug( sql)
+	#self.logger.debug( sql)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []
         for i in cursors:

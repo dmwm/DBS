@@ -24,22 +24,24 @@ SELECT DT.DATA_TIER_ID, DT.DATA_TIER_NAME, DT.CREATION_DATE, DT.CREATE_BY
 FROM %sDATA_TIERS DT 
 """ % (self.owner)
 
-    def execute(self, conn, dataTier='', transaction = False, cache=None):
+    def execute(self, conn, data_tier_name='', transaction = False, cache=None):
         """
         returns id for a given datatier name
         """
 	if cache:
-		ret=cache.get("DATA_TIERS")
-		if not ret==None:
-			return ret
+            ret=cache.get("DATA_TIERS")
+            if not ret==None:
+                return ret
+            
 	if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed", "dbs/dao/Oracle/DataTier/List expects db connection from upper layer.")
+
         sql = self.sql
 	binds={}
-	if dataTier:
-            op = ('=', 'like')['%' in dataTier]
+	if data_tier_name:
+            op = ('=', 'like')['%' in data_tier_name]
 	    sql += "WHERE DT.DATA_TIER_NAME %s :datatier" %op 
-	    binds = {"datatier":dataTier}
+	    binds = {"datatier":data_tier_name}
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
         return plist

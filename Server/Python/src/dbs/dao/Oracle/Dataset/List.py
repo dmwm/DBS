@@ -214,8 +214,8 @@ class List(DBFormatter):
                     provided for listDatasets call.")
         #import pdb
         #pdb.set_trace()
-        self.logger.debug( sql)
-        self.logger.debug("binds=%s" %binds)
+        #self.logger.debug( sql)
+        #self.logger.debug("binds=%s" %binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []
         for i in cursors:

@@ -155,7 +155,7 @@ class DbsApi(object):
         """
         return self.__callServer("/blocks", params = blockObj , callmethod='POST' )
 
-    def insertBlockBluk(self, blockDump={}):
+    def insertBlockBulk(self, blockDump={}):
         """
         """
         return self.__callServer("/bulkblocks", params = blockDump , callmethod='POST' )

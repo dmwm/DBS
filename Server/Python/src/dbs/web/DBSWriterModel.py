@@ -9,12 +9,15 @@ __version__ = "$Revision: 1.46 $"
 
 import re
 import cjson
+from cherrypy.lib import profiler
 
 from cherrypy import request, tools
+from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils 
 from dbs.web.DBSReaderModel import DBSReaderModel
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.DBSInputValidation import *
 
 import traceback
 
@@ -60,6 +63,8 @@ class DBSWriterModel(DBSReaderModel):
     """
     DBS3 Server API Documentation 
     """
+    p=profiler.Profiler("/uscms/home/yuyi/dbs3-test/DBS/Server/Python/control")
+
     def __init__(self, config):
 
         """
@@ -67,6 +72,10 @@ class DBSWriterModel(DBSReaderModel):
         """
 
         DBSReaderModel.__init__(self, config)
+
+        self.sequenceManagerDAO = self.daofactory(classname="SequenceManager")
+        self.dbsDataTierInsertDAO = self.daofactory(classname="DataTier.Insert")
+        
         self._addMethod('POST', 'primarydatasets', self.insertPrimaryDataset)
         self._addMethod('POST', 'outputconfigs', self.insertOutputConfig)
         self._addMethod('POST', 'acquisitioneras', self.insertAcquisitionEra)
@@ -200,15 +209,18 @@ class DBSWriterModel(DBSReaderModel):
                 
     @tools.secmodv2(authzfunc=authInsert)
     def insertBulkBlock(self):
+        self.p.run(self._insertBulkBlock)
+
+    def _insertBulkBlock(self):
         """
         gets the input from cherrypy request body.
         input must be a dictionaryi that match blockDump output.
         """
-
         try:
-
             body = request.body.read()
             indata = cjson.decode(body)
+            indata = validateJSONInput("insertBlock",indata)
+            validateJSONInputNoCopy("insertBlock",indata)
             self.dbsBlockInsert.putBlock(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
@@ -219,19 +231,22 @@ class DBSWriterModel(DBSReaderModel):
 
     @tools.secmodv2(authzfunc=authInsert)
     def insertBlock(self):
+        self.p.run(self._insertBlock)
+
+    def _insertBlock(self):
         """
         gets the input from cherrypy request body.
         input must be a dictionary with the following keys:
         KEYS: required/optional : default = ...
         ...
-        """
-        
-        try:
-        
-            body = request.body.read()
-            indata = cjson.decode(body)
-            # Proper validation needed
-            vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$",
+        """	
+	try:
+	    body = request.body.read()
+	    indata = cjson.decode(body)
+            #indata = validateJSONInput("insertDataTier",indata)
+            
+	    # Proper validation needed
+	    vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
                       indata["block_name"])
             assert vblock, "Invalid block name %s" % indata["block_name"]
             block = {} 
@@ -274,16 +289,15 @@ class DBSWriterModel(DBSReaderModel):
         adler32 (optional, default = ''): string <br />
         md5 (optional, default = ''): string <br />
         auto_cross_section (optional, default = -1.): float <br />
-            file_lumi_list (optional, default = []): [{"run_num": 123, "lumi_section_num": 12},{}....] <br />
-            file_parent_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
-            file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
-            file_output_config_list(optional, default = []) :[{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] <br />
+        file_lumi_list (optional, default = []): [{'run_num': 123, 'lumi_section_num': 12},{}....] <br />
+        file_parent_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....] <br />
+        file_assoc_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....] <br />
+        file_output_config_list(optional, default = []) :[{'app_name':..., 'release_version':..., 'pset_hash':...., output_module_label':...},{}.....] <br />
         """
-        if qInserts in (False, 'False'):
-            qInserts = False
-        try:
-            body = request.body.read()
-            indata = cjson.decode(body)["files"]
+	if qInserts in (False, 'False'): qInserts=False
+	try:
+	    body = request.body.read()
+	    indata = cjson.decode(body)["files"]
         
             # proper validation needed
             businput = []
@@ -356,18 +370,42 @@ class DBSWriterModel(DBSReaderModel):
 
     @tools.secmodv2(authzfunc=authKeyInsert)
     def insertDataTier(self):
-        """
-        Inserts a data tier in DBS
-        """
+        self.p.run(self._insertDataTier)
 
-        try:
+    def _insertDataTier(self):
+	"""
+	Inserts a data tier in DBS
+	"""
+        
+	try:
             body = request.body.read()
             indata = cjson.decode(body)
+
+            indata = validateJSONInput("insertDataTier", indata)
+            
             indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
-            self.dbsDataTier.insertDataTier(indata)
+
+            conn = self.dbi.connection()
+            tran = conn.begin()
+
+            indata['data_tier_id'] = self.sequenceManagerDAO.increment(conn, "SEQ_DT", tran)
+
+            indata['data_tier_name'] = indata['data_tier_name'].upper()
+            
+            self.dbsDataTierInsertDAO.execute(conn, indata, tran)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
-        except Exception, ex:
-            sError = " DBSWriterModel\insertDataTier. %s\n. Exception trace: \n %s" \
-                        % (ex, traceback.format_exc())
-            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+        except Exception as ex:
+            if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                # already exist
+                self.logger.warning("Unique constraint violation being ignored...")
+                self.logger.warning("%s" % ex)
+                pass
+            else:
+                sError = " DBSWriterModel\insertDataTier. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
+                dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+        finally:
+            tran.commit()
+            if conn:
+                conn.close()
+

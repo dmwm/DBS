@@ -95,6 +95,8 @@ class DBSBlockInsert :
         #YG
         try:
             #1 insert configuration
+            #import pdb
+            #pdb.set_trace()
             configList = self.insertOutputModuleConfig(
                             blockcontent['dataset_conf_list'])
             #2 insert dataset
@@ -328,6 +330,10 @@ class DBSBlockInsert :
                     #print "About to set cfgid: %s" % str(cfgid)
         except Exception, ex:
             raise
+
+        if len(missingList)==0:
+            return otptIdList
+
         #Now insert the missing configs
         try:
             #tran = conn.begin()
