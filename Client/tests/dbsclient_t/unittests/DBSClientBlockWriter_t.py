@@ -29,7 +29,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         """setup all necessary parameters"""
 	
     def test1000(self):
-	"""test1000 web.DBSClientWriter.insertBlockBluk: basic test"""
+	"""test1000 web.DBSClientWriter.insertBlockBulk: basic test"""
         testparams['dataset_conf_list'][0]['app_name'] = "%s_%s"%(testparams['dataset_conf_list'][0]['app_name'], uid)
         for i in range(len(testparams['file_conf_list'])):
             testparams['file_conf_list'][i]['app_name'] = "%s_%s"%(testparams['file_conf_list'][i]['app_name'], uid)
@@ -45,7 +45,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         testparams['block']['block_name'] = '%s_%s' %(testparams['block']['block_name'],uid)
         #print  testparams
         
-	api.insertBlockBluk(blockDump=testparams)
+	api.insertBlockBulk(blockDump=testparams)
 	# insert the parent block as well
 
 if __name__ == "__main__":

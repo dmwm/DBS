@@ -406,7 +406,7 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test86(self):
         """test86: web.DBSReaderModel.blockDump with block_name"""
-        api.blockDump(block_name="/unittest_web_primary_ds_name_64682/unittest_web_dataset_64682/GEN-SIM-RAW#64682")
+        api.blockDump(block_name=testparams["block"])
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)

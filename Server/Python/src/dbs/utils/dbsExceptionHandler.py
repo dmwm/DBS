@@ -9,17 +9,20 @@ def dbsExceptionHandler(eCode='', message='', logger=None , serverError=''):
     if  logger:
         #at the web layer
         if eCode == "dbsException-invalid-input":
+            #logger(eCode + ": " + serverError)
             raise HTTPError(400, message)
         elif eCode == "dbsException-missing-data":
             logger(eCode + ": " +  serverError)
             #print (eCode + ": " +  serverError)
             raise HTTPError(412, message)
         elif eCode == "dbsException-input-too-large":
+            logger(eCode + ": " +  serverError)
             raise HTTPError(413, message)
         elif eCode == "dbsException-invalid-input2":
             logger(eCode + ": " +  serverError)
-            raise HTTPError(404, message)
+            raise HTTPError(400, message)
         elif eCode == "dbsException-conflict-data":
+            logger(eCode + ": " +  serverError)
             raise HTTPError(409, message)
         else:
             #client gets httperror 500 for server internal error
@@ -28,6 +31,6 @@ def dbsExceptionHandler(eCode='', message='', logger=None , serverError=''):
             raise HTTPError(500, message)
     else:
         #not in the web layer
-        raise dbsException(eCode, message)
+        raise dbsException(eCode, message, serverError)
         
         

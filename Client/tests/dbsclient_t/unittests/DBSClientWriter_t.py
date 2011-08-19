@@ -282,7 +282,7 @@ class DBSClientWriter_t(unittest.TestCase):
 
     def test21(self):
 	    """test21 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-	    api.updateDatasetType(dataset=dataset, dataset_access_type="PRODUCTION")	 
+	    api.updateDatasetType(dataset=dataset, dataset_access_type="RO")	 
 	
     def test208(self):
 	"""test208 generating the output file for reader test"""

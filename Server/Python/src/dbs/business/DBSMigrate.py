@@ -347,8 +347,10 @@ class DBSMigrate:
             #in order to reduce the number of dao objects, we will not write
             #a special migration one. However, we will have to remove the
             #extras
-            dataset = self.datasetlist.execute(conn,
-                                               dataset=block["dataset"])[0]
+            dataset1 = self.datasetlist.execute(conn,
+                                               dataset=block["dataset"])
+            dataset = dataset1[0]
+
             #get block parentage
             bparent = self.bparentlist.execute(conn, block['block_name'])
             #get dataset parentage

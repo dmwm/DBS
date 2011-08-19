@@ -9,9 +9,9 @@ __version__ = "$Revision: 1.46 $"
 
 import re
 import cjson
-from cherrypy.lib import profiler
+#from cherrypy.lib import profiler
 
-from cherrypy import request, tools
+from cherrypy import request, tools, HTTPError
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils 
 from dbs.web.DBSReaderModel import DBSReaderModel
@@ -63,7 +63,7 @@ class DBSWriterModel(DBSReaderModel):
     """
     DBS3 Server API Documentation 
     """
-    p=profiler.Profiler("/uscms/home/yuyi/dbs3-test/DBS/Server/Python/control")
+    #p=profiler.Profiler("/uscms/home/yuyi/dbs3-test/DBS/Server/Python/control")
 
     def __init__(self, config):
 
@@ -104,10 +104,13 @@ class DBSWriterModel(DBSReaderModel):
         try :
             body = request.body.read()
             indata = cjson.decode(body)
+            validateJSONInputNoCopy("primds",indata)
             indata.update({"creation_date": dbsUtils().getTime(), "create_by": dbsUtils().getCreateBy() })
             self.dbsPrimaryDataset.insertPrimaryDataset(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he 
         except Exception, ex:
             sError = "DBSWriterModel/insertPrimaryDataset. %s\n Exception trace: \n %s" \
                         % (ex, traceback.format_exc())
@@ -126,13 +129,15 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
+            validateJSONInputNoCopy("dataset_conf_list",indata)
             indata.update({"creation_date": dbsUtils().getTime(),
                            "create_by" : dbsUtils().getCreateBy() ,
                            "last_modified_by" : dbsUtils().getCreateBy() })
-            # need proper validation
             self.dbsOutputConfig.insertOutputConfig(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
         except Exception, ex:
             sError = "DBSWriterModel/insertOutputConfig. %s\n. Exception trace: \n %s" \
                             % (ex, traceback.format_exc())
@@ -151,10 +156,14 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
+            validateJSONInputNoCopy("acquisition_era",indata)
+            indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
+                           "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })
             self.dbsAcqEra.insertAcquisitionEra(indata)
         except dbsException as de:
-            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+        except HTTPError as he:
+            raise he
         except Exception, ex:
             sError = " DBSWriterModel/insertAcquisitionEra. %s\n. Exception trace: \n %s" \
                         % (ex, traceback.format_exc())
@@ -172,10 +181,14 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
+            validateJSONInputNoCopy('processing_era', indata)
+            indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
+                           "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })
             self.dbsProcEra.insertProcessingEra(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
         except Exception, ex:
             sError = "DBSWriterModel/insertProcessingEra. %s\n. Exception trace: \n %s" \
                             % (ex, traceback.format_exc())
@@ -192,7 +205,7 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-
+            validateJSONInputNoCopy('dataset', indata)
             indata.update({"creation_date": dbsUtils().getTime(),
                             "last_modification_date" : dbsUtils().getTime(),
                             "create_by" : dbsUtils().getCreateBy() ,
@@ -202,16 +215,20 @@ class DBSWriterModel(DBSReaderModel):
             self.dbsDataset.insertDataset(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
         except Exception, ex:
             sError = " DBSWriterModel/insertDataset. %s\n. Exception trace: \n %s" \
                         % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-                
+    """      
+    For Profling
     @tools.secmodv2(authzfunc=authInsert)
     def insertBulkBlock(self):
         self.p.run(self._insertBulkBlock)
-
-    def _insertBulkBlock(self):
+    """    
+    @tools.secmodv2(authzfunc=authInsert)
+    def insertBulkBlock(self):
         """
         gets the input from cherrypy request body.
         input must be a dictionaryi that match blockDump output.
@@ -219,21 +236,26 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            indata = validateJSONInput("insertBlock",indata)
-            validateJSONInputNoCopy("insertBlock",indata)
+            #indata = validateJSONInput("insertBlock",indata)
+            validateJSONInputNoCopy("blockBulk",indata)
             self.dbsBlockInsert.putBlock(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
         except Exception, ex:
             sError = "DBSWriterModel/insertBulkBlock. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc()) 
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-
+    """
+    For Profling
+    
     @tools.secmodv2(authzfunc=authInsert)
     def insertBlock(self):
         self.p.run(self._insertBlock)
-
-    def _insertBlock(self):
+    """
+    @tools.secmodv2(authzfunc=authInsert)
+    def insertBlock(self):
         """
         gets the input from cherrypy request body.
         input must be a dictionary with the following keys:
@@ -243,12 +265,8 @@ class DBSWriterModel(DBSReaderModel):
 	try:
 	    body = request.body.read()
 	    indata = cjson.decode(body)
-            #indata = validateJSONInput("insertDataTier",indata)
-            
-	    # Proper validation needed
-	    vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", 
-                      indata["block_name"])
-            assert vblock, "Invalid block name %s" % indata["block_name"]
+            validateJSONInputNoCopy("block",indata)
+            vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", indata["block_name"])   
             block = {} 
             block.update({
                       "dataset" : vblock.groups()[0],
@@ -298,12 +316,13 @@ class DBSWriterModel(DBSReaderModel):
 	try:
 	    body = request.body.read()
 	    indata = cjson.decode(body)["files"]
-        
-            # proper validation needed
+            if not isinstance(indata, (list,dict)):
+                 dbsExceptionHandler("dbsException-invalid-input", "Invalid Input DataType", self.logger.exception, \
+                                      "insertFile expects input as list or dirc")
             businput = []
-            assert type(indata) in (list, dict)
             if type(indata) == dict:
                 indata = [indata]
+            validateJSONInputNoCopy("files",indata)
             for f in indata:
                 f.update({
                      #"dataset":f["dataset"],
@@ -319,11 +338,14 @@ class DBSWriterModel(DBSReaderModel):
             self.dbsFile.insertFile(businput, qInserts)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
         except Exception, ex:
             sError = "DBSWriterModel/insertFile. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-  
+ 
+    @inputChecks(logical_file_name=str, is_file_valid=(int, str))
     @tools.secmodv2(authzfunc=authInsert)    
     def updateFile(self, logical_file_name="", is_file_valid=1):
         """
@@ -333,11 +355,14 @@ class DBSWriterModel(DBSReaderModel):
             self.dbsFile.updateStatus(logical_file_name, is_file_valid)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
         except Exception, ex:
             sError = "DBSWriterModel/updateFile. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(dataset=str, is_dataset_valid=(int, str), dataset_access_type=(str))
     @tools.secmodv2(authzfunc=authInsert)
     def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_access_type=""):
         """
@@ -351,10 +376,13 @@ class DBSWriterModel(DBSReaderModel):
                     self.dbsDataset.updateStatus(dataset, is_dataset_valid)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
         except Exception, ex:
             sError = "DBSWriterModel\updateDataset. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(block_name=str, open_for_writing=(int,str))
     @tools.secmodv2(authzfunc=authInsert)
     def updateBlock(self, block_name="", open_for_writing=0):
         """
@@ -364,15 +392,19 @@ class DBSWriterModel(DBSReaderModel):
             self.dbsBlock.updateStatus(block_name, open_for_writing)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
         except Exception, ex:
             sError = "DBSWriterModel\updateStatus. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-
+    """
+    For profling
     @tools.secmodv2(authzfunc=authKeyInsert)
     def insertDataTier(self):
         self.p.run(self._insertDataTier)
-
-    def _insertDataTier(self):
+    """
+    @tools.secmodv2(authzfunc=authKeyInsert)
+    def insertDataTier(self):
 	"""
 	Inserts a data tier in DBS
 	"""
@@ -381,9 +413,10 @@ class DBSWriterModel(DBSReaderModel):
             body = request.body.read()
             indata = cjson.decode(body)
 
-            indata = validateJSONInput("insertDataTier", indata)
-            
-            indata.update({"creation_date": dbsUtils().getTime(), "create_by" : dbsUtils().getCreateBy() })
+            validateJSONInputNoCopy("dataTier", indata)
+
+            indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
+                           "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })
 
             conn = self.dbi.connection()
             tran = conn.begin()
@@ -395,6 +428,8 @@ class DBSWriterModel(DBSReaderModel):
             self.dbsDataTierInsertDAO.execute(conn, indata, tran)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
         except Exception as ex:
             if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                 # already exist

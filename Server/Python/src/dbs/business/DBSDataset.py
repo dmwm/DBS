@@ -164,18 +164,9 @@ class DBSDataset:
         else:
             try:
                 dataset = inputdata["dataset"]
-                if inputdata.has_key("is_dataset_valid"):
-                    is_dataset_valid = inputdata["is_dataset_valid"]
-                else:
-                    is_dataset_valid = 1
-                if inputdata.has_key("dataset_access_type"):
-                    dataset_access_type = inputdata["dataset_access_type"]
-                else:
-                    dataset_access_type = "RO" 
-                if inputdata.has_key("detail"):
-                    detail = inputdata["detail"]
-                else:
-                    detail = False 
+                is_dataset_valid = inputdata.get("is_dataset_valid", 1)
+                dataset_access_type = inputdata.get("dataset_access_type", "RO")
+                detail = inputdata.get("detail", False)
                 conn = None
                 conn = self.dbi.connection()
                 #import pdb
@@ -187,7 +178,7 @@ class DBSDataset:
                 return result                        
             except cjson.DecodeError, de:
                 msg = "business/listDatasetArray requires at least a list of dataset. %s" % de
-                dbsExceptionHandler('dbsException-invalid-input', msg)
+                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, msg)
             finally:
                 if conn:
                     conn.close()
