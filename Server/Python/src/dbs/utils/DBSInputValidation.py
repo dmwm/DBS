@@ -90,8 +90,8 @@ acceptedInputKeys = {
 validationFunction = {
     'block_name':block,
     'dataset':dataset,
-    #'logical_file_name':lfn,
-    #'file_parent_lfn':lfn,
+    'logical_file_name':lfn,
+    'file_parent_lfn':lfn,
     'primary_ds_name':primdataset
     }
 
