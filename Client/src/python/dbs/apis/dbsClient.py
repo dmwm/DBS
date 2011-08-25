@@ -1,16 +1,12 @@
 import os, sys, socket
 import urllib, urllib2
-from httplib import HTTPConnection
+import urlparse
+import httplib
 from StringIO import StringIO
-from dbs.exceptions.dbsClientException import dbsClientException
 import cjson
-
-try:
-    # Python 2.6
-    import json
-except:
-    # Prior to 2.6 requires simplejson
-    import simplejson as json
+import json
+from dbs.exceptions.dbsClientException import dbsClientException
+from dbs.apis.dbsHTTPSAuthHandler import HTTPSAuthHandler 
 
 def checkInputParameter(method,parameters,validParameters,requiredParameters=None):
     for parameter in parameters:
@@ -41,16 +37,29 @@ def checkInputParameter(method,parameters,validParameters,requiredParameters=Non
                 raise dbsClientException("Invalid input", "API %s does requires only *one* of the parameters %s." % (method, requiredParameters['standalone']))
                         
 class DbsApi(object):
-    def __init__(self, url="", proxy=""):
+    def __init__(self, url="", proxy="", key=None, cert=None, debug=0):
         """
         * DbsApi CTOR
         url: server URL
         proxy: http proxy; this feature is TURNED OFF at the moemnt
         """
-        self.url=url
-        self.proxy=proxy
-        self.opener =  urllib2.build_opener()
-
+        #import pdb
+        #pdb.set_trace()
+        self.url = url
+        self.proxy = proxy
+        self.key = key
+        self.cert = cert
+        spliturl = urlparse.urlparse(url)
+        callType = spliturl[0]
+        if callType == 'http':
+            self.opener =  urllib2.build_opener()
+        elif callType == 'https':
+            key1, cert1 = self.__getKeyCert(self.key, self.cert)
+            https_handler  = HTTPSAuthHandler(key1, cert1, debug)
+            self.opener = urllib2.build_opener(https_handler)
+        else:
+            raise ValueError, "unknown URL type: %s" % callType
+        
     def __callServer(self, method="", params={}, callmethod='GET'):
         """
         * __callServer 
@@ -61,7 +70,6 @@ class DbsApi(object):
         """
         UserID=os.environ['USER']+'@'+socket.gethostname()
         headers =  {"Content-type": "application/json", "Accept": "application/json", "UserID": UserID }
-
         res=""
         try:
             calling=self.url+method
@@ -72,17 +80,18 @@ class DbsApi(object):
             if not callmethod in ('POST', 'PUT') :
                 if params == {}:
                     req = urllib2.Request(url=calling, headers = headers)
-                    data = urllib2.urlopen(req)
+                    data = self.opener.open(req)
                 else:
                     parameters = urllib.urlencode(params)
                     req = urllib2.Request(url=calling+'?'+parameters, headers = headers)
-                    data = urllib2.urlopen(req)
+                    data = self.opener.open(req)
             else:
                 params = cjson.encode(params)
                 req = urllib2.Request(url=calling, data=params, headers = headers)
                 req.get_method = lambda: callmethod
                 data = self.opener.open(req)
             res = data.read()
+            data.close()
             
         except urllib2.HTTPError, httperror:
             self.__parseForException(httperror)
@@ -104,13 +113,30 @@ class DbsApi(object):
         An internal method, should not be used by clients
         """
         data = httperror.read()
-        if type(data)==type("abc"):
-            data=json.loads(data)
+        try:
+            if type(data)==type("abc"):
+                data=json.loads(data)
+        except ValueError as ve:
+            raise httperror
             
         if type(data) == type({}) and data.has_key('exception'):# re-raise more details with more details
             raise urllib2.HTTPError(httperror.geturl(),data['exception'],data['message'],httperror.headers,httperror.fp)
         
         raise httperror
+
+    def __getKeyCert(self, key=None, cert=None):
+        """
+        If the client supplied key and cert exist, use them
+        If they are not supplied by client, find the in the defaul location.
+        If the key or cert file cannot be found. raise ValueError.    
+        """
+        if not isinstance(key, str) or not isinstance(cert, str):
+            key =  os.environ['HOME']+"/.globus/userkey.pem"
+            cert = os.environ['HOME']+"/.globus/usercert.pem"
+        if  os.path.isfile(key) and  os.path.isfile(cert):
+                return key, cert
+        else:
+                raise ValueError, "key or cert file does not exist: %s, %s" % (key,cert)
         
     def blockDump(self,**kwargs):
         """
