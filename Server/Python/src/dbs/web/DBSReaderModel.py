@@ -222,7 +222,7 @@ class DBSReaderModel(RESTModel):
         release_version="", pset_hash="", app_name="", output_module_label="",
         processing_version="", acquisition_era_name="", run_num="0",
         physics_group_name="", logical_file_name="", primary_ds_name="",
-        primary_ds_type="", data_tier_name="", dataset_access_type="RO",
+        primary_ds_type="", data_tier_name="", dataset_access_type="",
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',
         ldate='0', detail=False):
         """
@@ -307,11 +307,18 @@ class DBSReaderModel(RESTModel):
         """
         try :
             body = request.body.read()
-            data = cjson.decode(body)
-            validateJSONInputNoCopy("dataset",data)
+            if body:
+                data = cjson.decode(body)
+                #import pdb
+                #pdb.set_trace()
+                data = validateJSONInputNoCopy("dataset",data)
+            else:
+                data=''
             #import pdb
             #pdb.set_trace()
             return self.dbsDataset.listDatasetArray(data)
+        except cjson.DecodeError as De:
+            dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except HTTPError as he:
@@ -447,7 +454,7 @@ class DBSReaderModel(RESTModel):
         try :
             body = request.body.read()
             data = cjson.decode(body)
-            validateJSONInputNoCopy("block", data)
+            data = validateJSONInputNoCopy("block", data)
             return self.dbsBlock.listBlockParents(data["block_name"])
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)

@@ -22,7 +22,7 @@ class Insert(InsertSingle):
         """
         daoinput must be a dictionary with the following keys:
 	dataset_id, dataset, is_dataset_valid, 
-	primary_ds_id, processed_ds_id, data_tier_id, dataset_access_type_id, 
+	primary_ds_id, processed_ds_id, data_tier_id,  
 	physics_group_id, xtcrosssection, creation_date, create_by, 
 	last_modification_date, last_modified_by
 	"""

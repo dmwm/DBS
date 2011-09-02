@@ -104,7 +104,7 @@ class DBSWriterModel(DBSReaderModel):
         try :
             body = request.body.read()
             indata = cjson.decode(body)
-            validateJSONInputNoCopy("primds",indata)
+            indata = validateJSONInputNoCopy("primds",indata)
             indata.update({"creation_date": dbsUtils().getTime(), "create_by": dbsUtils().getCreateBy() })
             self.dbsPrimaryDataset.insertPrimaryDataset(indata)
         except dbsException as de:
@@ -129,7 +129,7 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            validateJSONInputNoCopy("dataset_conf_list",indata)
+            indata = validateJSONInputNoCopy("dataset_conf_list",indata)
             indata.update({"creation_date": dbsUtils().getTime(),
                            "create_by" : dbsUtils().getCreateBy() ,
                            "last_modified_by" : dbsUtils().getCreateBy() })
@@ -156,7 +156,7 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            validateJSONInputNoCopy("acquisition_era",indata)
+            indata = validateJSONInputNoCopy("acquisition_era",indata)
             indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
                            "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })
             self.dbsAcqEra.insertAcquisitionEra(indata)
@@ -181,7 +181,7 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            validateJSONInputNoCopy('processing_era', indata)
+            indata = validateJSONInputNoCopy('processing_era', indata)
             indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
                            "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })
             self.dbsProcEra.insertProcessingEra(indata)
@@ -205,7 +205,7 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            validateJSONInputNoCopy('dataset', indata)
+            indata = validateJSONInputNoCopy('dataset', indata)
             indata.update({"creation_date": dbsUtils().getTime(),
                             "last_modification_date" : dbsUtils().getTime(),
                             "create_by" : dbsUtils().getCreateBy() ,
@@ -237,7 +237,7 @@ class DBSWriterModel(DBSReaderModel):
             body = request.body.read()
             indata = cjson.decode(body)
             #indata = validateJSONInput("insertBlock",indata)
-            validateJSONInputNoCopy("blockBulk",indata)
+            indata = validateJSONInputNoCopy("blockBulk",indata)
             self.dbsBlockInsert.putBlock(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
@@ -265,7 +265,7 @@ class DBSWriterModel(DBSReaderModel):
 	try:
 	    body = request.body.read()
 	    indata = cjson.decode(body)
-            validateJSONInputNoCopy("block",indata)
+            indata = validateJSONInputNoCopy("block",indata)
             vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", indata["block_name"])   
             block = {} 
             block.update({
@@ -322,7 +322,7 @@ class DBSWriterModel(DBSReaderModel):
             businput = []
             if type(indata) == dict:
                 indata = [indata]
-            validateJSONInputNoCopy("files",indata)
+            indata = validateJSONInputNoCopy("files",indata)
             for f in indata:
                 f.update({
                      #"dataset":f["dataset"],
@@ -413,7 +413,7 @@ class DBSWriterModel(DBSReaderModel):
             body = request.body.read()
             indata = cjson.decode(body)
 
-            validateJSONInputNoCopy("dataTier", indata)
+            indata = validateJSONInputNoCopy("dataTier", indata)
 
             indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
                            "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })

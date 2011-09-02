@@ -37,12 +37,28 @@ def inputChecks(**_params_):
                     else:
                         if type(value) == str:
                             try:
-                                searchingstr(value)
+                                if name == 'dataset':
+                                    if '*' in value: searchdataset(value)
+                                    else: dataset(value)
+                                elif name =='block_name':
+                                    if '*' in value: searchblock(value)
+                                    else: block(value)
+                                elif name =='primary_ds_name':
+                                    if '*' in value: searchstr(value)
+                                    else: primdataset(value)
+                                elif name =='processed_ds_name':
+                                    if '*' in value: searchstr(value)
+                                    else:  procdataset(value) 
+                                elif name=='logical_file_name':
+                                    if '*' in value: searchstr(value)
+                                    else: lfn(value)
+                                else:
+                                    searchstr(value)
                             except AssertionError as ae:
-                                serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(input_key, input_data)
+                                serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(name, value)
                                 #print ae
                                 dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input Data: Not Match Required Format",\
-                                    logging.exception, serverLog)
+                                        logging.exception, serverLog)
             return _func_(*args, **kw)
         return wrapped
     return checkTypes
@@ -92,27 +108,33 @@ validationFunction = {
     'dataset':dataset,
     'logical_file_name':lfn,
     'file_parent_lfn':lfn,
-    'primary_ds_name':primdataset
+    'primary_ds_name':primdataset,
+    'processed_ds_name':procdataset
     }
 
+
+validationFunctionWwildcard = {
+    'block_name':searchblock,
+    'dataset':searchdataset,
+    }
+    
+
 def validateJSONInputNoCopy(input_key,input_data):
-    #import pdb
-    #pdb.set_trace()
     if isinstance(input_data,dict):
         for key in input_data.keys():
             if key not in acceptedInputKeys[input_key]:
-                #import pdb
-                #pdb.set_trace()
-                #print "%s is not a valid input key"%key
                 dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", logging.exception, \
                                     "%s is not a valid input key for %s"%(key, input_key))
             else:
-                validateJSONInputNoCopy(key,input_data[key])
+                input_data[key] = validateJSONInputNoCopy(key,input_data[key])
     elif isinstance(input_data,list):
+        l = []
         for x in input_data:
-            validateJSONInputNoCopy(input_key,x) 
+            l.append(validateJSONInputNoCopy(input_key,x))
+        input_data = l
     elif isinstance(input_data,str):
         validateStringInput(input_key,input_data)
+        if '*' in input_data: input_data = input_data.replace('*', '%')
     elif isinstance(input_data,int):
         pass
     elif isinstance(input_data,long):
@@ -124,15 +146,21 @@ def validateJSONInputNoCopy(input_key,input_data):
     else:
         #print  'invalid input: %s= %s'%(input_key, input_data)
         dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", logging.exception, 'invalid input: %s= %s'%(input_key, input_data))
-    return
+    return input_data
 
 def validateStringInput(input_key,input_data):
     """
     To check if a string has the required format. This is only used for POST APIs.
     """
-    func = validationFunction.get(input_key)
-    if func is None:
-        func = namestr
+    func = None
+    if '*' in input_data or '%' in input_data:
+        func = validationFunctionWwildcard.get(input_key)
+        if func is None:
+            func = searchstr
+    else:    
+        func = validationFunction.get(input_key)
+        if func is None:
+            func = namestr
 
     try:
         func(input_data)

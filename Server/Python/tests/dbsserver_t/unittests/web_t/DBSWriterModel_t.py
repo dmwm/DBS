@@ -144,7 +144,7 @@ class DBSWriterModel_t(unittest.TestCase):
 
     def test08(self):
 	"""test08: web.DBSWriterModel.insertProcessingEra: Basic test """
-	data={'processing_version': processing_version, 'description':'this is a test'}
+	data={'processing_version': processing_version, 'description':'this-is-a-test'}
 	api.insert('processingeras', data)
 	
     	
@@ -218,7 +218,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	"""test12: web.DBSWriterModel.insertDataset: missing parameter must raise an error"""
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
-	        #'dataset_access_type': 'PRODUCTION', 
+	        'dataset_access_type': 'PRODUCTION', 
 		'processed_ds_name': procdataset, 'dataset':dataset,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': 
@@ -301,7 +301,7 @@ class DBSWriterModel_t(unittest.TestCase):
                                   ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
                 'block_name': block
 			    #'is_file_valid': 1
                 }
@@ -332,7 +332,7 @@ class DBSWriterModel_t(unittest.TestCase):
                                   ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
                 'block_name': block
 			    #'is_file_valid': 1
                 }
@@ -364,9 +364,9 @@ class DBSWriterModel_t(unittest.TestCase):
                                       {'lumi_section_num': u'26422', 'run_num': u'1'},
                                       {'lumi_section_num': u'29838', 'run_num': u'1'}
                                   ],
-                'file_parent_list': [{"file_parent_lfn": "/store/mc/%s/%i.root" %(uid, i)}],
+                'file_parent_list': [{"file_parent_lfn": "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i)}],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/%s-child/%i.root" %(uid, i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" %(uid, i),
                 'block_name': child_block
                             #'is_file_valid': 1
                 }
@@ -378,7 +378,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	
     def test21(self):
 	"""test21 web.DBSWriterModel.updateFileStatus: Basic test """
-	lfn = "/store/mc/%s-child/%i.root" %(uid, 1)
+	lfn = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" %(uid, 1)
 	#print lfn
 	api.update('files', logical_file_name=lfn, is_file_valid=0)
 

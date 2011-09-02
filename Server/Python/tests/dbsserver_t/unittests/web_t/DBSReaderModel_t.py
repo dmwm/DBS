@@ -62,7 +62,7 @@ class DBSReaderModel_t(unittest.TestCase):
     
     def test006(self):
         """test006: web.DBSReaderModel.listDatasets: basic test"""
-        api.list('datasets', dataset='*')
+        api.list('datasets', dataset='/*')
 
     def test007(self):
         """test007: web.DBSReaderModel.listDatasets: basic test"""
@@ -192,7 +192,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test031(self):
         """test031: web.DBSReaderModel.listBlocks: basic negative test"""
 	try:
-	    api.list('blocks', dataset='*')
+	    api.list('blocks', dataset='/*')
         except Exception, ex:
             if 'HTTPError 400' in ex.args[0]:
                 pass
@@ -225,7 +225,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test036(self):
         """test036: web.DBSReaderModel.listBlocks: basic negative test"""
         try:
-            api.list('blocks', block_name='*')
+            api.list('blocks', block_name='/*')
         except Exception, ex:
             if 'HTTPError 400' in ex.args[0]:
                 pass
@@ -272,7 +272,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test042(self):
         """test042: web.DBSReaderModel.listFiles: basic negative test"""
 	try:
-	    api.list('files', dataset='*')
+	    api.list('files', dataset='/*')
 	except Exception, ex:
 	    if 'HTTPError 400' in ex.args[0]:
                 pass
@@ -316,7 +316,7 @@ class DBSReaderModel_t(unittest.TestCase):
         """test048: web.DBSReaderModel.listFiles: basic negative test """
 	
         try:
-	    api.list('files', block_name='*')
+	    api.list('files', block_name='/*')
         except Exception, ex:
             if 'HTTPError 400' in ex.args[0]:
                 pass
@@ -330,7 +330,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test050(self):
         """test050: web.DBSReaderModel.listFiles: basic negative test """
 	try:
-	    api.list('files', logical_file_name='*')
+	    api.list('files', logical_file_name='/*')
         except Exception, ex:
             if 'HTTPError 400' in ex.args[0]:
                 pass
@@ -354,7 +354,7 @@ class DBSReaderModel_t(unittest.TestCase):
        
     def test053(self):
         """test053: web.DBSReaderModel.listDatasetParents: basic test """
-        api.list('datasetparents', dataset="*")
+        api.list('datasetparents', dataset="/*")
 
     def test054(self):
         """test054: web.DBSReaderModel.listDatasetParents: basic test """
@@ -381,7 +381,7 @@ class DBSReaderModel_t(unittest.TestCase):
     
     def test058(self):
         """test058: web.DBSReaderModel.listOutputConfigs: basic test """
-	api.list('outputconfigs', dataset="*")
+	api.list('outputconfigs', dataset="/*")
 
     def test059(self):
         """test059: web.DBSReaderModel.listOutputConfigs: basic test """
@@ -393,7 +393,7 @@ class DBSReaderModel_t(unittest.TestCase):
 	
     def test061(self):
         """test061: web.DBSReaderModel.listOutputConfigs: basic test """
-        api.list('outputconfigs', logical_file_name="*")
+        api.list('outputconfigs', logical_file_name="/*")
 
     def test062(self):
         """test062: web.DBSReaderModel.listOutputConfigs: basic test """
@@ -485,7 +485,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test080(self):
         """test080: web.DBSReaderModel.listFileParents: basic test """
-        api.list('fileparents', logical_file_name="ABC")
+        api.list('fileparents', logical_file_name="/ABC*")
     
     def test081(self):
         """test081: web.DBSReaderModel.listFileParents: must raise an exception if no parameter is passed """
@@ -519,7 +519,7 @@ class DBSReaderModel_t(unittest.TestCase):
     def test084(self):
         """test084: web.DBSReaderModel.listFileLumis: basic test """
         try:
-            api.list('filelumis', block_name="*")
+            api.list('filelumis', block_name="/*")
         except Exception, ex:
             if 'HTTPError 400' in ex.args[0]:
                 pass
@@ -612,7 +612,8 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test095(self):
         """test095: web.DBSReaderModel.listDatasets with acquisition era: basic """
-        api.list('datasets', acquisition_era=testparams['acquisition_era']) 
+        print testparams['acquisition_era']
+        api.list('datasets', acquisition_era_name=testparams['acquisition_era']) 
 
     def test096(self):
         """test096: web.DBSReaderModel.listDataTypes : basic """

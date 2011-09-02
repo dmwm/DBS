@@ -26,7 +26,7 @@ class BriefList(DBFormatter):
                 release_version="", pset_hash="", app_name="", output_module_label="",
                 processing_version="", acquisition_era="", run_num=0,
                 physics_group_name="", logical_file_name="", primary_ds_name="",
-                primary_ds_type="", data_tier_name="", dataset_access_type="RO", 
+                primary_ds_type="", data_tier_name="", dataset_access_type="", 
                 min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, ldate=0,
                 transaction=False):
 
@@ -38,9 +38,9 @@ class BriefList(DBFormatter):
 	wheresql = 'WHERE D.IS_DATASET_VALID=:is_dataset_valid '
         if dataset and type(dataset) is list:  # for the POST method
             wheresql += " AND D.DATASET=:dataset "
-            if dataset_access_type and dataset_access_type !="%":
+            if dataset_access_type and (dataset_access_type !="%" or dataset_access_type != '*'):
                 joinsql += " JOIN %sDATASET_ACCESS_TYPES DP on DP.DATASET_ACCESS_TYPE_ID= D.DATASET_ACCESS_TYPE_ID " % (self.owner)
-                op = ("=", "like")["%" in dataset_access_type]
+                op = ("=", "like")["%" in dataset_access_type or "*" in dataset_access_type]
                 wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op
                 binds = [{'dataset_access_type':dataset_access_type, 'is_dataset_valid':is_dataset_valid, 'dataset': x } for x in
                         dataset]
@@ -105,9 +105,9 @@ class BriefList(DBFormatter):
                 wheresql += " AND DT.DATA_TIER_NAME %s :data_tier_name " % op
                 binds.update(data_tier_name=data_tier_name)
 
-            if dataset_access_type and dataset_access_type !="%":
+            if dataset_access_type and (dataset_access_type !="%" or dataset_access_type != '*'):
                 joinsql += " JOIN %sDATASET_ACCESS_TYPES DP on DP.DATASET_ACCESS_TYPE_ID= D.DATASET_ACCESS_TYPE_ID " % (self.owner)
-                op = ("=", "like")["%" in dataset_access_type]
+                op = ("=", "like")["%" in dataset_access_type or "*" in dataset_access_type]
                 wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op
                 binds.update(dataset_access_type=dataset_access_type)
 

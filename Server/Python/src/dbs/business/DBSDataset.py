@@ -117,7 +117,7 @@ class DBSDataset:
                      acquisition_era="", run_num=0, physics_group_name="",
                      logical_file_name="", primary_ds_name="",
                      primary_ds_type="", data_tier_name="",
-                     dataset_access_type="RO", min_cdate=0, max_cdate=0,
+                     dataset_access_type="", min_cdate=0, max_cdate=0,
                      min_ldate=0, max_ldate=0, cdate=0, ldate=0, detail=False):
         """
         lists all datasets if dataset parameter is not given.
@@ -135,7 +135,10 @@ class DBSDataset:
             conn = self.dbi.connection()
 
             dao = (self.datasetbrieflist, self.datasetlist)[detail]
-
+            if dataset_access_type: dataset_access_type = dataset_access_type.upper()
+            if data_tier_name: data_tier_name = data_tier_name.upper()
+            if  processing_version:  processing_version =  processing_version.upper()
+            if acquisition_era: acquisition_era = acquisition_era.upper()
             result = dao.execute(conn, 
                                  dataset, is_dataset_valid,
                                  parent_dataset,
@@ -143,13 +146,13 @@ class DBSDataset:
                                  pset_hash,
                                  app_name,
                                  output_module_label,
-                                 processing_version.upper(),
-                                 acquisition_era.upper(), 
+                                 processing_version,
+                                 acquisition_era, 
                                  run_num, physics_group_name,
                                  logical_file_name,
                                  primary_ds_name, primary_ds_type,
-                                 data_tier_name.upper(),
-                                 dataset_access_type.upper(),
+                                 data_tier_name,
+                                 dataset_access_type, 
                                  min_cdate, max_cdate, min_ldate, max_ldate,
                                  cdate, ldate)    
             return result
@@ -165,7 +168,7 @@ class DBSDataset:
             try:
                 dataset = inputdata["dataset"]
                 is_dataset_valid = inputdata.get("is_dataset_valid", 1)
-                dataset_access_type = inputdata.get("dataset_access_type", "RO")
+                dataset_access_type = inputdata.get("dataset_access_type", None)
                 detail = inputdata.get("detail", False)
                 conn = None
                 conn = self.dbi.connection()
@@ -187,7 +190,7 @@ class DBSDataset:
         """
         input dictionary must have the following keys:
         dataset, is_dataset_valid, primary_ds_name(name), processed_ds(name), data_tier(name),
-        dataset_access_type(name), acquisition_era(name), processing_version(name), 
+        acquisition_era(name), processing_version(name), 
         physics_group(name), xtcrosssection, creation_date, create_by, 
         last_modification_date, last_modified_by
         """ 
@@ -196,9 +199,8 @@ class DBSDataset:
             dbsExceptionHandler('dbsException-invalid-input', "business/DBSDataset/insertDataset must have dataset,\
                 is_dataset_valid, primary_ds_name, processed_ds_name as input")
 
-        if not (businput.has_key("data_tier_name") and businput.has_key("dataset_access_type") ):
-            dbsExceptionHandler('dbsException-invalid-input', "business/DBSDataset/insertDataset must have data_tier(name),\
-                dataset_access_type as input.")
+        if not businput.has_key("data_tier_name"):
+            dbsExceptionHandler('dbsException-invalid-input', "insertDataset must have data_tier (name) as input.")
 
         conn = self.dbi.connection()
         tran = conn.begin()
@@ -213,9 +215,10 @@ class DBSDataset:
             if dsdaoinput["data_tier_id"] == -1:
                 dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Data Tier: %s not found"
                                                                                     % businput["data_tier_name"]) 
-            dsdaoinput["dataset_access_type_id"] = self.datatypeid.execute(conn, businput["dataset_access_type"].upper(), tran)
-            if dsdaoinput["dataset_access_type_id"] == -1:
-                dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Dataset Access Type : %s not found"
+            if "dataset_access_type" in businput:
+                dsdaoinput["dataset_access_type_id"] = self.datatypeid.execute(conn, businput["dataset_access_type"].upper(), tran)
+                if dsdaoinput["dataset_access_type_id"] == -1:
+                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Dataset Access Type : %s not found"
                                                                                     % businput["dataset_access_type"] )
             dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
             if dsdaoinput["physics_group_id"]  == -1:
