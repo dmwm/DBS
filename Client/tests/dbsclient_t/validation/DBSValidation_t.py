@@ -70,7 +70,7 @@ class DBSValitaion_t(unittest.TestCase):
 
     def test04(self):
 	"""test04: web.DBSWriterModel.insertProcessingEra: Basic test """
-        data={'processing_version': processing_version, 'description':'this is a test'}
+        data={'processing_version': processing_version, 'description':'this_is_a_test'}
 	api.insertProcessingEra(data)
            
     def test05(self):
@@ -82,14 +82,12 @@ class DBSValitaion_t(unittest.TestCase):
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, \
                     'output_module_label': output_module_label, 'global_tag' : global_tag},
 		    ],
-		'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
         try:
-            #print data['dataset']
             api.insertDataset(datasetObj=data)
-            #print dataset
             dsList = api.listDatasets(dataset=dataset, detail=True, dataset_access_type='PRODUCTION')
         except Exception, e:
             print e
@@ -134,7 +132,7 @@ class DBSValitaion_t(unittest.TestCase):
 	# That is later used in inserting files in 'block', that are then 'validated'
 	pridata = {'primary_ds_name':primary_ds_name+"_parent",
 	                    'primary_ds_type':'test'}
-	api.insertPrimaryDataset(primaryDSObj=pridata)
+        api.insertPrimaryDataset(primaryDSObj=pridata)
 	data = {
 		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset+"_parent", 'primary_ds_name': primary_ds_name+"_parent",
@@ -161,7 +159,7 @@ class DBSValitaion_t(unittest.TestCase):
                 'file_size': u'201221191', 'auto_cross_section': 0.0, 
                 'check_sum': u'1504266448',
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/parent_%s/%i.root" %(uid, i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" %(uid, i),
                 'block_name': block_parent,
 		'file_lumi_list': [
 		                                          {'lumi_section_num': u'27414', 'run_num': u'1'},
@@ -188,31 +186,30 @@ class DBSValitaion_t(unittest.TestCase):
 		                      {'lumi_section_num': u'26422', 'run_num': u'1'},
 		                      {'lumi_section_num': u'29838', 'run_num': u'1'}
                                   ],
-                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
+                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" %(uid, i)} ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/%s/%i.root" %(uid, i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
-			    #'is_file_valid': 1
+                #'is_file_valid': 1
                 }
 	    flist.append(f)
-	#import pdb
-        api.insertFiles(filesList={"files":flist}, qInserts=False)
-        #pdb.set_trace()
 
+        api.insertFiles(filesList={"files":flist}, qInserts=False)
+        
 	### Lets begin the validation now
 	# our block, 'block' now has these 10 files, and that is basis of our validation
 	flList=api.listFiles(block_name=block, detail=True)
-	self.assertEqual(len(flList), 10)
+	self.assertEqual(len(flList), len(flist))
 	for afileInDBS in flList:
 	    self.assertEqual(afileInDBS['block_name'], block)
 	    self.assertEqual(afileInDBS['event_count'], 1619)
 	    self.assertEqual(afileInDBS['file_size'], 201221191)
 	    self.assertEqual(afileInDBS['is_file_valid'], 1)
 	# Get the file parent -- The inserted file must have a parent
-        logical_file_name = "/store/mc/%s/%i.root" %(uid, 0)
+        logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 0)
 	flParentList=api.listFileParents(logical_file_name=logical_file_name)
 	self.assertEqual(len(flParentList), 1)
-	self.assertEqual(flParentList[0]['parent_logical_file_name'][0], "/store/mc/parent_%s/%i.root" %(uid, 0))
+	self.assertEqual(flParentList[0]['parent_logical_file_name'][0], "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" %(uid, 0))
 	# Get the dataset parent -- due to fact that files had parents, dataset parentage is also inserted
 	dsParentList=api.listDatasetParents(dataset=dataset)
 	self.assertEqual(len(dsParentList), 1)
@@ -232,7 +229,7 @@ class DBSValitaion_t(unittest.TestCase):
 
     def test08(self):
 	"""update file status and validate that it got updated"""
-	logical_file_name = "/store/mc/%s/%i.root" %(uid, 0)
+	logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 0)
 	#print "WARNING : DBS cannot list INVALID file, so for now this test is commented out"
 	api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
 	#listfile

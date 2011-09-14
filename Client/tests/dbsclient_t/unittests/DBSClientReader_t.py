@@ -162,7 +162,7 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test31(self):
 	"""test31 unittestDBSClientReader_t.listDatasetParents basic test"""
-	api.listDatasetParents(dataset='doesnotexists')
+	api.listDatasetParents(dataset='/does/not/exists')
 
     def test32(self):
 	"""test32 unittestDBSClientReader_t.listFiles: basic test"""
@@ -190,15 +190,15 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test38(self):
 	"""test38 unittestDBSClientReader_t.listFiles: basic test"""
-	api.listFiles(dataset="doesnotexist")
+	api.listFiles(dataset="/does/not/exist")
     
     def test39(self):
 	"""test39 unittestDBSClientReader_t.listFiles: basic test"""
-	api.listFiles(block_name="doesnotexist#123")
+	api.listFiles(block_name="/does/not/exist#123")
     
     def test40(self):
 	"""test40 unittestDBSClientReader_t.listFiles: basic test"""
-	api.listFiles(logical_file_name="doesnotexist")
+	api.listFiles(logical_file_name="/store/mc/does/not/EXIST/NotReally/0815/doesnotexist.root")
 
     def test41(self):
 	"""test41 unittestDBSClientReader_t.listFileParents: basic test"""	
@@ -215,7 +215,7 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test43(self):
 	"""test43 unittestDBSClientReader_t.listFileParents: basic test"""	
-	api.listFileParents(logical_file_name="doesnotexist")
+	api.listFileParents(logical_file_name="/store/mc/does/not/EXIST/NotReally/0815/doesnotexist.root")
 
     def test44(self):
 	"""test44 unittestDBSClientReader_t.listFileLumis: basic test"""	
@@ -232,7 +232,7 @@ class DBSClientReader_t(unittest.TestCase):
     
     def test46(self):
 	"""test46 unittestDBSClientReader_t.listFileLumis: basic test"""	
-	api.listFileLumis(logical_file_name="doesnotexist")
+	api.listFileLumis(logical_file_name="/store/mc/does/not/EXIST/NotReally/0815/doesnotexist.root")
 
     """
     def test47(self):
@@ -296,7 +296,7 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test60(self):
 	"""test60 unittestDBSClientReader_t.listDatasetParents basic test"""
-	api.listDatasetParents(dataset='doesnotexists')
+	api.listDatasetParents(dataset='/does/not/exists')
 
     def test61(self):
 	"""test61 unittestDBSClientReader_t.listFiles: basic test"""
@@ -317,11 +317,11 @@ class DBSClientReader_t(unittest.TestCase):
 	
     def test65(self):
 	"""test65 unittestDBSClientReader_t.listDatasets: acquisition_era"""
-	api.listDatasets(dataset=testparams['dataset'], acquisition_era=testparams['acquisition_era'] )
+	api.listDatasets(dataset=testparams['dataset'], acquisition_era_name=testparams['acquisition_era'] )
 
     def test66(self):
 	"""test66 unittestDBSClientReader_t.listDatasets: acquisition_era and processing_version both"""
-	api.listDatasets(dataset=testparams['dataset'], acquisition_era=testparams['acquisition_era'], processing_version=testparams['processing_version'] )
+	api.listDatasets(dataset=testparams['dataset'], acquisition_era_name=testparams['acquisition_era'], processing_version=testparams['processing_version'] )
 
     def test67(self):
 	"""test67 unittestDBSClientReader_t.listDataTypes: basic test"""

@@ -321,7 +321,7 @@ class DbsApi(object):
         * app_name : Application name (generally it is cmsRun)
         * output_module_label : output_module_label
         * processing_version : Processing Version
-        * acquisition_era : Acquisition Era
+        * acquisition_era_name : Acquisition Era
         * primary_ds_name : Primary Dataset Name
         * primary_ds_type : Primary Dataset Type (Type of data, MC/DATA)
         * data_tier_name : Data Tier 
@@ -332,7 +332,7 @@ class DbsApi(object):
         """
         validParameters = ['dataset','parent_dataset','is_dataset_valid',
                            'release_version','pset_hash','app_name',
-                           'output_module_label','processing_version','acquisition_era',
+                           'output_module_label','processing_version','acquisition_era_name',
                            'run_num','physics_group_name','logical_file_name',
                            'primary_ds_name','primary_ds_type','data_tier_name',
                            'dataset_access_type','min_cdate','max_cdate',

@@ -29,22 +29,20 @@ class FileLike(object):
         pass
 
 class DBSRestApi:
-    def __init__(self, configfile, service='DBS'):
+    def __init__(self, configfile, service='DBS', dbinstance='dev/global'):
         log.error_log.setLevel(logging.ERROR)
-        config = self.configure(configfile, service)
+        config = self.configure(configfile, service, dbinstance)
         config = config.section_("DBS")
         self.rest = RESTApi(config)
         self.config = config
 
-    def configure(self, configfile, service):
+    def configure(self, configfile, service, dbinstance):
         cfg = loadConfigurationFile(configfile)
         wconfig = cfg.section_("Webtools")
         app = wconfig.application
+        
         appconfig = cfg.section_(app)
         dbsconfig = getattr(appconfig.views.active, service)
-	#databasecore = cfg.CoreDatabase
-        #webapp = cfg.cmsdbs
-        #dbsconfig = getattr(webapp.views.active, service)
 	
 	# Eitehr we change formatter 
 	# OR change the 'Accept' type to application/json (which we don't know how to do at thi moment)	
@@ -53,28 +51,26 @@ class DBSRestApi:
          
         config.component_('SecurityModule')
         config.SecurityModule.dangerously_insecure = True
-
-
-	#config.section_("CoreDatabase")
-	#config.CoreDatabase = databasecore
 	
         config.component_('DBS')
-        #config.DBS.application = "cmsdbs"
         config.DBS.application = app
 	config.DBS.model       = dbsconfig.model
 	config.DBS.formatter   = dbsconfig.formatter
-        config.DBS.database    = dbsconfig.database 
-        config.DBS.dbowner     = dbsconfig.dbowner
-        config.DBS.version     = dbsconfig.version
-        #config.DBS.version     = databasecore.version
-	config.DBS.default_expires = 300
-	# DBS uses owner name, directly from app section at the moment 
-        #(does not pick it from CoreDatabse)
-	#config.DBS.dbowner     = databasecore.dbowner
-	# Add the CoreDatabase section to DBS
-	#config.DBS.database = config.CoreDatabase
-	
-	
+
+        #Does not support instances
+        #config.DBS.instances   = cfg.dbs.instances
+        #config.DBS.database    = dbsconfig.database
+
+        #Use dev/global for the unittest
+        dbconfig = getattr(dbsconfig.database.instances,dbinstance)
+        config.DBS.section_('database')
+        config.DBS.database.connectUrl = dbconfig.connectUrl
+        config.DBS.database.dbowner = dbconfig.dbowner
+        #config.DBS.database.version = dbconfig.version
+        config.DBS.database.engineParameters = dbconfig.engineParameters
+        
+        config.DBS.default_expires = 300
+		
         return config
 
     def list1(self, call, params={}):
@@ -117,7 +113,7 @@ class DBSRestApi:
 	return data
 
 def options():
-    defaultcfg = os.environ["DBS_TEST_CONFIG_READER"]
+    defaultcfg = os.environ["DBS_TEST_CONFIG"]
     defaultservice = os.environ["DBS_TEST_SERVICE"]
     parser = OptionParser()
     parser.add_option("-c", "--config", dest="cfile", default=defaultcfg)
@@ -130,7 +126,7 @@ def options():
     parser.add_option("--logical_file_name", dest='logical_file_name')
     parser.add_option("--site_name", dest='site_name')
     parser.add_option("--parent_dataset", dest='parent_dataset')
-    parser.add_option("--version", dest='version')
+    #parser.add_option("--version", dest='version')
     parser.add_option("--hash", dest='hash')
     parser.add_option("--app_name", dest='app_name')
     parser.add_option("--output_module_label", dest='output_module_label')

@@ -23,8 +23,8 @@ def importCode(code,name,add_to_sys_modules=0):
         sys.modules[name] = module
     return module
 
-config = os.environ["DBS_TEST_CONFIG_WRITER"]
-service = os.environ["DBS_TEST_SERVICE"]
+config = os.environ["DBS_TEST_CONFIG"]
+service = os.environ.get("DBS_TEST_SERVICE","DBSReader")
 api = DBSRestApi(config, service)
 
 class DBSReaderModel_t(unittest.TestCase):
@@ -32,10 +32,13 @@ class DBSReaderModel_t(unittest.TestCase):
     def setUp(self):
         """setup all necessary parameters"""
         global testparams
+        filename=os.path.join(os.path.dirname(os.path.abspath(__file__)),'info.dict')
+        infofile=open(filename,"r")    
+        testparams=importCode(infofile, "testparams", 0).info
+        
         if len(testparams) == 0:
             testparams = outDict
-	#import pdb
-	#pdb.set_trace()
+	
     def test001(self):
         """test001: web.DBSReaderModel.listPrimaryDatasets: basic test"""
         api.list('primarydatasets')
@@ -672,8 +675,4 @@ class DBSReaderModel_t(unittest.TestCase):
 	
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSReaderModel_t)
-    infofile=open("info.dict","r")    
-    testparams=importCode(infofile, "testparams", 0).info
     unittest.TextTestRunner(verbosity=2).run(SUITE)
-else:
-    testparams={}

@@ -28,8 +28,8 @@ class NullDevice:
     def write(self, s):
         pass
 
-config = os.environ["DBS_TEST_CONFIG_WRITER"] 
-service = os.environ["DBS_TEST_SERVICE"] 
+config = os.environ["DBS_TEST_CONFIG"] 
+service = os.environ.get("DBS_TEST_SERVICE","DBSWriter")
 api = DBSRestApi(config, service)
 uid = uuid.uuid4().time_mid
 print "****uid=%s******" %uid
@@ -80,6 +80,10 @@ class DBSWriterModel_t(unittest.TestCase):
 
     def setUp(self):
         """setup all necessary parameters"""
+        filename=os.path.join(os.path.dirname(os.path.abspath(__file__)),'info.dict')
+        infoout=open(filename, "w")
+        infoout.write("info="+str(outDict))
+        infoout.close()
 
     def test01(self):
         """test01: web.DBSWriterModel.insertPrimaryDataset: basic test\n"""
@@ -395,6 +399,3 @@ class DBSWriterModel_t(unittest.TestCase):
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSWriterModel_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
-    infoout=open("info.dict", "w")
-    infoout.write("info="+str(outDict))
-    infoout.close()	

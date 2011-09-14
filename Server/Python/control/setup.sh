@@ -29,7 +29,7 @@ dbs3_start1(){
 if [ -z "$1" ]
    then
 #When running server interactively, one needs to use a different config file.
-       $WTBASE/python/WMCore/WebTools/Root.py -i $DBS3_ROOT/DBS/Server/Python/control/cms_dbs_writer_single_server.py
+       $WTBASE/python/WMCore/WebTools/Root.py -i $DBS3_ROOT/DBS/Server/Python/control/DBSConfig.py
    else
        $WTBASE/python/WMCore/WebTools/Root.py -i $DBS3_ROOT/Config/$1.py
 fi

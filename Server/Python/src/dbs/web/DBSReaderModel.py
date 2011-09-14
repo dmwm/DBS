@@ -50,6 +50,15 @@ class DBSReaderModel(RESTModel):
         """
         All parameters are provided through DBSConfig module
         """
+        #Dictionary with reader and writer as keys
+        urls = config.database.connectUrl
+
+        #instantiate the page with the writer_config
+        if type(urls)==type({}):
+            config.database.connectUrl = urls['reader']
+
+        dbowner = config.database.dbowner
+        
         RESTModel.__init__(self, config)
         self.dbsUtils2 = dbsUtils()
         self.version = self.getServerVersion()
@@ -57,7 +66,8 @@ class DBSReaderModel(RESTModel):
         #self.logger.warning("DBSReaderModle")
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 
-        self.daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=config.dbowner)
+        self.daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=dbowner)
+
         self.dbsDataTierListDAO = self.daofactory(classname="DataTier.List")
         
 	self._addMethod('GET', 'serverinfo', self.getServerInfo)
@@ -102,26 +112,26 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'])
         self._addMethod('GET', 'help', self.getHelp, args=['call'])
 
-        self.dbsDoNothing = DBSDoNothing(self.logger, self.dbi, config.dbowner)
-        self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, config.dbowner)
-        self.dbsDataset = DBSDataset(self.logger, self.dbi, config.dbowner)
-        self.dbsBlock = DBSBlock(self.logger, self.dbi, config.dbowner)
-        self.dbsFile = DBSFile(self.logger, self.dbi, config.dbowner)
+        self.dbsDoNothing = DBSDoNothing(self.logger, self.dbi, dbowner)
+        self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, dbowner)
+        self.dbsDataset = DBSDataset(self.logger, self.dbi, dbowner)
+        self.dbsBlock = DBSBlock(self.logger, self.dbi, dbowner)
+        self.dbsFile = DBSFile(self.logger, self.dbi, dbowner)
         self.dbsAcqEra = DBSAcquisitionEra(self.logger, self.dbi,
-            config.dbowner)
+            dbowner)
         self.dbsOutputConfig = DBSOutputConfig(self.logger, self.dbi,
-            config.dbowner)
+            dbowner)
         self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi,
-            config.dbowner)
-        self.dbsSite = DBSSite(self.logger, self.dbi, config.dbowner)
-	self.dbsRun = DBSRun(self.logger, self.dbi, config.dbowner)
-	self.dbsDataType = DBSDataType(self.logger, self.dbi, config.dbowner)
-        self.dbsStatus = DBSStatus(self.logger, self.dbi, config.dbowner)
-	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, config.dbowner)
-        self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, config.dbowner) 
-        self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, config.dbowner)
-        self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, config.dbowner)
-        self.dbsPhysicsGroup = DBSPhysicsGroup(self.logger, self.dbi, config.dbowner)
+            dbowner)
+        self.dbsSite = DBSSite(self.logger, self.dbi, dbowner)
+	self.dbsRun = DBSRun(self.logger, self.dbi, dbowner)
+	self.dbsDataType = DBSDataType(self.logger, self.dbi, dbowner)
+        self.dbsStatus = DBSStatus(self.logger, self.dbi, dbowner)
+	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, dbowner)
+        self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, dbowner) 
+        self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, dbowner)
+        self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, dbowner)
+        self.dbsPhysicsGroup = DBSPhysicsGroup(self.logger, self.dbi, dbowner)
     """ 
     def checkList(self, input):
         if type(input['block_name']) is not str:
@@ -139,8 +149,7 @@ class DBSReaderModel(RESTModel):
 
     def getHelp(self, call=""):
         if call:
-            params = inspect.getargspec(self.methods['GET'][call]['call'])[0]
-            del params[params.index('self')]
+            params = self.methods['GET'][call]['args']
             doc = self.methods['GET'][call]['call'].__doc__
             return dict(params=params, doc=doc)
         else:
@@ -314,8 +323,6 @@ class DBSReaderModel(RESTModel):
                 data = validateJSONInputNoCopy("dataset",data)
             else:
                 data=''
-            #import pdb
-            #pdb.set_trace()
             return self.dbsDataset.listDatasetArray(data)
         except cjson.DecodeError as De:
             dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
@@ -327,14 +334,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listDatasetArray. %s \n Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    """
-    @inputChecks(data_tier_name=str)
-    @tools.secmodv2()
-    def listDataTiers(self, data_tier_name=""):
-        p2 = profiler.Profiler("/uscms/home/yuyi/dbs3-test/DBS/Server/Python/control")
-        p3=1
-        p2.run(self._listDataTiers, data_tier_name)
-    """
+
     @inputChecks(data_tier_name=str)
     @tools.secmodv2()
     def listDataTiers(self, data_tier_name=""):

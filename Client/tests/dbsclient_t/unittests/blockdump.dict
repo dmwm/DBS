@@ -1,3 +1,4 @@
+
 blockDump={'dataset_conf_list': [{u'release_version': 'CMSSW_1_2_3', u'pset_hash':
 '76e303993a1c2f842159dbfeeed9a0dd', u'app_name': 'cmsRun', u'output_module_label': 'Merged', 
 u'global_tag': 'my-cms-gtag'}],
@@ -68,13 +69,12 @@ u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':
 
 
 'processing_era': {'create_by': 'Client Name', 'processing_version':
-'4145', 'description': 'this is a test', 'creation_date': 1279912078},
+'4145', 'description': 'this_is_a_test', 'creation_date': 1279912078},
 
 'primds':
 {u'create_by': 'Client Name', u'primary_ds_type': 'test', 
 u'primary_ds_name': 'unittest_web_primary_ds_name_14144',
 u'creation_date': 1279912078}, 
-
 'dataset': {u'is_dataset_valid': 1,
 u'physics_group_name': 'Tracker', u'create_by': 'Client Name',
 u'dataset_access_type': 'PRODUCTION', u'data_tier_name': 'GEN-SIM-RAW',

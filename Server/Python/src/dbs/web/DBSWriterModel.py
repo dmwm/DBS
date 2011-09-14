@@ -9,7 +9,6 @@ __version__ = "$Revision: 1.46 $"
 
 import re
 import cjson
-#from cherrypy.lib import profiler
 
 from cherrypy import request, tools, HTTPError
 from WMCore.DAOFactory import DAOFactory
@@ -25,21 +24,6 @@ def authInsert(user, role, group, site):
     """
     Authorization function for general insert  
     """
-
-    # user = {
-    #    'dn': '/DC=ch/DC=cern/[...]/CN=fakeuser/CN=Fake User',
-    #    'method': 'X509Cert',
-    #    'login': 'fakeuser',
-    #    'name': 'Fake User',
-    #    'roles': {
-    #        'admin':   {'site': set(['t2-br-uerj', 't1-ch-cern']), 
-    #                    'group': set(['cms', 'ph-users'])},
-    #        'dev':     {'site': set(['t1-ch-cern']), 
-    #                    'group': set(['dmwm'])},
-    #        'shifter': {'site': set(['t0-ch-cern']), 
-    #                    'group': set(['facop','ph-users'])}
-    #    } 
-    # }
 
     for k, v in user['roles'].iteritems():
         for g in v['group']:
@@ -63,13 +47,18 @@ class DBSWriterModel(DBSReaderModel):
     """
     DBS3 Server API Documentation 
     """
-    #p=profiler.Profiler("/uscms/home/yuyi/dbs3-test/DBS/Server/Python/control")
-
     def __init__(self, config):
-
         """
         All parameters are provided through DBSConfig module
         """
+
+        #Dictionary with reader and writer as keys
+        urls = config.database.connectUrl
+
+        #instantiate the page with the writer_config
+
+        if type(urls)==type({}):
+            config.database.connectUrl = urls['writer']
 
         DBSReaderModel.__init__(self, config)
 
@@ -193,6 +182,7 @@ class DBSWriterModel(DBSReaderModel):
             sError = "DBSWriterModel/insertProcessingEra. %s\n. Exception trace: \n %s" \
                             % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
     @tools.secmodv2(authzfunc=authInsert)                
     def insertDataset(self):
         """
@@ -221,12 +211,7 @@ class DBSWriterModel(DBSReaderModel):
             sError = " DBSWriterModel/insertDataset. %s\n. Exception trace: \n %s" \
                         % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    """      
-    For Profling
-    @tools.secmodv2(authzfunc=authInsert)
-    def insertBulkBlock(self):
-        self.p.run(self._insertBulkBlock)
-    """    
+
     @tools.secmodv2(authzfunc=authInsert)
     def insertBulkBlock(self):
         """
@@ -247,13 +232,7 @@ class DBSWriterModel(DBSReaderModel):
             sError = "DBSWriterModel/insertBulkBlock. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc()) 
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    """
-    For Profling
-    
-    @tools.secmodv2(authzfunc=authInsert)
-    def insertBlock(self):
-        self.p.run(self._insertBlock)
-    """
+
     @tools.secmodv2(authzfunc=authInsert)
     def insertBlock(self):
         """
@@ -397,12 +376,7 @@ class DBSWriterModel(DBSReaderModel):
         except Exception, ex:
             sError = "DBSWriterModel\updateStatus. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    """
-    For profling
-    @tools.secmodv2(authzfunc=authKeyInsert)
-    def insertDataTier(self):
-        self.p.run(self._insertDataTier)
-    """
+
     @tools.secmodv2(authzfunc=authKeyInsert)
     def insertDataTier(self):
 	"""

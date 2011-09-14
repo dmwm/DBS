@@ -94,7 +94,7 @@ class DBSClientWriter_t(unittest.TestCase):
 
     def test07(self):
 	"""test07: web.DBSWriterModel.insertProcessingEra: Basic test """
-	data={'processing_version': processing_version, 'description':'this is a test'}
+	data={'processing_version': processing_version, 'description':'this_is_a_test'}
 	api.insertProcessingEra(data)
 					    
     def test08(self):
@@ -178,10 +178,7 @@ class DBSClientWriter_t(unittest.TestCase):
 
     def test16(self):
 	"""test16 web.DBSClientWriter.insertFiles: insert parent file for later use : basic test"""
-        #import pdb
-        #pdb.set_trace()
-
-	flist=[]
+        flist=[]
  	for i in range(10):
 	    f={  
 		'adler32': u'NOTSET', 'file_type': 'EDM',
@@ -200,14 +197,12 @@ class DBSClientWriter_t(unittest.TestCase):
                                   ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/parent_%s/%i.root" %(uid, i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': parent_block
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
-        #import pdb
-        #pdb.set_trace()
-	api.insertFiles(filesList={"files":flist})
+        api.insertFiles(filesList={"files":flist})
 	time.sleep(10)
 
     def test17(self):
@@ -230,9 +225,9 @@ class DBSClientWriter_t(unittest.TestCase):
 		                      {'lumi_section_num': u'26422', 'run_num': u'2'},
 		                      {'lumi_section_num': u'29838', 'run_num': u'3'}
                                   ],
-                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
+                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/%s/%i.root" %(uid, i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
 			    #'is_file_valid': 1
                 }
@@ -260,9 +255,9 @@ class DBSClientWriter_t(unittest.TestCase):
 		                      {'lumi_section_num': u'26422', 'run_num': u'2'},
 		                      {'lumi_section_num': u'29838', 'run_num': u'3'}
                                   ],
-                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/parent_%s/%i.root" %(uid, i)} ],
+                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/%s/%i.root" %(uid, i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
 			    #'is_file_valid': 1
                 }
@@ -273,7 +268,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	
     def test19(self):
 	"""test19 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
-	logical_file_name = "/store/mc/%s/%i.root" %(uid, 1)
+	logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 1)
 	api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
 
     def test20(self):
