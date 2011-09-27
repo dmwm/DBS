@@ -1,11 +1,11 @@
 /* ---------------------------------------------------------------------- */
 /* Script generated with: DeZign for Databases v6.1.2                     */
-/* Target DBMS:           Oracle 10g                                      */
+/* Target DBMS:           Oracle 11g                                      */
 /* Project file:          DBS3.dez                                        */
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2011-05-31 10:59                                */
+/* Created on:            2011-09-15 09:23                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -548,7 +548,7 @@ CREATE TABLE DATASETS (
     PROCESSING_ERA_ID INTEGER,
     PHYSICS_GROUP_ID INTEGER,
     XTCROSSSECTION FLOAT(126),
-    DATASET_UID VARCHAR2(100),
+    PREP_ID VARCHAR2(256),
     CREATION_DATE INTEGER,
     CREATE_BY VARCHAR2(100),
     LAST_MODIFICATION_DATE INTEGER,

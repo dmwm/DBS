@@ -231,52 +231,61 @@ class DBSFile:
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
+            #Now we are dealing with independent files that have different dataset/block and so on. 
+            #See Trac #358.  
+            #The expected input data format is a list of dictionary to insert independent files into DBS, 
+            #inputdata={'files':[{}, {}, {}]}
+            #YG  09/15/2011
         
             # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
             #files2insert = []
             fidl = []
             fileInserted = False
-            
-            firstfile = businput[0]
-            # first check if the dataset exists
-            # and block exists that files are suppose to be going to and is OPEN for writing
-            dataset_id = self.datasetid.execute(conn, dataset=firstfile["dataset"], transaction=tran)
-            if dataset_id == -1 :
-                dbsExceptionHandler('dbsException-missing-data', "Required Dataset Not Found.", None, "Requored Dataset %s does not exist"\
-                        %firstfile["dataset"] )
-            # get the list of configs in for this dataset
-            dsconfigs = [x['output_mod_config_id'] for x in self.dsconfigids.execute(conn, dataset=firstfile["dataset"], transaction=tran)]
-            fileconfigs = [] # this will hold file configs that we will list in the insert file logic below       
-            block_info = self.blocklist.execute(conn, block_name=firstfile["block_name"], transaction=tran)
-            #assert len(block_info) == 1
-            if len(block_info) != 1 : dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,\
-                                                          "Cannot found required block %s in DB" %firstfile["block_name"])
-            block_info = block_info[0]
-            #assert block_info["block_id"] 
-            #assert block_info["open_for_writing"] == 1 
-            if  block_info["open_for_writing"] != 1 : dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,\
-                                                                           "Block %s is not open for writting" %firstfile["block_name"])  
-            if block_info.has_key("block_id"):
-                block_id = block_info["block_id"]
-            else:
-                dbsExceptionHandler("dbsException-missing-data", "Block not found", None,\
-                                          "Cannot found required block %s in DB" %firstfile["block_name"])
-           
-            #make the default file_type=EDM
-            file_type_id = self.ftypeid.execute( conn, firstfile.get("file_type", "EDM"), transaction=tran)
-            if file_type_id == -1: 
-                dbsExceptionHandler('dbsException-missing-data', "File type not found.", None, "Required file type %s not found in DBS"\
-                        %firstfile.get("file_type", "EDM") )
-
-            iFile = 0
-            fileIncrement = 40
-            fID = self.sm.increment(conn, "SEQ_FL", transaction=tran, incCount=fileIncrement)
-            #looping over the files, everytime create a new object 'filein' as you never know 
-            #whats in the original object and we do not want to know
+            dataset = ""
+            block_name = ""
+            dataset_id = -1
+            block_id = -1
+            dsconfigs = []
             for f in businput:
+                # first check if the dataset exists
+                # and block exists that files are suppose to be going to and is OPEN for writing
+                if dataset != f["dataset"]:
+                    dataset_id = self.datasetid.execute(conn, dataset=f["dataset"], transaction=tran)
+                    dataset = f["dataset"]
+                    if dataset_id == -1 :
+                        dbsExceptionHandler('dbsException-missing-data', "Required Dataset Not Found.", None, "Required Dataset %s does not exist"\
+                        %f["dataset"] )
+                    # get the list of configs in for this dataset
+                    dsconfigs = [x['output_mod_config_id'] for x in self.dsconfigids.execute(conn, dataset=f["dataset"], transaction=tran)]
+                fileconfigs = [] # this will hold file configs that we will list in the insert file logic below       
+                if block_name != f["block_name"]:
+                    block_info = self.blocklist.execute(conn, block_name=f["block_name"], transaction=tran)
+                    if len(block_info) != 1 : dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,\
+                                                          "Cannot found required block %s in DB" %f["block_name"])
+                    block_info = block_info[0]
+                    if  block_info["open_for_writing"] != 1 : dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,\
+                                                                           "Block %s is not open for writting" %f["block_name"])  
+                    if block_info.has_key("block_id"):
+                        block_id = block_info["block_id"]
+                    else:
+                        dbsExceptionHandler("dbsException-missing-data", "Block not found", None,\
+                                          "Cannot found required block %s in DB" %f["block_name"])
+           
+                #make the default file_type=EDM
+                file_type_id = self.ftypeid.execute( conn, f.get("file_type", "EDM"), transaction=tran)
+                if file_type_id == -1: 
+                    dbsExceptionHandler('dbsException-missing-data', "File type not found.", None, "Required file type %s not found in DBS"\
+                        %f.get("file_type", "EDM") )
+
+                iFile = 0
+                fileIncrement = 40
+                fID = self.sm.increment(conn, "SEQ_FL", transaction=tran, incCount=fileIncrement)
+                #looping over the files, everytime create a new object 'filein' as you never know 
+                #whats in the original object and we do not want to know
+                #for f in businput:
                 file_clob = {}
                 fparents2insert = []
-                fparents2insert = []
+                #fparents2insert = []
                 flumis2insert = []
                 fconfigs2insert = []
                 # create the file object from the original 
@@ -411,7 +420,7 @@ class DBSFile:
                     dbsExceptionHandler('dbsException-conflict-data', 'Mismatched configure. ', None, "DBSFile/insertFile. Output configs mismatch, \
                             output configs known to dataset: \
                             %s are different from what are being mapped to file : %s " \
-                            %(firstfile["dataset"], filein["logical_file_name"]) )
+                            %(f["dataset"], filein["logical_file_name"]) )
                 # insert output module config mapping
                 if fconfigs2insert:
                     file_clob['file_output_config_list'] = fconfigs2insert
@@ -427,35 +436,25 @@ class DBSFile:
                         else:
                             raise                  
                 
-            # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
-            # fpbdlist, returns a dict of {block_id, dataset_id} combination
-            if fileInserted:
-                fpblks = []
-                fpds = []
-                fileParentBlocksDatasets = self.fpbdlist.execute(conn, fidl, transaction=tran)
-                for adict in fileParentBlocksDatasets:
-                    if adict["block_id"] not in fpblks:
-                        fpblks.append(adict["block_id"])
-                    if adict["dataset_id"] not in fpds:
-                        fpds.append(adict["dataset_id"])
+                # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
+                # fpbdlist, returns a dict of {block_id, dataset_id} combination
+                if fileInserted:
+                    fpblks = []
+                    fpds = []
+                    fileParentBlocksDatasets = self.fpbdlist.execute(conn, fidl, transaction=tran)
+                    for adict in fileParentBlocksDatasets:
+                        if adict["block_id"] not in fpblks:
+                            fpblks.append(adict["block_id"])
+                        if adict["dataset_id"] not in fpds:
+                            fpds.append(adict["dataset_id"])
                 # Update Block parentage
                 if len(fpblks) > 0 :
-                    # we need to bulk this, number of parents can get big in rare cases
                     bpdaolist = []
-                    #iPblk = 0
-                    #fpblkInc = 10
-                    #bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
                     for ablk in fpblks:
-                        #if iPblk == fpblkInc:
-                            #bpID = self.sm.increment(conn, "SEQ_BP", transaction=tran, incCount=fpblkInc)
-                            #iPblk = 0
                         bpdao = { "this_block_id": block_id }
                         bpdao["parent_block_id"] = ablk
-                        #bpdao["block_parent_id"] = bpID
                         bpdaolist.append(bpdao)
-                    # insert them all
                     # Do this one by one, as its sure to have duplicate in dest table
-
                     for abp in bpdaolist:
                         try:
                             self.blkparentin.execute(conn, abp, transaction=tran)
@@ -467,16 +466,9 @@ class DBSFile:
                 # Update dataset parentage
                 if len(fpds) > 0 :
                     dsdaolist = []
-                    #iPds = 0
-                    #fpdsInc = 10
-                    #pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
                     for ads in fpds:
-                        #if iPds == fpdsInc:
-                            #pdsID = self.sm.increment(conn, "SEQ_DP", transaction=tran, incCount=fpdsInc)
-                            #iPds = 0
                         dsdao = { "this_dataset_id": dataset_id }
                         dsdao["parent_dataset_id"] = ads
-                        #dsdao["dataset_parent_id"] = pdsID # PK of table 
                         dsdaolist.append(dsdao)
                     # Do this one by one, as its sure to have duplicate in dest table
                     for adsp in dsdaolist:

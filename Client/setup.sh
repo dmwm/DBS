@@ -6,6 +6,8 @@ export PYTHONPATH=$PWD:$PWD/src/python:$cjson:$PYTHONPATH
 #export DBS_WRITER_URL=http://cmssrv48.fnal.gov:8687/DBS
 #need to be updated for your installation.
 export LD_LIBRARY_PATH=$PWD/../../../external/python/2.6.4-comp/lib:$LD_LIBRARY_PATH
-export DBS_WRITER_URL=http://cms-xen40.fnal.gov/cms_dbs/DBS
-export DBS_READER_URL=http://cms-xen40.fnal.gov/cms_dbs/DBS
+#export DBS_WRITER_URL=http://cms-xen40.fnal.gov/cms_dbs/DBS
+#export DBS_READER_URL=http://cms-xen40.fnal.gov/cms_dbs/DBS
+export DBS_READER_URL=http://cms-xen39.fnal.gov:8787/dbs/int/global/DBSReader
+export DBS_WRITER_URL=http://cms-xen39.fnal.gov:8787/dbs/int/global/DBSWriter
 alias dbs="python $PWD/cmdline/dbs.py"

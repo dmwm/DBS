@@ -348,8 +348,8 @@ class DBSMigrate:
             #a special migration one. However, we will have to remove the
             #extras
             dataset1 = self.datasetlist.execute(conn,
-                                               dataset=block["dataset"])
-            dataset = dataset1[0]
+                                               dataset=block["dataset"], dataset_access_type="")
+            if dataset1: dataset = dataset1[0]
 
             #get block parentage
             bparent = self.bparentlist.execute(conn, block['block_name'])

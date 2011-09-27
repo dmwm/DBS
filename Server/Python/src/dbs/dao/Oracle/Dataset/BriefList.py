@@ -26,10 +26,9 @@ class BriefList(DBFormatter):
                 release_version="", pset_hash="", app_name="", output_module_label="",
                 processing_version="", acquisition_era="", run_num=0,
                 physics_group_name="", logical_file_name="", primary_ds_name="",
-                primary_ds_type="", data_tier_name="", dataset_access_type="", 
-                min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, ldate=0,
+                primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", 
+                prep_id="", min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, ldate=0,
                 transaction=False):
-
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/BriefList.  Expects db connection from upper layer.")
 	selectsql = 'SELECT '
@@ -64,6 +63,7 @@ class BriefList(DBFormatter):
                 binds.update(max_cdate = max_cdate)
             else:
                 pass
+            
             if ldate != 0:
                 wheresql += "AND D.LAST_MODIFICATION_DATE = :ldate "
                 binds.update(ldate = ldate)
@@ -79,8 +79,10 @@ class BriefList(DBFormatter):
                 binds.update(max_ldate = max_ldate)
             else:
                 pass
- 
-	
+            
+            if prep_id:
+                wheresql += "AND D.prep_id = :prep_id "
+                binds.update(prep_id = prep_id)
             if dataset and type(dataset) is str and dataset != "%":
                 op = ("=", "like")["%" in dataset]
                 wheresql += " AND D.DATASET %s :dataset " % op
@@ -90,7 +92,6 @@ class BriefList(DBFormatter):
                 op = ("=", "like")["%" in primary_ds_name ]
                 wheresql += " AND P.PRIMARY_DS_NAME %s :primary_ds_name " % op
                 binds.update(primary_ds_name = primary_ds_name)
-
             if primary_ds_type and  primary_ds_type !="%":
                 if not primary_ds_name:  
                     joinsql += " JOIN %sPRIMARY_DATASETS P ON P.PRIMARY_DS_ID = D.PRIMARY_DS_ID " % (self.owner)
@@ -98,6 +99,12 @@ class BriefList(DBFormatter):
                 op = ("=", "like")["%" in primary_ds_type]
                 wheresql += " AND PDT.PRIMARY_DS_TYPE %s :primary_ds_type " %op
                 binds.update(primary_ds_type=primary_ds_type)
+            
+            if processed_ds_name and processed_ds_name != "%":
+                joinsql += " JOIN %sPROCESSED_DATASETS PR ON PR.PROCESSED_DS_ID = D.PROCESSED_DS_ID " % (self.owner)
+                op = ("=", "like")["%" in processed_ds_name ]
+                wheresql += " AND PR.PROCESSED_DS_NAME %s :processed_ds_name " % op
+                binds.update(processed_ds_name = processed_ds_name)
 
             if data_tier_name and data_tier_name != "%":
                 joinsql += " JOIN %sDATA_TIERS DT ON DT.DATA_TIER_ID = D.DATA_TIER_ID " % (self.owner)

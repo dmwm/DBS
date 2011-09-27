@@ -76,7 +76,7 @@ class DBSValitaion_t(unittest.TestCase):
     def test05(self):
 	"""test05: web.DBSClientWriter.Dataset: validation test"""
 	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
+		'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, \
@@ -95,7 +95,6 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(len(dsList), 1)
 	dsInDBS=dsList[0]
 	self.assertEqual(dsInDBS['dataset'], dataset)
-	self.assertEqual(dsInDBS['is_dataset_valid'], 1)
 	self.assertEqual(dsInDBS['physics_group_name'], 'Tracker')
 	self.assertEqual(dsInDBS['dataset_access_type'], 'PRODUCTION')
 	self.assertEqual(dsInDBS['processed_ds_name'], procdataset)
@@ -134,7 +133,7 @@ class DBSValitaion_t(unittest.TestCase):
 	                    'primary_ds_type':'test'}
         api.insertPrimaryDataset(primaryDSObj=pridata)
 	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
+		'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset+"_parent", 'primary_ds_name': primary_ds_name+"_parent",
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, \
@@ -239,17 +238,17 @@ class DBSValitaion_t(unittest.TestCase):
 	
     def test09(self):
 	"""test09 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status and validate it"""
-	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=1)
+	#api.updateDatasetStatus(dataset=dataset, is_dataset_valid=1)
 	dsInDBS=api.listDatasets(dataset=dataset,  dataset_access_type="PRODUCTION", detail=True)
 	self.assertEqual(len(dsInDBS), 1)
-	self.assertEqual(dsInDBS[0]['is_dataset_valid'], 1)
+	#self.assertEqual(dsInDBS[0]['is_dataset_valid'], 1)
 	
     def test10(self):
 	"""test10 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-	api.updateDatasetType(dataset=dataset, dataset_access_type="RO")
+	api.updateDatasetType(dataset=dataset, dataset_access_type="VALID")
 	dsInDBS=api.listDatasets(dataset=dataset, detail=True)
         self.assertEqual(len(dsInDBS), 1)
-	self.assertEqual(dsInDBS[0]['dataset_access_type'], "RO")
+	self.assertEqual(dsInDBS[0]['dataset_access_type'], "VALID")
 
 
 	

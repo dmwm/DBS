@@ -100,7 +100,7 @@ class DBSClientWriter_t(unittest.TestCase):
     def test08(self):
 	"""test08: web.DBSClientWriter.insertDataset: basic test"""
 	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
+		'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
@@ -117,7 +117,7 @@ class DBSClientWriter_t(unittest.TestCase):
         #import pdb
         #pdb.set_trace()
 	parentdata = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': parent_dataset,
+		'physics_group_name': 'Tracker', 'dataset': parent_dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
@@ -133,7 +133,7 @@ class DBSClientWriter_t(unittest.TestCase):
     def test09(self):
 	"""test09: web.DBSClientWriter.insertDataset: duplicate insert should be ignored"""
 	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
+		'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
@@ -150,7 +150,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	"""test11: web.DBSClientWriter.insertDataset: no output_configs, should be fine insert!"""
 	data = {
 		'dataset': dataset2,
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
+		'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
 		'creation_date' : 1234, 'create_by' : 'testuser', "last_modification_date" : 1234, "last_modified_by"
@@ -270,10 +270,6 @@ class DBSClientWriter_t(unittest.TestCase):
 	"""test19 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
 	logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 1)
 	api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
-
-    def test20(self):
-	"""test20 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status"""
-	api.updateDatasetStatus(dataset=dataset, is_dataset_valid=1)
 
     def test21(self):
 	    """test21 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""

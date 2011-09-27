@@ -24,7 +24,7 @@ class List(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 	self.basesql = \
 	"""
-	D.DATASET_ID, D.DATASET, D.IS_DATASET_VALID, 
+	D.DATASET_ID, D.DATASET, D.PREP_ID, 
         D.XTCROSSSECTION, 
         D.CREATION_DATE, D.CREATE_BY, 
         D.LAST_MODIFICATION_DATE, D.LAST_MODIFIED_BY,
@@ -54,7 +54,7 @@ class List(DBFormatter):
                 release_version="", pset_hash="", app_name="", output_module_label="",\
                 processing_version="", acquisition_era="", run_num=0,\
                 physics_group_name="", logical_file_name="", primary_ds_name="",\
-                primary_ds_type="", data_tier_name="", dataset_access_type="", \
+                primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", prep_id="",\
                 min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,\
                 ldate=0, transaction=False):
         #import pdb
@@ -107,7 +107,9 @@ class List(DBFormatter):
                 binds.update(max_ldate = max_ldate)
             else:
                 pass
-    
+            if prep_id:
+                wheresql += "AND D.PREP_ID = :prep_id "
+                binds.update(prep_id = prep_id)
             if dataset and dataset != "%":
                op = ("=", "like")["%" in dataset]
                wheresql += " AND D.DATASET %s :dataset " % op
@@ -116,6 +118,11 @@ class List(DBFormatter):
                op = ("=", "like")["%" in primary_ds_name ]
                wheresql += " AND P.PRIMARY_DS_NAME %s :primary_ds_name " % op
                binds.update(primary_ds_name = primary_ds_name)
+            if processed_ds_name and processed_ds_name != "%":
+                joinsql += " JOIN %sPROCESSED_DATASETS PR ON PR.PROCESSED_DS_ID = D.PROCESSED_DS_ID " % (self.owner)
+                op = ("=", "like")["%" in processed_ds_name ]
+                wheresql += " AND PR.PROCESSED_DS_NAME %s :processed_ds_name " % op
+                binds.update(processed_ds_name = processed_ds_name)
             if data_tier_name and data_tier_name != "%":
                op = ("=", "like")["%" in data_tier_name ]
                wheresql += " AND DT.DATA_TIER_NAME %s :data_tier_name " % op

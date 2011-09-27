@@ -77,9 +77,8 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version',
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
-                                'primary_ds_name', 'primary_ds_type', 'data_tier_name', 'dataset_access_type',
-                                'is_dataset_valid', 'min_cdate, max_cdate', 'min_ldate', 'max_ldate',
-                                'cdate', 'ldate', 'detail'])
+                                'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name', 'dataset_access_type', 'prep_id',
+                                'min_cdate, max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'])
         self._addMethod('POST', 'datasetlist', self.listDatasetArray)
         self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'origin_site_name',
                         'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate',
@@ -221,17 +220,18 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
     #@expose
-    @inputChecks( dataset=str, parent_dataset=str, is_dataset_valid=(str,int),release_version=str, pset_hash=str,
+    @inputChecks( dataset=str, parent_dataset=str, release_version=str, pset_hash=str,
                  app_name=str, output_module_label=str,  processing_version=str, acquisition_era_name=str,
                  run_num=(long,int,str), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
-                 primary_ds_type=str, data_tier_name=str, dataset_access_type=str, min_cdate=(int,str), max_cdate=(int,str),
+                 primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str, 
+                 min_cdate=(int,str), max_cdate=(int,str),
                  min_ldate=(int,str), max_ldate=(int, str), cdate=(int,str), ldate=(int,str), detail=(bool,str))
     @tools.secmodv2()
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="",
         processing_version="", acquisition_era_name="", run_num="0",
-        physics_group_name="", logical_file_name="", primary_ds_name="",
-        primary_ds_type="", data_tier_name="", dataset_access_type="",
+        physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="", 
+        processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='',
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',
         ldate='0', detail=False):
         """
@@ -256,6 +256,7 @@ class DBSReaderModel(RESTModel):
         primary_ds_type = primary_ds_type.replace("*", "%")
         data_tier_name = data_tier_name.replace("*", "%")
         dataset_access_type = dataset_access_type.replace("*", "%")
+        processed_ds_name = processed_ds_name.replace("*", "%")
         acquisition_era_name = acquisition_era_name.replace("*", "%")
         processing_version =  processing_version.replace("*", "%")
         try:
@@ -299,8 +300,8 @@ class DBSReaderModel(RESTModel):
         try:
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash,
                 app_name, output_module_label, processing_version, acquisition_era_name,
-                run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type,
-                data_tier_name, dataset_access_type,
+                run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
+                data_tier_name, dataset_access_type, prep_id,
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)

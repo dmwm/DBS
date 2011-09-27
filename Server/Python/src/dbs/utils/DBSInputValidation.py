@@ -84,9 +84,9 @@ acceptedInputKeys = {
     ################
     'processing_era':['processing_version', 'description', 'create_by', 'creation_date'],
     ################
-    'dataset':['dataset', 'is_dataset_valid', 'physics_group_name', 'processed_ds_name', 'dataset_access_type', 'data_tier_name',\
+    'dataset':['dataset', 'physics_group_name', 'processed_ds_name', 'dataset_access_type', 'data_tier_name',\
                'output_configs', 'primary_ds_name', 'primary_ds_type', 'acquisition_era_name', 'processing_version', 'xtcrosssection',\
-               'create_by', 'creation_date', 'last_modification_date', 'last_modified_by', 'detail'],
+               'create_by', 'creation_date', 'last_modification_date', 'last_modified_by', 'detail', 'prep_id'],
     ################
     'block': ['block_name', 'open_for_writing', 'origin_site_name', 'dataset', 'creation_date', 'creation_date', 'create_by',\
               'last_modification_date', 'last_modified_by', 'file_count', 'block_size'],
@@ -97,7 +97,7 @@ acceptedInputKeys = {
     ################
     'files':['check_sum', 'file_lumi_list', 'event_count', 'file_type', 'logical_file_name', 'file_size', 'file_output_config_list',\
              'file_parent_list','last_modified_by', 'last_modification_date', 'create_by', 'creation_date', 'auto_cross_section',\
-              'adler32', 'dataset', 'block_name', 'is_file_valid', 'md5'],
+              'adler32', 'dataset', 'block_name', 'md5'],
     ################
     'file_lumi_list':['lumi_section_num', 'run_num']
     ################

@@ -155,26 +155,28 @@ class DBSWriterModel_t(unittest.TestCase):
     def test09(self):
 	"""test09: web.DBSWriterModel.insertDataset(Dataset is construct by DBSDatset.): basic test"""
 	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
+		'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+                'prep_id':'MC_12344',
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name
 		}
 	#import pdb
 	#pdb.set_trace()
 	api.insert('datasets', data)
 	childdata = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': child_dataset,
+		'physics_group_name': 'Tracker', 'dataset': child_dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "child_"+procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+                'prep_id':'MC_3455',
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insert('datasets', childdata)
@@ -185,7 +187,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	#pdb.set_trace()
 	"""test10: web.DBSWriterModel.insertDataset: duplicate insert should be ignored"""
 	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': dataset,
+		'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': 
@@ -200,7 +202,7 @@ class DBSWriterModel_t(unittest.TestCase):
     def test11(self):
 	"""test11: web.DBSWriterModel.insertDataset: missing primary_ds_name must raise an error"""
 	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 
+                'physics_group_name': 'Tracker', 
 		#'primary_ds_name': primary_ds_name,
 		'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
@@ -221,7 +223,7 @@ class DBSWriterModel_t(unittest.TestCase):
     def test12(self):
 	"""test12: web.DBSWriterModel.insertDataset: missing parameter must raise an error"""
 	data = {
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
+		'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
 	        'dataset_access_type': 'PRODUCTION', 
 		'processed_ds_name': procdataset, 'dataset':dataset,
 		'output_configs': [
@@ -246,25 +248,12 @@ class DBSWriterModel_t(unittest.TestCase):
 	"""test13: web.DBSWriterModel.insertDataset: no output_configs, should be fine insert!"""
 	data = {
 		'dataset': dataset,
-		'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
+		'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
-		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier
+		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
+                'prep_id':'MC-6789'
 		}
 	api.insert('datasets', data)
-        
-    #def test14(self):
-	#"""test14: web.DBSWriterModel.insertSite: basic test"""
-	#data = {
-	#     "site_name" : site
-	#}
-	#api.insert('sites', data)
-
-    #def test15(self):
-	#"""test15: web.DBSWriterModel.insertSite: duplicate site must not throw any errors"""
-	#data = {
-	#     "site_name" : site
-	#}
-        #api.insert('sites', data)
 	
     def test16(self):
 	"""test16 web.DBSWriterModel.insertBlock: basic test"""
@@ -389,8 +378,8 @@ class DBSWriterModel_t(unittest.TestCase):
 
     def test22(self):
         """test22 web.DBSWriterModel.updateDatasetStatus: Basic test """
-        api.update('datasets', dataset=dataset, is_dataset_valid=0)
-        api.update('datasets', dataset=dataset, is_dataset_valid=1)
+        api.update('datasets', dataset=dataset)
+        api.update('datasets', dataset=dataset)
 
     def test23(self):
         """test23 web.DBSWriterModel.updateDatasetType: Basic test """

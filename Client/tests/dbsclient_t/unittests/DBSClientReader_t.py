@@ -362,15 +362,14 @@ class DBSClientReader_t(unittest.TestCase):
     def test76(self):
 	"""test76 web.DBSReaderModel.listFileChildren with logical_file_name"""
 	api.listFileChildren(logical_file_name=testparams['parent_files'][0])
-
-    def test77(self):
+    
+    #def test77(self):
         """test77: call help method"""
-        api.help()
+        #api.help()
 
-    def test78(self):
+    #def test78(self):
         """test78 call help method with datatiers"""
-        api.help(call="datatiers")
-
+        #api.help(call="datatiers")
     def test79(self):
         """test79 web.DBSReaderModel.listReleaseVersions"""
         api.listReleaseVersions()

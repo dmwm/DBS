@@ -75,8 +75,7 @@ class DBSWriterModel(DBSReaderModel):
         self._addMethod('PUT', 'files', self.updateFile, 
                         args=['logical_file_name', 'is_file_valid'])
         self._addMethod('PUT', 'datasets', self.updateDataset, 
-                        args=['dataset', 'is_dataset_valid',
-                              'dataset_access_type'])
+                        args=['dataset', 'dataset_access_type'])
         self._addMethod('PUT', 'blocks', self.updateBlock,
                         args=['block_name', 'open_for_writing'])
         self._addMethod('POST', 'datatiers', self.insertDataTier)
@@ -222,6 +221,8 @@ class DBSWriterModel(DBSReaderModel):
             body = request.body.read()
             indata = cjson.decode(body)
             #indata = validateJSONInput("insertBlock",indata)
+            #import pdb
+            #pdb.set_trace()
             indata = validateJSONInputNoCopy("blockBulk",indata)
             self.dbsBlockInsert.putBlock(indata)
         except dbsException as de:
@@ -341,7 +342,7 @@ class DBSWriterModel(DBSReaderModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(dataset=str, is_dataset_valid=(int, str), dataset_access_type=(str))
+    @inputChecks(dataset=str, dataset_access_type=str)
     @tools.secmodv2(authzfunc=authInsert)
     def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_access_type=""):
         """

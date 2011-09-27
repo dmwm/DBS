@@ -116,8 +116,8 @@ class DBSDataset:
                      output_module_label="", processing_version="",
                      acquisition_era="", run_num=0, physics_group_name="",
                      logical_file_name="", primary_ds_name="",
-                     primary_ds_type="", data_tier_name="",
-                     dataset_access_type="", min_cdate=0, max_cdate=0,
+                     primary_ds_type="", processed_ds_name="", data_tier_name="",
+                     dataset_access_type="VALID", prep_id="", min_cdate=0, max_cdate=0,
                      min_ldate=0, max_ldate=0, cdate=0, ldate=0, detail=False):
         """
         lists all datasets if dataset parameter is not given.
@@ -151,8 +151,8 @@ class DBSDataset:
                                  run_num, physics_group_name,
                                  logical_file_name,
                                  primary_ds_name, primary_ds_type,
-                                 data_tier_name,
-                                 dataset_access_type, 
+                                 processed_ds_name, data_tier_name,
+                                 dataset_access_type, prep_id,
                                  min_cdate, max_cdate, min_ldate, max_ldate,
                                  cdate, ldate)    
             return result
@@ -195,9 +195,9 @@ class DBSDataset:
         last_modification_date, last_modified_by
         """ 
         if not (businput.has_key("primary_ds_name") and businput.has_key("dataset")
-                and businput.has_key("is_dataset_valid") and businput.has_key("processed_ds_name") ):
+                and businput.has_key("dataset_access_type") and businput.has_key("processed_ds_name") ):
             dbsExceptionHandler('dbsException-invalid-input', "business/DBSDataset/insertDataset must have dataset,\
-                is_dataset_valid, primary_ds_name, processed_ds_name as input")
+                dataset_access_type, primary_ds_name, processed_ds_name as input")
 
         if not businput.has_key("data_tier_name"):
             dbsExceptionHandler('dbsException-invalid-input', "insertDataset must have data_tier (name) as input.")
@@ -220,9 +220,10 @@ class DBSDataset:
                 if dsdaoinput["dataset_access_type_id"] == -1:
                     dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Dataset Access Type : %s not found"
                                                                                     % businput["dataset_access_type"] )
-            dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
-            if dsdaoinput["physics_group_id"]  == -1:
-                dbsExceptionHandler("dbsException-missing-data",  "DBSDataset/insertDataset. Physics Group : %s Not found"
+            if "physics_group_name" in businput:
+                dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
+                if dsdaoinput["physics_group_id"]  == -1:
+                    dbsExceptionHandler("dbsException-missing-data",  "insertDataset. Physics Group : %s Not found"
                                                                                     % businput["physics_group_name"]) 
 
             # See if processed dataset exists, if not, add one
@@ -239,6 +240,9 @@ class DBSDataset:
                 dsdaoinput["processed_ds_id"] = procid
 
             dsdaoinput["dataset_id"] = self.sm.increment(conn, "SEQ_DS", tran)
+            
+            if "prep_id" in  businput:
+                dsdaoinput["prep_id"] = businput["prep_id"]
 
             # we are better off separating out what we need for the dataset DAO
             dsdaoinput.update({ 
@@ -246,8 +250,6 @@ class DBSDataset:
                                (businput["primary_ds_name"],
                                 businput["processed_ds_name"],
                                 businput["data_tier_name"].upper()),
-                               "is_dataset_valid" :
-                                    businput["is_dataset_valid"],
                                "creation_date" : businput["creation_date"],
                                "xtcrosssection" : businput["xtcrosssection"],
                                "create_by" : businput["create_by"],

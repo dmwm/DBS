@@ -610,15 +610,6 @@ class DbsApi(object):
         block_name=parts[0]+urllib.quote_plus('#')+parts[1]
         return self.__callServer("/blocks?block_name=%s&open_for_writing=%s" %(block_name, open_for_writing), params={}, callmethod='PUT')
 
-    def updateDatasetStatus(self, dataset, is_dataset_valid):
-        """
-        API to update dataset status
-        * dataset : dataset name --REQUIRED
-        * is_dataset_valid : valid=1, invalid=0 --REQUIRED
-        *
-        """
-        return self.__callServer("/datasets?dataset=%s&is_dataset_valid=%s" %(dataset, is_dataset_valid), params={}, callmethod='PUT')    
-
     def updateDatasetType(self, dataset, dataset_access_type):
         """
         API to update dataset status
