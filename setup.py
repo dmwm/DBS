@@ -73,6 +73,7 @@ def get_relative_path():
 
 def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   # Expand various sources.
+  docroot = "doc/build/html"
   system = systems[system_name]
   exsrc = sum((glob("%s" % x) for x in system.get('examples', [])), [])
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
@@ -84,6 +85,12 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.packages = system.get('pythonpkg', [])
   dist.package_dir = { '': system.get('srcdir', []) }
   dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc)]
+
+  if os.path.exists(docroot):
+    for dirpath, dirs, files in os.walk(docroot):
+      dist.data_files.append(("%sdoc%s" % (patch_x, dirpath[len(docroot):]),
+                              ["%s/%s" % (dirpath, fname) for fname in files
+                               if fname != '.buildinfo']))
 
 class BuildCommand(Command):
   """Build python modules for a specific system."""
@@ -112,7 +119,15 @@ class BuildCommand(Command):
 
     # Force rebuild.
     shutil.rmtree("%s/build" % get_relative_path(), True)
-     
+    shutil.rmtree("doc/build", True)
+
+  def generate_docs(self):
+    if self.system=="Server":
+      os.environ["PYTHONPATH"] = "%s/WMCore/build/lib/:%s" % (os.path.dirname(os.getcwd()), os.environ["PYTHONPATH"])
+    os.environ["PYTHONPATH"] = "%s/build/lib:%s" % (os.getcwd(), os.environ["PYTHONPATH"])
+    #spawn(['make', '-C', 'doc', 'html', 'PROJECT=%s' % self.system.lower()])
+    spawn(['make', '-C', 'doc', 'html', 'PROJECT=dbs'])  
+
   def run(self):
     command = 'build'
     if self.distribution.have_run.get(command): return
@@ -120,7 +135,7 @@ class BuildCommand(Command):
     cmd.force = self.force
     cmd.ensure_finalized()
     cmd.run()
-        
+    self.generate_docs()
     self.distribution.have_run[command] = 1
 
 class InstallCommand(install):

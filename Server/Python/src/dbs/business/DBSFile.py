@@ -194,28 +194,28 @@ class DBSFile:
 
     def insertFile(self, businput, qInserts=False):
         """
-        qInserts : True means that inserts will be queued instead of done immediately. INSERT QUEUE Manager will perform the inserts, within few minutes.
-        
         This method supports bulk insert of files
         performing other operations such as setting Block and Dataset parentages, 
         setting mapping between OutputConfigModules and File(s) etc.
 
-        logical_file_name (required) : string  <br />
-        is_file_valid: (optional, default = 1): 1/0 <br />
-        block, required: /a/b/c#d <br />
-        dataset, required: /a/b/c <br />
-        file_type (optional, default = EDM): one of the predefined types, <br />
-        check_sum (optional, default = '-1'): string <br />
-        event_count (optional, default = -1): int <br />
-        file_size (optional, default = -1.): float <br />
-        adler32 (optional, default = ''): string <br />
-        md5 (optional, default = ''): string <br />
-        auto_cross_section (optional, default = -1.): float <br />
-            file_lumi_list (optional, default = []): [{"run_num": 123, "lumi_section_num": 12},{}....] <br />
-            file_parent_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
-            file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] <br />
-            file_output_config_list(optional, default = []) :
-                [{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] <br />
+        :param qInserts: True means that inserts will be queued instead of done immediately. INSERT QUEUE Manager will perform the inserts, within few minutes.
+        :type qInserts: bool
+        :param logical_file_name (required) : string 
+        :param is_file_valid: (optional, default = 1): 1/0 
+        :param block, required: /a/b/c#d 
+        :param dataset, required: /a/b/c 
+        :param file_type (optional, default = EDM): one of the predefined types, 
+        :param check_sum (optional, default = '-1'): string 
+        :param event_count (optional, default = -1): int 
+        :param file_size (optional, default = -1.): float 
+        :param adler32 (optional, default = ''): string 
+        :param md5 (optional, default = ''): string 
+        :param auto_cross_section (optional, default = -1.): float 
+        :param file_lumi_list (optional, default = []): [{"run_num": 123, "lumi_section_num": 12},{}....] 
+        :param file_parent_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] 
+        :param file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] 
+        :param file_output_config_list(optional, default = []) :
+        [{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] 
         """
 
         # We do not wnat to go be beyond 10 files at a time

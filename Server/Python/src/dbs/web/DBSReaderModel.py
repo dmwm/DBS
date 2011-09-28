@@ -42,6 +42,15 @@ from WMCore.DAOFactory import DAOFactory
 
 __server__version__ = "$Name:  $"
 
+#Necessary for sphinx documentation
+if not getattr(tools,"secmodv2",None):
+    def FakeAuthForDoc(*a,**b):
+        def wrapper(func):
+            return func
+        return wrapper
+
+    tools.secmodv2 = FakeAuthForDoc
+
 class DBSReaderModel(RESTModel):
     """
     DBS3 Server API Documentation 
