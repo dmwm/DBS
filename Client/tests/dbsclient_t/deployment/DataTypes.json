@@ -1,6 +1,4 @@
-[
-    {
-        "primary_ds_type_id": 22, 
-        "data_type": "TEST"
-    }
-]
+{
+    "data_type": "TEST"
+}
+

@@ -91,7 +91,7 @@ acceptedInputKeys = {
     'block': ['block_name', 'open_for_writing', 'origin_site_name', 'dataset', 'creation_date', 'creation_date', 'create_by',\
               'last_modification_date', 'last_modified_by', 'file_count', 'block_size'],
     ################
-    'acquisition_era':['acquisition_era_name'],
+    'acquisition_era':['acquisition_era_name','description'],
     ################
     'primds':['primary_ds_type', 'primary_ds_name', 'creation_date', 'create_by'],
     ################

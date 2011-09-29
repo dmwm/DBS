@@ -1,0 +1,3504 @@
+{
+    "files": [
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2231277532", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2983039445", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24022", 
+                    "run_num": "43"
+                }, 
+                {
+                    "lumi_section_num": "24122", 
+                    "run_num": "43"
+                }, 
+                {
+                    "lumi_section_num": "24222", 
+                    "run_num": "43"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "33472", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2488209634", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1728226423", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21053", 
+                    "run_num": "82"
+                }, 
+                {
+                    "lumi_section_num": "21153", 
+                    "run_num": "82"
+                }, 
+                {
+                    "lumi_section_num": "21253", 
+                    "run_num": "82"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "46022", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2149605739", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2535939084", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23830", 
+                    "run_num": "49"
+                }, 
+                {
+                    "lumi_section_num": "23930", 
+                    "run_num": "49"
+                }, 
+                {
+                    "lumi_section_num": "24030", 
+                    "run_num": "49"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "16596", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2437347936", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1516811645", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28050", 
+                    "run_num": "28"
+                }, 
+                {
+                    "lumi_section_num": "28150", 
+                    "run_num": "28"
+                }, 
+                {
+                    "lumi_section_num": "28250", 
+                    "run_num": "28"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "59031", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2750171131", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2635219441", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20553", 
+                    "run_num": "33"
+                }, 
+                {
+                    "lumi_section_num": "20653", 
+                    "run_num": "33"
+                }, 
+                {
+                    "lumi_section_num": "20753", 
+                    "run_num": "33"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "74490", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2882521525", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2530005898", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29510", 
+                    "run_num": "99"
+                }, 
+                {
+                    "lumi_section_num": "29610", 
+                    "run_num": "99"
+                }, 
+                {
+                    "lumi_section_num": "29710", 
+                    "run_num": "99"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "51770", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2994298439", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2195778398", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21381", 
+                    "run_num": "43"
+                }, 
+                {
+                    "lumi_section_num": "21481", 
+                    "run_num": "43"
+                }, 
+                {
+                    "lumi_section_num": "21581", 
+                    "run_num": "43"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "77054", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2121785082", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2607777085", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28535", 
+                    "run_num": "1"
+                }, 
+                {
+                    "lumi_section_num": "28635", 
+                    "run_num": "1"
+                }, 
+                {
+                    "lumi_section_num": "28735", 
+                    "run_num": "1"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "33171", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2903631895", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2285158532", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28256", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "28356", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "28456", 
+                    "run_num": "2"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "68273", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2391929550", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2825888428", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "25855", 
+                    "run_num": "84"
+                }, 
+                {
+                    "lumi_section_num": "25955", 
+                    "run_num": "84"
+                }, 
+                {
+                    "lumi_section_num": "26055", 
+                    "run_num": "84"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "94085", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2545426377", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2100717823", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27738", 
+                    "run_num": "50"
+                }, 
+                {
+                    "lumi_section_num": "27838", 
+                    "run_num": "50"
+                }, 
+                {
+                    "lumi_section_num": "27938", 
+                    "run_num": "50"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "37605", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2528731709", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2857787405", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21945", 
+                    "run_num": "28"
+                }, 
+                {
+                    "lumi_section_num": "22045", 
+                    "run_num": "28"
+                }, 
+                {
+                    "lumi_section_num": "22145", 
+                    "run_num": "28"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "34052", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2826116844", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3076828197", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24704", 
+                    "run_num": "27"
+                }, 
+                {
+                    "lumi_section_num": "24804", 
+                    "run_num": "27"
+                }, 
+                {
+                    "lumi_section_num": "24904", 
+                    "run_num": "27"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "6093", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2213491350", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3155432323", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21559", 
+                    "run_num": "8"
+                }, 
+                {
+                    "lumi_section_num": "21659", 
+                    "run_num": "8"
+                }, 
+                {
+                    "lumi_section_num": "21759", 
+                    "run_num": "8"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "17402", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2055103435", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1967121758", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "22413", 
+                    "run_num": "29"
+                }, 
+                {
+                    "lumi_section_num": "22513", 
+                    "run_num": "29"
+                }, 
+                {
+                    "lumi_section_num": "22613", 
+                    "run_num": "29"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "37914", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2562707057", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2822430243", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20804", 
+                    "run_num": "15"
+                }, 
+                {
+                    "lumi_section_num": "20904", 
+                    "run_num": "15"
+                }, 
+                {
+                    "lumi_section_num": "21004", 
+                    "run_num": "15"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "79211", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2781740972", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3372436504", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20659", 
+                    "run_num": "43"
+                }, 
+                {
+                    "lumi_section_num": "20759", 
+                    "run_num": "43"
+                }, 
+                {
+                    "lumi_section_num": "20859", 
+                    "run_num": "43"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "98862", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2253488730", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2101985713", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24887", 
+                    "run_num": "60"
+                }, 
+                {
+                    "lumi_section_num": "24987", 
+                    "run_num": "60"
+                }, 
+                {
+                    "lumi_section_num": "25087", 
+                    "run_num": "60"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "50496", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2139843317", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3491764451", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21408", 
+                    "run_num": "18"
+                }, 
+                {
+                    "lumi_section_num": "21508", 
+                    "run_num": "18"
+                }, 
+                {
+                    "lumi_section_num": "21608", 
+                    "run_num": "18"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "97824", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2962813444", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1620565527", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "26240", 
+                    "run_num": "90"
+                }, 
+                {
+                    "lumi_section_num": "26340", 
+                    "run_num": "90"
+                }, 
+                {
+                    "lumi_section_num": "26440", 
+                    "run_num": "90"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "87535", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_9.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2352725978", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3378415090", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "25383", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "25483", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "25583", 
+                    "run_num": "2"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "72877", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2827045684", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2843907323", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27181", 
+                    "run_num": "34"
+                }, 
+                {
+                    "lumi_section_num": "27281", 
+                    "run_num": "34"
+                }, 
+                {
+                    "lumi_section_num": "27381", 
+                    "run_num": "34"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "93416", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2847859617", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3424741496", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21687", 
+                    "run_num": "80"
+                }, 
+                {
+                    "lumi_section_num": "21787", 
+                    "run_num": "80"
+                }, 
+                {
+                    "lumi_section_num": "21887", 
+                    "run_num": "80"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "65121", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2224326006", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2770407506", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29164", 
+                    "run_num": "75"
+                }, 
+                {
+                    "lumi_section_num": "29264", 
+                    "run_num": "75"
+                }, 
+                {
+                    "lumi_section_num": "29364", 
+                    "run_num": "75"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "58531", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2296933931", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3239566746", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27727", 
+                    "run_num": "70"
+                }, 
+                {
+                    "lumi_section_num": "27827", 
+                    "run_num": "70"
+                }, 
+                {
+                    "lumi_section_num": "27927", 
+                    "run_num": "70"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "47937", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2300162142", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1540038675", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29924", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "30024", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "30124", 
+                    "run_num": "2"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "18973", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2157946933", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3077904927", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20154", 
+                    "run_num": "9"
+                }, 
+                {
+                    "lumi_section_num": "20254", 
+                    "run_num": "9"
+                }, 
+                {
+                    "lumi_section_num": "20354", 
+                    "run_num": "9"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "9965", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2462528733", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2339105651", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28125", 
+                    "run_num": "68"
+                }, 
+                {
+                    "lumi_section_num": "28225", 
+                    "run_num": "68"
+                }, 
+                {
+                    "lumi_section_num": "28325", 
+                    "run_num": "68"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "16922", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2273902844", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3261134659", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23163", 
+                    "run_num": "12"
+                }, 
+                {
+                    "lumi_section_num": "23263", 
+                    "run_num": "12"
+                }, 
+                {
+                    "lumi_section_num": "23363", 
+                    "run_num": "12"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "19775", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2351708644", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1657734133", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23089", 
+                    "run_num": "96"
+                }, 
+                {
+                    "lumi_section_num": "23189", 
+                    "run_num": "96"
+                }, 
+                {
+                    "lumi_section_num": "23289", 
+                    "run_num": "96"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "10416", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_9.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2916905697", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1904252863", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "26949", 
+                    "run_num": "33"
+                }, 
+                {
+                    "lumi_section_num": "27049", 
+                    "run_num": "33"
+                }, 
+                {
+                    "lumi_section_num": "27149", 
+                    "run_num": "33"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "20745", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2751882000", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3349393899", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27909", 
+                    "run_num": "23"
+                }, 
+                {
+                    "lumi_section_num": "28009", 
+                    "run_num": "23"
+                }, 
+                {
+                    "lumi_section_num": "28109", 
+                    "run_num": "23"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "38885", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2077191561", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3137390813", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27465", 
+                    "run_num": "64"
+                }, 
+                {
+                    "lumi_section_num": "27565", 
+                    "run_num": "64"
+                }, 
+                {
+                    "lumi_section_num": "27665", 
+                    "run_num": "64"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "72039", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2435365919", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2286323194", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23172", 
+                    "run_num": "32"
+                }, 
+                {
+                    "lumi_section_num": "23272", 
+                    "run_num": "32"
+                }, 
+                {
+                    "lumi_section_num": "23372", 
+                    "run_num": "32"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "5105", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2819807291", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1568593875", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23490", 
+                    "run_num": "25"
+                }, 
+                {
+                    "lumi_section_num": "23590", 
+                    "run_num": "25"
+                }, 
+                {
+                    "lumi_section_num": "23690", 
+                    "run_num": "25"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "69273", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2513821407", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2718062643", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21216", 
+                    "run_num": "32"
+                }, 
+                {
+                    "lumi_section_num": "21316", 
+                    "run_num": "32"
+                }, 
+                {
+                    "lumi_section_num": "21416", 
+                    "run_num": "32"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "45987", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2305389896", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1913350481", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "22108", 
+                    "run_num": "70"
+                }, 
+                {
+                    "lumi_section_num": "22208", 
+                    "run_num": "70"
+                }, 
+                {
+                    "lumi_section_num": "22308", 
+                    "run_num": "70"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "29135", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2389095426", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2905379270", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29506", 
+                    "run_num": "74"
+                }, 
+                {
+                    "lumi_section_num": "29606", 
+                    "run_num": "74"
+                }, 
+                {
+                    "lumi_section_num": "29706", 
+                    "run_num": "74"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "29284", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2952668706", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3200606718", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29961", 
+                    "run_num": "98"
+                }, 
+                {
+                    "lumi_section_num": "30061", 
+                    "run_num": "98"
+                }, 
+                {
+                    "lumi_section_num": "30161", 
+                    "run_num": "98"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "21713", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2555090532", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3131547869", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24966", 
+                    "run_num": "93"
+                }, 
+                {
+                    "lumi_section_num": "25066", 
+                    "run_num": "93"
+                }, 
+                {
+                    "lumi_section_num": "25166", 
+                    "run_num": "93"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "8364", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_9.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2906251823", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2789333570", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "22515", 
+                    "run_num": "50"
+                }, 
+                {
+                    "lumi_section_num": "22615", 
+                    "run_num": "50"
+                }, 
+                {
+                    "lumi_section_num": "22715", 
+                    "run_num": "50"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "29756", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2221961345", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2064203559", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "25700", 
+                    "run_num": "45"
+                }, 
+                {
+                    "lumi_section_num": "25800", 
+                    "run_num": "45"
+                }, 
+                {
+                    "lumi_section_num": "25900", 
+                    "run_num": "45"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "78865", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2583908567", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1507664185", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20291", 
+                    "run_num": "63"
+                }, 
+                {
+                    "lumi_section_num": "20391", 
+                    "run_num": "63"
+                }, 
+                {
+                    "lumi_section_num": "20491", 
+                    "run_num": "63"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "7345", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2039620311", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3031502818", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "25105", 
+                    "run_num": "66"
+                }, 
+                {
+                    "lumi_section_num": "25205", 
+                    "run_num": "66"
+                }, 
+                {
+                    "lumi_section_num": "25305", 
+                    "run_num": "66"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "8687", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2219796053", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2089580787", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29328", 
+                    "run_num": "96"
+                }, 
+                {
+                    "lumi_section_num": "29428", 
+                    "run_num": "96"
+                }, 
+                {
+                    "lumi_section_num": "29528", 
+                    "run_num": "96"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "33898", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2302175317", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3154891888", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27487", 
+                    "run_num": "36"
+                }, 
+                {
+                    "lumi_section_num": "27587", 
+                    "run_num": "36"
+                }, 
+                {
+                    "lumi_section_num": "27687", 
+                    "run_num": "36"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "71666", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2752921296", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2705316400", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "26371", 
+                    "run_num": "58"
+                }, 
+                {
+                    "lumi_section_num": "26471", 
+                    "run_num": "58"
+                }, 
+                {
+                    "lumi_section_num": "26571", 
+                    "run_num": "58"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "83840", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2398441318", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1875714392", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20538", 
+                    "run_num": "65"
+                }, 
+                {
+                    "lumi_section_num": "20638", 
+                    "run_num": "65"
+                }, 
+                {
+                    "lumi_section_num": "20738", 
+                    "run_num": "65"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "17066", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2985526187", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3079104278", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20708", 
+                    "run_num": "24"
+                }, 
+                {
+                    "lumi_section_num": "20808", 
+                    "run_num": "24"
+                }, 
+                {
+                    "lumi_section_num": "20908", 
+                    "run_num": "24"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "48608", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2191341376", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3350714667", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24529", 
+                    "run_num": "88"
+                }, 
+                {
+                    "lumi_section_num": "24629", 
+                    "run_num": "88"
+                }, 
+                {
+                    "lumi_section_num": "24729", 
+                    "run_num": "88"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "81267", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_9.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2689648684", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2371165931", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24708", 
+                    "run_num": "83"
+                }, 
+                {
+                    "lumi_section_num": "24808", 
+                    "run_num": "83"
+                }, 
+                {
+                    "lumi_section_num": "24908", 
+                    "run_num": "83"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "56605", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2543548439", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1892869191", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20625", 
+                    "run_num": "43"
+                }, 
+                {
+                    "lumi_section_num": "20725", 
+                    "run_num": "43"
+                }, 
+                {
+                    "lumi_section_num": "20825", 
+                    "run_num": "43"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "42802", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2148432766", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1933202592", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24149", 
+                    "run_num": "61"
+                }, 
+                {
+                    "lumi_section_num": "24249", 
+                    "run_num": "61"
+                }, 
+                {
+                    "lumi_section_num": "24349", 
+                    "run_num": "61"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "90858", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2911205372", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2946527135", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24680", 
+                    "run_num": "9"
+                }, 
+                {
+                    "lumi_section_num": "24780", 
+                    "run_num": "9"
+                }, 
+                {
+                    "lumi_section_num": "24880", 
+                    "run_num": "9"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "48355", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2844911998", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2945184443", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "22079", 
+                    "run_num": "57"
+                }, 
+                {
+                    "lumi_section_num": "22179", 
+                    "run_num": "57"
+                }, 
+                {
+                    "lumi_section_num": "22279", 
+                    "run_num": "57"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "24881", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2584865587", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2613404627", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21965", 
+                    "run_num": "27"
+                }, 
+                {
+                    "lumi_section_num": "22065", 
+                    "run_num": "27"
+                }, 
+                {
+                    "lumi_section_num": "22165", 
+                    "run_num": "27"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "6523", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2163116587", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3067917062", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "26118", 
+                    "run_num": "81"
+                }, 
+                {
+                    "lumi_section_num": "26218", 
+                    "run_num": "81"
+                }, 
+                {
+                    "lumi_section_num": "26318", 
+                    "run_num": "81"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "18899", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2028076396", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3444576053", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24577", 
+                    "run_num": "54"
+                }, 
+                {
+                    "lumi_section_num": "24677", 
+                    "run_num": "54"
+                }, 
+                {
+                    "lumi_section_num": "24777", 
+                    "run_num": "54"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "44388", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2123343208", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2569247027", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29595", 
+                    "run_num": "54"
+                }, 
+                {
+                    "lumi_section_num": "29695", 
+                    "run_num": "54"
+                }, 
+                {
+                    "lumi_section_num": "29795", 
+                    "run_num": "54"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "84433", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2462319948", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2125937249", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24056", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "24156", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "24256", 
+                    "run_num": "2"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "78016", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_9.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2514695424", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3368308833", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28514", 
+                    "run_num": "94"
+                }, 
+                {
+                    "lumi_section_num": "28614", 
+                    "run_num": "94"
+                }, 
+                {
+                    "lumi_section_num": "28714", 
+                    "run_num": "94"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "65967", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2248174833", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2788711039", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20578", 
+                    "run_num": "8"
+                }, 
+                {
+                    "lumi_section_num": "20678", 
+                    "run_num": "8"
+                }, 
+                {
+                    "lumi_section_num": "20778", 
+                    "run_num": "8"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "64066", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2071915285", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2124810220", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20372", 
+                    "run_num": "56"
+                }, 
+                {
+                    "lumi_section_num": "20472", 
+                    "run_num": "56"
+                }, 
+                {
+                    "lumi_section_num": "20572", 
+                    "run_num": "56"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "67442", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2454502399", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1900571318", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23792", 
+                    "run_num": "10"
+                }, 
+                {
+                    "lumi_section_num": "23892", 
+                    "run_num": "10"
+                }, 
+                {
+                    "lumi_section_num": "23992", 
+                    "run_num": "10"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "11815", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2436367920", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2776731237", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21603", 
+                    "run_num": "25"
+                }, 
+                {
+                    "lumi_section_num": "21703", 
+                    "run_num": "25"
+                }, 
+                {
+                    "lumi_section_num": "21803", 
+                    "run_num": "25"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "13650", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2393479804", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3336975268", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28902", 
+                    "run_num": "76"
+                }, 
+                {
+                    "lumi_section_num": "29002", 
+                    "run_num": "76"
+                }, 
+                {
+                    "lumi_section_num": "29102", 
+                    "run_num": "76"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "75377", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2307887312", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2103745418", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28871", 
+                    "run_num": "10"
+                }, 
+                {
+                    "lumi_section_num": "28971", 
+                    "run_num": "10"
+                }, 
+                {
+                    "lumi_section_num": "29071", 
+                    "run_num": "10"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "64197", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2596725859", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2294159567", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23194", 
+                    "run_num": "1"
+                }, 
+                {
+                    "lumi_section_num": "23294", 
+                    "run_num": "1"
+                }, 
+                {
+                    "lumi_section_num": "23394", 
+                    "run_num": "1"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "78822", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2497253080", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3229976830", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "25979", 
+                    "run_num": "93"
+                }, 
+                {
+                    "lumi_section_num": "26079", 
+                    "run_num": "93"
+                }, 
+                {
+                    "lumi_section_num": "26179", 
+                    "run_num": "93"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "6828", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2045461578", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3422535056", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20061", 
+                    "run_num": "95"
+                }, 
+                {
+                    "lumi_section_num": "20161", 
+                    "run_num": "95"
+                }, 
+                {
+                    "lumi_section_num": "20261", 
+                    "run_num": "95"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "32054", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_9.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2020169092", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3072680527", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29609", 
+                    "run_num": "83"
+                }, 
+                {
+                    "lumi_section_num": "29709", 
+                    "run_num": "83"
+                }, 
+                {
+                    "lumi_section_num": "29809", 
+                    "run_num": "83"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "38208", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2137651555", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2348783084", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23981", 
+                    "run_num": "97"
+                }, 
+                {
+                    "lumi_section_num": "24081", 
+                    "run_num": "97"
+                }, 
+                {
+                    "lumi_section_num": "24181", 
+                    "run_num": "97"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "4735", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2897028835", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1781965389", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24699", 
+                    "run_num": "82"
+                }, 
+                {
+                    "lumi_section_num": "24799", 
+                    "run_num": "82"
+                }, 
+                {
+                    "lumi_section_num": "24899", 
+                    "run_num": "82"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "79112", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2445359094", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3104014019", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24360", 
+                    "run_num": "6"
+                }, 
+                {
+                    "lumi_section_num": "24460", 
+                    "run_num": "6"
+                }, 
+                {
+                    "lumi_section_num": "24560", 
+                    "run_num": "6"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "16693", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2189158830", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2269717496", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "25306", 
+                    "run_num": "10"
+                }, 
+                {
+                    "lumi_section_num": "25406", 
+                    "run_num": "10"
+                }, 
+                {
+                    "lumi_section_num": "25506", 
+                    "run_num": "10"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "10592", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2449448620", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2331993654", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28072", 
+                    "run_num": "37"
+                }, 
+                {
+                    "lumi_section_num": "28172", 
+                    "run_num": "37"
+                }, 
+                {
+                    "lumi_section_num": "28272", 
+                    "run_num": "37"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "27821", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2793692986", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2023948286", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21724", 
+                    "run_num": "80"
+                }, 
+                {
+                    "lumi_section_num": "21824", 
+                    "run_num": "80"
+                }, 
+                {
+                    "lumi_section_num": "21924", 
+                    "run_num": "80"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "71714", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2703539376", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3479341153", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "26518", 
+                    "run_num": "99"
+                }, 
+                {
+                    "lumi_section_num": "26618", 
+                    "run_num": "99"
+                }, 
+                {
+                    "lumi_section_num": "26718", 
+                    "run_num": "99"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "76750", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2871064405", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2990130103", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28260", 
+                    "run_num": "75"
+                }, 
+                {
+                    "lumi_section_num": "28360", 
+                    "run_num": "75"
+                }, 
+                {
+                    "lumi_section_num": "28460", 
+                    "run_num": "75"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "90573", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2659649454", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1838836771", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23148", 
+                    "run_num": "83"
+                }, 
+                {
+                    "lumi_section_num": "23248", 
+                    "run_num": "83"
+                }, 
+                {
+                    "lumi_section_num": "23348", 
+                    "run_num": "83"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "17926", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_9.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2688938921", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2067611612", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28787", 
+                    "run_num": "14"
+                }, 
+                {
+                    "lumi_section_num": "28887", 
+                    "run_num": "14"
+                }, 
+                {
+                    "lumi_section_num": "28987", 
+                    "run_num": "14"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "69318", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2693894577", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2153379867", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27010", 
+                    "run_num": "65"
+                }, 
+                {
+                    "lumi_section_num": "27110", 
+                    "run_num": "65"
+                }, 
+                {
+                    "lumi_section_num": "27210", 
+                    "run_num": "65"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "93562", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2045567223", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3212471053", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28463", 
+                    "run_num": "38"
+                }, 
+                {
+                    "lumi_section_num": "28563", 
+                    "run_num": "38"
+                }, 
+                {
+                    "lumi_section_num": "28663", 
+                    "run_num": "38"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "88361", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2886158329", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3231511794", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "21509", 
+                    "run_num": "42"
+                }, 
+                {
+                    "lumi_section_num": "21609", 
+                    "run_num": "42"
+                }, 
+                {
+                    "lumi_section_num": "21709", 
+                    "run_num": "42"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "5590", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2117505824", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3095397583", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "20786", 
+                    "run_num": "78"
+                }, 
+                {
+                    "lumi_section_num": "20886", 
+                    "run_num": "78"
+                }, 
+                {
+                    "lumi_section_num": "20986", 
+                    "run_num": "78"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "14255", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2802748189", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2386442805", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "26080", 
+                    "run_num": "25"
+                }, 
+                {
+                    "lumi_section_num": "26180", 
+                    "run_num": "25"
+                }, 
+                {
+                    "lumi_section_num": "26280", 
+                    "run_num": "25"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "79131", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2974471481", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2114511177", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27957", 
+                    "run_num": "49"
+                }, 
+                {
+                    "lumi_section_num": "28057", 
+                    "run_num": "49"
+                }, 
+                {
+                    "lumi_section_num": "28157", 
+                    "run_num": "49"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "34300", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2929203486", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2667259967", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29929", 
+                    "run_num": "69"
+                }, 
+                {
+                    "lumi_section_num": "30029", 
+                    "run_num": "69"
+                }, 
+                {
+                    "lumi_section_num": "30129", 
+                    "run_num": "69"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "62593", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2318463302", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1601267252", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27613", 
+                    "run_num": "49"
+                }, 
+                {
+                    "lumi_section_num": "27713", 
+                    "run_num": "49"
+                }, 
+                {
+                    "lumi_section_num": "27813", 
+                    "run_num": "49"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "82762", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2786009612", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2949784000", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "26916", 
+                    "run_num": "28"
+                }, 
+                {
+                    "lumi_section_num": "27016", 
+                    "run_num": "28"
+                }, 
+                {
+                    "lumi_section_num": "27116", 
+                    "run_num": "28"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "75700", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_9.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2409820640", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2337647028", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "24687", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "24787", 
+                    "run_num": "2"
+                }, 
+                {
+                    "lumi_section_num": "24887", 
+                    "run_num": "2"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "84096", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_0.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2136990056", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1700563615", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "22098", 
+                    "run_num": "41"
+                }, 
+                {
+                    "lumi_section_num": "22198", 
+                    "run_num": "41"
+                }, 
+                {
+                    "lumi_section_num": "22298", 
+                    "run_num": "41"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "79172", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_1.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2213751737", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2953557432", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "22666", 
+                    "run_num": "10"
+                }, 
+                {
+                    "lumi_section_num": "22766", 
+                    "run_num": "10"
+                }, 
+                {
+                    "lumi_section_num": "22866", 
+                    "run_num": "10"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "75787", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_2.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2845411442", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1801861791", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "22639", 
+                    "run_num": "16"
+                }, 
+                {
+                    "lumi_section_num": "22739", 
+                    "run_num": "16"
+                }, 
+                {
+                    "lumi_section_num": "22839", 
+                    "run_num": "16"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "12874", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_3.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2469119844", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1539342940", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "29630", 
+                    "run_num": "40"
+                }, 
+                {
+                    "lumi_section_num": "29730", 
+                    "run_num": "40"
+                }, 
+                {
+                    "lumi_section_num": "29830", 
+                    "run_num": "40"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "75189", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_4.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2758715211", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2869927226", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "27266", 
+                    "run_num": "72"
+                }, 
+                {
+                    "lumi_section_num": "27366", 
+                    "run_num": "72"
+                }, 
+                {
+                    "lumi_section_num": "27466", 
+                    "run_num": "72"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "1614", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_5.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2061319347", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2810664039", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "22548", 
+                    "run_num": "12"
+                }, 
+                {
+                    "lumi_section_num": "22648", 
+                    "run_num": "12"
+                }, 
+                {
+                    "lumi_section_num": "22748", 
+                    "run_num": "12"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "87535", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_6.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2156258318", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "1732195951", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "28505", 
+                    "run_num": "75"
+                }, 
+                {
+                    "lumi_section_num": "28605", 
+                    "run_num": "75"
+                }, 
+                {
+                    "lumi_section_num": "28705", 
+                    "run_num": "75"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "63497", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_7.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2547774118", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "3043848404", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "26426", 
+                    "run_num": "92"
+                }, 
+                {
+                    "lumi_section_num": "26526", 
+                    "run_num": "92"
+                }, 
+                {
+                    "lumi_section_num": "26626", 
+                    "run_num": "92"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "69688", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_8.root"
+        }, 
+        {
+            "adler32": "", 
+            "file_type": "EDM", 
+            "file_output_config_list": [
+                {
+                    "release_version": "CMSSW_1_2_3", 
+                    "pset_hash": "NO_PSET_HASH", 
+                    "app_name": "cmsRun", 
+                    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+                    "global_tag": "DBS3_DEPLOYMENT_TEST"
+                }
+            ], 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "file_size": "2026928001", 
+            "auto_cross_section": 0.0, 
+            "check_sum": "2877044995", 
+            "file_lumi_list": [
+                {
+                    "lumi_section_num": "23850", 
+                    "run_num": "56"
+                }, 
+                {
+                    "lumi_section_num": "23950", 
+                    "run_num": "56"
+                }, 
+                {
+                    "lumi_section_num": "24050", 
+                    "run_num": "56"
+                }
+            ], 
+            "file_parent_list": [], 
+            "event_count": "24827", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_9.root"
+        }
+    ]
+}

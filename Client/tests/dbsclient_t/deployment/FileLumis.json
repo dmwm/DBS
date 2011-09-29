@@ -1,132 +1,152 @@
 [
     {
-        "lumi_section_num": 1315608, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 20553, 
+        "run_num": 33, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
     }, 
     {
-        "lumi_section_num": 1315629, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 20653, 
+        "run_num": 33, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
     }, 
     {
-        "lumi_section_num": 1315609, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 20753, 
+        "run_num": 33, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
     }, 
     {
-        "lumi_section_num": 1315615, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 21053, 
+        "run_num": 82, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
     }, 
     {
-        "lumi_section_num": 1315628, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 21153, 
+        "run_num": 82, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
     }, 
     {
-        "lumi_section_num": 1315815, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 21253, 
+        "run_num": 82, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
     }, 
     {
-        "lumi_section_num": 1315610, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 21381, 
+        "run_num": 43, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
     }, 
     {
-        "lumi_section_num": 1315633, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 21481, 
+        "run_num": 43, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
     }, 
     {
-        "lumi_section_num": 1315636, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 21581, 
+        "run_num": 43, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
     }, 
     {
-        "lumi_section_num": 1315612, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 23830, 
+        "run_num": 49, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
     }, 
     {
-        "lumi_section_num": 1315616, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 23930, 
+        "run_num": 49, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
     }, 
     {
-        "lumi_section_num": 1315634, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 24022, 
+        "run_num": 43, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
     }, 
     {
-        "lumi_section_num": 1315619, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 24030, 
+        "run_num": 49, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
     }, 
     {
-        "lumi_section_num": 1315620, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 24122, 
+        "run_num": 43, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
     }, 
     {
-        "lumi_section_num": 1315631, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 24222, 
+        "run_num": 43, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
     }, 
     {
-        "lumi_section_num": 1315632, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 25855, 
+        "run_num": 84, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
     }, 
     {
-        "lumi_section_num": 1315813, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 25955, 
+        "run_num": 84, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
     }, 
     {
-        "lumi_section_num": 1315635, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 26055, 
+        "run_num": 84, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
     }, 
     {
-        "lumi_section_num": 1315812, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 28050, 
+        "run_num": 28, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
     }, 
     {
-        "lumi_section_num": 1315613, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 28150, 
+        "run_num": 28, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
     }, 
     {
-        "lumi_section_num": 1315617, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 28250, 
+        "run_num": 28, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
     }, 
     {
-        "lumi_section_num": 1315614, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 28256, 
+        "run_num": 2, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
     }, 
     {
-        "lumi_section_num": 1315618, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 28356, 
+        "run_num": 2, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
     }, 
     {
-        "lumi_section_num": 1315814, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 28456, 
+        "run_num": 2, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
     }, 
     {
-        "lumi_section_num": 1315630, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 28535, 
+        "run_num": 1, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
     }, 
     {
-        "lumi_section_num": 1315611, 
-        "run_num": 81427, 
-        "logical_file_name": "/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"
+        "lumi_section_num": 28635, 
+        "run_num": 1, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
+    }, 
+    {
+        "lumi_section_num": 28735, 
+        "run_num": 1, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
+    }, 
+    {
+        "lumi_section_num": 29510, 
+        "run_num": 99, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
+    }, 
+    {
+        "lumi_section_num": 29610, 
+        "run_num": 99, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
+    }, 
+    {
+        "lumi_section_num": 29710, 
+        "run_num": 99, 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
     }
 ]

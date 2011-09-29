@@ -1,8 +1,4 @@
-[
-    {
-        "acquisition_era_name": "Commissioning11", 
-        "create_by": null, 
-        "description": null, 
-        "creation_date": null
-    }
-]
+{
+    "acquisition_era_name": "DBS3_DEPLOYMENT_TEST_ERA",
+    "description": "DBS3_DEPLOYMENT_TEST_ERA"
+}

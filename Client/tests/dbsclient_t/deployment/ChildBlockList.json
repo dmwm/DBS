@@ -1,0 +1,42 @@
+[
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }, 
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }, 
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }, 
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }, 
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }, 
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }, 
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }, 
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }, 
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }, 
+    {
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb",
+	"origin_site_name": "dbs3test-srm.not.exists"
+    }
+]

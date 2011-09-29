@@ -3,11 +3,9 @@
         "dataset_access_type": [
             "DELETED", 
             "DEPRECATED", 
-            "EXPORTED", 
-            "IMPORTED", 
-            "PRODUCTION", 
-            "RO", 
-            "UNKNOWN_DBS2_TYPE"
+            "INVALID",
+            "VALID",
+            "PRODUCTION"
         ]
     }
 ]

@@ -7,6 +7,146 @@ import unittest
 from dbs.apis.dbsClient import *
 from dbs.exceptions.dbsClientException import dbsClientException
 
+def stripChangingParameters(data):
+    keys2remove = ['create_by','creation_date','data_tier_id','primary_ds_type_id','primary_ds_id',
+                   'last_modified_by','last_modification_date','dataset_id','origin_site_name','child_dataset_id',
+                   'parent_dataset_id', 'file_id', 'file_type_id', 'block_id']
+
+    if isinstance(data,dict):
+        for key in keys2remove:
+            if data.has_key(key):
+                del data[key]
+
+    elif isinstance(data,list):
+        data = [stripChangingParameters(entry) for entry in data]
+
+    else:
+        pass
+
+    return data
+
+class PrepareDeploymentsTests(unittest.TestCase):
+    def setUp(self):
+        self.url=os.environ['DBS_WRITER_URL']
+        
+        self.api = DbsApi(url=self.url)
+
+    def test_01_insert_primary_dataset(self):
+        fp = file("PrimaryDatasets.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+        
+        self.api.insertPrimaryDataset(data)
+        
+    def test_02_insert_output_config(self):
+        fp = file("OutputConfigs.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+        
+        self.api.insertOutputConfig(data)
+        
+    def test_03_insert_acquisition_era(self):
+        fp = file("Acquisitioneras.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+
+        self.api.insertAcquisitionEra(data)
+
+    def test_04_insert_processing_era(self):
+        fp = file("ProcessingEras.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+
+        self.api.insertProcessingEra(data)
+
+    def test_05_insert_datatier(self):
+        fp = file("DataTiers.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+        
+        self.api.insertDataTier(data)
+
+    def test_06_insert_dataset(self):
+        fp = file("DatasetList.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+        
+        self.api.insertDataset(data)
+
+    def test_07_insert_child_dataset(self):
+        fp = file("ChildDatasetList.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+        
+        self.api.insertDataset(data)
+
+    def test_08_insert_block(self):
+        fp = file("BlockList.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+
+        for block in data:
+            self.api.insertBlock(block)
+
+    def test_09_insert_child_block(self):
+        fp = file("ChildBlockList.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+
+        for block in data:
+            self.api.insertBlock(block)
+
+    def test_10_insert_files(self):
+        fp = file("FileList.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+
+        ##spit data into chunks of 10 files, because DBS3 has a limitation of injecting max. 10 files in a chunk
+
+        fileList = data['files']
+        
+        fileList = [fileList[i:i+10] for i  in range(0, len(fileList), 10)]
+
+        for entry in fileList:
+            self.api.insertFiles(filesList={'files':entry})
+            
+
+    def test_11_insert_child_files(self):
+        fp = file("ChildFileList.json",'r')
+
+        data = json.load(fp)
+
+        fp.close()
+
+        ##spit data into chunks of 10 files, because DBS3 has a limitation of injecting max. 10 files in a chunk
+
+        fileList = data['files']
+        
+        fileList = [fileList[i:i+10] for i  in range(0, len(fileList), 10)]
+
+        for entry in fileList:
+            self.api.insertFiles(filesList={'files':entry})
+
 class PostDeploymentTests(unittest.TestCase):
     def __init__(self, methodName='runTest'):
         self.RESTModel = 'DBSReader'
@@ -23,13 +163,13 @@ class PostDeploymentTests(unittest.TestCase):
             self.url=os.environ['DBS_WRITER_URL']
             
         self.api = DbsApi(url=self.url)
-
+            
     def test_list_acquisitioneras(self):
         fp = file("Acquisitioneras.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [json.load(fp)]
         
-        acquisitioneras = self.api.listAcquisitionEras(acquisition_era_name="Commissioning11")
-        self.assertEqual(expected_data,acquisitioneras)
+        acquisitioneras = self.api.listAcquisitionEras(acquisition_era_name="DBS3_DEPLOYMENT_TEST_ERA")
+        self.assertEqual(expected_data,stripChangingParameters(acquisitioneras))
 
         fp.close()
 
@@ -47,14 +187,11 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertFalse(False in result)
 
     def test_list_block_children(self):
-        fp = file("BlockChildren.json",'r')
-        expected_data = sorted(json.load(fp), key=lambda k: k["block_name"])
+        expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
         
-        blockchildren = sorted(self.api.listBlockChildren(block_name="/JetMETTau/Run2010A-v1/RAW#00513c84-93d1-4f71-81ea-440d9451861a"), key=lambda k: k["block_name"])
+        blockchildren = sorted(self.api.listBlockChildren(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["block_name"])
 
         self.assertEqual(expected_data,blockchildren)
-
-        fp.close()
 
         try:
             self.api.listBlockChildren()
@@ -68,14 +205,11 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_list_block_parents(self):
-        fp = file("BlockParents.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [{u'parent_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81', u'this_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
         
-        blockparents = self.api.listBlockParents(block_name="/JetMETTau/Run2010A-PromptReco-v1/RECO#c737f664-42f3-49f5-8e3c-6f930eae6b0c")
+        blockparents = self.api.listBlockParents(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81")
 
         self.assertEqual(expected_data,blockparents)
-
-        fp.close()
         
         try:
             self.api.listBlockParents()
@@ -90,21 +224,21 @@ class PostDeploymentTests(unittest.TestCase):
 
     def test_list_blocks(self):
         fp = file("BlockList.json",'r')
-        expected_data = sorted(json.load(fp), key=lambda k: k["block_name"])
+        expected_data = stripChangingParameters(sorted(json.load(fp), key=lambda k: k["block_name"]))
         
-        blocks = sorted(self.api.listBlocks(dataset="/JetMETTau/Run2010A-v1/RAW"), key=lambda k: k["block_name"])
+        blocks = sorted(self.api.listBlocks(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW"), key=lambda k: k["block_name"])
 
         self.assertEqual(expected_data,blocks)
 
         fp.close()
 
-        expected_data = [{u'block_name': u'/JetMETTau/Run2010A-v1/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c80'}]
+        expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
         
-        blocks = self.api.listBlocks(block_name="/JetMETTau/Run2010A-v1/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c80")
+        blocks = self.api.listBlocks(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
 
         self.assertEqual(expected_data,blocks)
 
-        blocks = self.api.listBlocks(logical_file_name="/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root")
+        blocks = self.api.listBlocks(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
 
         self.assertEqual(expected_data,blocks)        
 
@@ -122,44 +256,45 @@ class PostDeploymentTests(unittest.TestCase):
     def test_list_datasets(self):
         fp = file("DatasetList.json",'r')
         expected_data = json.load(fp)
-        
-        datasets = self.api.listDatasets(dataset="/JetMETTau/Run2010A-v1/RAW",dataset_access_type="*",detail="True")
 
-        self.assertEqual(expected_data,datasets)
+        del expected_data['output_configs']
+        
+        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",dataset_access_type="*",detail="True"))
+
+        self.assertEqual([expected_data],datasets)
 
         fp.close()
 
-        datasets = self.api.listDatasets(dataset="/JetMETTau/Run2010A-v1/RAW",dataset_access_type="*",detail="True",data_tier_name="RAW")
+        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",dataset_access_type="*",detail="True",data_tier_name="RAW"))
 
-        self.assertEqual(expected_data,datasets)
+        self.assertEqual([expected_data],datasets)
 
-        datasets = self.api.listDatasets(dataset="/JetMETTau/Run2010A-v1/RAW",dataset_access_type="*",detail="True",primary_ds_name="JetMETTau")
+        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",dataset_access_type="*",detail="True",primary_ds_name="DBS3DeploymentTestPrimary"))
 
-        self.assertEqual(expected_data,datasets)
+        self.assertEqual([expected_data],datasets)
 
-        datasets = self.api.listDatasets(dataset_access_type="*",detail="True", logical_file_name="/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root")
+        datasets = stripChangingParameters(self.api.listDatasets(dataset_access_type="*",detail="True", logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"))
 
-        self.assertEqual(expected_data,datasets)
+        self.assertEqual([expected_data],datasets)
 
     def test_list_dataset_access_types(self):
         fp = file("DatasetAccessTypes.json",'r')
         expected_data = json.load(fp)
+        expected_data[0]["dataset_access_type"].sort()
         
         datasetaccesstypes = self.api.listDatasetAccessTypes()
+        datasetaccesstypes[0]["dataset_access_type"].sort()
 
         self.assertEqual(expected_data,datasetaccesstypes)
 
         fp.close()
 
     def test_list_dataset_children(self):
-        fp = file("DatasetChildren.json",'r')
-        expected_data = sorted(json.load(fp), key=lambda k: k["child_dataset_id"])
+        expected_data = [{u'child_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO', u'dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW'}]
         
-        children = sorted(self.api.listDatasetChildren(dataset="/JetMETTau/Run2010A-v1/RAW"), key=lambda k: k["child_dataset_id"])
+        children = stripChangingParameters(self.api.listDatasetChildren(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW"))
 
         self.assertEqual(expected_data,children)
-
-        fp.close()
 
         try:
             self.api.listDatasetChildren()
@@ -173,14 +308,11 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_list_dataset_parents(self):
-        fp = file("DatasetParents.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [{u'dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO', u'parent_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW'}]
         
-        parents = self.api.listDatasetParents(dataset="/MinBias_TuneD6T_7TeV-pythia6/Summer10-START36_V10_SP10-v1/GEN-SIM-RECODEBUG")
+        parents = stripChangingParameters(self.api.listDatasetParents(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO"))
 
         self.assertEqual(expected_data,parents)
-
-        fp.close()
 
         try:
             self.api.listDatasetParents()
@@ -195,11 +327,11 @@ class PostDeploymentTests(unittest.TestCase):
                     
     def test_list_datatiers(self):
         fp = file("DataTiers.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [json.load(fp)]
 
-        datatiers = self.api.listDataTiers(data_tier_name="GEN-SIM-DIGI-HLTDEBUG-RECO")
+        datatiers = self.api.listDataTiers(data_tier_name="DBS3_DEPLOYMENT_TEST_TIER")
 
-        self.assertEqual(expected_data,datatiers)
+        self.assertEqual(expected_data,stripChangingParameters(datatiers))
 
         fp.close()
 
@@ -218,11 +350,11 @@ class PostDeploymentTests(unittest.TestCase):
 
     def test_list_datatypes(self):
         fp = file("DataTypes.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [json.load(fp)]
     
         datatypes = self.api.listDataTypes(datatype="TEST")
         
-        self.assertEqual(expected_data,datatypes)
+        self.assertEqual(expected_data,stripChangingParameters(datatypes))
 
         fp.close()
 
@@ -238,15 +370,12 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertFalse(False in result)
 
     def test_list_file_children(self):
-        fp = file("FileChildren.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [{u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'], u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
         
-        children = self.api.listFileChildren(logical_file_name="/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root")
+        children = self.api.listFileChildren(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
 
         self.assertEqual(expected_data,children)
 
-        fp.close()
-        
         try:
             self.api.listFileChildren()
         except dbsClientException:
@@ -262,21 +391,18 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("FileLumis.json",'r')
         expected_data = sorted(json.load(fp), key=lambda k: k["lumi_section_num"])
 
-        lumis = sorted(self.api.listFileLumis(block_name="/JetMETTau/Run2010A-v1/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c80"), key=lambda k: k["lumi_section_num"])
+        lumis = sorted(self.api.listFileLumis(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["lumi_section_num"])
 
         self.assertEqual(expected_data,lumis)
 
         fp.close()
 
-        fp = file("FileLumis2.json",'r')
-        expected_data = sorted(json.load(fp), key=lambda k: k["lumi_section_num"])
+        expected_data = [{u'lumi_section_num': 24022, u'run_num': 43}, {u'lumi_section_num': 24122, u'run_num': 43}, {u'lumi_section_num': 24222, u'run_num': 43}]
 
-        lumis = sorted(self.api.listFileLumis(logical_file_name="/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root"), key=lambda k: k["lumi_section_num"])
+        lumis = sorted(self.api.listFileLumis(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"), key=lambda k: k["lumi_section_num"])
 
         self.assertEqual(expected_data,lumis)
 
-        fp.close()
-        
         try:
             self.api.listFileLumis()
         except dbsClientException:
@@ -292,21 +418,18 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("FileParents.json",'r')
         expected_data = sorted(json.load(fp), key=lambda k: k["parent_logical_file_name"])
         
-        parents = sorted(self.api.listFileParents(block_name="/JetMETTau/Run2010A-Dec22ReReco_v1/AOD#fe7240b6-505d-4624-be0b-68f525697638"), key=lambda k: k["parent_logical_file_name"])
+        parents = sorted(self.api.listFileParents(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["parent_logical_file_name"])
 
         self.assertEqual(expected_data,parents)
 
         fp.close()
 
-        fp = file("FileParents2.json",'r')
-        expected_data = sorted(json.load(fp), key=lambda k: k["parent_logical_file_name"])
+        expected_data = [{u'parent_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'], u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
         
-        parents = sorted(self.api.listFileParents(logical_file_name="/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AEA4A191-BC1C-E011-9912-003048678FD6.root"), key=lambda k: k["parent_logical_file_name"])
+        parents = self.api.listFileParents(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
         
         self.assertEqual(expected_data,parents)
 
-        fp.close()
-        
         try:
             self.api.listFileParents()
         except dbsClientException:
@@ -322,17 +445,18 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("ListFiles.json",'r')
         expected_data = json.load(fp)
         
-        files = self.api.listFiles(logical_file_name="/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AEA4A191-BC1C-E011-9912-003048678FD6.root",detail="True")
-
-        self.assertEqual(expected_data,files)
-
-        files = self.api.listFiles(dataset="/JetMETTau/Run2010A-Dec22ReReco_v1/AOD",logical_file_name="/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AEA4A191-BC1C-E011-9912-003048678FD6.root",detail="True")
-
-        self.assertEqual(expected_data,files)
-
-        files = self.api.listFiles(block_name="/JetMETTau/Run2010A-Dec22ReReco_v1/AOD#fe7240b6-505d-4624-be0b-68f525697638",logical_file_name="/store/data/Run2010A/JetMETTau/AOD/Dec22ReReco_v1/0088/AEA4A191-BC1C-E011-9912-003048678FD6.root",detail="True")
+        files = self.api.listFiles(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
         
-        self.assertEqual(expected_data,files)
+
+        self.assertEqual(expected_data,stripChangingParameters(files))
+
+        files = self.api.listFiles(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
+
+        self.assertEqual(expected_data,stripChangingParameters(files))
+
+        files = self.api.listFiles(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
+        
+        self.assertEqual(expected_data,stripChangingParameters(files))
 
         fp.close()
 
@@ -348,19 +472,15 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_list_file_summaries(self):
-        fp = file("FileSummaries.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [{u'num_block': 1, u'num_file': 10, u'num_event': 553964, u'num_lumi': 30, u'file_size': 25350778463}]
         
-        summaries = self.api.listFileSummaries(block_name="/JetMETTau/Run2010A-v1/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c80")
+        summaries = self.api.listFileSummaries(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
 
         self.assertEqual(expected_data,summaries)
 
-        fp.close()
-
-        fp = file("FileSummaries2.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [{u'num_block': 1, u'num_file': 10, u'num_event': 553964, u'num_lumi': 30, u'file_size': 25350778463}]
         
-        summaries = self.api.listFileSummaries(dataset="/JetMETTau/Run2010A-v1/RAW")
+        self.api.listFileSummaries(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW")
 
         self.assertEqual(expected_data,summaries)
 
@@ -377,38 +497,32 @@ class PostDeploymentTests(unittest.TestCase):
 
     def test_list_output_configs(self):
         fp = file("OutputConfigs.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [json.load(fp)]
         
-        configs = self.api.listOutputConfigs(dataset="/JetMETTau/Run2010A-v1/RAW",logical_file_name="/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root",app_name="cmsRun")
+        configs = self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",app_name="cmsRun")
         self.assertEqual(expected_data,configs)
 
-        configs = self.api.listOutputConfigs(dataset="/JetMETTau/Run2010A-v1/RAW",logical_file_name="/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root")
+        configs = self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
         self.assertEqual(expected_data,configs)
         
-        configs = self.api.listOutputConfigs(logical_file_name="/store/data/Run2010A/JetMETTau/RAW/v1/000/136/063/3470B5EC-0866-DF11-ADD9-0030487CD906.root")
+        configs = self.api.listOutputConfigs(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
         self.assertEqual(expected_data,configs)
 
         fp.close()
 
     def test_list_physics_groups(self):
-        fp = file("PhysicsGroups.json",'r')
-        expected_data = sorted(json.load(fp), key=lambda k: k["physics_group_name"])
         
-        groups = sorted(self.api.listPhysicsGroups(), key=lambda k: k["physics_group_name"])
+        self.api.listPhysicsGroups()
 
-        self.assertEqual(expected_data,groups)
+        groups = self.api.listPhysicsGroups(physics_group_name="Top")
 
-        fp.close()
-
-        groups = self.api.listPhysicsGroups(physics_group_name="susy")
-
-        self.assertEqual('susy',groups[0].get('physics_group_name'))
+        self.assertEqual('Top',groups[0].get('physics_group_name'))
 
     def test_list_primarydatasets(self):
         fp = file("PrimaryDatasets.json",'r')
-        expected_data = sorted(json.load(fp), key=lambda k: k['primary_ds_id'])
+        expected_data = [json.load(fp)]
 
-        primarydatasets = sorted(self.api.listPrimaryDatasets(primary_ds_name="*Tau3Mu*"), key=lambda k: k['primary_ds_id'])
+        primarydatasets = stripChangingParameters(self.api.listPrimaryDatasets(primary_ds_name="DBS3Deployment*"))
 
         self.assertEqual(expected_data,primarydatasets)
 
@@ -416,9 +530,9 @@ class PostDeploymentTests(unittest.TestCase):
 
     def test_list_processing_eras(self):
         fp = file("ProcessingEras.json",'r')
-        expected_data = json.load(fp)
+        expected_data = [json.load(fp)]
         
-        eras = self.api.listProcessingEras(processing_version="4998")
+        eras = stripChangingParameters(self.api.listProcessingEras(processing_version="4711"))
 
         self.assertEqual(expected_data,eras)
 
@@ -460,10 +574,33 @@ class PostDeploymentTests(unittest.TestCase):
         fp.close()
 
 if __name__ == "__main__":
+    import sys
+
+    message =  "Usage:   python DBSDeployment_t.py insert=True \n\
+                or python DBSDeployment_t.py insert=False "
+    
+    args = sys.argv
+    if len(args) == 1:
+        print message
+        sys.exit()
+    elif len(args) != 2:
+        print message
+        sys.exit()
+    else:
+        if args[1] not in ['insert=True', 'insert=False']: 
+            print message
+            sys.exit()
+        
+    
     RESTModel = ('DBSReader','DBSWriter')
 
     TestSuite = unittest.TestSuite()
 
+    if args[1] == 'insert=True': 
+        prepareTests = unittest.TestLoader().loadTestsFromTestCase(PrepareDeploymentsTests)
+        TestSuite.addTests(prepareTests)
+    else:
+        pass
     for model in RESTModel:
         loadedTests = unittest.TestLoader().loadTestsFromTestCase(PostDeploymentTests)
 
