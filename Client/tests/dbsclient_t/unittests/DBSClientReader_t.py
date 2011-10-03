@@ -407,7 +407,30 @@ class DBSClientReader_t(unittest.TestCase):
         """test86: web.DBSReaderModel.blockDump with block_name"""
         api.blockDump(block_name=testparams["block"])
 
+    def test87(self):
+        """test87: web.DBSReaderModel.listPrimaryDSTypes"""
+        api.listPrimaryDSTypes()
+
+    def test88(self):
+        """test88: web.DBSReaderModel.listPrimaryDSTypes with dataset"""
+        api.listPrimaryDSTypes(dataset=testparams['dataset'])
+
+    def test89(self):
+        """test89: web.DBSReaderModel.listPrimaryDSTypes with primary_ds_type""" 
+        api.listPrimaryDSTypes(primary_ds_type="mc")
+
+    def test90(self):
+        """test90: web.DBSReaderModel.listDatasetArray"""
+        api.listDatasetArray(dataset=[testparams['dataset']])
+
+    def test91(self):
+        """test91: web.DBSReaderModel.listDatasetArray with dataset_access_type"""
+        api.listDatasetArray(dataset=[testparams['dataset']],dataset_access_type="PRODUCTION")
+
+    def test92(self):
+        """test92: web.DBSReaderModel.listDatasetArray with detail"""
+        api.listDatasetArray(dataset=[testparams['dataset']], detail=True)
+        
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
-        

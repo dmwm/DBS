@@ -272,8 +272,8 @@ class DBSClientWriter_t(unittest.TestCase):
 	api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
 
     def test21(self):
-	    """test21 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-	    api.updateDatasetType(dataset=dataset, dataset_access_type="RO")	 
+        """test21 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
+        api.updateDatasetType(dataset=dataset, dataset_access_type="RO")
 	
     def test208(self):
 	"""test208 generating the output file for reader test"""

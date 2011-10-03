@@ -4,7 +4,7 @@ import httplib
 
 class HTTPSAuthHandler(urllib2.HTTPSHandler):
     """
-    HTTPS authentication class to provid path of key/cert files.
+    HTTPS authentication class to provide path of key/cert files.
     """
     def __init__(self, key=None, cert=None, level=0):
         urllib2.HTTPSHandler.__init__(self, debuglevel=level)

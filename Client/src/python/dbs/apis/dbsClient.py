@@ -39,12 +39,14 @@ def checkInputParameter(method,parameters,validParameters,requiredParameters=Non
 class DbsApi(object):
     def __init__(self, url="", proxy="", key=None, cert=None, debug=0):
         """
-        * DbsApi CTOR
-        url: server URL
-        proxy: http proxy; this feature is TURNED OFF at the moemnt
+        DbsApi CTOR
+        
+        :param url: server URL.
+        :type url: str
+        :param proxy: http proxy. This feature is TURNED OFF at the moment
+        :type proxy: str
+
         """
-        #import pdb
-        #pdb.set_trace()
         self.url = url
         self.proxy = proxy
         self.key = key
@@ -54,7 +56,7 @@ class DbsApi(object):
         if callType == 'http':
             self.opener =  urllib2.build_opener()
         elif callType == 'https':
-            key1, cert1 = self.__getKeyCert(self.key, self.cert)
+            key1, cert1 = self.__getKeyCert()
             https_handler  = HTTPSAuthHandler(key1, cert1, debug)
             self.opener = urllib2.build_opener(https_handler)
         else:
@@ -62,11 +64,15 @@ class DbsApi(object):
         
     def __callServer(self, method="", params={}, callmethod='GET'):
         """
-        * __callServer 
-        * A private method to make HTTP call to the DBS Server
-        * method: addition to URL, this is generall where the VERB is provided for the REST call, as '/files'
-        * params: parameters to server
-        * callmethod; the HTTP method used, by default it is HTTP-GET, possible values are GET, POST and PUT
+        A private method to make HTTP call to the DBS Server
+        
+        :param method: Addition to URL, this is generall where the VERB is provided for the REST call, as '/files'.
+        :type method: str
+        :param params: Parameters to server.
+        :type params: dict
+        :param callmethod: The HTTP method used, by default it is HTTP-GET, possible values are GET, POST and PUT.
+        :type callmethod: str
+        
         """
         UserID=os.environ['USER']+'@'+socket.gethostname()
         headers =  {"Content-type": "application/json", "Accept": "application/json", "UserID": UserID }
@@ -99,18 +105,21 @@ class DbsApi(object):
             raise urlerror
         except Exception, e:
             raise e
-
+        
         #FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
         try:
             json_ret=json.loads(res)
         except Exception, e:
             raise e
-        finally:
-            return json_ret
+        
+        return json_ret
 		
     def __parseForException(self, httperror):
         """
         An internal method, should not be used by clients
+
+        :param httperror: Throwns httperror by the server
+        
         """
         data = httperror.read()
         try:
@@ -124,24 +133,62 @@ class DbsApi(object):
         
         raise httperror
 
-    def __getKeyCert(self, key=None, cert=None):
+    def __getKeyCert(self):
         """
-        If the client supplied key and cert exist, use them
-        If they are not supplied by client, find the in the defaul location.
-        If the key or cert file cannot be found. raise ValueError.    
-        """
-        if not isinstance(key, str) or not isinstance(cert, str):
-            key =  os.environ['HOME']+"/.globus/userkey.pem"
-            cert = os.environ['HOME']+"/.globus/usercert.pem"
-        if  os.path.isfile(key) and  os.path.isfile(cert):
-                return key, cert
-        else:
-                raise ValueError, "key or cert file does not exist: %s, %s" % (key,cert)
+        Get the user credentials if they exist, otherwise throw an exception.
         
+        This code was modified from DBSAPI/dbsHttpService.py and WMCore/Services/Requests.py
+
+        """
+        # Zeroth case is if the class has over ridden the key/cert and has it
+        # stored in self
+        if getattr(self, 'cert', None) and getattr(self, 'key', None):
+            key = self.key
+            cert = self.cert
+
+        # Now we're trying to guess what the right cert/key combo is...
+        # First preference to HOST Certificate, This is how it set in Tier0
+        elif os.environ.has_key('X509_HOST_CERT'):
+            cert = os.environ['X509_HOST_CERT']
+            key = os.environ['X509_HOST_KEY']
+            
+        # Second preference to User Proxy, very common
+        elif (os.environ.has_key('X509_USER_PROXY')) and \
+                (os.path.exists( os.environ['X509_USER_PROXY'])):
+            cert = os.environ['X509_USER_PROXY']
+            key = cert
+
+        # Third preference to User Cert/Proxy combinition
+        elif os.environ.has_key('X509_USER_CERT'):
+            cert = os.environ['X509_USER_CERT']
+            key = os.environ['X509_USER_KEY']
+
+        # TODO: only in linux, unix case, add other os case
+        # look for proxy at default location /tmp/x509up_u$uid
+        elif os.path.exists('/tmp/x509up_u'+str(os.getuid())):
+            cert = '/tmp/x509up_u'+str(os.getuid())
+            key = cert
+        elif sys.stdin.isatty():
+            if os.path.exists(os.environ['HOME'] + '/.globus/usercert.pem'):
+                cert = os.environ['HOME'] + '/.globus/usercert.pem'
+                if os.path.exists(os.environ['HOME'] + '/.globus/userkey.pem'):
+                    key = os.environ['HOME'] + '/.globus/userkey.pem'
+                else:
+                    key = cert
+
+        #Set but not found
+        if  os.path.isfile(key) and  os.path.isfile(cert):
+            return key, cert
+        else:
+            raise ValueError, "key or cert file does not exist: %s, %s" % (key,cert)
+     
     def blockDump(self,**kwargs):
         """
-        * API the list all information related with the block_name
-        * block_name: name of block whoes children needs to be found --REQUIRED
+        API the list all information related with the block_name
+        
+        :param block_name: Name of block whoes children needs to be found --REQUIRED
+        :type block_name: str
+        
         """
         validParameters = ['block_name']
 
@@ -153,7 +200,11 @@ class DbsApi(object):
 
     def help(self,**kwargs):
         """
-        * API to get a list of supported calls
+        API to get a list of supported calls
+
+        :param call: RESTAPI call for which help is desired
+        :type call: str
+        
         """
         validParameters = ['call']
 
@@ -163,59 +214,75 @@ class DbsApi(object):
 
     def insertAcquisitionEra(self, acqEraObj={}):
         """
-        * API to insert An Acquisition Era in DBS 
-        * acqEraObj : Acquisition Era object of type {}, with key(s) :-
-        * acquisition_era_name : Acquisition Era Name --REQUIRED
+        API to insert An Acquisition Era in DBS
+        
+        :param acqEraObj: Acquisition Era object
+        :type acqEraObj: dict
+        :key acquisition_era_name: Acquisition Era Name (Required)
+                
         """
         return self.__callServer("/acquisitioneras", params = acqEraObj , callmethod='POST' )
 
     def insertBlock(self, blockObj={}):
         """
-        * API to insert a block into DBS 
-        * blockObj : block object, with key(s) :-
-        * open_for_writing : Open For Writing (1/0) (Default 1)
-        * block_size : Block Size (Default 0)
-        * file_count : File Count (Default 0)
-        * block_name : Block Name --REQUIRED
-        * origin_site_name : Origin Site Name --REQUIRED 
+        API to insert a block into DBS
+        
+        :param blockObj: Block object
+        :type blockObj: dict
+        :key open_for_writing: Open For Writing (1/0) (Default 1)
+        :key block_size: Block Size (Default 0)
+        :key file_count: File Count (Default 0)
+        :key block_name: Block Name (Required)
+        :key origin_site_name: Origin Site Name (Required)
+        
         """
         return self.__callServer("/blocks", params = blockObj , callmethod='POST' )
 
-    def insertBlockBulk(self, blockDump={}):
+    def insertBulkBlock(self, blockDump={}):
         """
+        API to insert a bulk block
+        :param blockDump: Output of the block dump command
+        :type blockDump: dict
+        
         """
         return self.__callServer("/bulkblocks", params = blockDump , callmethod='POST' )
 
     def insertDataset(self, datasetObj={}):
         """
-        * API to list A primary dataset in DBS 
-        * datasetObj : dataset object of type {}, with key(s) :-
-            *  processed_ds_name : Processed Dataset Name
-            * primary_ds_name : Primary Dataset Name
-            * is_dataset_valid : Is Dataset Valid (1/0)
-            * xtcrosssection : Xtcrosssection
-            * global_tag : Global Tag
-            * output_configs : Output Configs (List of)
-                    o app_name : App Name
-                    o release_version : Release Version
-                    o pset_hash : Pset Hash
-                    o output_module_label : Output Module Label 
+        API to list A primary dataset in DBS
+        
+        :param datasetObj: Dataset object
+        :type datasetObj: dict
+        :key processed_ds_name: Processed Dataset Name
+        :key primary_ds_name: Primary Dataset Name
+        :key is_dataset_valid: Is Dataset Valid (1/0)
+        :key xtcrosssection: Xtcrosssection
+        :key global_tag: Global Tag
+        :key output_configs: Output Configs (dict)
+        
         """
         return self.__callServer("/datasets", params = datasetObj , callmethod='POST' )
     
     def insertDataTier(self, dataTierObj={}):
         """
-        * API to insert A Data Tier in DBS 
-        * dataTierObj : Data Tier object of type {}, with kys :-
-                data_tier_name : Data Tier that needs to be inserted
+        API to insert A Data Tier in DBS
+        
+        :param dataTierObj: Data Tier object
+        :type dataTierObj: dict
+        :key data_tier_name: Data Tier that needs to be inserted
+        
         """
         return self.__callServer("/datatiers", params = dataTierObj , callmethod='POST' )
 
     def insertFiles(self, filesList=[], qInserts=False):
         """
-        * API to insert a list of file into DBS in DBS 
-        * filesList : list of file objects
-        * qInserts : (NEVER use this parameter, unless you are TOLD by DBS Team)
+        API to insert a list of file into DBS in DBS
+        
+        :param filesList: list of file objects
+        :type filesList: list
+        :param qInserts: NEVER use this parameter, unless you are TOLD by DBS Team
+        :type qInserts: bool
+        
         """
 
         if qInserts==False: #turn off qInserts
@@ -224,36 +291,49 @@ class DbsApi(object):
 
     def insertOutputConfig(self, outputConfigObj={}):
         """
-        * API to insert An OutputConfig in DBS 
-        * outputConfigObj : Output Config object of type {}, with key(s) :-
-        * app_name : App Name  --REQUIRED
-        * release_version : Release Version --REQUIRED
-        * pset_hash : Pset Hash --REQUIRED
-        * output_module_label : Output Module Label --REQUIRED
+        API to insert An OutputConfig in DBS
+        
+        :param outputConfigObj: Output Config object
+        :type outputConfigObj: dict
+        :key app_name: App Name (Required)
+        :key release_version: Release Version (Required)
+        :key pset_hash: Pset Hash (Required)
+        :key output_module_label: Output Module Label (Required)
+        
         """
         return self.__callServer("/outputconfigs", params = outputConfigObj , callmethod='POST' )
 
     def insertPrimaryDataset(self, primaryDSObj={}):
         """
-        * API to insert A primary dataset in DBS 
-        * primaryDSObj : primary dataset object of type {} , with key(s) :-
-        * primary_ds_type : TYPE (out of valid types in DBS, MC, DATA) --REQUIRED
-        * primary_ds_name : Name of the primary dataset --REQUIRED
+        API to insert A primary dataset in DBS
+        
+        :param primaryDSObj: primary dataset object
+        :type primaryDSObj: dict
+        :key primary_ds_type: TYPE (out of valid types in DBS, MC, DATA) (Required)
+        :key primary_ds_name: Name of the primary dataset (Required)
+        
         """
         return self.__callServer("/primarydatasets", params = primaryDSObj, callmethod='POST' )
 
     def insertProcessingEra(self, procEraObj={}):
         """
-        * API to insert A Processing Era in DBS 
-        * procEraObj : Processing Era object of type {}
-        * processing_version : Processing Version --REQUIRED
-        * description : Description --REQUIRED
+        API to insert A Processing Era in DBS
+        
+        :param procEraObj: Processing Era object
+        :type procEraObj: dict
+        :key processing_version: Processing Version (Required)
+        :key description: Description (Required)
+        
         """
         return self.__callServer("/processingeras", params = procEraObj , callmethod='POST' )
 
     def listAcquisitionEras(self, **kwargs):
         """
-        * API to list ALL Acquisition Eras in DBS 
+        API to list ALL Acquisition Eras in DBS
+
+        :param acquisition_era_name: Acquisition era name
+        :type acquisition_era_name: str
+        
         """
         validParameters = ['acquisition_era_name']
 
@@ -264,7 +344,10 @@ class DbsApi(object):
     def listBlockChildren(self, **kwargs):
         """
         API to list block children
-        * block_name : name of block whoes children needs to be found --REQUIRED
+        
+        :param block_name: name of block whoes children needs to be found (Required)
+        :type block_name: str
+        
         """
         validParameters=['block_name']
 
@@ -277,7 +360,10 @@ class DbsApi(object):
     def listBlockParents(self, **kwargs):
         """
         API to list block parents
-        * block_name : name of block whoes parents needs to be found --REQUIRED
+        
+        :param block_name: name of block whoes parents needs to be found (Required)
+        :type block_name: str
+        
         """
         validParameters=['block_name']
 
@@ -289,12 +375,19 @@ class DbsApi(object):
     
     def listBlocks(self, **kwargs):
         """
-        * API to list A block in DBS 
-        * block_name : name of the block
-        * dataset : dataset
-        * logical_file_name : Logical File Name
-        * origin_site_name : Origin Site Name
-        * run_num : Run Number
+        API to list A block in DBS
+        
+        :param block_name: name of the block
+        :type block_name: str
+        :param dataset: dataset
+        :type dataset: str
+        :param logical_file_name: Logical File Name
+        :type logical_file_name: str
+        :param origin_site_name: Origin Site Name
+        :type origin_site_name: str
+        :param run_num: Run Number
+        :type run_num: int
+        
         """
         validParameters = ['dataset','block_name','origin_site_name',
                            'logical_file_name','run_num','min_cdate',
@@ -313,22 +406,36 @@ class DbsApi(object):
 
     def listDatasets(self, **kwargs):
         """
-        * API to list dataset(s) in DBS 
-        * dataset : Full dataset (path) of the dataset
-        * parent_dataset : Full dataset (path) of the dataset
-        * release_version : cmssw version
-        * pset_hash : pset hash
-        * app_name : Application name (generally it is cmsRun)
-        * output_module_label : output_module_label
-        * processing_version : Processing Version
-        * acquisition_era_name : Acquisition Era
-        * primary_ds_name : Primary Dataset Name
-        * primary_ds_type : Primary Dataset Type (Type of data, MC/DATA)
-        * data_tier_name : Data Tier 
-        * dataset_access_type : Dataset Access Type ( PRODUCTION, DEPRECATED etc.)
-        *
+        API to list dataset(s) in DBS
+        
+        :param dataset:  Full dataset (path) of the dataset
+        :type dataset: str
+        :param parent_dataset: Full dataset (path) of the dataset
+        :type parent_dataset: str
+        :param release_version: cmssw version
+        :type release_version: str
+        :param pset_hash: pset hash
+        :type pset_hash: str
+        :param app_name: Application name (generally it is cmsRun)
+        :type app_name: str
+        :param output_module_label: output_module_label
+        :type output_module_label: str
+        :param processing_version: Processing Version
+        :type processing_version: str
+        :param acquisition_era_name: Acquisition Era
+        :type acquisition_era_name: str
+        :param primary_ds_name: Primary Dataset Name
+        :type primary_ds_name: str
+        :param primary_ds_type: Primary Dataset Type (Type of data, MC/DATA)
+        :type primary_ds_type: str
+        :param data_tier_name: Data Tier 
+        :type data_tier_name: str
+        :param dataset_access_type: Dataset Access Type ( PRODUCTION, DEPRECATED etc.)
+        :type dataset_access_type: str
+        
         * You can use ANY combination of these parameters in this API
-        * In absence of parameters, all datasets know to DBS instance will be returned
+        * In absence of parameters, all datasets known to DBS instance will be returned
+        
         """
         validParameters = ['dataset','parent_dataset','is_dataset_valid',
                            'release_version','pset_hash','app_name',
@@ -348,8 +455,11 @@ class DbsApi(object):
 
     def listDatasetAccessTypes(self, **kwargs):
         """
-        * API to list ALL dataset access types
-        * dataset_access_type: If provided, list THAT dataset access type
+        API to list ALL dataset access types
+
+        :param dataset_access_type: If provided, list THAT dataset access type
+        :type dataset_access_type: str
+        
         """
         validParameters = ['dataset_access_type']
 
@@ -357,10 +467,36 @@ class DbsApi(object):
 
         return self.__callServer("/datasetaccesstypes",params=kwargs)
 
+    def listDatasetArray(self, **kwargs):
+        """
+        API to list datasets in DBS
+        
+        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required)
+        :type dataset: list
+        :param dataset_access_type: If provided list only datasets having that dataset access type
+        :type dataset_access_type: str
+        :param detail: brief list or detailed list 1/0
+        :type detail: bool
+        
+        """
+        validParameters = ['dataset','dataset_access_type','detail']
+        requiredParameters = {'forced':['dataset']}
+
+        checkInputParameter(method="listDatasetArray",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
+
+        #set defaults
+        if 'detail' not in kwargs.keys():
+            kwargs['detail']=False
+
+        return self.__callServer("/datasetlist",params=kwargs,callmethod='POST')
+
     def listDatasetChildren(self, **kwargs):
         """
-        * API to list A datasets children in DBS 
-        * dataset : dataset --REQUIRED
+        API to list A datasets children in DBS
+        
+        :param dataset: dataset (Required)
+        :type dataset: str
+        
         """
         validParameters = ['dataset']
         requiredParameters = {'forced':validParameters}
@@ -371,8 +507,11 @@ class DbsApi(object):
     
     def listDatasetParents(self, **kwargs):
         """
-        * API to list A datasets parents in DBS 
-        * dataset : dataset --REQUIRED
+        API to list A datasets parents in DBS
+        
+        :param dataset: dataset (Required)
+        :type dataset: str
+        
         """
         validParameters = ['dataset']
         requiredParameters = {'forced':validParameters}
@@ -384,7 +523,10 @@ class DbsApi(object):
     def listDataTiers(self, **kwargs):
         """
         API to list data tiers  known to DBS
-        datatier : when supplied, dbs will list details on this tier
+        
+        :param datatier: When supplied, dbs will list details on this tier
+        :type datatier: str
+        
         """
         validParameters=['data_tier_name']
 
@@ -395,7 +537,10 @@ class DbsApi(object):
     def listDataTypes(self, **kwargs):
         """
         API to list data types known to dbs (when no parameter supplied)
-        dataset: If provided, will return data type (of primary dataset) of the dataset
+        
+        :param dataset: If provided, will return data type (of primary dataset) of the dataset
+        :type dataset: str
+        
         """
         validParameters=['datatype','dataset']
 
@@ -405,8 +550,11 @@ class DbsApi(object):
     
     def listFileChildren(self, **kwargs):
         """
-        * API to list file children
-        * logical_file_name : logical_file_name of file
+        API to list file children
+        
+        :param logical_file_name: logical_file_name of file
+        :type logical_file_name: str
+        
         """
         validParameters = ['logical_file_name']
 
@@ -418,8 +566,11 @@ class DbsApi(object):
 
     def listFileLumis(self, **kwargs):
         """
-        * API to list Lumi for files
-        * logical_file_name : logical_file_name of file
+        API to list Lumi for files
+        
+        :param logical_file_name: logical_file_name of file
+        :type logical_file_name: str
+        
         """
         validParameters = ['logical_file_name','block_name']
 
@@ -431,8 +582,11 @@ class DbsApi(object):
 
     def listFileParents(self, **kwargs):
         """
-        * API to list file parents
-        * logical_file_name : logical_file_name of file
+        API to list file parents
+        
+        :param logical_file_name: logical_file_name of file
+        :type logical_file_name: str
+        
         """
         validParameters = ['logical_file_name','block_id','block_name']
 
@@ -444,17 +598,29 @@ class DbsApi(object):
 
     def listFiles(self, **kwargs):
         """
-        * API to list A file in DBS 
-        * logical_file_name : logical_file_name of file
-        * dataset : dataset
-        * block : block name
-        * release_version : release version
-        * pset_hash
-        * app_name
-        * output_module_label
-        * minrun/maxrun : if you want to look for a run range use these 
-                          Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
-        * origin_site_name : site where file was created
+        API to list A file in DBS
+        
+        :param logical_file_name: logical_file_name of file
+        :type logical_file_name: str
+        :param dataset: dataset
+        :type dataset: str
+        :param block: block name
+        :type block: str
+        :param release_version: release version
+        :type release_version: str
+        :param pset_hash: Parameter Set Hash
+        :type pset_hash: str
+        :param app_name: Name of the appication
+        :type app_name: str
+        :param output_module_label: name of the used output module
+        :type output_module_label: str
+        :param minrun,maxrun: if you want to look for a run range use these 
+        :type minrun,maxrun: int
+        :param origin_site_name: site where file was created
+        :type origin_site_name: str
+
+        * Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
+        
         """
         validParameters = ['dataset','block_name','logical_file_name',
                           'release_version','pset_hash','app_name',
@@ -473,7 +639,13 @@ class DbsApi(object):
         
     def listFileSummaries(self, **kwargs):
         """
-        * API to list number of files, event counts and number of lumis in a given block of dataset
+        API to list number of files, event counts and number of lumis in a given block of dataset
+
+        :param block_name: Block name
+        :type block_name: str
+        :param dataset: Dataset name
+        :type dataset: str
+        
         """
         validParameters = ['block_name','dataset']
 
@@ -485,16 +657,24 @@ class DbsApi(object):
 
     def listOutputConfigs(self, **kwargs):
         """
-        * API to list OutputConfigs in DBS 
-        * dataset : Full dataset (path) of the dataset
-        * parent_dataset : Full dataset (path) of the dataset
-        * release_version : cmssw version
-        * pset_hash : pset hash
-        * app_name : Application name (generally it is cmsRun)
-        * output_module_label : output_module_label
-        * 
+        API to list OutputConfigs in DBS
+        
+        :param dataset: Full dataset (path) of the dataset
+        :type dataset: str
+        :param parent_dataset: Full dataset (path) of the dataset
+        :type parent_dataset: str
+        :param release_version: cmssw version
+        :type release_version: str
+        :param pset_hash: pset hash
+        :type pset_hash: str
+        :param app_name: Application name (generally it is cmsRun)
+        :type app_name: str
+        :param output_module_label: output_module_label
+        :type output_module_label: str
+        
         * You can use ANY combination of these parameters in this API
         * All parameters are optional, if you do not provide any parameter, ALL configs will be listed from DBS
+        
         """
         validParameters = ['dataset','logical_file_name','release_version',
                            'pset_hash','app_name','output_module_label',
@@ -506,8 +686,11 @@ class DbsApi(object):
 
     def listPhysicsGroups(self, **kwargs):
         """
-        * API to list ALL physics groups
-        * physics_group_name: If provided, list THAT specific physics group
+        API to list ALL physics groups
+        
+        :param physics_group_name: If provided, list THAT specific physics group
+        :type physics_group_name: str
+        
         """
         validParameters = ['physics_group_name']
 
@@ -517,8 +700,11 @@ class DbsApi(object):
 
     def listPrimaryDatasets(self, **kwargs):
         """
-        * API to list ALL primary datasets in DBS 
-        * primary_ds_name: If provided, will list THAT primary dataset
+        API to list ALL primary datasets in DBS
+        
+        :param primary_ds_name: If provided, will list THAT primary dataset
+        :type primary_ds_name: str
+        
         """
         validParameters = ['primary_ds_name']
 
@@ -526,9 +712,29 @@ class DbsApi(object):
         
         return self.__callServer("/primarydatasets",params=kwargs)
 
+    def listPrimaryDSTypes(self,**kwargs):
+        """
+        API to list primary dataset types
+        
+        :param primary_ds_type: If provided, will list THAT primary dataset type
+        :type primary_ds_type: str
+        :param dataset: List the primary dataset type for dataset
+        :type dataset: str
+        
+        """
+        validParameters = ['primary_ds_type','dataset']
+
+        checkInputParameter(method="listPrimaryDSTypes",parameters=kwargs.keys(),validParameters=validParameters)
+
+        return self.__callServer("/primarydstypes",params=kwargs)
+
     def listProcessingEras(self, **kwargs):
         """
-        * API to list ALL Processing Eras in DBS 
+        API to list ALL Processing Eras in DBS
+
+        :param processing_version: Processing Version
+        :type processing_version: str
+        
         """
         validParameters = ['processing_version']
 
@@ -538,9 +744,13 @@ class DbsApi(object):
 
     def listReleaseVersions(self, **kwargs):
         """
-        * API to list all release versions in DBS
-        * release_version: If provided, will list THAT release version
-        * dataset: If provided, will list release version of the specified dataset
+        API to list all release versions in DBS
+        
+        :param release_version: If provided, will list THAT release version
+        :type release_version: str
+        :param dataset: If provided, will list release version of the specified dataset
+        :type dataset: str
+        
         """
         validParameters = ['dataset','release_version']
 
@@ -550,13 +760,16 @@ class DbsApi(object):
 
     def listRuns(self, **kwargs):
         """
-        * API to list runs in DBS 
-        * minrun: minimum run number	
-        * maxrun: maximum run number
-        * (minrun, max)	defines the run range
-        *
+        API to list runs in DBS
+        
+        :param minrun: minimum run number
+        :type minrun: int
+        :param maxrun: maximum run number
+        :type masrun: int
+                
         * If you omit both min/maxrun, then all runs known to DBS will be listed
         * Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
+        
         """
 
         validParameters = ['minrun','maxrun','logical_file_name','block_name','dataset']
@@ -566,11 +779,28 @@ class DbsApi(object):
         return self.__callServer("/runs",params=kwargs)
 
     def migrateSubmit(self, inp):
-        """ Submit a migrate request to migration service"""
+        """
+        Submit a migrate request to migration service
+
+        :param inp:
+        
+        """
         return self.__callServer("/submit", params=inp, callmethod='POST') 
 
     def migrateStatus(self, migration_request_id="", block_name="", dataset="", user=""):
-        """Check the status of migration request"""
+        """
+        Check the status of migration request
+
+        :param migration_request_id: Migration Request ID
+        :type migration_request_id: str
+        :param block_name: Block name
+        :type block_name: str
+        :param dataset: Dataset name
+        :type dataset: str
+        :param user: user
+        :type user: str
+
+        """
         amp=False
         add_to_url=""
         if  migration_request_id:
@@ -596,36 +826,67 @@ class DbsApi(object):
     def serverinfo(self):
         """
         * API to retrieve DAS interface and status information
-        * can be used a PING
+        * can be used as PING
+
         """
         return self.__callServer("/serverinfo")
   
-    def updateBlockStatus(self, block_name, open_for_writing):
+    def updateBlockStatus(self, **kwargs):
         """
         API to update block status
-        * block_name : block name
-        * open_for_writing : open_for_writing=0 (close), open_for_writing=1 (open)
+        
+        :param block_name: block name (Required)
+        :type block_name: str
+        :param open_for_writing: open_for_writing=0 (close), open_for_writing=1 (open) (Required)
+        :type open_for_writing: str
+        
         """
-        parts=block_name.split('#')
-        block_name=parts[0]+urllib.quote_plus('#')+parts[1]
-        return self.__callServer("/blocks?block_name=%s&open_for_writing=%s" %(block_name, open_for_writing), params={}, callmethod='PUT')
+        validParameters = ['block_name','open_for_writing']
 
-    def updateDatasetType(self, dataset, dataset_access_type):
-        """
-        API to update dataset status
-        * dataset : Dataset --REQUIRED
-        * dataset_access_type : production, deprecated, etc --REQUIRED
-        *
-        """
-        return self.__callServer("/datasets?dataset=%s&dataset_access_type=%s" %(dataset, dataset_access_type), params={}, callmethod='PUT')    
+        requiredParameters = {'forced':validParameters}
 
-    def updateFileStatus(self, logical_file_name="", is_file_valid=1):
+        checkInputParameter(method="updateBlockStatus",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
+
+        parts=kwargs['block_name'].split('#')
+        kwargs['block_name'] = xsparts[0]+urllib.quote_plus('#')+parts[1]
+
+        return self.__callServer("/blocks", params=kwargs, callmethod='PUT')
+
+    def updateDatasetType(self, **kwargs):
+        """
+        API to update dataset type
+
+        :param dataset: Dataset (Required)
+        :type dataset: str
+        :param dataset_access_type: production, deprecated, etc (Required)
+        :type dataset_access_type: str
+        
+        """
+        validParameters = ['dataset','dataset_access_type']
+
+        requiredParameters = {'forced':validParameters}
+
+        checkInputParameter(method="updateDatasetType",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
+        
+        return self.__callServer("/datasets", params=kwargs, callmethod='PUT')    
+
+    def updateFileStatus(self, **kwargs):
         """
         API to update file status
-        * logical_file_name : logical_file_name --REQUIRED
-        * is_file_valid : valid=1, invalid=0 --REQUIRED
+        
+        :param logical_file_name: logical_file_name (Required)
+        :type logical_file_name: str
+        :param is_file_valid: valid=1, invalid=0 (Required)
+        :type is_file_valid: bool
+        
         """
-        return self.__callServer("/files?logical_file_name=%s&is_file_valid=%s" %(logical_file_name, is_file_valid), params={}, callmethod='PUT')
+        validParameters = ['logical_file_name','is_file_valid']
+
+        requiredParameters= {'forced':validParameters}
+
+        checkInputParameter(method="updateFileStatus",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
+        
+        return self.__callServer("/files", params=kwargs, callmethod='PUT')
     
 if __name__ == "__main__":
     # DBS Service URL
