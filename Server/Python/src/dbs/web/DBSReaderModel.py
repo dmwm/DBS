@@ -87,7 +87,7 @@ class DBSReaderModel(RESTModel):
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version',
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name', 'dataset_access_type', 'prep_id',
-                                'min_cdate, max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'])
+                                'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'])
         self._addMethod('POST', 'datasetlist', self.listDatasetArray)
         self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'origin_site_name',
                         'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate',
@@ -270,31 +270,31 @@ class DBSReaderModel(RESTModel):
         processing_version =  processing_version.replace("*", "%")
         try:
             #run_num = run_num.replace("*", "%")
-            if '*' in run_num or '%' in run_num:
+            if isinstance(run_num,str) and ('*' in run_num or '%' in run_num):
                 run_num = 0
             else:
                 run_num = int(run_num)
-            if '*' in min_cdate or '%' in min_cdate:
+            if isinstance(min_cdate,str) and ('*' in min_cdate or '%' in min_cdate):
                 min_cdate = 0
             else:
                 min_cdate = int(min_cdate)
-            if '*' in max_cdate or '%' in max_cdate:
+            if isinstance(max_cdate,str) and ('*' in max_cdate or '%' in max_cdate):
                 max_cdate = 0
             else:
                 max_cdate = int(max_cdate)
-            if '*' in min_ldate or '%' in min_ldate:
+            if isinstance(min_ldate,str) and ('*' in min_ldate or '%' in min_ldate):
                 min_ldate = 0
             else:
                 min_ldate = int(min_ldate)
-            if '*' in max_ldate or '%' in max_ldate:
+            if isinstance(max_ldate,str) and ('*' in max_ldate or '%' in max_ldate):
                 max_ldate = 0
             else:
                 max_ldate = int(max_ldate)
-            if '*' in cdate or '%' in cdate:
+            if isinstance(cdate,str) and ('*' in cdate or '%' in cdate):
                 cdate = 0
             else:
                 cdate = int(cdate)
-            if '*' in ldate or '%' in ldate:
+            if isinstance(ldate,str) and ('*' in ldate or '%' in ldate):
                 ldate = 0
             else:
                 ldate = int(ldate)
@@ -393,32 +393,31 @@ class DBSReaderModel(RESTModel):
         origin_site_name = origin_site_name.replace("*","%")
         run_num = str(run_num)
         try:
-            #run_num = run_num.replace("*", "%")
-            if '%' in run_num or '*' in run_num:
+            if isinstance(run_num,str) and ('%' in run_num or '*' in run_num):
                 run_num = 0
             else:
                 run_num = int(run_num)
-            if '*' in min_cdate or '%' in min_cdate:
+            if isinstance(min_cdate,str) and ('*' in min_cdate or '%' in min_cdate):
                 min_cdate = 0
             else:
                 min_cdate = int(min_cdate)
-            if '*' in max_cdate or '%' in max_cdate:
+            if isinstance(max_cdate,str) and ('*' in max_cdate or '%' in max_cdate):
                 max_cdate = 0
             else:
                 max_cdate = int(max_cdate)
-            if '*' in min_ldate or '%' in min_ldate:
+            if isinstance(min_ldate,str) and ('*' in min_ldate or '%' in min_ldate):
                 min_ldate = 0
             else:
                 min_ldate = int(min_ldate)
-            if '*' in max_ldate or '%' in max_ldate:
+            if isinstance(max_ldate,str) and ('*' in max_ldate or '%' in max_ldate):
                 max_ldate = 0
             else:
                 max_ldate = int(max_ldate)
-            if '*' in cdate or '%' in cdate:
+            if isinstance(cdate,str) and ('*' in cdate or '%' in cdate):
                 cdate = 0
             else:
                 cdate = int(cdate)
-            if '*' in ldate or '%' in ldate:
+            if isinstance(cdate,str) and ('*' in ldate or '%' in ldate):
                 ldate = 0
             else:
                 ldate = int(ldate)
@@ -521,6 +520,7 @@ class DBSReaderModel(RESTModel):
         block_name = block_name.replace("*", "%")
         origin_site_name = origin_site_name.replace("*", "%")
         dataset = dataset.replace("*", "%")
+
         maxrun = int(maxrun)
         minrun = int(minrun)
         if lumi_list:
@@ -661,7 +661,7 @@ class DBSReaderModel(RESTModel):
         http://dbs3/filelumis?logical_file_name=lfn
         http://dbs3/filelumis?block_name=block_name
         """
-        if '*' in run_num or '%' in run_num:
+        if isinstance(run_num,str) and ('*' in run_num or '%' in run_num):
             run_num = 0
         else:
             run_num = int(run_num)
