@@ -14,12 +14,23 @@ class Insert(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 
         self.sql = \
-                 """INSERT INTO %sOUTPUT_MODULE_CONFIGS ( OUTPUT_MOD_CONFIG_ID, APP_EXEC_ID, 
-                 RELEASE_VERSION_ID, PARAMETER_SET_HASH_ID, OUTPUT_MODULE_LABEL, GLOBAL_TAG,
-                 SCENARIO, CREATION_DATE, CREATE_BY) VALUES (:output_mod_config_id,
-                 :app_exec_id, :release_version_id, :parameter_set_hash_id, 
-                 :output_module_label, :global_tag, :scenario, :creation_date, :create_by)
-                 """% (self.owner)
+                """INSERT ALL
+                   WHEN not exists(select app_exec_id from %sapplication_executables where app_name = app_n) THEN
+                        INTO %sapplication_executables(app_exec_id, app_name)values(%sseq_ae.nextval, app_n)
+                   WHEN not exists (select release_version_id from %srelease_versions where release_version = release_v) THEN
+                        INTO %srelease_versions(release_version_id, release_version) values (%sseq_rv.nextval, release_v)
+                   WHEN not exists(select parameter_set_hash_id from %sparameter_set_hashes where pset_hash = pset_h) THEN
+                        INTO %sparameter_set_hashes ( parameter_set_hash_id, pset_hash ) values (%sseq_psh.nextval, pset_h)
+                   WHEN 1=1 THEN
+                        INTO %soutput_module_configs ( output_mod_config_id, app_exec_id, release_version_id,
+                        parameter_set_hash_id, output_module_label, global_tag, scenario, creation_date, create_by
+                        ) values (%sseq_omc.nextval,
+                        NVL((select app_exec_id from %sapplication_executables where app_name = app_n),%sseq_ae.nextval),
+                        NVL((select release_version_id from %srelease_versions where release_version = release_v), %sseq_rv.nextval),
+                        NVL((select parameter_set_hash_id from  %sparameter_set_hashes where pset_hash = pset_h), %sseq_psh.nextval),
+                        :output_module_label, :global_tag, :scenario, :creation_date, :create_by)
+                   select :app_name app_n, :release_version release_v, :pset_hash pset_h from dual
+                """% ((self.owner,)*17)
 
     def execute( self, conn, outputModConfigObj, transaction=False ):
         if not conn:

@@ -119,8 +119,7 @@ class DBSWriterModel(DBSReaderModel):
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("dataset_conf_list",indata)
             indata.update({"creation_date": dbsUtils().getTime(),
-                           "create_by" : dbsUtils().getCreateBy() ,
-                           "last_modified_by" : dbsUtils().getCreateBy() })
+                           "create_by" : dbsUtils().getCreateBy()})
             self.dbsOutputConfig.insertOutputConfig(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)

@@ -44,7 +44,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
 
         testparams['block']['block_name'] = '%s_%s' %(testparams['block']['block_name'],uid)
         #print  testparams
-	api.insertBlockBulk(blockDump=testparams)
+	api.insertBulkBlock(blockDump=testparams)
 	# insert the parent block as well
 
 if __name__ == "__main__":

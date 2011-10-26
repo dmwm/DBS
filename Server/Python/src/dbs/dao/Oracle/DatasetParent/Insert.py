@@ -14,8 +14,11 @@ class Insert(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.logger = logger
 
-        self.sql = """INSERT INTO %sDATASET_PARENTS ( THIS_DATASET_ID, PARENT_DATASET_ID) 
-                          VALUES (:this_dataset_id, :parent_dataset_id)""" % (self.owner)
+        self.sql =\
+                   """insert into %sdataset_parents ( this_dataset_id, parent_dataset_id) 
+                          values (:this_dataset_id, 
+                                  (select dataset_id as parent_dataset_id from %sdatasets where dataset=:dataset))
+                  """ % ( (self.owner,)*2 )
 	    
     def execute( self, conn, binds, transaction=False ):
         if not conn:

@@ -32,11 +32,6 @@ class DBSOutputConfig:
         self.appid = daofactory(classname='ApplicationExecutable.GetID')
         self.verid = daofactory(classname='ReleaseVersion.GetID')
         self.hashid = daofactory(classname='ParameterSetHashe.GetID')
-
-        self.appin = daofactory(classname='ApplicationExecutable.Insert')
-        self.verin = daofactory(classname='ReleaseVersion.Insert')
-        self.hashin = daofactory(classname='ParameterSetHashe.Insert')
-
         self.outmodin = daofactory(classname='OutputModuleConfig.Insert')
         
     def listOutputConfigs(self, dataset="", logical_file_name="", 
@@ -57,11 +52,13 @@ class DBSOutputConfig:
     
     def insertOutputConfig(self, businput):
         """
-        Method to insert the Output Config
-        It first checks if release, app, and pset_hash exists, if not insert them,
-        and then insert the output module
+        Method to insert the Output Config.
+        app_name, release_version, pset_hash, global_tag and output_module_label are
+        required.
+        args:
+            businput(dic): input dictionary. 
 
-        Updated Jan 12, 2011    
+        Updated Oct 12, 2011    
         """
         if not (businput.has_key("app_name")  and businput.has_key("release_version")\
             and businput.has_key("pset_hash") and businput.has_key("output_module_label")
@@ -72,60 +69,28 @@ class DBSOutputConfig:
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            businput["app_exec_id"] = self.appid.execute(conn, 
-                                        businput["app_name"], tran)
-            if businput["app_exec_id"] == -1:
-                businput["app_exec_id"] = self.sm.increment(conn, "SEQ_AE",
-                                                            tran)
-                appdaoinput = {
-                    "app_name" : businput["app_name"],
-                    "app_exec_id" : businput["app_exec_id"]
-                }
-                self.appin.execute(conn, appdaoinput, tran)
-            businput["release_version_id"] = self.verid.execute(conn,
-                                        businput["release_version"], tran)
-            if businput["release_version_id"] == -1:
-                businput["release_version_id"] = self.sm.increment(conn,
-                                                            "SEQ_RV", tran)
-                verdaoinput = {
-                    "release_version" : businput["release_version"],
-                    "release_version_id" : businput["release_version_id"]
-                }
-                self.verin.execute(conn, verdaoinput, tran)
-            businput["parameter_set_hash_id"] = self.hashid.execute(conn, 
-                                                businput["pset_hash"], tran)
-            if businput["parameter_set_hash_id"] == -1:
-                businput["parameter_set_hash_id"] = self.sm.increment(conn,
-                                                            "SEQ_PSH", tran)
-                pshdaoinput = {
-                    "parameter_set_hash_id" :
-                        businput["parameter_set_hash_id"],
-                   "pset_hash" : businput["pset_hash"],
-                   "name" : "no_name"
-                }
-                self.hashin.execute(conn, pshdaoinput, tran)
             # Proceed with o/p module insertion
-            omcdaoinput = {
-                "app_exec_id" : businput["app_exec_id"],
-                "release_version_id" : businput["release_version_id"],
-                "parameter_set_hash_id" : businput["parameter_set_hash_id"],
-                "output_module_label" : businput["output_module_label"],
-                "global_tag" : businput.get("global_tag", None),
-                "scenario"   : businput.get("scenario", None),
-                "creation_date" : businput.get("creation_date", None),
-                "create_by" : businput.get("create_by", None)
-            }
-            omcdaoinput["output_mod_config_id"] = self.sm.increment(conn,
-                                                            "SEQ_OMC", tran)
-            self.outmodin.execute(conn, omcdaoinput, tran)
+            businput['scenario'] = businput.get("scenario", None)
+            self.outmodin.execute(conn, businput, tran)
             tran.commit()
 
         except exceptions.IntegrityError, ex:
             if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-                pass
+                #if the validation is due to a unique constrain break in OUTPUT_MODULE_CONFIGS
+                if str(ex).find("TUC_OMC_1") != -1: pass
+                #otherwise, try again
+                else:
+                    try:
+                        self.outmodin.execute(conn, businput, tran)
+                        tran.commit()
+                    except exceptions.IntegrityError, ex1:
+                        if str(ex1).find("unique constraint") != -1 and str(ex1).find("TUC_OMC_1") != -1: pass
+                    except Exception, e1:
+                        if tran:
+                            tran.rollback()
+                        raise
             else:
                 raise
-                
         except Exception, e:
             if tran:
                 tran.rollback()

@@ -14,8 +14,11 @@ class Insert(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.logger = logger
 
-        self.sql = """INSERT INTO %sBLOCK_PARENTS (THIS_BLOCK_ID, PARENT_BLOCK_ID) 
-                          VALUES (:this_block_id, :parent_block_id)""" % (self.owner)
+        self.sql =\
+                  """insert into %sblock_parents (this_block_id, parent_block_id) 
+                          values (:this_block_id, 
+                                  (select block_id as parent_block_id from %sblocks where block_name=:block_name) )
+                  """%((self.owner,)*2)
 
     def execute( self, conn, binds, transaction=False ):
         if not conn:

@@ -30,8 +30,8 @@ class DBSFile:
         self.blocklist = daofactory(classname = "Block.List")
         self.ftypeid = daofactory(classname = "FileType.GetID")
         self.fpbdlist = daofactory(classname = "FileParentBlock.List")
-        self.blkparentin = daofactory(classname = "BlockParent.Insert")
-        self.dsparentin = daofactory(classname = "DatasetParent.Insert")
+        self.blkparentin = daofactory(classname = "BlockParent.Insert2")
+        self.dsparentin = daofactory(classname = "DatasetParent.Insert2")
         self.blkstats = daofactory(classname = "Block.ListStats")
         self.blkstatsin = daofactory(classname = "Block.UpdateStats")
         self.outconfigid = daofactory(classname='OutputModuleConfig.GetID')
@@ -218,12 +218,9 @@ class DBSFile:
         [{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] 
         """
 
-        # We do not wnat to go be beyond 10 files at a time
+        # We do not want to go be beyond 10 files at a time
         # If user wants to insert over 10 files in one shot, we run into risks of locking the database 
         # tables for longer time, and in case of error, it will be hard to see where error occured 
-        #qInserts=False
-        #import pdb
-        #pdb.set_trace()
         if len(businput) > 10:
             dbsExceptionHandler('dbsException-input-too-large', "DBS cannot insert \
                     more than 10 files in one bulk call")
@@ -239,7 +236,7 @@ class DBSFile:
         
             # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
             #files2insert = []
-            fidl = []
+            #fidl = []
             fileInserted = False
             dataset = ""
             block_name = ""
@@ -253,29 +250,30 @@ class DBSFile:
                     dataset_id = self.datasetid.execute(conn, dataset=f["dataset"], transaction=tran)
                     dataset = f["dataset"]
                     if dataset_id == -1 :
-                        dbsExceptionHandler('dbsException-missing-data', "Required Dataset Not Found.", None, "Required Dataset %s does not exist"\
-                        %f["dataset"] )
+                        dbsExceptionHandler('dbsException-missing-data', "Required Dataset Not Found.", None, 
+                        "Required Dataset %s does not exist"%f["dataset"] )
                     # get the list of configs in for this dataset
                     dsconfigs = [x['output_mod_config_id'] for x in self.dsconfigids.execute(conn, dataset=f["dataset"], transaction=tran)]
                 fileconfigs = [] # this will hold file configs that we will list in the insert file logic below       
                 if block_name != f["block_name"]:
                     block_info = self.blocklist.execute(conn, block_name=f["block_name"], transaction=tran)
-                    if len(block_info) != 1 : dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,\
+                    if len(block_info) != 1 : dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,
                                                           "Cannot found required block %s in DB" %f["block_name"])
                     block_info = block_info[0]
-                    if  block_info["open_for_writing"] != 1 : dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,\
+                    if  block_info["open_for_writing"] != 1 : dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,
                                                                            "Block %s is not open for writting" %f["block_name"])  
                     if block_info.has_key("block_id"):
                         block_id = block_info["block_id"]
                     else:
-                        dbsExceptionHandler("dbsException-missing-data", "Block not found", None,\
+                        dbsExceptionHandler("dbsException-missing-data", "Block not found", None,
                                           "Cannot found required block %s in DB" %f["block_name"])
-           
+                else: dbsExceptionHandler('dbsException-missing-data', "Required block name Not Found in input.", 
+                                            None, "Required block Not Found in input.")
                 #make the default file_type=EDM
                 file_type_id = self.ftypeid.execute( conn, f.get("file_type", "EDM"), transaction=tran)
                 if file_type_id == -1: 
-                    dbsExceptionHandler('dbsException-missing-data', "File type not found.", None, "Required file type %s not found in DBS"\
-                        %f.get("file_type", "EDM") )
+                    dbsExceptionHandler('dbsException-missing-data', "File type not found.", None, 
+                                        "Required file type %s not found in DBS"%f.get("file_type", "EDM") )
 
                 iFile = 0
                 fileIncrement = 40
@@ -285,7 +283,6 @@ class DBSFile:
                 #for f in businput:
                 file_clob = {}
                 fparents2insert = []
-                #fparents2insert = []
                 flumis2insert = []
                 fconfigs2insert = []
                 # create the file object from the original 
@@ -324,39 +321,26 @@ class DBSFile:
                         file_clob['file'] = filein
                 except exceptions.IntegrityError, ex:
                     if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-                        #refresh the file_id from database
-                        #filein["file_id"]=self.fileid.execute(filein["logical_file_name"], conn, transaction=tran)
                         # Lets move on to NEXT file, we do not want to continue processing this file
+                        
+                        #Nothing about this file is updated when it is already in DB. No file parentage, block parentage, dataset parentage and so on.
+                        #Is this right?  YG  Oct. 24
                         self.logger.warning("DBSFile/insertFile. File already exists in DBS, not changing it: %s" 
                                             %filein["logical_file_name"] )
                         continue
                     else:
                         raise   
 
-                # Saving the id for later use
-                fidl.append(filein["file_id"])
-
                 #process file parents, file lumi, file outputmodconfigs, ...
-
                 #file lumi sections
                 if f.has_key("file_lumi_list"):
                     fllist = f["file_lumi_list"]
                     if len(fllist) > 0:
-                        iLumi = 0
-                        flIncrement = 100
-                        flID = self.sm.increment(conn, "SEQ_FLM",
-                                    transaction=tran, incCount=flIncrement)
                         for fl in fllist:
-                            if iLumi == flIncrement:
-                                flID = self.sm.increment(conn, "SEQ_FLM",
-                                        transaction=tran, incCount=flIncrement)
-                                iLumi = 0
                             fldao = { 
                                 "run_num" : fl["run_num"],
                                 "lumi_section_num" : fl["lumi_section_num"]
                             }
-                            fldao["file_lumi_id"] = flID + iLumi
-                            iLumi += 1
                             fldao["file_id"] = filein["file_id"]
                             flumis2insert.append(fldao)
                  
@@ -367,29 +351,14 @@ class DBSFile:
                     for fp in fplist:
                         fpdao = {}
                         fpdao["this_file_id"] = filein["file_id"]
-                        lfn = fp["file_parent_lfn"]
-                        pflid = self.fileid.execute(conn, lfn,
-                                                transaction=tran)
-                        if pflid == -1 : 
-                            dbsExceptionHandler('dbsException-missing-data', "Parent not found.", None, "The parent file %s for file %s\
-                                    not found in DBS" % (lfn, f["logical_file_name"]) )
-                        fpdao["parent_file_id"] = pflid
+                        fpdao["parent_logical_file_name"] = fp["file_parent_lfn"]
                         fparents2insert.append(fpdao)
-
                 if f.has_key("file_output_config_list"):
                     #file output config modules
                     foutconfigs = f["file_output_config_list"]
                     if(len(foutconfigs) > 0):
-                        iConfig = 0
-                        fconfigInc = 5
-                        fcID = self.sm.increment(conn, "SEQ_FC", transaction=tran, incCount=fconfigInc)
                         for fc in foutconfigs:
-                            if iConfig == fconfigInc:
-                                fcID = self.sm.increment(conn, "SEQ_FC", transaction=tran, incCount=fconfigInc)
-                                iConfig = 0
                             fcdao = {}
-                            fcdao["file_output_config_id"] = fcID + iConfig
-                            iConfig += 1
                             fcdao["file_id"] = filein["file_id"]
                             fcdao["output_mod_config_id"] = self.outconfigid.execute(conn, fc["app_name"],
                                     fc["release_version"], fc["pset_hash"], fc["output_module_label"],
@@ -414,8 +383,6 @@ class DBSFile:
                     if not qInserts:
                         self.fparentin.execute(conn, fparents2insert, transaction=tran)
                 # First check to see if these output configs are mapped to THIS dataset as well, if not raise an exception
-                #import pdb
-                #pdb.set_trace()
                 if not set(fileconfigs).issubset(set(dsconfigs)) :
                     dbsExceptionHandler('dbsException-conflict-data', 'Mismatched configure. ', None, "DBSFile/insertFile. Output configs mismatch, \
                             output configs known to dataset: \
@@ -435,48 +402,22 @@ class DBSFile:
                             pass
                         else:
                             raise                  
-                
-                # List the parent blocks and datasets of the file's parents (parent of the block and dataset)
-                # fpbdlist, returns a dict of {block_id, dataset_id} combination
-                if fileInserted:
-                    fpblks = []
-                    fpds = []
-                    fileParentBlocksDatasets = self.fpbdlist.execute(conn, fidl, transaction=tran)
-                    for adict in fileParentBlocksDatasets:
-                        if adict["block_id"] not in fpblks:
-                            fpblks.append(adict["block_id"])
-                        if adict["dataset_id"] not in fpds:
-                            fpds.append(adict["dataset_id"])
-                # Update Block parentage
-                if len(fpblks) > 0 :
-                    bpdaolist = []
-                    for ablk in fpblks:
-                        bpdao = { "this_block_id": block_id }
-                        bpdao["parent_block_id"] = ablk
-                        bpdaolist.append(bpdao)
-                    # Do this one by one, as its sure to have duplicate in dest table
-                    for abp in bpdaolist:
+                                
+                #insert block parentages and dataset parentages based on file parentages
+                # Do this one by one, as it is sure to have duplicate in dest table
+                if fileInserted and fparents2insert:
+                    for fp in fparents2insert:
                         try:
-                            self.blkparentin.execute(conn, abp, transaction=tran)
+                            bkParentage2insert={'this_block_id' : filein["block_id"], 'parent_logical_file_name': fp['parent_logical_file_name']}
+                            self.blkparentin.execute(conn, bkParentage2insert, transaction=tran)
+                            dsParentage2insert={'this_dataset_id': filein["dataset_id"], 'parent_logical_file_name' : fp['parent_logical_file_name']}
+                            self.dsparentin.execute(conn, dsParentage2insert, transaction=tran)
                         except exceptions.IntegrityError, ex:
-                            if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                            #ORA-00001
+                            if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                                 pass
-                            else:
+                            elif str(ex).find("ORA-01400") != -1:
                                 raise
-                # Update dataset parentage
-                if len(fpds) > 0 :
-                    dsdaolist = []
-                    for ads in fpds:
-                        dsdao = { "this_dataset_id": dataset_id }
-                        dsdao["parent_dataset_id"] = ads
-                        dsdaolist.append(dsdao)
-                    # Do this one by one, as its sure to have duplicate in dest table
-                    for adsp in dsdaolist:
-                        try:
-                            self.dsparentin.execute(conn, adsp, transaction=tran)
-                        except exceptions.IntegrityError, ex:
-                            if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-                                pass
                             else:
                                 raise
 

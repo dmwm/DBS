@@ -16,10 +16,10 @@ class Insert(DBFormatter):
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
-INSERT INTO %sFILE_LUMIS 
-(FILE_LUMI_ID, RUN_NUM, LUMI_SECTION_NUM, FILE_ID) 
-VALUES (:file_lumi_id, :run_num, :lumi_section_num, :file_id)
-""" % (self.owner)
+insert into %sfile_lumis 
+(file_lumi_id , run_num, lumi_section_num, file_id) 
+values (%sseq_flm.nextval, :run_num, :lumi_section_num, :file_id)
+""" % ((self.owner,)*2)
 
     def execute( self, conn, daoinput, transaction = False ):
         if not conn:

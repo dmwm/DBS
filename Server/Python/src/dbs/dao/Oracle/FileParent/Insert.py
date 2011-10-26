@@ -15,11 +15,10 @@ class Insert(DBFormatter):
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
-"""
-INSERT INTO %sFILE_PARENTS 
-(THIS_FILE_ID, PARENT_FILE_ID) 
-VALUES (:this_file_id, :parent_file_id)
-""" % (self.owner)
+                    """insert into %sfile_parents 
+                       (this_file_id, parent_file_id) 
+                       values(:this_file_id, (select file_id from %sfiles where logical_file_name=:parent_logical_file_name))
+                    """ % ((self.owner,)*2)
 
     def execute( self, conn, daoinput, transaction = False ):
         """

@@ -4,8 +4,10 @@
 This module provides business object class to interact with Dataset. 
 """
 import cjson
+from sqlalchemy import exceptions
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsUtils import dbsUtils
 
 class DBSDataset:
     """
@@ -24,12 +26,7 @@ class DBSDataset:
         self.datasetbrieflist = daofactory(classname="Dataset.BriefList")
         self.datasetid = daofactory(classname="Dataset.GetID")
         self.sm = daofactory(classname="SequenceManager")
-        self.primdsid = daofactory(classname='PrimaryDataset.GetID')
-        self.tierid = daofactory(classname='DataTier.GetID')
-        self.datatypeid = daofactory(classname='DatasetType.GetID')
         self.phygrpid = daofactory(classname='PhysicsGroup.GetID')
-        self.procdsid = daofactory(classname='ProcessedDataset.GetID')
-        self.procdsin = daofactory(classname='ProcessedDataset.Insert')
         self.datasetin = daofactory(classname='Dataset.Insert')
         self.outconfigid = daofactory(classname='OutputModuleConfig.GetID')
         self.datasetoutmodconfigin = daofactory(classname=
@@ -124,9 +121,6 @@ class DBSDataset:
         The parameter can include % character. 
         all other parameters are not wild card ones.
         """
-        #import pdb
-        #pdb.set_trace()
-        #self.logger.warning("I am in listDataset businese")
         if(logical_file_name and logical_file_name.find("%")!=-1):
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasets API requires \
                 fullly qualified logical_file_name. NO wildcard is allowed in logical_file_name.')
@@ -172,9 +166,6 @@ class DBSDataset:
                 detail = inputdata.get("detail", False)
                 conn = None
                 conn = self.dbi.connection()
-                #import pdb
-                #pdb.set_trace()
-
                 dao = (self.datasetbrieflist, self.datasetlist)[detail]   
                 result = dao.execute(conn, dataset=dataset, is_dataset_valid=is_dataset_valid,
                     dataset_access_type=dataset_access_type, transaction=False)
@@ -189,7 +180,8 @@ class DBSDataset:
     def insertDataset(self, businput):
         """
         input dictionary must have the following keys:
-        dataset, is_dataset_valid, primary_ds_name(name), processed_ds(name), data_tier(name),
+        dataset, primary_ds_name(name), processed_ds(name), data_tier(name)
+        It may have following keys:
         acquisition_era(name), processing_version(name), 
         physics_group(name), xtcrosssection, creation_date, create_by, 
         last_modification_date, last_modified_by
@@ -207,56 +199,39 @@ class DBSDataset:
         try:
 
             dsdaoinput = {}
-            dsdaoinput["primary_ds_id"] = self.primdsid.execute(conn, businput["primary_ds_name"], tran)
-            if dsdaoinput["primary_ds_id"] == -1:
-                dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Primary Dataset: %s not found"
-                                                                                    % businput["primary_ds_name"]) 
-            dsdaoinput["data_tier_id"] = self.tierid.execute(conn, businput["data_tier_name"].upper(), tran)
-            if dsdaoinput["data_tier_id"] == -1:
-                dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Data Tier: %s not found"
-                                                                                    % businput["data_tier_name"]) 
-            if "dataset_access_type" in businput:
-                dsdaoinput["dataset_access_type_id"] = self.datatypeid.execute(conn, businput["dataset_access_type"].upper(), tran)
-                if dsdaoinput["dataset_access_type_id"] == -1:
-                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Dataset Access Type : %s not found"
-                                                                                    % businput["dataset_access_type"] )
+            dsdaoinput["primary_ds_name"] = businput["primary_ds_name"]
+            dsdaoinput["data_tier_name"] =  businput["data_tier_name"].upper()
+            dsdaoinput["dataset_access_type"] = businput["dataset_access_type"].upper()
+            #not required pre-exist in the db. will insert with the dataset if not in yet
+            dsdaoinput["processed_ds_name"] = businput["processed_ds_name"]
             if "physics_group_name" in businput:
                 dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
                 if dsdaoinput["physics_group_id"]  == -1:
                     dbsExceptionHandler("dbsException-missing-data",  "insertDataset. Physics Group : %s Not found"
                                                                                     % businput["physics_group_name"]) 
-
-            # See if processed dataset exists, if not, add one
-            procid = self.procdsid.execute(conn, businput["processed_ds_name"],
-                                            tran)
-            if procid > 0:
-                dsdaoinput["processed_ds_id"] = procid
             else:
-                procid = self.sm.increment(conn, "SEQ_PSDS", tran)
-                procdaoinput = {
-                    "processed_ds_name" : businput["processed_ds_name"],
-                    "processed_ds_id" : procid}
-                self.procdsin.execute(conn, procdaoinput, tran)
-                dsdaoinput["processed_ds_id"] = procid
+                dsdaoinput["physics_group_id"] = None
 
             dsdaoinput["dataset_id"] = self.sm.increment(conn, "SEQ_DS", tran)
-            
-            if "prep_id" in  businput:
-                dsdaoinput["prep_id"] = businput["prep_id"]
-
             # we are better off separating out what we need for the dataset DAO
             dsdaoinput.update({ 
                                "dataset" : "/%s/%s/%s" %
                                (businput["primary_ds_name"],
                                 businput["processed_ds_name"],
                                 businput["data_tier_name"].upper()),
-                               "creation_date" : businput["creation_date"],
-                               "xtcrosssection" : businput["xtcrosssection"],
-                               "create_by" : businput["create_by"],
-                               "last_modification_date" :
-                                    businput["last_modification_date"],
-                               "last_modified_by" :
-                                    businput["last_modified_by"]})
+                               "prep_id" : businput.get("prep_id", None),
+                               "xtcrosssection" : businput.get("xtcrosssection", None),
+                               "creation_date" : businput.get("creation_date",dbsUtils().getTime() ),
+                               "create_by" : businput.get("create_by", dbsUtils().getCreateBy()) ,
+                               "last_modification_date" : businput.get("last_modification_date", dbsUtils().getTime()),
+                               "last_modified_by" : businput.get("last_modified_by", dbsUtils().getModifiedBy())})
+            #physics group
+            if "physics_group_name" in businput:
+                dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
+                if dsdaoinput["physics_group_id"]  == -1:
+                    dbsExceptionHandler("dbsException-missing-data",  "insertDataset. Physics Group : %s Not found"
+                                                                                    % businput["physics_group_name"])
+            else: dsdaoinput["physics_group_id"] = None
 
             # See if Processing Era exists
             if businput.has_key("processing_version"):
@@ -264,17 +239,19 @@ class DBSDataset:
                 if dsdaoinput["processing_era_id"] == -1 :
                     dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Processing Era : %s not found"
                                                         % businput["processing_version"]) 
+            else: dsdaoinput["processing_era_id"] = None
+
             # See if Acquisition Era exists
             if businput.has_key("acquisition_era_name"):
                 dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"].upper(), tran)
                 if dsdaoinput["acquisition_era_id"] == -1 :
                     dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Acquisition Era : %s not found"
                                                         % dsdaoinput["acquisition_era_id"])
-                 
+            else: dsdaoinput["acquisition_era_id"] = None
             try:
                 # insert the dataset
                 self.datasetin.execute(conn, dsdaoinput, tran)
-            except Exception, ex:
+            except exceptions.IntegrityError, ex:
                 if (str(ex).lower().find("unique constraint") != -1 or
                     str(ex).lower().find("duplicate") != -1):
                     # dataset already exists, lets fetch the ID
@@ -286,8 +263,11 @@ class DBSDataset:
                     if dsdaoinput["dataset_id"] == -1 :
                         dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Strange error, the dataset %s does not exist ?" 
                                                     % ds )
-                else:
-                    raise       
+                if (str(ex).find("ORA-01400") ) != -1 :
+                    dbsExceptionHandler("dbsException-missing-data", "insertDataset must have: dataset,\
+                                          primary_ds_name, processed_ds_name, data_tier_name ")
+            except Exception, e:
+                raise       
 
             #FIXME : What about the READ-only status of the dataset
             # Create dataset_output_mod_mod_configs mapping
@@ -307,7 +287,6 @@ class DBSDataset:
                                                                                    anOutConfig["pset_hash"],
                                                                                    anOutConfig["output_module_label"],
                                                                                    anOutConfig["global_tag"]))
-                    dsoutconfdaoin["ds_output_mod_conf_id"] = self.sm.increment(conn, "SEQ_DC", tran)
                     try:
                         self.datasetoutmodconfigin.execute(conn, dsoutconfdaoin, tran)
                     except Exception, ex:

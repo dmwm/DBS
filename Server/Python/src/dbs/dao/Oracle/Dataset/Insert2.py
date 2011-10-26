@@ -6,9 +6,10 @@ __version__  = "$Id: Insert.py,v 1.15 2010/07/09 19:38:10 afaq Exp $ "
 
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
+from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
-class Insert(DBFormatter):
+class Insert2(DBFormatter):
     """ Dataset Insert DAO Class"""
     
     def __init__(self, logger, dbi, owner):
@@ -20,25 +21,30 @@ class Insert(DBFormatter):
         """insert all
            when not exists (select * from %sprocessed_datasets where processed_ds_name=processed_n) then
                 into %sprocessed_datasets(processed_ds_id, processed_ds_name) values (%sseq_psds.nextval, processed_n)
+           when not exists (select * from %sdata_tiers where data_tier_name=tier) then
+                into %sdata_tiers(data_tier_id, data_tier_name, creation_date, create_by) values (%sseq_dt.nextval, 
+                                  tier, cdate, cby) 
+           when not exists (select * from %sdataset_access_types where dataset_access_type=access_t) then
+                into %sdataset_access_types(dataset_access_type_id, dataset_access_type) values (%sseq_dtp.nextval, access_t)
            when 1 = 1 then  
            into %sdatasets ( dataset_id, dataset, primary_ds_id, processed_ds_id, data_tier_id,
                            dataset_access_type_id, acquisition_era_id,  processing_era_id,
                            physics_group_id,  xtcrosssection, prep_id, creation_date, create_by,
                            last_modification_date, last_modified_by
                          )
-                  values ( :dataset_id, :dataset,
-                           (select primary_ds_id from %sprimary_datasets where primary_ds_name=pri_n),
+                  values ( :dataset_id, :dataset, :primary_ds_id,
                            nvl((select processed_ds_id  from %sprocessed_datasets where processed_ds_name=processed_n),
                                 %sseq_psds.nextval),
-                           (select data_tier_id from %sdata_tiers where data_tier_name=tier),
-                           (select dataset_access_type_id from %sdataset_access_types where dataset_access_type=access_t),
+                           nvl((select data_tier_id from %sdata_tiers where data_tier_name=tier), %sseq_dt.nextval), 
+                          nvl((select dataset_access_type_id from %sdataset_access_types where dataset_access_type=access_t), %sseq_dtp.nextval), 
                            :acquisition_era_id, :processing_era_id, :physics_group_id,
-                           :xtcrosssection, :prep_id, :creation_date, :create_by,
+                           :xtcrosssection, :prep_id, cdate, cby,
                            :last_modification_date, :last_modified_by 
                          )
-                select  :primary_ds_name pri_n, :processed_ds_name processed_n,
-                        :data_tier_name tier,  :dataset_access_type access_t 
-                from dual""" %((self.owner,)*9)
+                select  :processed_ds_name processed_n,
+                        :data_tier_name tier,  :dataset_access_type access_t,  
+                        :creation_date cdate, :create_by cby
+                from dual""" %((self.owner,)*16)
 
     def execute(self, conn, daoinput, transaction = False):
 

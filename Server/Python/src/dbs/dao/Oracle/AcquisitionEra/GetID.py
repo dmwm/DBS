@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 """
 This module provides AcquisitionEra.GetID data access object.
-"""
-###
-__revision__ = "$Id: GetID.py,v 1.10 2010/08/02 21:49:44 afaq Exp $"
-__version__ = "$Revision: 1.10 $"
 
+"""
 from WMCore.Database.DBFormatter import DBFormatter
 
 class GetID(DBFormatter):
@@ -28,6 +25,10 @@ class GetID(DBFormatter):
     def execute(self, conn, name, transaction = False):
         """
         returns id for a given acquisition_era
+        Args: 
+            name (str):  The name of acquisition era
+        Returns:
+           int.  The id of the acquisition era
         """
         binds = {"acquisition_era_name":name}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
