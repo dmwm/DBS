@@ -542,7 +542,7 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("ReleaseVersions.json",'r')
         expected_data = json.load(fp)
         
-        versions = self.api.listReleaseVersions(dataset="/JetMETTau/Run2010A-v1/RAW")
+        versions = self.api.listReleaseVersions(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW")
 
         self.assertEqual(expected_data,versions)
 
@@ -557,7 +557,7 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("RunList.json",'r')
         expected_data = json.load(fp)
         
-        runs = self.api.listRuns(minrun=1095,maxrun=1100)
+        runs = self.api.listRuns(minrun=43,maxrun=43)
         
         self.assertEqual(expected_data,runs)
 
