@@ -245,24 +245,7 @@ class DBSWriterModel(DBSReaderModel):
 	    body = request.body.read()
 	    indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("block",indata)
-            vblock = re.match(r"(/[\w\d_-]+/[\w\d_-]+/[\w\d_-]+)#([\w\d_-]+)$", indata["block_name"])   
-            block = {} 
-            block.update({
-                      "dataset" : vblock.groups()[0],
-                      "creation_date" : 
-                        indata.get("creation_date", dbsUtils().getTime()),
-                      "create_by" : 
-                        indata.get("create_by", dbsUtils().getCreateBy()),
-                      "last_modification_date" : dbsUtils().getTime(),
-                      "last_modified_by" : dbsUtils().getCreateBy(),
-                      "block_name" : indata["block_name"],
-                      "file_count" : indata.get("file_count", 0),
-                      "block_size" : indata.get("block_size", 0),
-                      "origin_site_name": indata.get("origin_site_name"),
-                      "open_for_writing": indata.get("open_for_writing", 1),
-                      })
-
-            self.dbsBlock.insertBlock(block)
+            self.dbsBlock.insertBlock(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
@@ -350,9 +333,9 @@ class DBSWriterModel(DBSReaderModel):
         try:
             if dataset_access_type != "":
                 self.dbsDataset.updateType(dataset, dataset_access_type)
-            else: 
-                if is_dataset_valid != -1:
-                    self.dbsDataset.updateStatus(dataset, is_dataset_valid)
+            else:
+                dbsExceptionHandler("dbsException-invalid-input", "DBSWriterModel/updateDataset. dataset_access_type is required.")
+                
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
@@ -382,8 +365,7 @@ class DBSWriterModel(DBSReaderModel):
 	"""
 	Inserts a data tier in DBS
 	"""
-        
-	try:
+      	try:
             body = request.body.read()
             indata = cjson.decode(body)
 
@@ -394,6 +376,9 @@ class DBSWriterModel(DBSReaderModel):
 
             conn = self.dbi.connection()
             tran = conn.begin()
+
+            if not indata.has_key("data_tier_name"):
+                dbsExceptionHandler("dbsException-invalid-input", "DBSWriterModel/insertDataTier. data_tier_name is required.")
 
             indata['data_tier_id'] = self.sequenceManagerDAO.increment(conn, "SEQ_DT", tran)
 

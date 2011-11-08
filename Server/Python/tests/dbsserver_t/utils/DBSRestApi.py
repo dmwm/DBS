@@ -104,12 +104,11 @@ class DBSRestApi:
         return self.parseForException(ret)
 
     def parseForException(self, data):
-	if type(data)==type("abc"):
+        if type(data)==type("abc"):
 	    data=json.loads(data)	
 	if type(data) == type({}):
 	    if type(data) == type({}) and data.has_key('exception'):
-                print traceback.format_exc()
-		raise Exception("DBS Server raised an exception: HTTPError %s :" %data['exception'] + (data['message']))
+                raise Exception("DBS Server raised an exception: HTTPError %s :" %data['exception'] + (data['message']))
 	return data
 
 def options():

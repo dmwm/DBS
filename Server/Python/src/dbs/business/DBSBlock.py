@@ -88,7 +88,7 @@ class DBSBlock:
         """
         list parents of a block
         """
-        if (not block_name) or re.search('^%%*$', block_name):
+        if (not block_name) or re.search("['%','*']", block_name):
             dbsExceptionHandler('dbsException-invalid-input', "DBSBlock/listBlockChildren. Block_name must be provided." )
         try:
             conn = self.dbi.connection()
@@ -104,9 +104,9 @@ class DBSBlock:
         """
         dataset, block_name, or logical_file_name must be passed.
         """
-        if (not dataset) or re.search('^%%*$', dataset):
-            if (not block_name) or re.search('^%%*$', block_name):
-                if (not logical_file_name) or re.search('^%%*$', logical_file_name) :
+        if (not dataset) or re.search("['%','*']", dataset):
+            if (not block_name) or re.search("['%','*']", block_name):
+                if (not logical_file_name) or re.search("['%','*']", logical_file_name) :
                     msg = "DBSBlock/listBlock. You must specify at least one parameter(dataset, block_name, logical_file_name)\
                             with listBlocks api" 
                     dbsExceptionHandler('dbsException-invalid-input', msg)
@@ -140,14 +140,15 @@ class DBSBlock:
         tran = conn.begin()
         try:
             blkinput = {
-                "last_modification_date":businput.get("last_modification_date", None),
-                "last_modified_by":businput.get("last_modified_by", None),
-                "create_by":businput.get("create_by", None),
-                "creation_date":businput.get("creation_date", None),
-                "open_for_writing":businput.get("open_for_writing", None),
-                "block_size":businput.get("block_size", None),
-                "file_count":businput.get("file_count", None),
-                "block_name":businput.get("block_name", None)
+                "last_modification_date":businput.get("last_modification_date",  dbsUtils().getTime()),
+                "last_modified_by":businput.get("last_modified_by", dbsUtils().getCreateBy()),
+                "create_by":businput.get("create_by", dbsUtils().getCreateBy()),
+                "creation_date":businput.get("creation_date", dbsUtils().getTime()),
+                "open_for_writing":businput.get("open_for_writing", 1),
+                "block_size":businput.get("block_size", 0),
+                "file_count":businput.get("file_count", 0),
+                "block_name":businput.get("block_name"),
+                "origin_site_name":businput.get("origin_site_name")
             }
             ds_name = businput["block_name"].split('#')[0]
             blkinput["dataset_id"] = self.datasetid.execute(conn,  ds_name, tran)
@@ -155,8 +156,6 @@ class DBSBlock:
                 msg = "DBSBlock/insertBlock. Dataset %s does not exists" % ds_name
                 dbsExceptionHandler('dbsException-missing-data', msg)
             blkinput["block_id"] =  self.sm.increment(conn, "SEQ_BK", tran)
-            if(businput.has_key("origin_site_name")):
-                blkinput["origin_site_name"] = businput["origin_site_name"]
             self.blockin.execute(conn, blkinput, tran)
 
             tran.commit()

@@ -114,15 +114,17 @@ class DBSValitaion_t(unittest.TestCase):
 		
 	api.insertBlock(blockObj=data)
 	blkList = api.listBlocks(block_name=block, detail=True)
+        print "\n block_name = %s"  %block
 	self.assertEqual(len(blkList), 1)
 	blkInDBS=blkList[0]
+        print "blkInDBS = "
+        print blkInDBS
 	self.assertEqual(blkInDBS['origin_site_name'], site )
 	self.assertEqual(blkInDBS['open_for_writing'], 1)
 	self.assertEqual(blkInDBS['dataset'], dataset)
 	self.assertEqual(blkInDBS['block_name'], block)
 	self.assertEqual(blkInDBS['file_count'], 0)
 	self.assertEqual(blkInDBS['block_size'], 0)
-
     def test07(self):
 	"""test07 web.DBSClientWriter.Files: validation test"""
 	#
@@ -249,7 +251,6 @@ class DBSValitaion_t(unittest.TestCase):
 	dsInDBS=api.listDatasets(dataset=dataset, detail=True)
         self.assertEqual(len(dsInDBS), 1)
 	self.assertEqual(dsInDBS[0]['dataset_access_type'], "VALID")
-
 
 	
 if __name__ == "__main__":

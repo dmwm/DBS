@@ -13,6 +13,7 @@ from WMCore.DAOFactory import DAOFactory
 import json, cjson
 import urllib, urllib2
 from dbs.utils.dbsUtils import dbsUtils
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from sqlalchemy import exceptions
 
@@ -336,6 +337,10 @@ class DBSMigrate:
         """ This method is used at source server and gets the 
             information on a single block that is being migrated.
             Try to return in a format to be ready for insert calls"""
+        if '%' in block_name or '*' in block_name:
+            msg = "No wildcard is allowed in block_name for dumpBlock API" 
+            dbsExceptionHandler('dbsException-invalid-input', msg)
+            
         conn = self.dbi.connection()
         try :
             #block name is unique

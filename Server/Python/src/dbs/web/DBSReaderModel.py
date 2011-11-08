@@ -42,12 +42,16 @@ from WMCore.DAOFactory import DAOFactory
 
 __server__version__ = "$Name:  $"
 
-#Necessary for sphinx documentation
+#Necessary for sphinx documentation and server side unit tests.
 if not getattr(tools,"secmodv2",None):
-    def FakeAuthForDoc(*a,**b):
-        def wrapper(func):
-            return func
-        return wrapper
+    class FakeAuthForDoc(object):
+        def __init__(self,*args,**kwargs):
+            pass
+        
+        def __call__(self,func,*args,**kwargs):
+            def wrapper(*args,**kwargs):
+                return func(*args,**kwargs)
+            return wrapper
 
     tools.secmodv2 = FakeAuthForDoc
 

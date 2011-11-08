@@ -72,6 +72,9 @@ class DBSDataset:
         """
         Used to toggle the status of a dataset  is_dataset_valid=0/1 (invalid/valid)
         """
+        if( dataset == "" ):
+            dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/updateStatus. dataset is required.")
+
         conn = self.dbi.connection()
         trans = conn.begin()
 
@@ -92,6 +95,9 @@ class DBSDataset:
         """
         Used to change the status of a dataset type (production/etc.)
         """
+        if( dataset == "" ):
+            dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/updateType. dataset is required.")
+
         conn = self.dbi.connection()
         trans = conn.begin()
 
@@ -159,12 +165,12 @@ class DBSDataset:
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasetArray API requires \
                 at least a list of dataset.')
         else:
+            conn = None
             try:
                 dataset = inputdata["dataset"]
                 is_dataset_valid = inputdata.get("is_dataset_valid", 1)
                 dataset_access_type = inputdata.get("dataset_access_type", None)
                 detail = inputdata.get("detail", False)
-                conn = None
                 conn = self.dbi.connection()
                 dao = (self.datasetbrieflist, self.datasetlist)[detail]   
                 result = dao.execute(conn, dataset=dataset, is_dataset_valid=is_dataset_valid,
@@ -192,7 +198,7 @@ class DBSDataset:
                 dataset_access_type, primary_ds_name, processed_ds_name as input")
 
         if not businput.has_key("data_tier_name"):
-            dbsExceptionHandler('dbsException-invalid-input', "insertDataset must have data_tier (name) as input.")
+            dbsExceptionHandler('dbsException-invalid-input', "insertDataset must have data_tier_name as input.")
 
         conn = self.dbi.connection()
         tran = conn.begin()

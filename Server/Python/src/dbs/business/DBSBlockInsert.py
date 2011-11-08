@@ -247,7 +247,7 @@ class DBSBlockInsert :
             #This means there is some trouble.
             #Throw exception to let the up layer know. YG 11/17/2010
             tran.rollback()
-            raise
+            dbsExceptionHandler("dbsException-invalid-input","DBSBlockInsert/insertBlock. Block already exists.")
         except Exception, ex:
             tran.rollback()
             raise

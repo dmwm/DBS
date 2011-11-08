@@ -35,8 +35,11 @@ class DBSOutputConfig:
         self.outmodin = daofactory(classname='OutputModuleConfig.Insert')
         
     def listOutputConfigs(self, dataset="", logical_file_name="", 
-                         release_version="", pset_hash="", app_name="",
-                         output_module_label="", block_id=0, global_tag=''):
+                          release_version="", pset_hash="", app_name="",
+                          output_module_label="", block_id=0, global_tag=''):
+        if '*' in logical_file_name or '%' in logical_file_name:
+            dbsExceptionHandler('dbsException-invalid-input', "Fully specified logical_file_name is required. No wildcards are allowed." )
+        
         try:
             conn = self.dbi.connection()
             result = self.outputmoduleconfiglist.execute(conn, dataset,

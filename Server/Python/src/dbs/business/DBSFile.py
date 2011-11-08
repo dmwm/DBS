@@ -70,7 +70,7 @@ class DBSFile:
             if not block_name and not dataset:
                 msg =  "Block_name or dataset is required for listFileSummary API"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
-            if '%' in block_name or '%' in dataset:
+            if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
                 msg = "No wildcard is allowed in block_name or dataset for listFileSummary API" 
                 dbsExceptionHandler('dbsException-invalid-input', msg)
             result = self.filesummarylist.execute(conn, block_name, dataset, run_num)
@@ -211,11 +211,11 @@ class DBSFile:
         :param adler32 (optional, default = ''): string 
         :param md5 (optional, default = ''): string 
         :param auto_cross_section (optional, default = -1.): float 
-        :param file_lumi_list (optional, default = []): [{"run_num": 123, "lumi_section_num": 12},{}....] 
-        :param file_parent_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] 
-        :param file_assoc_list(optional, default = []) :[{"file_parent_lfn": "mylfn"},{}....] 
+        :param file_lumi_list (optional, default = []): [{'run_num': 123, 'lumi_section_num': 12},{}....] 
+        :param file_parent_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....] 
+        :param file_assoc_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....] 
         :param file_output_config_list(optional, default = []) :
-        [{"app_name":..., "release_version":..., "pset_hash":...., output_module_label":...},{}.....] 
+        [{'app_name':..., 'release_version':..., 'pset_hash':...., output_module_label':...},{}.....] 
         """
 
         # We do not want to go be beyond 10 files at a time
@@ -225,6 +225,7 @@ class DBSFile:
             dbsExceptionHandler('dbsException-input-too-large', "DBS cannot insert \
                     more than 10 files in one bulk call")
             return
+        
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
@@ -244,6 +245,10 @@ class DBSFile:
             block_id = -1
             dsconfigs = []
             for f in businput:
+                if not (f.has_key("logical_file_name") and f.has_key("block_name") and f.has_key("dataset") ):
+                    dbsExceptionHandler('dbsException-invalid-input', "DBSFile/insertFile must have logical_file_name, block_name and dataset as input")
+                if f["block_name"].split('#')[0] != f["dataset"]:
+                    dbsExceptionHandler('dbsException-invalid-input', "DBSFile/insertFile: dataset and block_name NOT match")
                 # first check if the dataset exists
                 # and block exists that files are suppose to be going to and is OPEN for writing
                 if dataset != f["dataset"]:
