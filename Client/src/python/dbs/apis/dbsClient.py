@@ -62,7 +62,7 @@ class DbsApi(object):
         else:
             raise ValueError, "unknown URL type: %s" % callType
         
-    def __callServer(self, method="", params={}, callmethod='GET'):
+    def __callServer(self, method="", params={}, data={}, callmethod='GET'):
         """
         A private method to make HTTP call to the DBS Server
         
@@ -83,21 +83,28 @@ class DbsApi(object):
             if self.proxy not in (None, ""):
                 proxies = { 'http': self.proxy }
             
-            if not callmethod in ('POST', 'PUT') :
+            if not callmethod in ('POST', 'PUT'):
                 if params == {}:
                     req = urllib2.Request(url=calling, headers = headers)
-                    data = self.opener.open(req)
                 else:
                     parameters = urllib.urlencode(params)
                     req = urllib2.Request(url=calling+'?'+parameters, headers = headers)
-                    data = self.opener.open(req)
             else:
-                params = cjson.encode(params)
-                req = urllib2.Request(url=calling, data=params, headers = headers)
+                data = cjson.encode(data)
+                headers['Content-length'] = str(len(data))
+                if params == {}:
+                    req = urllib2.Request(url=calling, data=data, headers = headers)
+                elif data == {}:
+                    parameters = urllib.urlencode(params)
+                    req = urllib2.Request(url=calling+'?'+parameters, headers = headers)
+                else:
+                    parameters = urllib.urlencode(params)
+                    req = urllib2.Request(url=calling+'?'+parameters, data=data, headers = headers)
                 req.get_method = lambda: callmethod
-                data = self.opener.open(req)
-            res = data.read()
-            data.close()
+                
+            return_data = self.opener.open(req)
+            res = return_data.read()
+            return_data.close()
             
         except urllib2.HTTPError, httperror:
             self.__parseForException(httperror)
@@ -221,7 +228,7 @@ class DbsApi(object):
         :key acquisition_era_name: Acquisition Era Name (Required)
                 
         """
-        return self.__callServer("/acquisitioneras", params = acqEraObj , callmethod='POST' )
+        return self.__callServer("/acquisitioneras", data = acqEraObj , callmethod='POST' )
 
     def insertBlock(self, blockObj={}):
         """
@@ -236,7 +243,7 @@ class DbsApi(object):
         :key origin_site_name: Origin Site Name (Required)
         
         """
-        return self.__callServer("/blocks", params = blockObj , callmethod='POST' )
+        return self.__callServer("/blocks", data = blockObj , callmethod='POST' )
 
     def insertBulkBlock(self, blockDump={}):
         """
@@ -245,7 +252,7 @@ class DbsApi(object):
         :type blockDump: dict
         
         """
-        return self.__callServer("/bulkblocks", params = blockDump , callmethod='POST' )
+        return self.__callServer("/bulkblocks", data = blockDump , callmethod='POST' )
 
     def insertDataset(self, datasetObj={}):
         """
@@ -261,7 +268,7 @@ class DbsApi(object):
         :key output_configs: Output Configs (dict)
         
         """
-        return self.__callServer("/datasets", params = datasetObj , callmethod='POST' )
+        return self.__callServer("/datasets", data = datasetObj , callmethod='POST' )
     
     def insertDataTier(self, dataTierObj={}):
         """
@@ -272,7 +279,7 @@ class DbsApi(object):
         :key data_tier_name: Data Tier that needs to be inserted
         
         """
-        return self.__callServer("/datatiers", params = dataTierObj , callmethod='POST' )
+        return self.__callServer("/datatiers", data = dataTierObj , callmethod='POST' )
 
     def insertFiles(self, filesList=[], qInserts=False):
         """
@@ -286,8 +293,8 @@ class DbsApi(object):
         """
 
         if qInserts==False: #turn off qInserts
-            return self.__callServer("/files?qInserts=%s" % qInserts, params = filesList , callmethod='POST' )    
-        return self.__callServer("/files", params = filesList , callmethod='POST' )
+            return self.__callServer("/files", params={'qInserts':qInserts}, data = filesList , callmethod='POST' )    
+        return self.__callServer("/files", data = filesList , callmethod='POST' )
 
     def insertOutputConfig(self, outputConfigObj={}):
         """
@@ -301,7 +308,7 @@ class DbsApi(object):
         :key output_module_label: Output Module Label (Required)
         
         """
-        return self.__callServer("/outputconfigs", params = outputConfigObj , callmethod='POST' )
+        return self.__callServer("/outputconfigs", data = outputConfigObj , callmethod='POST' )
 
     def insertPrimaryDataset(self, primaryDSObj={}):
         """
@@ -313,7 +320,7 @@ class DbsApi(object):
         :key primary_ds_name: Name of the primary dataset (Required)
         
         """
-        return self.__callServer("/primarydatasets", params = primaryDSObj, callmethod='POST' )
+        return self.__callServer("/primarydatasets", data = primaryDSObj, callmethod='POST' )
 
     def insertProcessingEra(self, procEraObj={}):
         """
@@ -325,7 +332,7 @@ class DbsApi(object):
         :key description: Description (Required)
         
         """
-        return self.__callServer("/processingeras", params = procEraObj , callmethod='POST' )
+        return self.__callServer("/processingeras", data = procEraObj , callmethod='POST' )
 
     def listAcquisitionEras(self, **kwargs):
         """
@@ -488,7 +495,7 @@ class DbsApi(object):
         if 'detail' not in kwargs.keys():
             kwargs['detail']=False
 
-        return self.__callServer("/datasetlist",params=kwargs,callmethod='POST')
+        return self.__callServer("/datasetlist",data=kwargs,callmethod='POST')
 
     def listDatasetChildren(self, **kwargs):
         """
@@ -785,7 +792,7 @@ class DbsApi(object):
         :param inp:
         
         """
-        return self.__callServer("/submit", params=inp, callmethod='POST') 
+        return self.__callServer("/submit", data=inp, callmethod='POST') 
 
     def migrateStatus(self, migration_request_id="", block_name="", dataset="", user=""):
         """

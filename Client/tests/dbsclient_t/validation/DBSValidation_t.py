@@ -114,11 +114,8 @@ class DBSValitaion_t(unittest.TestCase):
 		
 	api.insertBlock(blockObj=data)
 	blkList = api.listBlocks(block_name=block, detail=True)
-        print "\n block_name = %s"  %block
 	self.assertEqual(len(blkList), 1)
 	blkInDBS=blkList[0]
-        print "blkInDBS = "
-        print blkInDBS
 	self.assertEqual(blkInDBS['origin_site_name'], site )
 	self.assertEqual(blkInDBS['open_for_writing'], 1)
 	self.assertEqual(blkInDBS['dataset'], dataset)
@@ -134,9 +131,12 @@ class DBSValitaion_t(unittest.TestCase):
 	pridata = {'primary_ds_name':primary_ds_name+"_parent",
 	                    'primary_ds_type':'test'}
         api.insertPrimaryDataset(primaryDSObj=pridata)
+        primary_ds_name_parent = primary_ds_name+'_parent'
+        procdataset_parent = procdataset+"_parent"
+        dataset_parent = "/%s/%s/%s" % (primary_ds_name_parent,procdataset_parent,tier)
 	data = {
-		'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset+"_parent", 'primary_ds_name': primary_ds_name+"_parent",
+		'physics_group_name': 'Tracker', 'dataset': dataset_parent,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset_parent, 'primary_ds_name': primary_ds_name_parent,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, \
                     'output_module_label': output_module_label, 'global_tag':global_tag},
@@ -147,7 +147,7 @@ class DBSValitaion_t(unittest.TestCase):
 		}
 	api.insertDataset(datasetObj=data)
 
-	block_parent="/%s/%s/%s#%s" % (primary_ds_name+"_parent", procdataset+"_parent", tier, uid)
+	block_parent="/%s/%s/%s#%s" % (primary_ds_name_parent, procdataset_parent, tier, uid)
 	pblkdata = {'block_name': block_parent,
 	                    'origin_site_name': site }
 	api.insertBlock(blockObj=pblkdata)
@@ -156,7 +156,7 @@ class DBSValitaion_t(unittest.TestCase):
  	for i in range(10):
 	    f={  
 		'adler32': u'NOTSET', 'file_type': 'EDM',
-                'dataset': dataset,
+                'dataset': dataset_parent,
                 'file_size': u'201221191', 'auto_cross_section': 0.0, 
                 'check_sum': u'1504266448',
                 'event_count': u'1619',
@@ -214,7 +214,7 @@ class DBSValitaion_t(unittest.TestCase):
 	# Get the dataset parent -- due to fact that files had parents, dataset parentage is also inserted
 	dsParentList=api.listDatasetParents(dataset=dataset)
 	self.assertEqual(len(dsParentList), 1)
-	self.assertEqual(dsParentList[0]['parent_dataset'], "/%s/%s/%s" % (primary_ds_name+"_parent", procdataset+"_parent", tier) )
+	self.assertEqual(dsParentList[0]['parent_dataset'], "/%s/%s/%s" % (primary_ds_name+"_parent", procdataset+"_parent", tier))
 	# block parameters, such as file_count must also be updated, lets validate
     	blkList = api.listBlocks(block_name=block, detail=True)
 	self.assertEqual(len(blkList), 1)
@@ -247,7 +247,7 @@ class DBSValitaion_t(unittest.TestCase):
 	
     def test10(self):
 	"""test10 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-	api.updateDatasetType(dataset=dataset, dataset_access_type="VALID")
+        api.updateDatasetType(dataset=dataset, dataset_access_type="VALID")
 	dsInDBS=api.listDatasets(dataset=dataset, detail=True)
         self.assertEqual(len(dsInDBS), 1)
 	self.assertEqual(dsInDBS[0]['dataset_access_type'], "VALID")
