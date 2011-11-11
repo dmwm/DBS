@@ -43,6 +43,12 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         testparams['dataset']['dataset'] = '%s_%s' %(testparams['dataset']['dataset'],uid)
 
         testparams['block']['block_name'] = '%s_%s' %(testparams['block']['block_name'],uid)
+        
+        #We hard coded the parent_logical_fil_name in the dict file for testing on lum db. It may not
+        #fit to ask dbs. One have to change it before run the test for other dbs.
+        for  k in range(len(testparams['file_parent_list'])):
+            testparams['file_parent_list'][k]['logical_file_name'] = "%s_%s" %(testparams['file_parent_list'][k]['logical_file_name'],uid)
+
         #print  testparams
 	api.insertBulkBlock(blockDump=testparams)
 	# insert the parent block as well

@@ -160,25 +160,17 @@ class DBSBlockInsert :
             #All parentage is deduced from file paretage,
             #10/16/2011
             nfileparent = len(fileParentList)
+            bkParentList = []
+            dsParentList = []
             for k in range(nfileparent):
                 fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
                 del fileParentList[k]['logical_file_name']
-                try: 
-                    bkParentage2insert={'this_block_id' : blockId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
-                    dsParent2Insert = {'this_dataset_id' : datasetId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
-                    #we cannot do bulk insertion for the block and dataset parentage because they may be duplicated.
-                    self.blkparentin.execute(conn, bkParentage2insert, transaction=tran)
-                    self.dsparentin.execute(conn, dsParentage2insert, transaction=tran)
-                except exceptions.IntegrityError, ex:
-                    #ORA-00001
-                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-                        pass
-                    elif str(ex).find("ORA-01400") != -1:
-                        if tran:tran.rollback()
-                        raise
-                    else:
-                        if tran:tran.rollback()
-                        raise
+                bkParentage2insert={'this_block_id' : blockId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
+                dsParent2Insert = {'this_dataset_id' : datasetId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
+                if not any(d.get('parent_logical_file_name') == bkParentage2insert['parent_logical_file_name'] for d in bkParentList):
+                    #not exist yet
+                    bkParentList.append(bkParentage2insert)
+                    dsParentList.append(dsParent2Insert)
 
             #deal with file config
             for fc in fileConfigList:
@@ -210,8 +202,37 @@ class DBSBlockInsert :
             #insert file configration
             if fileConfObjs:
                 self.fconfigin.execute(conn, fileConfObjs, tran)
+            #insert bk and dataset parentage
+            #we cannot do bulk insertion for the block and dataset parentage because they may be duplicated.
+            lbk = len(bkParentList)
+            dsk = len(dsParentList)
+            for k in range(lbk):
+                try:
+                    self.blkparentin2.execute(conn, bkParentList[k], transaction=tran)
+                except exceptions.IntegrityError, ex:
+                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                        pass
+                    elif str(ex).find("ORA-01400") != -1:
+                        if tran:tran.rollback()
+                        raise
+                    else:
+                        if tran:tran.rollback()
+                        raise
+            for k in range(dsk):
+                try:
+                    self.dsparentin2.execute(conn, dsParentList[k], transaction=tran)
+                except exceptions.IntegrityError, ex: 
+                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1: 
+                        pass
+                    elif str(ex).find("ORA-01400") != -1: 
+                        if tran:tran.rollback()
+                        raise
+                    else:
+                        if tran:tran.rollback()
+                        raise
+            #finally, commit everything for file.
             tran.commit()
-        except Exception, ex:
+        except Exception, ex1:
             if tran:
                 tran.rollback()
             raise
@@ -220,7 +241,6 @@ class DBSBlockInsert :
                 tran.close()
             if conn:
                 conn.close()
-
 
     def insertBlock(self, blockcontent, datasetId):
         """
