@@ -1,13 +1,26 @@
 """
 Unittests to validate the DBS2 to DBS3 migration
-Author: Manuel Giffels <giffels@physik.rwth-aachen.de>
 """
 
 import logging
 import unittest
 
-from DBS2SqlApi import DBS2SqlApi
-from DBS3SqlApi import DBS3SqlApi
+from DBSSqlQueries import DBSSqlQueries
+
+try:
+    from DBSSecret import DBS2Secret
+    from DBSSecret import DBS3Secret
+except:
+    msg = """You need to put a DBSSecret.py in your directory. It has to have the following structure:\n
+              DBS2Secret = {'connectUrl' : {
+                            'reader' : 'oracle://reader:passwd@instance'
+                            },
+                            'databaseOwner' : 'owner'}
+              DBS3Secret = {'connectUrl' : {
+                            'reader' : 'oracle://reader:passwd@instance'
+                            },
+                            'databaseOwner' : 'owner'}"""
+    print msg
 
 def listComparision(resultsDBS2,resultsDBS3):
     diffList = []
@@ -59,145 +72,122 @@ def diffKeys(resultDBS2,resultDBS3):
 class CompareDBS2ToDBS3(unittest.TestCase):
     
     def setUp(self):
-        ownerDBS3 = 'owner'
-        connectUrlDBS3 = 'oracle://owner:passwd@instance'
+        ownerDBS3 = DBS3Secret['databaseOwner']
+        connectUrlDBS3 = DBS3Secret['connectUrl']['reader']
 
-        ownerDBS2 = 'owner'
-        connectUrlDBS2 = 'oracle://owner:passwd@instance'
+        ownerDBS2 = DBS2Secret['databaseOwner']
+        connectUrlDBS2 = DBS2Secret['connectUrl']['reader']
 
         logger = logging.getLogger()
 
-        self.dbs2sqlapi = DBS2SqlApi(logger,connectUrlDBS2,ownerDBS2)
-        self.dbs3sqlapi = DBS3SqlApi(logger,connectUrlDBS3,ownerDBS3,ownerDBS2)
+        #self.dbs2sqlapi = DBS2SqlApi(logger,connectUrlDBS2,ownerDBS2)
+        #self.dbs3sqlapi = DBS3SqlApi(logger,connectUrlDBS3,ownerDBS3,ownerDBS2)
+        self.dbssqlqueries = DBSSqlQueries(logger,connectUrlDBS3,ownerDBS3,ownerDBS2)
 
     def test_acquisition_eras(self):
-        resultsDBS2 = self.dbs2sqlapi.acquisitionEras(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.acquisitionEras(sort=False)
-
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
-
+        resultsUnion = self.dbssqlqueries.acquisitionEras(sort=False)
+        
+        self.assertEqual(len(resultsUnion),0)
+        
     def test_application_executables(self):
-        resultsDBS2 = self.dbs2sqlapi.applicationExecutables(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.applicationExecutables(sort=False)
+        resultsUnion = self.dbssqlqueries.applicationExecutables(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_blocks(self):
-        resultsDBS2 = self.dbs2sqlapi.blockList(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.blockList(sort=True)#not sorted in SQL Query
+        resultsUnion = self.dbssqlqueries.block(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
         
     def test_block_parents(self):
-        resultsUnion = self.dbs3sqlapi.blockParents(sort=False)
+        resultsUnion = self.dbssqlqueries.blockParents(sort=False)
                     
         self.assertEqual(len(resultsUnion),0)
     
     def test_datasets(self):
-        resultsDBS2 = self.dbs2sqlapi.datasetList(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.datasetList(sort=False)
-
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        resultsUnion = self.dbssqlqueries.dataset(sort=False)
+        
+        self.assertEqual(len(resultsUnion),0)
 
     def test_dataset_access_types(self):
-        resultsDBS2 = self.dbs2sqlapi.datasetAccessTypes(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.datasetAccessTypes(sort=False)
+        resultsUnion = self.dbssqlqueries.datasetAccessTypes(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_dataset_output_mod_configs(self):
-        resultsDBS2 = self.dbs2sqlapi.datasetOutputModConfigs(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.datasetOutputModConfigs(sort=False)
+        resultsUnion = self.dbssqlqueries.datasetOutputModConfigs(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_dataset_parents(self):
-        resultsDBS2 = self.dbs2sqlapi.datasetParents(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.datasetParents(sort=False)
-        
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        resultsUnion = self.dbssqlqueries.datasetParents(sort=False)
 
-    def test_dataset_runs(self):
-        resultsDBS2 = self.dbs2sqlapi.datasetRuns(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.datasetRuns(sort=False)
-
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
     
     def test_data_tiers(self):
-        resultsDBS2 = self.dbs2sqlapi.dataTierList(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.dataTierList(sort=True)#not sorted in SQL Query
+        resultsUnion = self.dbssqlqueries.dataTier(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_files(self):
-        resultsUnion = self.dbs3sqlapi.fileList(sort=False)
+        resultsUnion = self.dbssqlqueries.file(sort=False)
             
         self.assertEqual(len(resultsUnion),0)
 
     def test_file_data_types(self):
-        resultsDBS2 = self.dbs2sqlapi.fileDataTypes(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.fileDataTypes(sort=False)
+        resultsUnion = self.dbssqlqueries.fileDataTypes(sort=False)
 
-        diffKeys(resultsDBS2[0],resultsDBS3[0])
-
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_file_lumis(self):
-        resultsUnion = self.dbs3sqlapi.fileLumis(sort=False)
+        resultsUnion = self.dbssqlqueries.fileLumis(sort=False)
                     
         self.assertEqual(len(resultsUnion),0)
         
     def test_file_output_mod_configs(self):
-        resultsUnion = self.dbs3sqlapi.fileOutputModConfigs(sort=False)
+        resultsUnion = self.dbssqlqueries.fileOutputModConfigs(sort=False)
         
         self.assertEqual(len(resultsUnion),0)
     
     def test_file_parents(self):
-        resultsUnion = self.dbs3sqlapi.fileParents(sort=False)
+        resultsUnion = self.dbssqlqueries.fileParents(sort=False)
                     
         self.assertEqual(len(resultsUnion),0)
     
     def test_output_module_config(self):
-        resultsDBS2 = self.dbs2sqlapi.outputModuleConfig(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.outputModuleConfig(sort=False)
+        resultsUnion = self.dbssqlqueries.outputModuleConfig(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_parameter_set_hashes(self):
-        resultsDBS2 = self.dbs2sqlapi.parametersetHashes(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.parametersetHashes(sort=False)
+        resultsUnion = self.dbssqlqueries.parametersetHashes(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_physics_groups(self):
-        resultsDBS2 = self.dbs2sqlapi.physicsGroups(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.physicsGroups(sort=False)
+        resultsUnion = self.dbssqlqueries.physicsGroups(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_primary_datasets(self):
-        resultsDBS2 = self.dbs2sqlapi.primaryDatasetList(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.primaryDatasetList(sort=True)#not sorted in SQL Query
+        resultsUnion = self.dbssqlqueries.primaryDataset(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_primary_ds_types(self):
-        resultsDBS2 = self.dbs2sqlapi.primaryDSTypes(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.primaryDSTypes(sort=False)
+        resultsUnion = self.dbssqlqueries.primaryDSTypes(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
         
     def test_processed_datasets(self):
-        resultsDBS2 = self.dbs2sqlapi.processedDatasets(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.processedDatasets(sort=False)
+        resultsUnion= self.dbssqlqueries.processedDatasets(sort=False)
 
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        self.assertEqual(len(resultsUnion),0)
 
     def test_release_versions(self):
-        resultsDBS2 = self.dbs2sqlapi.releaseVersions(sort=False)
-        resultsDBS3 = self.dbs3sqlapi.releaseVersions(sort=False)
-
-        self.assertTrue(listComparision(resultsDBS2,resultsDBS3))
+        resultsUnion = self.dbssqlqueries.releaseVersions(sort=False)
+       
+        self.assertEqual(len(resultsUnion),0)
 
 if __name__ == '__main__':
     TestSuite = unittest.TestSuite()
