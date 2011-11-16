@@ -229,9 +229,13 @@ class DBSWriterModel(DBSReaderModel):
         except HTTPError as he:
             raise he
         except Exception, ex:
-            sError = "DBSWriterModel/insertBulkBlock. %s\n. Exception trace: \n %s" \
+            #illegal variable name/number
+            if str(ex).find("ORA-01036") != -1:
+                dbsExceptionHandler("dbsException-invalid-input2", "illegal variable name/number from input",  self.logger.exception, str(ex))
+            else:
+                sError = "DBSWriterModel/insertBulkBlock. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc()) 
-            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+                dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @tools.secmodv2(authzfunc=authInsert)
     def insertBlock(self):
