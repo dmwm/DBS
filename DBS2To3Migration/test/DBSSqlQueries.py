@@ -439,6 +439,26 @@ class DBSSqlQueries(object):
                         ORDER BY FILE_LUMI_ID
                         """ % (ownerDBS3,ownerDBS2),
                         ##############################################
+                        'FileLumisMinMax':
+                        """SELECT MIN(FRL.ID) AS MIN_ID,
+                        MAX(FRL.ID) AS MAX_ID
+                        FROM %s.FILERUNLUMI FRL
+                        """ % (ownerDBS2),
+                        ##############################################
+                        'FileLumisSplited':
+                        """SELECT FILE_LUMI_ID,RUN_NUM,LUMI_SECTION_NUM,FILE_ID FROM
+                        (SELECT FL.FILE_LUMI_ID,FL.RUN_NUM,FL.LUMI_SECTION_NUM,FL.FILE_ID
+                        FROM %s.FILE_LUMIS FL
+                        UNION ALL
+                        SELECT FRL.ID file_lumi_id, FRL.RUN run_num, FRL.LUMI lumi_section_num, FRL.FILEID file_id
+                        FROM %s.FILERUNLUMI FRL
+                        )
+                        WHERE FILE_LUMI_ID >= :min_id AND FILE_LUMI_ID <= :max_id
+                        GROUP BY FILE_LUMI_ID,RUN_NUM,LUMI_SECTION_NUM,FILE_ID
+                        HAVING COUNT(*) = 1
+                        ORDER BY FILE_LUMI_ID
+                        """ % (ownerDBS3,ownerDBS2),
+                        ##############################################
                         'FileOutputModConfigs':
                         """SELECT FILE_OUTPUT_CONFIG_ID,FILE_ID,OUTPUT_MOD_CONFIG_ID FROM
                         (SELECT FOMC.FILE_OUTPUT_CONFIG_ID,FOMC.FILE_ID,FOMC.OUTPUT_MOD_CONFIG_ID
@@ -698,8 +718,36 @@ class DBSSqlQueries(object):
     def fileDataTypes(self,sort=True):
         return self._queryDB('FileDataTypes',sort=sort)     
 
-    def fileLumis(self,sort=True):
-        return self._queryDB('FileLumis',sort=sort)
+    def fileLumis(self,sort=True,split=None):
+        if isinstance(split,int):
+            result = self._queryDB('FileLumisMinMax',sort=False)
+
+            if not len(result):
+                return None
+            
+            min_id = result[0]['min_id']
+            max_id = result[0]['max_id']
+
+            stepwidth = (max_id-min_id)/split
+                        
+            retval = []
+            
+            for i in range(split):
+                start = min_id + (i*stepwidth)
+
+                print "Progress: %i" % (int(float(i*stepwidth*100)/float(max_id-min_id))) 
+
+                if i!=(split-1):
+                    bind_dict = {"min_id":start, "max_id":start+stepwidth}
+                    retval += (self._queryDB('FileLumisSplited', binds=bind_dict, sort=sort))
+                else:
+                    bind_dict = {"min_id":min_id+(i*stepwidth), "max_id":max_id}
+                    retval += (self._queryDB('FileLumisSplited',binds=bind_dict, sort=sort))
+
+            return retval
+
+        else:
+            return self._queryDB('FileLumis',sort=sort)            
 
     def fileOutputModConfigs(self,sort=True):
         return self._queryDB('FileOutputModConfigs',sort=sort)

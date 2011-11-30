@@ -80,8 +80,6 @@ class CompareDBS2ToDBS3(unittest.TestCase):
 
         logger = logging.getLogger()
 
-        #self.dbs2sqlapi = DBS2SqlApi(logger,connectUrlDBS2,ownerDBS2)
-        #self.dbs3sqlapi = DBS3SqlApi(logger,connectUrlDBS3,ownerDBS3,ownerDBS2)
         self.dbssqlqueries = DBSSqlQueries(logger,connectUrlDBS3,ownerDBS3,ownerDBS2)
 
     def test_acquisition_eras(self):
