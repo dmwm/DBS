@@ -162,7 +162,11 @@ class DBSBlockInsert :
             nfileparent = len(fileParentList)
             bkParentList = []
             dsParentList = []
+            #import pdb
+            #pdb.set_trace()
             for k in range(nfileparent):
+                #import pdb
+                #pdb.set_trace()
                 fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
                 del fileParentList[k]['logical_file_name']
                 bkParentage2insert={'this_block_id' : blockId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}

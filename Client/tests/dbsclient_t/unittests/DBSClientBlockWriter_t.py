@@ -46,12 +46,30 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         
         #We hard coded the parent_logical_fil_name in the dict file for testing on lum db. It may not
         #fit to ask dbs. One have to change it before run the test for other dbs.
-        for  k in range(len(testparams['file_parent_list'])):
-            testparams['file_parent_list'][k]['logical_file_name'] = "%s_%s" %(testparams['file_parent_list'][k]['logical_file_name'],uid)
+        #for  k in range(len(testparams['file_parent_list'])):
+        #    testparams['file_parent_list'][k]['logical_file_name'] = "%s_%s" %(testparams['file_parent_list'][k]['logical_file_name'],uid)
 
         #print  testparams
 	api.insertBulkBlock(blockDump=testparams)
-	# insert the parent block as well
+        print "Done inserting parent files"
+    def test1001(self):
+	# insert chidren with parentage: the privious inserted files are the parents
+        testparams['file_parent_list'] = []
+        for k in range(len(testparams['files'])):
+            testparams['file_parent_list'].append({'logical_file_name':'%s-%s'%(testparams['files'][k]['logical_file_name'], 'chd'), 
+                                             'parent_logical_file_name': testparams['files'][k]['logical_file_name']})
+            testparams['files'][k]['logical_file_name'] = "%s-%s" %(testparams['files'][k]['logical_file_name'], 'chd')   
+        testparams['dataset']['dataset'] = '%s_%s' %(testparams['dataset']['dataset'],'chd')
+        testparams['block']['block_name'] = '%s_%s' %(testparams['block']['block_name'],'chd')
+
+        for i in range(len(testparams['file_conf_list'])):
+            testparams['file_conf_list'][i]['lfn'] =  "%s-%s" %(testparams['file_conf_list'][i]['lfn'],'chd')
+
+
+
+        api.insertBulkBlock(blockDump=testparams)
+        print "Done inserting child files"
+
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientBlockWriter_t)

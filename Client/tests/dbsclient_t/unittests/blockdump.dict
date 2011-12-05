@@ -73,10 +73,6 @@ u'logical_file_name': '/store/data/a/b/A/a/1/1/1/abcd4.root', u'file_size': 2012
 {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM',  u'last_modified_by': 'Yuyi', u'logical_file_name': '/store/data/a/b/A/a/1/1/1/abcd7.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0}, 
 {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Yuyi',u'logical_file_name': '/store/data/a/b/A/a/1/1/1/abcd8.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0}], 
 
-'file_parent_list':[{'logical_file_name':'/store/data/a/b/A/a/1/1/1/abcd4.root' , 'parent_logical_file_name':
-'/store/data/a/b/A/a/1/1/1/abcd3.root_15825'},
-{'logical_file_name':'/store/data/a/b/A/a/1/1/1/abcd5.root' , 'parent_logical_file_name':'/store/data/a/b/A/a/1/1/1/abcd2.root_15825' }], 
-
 'processing_era': {'create_by': 'Yuyi', 'processing_version':
 '4145', 'description': 'this_is_a_test', 'creation_date': 1279912078},
 
@@ -101,4 +97,9 @@ u'dataset':
 '/unittest_web_primary_ds_name_14144/unittest_web_dataset_14144/GEN-SIM-RAW#141444',
 u'file_count': 10, u'origin_site_name': 'cmssrm.fnal.gov', 
 u'block_size': 20122119010, 'origin_site_name': 'my_site'}, 
+
+#'file_parent_list':[{'logical_file_name':'/store/data/a/b/A/a/1/1/1/abcd4.root' , 'parent_logical_file_name':
+#'/store/data/a/b/A/a/1/1/1/abcd3.root_15825'},
+#{'logical_file_name':'/store/data/a/b/A/a/1/1/1/abcd5.root' , 'parent_logical_file_name':'/store/data/a/b/A/a/1/1/1/abcd2.root_15825' }]
+
 }
