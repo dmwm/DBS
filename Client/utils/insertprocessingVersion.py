@@ -6,7 +6,7 @@ url=os.environ['DBS_WRITER_URL']
 # API Object    
 dbs3api = DbsApi(url=url)
 
-processing_version={'processing_version': 100, 'description': 'testing_insert_p-v'}
+processing_version={'processing_version': 101, 'description': 'testing_insert_p-v'}
 
 print dbs3api.insertProcessingEra(processing_version)
-print dbs3api.listProcessingEras(processing_version=100)
+print dbs3api.listProcessingEras(processing_version=101)

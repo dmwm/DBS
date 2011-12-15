@@ -7,9 +7,9 @@ url=os.environ['DBS_WRITER_URL']
 dbs3api = DbsApi(url=url)
 
 dataset={'primary_ds_name': 'yuyi_pri', 'physics_group_name': 'Tracker',
- 'processed_ds_name':'YuYi_GUO1-pstr-v1', 'dataset_access_type': 'VALID',
+ 'processed_ds_name':'YuYi_GUO2-pstr-v101', 'dataset_access_type': 'VALID',
  'xtcrosssection': 123, 'data_tier_name':
- 'GEN-SIM-DIGI-RAW','acquisition_era_name':'YuYi_GUO1', 'processing_version':1 }
+ 'GEN-SIM-DIGI-RAW','acquisition_era_name':'YuYi_GUO2', 'processing_version':101 }
 
 dataset.update({'dataset' : '/%s/%s/%s' %(dataset['primary_ds_name'], dataset['processed_ds_name'],
                 dataset['data_tier_name'])})
