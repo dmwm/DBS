@@ -52,6 +52,8 @@ def inputChecks(**_params_):
                                 elif name=='logical_file_name':
                                     if '*' in value: searchstr(value)
                                     else: lfn(value)
+                                elif name=='processing_version':
+                                    procversion(value)
                                 else:
                                     searchstr(value)
                             except AssertionError as ae:
@@ -91,7 +93,7 @@ acceptedInputKeys = {
     'block': ['block_name', 'open_for_writing', 'origin_site_name', 'dataset', 'creation_date', 'creation_date', 'create_by',\
               'last_modification_date', 'last_modified_by', 'file_count', 'block_size'],
     ################
-    'acquisition_era':['acquisition_era_name','description'],
+    'acquisition_era':['acquisition_era_name','description', 'start_date','end_date'],
     ################
     'primds':['primary_ds_type', 'primary_ds_name', 'creation_date', 'create_by'],
     ################
@@ -109,7 +111,9 @@ validationFunction = {
     'logical_file_name':lfn,
     'file_parent_lfn':lfn,
     'primary_ds_name':primdataset,
-    'processed_ds_name':procdataset
+    'processed_ds_name':procdataset,
+    'processing_version':procversion,
+    'acquisition_era_name':acqname
     }
 
 

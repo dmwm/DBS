@@ -68,6 +68,7 @@ class DBSWriterModel(DBSReaderModel):
         self._addMethod('POST', 'primarydatasets', self.insertPrimaryDataset)
         self._addMethod('POST', 'outputconfigs', self.insertOutputConfig)
         self._addMethod('POST', 'acquisitioneras', self.insertAcquisitionEra)
+        self._addMethod('PUT', 'acquisitioneras', self.updateAcqEraEndDate, args=['acquisition_era_name','end_date'])
         self._addMethod('POST', 'processingeras', self.insertProcessingEra)
         self._addMethod('POST', 'datasets', self.insertDataset)
         self._addMethod('POST', 'blocks', self.insertBlock)
@@ -130,6 +131,26 @@ class DBSWriterModel(DBSReaderModel):
                             % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @inputChecks(acquisition_era_name=str, end_date=(int, str))
+    @tools.secmodv2(authzfunc=authInsert)
+    def updateAcqEraEndDate(self, acquisition_era_name ="", end_date=0):
+        """
+        API to update Acquisition era's end_date.
+        """
+        try:
+            self.dbsAcqEra.UpdateAcqEraEndDate( acquisition_era_name, end_date)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
+        except Exception, ex:
+            sError = "DBSWriterModel/updateFile. %s\n. Exception trace: \n %s" \
+                    % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
+
+
+
     @tools.secmodv2(authzfunc=authInsert)
     def insertAcquisitionEra(self):
         """
@@ -144,7 +165,8 @@ class DBSWriterModel(DBSReaderModel):
             body = request.body.read()
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("acquisition_era",indata)
-            indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
+            indata.update({"start_date": indata.get("start_date", dbsUtils().getTime()),\
+                           "creation_date": indata.get("creation_date", dbsUtils().getTime()), \
                            "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })
             self.dbsAcqEra.insertAcquisitionEra(indata)
         except dbsException as de:

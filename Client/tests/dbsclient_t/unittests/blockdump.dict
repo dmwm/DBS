@@ -74,7 +74,7 @@ u'logical_file_name': '/store/data/a/b/A/a/1/1/1/abcd4.root', u'file_size': 2012
 {u'check_sum': '1504266448', 'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'adler32':'NOTSET', u'event_count': 1619, u'file_type': 'EDM', u'last_modified_by': 'Yuyi',u'logical_file_name': '/store/data/a/b/A/a/1/1/1/abcd8.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'md5': None, u'auto_cross_section':0.0}], 
 
 'processing_era': {'create_by': 'Yuyi', 'processing_version':
-'4145', 'description': 'this_is_a_test', 'creation_date': 1279912078},
+10, 'description': 'this_is_a_test'},
 
 'primds':
 {u'create_by': 'Yuyi', u'primary_ds_type': 'test', 
@@ -85,16 +85,16 @@ u'creation_date': 1279912078},
 u'physics_group_name': 'Tracker', u'create_by': 'Yuyi',
 u'dataset_access_type': 'PRODUCTION', u'data_tier_name': 'GEN-SIM-RAW',
 u'last_modified_by': 'Yuyi', u'creation_date': 1279912078,
-u'processed_ds_name': 'unittest_web_dataset_14144',
+u'processed_ds_name': 'Summer2011-pstr-v10',
 u'xtcrosssection': 123.0, u'last_modification_date': 1279912078,
 u'dataset':
-'/unittest_web_primary_ds_name_14144/unittest_web_dataset_14144/GEN-SIM-RAW'},
+'/unittest_web_primary_ds_name_14144/Summer2011-pstr-v10/GEN-SIM-RAW'},
 
-'acquisition_era':{'acquisition_era_name':'Summer_test'},
+'acquisition_era':{'acquisition_era_name':'Summer2011', 'start_date':1978},
 
 'block': {u'create_by': 'Yuyi', u'creation_date':
 1279912079, u'open_for_writing': 1, u'block_name':
-'/unittest_web_primary_ds_name_14144/unittest_web_dataset_14144/GEN-SIM-RAW#141444',
+'/unittest_web_primary_ds_name_14144/Summer2011-pstr-v10/GEN-SIM-RAW#141444',
 u'file_count': 10, u'origin_site_name': 'cmssrm.fnal.gov', 
 u'block_size': 20122119010, 'origin_site_name': 'my_site'}, 
 

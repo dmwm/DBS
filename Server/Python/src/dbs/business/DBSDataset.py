@@ -116,7 +116,7 @@ class DBSDataset:
    
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
                      release_version="", pset_hash="", app_name="",
-                     output_module_label="", processing_version="",
+                     output_module_label="", processing_version=0,
                      acquisition_era="", run_num=0, physics_group_name="",
                      logical_file_name="", primary_ds_name="",
                      primary_ds_type="", processed_ds_name="", data_tier_name="",
@@ -137,7 +137,7 @@ class DBSDataset:
             dao = (self.datasetbrieflist, self.datasetlist)[detail]
             if dataset_access_type: dataset_access_type = dataset_access_type.upper()
             if data_tier_name: data_tier_name = data_tier_name.upper()
-            if  processing_version:  processing_version =  processing_version.upper()
+            #if  processing_version:  processing_version =  processing_version.upper()
             if acquisition_era: acquisition_era = acquisition_era.upper()
             result = dao.execute(conn, 
                                  dataset, is_dataset_valid,
@@ -188,7 +188,7 @@ class DBSDataset:
         input dictionary must have the following keys:
         dataset, primary_ds_name(name), processed_ds(name), data_tier(name)
         It may have following keys:
-        acquisition_era(name), processing_version(name), 
+        acquisition_era(name), processing_version, 
         physics_group(name), xtcrosssection, creation_date, create_by, 
         last_modification_date, last_modified_by
         """ 
@@ -209,12 +209,24 @@ class DBSDataset:
             dsdaoinput["data_tier_name"] =  businput["data_tier_name"].upper()
             dsdaoinput["dataset_access_type"] = businput["dataset_access_type"].upper()
             #not required pre-exist in the db. will insert with the dataset if not in yet
-            dsdaoinput["processed_ds_name"] = businput["processed_ds_name"]
+            #processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version
+            #althrough acquisition era and processing version is not required for a dataset in the schema(the schema is build this way because
+            #we need to accomdate the DBS2 data), but we impose the requirement on the API. So both acquisition and processing eras are required 
+            #YG 12/07/2011  TK-362
+            if businput.has_key("acquisition_era_name") and businput.has_key("processing_version"):
+                erals=businput["processed_ds_name"].rsplit('-')
+                if erals[0]==businput["acquisition_era_name"] and erals[len(erals)-1]=="%s%s"%("v",businput["processing_version"]):
+                    dsdaoinput["processed_ds_name"] = businput["processed_ds_name"]
+                else:
+                    dbsExceptionHandler('dbsException-invalid-input', "insertDataset:\
+                    processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version must be satisified.")
+            else:
+                dbsExceptionHandler("dbsException-missing-data",  "insertDataset: Required acquistion era or processing version is not found in the input")
+            
             if "physics_group_name" in businput:
                 dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
                 if dsdaoinput["physics_group_id"]  == -1:
-                    dbsExceptionHandler("dbsException-missing-data",  "insertDataset. Physics Group : %s Not found"
-                                                                                    % businput["physics_group_name"]) 
+                    dbsExceptionHandler("dbsException-missing-data",  "insertDataset. Physics Group Not found in DB")
             else:
                 dsdaoinput["physics_group_id"] = None
 
@@ -240,20 +252,18 @@ class DBSDataset:
             else: dsdaoinput["physics_group_id"] = None
 
             # See if Processing Era exists
-            if businput.has_key("processing_version"):
-                dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"].upper(), tran)
+            if businput.has_key("processing_version") and businput["processing_version"] != 0:
+                dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"], tran)
                 if dsdaoinput["processing_era_id"] == -1 :
-                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Processing Era : %s not found"
-                                                        % businput["processing_version"]) 
-            else: dsdaoinput["processing_era_id"] = None
+                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: Processing version not found in DB") 
+            else: dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset: processing version is required")
 
             # See if Acquisition Era exists
             if businput.has_key("acquisition_era_name"):
-                dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"].upper(), tran)
+                dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"], tran)
                 if dsdaoinput["acquisition_era_id"] == -1 :
-                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Acquisition Era : %s not found"
-                                                        % dsdaoinput["acquisition_era_id"])
-            else: dsdaoinput["acquisition_era_id"] = None
+                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: Acquisition Era not found in DB")
+            else: dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset: Acquisition Era is required")
             try:
                 # insert the dataset
                 self.datasetin.execute(conn, dsdaoinput, tran)

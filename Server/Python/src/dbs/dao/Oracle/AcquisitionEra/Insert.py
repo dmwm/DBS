@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 """ DAO Object for ACQUISITION_ERAS table """
 
-__revision__ = "$Revision: 1.10 $"
-__version__  = "$Id: Insert.py,v 1.10 2010/06/23 21:21:18 afaq Exp $ "
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
 from sqlalchemy import exceptions

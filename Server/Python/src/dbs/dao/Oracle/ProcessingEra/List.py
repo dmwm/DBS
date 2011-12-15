@@ -31,7 +31,8 @@ FROM %sPROCESSING_ERAS PE
         sql = self.sql
 	binds={}
 	if processingV:
-            op = ("=", "like")["%" in  processingV]
+            #op = ("=", "like")["%" in  processingV]
+            op = "="
 	    sql += "WHERE PE.PROCESSING_VERSION %s :processingV" %op 
 	    binds = {"processingV":processingV}
         result = self.dbi.processData(sql, binds, conn, transaction)

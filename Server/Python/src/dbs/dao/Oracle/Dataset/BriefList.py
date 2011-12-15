@@ -24,7 +24,7 @@ class BriefList(DBFormatter):
 
     def execute(self, conn, dataset="", is_dataset_valid=1, parent_dataset="",
                 release_version="", pset_hash="", app_name="", output_module_label="",
-                processing_version="", acquisition_era="", run_num=0,
+                processing_version=0, acquisition_era="", run_num=0,
                 physics_group_name="", logical_file_name="", primary_ds_name="",
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", 
                 prep_id="", min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, ldate=0,
@@ -161,9 +161,10 @@ class BriefList(DBFormatter):
                 wheresql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label " % op
                 binds.update(output_module_label=output_module_label)
 
-            if processing_version:
+            if processing_version != 0:
                 joinsql += " LEFT OUTER JOIN %sPROCESSING_ERAS PE ON PE.PROCESSING_ERA_ID = D.PROCESSING_ERA_ID " % (self.owner)
-                op = ("=", "like")["%" in processing_version]
+                #op = ("=", "like")["%" in processing_version]
+                op = "="
                 wheresql += " AND PE.PROCESSING_VERSION %s :pversion " % op
                 binds.update(pversion=processing_version)
 

@@ -397,7 +397,7 @@ class DBSBlockInsert :
         datasetID = self.datasetid.execute(conn, dataset['dataset'])
         dataset['dataset_id'] = datasetID
         if datasetID > 0:
-            # Then we already have a valid dataset.
+            # Then we already have a valid dataset. We only need to fill the map (dataset & output module config)
             # Skip to the END
             try:
                 self.insertDatasetWOannex(dataset = dataset, 
@@ -411,9 +411,6 @@ class DBSBlockInsert :
             return datasetID
 
         # Else, we need to do the work
-
-
-        
         try:
             #Start a new transaction 
             tran = conn.begin()
@@ -440,42 +437,59 @@ class DBSBlockInsert :
                     raise
             dataset['primary_ds_id'] = primds["primary_ds_id"]
             #2 Deal with processed ds
-            #processed ds is handled inside of dataset insertion
-            
+            #processed ds is handled inside of dataset insertion, However we need to make sure it is formated correctly.
+            #processed_ds_name is not required pre-exist in the db. will insert with the dataset if not in yet
+            #  
+            #         processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version
+            #
+            #althrough acquisition era and processing version is not required for a dataset 
+            #in the schema(the schema is build this way because
+            #we need to accomdate the DBS2 data), but we impose the requirement on the API. 
+            #So both acquisition and processing eras are required. 
+            #We do the format checking after we deal with acquision era and processing era.
+            #
+            #YG 12/07/2011  TK-362
+
             #3 Deal with Acquisition era
             aq = {}
             if blockcontent.has_key('acquisition_era'):
                 aq = blockcontent['acquisition_era']
-            else: dataset['acquisition_era_id'] = None    
+            else: dbsExceptionHandler("dbsException-invalid-input", "BlockInsert: Acquisition Era is required")    
             #is there acquisition?
-            if aq:
+            if aq.has_key('acquisition_era_name'):
                 try:
                     #insert acquisition era into db
                     aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
-                    aq['acquisition_era_name'] = aq['acquisition_era_name'].upper()
                     self.acqin.execute(conn, aq, tran)
                     dataset['acquisition_era_id'] = aq['acquisition_era_id']
-                except exceptions.IntegrityError:
+                except exceptions.IntegrityError, ei:
                     #ok, already in db
                     dataset['acquisition_era_id'] = self.acqid.execute(conn,
-                                            aq['acquisition_era_name'].upper())
+                                            aq['acquisition_era_name'])
+                    if dataset['acquisition_era_id'] <= 0:
+                        tran.rollback()
+                        dbsExceptionHandler("dbsException-invalid-input", "BlockInsert: Check the spelling of acquisition Era name.\
+                                            the db may already have the same acquisition era, but with different casees.")
                 except Exception, ex:
                     tran.rollback()
                     raise
             else:
-                #no acquisition era for this dataset
-                dataset['acquisition_era_id'] = None
+                tran.rollback() 
+                dbsExceptionHandler("dbsException-invalid-input", "BlockInsert: Acquisition Era is required")
+
             #4 Deal with Processing era
             pera = {}
             if (blockcontent.has_key('processing_era')):
                 pera = blockcontent['processing_era']
-            else: dataset['processing_era_id'] = None
+            else:
+                tran.rollback() 
+                dbsExceptionHandler('dbsException-invalid-input', 'BlockInsert:processing version is required') 
             #is there processing era?
-            if pera:
+            if pera.has_key('processing_version'):
                 try:
                     #insert processing era into db
                     pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE")
-                    pera['processing_version'] = pera['processing_version'].upper()
+                    #pera['processing_version'] = pera['processing_version'].upper()
                     self.procsingin.execute(conn, pera, tran)
                     dataset['processing_era_id'] = pera['processing_era_id']
                 except exceptions.IntegrityError:
@@ -485,10 +499,18 @@ class DBSBlockInsert :
                 except Exception, ex:
                     tran.rollback()
                     raise
-            else:
-                #no processing era for this dataset
-                dataset['processing_era_id'] = None
-            #let's committe first 4 db acativties before going on.
+            else: 
+                tran.rollback()
+                dbsExceptionHandler('dbsException-invalid-input', 'BlockInsert:processing version is required')
+            #Make sure processed_ds_name is right format.
+            #processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version
+            erals=dataset["processed_ds_name"].rsplit('-')
+            if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
+                tran.rollback()
+                dbsExceptionHandler('dbsException-invalid-input', "BlockInsert:\
+                    processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version must be satisified.")
+    
+            #So far so good, let's committe first 4 db acativties before going on.
             tran.commit()
         except:
             if tran:

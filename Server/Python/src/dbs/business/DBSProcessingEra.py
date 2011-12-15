@@ -25,10 +25,10 @@ class DBSProcessingEra:
         """
         Returns all processing eras in dbs
         """
-        if type(processing_version) is not str:
-            dbsExceptionHandler('dbsException-invalid-input',
-                                'processing version given is not valid : %s' %
-                                processing_version)
+        #if type(processing_version) is not str:
+        #    dbsExceptionHandler('dbsException-invalid-input',
+        #                        'processing version given is not valid : %s' %
+        #                        processing_version)
         try:
             conn = self.dbi.connection()
             result = self.pelst.execute(conn, processing_version)
@@ -47,7 +47,7 @@ class DBSProcessingEra:
         tran = conn.begin()
         try:
             businput["processing_era_id"] = self.sm.increment(conn, "SEQ_PE", tran)
-            businput["processing_version"] = businput["processing_version"].upper()
+            businput["processing_version"] = businput["processing_version"]
             self.pein.execute(conn, businput, tran)
             tran.commit()
         except KeyError, ke:

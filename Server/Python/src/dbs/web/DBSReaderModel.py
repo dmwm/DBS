@@ -118,6 +118,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'blockchildren', self.listBlockChildren, args=['block_name'])
         self._addMethod('GET', 'blockdump', self.dumpBlock, args=['block_name'])
         self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=['acquisition_era_name'])
+        self._addMethod('GET', 'acquisitioneras_ci', self.listAcquisitionEras_CI, args=['acquisition_era_name'])
         self._addMethod('GET', 'processingeras', self.listProcessingEras, args=['processing_version'])
         self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version', 'dataset'])
         self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'])
@@ -760,14 +761,32 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listAcquisitionEras. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(processing_version=str)
+    @inputChecks(acquisition_era_name=str)
     @tools.secmodv2()
-    def listProcessingEras(self, processing_version=''):
+    def listAcquisitionEras_CI(self, acquisition_era_name=''):
+        """
+        lists case sensitive acquisition eras known to dbs 
+        """
+        try:
+            acquisition_era_name = acquisition_era_name.replace('*', '%')
+            return  self.dbsAcqEra.listAcquisitionEras_CI(acquisition_era_name)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+        except Exception as ex:
+            sError = "DBSReaderModel/listAcquisitionEras. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
+self.logger.exception, sError)
+
+
+
+    @inputChecks(processing_version=(str,int))
+    @tools.secmodv2()
+    def listProcessingEras(self, processing_version=0):
         """
         lists acquisition eras known to dbs
         """
         try:
-            processing_version = processing_version.replace("*", "%")
+            #processing_version = processing_version.replace("*", "%")
             return  self.dbsProcEra.listProcessingEras(processing_version)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)

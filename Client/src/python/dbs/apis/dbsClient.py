@@ -343,10 +343,23 @@ class DbsApi(object):
         
         """
         validParameters = ['acquisition_era_name']
+        checkInputParameter(method="listAcquisitionEras",parameters=kwargs.keys(),validParameters=validParameters)
+        return self.__callServer("/acquisitioneras",params=kwargs)
+
+
+    def listAcquisitionEras_ci(self, **kwargs):
+        """
+        API to list ALL Acquisition Eras in DBS
+
+        :param acquisition_era_name: Acquisition era name
+        :type acquisition_era_name: str
+        
+        """
+        validParameters = ['acquisition_era_name']
 
         checkInputParameter(method="listAcquisitionEras",parameters=kwargs.keys(),validParameters=validParameters)
         
-        return self.__callServer("/acquisitioneras",params=kwargs)
+        return self.__callServer("/acquisitioneras_ci",params=kwargs)
 
     def listBlockChildren(self, **kwargs):
         """
@@ -744,9 +757,9 @@ class DbsApi(object):
         
         """
         validParameters = ['processing_version']
-
-        checkInputParameter(method="listProcessingEras",parameters=kwargs.keys(),validParameters=validParameters)
-
+        requiredParameters={'forced':validParameters}
+        checkInputParameter(method="listProcessingEras",parameters=kwargs.keys(),validParameters=validParameters,
+                                    requiredParameters=requiredParameters)
         return self.__callServer("/processingeras",params=kwargs)
 
     def listReleaseVersions(self, **kwargs):
@@ -858,6 +871,21 @@ class DbsApi(object):
         kwargs['block_name'] = xsparts[0]+urllib.quote_plus('#')+parts[1]
 
         return self.__callServer("/blocks", params=kwargs, callmethod='PUT')
+
+    def updateAcqEraEndDate(self, **kwargs):
+        """
+        API to update the end_date of an acquisition era
+
+        :acquisition_era_name: str  (Required)
+        :end_date: int and not zero (Required)        
+        """
+        validParameters = ['end_date','acquisition_era_name']
+
+        requiredParameters = {'forced':validParameters}
+
+        checkInputParameter(method="updateAcqEraEndDate",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
+
+        return self.__callServer("/acquisitioneras", params=kwargs, callmethod='PUT')
 
     def updateDatasetType(self, **kwargs):
         """
