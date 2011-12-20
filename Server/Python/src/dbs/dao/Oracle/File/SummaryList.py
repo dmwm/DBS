@@ -36,13 +36,13 @@ class SummaryList(DBFormatter):
                      and f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)   
                     ) as num_file,
                     
-                    (select sum(f.event_count) event_count from %sfiles f 
+                    nvl((select sum(f.event_count) event_count from %sfiles f 
                      join %sblocks b on b.BLOCK_ID = f.block_id
                      where b.BLOCK_NAME=:block_name and
                      f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)   
-                    ) as num_event,
+                    ),0) as num_event,
 
-                    (select sum(f.file_size) file_size from %sfiles f 
+                    (select nvl(sum(f.file_size),0) file_size from %sfiles f 
                      join %sblocks b on b.BLOCK_ID = f.block_id
                      where b.BLOCK_NAME=:block_name and 
                      f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)
@@ -71,12 +71,12 @@ class SummaryList(DBFormatter):
                      where b.BLOCK_NAME=:block_name
                     ) as num_file,
                     
-                    (select sum(f.event_count) event_count from %sfiles f 
+                    nvl((select sum(f.event_count) event_count from %sfiles f 
                      join %sblocks b on b.BLOCK_ID = f.block_id
                      where b.BLOCK_NAME=:block_name
-                    ) as num_event,
+                    ),0) as num_event,
 
-                    (select sum(f.file_size) file_size from %sfiles f 
+                    (select nvl(sum(f.file_size),0) file_size from %sfiles f 
                      join %sblocks b on b.BLOCK_ID = f.block_id
                      where b.BLOCK_NAME=:block_name
                     ) as file_size,
@@ -103,13 +103,13 @@ class SummaryList(DBFormatter):
                      f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)   
                     ) as num_file,
                        
-                    (select sum(f.event_count) event_count from %sfiles f 
+                    nvl((select sum(f.event_count) event_count from %sfiles f 
                      join %sdatasets d on d.DATASET_ID = f.dataset_id
                      where d.dataset=:dataset and
                      f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)
-                    ) as num_event,
+                    ),0) as num_event,
      
-                    (select sum(f.file_size) file_size from %sfiles f 
+                    (select nvl(sum(f.file_size),0) file_size from %sfiles f 
                      join %sdatasets d on d.DATASET_ID = f.dataset_id
                      where d.dataset=:dataset and
                      f.FILE_ID in (select fl.file_id from %sfile_lumis fl where run_num=:run_num)
@@ -139,12 +139,12 @@ class SummaryList(DBFormatter):
                      where d.dataset=:dataset
                     ) as num_file,
                        
-                    (select sum(f.event_count) event_count from %sfiles f 
+                    nvl((select sum(f.event_count) event_count from %sfiles f 
                      join %sdatasets d on d.DATASET_ID = f.dataset_id
                      where d.dataset=:dataset
-                    ) as num_event,
+                    ),0) as num_event,
      
-                    (select sum(f.file_size) file_size from %sfiles f 
+                    (select nvl(sum(f.file_size),0) file_size from %sfiles f 
                      join %sdatasets d on d.DATASET_ID = f.dataset_id
                      where d.dataset=:dataset
                     ) as file_size,

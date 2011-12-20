@@ -29,7 +29,7 @@ def inputChecks(**_params_):
                 #"name=abc" is removed by the framework since name is not a key work for the api.
                 if name !='self':
                     types = _params_[name]
-                    if name =='lumi_list': value = cjson.decode(value)
+                    #if name =='lumi_list': value = cjson.decode(value)
                     if not isinstance(value, types):
                         serverlog = "Expected '%s' to be %s; was %s." % (name, types, type(value))
                         #raise TypeError, "Expected '%s' to be %s; was %s." % (name, types, type(value))
@@ -40,6 +40,7 @@ def inputChecks(**_params_):
                                 if name == 'dataset':
                                     if '*' in value: searchdataset(value)
                                     else: dataset(value)
+                                elif name =='lumi_list': value = cjson.decode(value)
                                 elif name =='block_name':
                                     if '*' in value: searchblock(value)
                                     else: block(value)
