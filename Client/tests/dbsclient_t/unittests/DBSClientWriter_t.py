@@ -20,7 +20,10 @@ url=os.environ['DBS_WRITER_URL']
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
 api = DbsApi(url=url)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
-procdataset = 'unittest_web_dataset_%s' % uid 
+processing_version="%s" %(uid if (uid<9999) else uid%9999)
+acquisition_era_name="acq_era_%s" %uid
+procdataset = '%s-v%s' % (acquisition_era_name, processing_version) 
+parent_procdataset = '%s-pstr-v%s' % (acquisition_era_name, processing_version)
 tier = 'GEN-SIM-RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
 dataset2="%s_2" %dataset
@@ -31,10 +34,8 @@ pset_hash='76e303993a1c2f842159dbfeeed9a0dd'
 release_version='CMSSW_1_2_3'
 site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
-parent_dataset="/%s/parent_%s/%s" % (primary_ds_name, procdataset, tier)
+parent_dataset="/%s/%s/%s" % (primary_ds_name, parent_procdataset, tier)
 parent_block="%s#%s" % (parent_dataset, uid)
-acquisition_era_name="acq_era_%s" %uid
-processing_version="%s" %(uid if (uid<9999) else uid%9999)
 flist=[]
 
 outDict={
@@ -118,7 +119,7 @@ class DBSClientWriter_t(unittest.TestCase):
         #pdb.set_trace()
 	parentdata = {
 		'physics_group_name': 'Tracker', 'dataset': parent_dataset,
-	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "parent_"+procdataset, 'primary_ds_name': primary_ds_name,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': parent_procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
                         'output_module_label': output_module_label, 'global_tag':global_tag}

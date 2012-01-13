@@ -1,11 +1,11 @@
 /* ---------------------------------------------------------------------- */
-/* Script generated with: DeZign for Databases v6.1.2                     */
+/* Script generated with: DeZign for Databases v6.3.4                     */
 /* Target DBMS:           Oracle 11g                                      */
 /* Project file:          DBS3.dez                                        */
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2011-09-15 09:23                                */
+/* Created on:            2012-01-13 11:02                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -533,6 +533,114 @@ GRANT DELETE ON PRIMARY_DATASETS TO CMS_DBS3_ADMIN_ROLE;
 CREATE INDEX IDX_PDS_1 ON PRIMARY_DATASETS (PRIMARY_DS_TYPE_ID);
 
 /* ---------------------------------------------------------------------- */
+/* Add table "ACQUISITION_ERAS"                                           */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE ACQUISITION_ERAS (
+    ACQUISITION_ERA_ID INTEGER CONSTRAINT NN_AQE_ACQUISITION_ERA_ID NOT NULL,
+    ACQUISITION_ERA_NAME VARCHAR2(120) CONSTRAINT NN_AQE_ACQUISITION_ERA_NAME NOT NULL,
+    START_DATE INTEGER CONSTRAINT NN_AQE_START_DATE NOT NULL,
+    END_DATE INTEGER,
+    CREATION_DATE INTEGER,
+    CREATE_BY VARCHAR2(100),
+    DESCRIPTION VARCHAR2(40),
+    CONSTRAINT PK_AQE PRIMARY KEY (ACQUISITION_ERA_ID),
+    CONSTRAINT TUC_AQE_ACQUISITION_ERA_NAME UNIQUE (ACQUISITION_ERA_NAME)
+);
+CREATE UNIQUE INDEX CMS_DBS3_PROD2.TUC_AQE_ACQUISITION_ERA_NAME2 ON CMS_DBS3_PROD2.ACQUISITION_ERAS
+(NLSSORT("ACQUISITION_ERA_NAME",'nls_sort=''BINARY_CI'''));
+GRANT SELECT ON ACQUISITION_ERAS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON ACQUISITION_ERAS TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON ACQUISITION_ERAS TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
+/* Add table "PROCESSING_ERAS"                                            */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE PROCESSING_ERAS (
+    PROCESSING_ERA_ID INTEGER CONSTRAINT NN_PE_PROCESSING_ERA_ID NOT NULL,
+    PROCESSING_VERSION INTEGER,
+    CREATION_DATE INTEGER,
+    CREATE_BY VARCHAR2(100),
+    DESCRIPTION VARCHAR2(40),
+    CONSTRAINT PK_PE PRIMARY KEY (PROCESSING_ERA_ID),
+    CONSTRAINT TUC_PE_PROCESSING_VERSION UNIQUE (PROCESSING_VERSION)
+);
+GRANT SELECT ON PROCESSING_ERAS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON PROCESSING_ERAS  TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON PROCESSING_ERAS  TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
+/* Add table "FILE_BUFFERS"                                               */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE FILE_BUFFERS (
+    LOGICAL_FILE_NAME VARCHAR2(700) CONSTRAINT NN_FB_LOGICAL_FILE_NAME NOT NULL,
+    FILE_CLOB CLOB,
+    BLOCK_ID INTEGER,
+    CONSTRAINT PK_FB PRIMARY KEY (LOGICAL_FILE_NAME)
+);
+GRANT SELECT ON FILE_BUFFERS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON FILE_BUFFERS TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON FILE_BUFFERS TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
+/* Add table "MIGRATION_REQUESTS"                                         */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE MIGRATION_REQUESTS (
+    MIGRATION_REQUEST_ID INTEGER CONSTRAINT NN_MR_MIGRATION_REQUEST_ID NOT NULL,
+    MIGRATION_URL VARCHAR2(300),
+    MIGRATION_INPUT VARCHAR2(700),
+    MIGRATION_STATUS INTEGER,
+    CREATION_DATE INTEGER,
+    CREATE_BY VARCHAR2(100),
+    LAST_MODIFICATION_DATE INTEGER,
+    LAST_MODIFIED_BY VARCHAR2(100),
+    CONSTRAINT PK_MR PRIMARY KEY (MIGRATION_REQUEST_ID),
+    CONSTRAINT TUC_MR_1 UNIQUE (MIGRATION_URL, MIGRATION_INPUT)
+);
+GRANT SELECT ON MIGRATION_REQUESTS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON MIGRATION_REQUESTS TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON MIGRATION_REQUESTS TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
+/* Add table "MIGRATION_BLOCKS"                                           */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE MIGRATION_BLOCKS (
+    MIGRATION_BLOCK_ID INTEGER CONSTRAINT NN_MB_MIGRATION_BLOCK_ID NOT NULL,
+    MIGRATION_REQUEST_ID INTEGER CONSTRAINT NN_MB_MIGRATION_REQUEST_ID NOT NULL,
+    MIGRATION_BLOCK_NAME VARCHAR2(700),
+    MIGRATION_ORDER INTEGER,
+    MIGRATION_STATUS INTEGER,
+    CREATION_DATE INTEGER,
+    CREATE_BY VARCHAR2(100),
+    LAST_MODIFICATION_DATE INTEGER,
+    LAST_MODIFIED_BY VARCHAR2(100),
+    CONSTRAINT PK_MB PRIMARY KEY (MIGRATION_BLOCK_ID),
+    CONSTRAINT TUC_MB_1 UNIQUE (MIGRATION_BLOCK_NAME, MIGRATION_REQUEST_ID)
+);
+GRANT SELECT ON MIGRATION_BLOCKS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON MIGRATION_BLOCKS TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON MIGRATION_BLOCKS TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
+/* Add table "COMPONENT_STATUS"                                           */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE COMPONENT_STATUS (
+    COMP_STATUS_ID INTEGER CONSTRAINT NN_CSS_COMP_STATUS_ID NOT NULL,
+    COMPONENT_NAME VARCHAR2(50),
+    COMPONENT_STATUS VARCHAR2(100),
+    LAST_CONTACT_TIME INTEGER,
+    CONSTRAINT PK_CSS PRIMARY KEY (COMP_STATUS_ID)
+);
+GRANT SELECT ON COMPONENT_STATUS TO CMS_DBS3_READ_ROLE;
+GRANT INSERT, UPDATE ON COMPONENT_STATUS TO CMS_DBS3_WRITE_ROLE;
+GRANT DELETE ON COMPONENT_STATUS TO CMS_DBS3_ADMIN_ROLE;
+
+/* ---------------------------------------------------------------------- */
 /* Add table "DATASETS"                                                   */
 /* ---------------------------------------------------------------------- */
 
@@ -809,110 +917,6 @@ GRANT INSERT, UPDATE ON FILE_LUMIS  TO CMS_DBS3_WRITE_ROLE;
 GRANT DELETE ON FILE_LUMIS  TO CMS_DBS3_ADMIN_ROLE;
 
 CREATE INDEX IDX_FLM_1 ON FILE_LUMIS (FILE_ID);
-
-/* ---------------------------------------------------------------------- */
-/* Add table "ACQUISITION_ERAS"                                           */
-/* ---------------------------------------------------------------------- */
-
-CREATE TABLE ACQUISITION_ERAS (
-    ACQUISITION_ERA_ID INTEGER CONSTRAINT NN_AQE_ACQUISITION_ERA_ID NOT NULL,
-    ACQUISITION_ERA_NAME VARCHAR2(120) CONSTRAINT NN_AQE_ACQUISITION_ERA_NAME NOT NULL,
-    CREATION_DATE INTEGER,
-    CREATE_BY VARCHAR2(100),
-    DESCRIPTION VARCHAR2(40),
-    CONSTRAINT PK_AQE PRIMARY KEY (ACQUISITION_ERA_ID),
-    CONSTRAINT TUC_AQE_ACQUISITION_ERA_NAME UNIQUE (ACQUISITION_ERA_NAME)
-);
-GRANT SELECT ON ACQUISITION_ERAS TO CMS_DBS3_READ_ROLE;
-GRANT INSERT, UPDATE ON ACQUISITION_ERAS TO CMS_DBS3_WRITE_ROLE;
-GRANT DELETE ON ACQUISITION_ERAS TO CMS_DBS3_ADMIN_ROLE;
-
-/* ---------------------------------------------------------------------- */
-/* Add table "PROCESSING_ERAS"                                            */
-/* ---------------------------------------------------------------------- */
-
-CREATE TABLE PROCESSING_ERAS (
-    PROCESSING_ERA_ID INTEGER CONSTRAINT NN_PE_PROCESSING_ERA_ID NOT NULL,
-    PROCESSING_VERSION VARCHAR2(4),
-    CREATION_DATE INTEGER,
-    CREATE_BY VARCHAR2(100),
-    DESCRIPTION VARCHAR2(40),
-    CONSTRAINT PK_PE PRIMARY KEY (PROCESSING_ERA_ID),
-    CONSTRAINT TUC_PE_PROCESSING_VERSION UNIQUE (PROCESSING_VERSION)
-);
-GRANT SELECT ON PROCESSING_ERAS TO CMS_DBS3_READ_ROLE;
-GRANT INSERT, UPDATE ON PROCESSING_ERAS  TO CMS_DBS3_WRITE_ROLE;
-GRANT DELETE ON PROCESSING_ERAS  TO CMS_DBS3_ADMIN_ROLE;
-
-/* ---------------------------------------------------------------------- */
-/* Add table "FILE_BUFFERS"                                               */
-/* ---------------------------------------------------------------------- */
-
-CREATE TABLE FILE_BUFFERS (
-    LOGICAL_FILE_NAME VARCHAR2(700) CONSTRAINT NN_FB_LOGICAL_FILE_NAME NOT NULL,
-    FILE_CLOB CLOB,
-    BLOCK_ID INTEGER,
-    CONSTRAINT PK_FB PRIMARY KEY (LOGICAL_FILE_NAME)
-);
-GRANT SELECT ON FILE_BUFFERS TO CMS_DBS3_READ_ROLE;
-GRANT INSERT, UPDATE ON FILE_BUFFERS TO CMS_DBS3_WRITE_ROLE;
-GRANT DELETE ON FILE_BUFFERS TO CMS_DBS3_ADMIN_ROLE;
-
-/* ---------------------------------------------------------------------- */
-/* Add table "MIGRATION_REQUESTS"                                         */
-/* ---------------------------------------------------------------------- */
-
-CREATE TABLE MIGRATION_REQUESTS (
-    MIGRATION_REQUEST_ID INTEGER CONSTRAINT NN_MR_MIGRATION_REQUEST_ID NOT NULL,
-    MIGRATION_URL VARCHAR2(300),
-    MIGRATION_INPUT VARCHAR2(700),
-    MIGRATION_STATUS INTEGER,
-    CREATION_DATE INTEGER,
-    CREATE_BY VARCHAR2(100),
-    LAST_MODIFICATION_DATE INTEGER,
-    LAST_MODIFIED_BY VARCHAR2(100),
-    CONSTRAINT PK_MR PRIMARY KEY (MIGRATION_REQUEST_ID),
-    CONSTRAINT TUC_MR_1 UNIQUE (MIGRATION_URL, MIGRATION_INPUT)
-);
-GRANT SELECT ON MIGRATION_REQUESTS TO CMS_DBS3_READ_ROLE;
-GRANT INSERT, UPDATE ON MIGRATION_REQUESTS TO CMS_DBS3_WRITE_ROLE;
-GRANT DELETE ON MIGRATION_REQUESTS TO CMS_DBS3_ADMIN_ROLE;
-
-/* ---------------------------------------------------------------------- */
-/* Add table "MIGRATION_BLOCKS"                                           */
-/* ---------------------------------------------------------------------- */
-
-CREATE TABLE MIGRATION_BLOCKS (
-    MIGRATION_BLOCK_ID INTEGER CONSTRAINT NN_MB_MIGRATION_BLOCK_ID NOT NULL,
-    MIGRATION_REQUEST_ID INTEGER CONSTRAINT NN_MB_MIGRATION_REQUEST_ID NOT NULL,
-    MIGRATION_BLOCK_NAME VARCHAR2(700),
-    MIGRATION_ORDER INTEGER,
-    MIGRATION_STATUS INTEGER,
-    CREATION_DATE INTEGER,
-    CREATE_BY VARCHAR2(100),
-    LAST_MODIFICATION_DATE INTEGER,
-    LAST_MODIFIED_BY VARCHAR2(100),
-    CONSTRAINT PK_MB PRIMARY KEY (MIGRATION_BLOCK_ID),
-    CONSTRAINT TUC_MB_1 UNIQUE (MIGRATION_BLOCK_NAME, MIGRATION_REQUEST_ID)
-);
-GRANT SELECT ON MIGRATION_BLOCKS TO CMS_DBS3_READ_ROLE;
-GRANT INSERT, UPDATE ON MIGRATION_BLOCKS TO CMS_DBS3_WRITE_ROLE;
-GRANT DELETE ON MIGRATION_BLOCKS TO CMS_DBS3_ADMIN_ROLE;
-
-/* ---------------------------------------------------------------------- */
-/* Add table "COMPONENT_STATUS"                                           */
-/* ---------------------------------------------------------------------- */
-
-CREATE TABLE COMPONENT_STATUS (
-    COMP_STATUS_ID INTEGER CONSTRAINT NN_CSS_COMP_STATUS_ID NOT NULL,
-    COMPONENT_NAME VARCHAR2(50),
-    COMPONENT_STATUS VARCHAR2(100),
-    LAST_CONTACT_TIME INTEGER,
-    CONSTRAINT PK_CSS PRIMARY KEY (COMP_STATUS_ID)
-);
-GRANT SELECT ON COMPONENT_STATUS TO CMS_DBS3_READ_ROLE;
-GRANT INSERT, UPDATE ON COMPONENT_STATUS TO CMS_DBS3_WRITE_ROLE;
-GRANT DELETE ON COMPONENT_STATUS TO CMS_DBS3_ADMIN_ROLE;
 
 /* ---------------------------------------------------------------------- */
 /* Foreign key constraints                                                */

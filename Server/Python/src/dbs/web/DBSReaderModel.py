@@ -235,7 +235,7 @@ class DBSReaderModel(RESTModel):
     
     #@expose
     @inputChecks( dataset=str, parent_dataset=str, release_version=str, pset_hash=str,
-                 app_name=str, output_module_label=str,  processing_version=str, acquisition_era_name=str,
+                 app_name=str, output_module_label=str,  processing_version=(int,str), acquisition_era_name=str,
                  run_num=(long,int,str), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
                  primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str, 
                  min_cdate=(int,str), max_cdate=(int,str),
@@ -243,7 +243,7 @@ class DBSReaderModel(RESTModel):
     @tools.secmodv2()
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="",
-        processing_version="", acquisition_era_name="", run_num="0",
+        processing_version=0, acquisition_era_name="", run_num="0",
         physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="", 
         processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='',
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',
@@ -272,7 +272,7 @@ class DBSReaderModel(RESTModel):
         dataset_access_type = dataset_access_type.replace("*", "%")
         processed_ds_name = processed_ds_name.replace("*", "%")
         acquisition_era_name = acquisition_era_name.replace("*", "%")
-        processing_version =  processing_version.replace("*", "%")
+        #processing_version =  processing_version.replace("*", "%")
         try:
             #run_num = run_num.replace("*", "%")
             if isinstance(run_num,str) and ('*' in run_num or '%' in run_num):
