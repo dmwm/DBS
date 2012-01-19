@@ -32,7 +32,7 @@ class DBSAcquisitionEra:
         Returns all acquistion eras in dbs
         """
         if type(acq) is not str:
-            dbsExceptionHandler('dbsException-invalid-input', 'Acquistion era name given is not valid : %s' %acq)
+            dbsExceptionHandler('dbsException-invalid-input', 'acquistion_era_name given is not valid : %s' %acq)
         try:
             conn = self.dbi.connection()
             tran = conn.begin()
@@ -50,7 +50,7 @@ class DBSAcquisitionEra:
         Returns all acquistion eras in dbs
         """
         if type(acq) is not str:
-            dbsExceptionHandler('dbsException-invalid-input', 'Acquistion era name given is not valid : %s'%acq)
+            dbsExceptionHandler('dbsException-invalid-input', 'aquistion_era_name given is not valid : %s'%acq)
         try:
             conn = self.dbi.connection()
             tran = conn.begin()
@@ -86,7 +86,7 @@ class DBSAcquisitionEra:
                 # already exists
                 #self.logger.warning("DBSAcquisitionEra/insertAcquisitionEra: Unique constraint violation being ignored...")
                 #self.logger.warning("%s" % ex)
-                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input: the acquisition era name already exists in DB",  serverError="%s" %ex)
+                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input: acquisition_era_name already exists in DB",  serverError="%s" %ex)
             else:
                 if tran:
                     tran.rollback()

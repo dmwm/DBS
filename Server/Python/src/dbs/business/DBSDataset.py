@@ -221,12 +221,12 @@ class DBSDataset:
                     dbsExceptionHandler('dbsException-invalid-input', "insertDataset:\
                     processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version must be satisified.")
             else:
-                dbsExceptionHandler("dbsException-missing-data",  "insertDataset: Required acquistion era or processing version is not found in the input")
+                dbsExceptionHandler("dbsException-missing-data",  "insertDataset: Required acquisition_era_name or processing_version is not found in the input")
             
             if "physics_group_name" in businput:
                 dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
                 if dsdaoinput["physics_group_id"]  == -1:
-                    dbsExceptionHandler("dbsException-missing-data",  "insertDataset. Physics Group Not found in DB")
+                    dbsExceptionHandler("dbsException-missing-data",  "insertDataset. physics_group_name not found in DB")
             else:
                 dsdaoinput["physics_group_id"] = None
 
@@ -255,15 +255,15 @@ class DBSDataset:
             if businput.has_key("processing_version") and businput["processing_version"] != 0:
                 dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"], tran)
                 if dsdaoinput["processing_era_id"] == -1 :
-                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: Processing version not found in DB") 
-            else: dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset: processing version is required")
+                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: processing_version not found in DB") 
+            else: dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset: processing_version is required")
 
             # See if Acquisition Era exists
             if businput.has_key("acquisition_era_name"):
                 dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"], tran)
                 if dsdaoinput["acquisition_era_id"] == -1 :
-                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: Acquisition Era not found in DB")
-            else: dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset: Acquisition Era is required")
+                    dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: acquisition_era_name not found in DB")
+            else: dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset:  acquisition_era_name is required")
             try:
                 # insert the dataset
                 self.datasetin.execute(conn, dsdaoinput, tran)

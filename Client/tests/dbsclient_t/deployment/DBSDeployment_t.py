@@ -187,9 +187,9 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertFalse(False in result)
 
     def test_list_block_children(self):
-        expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
+        expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
         
-        blockchildren = sorted(self.api.listBlockChildren(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["block_name"])
+        blockchildren = sorted(self.api.listBlockChildren(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["block_name"])
 
         self.assertEqual(expected_data,blockchildren)
 
@@ -205,9 +205,9 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_list_block_parents(self):
-        expected_data = [{u'parent_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81', u'this_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
+        expected_data = [{u'parent_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81', u'this_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
         
-        blockparents = self.api.listBlockParents(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81")
+        blockparents = self.api.listBlockParents(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81")
 
         self.assertEqual(expected_data,blockparents)
         
@@ -226,19 +226,19 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("BlockList.json",'r')
         expected_data = stripChangingParameters(sorted(json.load(fp), key=lambda k: k["block_name"]))
         
-        blocks = sorted(self.api.listBlocks(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW"), key=lambda k: k["block_name"])
+        blocks = sorted(self.api.listBlocks(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW"), key=lambda k: k["block_name"])
 
         self.assertEqual(expected_data,blocks)
 
         fp.close()
 
-        expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
+        expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
         
-        blocks = self.api.listBlocks(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
+        blocks = self.api.listBlocks(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
 
         self.assertEqual(expected_data,blocks)
 
-        blocks = self.api.listBlocks(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
+        blocks = self.api.listBlocks(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
 
         self.assertEqual(expected_data,blocks)        
 
@@ -259,21 +259,21 @@ class PostDeploymentTests(unittest.TestCase):
 
         del expected_data['output_configs']
         
-        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",dataset_access_type="*",detail="True"))
+        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",dataset_access_type="*",detail="True"))
 
         self.assertEqual([expected_data],datasets)
 
         fp.close()
 
-        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",dataset_access_type="*",detail="True",data_tier_name="RAW"))
+        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",dataset_access_type="*",detail="True",data_tier_name="RAW"))
 
         self.assertEqual([expected_data],datasets)
 
-        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",dataset_access_type="*",detail="True",primary_ds_name="DBS3DeploymentTestPrimary"))
+        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",dataset_access_type="*",detail="True",primary_ds_name="DBS3DeploymentTestPrimary"))
 
         self.assertEqual([expected_data],datasets)
 
-        datasets = stripChangingParameters(self.api.listDatasets(dataset_access_type="*",detail="True", logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"))
+        datasets = stripChangingParameters(self.api.listDatasets(dataset_access_type="*",detail="True", logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"))
 
         self.assertEqual([expected_data],datasets)
 
@@ -290,9 +290,9 @@ class PostDeploymentTests(unittest.TestCase):
         fp.close()
 
     def test_list_dataset_children(self):
-        expected_data = [{u'child_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO', u'dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW'}]
+        expected_data = [{u'child_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO', u'dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW'}]
         
-        children = stripChangingParameters(self.api.listDatasetChildren(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW"))
+        children = stripChangingParameters(self.api.listDatasetChildren(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW"))
 
         self.assertEqual(expected_data,children)
 
@@ -308,9 +308,9 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_list_dataset_parents(self):
-        expected_data = [{u'dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO', u'parent_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW'}]
+        expected_data = [{u'dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO', u'parent_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW'}]
         
-        parents = stripChangingParameters(self.api.listDatasetParents(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO"))
+        parents = stripChangingParameters(self.api.listDatasetParents(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO"))
 
         self.assertEqual(expected_data,parents)
 
@@ -370,9 +370,9 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertFalse(False in result)
 
     def test_list_file_children(self):
-        expected_data = [{u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'], u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
+        expected_data = [{u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'], u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
         
-        children = self.api.listFileChildren(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
+        children = self.api.listFileChildren(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
 
         self.assertEqual(expected_data,children)
 
@@ -391,7 +391,7 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("FileLumis.json",'r')
         expected_data = sorted(json.load(fp), key=lambda k: k["lumi_section_num"])
 
-        lumis = sorted(self.api.listFileLumis(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["lumi_section_num"])
+        lumis = sorted(self.api.listFileLumis(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["lumi_section_num"])
 
         self.assertEqual(expected_data,lumis)
 
@@ -399,7 +399,7 @@ class PostDeploymentTests(unittest.TestCase):
 
         expected_data = [{u'lumi_section_num': 24022, u'run_num': 43}, {u'lumi_section_num': 24122, u'run_num': 43}, {u'lumi_section_num': 24222, u'run_num': 43}]
 
-        lumis = sorted(self.api.listFileLumis(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"), key=lambda k: k["lumi_section_num"])
+        lumis = sorted(self.api.listFileLumis(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"), key=lambda k: k["lumi_section_num"])
 
         self.assertEqual(expected_data,lumis)
 
@@ -418,15 +418,15 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("FileParents.json",'r')
         expected_data = sorted(json.load(fp), key=lambda k: k["parent_logical_file_name"])
         
-        parents = sorted(self.api.listFileParents(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["parent_logical_file_name"])
+        parents = sorted(self.api.listFileParents(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["parent_logical_file_name"])
 
         self.assertEqual(expected_data,parents)
 
         fp.close()
 
-        expected_data = [{u'parent_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'], u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
+        expected_data = [{u'parent_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'], u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
         
-        parents = self.api.listFileParents(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
+        parents = self.api.listFileParents(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
         
         self.assertEqual(expected_data,parents)
 
@@ -445,16 +445,16 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("ListFiles.json",'r')
         expected_data = json.load(fp)
         
-        files = self.api.listFiles(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
+        files = self.api.listFiles(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
         
 
         self.assertEqual(expected_data,stripChangingParameters(files))
 
-        files = self.api.listFiles(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
+        files = self.api.listFiles(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
 
         self.assertEqual(expected_data,stripChangingParameters(files))
 
-        files = self.api.listFiles(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
+        files = self.api.listFiles(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
         
         self.assertEqual(expected_data,stripChangingParameters(files))
 
@@ -474,13 +474,13 @@ class PostDeploymentTests(unittest.TestCase):
     def test_list_file_summaries(self):
         expected_data = [{u'num_block': 1, u'num_file': 10, u'num_event': 553964, u'num_lumi': 30, u'file_size': 25350778463}]
         
-        summaries = self.api.listFileSummaries(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
+        summaries = self.api.listFileSummaries(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
 
         self.assertEqual(expected_data,summaries)
 
         expected_data = [{u'num_block': 1, u'num_file': 10, u'num_event': 553964, u'num_lumi': 30, u'file_size': 25350778463}]
         
-        self.api.listFileSummaries(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW")
+        self.api.listFileSummaries(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW")
 
         self.assertEqual(expected_data,summaries)
 
@@ -499,13 +499,13 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("OutputConfigs.json",'r')
         expected_data = [json.load(fp)]
         
-        configs = self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",app_name="cmsRun")
+        configs = self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",app_name="cmsRun")
         self.assertEqual(expected_data,configs)
 
-        configs = self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
+        configs = self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
         self.assertEqual(expected_data,configs)
         
-        configs = self.api.listOutputConfigs(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
+        configs = self.api.listOutputConfigs(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
         self.assertEqual(expected_data,configs)
 
         fp.close()
@@ -542,7 +542,7 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file("ReleaseVersions.json",'r')
         expected_data = json.load(fp)
         
-        versions = self.api.listReleaseVersions(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW")
+        versions = self.api.listReleaseVersions(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW")
 
         self.assertEqual(expected_data,versions)
 

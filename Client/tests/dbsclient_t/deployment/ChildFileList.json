@@ -28,13 +28,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root", 
             "file_size": "2585460881", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -67,13 +67,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root", 
             "file_size": "2958232781", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -106,13 +106,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root", 
             "file_size": "2542332171", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -145,13 +145,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root", 
             "file_size": "2711673579", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -184,13 +184,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root", 
             "file_size": "2890224416", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -223,13 +223,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root", 
             "file_size": "2888099453", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -262,13 +262,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root", 
             "file_size": "2995092168", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -301,13 +301,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root", 
             "file_size": "2749302595", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -340,13 +340,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root", 
             "file_size": "2977542367", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -379,13 +379,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root", 
             "file_size": "2589328262", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -418,13 +418,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_0.root", 
             "file_size": "2670638806", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -457,13 +457,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_1.root", 
             "file_size": "2580958889", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -496,13 +496,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_2.root", 
             "file_size": "2863811103", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -535,13 +535,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_3.root", 
             "file_size": "2681245672", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -574,13 +574,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_4.root", 
             "file_size": "2769485001", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -613,13 +613,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_5.root", 
             "file_size": "2814872611", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -652,13 +652,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_6.root", 
             "file_size": "2855170533", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -691,13 +691,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_7.root", 
             "file_size": "2585848692", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -730,13 +730,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_8.root", 
             "file_size": "2776767416", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -769,13 +769,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_9.root", 
             "file_size": "2998088509", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_9.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -808,13 +808,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_0.root", 
             "file_size": "2419767756", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -847,13 +847,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_1.root", 
             "file_size": "2909330574", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -886,13 +886,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_2.root", 
             "file_size": "2864652691", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -925,13 +925,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_3.root", 
             "file_size": "2347878398", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -964,13 +964,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_4.root", 
             "file_size": "2970714998", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1003,13 +1003,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_5.root", 
             "file_size": "2593617675", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1042,13 +1042,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_6.root", 
             "file_size": "2189826701", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1081,13 +1081,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_7.root", 
             "file_size": "2567635388", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1120,13 +1120,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_8.root", 
             "file_size": "2316987621", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1159,13 +1159,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_9.root", 
             "file_size": "2475467263", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_9.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1198,13 +1198,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_0.root", 
             "file_size": "2978720457", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1237,13 +1237,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_1.root", 
             "file_size": "2797582244", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1276,13 +1276,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_2.root", 
             "file_size": "2747270006", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1315,13 +1315,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_3.root", 
             "file_size": "2917910468", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1354,13 +1354,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_4.root", 
             "file_size": "2939345378", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1393,13 +1393,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_5.root", 
             "file_size": "2550551382", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1432,13 +1432,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_6.root", 
             "file_size": "2533161671", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1471,13 +1471,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_7.root", 
             "file_size": "2451504017", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1510,13 +1510,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_8.root", 
             "file_size": "2977722017", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1549,13 +1549,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_9.root", 
             "file_size": "2610075139", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_9.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1588,13 +1588,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_0.root", 
             "file_size": "2953282805", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1627,13 +1627,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_1.root", 
             "file_size": "2924438501", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1666,13 +1666,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_2.root", 
             "file_size": "2876047289", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1705,13 +1705,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_3.root", 
             "file_size": "2574054109", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1744,13 +1744,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_4.root", 
             "file_size": "2503000119", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1783,13 +1783,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_5.root", 
             "file_size": "2658005270", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1822,13 +1822,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_6.root", 
             "file_size": "2984519434", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1861,13 +1861,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_7.root", 
             "file_size": "2749435368", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1900,13 +1900,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_8.root", 
             "file_size": "2997783412", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1939,13 +1939,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_9.root", 
             "file_size": "2274970560", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_9.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -1978,13 +1978,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_0.root", 
             "file_size": "2959138760", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2017,13 +2017,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_1.root", 
             "file_size": "2686838959", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2056,13 +2056,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_2.root", 
             "file_size": "2209741831", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2095,13 +2095,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_3.root", 
             "file_size": "2958284185", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2134,13 +2134,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_4.root", 
             "file_size": "2932283421", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2173,13 +2173,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_5.root", 
             "file_size": "2709195009", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2212,13 +2212,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_6.root", 
             "file_size": "2460982469", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2251,13 +2251,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_7.root", 
             "file_size": "2892353865", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2290,13 +2290,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_8.root", 
             "file_size": "2602263132", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2329,13 +2329,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_9.root", 
             "file_size": "2539955289", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_9.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2368,13 +2368,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_0.root", 
             "file_size": "2808127108", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2407,13 +2407,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_1.root", 
             "file_size": "2881830795", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2446,13 +2446,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_2.root", 
             "file_size": "2235977438", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2485,13 +2485,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_3.root", 
             "file_size": "2637175341", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2524,13 +2524,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_4.root", 
             "file_size": "2594141828", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2563,13 +2563,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_5.root", 
             "file_size": "2592140086", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2602,13 +2602,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_6.root", 
             "file_size": "2457883247", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2641,13 +2641,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_7.root", 
             "file_size": "2929282903", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2680,13 +2680,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_8.root", 
             "file_size": "2630601592", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2719,13 +2719,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_9.root", 
             "file_size": "2465399942", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_9.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2758,13 +2758,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_0.root", 
             "file_size": "2861851263", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2797,13 +2797,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_1.root", 
             "file_size": "2673471575", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2836,13 +2836,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_2.root", 
             "file_size": "2963358420", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2875,13 +2875,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_3.root", 
             "file_size": "2981609170", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2914,13 +2914,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_4.root", 
             "file_size": "2649190331", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2953,13 +2953,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_5.root", 
             "file_size": "2969321660", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -2992,13 +2992,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_6.root", 
             "file_size": "2960901079", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3031,13 +3031,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_7.root", 
             "file_size": "2924340446", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3070,13 +3070,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_8.root", 
             "file_size": "2949168734", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3109,13 +3109,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_9.root", 
             "file_size": "2752192205", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_9.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3148,13 +3148,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_0.root", 
             "file_size": "2704236702", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3187,13 +3187,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_1.root", 
             "file_size": "2696220151", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3226,13 +3226,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_2.root", 
             "file_size": "2676397718", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3265,13 +3265,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_3.root", 
             "file_size": "2952377583", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3304,13 +3304,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_4.root", 
             "file_size": "2798217330", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3343,13 +3343,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_5.root", 
             "file_size": "2930606540", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3382,13 +3382,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_6.root", 
             "file_size": "2984036618", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3421,13 +3421,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_7.root", 
             "file_size": "2933153151", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3460,13 +3460,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_8.root", 
             "file_size": "2671153316", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3499,13 +3499,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_9.root", 
             "file_size": "2800253634", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_9.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3538,13 +3538,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_0.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_0.root", 
             "file_size": "2986169848", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_0.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_0.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3577,13 +3577,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_1.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_1.root", 
             "file_size": "2859606514", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_1.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_1.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3616,13 +3616,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_2.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_2.root", 
             "file_size": "2977532528", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_2.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_2.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3655,13 +3655,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_3.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_3.root", 
             "file_size": "2893594358", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_3.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_3.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3694,13 +3694,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_4.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_4.root", 
             "file_size": "2489101632", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_4.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_4.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3733,13 +3733,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_5.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_5.root", 
             "file_size": "2956134699", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_5.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_5.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3772,13 +3772,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_6.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_6.root", 
             "file_size": "2184212711", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_6.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_6.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3811,13 +3811,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_7.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_7.root", 
             "file_size": "2892373336", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_7.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_7.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3850,13 +3850,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_8.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_8.root", 
             "file_size": "2655192734", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_8.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_8.root"
                 }
             ], 
             "auto_cross_section": 0.0
@@ -3889,13 +3889,13 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_9.root", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_9.root", 
             "file_size": "2609708518", 
             "file_parent_list": [
                 {
-                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_9.root"
+                    "file_parent_lfn": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_9.root"
                 }
             ], 
             "auto_cross_section": 0.0

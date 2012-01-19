@@ -1,62 +1,62 @@
 [
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
     }, 
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
     }, 
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
     }, 
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
     }, 
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
     }, 
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
     }, 
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
     }, 
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
     }, 
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
     }, 
     {
         "parent_logical_file_name": [
-            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
+            "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
         ], 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
     }
 ]

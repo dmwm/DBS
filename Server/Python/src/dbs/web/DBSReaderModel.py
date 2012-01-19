@@ -501,7 +501,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(dataset =str, block_name=str, logical_file_name =str, release_version=str, pset_hash=str, app_name=str,\
-                 output_module_label=str, minrun=(long, int, str), maxrun=(long, int,str), origin_site_name=str, lumi_list=list, detail=(str,bool))
+                 output_module_label=str, minrun=(long, int, str), maxrun=(long, int,str), origin_site_name=str, lumi_list=(str,list), detail=(str,bool))
     @tools.secmodv2()
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "",
         release_version="", pset_hash="", app_name="", output_module_label="",
@@ -528,9 +528,10 @@ class DBSReaderModel(RESTModel):
 
         maxrun = int(maxrun)
         minrun = int(minrun)
+
         if lumi_list:
-            #lumi_list = cjson.decode(lumi_list)
             lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
+            
         detail = detail in (True, 1, "True", "1", 'true')
         output_module_label = output_module_label.replace("*", "%")
         try:

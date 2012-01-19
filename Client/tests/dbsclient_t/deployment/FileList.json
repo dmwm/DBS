@@ -12,7 +12,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2231277532", 
             "auto_cross_section": 0.0, 
             "check_sum": "2983039445", 
@@ -32,8 +32,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "33472", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"
         }, 
         {
             "adler32": "", 
@@ -47,7 +47,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2488209634", 
             "auto_cross_section": 0.0, 
             "check_sum": "1728226423", 
@@ -67,8 +67,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "46022", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root"
         }, 
         {
             "adler32": "", 
@@ -82,7 +82,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2149605739", 
             "auto_cross_section": 0.0, 
             "check_sum": "2535939084", 
@@ -102,8 +102,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "16596", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root"
         }, 
         {
             "adler32": "", 
@@ -117,7 +117,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2437347936", 
             "auto_cross_section": 0.0, 
             "check_sum": "1516811645", 
@@ -137,8 +137,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "59031", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root"
         }, 
         {
             "adler32": "", 
@@ -152,7 +152,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2750171131", 
             "auto_cross_section": 0.0, 
             "check_sum": "2635219441", 
@@ -172,8 +172,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "74490", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root"
         }, 
         {
             "adler32": "", 
@@ -187,7 +187,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2882521525", 
             "auto_cross_section": 0.0, 
             "check_sum": "2530005898", 
@@ -207,8 +207,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "51770", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root"
         }, 
         {
             "adler32": "", 
@@ -222,7 +222,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2994298439", 
             "auto_cross_section": 0.0, 
             "check_sum": "2195778398", 
@@ -242,8 +242,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "77054", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root"
         }, 
         {
             "adler32": "", 
@@ -257,7 +257,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2121785082", 
             "auto_cross_section": 0.0, 
             "check_sum": "2607777085", 
@@ -277,8 +277,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "33171", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root"
         }, 
         {
             "adler32": "", 
@@ -292,7 +292,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2903631895", 
             "auto_cross_section": 0.0, 
             "check_sum": "2285158532", 
@@ -312,8 +312,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "68273", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root"
         }, 
         {
             "adler32": "", 
@@ -327,7 +327,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2391929550", 
             "auto_cross_section": 0.0, 
             "check_sum": "2825888428", 
@@ -347,8 +347,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "94085", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root"
         }, 
         {
             "adler32": "", 
@@ -362,7 +362,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2545426377", 
             "auto_cross_section": 0.0, 
             "check_sum": "2100717823", 
@@ -382,8 +382,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "37605", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_0.root"
         }, 
         {
             "adler32": "", 
@@ -397,7 +397,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2528731709", 
             "auto_cross_section": 0.0, 
             "check_sum": "2857787405", 
@@ -417,8 +417,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "34052", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_1.root"
         }, 
         {
             "adler32": "", 
@@ -432,7 +432,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2826116844", 
             "auto_cross_section": 0.0, 
             "check_sum": "3076828197", 
@@ -452,8 +452,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "6093", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_2.root"
         }, 
         {
             "adler32": "", 
@@ -467,7 +467,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2213491350", 
             "auto_cross_section": 0.0, 
             "check_sum": "3155432323", 
@@ -487,8 +487,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "17402", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_3.root"
         }, 
         {
             "adler32": "", 
@@ -502,7 +502,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2055103435", 
             "auto_cross_section": 0.0, 
             "check_sum": "1967121758", 
@@ -522,8 +522,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "37914", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_4.root"
         }, 
         {
             "adler32": "", 
@@ -537,7 +537,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2562707057", 
             "auto_cross_section": 0.0, 
             "check_sum": "2822430243", 
@@ -557,8 +557,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "79211", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_5.root"
         }, 
         {
             "adler32": "", 
@@ -572,7 +572,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2781740972", 
             "auto_cross_section": 0.0, 
             "check_sum": "3372436504", 
@@ -592,8 +592,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "98862", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_6.root"
         }, 
         {
             "adler32": "", 
@@ -607,7 +607,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2253488730", 
             "auto_cross_section": 0.0, 
             "check_sum": "2101985713", 
@@ -627,8 +627,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "50496", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_7.root"
         }, 
         {
             "adler32": "", 
@@ -642,7 +642,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2139843317", 
             "auto_cross_section": 0.0, 
             "check_sum": "3491764451", 
@@ -662,8 +662,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "97824", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_8.root"
         }, 
         {
             "adler32": "", 
@@ -677,7 +677,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2962813444", 
             "auto_cross_section": 0.0, 
             "check_sum": "1620565527", 
@@ -697,8 +697,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "87535", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#42fd840f-3f2b-40e3-bd0a-8a7452706c94", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/42fd840f-3f2b-40e3-bd0a-8a7452706c94_9.root"
         }, 
         {
             "adler32": "", 
@@ -712,7 +712,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2352725978", 
             "auto_cross_section": 0.0, 
             "check_sum": "3378415090", 
@@ -732,8 +732,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "72877", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_0.root"
         }, 
         {
             "adler32": "", 
@@ -747,7 +747,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2827045684", 
             "auto_cross_section": 0.0, 
             "check_sum": "2843907323", 
@@ -767,8 +767,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "93416", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_1.root"
         }, 
         {
             "adler32": "", 
@@ -782,7 +782,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2847859617", 
             "auto_cross_section": 0.0, 
             "check_sum": "3424741496", 
@@ -802,8 +802,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "65121", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_2.root"
         }, 
         {
             "adler32": "", 
@@ -817,7 +817,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2224326006", 
             "auto_cross_section": 0.0, 
             "check_sum": "2770407506", 
@@ -837,8 +837,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "58531", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_3.root"
         }, 
         {
             "adler32": "", 
@@ -852,7 +852,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2296933931", 
             "auto_cross_section": 0.0, 
             "check_sum": "3239566746", 
@@ -872,8 +872,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "47937", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_4.root"
         }, 
         {
             "adler32": "", 
@@ -887,7 +887,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2300162142", 
             "auto_cross_section": 0.0, 
             "check_sum": "1540038675", 
@@ -907,8 +907,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "18973", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_5.root"
         }, 
         {
             "adler32": "", 
@@ -922,7 +922,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2157946933", 
             "auto_cross_section": 0.0, 
             "check_sum": "3077904927", 
@@ -942,8 +942,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "9965", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_6.root"
         }, 
         {
             "adler32": "", 
@@ -957,7 +957,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2462528733", 
             "auto_cross_section": 0.0, 
             "check_sum": "2339105651", 
@@ -977,8 +977,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "16922", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_7.root"
         }, 
         {
             "adler32": "", 
@@ -992,7 +992,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2273902844", 
             "auto_cross_section": 0.0, 
             "check_sum": "3261134659", 
@@ -1012,8 +1012,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "19775", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_8.root"
         }, 
         {
             "adler32": "", 
@@ -1027,7 +1027,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2351708644", 
             "auto_cross_section": 0.0, 
             "check_sum": "1657734133", 
@@ -1047,8 +1047,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "10416", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#ac856494-002c-4aff-ad5c-c6f421f2de91", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/ac856494-002c-4aff-ad5c-c6f421f2de91_9.root"
         }, 
         {
             "adler32": "", 
@@ -1062,7 +1062,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2916905697", 
             "auto_cross_section": 0.0, 
             "check_sum": "1904252863", 
@@ -1082,8 +1082,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "20745", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_0.root"
         }, 
         {
             "adler32": "", 
@@ -1097,7 +1097,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2751882000", 
             "auto_cross_section": 0.0, 
             "check_sum": "3349393899", 
@@ -1117,8 +1117,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "38885", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_1.root"
         }, 
         {
             "adler32": "", 
@@ -1132,7 +1132,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2077191561", 
             "auto_cross_section": 0.0, 
             "check_sum": "3137390813", 
@@ -1152,8 +1152,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "72039", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_2.root"
         }, 
         {
             "adler32": "", 
@@ -1167,7 +1167,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2435365919", 
             "auto_cross_section": 0.0, 
             "check_sum": "2286323194", 
@@ -1187,8 +1187,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "5105", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_3.root"
         }, 
         {
             "adler32": "", 
@@ -1202,7 +1202,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2819807291", 
             "auto_cross_section": 0.0, 
             "check_sum": "1568593875", 
@@ -1222,8 +1222,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "69273", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_4.root"
         }, 
         {
             "adler32": "", 
@@ -1237,7 +1237,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2513821407", 
             "auto_cross_section": 0.0, 
             "check_sum": "2718062643", 
@@ -1257,8 +1257,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "45987", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_5.root"
         }, 
         {
             "adler32": "", 
@@ -1272,7 +1272,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2305389896", 
             "auto_cross_section": 0.0, 
             "check_sum": "1913350481", 
@@ -1292,8 +1292,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "29135", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_6.root"
         }, 
         {
             "adler32": "", 
@@ -1307,7 +1307,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2389095426", 
             "auto_cross_section": 0.0, 
             "check_sum": "2905379270", 
@@ -1327,8 +1327,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "29284", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_7.root"
         }, 
         {
             "adler32": "", 
@@ -1342,7 +1342,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2952668706", 
             "auto_cross_section": 0.0, 
             "check_sum": "3200606718", 
@@ -1362,8 +1362,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "21713", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_8.root"
         }, 
         {
             "adler32": "", 
@@ -1377,7 +1377,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2555090532", 
             "auto_cross_section": 0.0, 
             "check_sum": "3131547869", 
@@ -1397,8 +1397,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "8364", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/eb6e8f38-1a2b-41be-8da1-cc8a3e89fe43_9.root"
         }, 
         {
             "adler32": "", 
@@ -1412,7 +1412,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2906251823", 
             "auto_cross_section": 0.0, 
             "check_sum": "2789333570", 
@@ -1432,8 +1432,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "29756", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_0.root"
         }, 
         {
             "adler32": "", 
@@ -1447,7 +1447,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2221961345", 
             "auto_cross_section": 0.0, 
             "check_sum": "2064203559", 
@@ -1467,8 +1467,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "78865", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_1.root"
         }, 
         {
             "adler32": "", 
@@ -1482,7 +1482,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2583908567", 
             "auto_cross_section": 0.0, 
             "check_sum": "1507664185", 
@@ -1502,8 +1502,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "7345", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_2.root"
         }, 
         {
             "adler32": "", 
@@ -1517,7 +1517,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2039620311", 
             "auto_cross_section": 0.0, 
             "check_sum": "3031502818", 
@@ -1537,8 +1537,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "8687", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_3.root"
         }, 
         {
             "adler32": "", 
@@ -1552,7 +1552,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2219796053", 
             "auto_cross_section": 0.0, 
             "check_sum": "2089580787", 
@@ -1572,8 +1572,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "33898", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_4.root"
         }, 
         {
             "adler32": "", 
@@ -1587,7 +1587,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2302175317", 
             "auto_cross_section": 0.0, 
             "check_sum": "3154891888", 
@@ -1607,8 +1607,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "71666", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_5.root"
         }, 
         {
             "adler32": "", 
@@ -1622,7 +1622,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2752921296", 
             "auto_cross_section": 0.0, 
             "check_sum": "2705316400", 
@@ -1642,8 +1642,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "83840", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_6.root"
         }, 
         {
             "adler32": "", 
@@ -1657,7 +1657,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2398441318", 
             "auto_cross_section": 0.0, 
             "check_sum": "1875714392", 
@@ -1677,8 +1677,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "17066", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_7.root"
         }, 
         {
             "adler32": "", 
@@ -1692,7 +1692,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2985526187", 
             "auto_cross_section": 0.0, 
             "check_sum": "3079104278", 
@@ -1712,8 +1712,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "48608", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_8.root"
         }, 
         {
             "adler32": "", 
@@ -1727,7 +1727,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2191341376", 
             "auto_cross_section": 0.0, 
             "check_sum": "3350714667", 
@@ -1747,8 +1747,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "81267", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8d932f3d-fac6-4616-b833-336e3f695553", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8d932f3d-fac6-4616-b833-336e3f695553_9.root"
         }, 
         {
             "adler32": "", 
@@ -1762,7 +1762,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2689648684", 
             "auto_cross_section": 0.0, 
             "check_sum": "2371165931", 
@@ -1782,8 +1782,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "56605", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_0.root"
         }, 
         {
             "adler32": "", 
@@ -1797,7 +1797,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2543548439", 
             "auto_cross_section": 0.0, 
             "check_sum": "1892869191", 
@@ -1817,8 +1817,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "42802", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_1.root"
         }, 
         {
             "adler32": "", 
@@ -1832,7 +1832,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2148432766", 
             "auto_cross_section": 0.0, 
             "check_sum": "1933202592", 
@@ -1852,8 +1852,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "90858", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_2.root"
         }, 
         {
             "adler32": "", 
@@ -1867,7 +1867,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2911205372", 
             "auto_cross_section": 0.0, 
             "check_sum": "2946527135", 
@@ -1887,8 +1887,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "48355", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_3.root"
         }, 
         {
             "adler32": "", 
@@ -1902,7 +1902,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2844911998", 
             "auto_cross_section": 0.0, 
             "check_sum": "2945184443", 
@@ -1922,8 +1922,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "24881", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_4.root"
         }, 
         {
             "adler32": "", 
@@ -1937,7 +1937,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2584865587", 
             "auto_cross_section": 0.0, 
             "check_sum": "2613404627", 
@@ -1957,8 +1957,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "6523", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_5.root"
         }, 
         {
             "adler32": "", 
@@ -1972,7 +1972,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2163116587", 
             "auto_cross_section": 0.0, 
             "check_sum": "3067917062", 
@@ -1992,8 +1992,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "18899", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_6.root"
         }, 
         {
             "adler32": "", 
@@ -2007,7 +2007,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2028076396", 
             "auto_cross_section": 0.0, 
             "check_sum": "3444576053", 
@@ -2027,8 +2027,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "44388", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_7.root"
         }, 
         {
             "adler32": "", 
@@ -2042,7 +2042,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2123343208", 
             "auto_cross_section": 0.0, 
             "check_sum": "2569247027", 
@@ -2062,8 +2062,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "84433", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_8.root"
         }, 
         {
             "adler32": "", 
@@ -2077,7 +2077,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2462319948", 
             "auto_cross_section": 0.0, 
             "check_sum": "2125937249", 
@@ -2097,8 +2097,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "78016", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#1af66992-bde5-441b-aeec-313b30d87807", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/1af66992-bde5-441b-aeec-313b30d87807_9.root"
         }, 
         {
             "adler32": "", 
@@ -2112,7 +2112,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2514695424", 
             "auto_cross_section": 0.0, 
             "check_sum": "3368308833", 
@@ -2132,8 +2132,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "65967", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_0.root"
         }, 
         {
             "adler32": "", 
@@ -2147,7 +2147,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2248174833", 
             "auto_cross_section": 0.0, 
             "check_sum": "2788711039", 
@@ -2167,8 +2167,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "64066", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_1.root"
         }, 
         {
             "adler32": "", 
@@ -2182,7 +2182,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2071915285", 
             "auto_cross_section": 0.0, 
             "check_sum": "2124810220", 
@@ -2202,8 +2202,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "67442", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_2.root"
         }, 
         {
             "adler32": "", 
@@ -2217,7 +2217,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2454502399", 
             "auto_cross_section": 0.0, 
             "check_sum": "1900571318", 
@@ -2237,8 +2237,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "11815", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_3.root"
         }, 
         {
             "adler32": "", 
@@ -2252,7 +2252,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2436367920", 
             "auto_cross_section": 0.0, 
             "check_sum": "2776731237", 
@@ -2272,8 +2272,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "13650", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_4.root"
         }, 
         {
             "adler32": "", 
@@ -2287,7 +2287,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2393479804", 
             "auto_cross_section": 0.0, 
             "check_sum": "3336975268", 
@@ -2307,8 +2307,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "75377", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_5.root"
         }, 
         {
             "adler32": "", 
@@ -2322,7 +2322,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2307887312", 
             "auto_cross_section": 0.0, 
             "check_sum": "2103745418", 
@@ -2342,8 +2342,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "64197", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_6.root"
         }, 
         {
             "adler32": "", 
@@ -2357,7 +2357,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2596725859", 
             "auto_cross_section": 0.0, 
             "check_sum": "2294159567", 
@@ -2377,8 +2377,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "78822", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_7.root"
         }, 
         {
             "adler32": "", 
@@ -2392,7 +2392,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2497253080", 
             "auto_cross_section": 0.0, 
             "check_sum": "3229976830", 
@@ -2412,8 +2412,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "6828", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_8.root"
         }, 
         {
             "adler32": "", 
@@ -2427,7 +2427,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2045461578", 
             "auto_cross_section": 0.0, 
             "check_sum": "3422535056", 
@@ -2447,8 +2447,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "32054", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#85bce16f-4dc6-4f6c-8f1c-4b090f8f544c", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/85bce16f-4dc6-4f6c-8f1c-4b090f8f544c_9.root"
         }, 
         {
             "adler32": "", 
@@ -2462,7 +2462,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2020169092", 
             "auto_cross_section": 0.0, 
             "check_sum": "3072680527", 
@@ -2482,8 +2482,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "38208", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_0.root"
         }, 
         {
             "adler32": "", 
@@ -2497,7 +2497,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2137651555", 
             "auto_cross_section": 0.0, 
             "check_sum": "2348783084", 
@@ -2517,8 +2517,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "4735", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_1.root"
         }, 
         {
             "adler32": "", 
@@ -2532,7 +2532,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2897028835", 
             "auto_cross_section": 0.0, 
             "check_sum": "1781965389", 
@@ -2552,8 +2552,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "79112", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_2.root"
         }, 
         {
             "adler32": "", 
@@ -2567,7 +2567,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2445359094", 
             "auto_cross_section": 0.0, 
             "check_sum": "3104014019", 
@@ -2587,8 +2587,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "16693", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_3.root"
         }, 
         {
             "adler32": "", 
@@ -2602,7 +2602,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2189158830", 
             "auto_cross_section": 0.0, 
             "check_sum": "2269717496", 
@@ -2622,8 +2622,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "10592", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_4.root"
         }, 
         {
             "adler32": "", 
@@ -2637,7 +2637,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2449448620", 
             "auto_cross_section": 0.0, 
             "check_sum": "2331993654", 
@@ -2657,8 +2657,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "27821", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_5.root"
         }, 
         {
             "adler32": "", 
@@ -2672,7 +2672,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2793692986", 
             "auto_cross_section": 0.0, 
             "check_sum": "2023948286", 
@@ -2692,8 +2692,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "71714", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_6.root"
         }, 
         {
             "adler32": "", 
@@ -2707,7 +2707,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2703539376", 
             "auto_cross_section": 0.0, 
             "check_sum": "3479341153", 
@@ -2727,8 +2727,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "76750", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_7.root"
         }, 
         {
             "adler32": "", 
@@ -2742,7 +2742,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2871064405", 
             "auto_cross_section": 0.0, 
             "check_sum": "2990130103", 
@@ -2762,8 +2762,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "90573", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_8.root"
         }, 
         {
             "adler32": "", 
@@ -2777,7 +2777,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2659649454", 
             "auto_cross_section": 0.0, 
             "check_sum": "1838836771", 
@@ -2797,8 +2797,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "17926", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#0b4a5546-b6e4-40df-a42a-98e7ae8506ee", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/0b4a5546-b6e4-40df-a42a-98e7ae8506ee_9.root"
         }, 
         {
             "adler32": "", 
@@ -2812,7 +2812,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2688938921", 
             "auto_cross_section": 0.0, 
             "check_sum": "2067611612", 
@@ -2832,8 +2832,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "69318", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_0.root"
         }, 
         {
             "adler32": "", 
@@ -2847,7 +2847,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2693894577", 
             "auto_cross_section": 0.0, 
             "check_sum": "2153379867", 
@@ -2867,8 +2867,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "93562", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_1.root"
         }, 
         {
             "adler32": "", 
@@ -2882,7 +2882,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2045567223", 
             "auto_cross_section": 0.0, 
             "check_sum": "3212471053", 
@@ -2902,8 +2902,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "88361", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_2.root"
         }, 
         {
             "adler32": "", 
@@ -2917,7 +2917,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2886158329", 
             "auto_cross_section": 0.0, 
             "check_sum": "3231511794", 
@@ -2937,8 +2937,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "5590", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_3.root"
         }, 
         {
             "adler32": "", 
@@ -2952,7 +2952,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2117505824", 
             "auto_cross_section": 0.0, 
             "check_sum": "3095397583", 
@@ -2972,8 +2972,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "14255", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_4.root"
         }, 
         {
             "adler32": "", 
@@ -2987,7 +2987,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2802748189", 
             "auto_cross_section": 0.0, 
             "check_sum": "2386442805", 
@@ -3007,8 +3007,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "79131", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_5.root"
         }, 
         {
             "adler32": "", 
@@ -3022,7 +3022,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2974471481", 
             "auto_cross_section": 0.0, 
             "check_sum": "2114511177", 
@@ -3042,8 +3042,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "34300", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_6.root"
         }, 
         {
             "adler32": "", 
@@ -3057,7 +3057,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2929203486", 
             "auto_cross_section": 0.0, 
             "check_sum": "2667259967", 
@@ -3077,8 +3077,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "62593", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_7.root"
         }, 
         {
             "adler32": "", 
@@ -3092,7 +3092,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2318463302", 
             "auto_cross_section": 0.0, 
             "check_sum": "1601267252", 
@@ -3112,8 +3112,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "82762", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_8.root"
         }, 
         {
             "adler32": "", 
@@ -3127,7 +3127,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2786009612", 
             "auto_cross_section": 0.0, 
             "check_sum": "2949784000", 
@@ -3147,8 +3147,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "75700", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#d091a9e9-f81d-432b-9e62-76115ac3dd80", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/d091a9e9-f81d-432b-9e62-76115ac3dd80_9.root"
         }, 
         {
             "adler32": "", 
@@ -3162,7 +3162,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2409820640", 
             "auto_cross_section": 0.0, 
             "check_sum": "2337647028", 
@@ -3182,8 +3182,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "84096", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_0.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_0.root"
         }, 
         {
             "adler32": "", 
@@ -3197,7 +3197,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2136990056", 
             "auto_cross_section": 0.0, 
             "check_sum": "1700563615", 
@@ -3217,8 +3217,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "79172", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_1.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_1.root"
         }, 
         {
             "adler32": "", 
@@ -3232,7 +3232,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2213751737", 
             "auto_cross_section": 0.0, 
             "check_sum": "2953557432", 
@@ -3252,8 +3252,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "75787", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_2.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_2.root"
         }, 
         {
             "adler32": "", 
@@ -3267,7 +3267,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2845411442", 
             "auto_cross_section": 0.0, 
             "check_sum": "1801861791", 
@@ -3287,8 +3287,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "12874", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_3.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_3.root"
         }, 
         {
             "adler32": "", 
@@ -3302,7 +3302,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2469119844", 
             "auto_cross_section": 0.0, 
             "check_sum": "1539342940", 
@@ -3322,8 +3322,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "75189", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_4.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_4.root"
         }, 
         {
             "adler32": "", 
@@ -3337,7 +3337,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2758715211", 
             "auto_cross_section": 0.0, 
             "check_sum": "2869927226", 
@@ -3357,8 +3357,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "1614", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_5.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_5.root"
         }, 
         {
             "adler32": "", 
@@ -3372,7 +3372,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2061319347", 
             "auto_cross_section": 0.0, 
             "check_sum": "2810664039", 
@@ -3392,8 +3392,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "87535", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_6.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_6.root"
         }, 
         {
             "adler32": "", 
@@ -3407,7 +3407,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2156258318", 
             "auto_cross_section": 0.0, 
             "check_sum": "1732195951", 
@@ -3427,8 +3427,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "63497", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_7.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_7.root"
         }, 
         {
             "adler32": "", 
@@ -3442,7 +3442,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2547774118", 
             "auto_cross_section": 0.0, 
             "check_sum": "3043848404", 
@@ -3462,8 +3462,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "69688", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_8.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_8.root"
         }, 
         {
             "adler32": "", 
@@ -3477,7 +3477,7 @@
                     "global_tag": "DBS3_DEPLOYMENT_TEST"
                 }
             ], 
-            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW", 
+            "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", 
             "file_size": "2026928001", 
             "auto_cross_section": 0.0, 
             "check_sum": "2877044995", 
@@ -3497,8 +3497,8 @@
             ], 
             "file_parent_list": [], 
             "event_count": "24827", 
-            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
-            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_v2/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_9.root"
+            "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#54d0fd08-1644-4252-970d-3285b083a9fb", 
+            "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/54d0fd08-1644-4252-970d-3285b083a9fb_9.root"
         }
     ]
 }

@@ -21,11 +21,14 @@ service = os.environ.get("DBS_TEST_SERVICE","DBSWriter")
 api = DBSRestApi(config, service)
 uid = uuid.uuid4().time_mid
 print "****uid=%s******" %uid
+acquisition_era_name="acq_era_%s" %uid
+processing_version="%s" %(uid if (uid<9999) else uid%9999)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
-procdataset = 'unittest_web_dataset_%s' % uid 
+procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
+childprocdataset = '%s-unittest_web_child_dataset-v%s' % (acquisition_era_name, processing_version) 
 tier = 'GEN-SIM-RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
-child_dataset="/%s/child_%s/%s" % (primary_ds_name, procdataset, tier)
+child_dataset="/%s/%s/%s" % (primary_ds_name, childprocdataset, tier)
 app_name='cmsRun'
 output_module_label='Merged-%s' %uid
 global_tag='my_tag-%s'%uid
@@ -34,8 +37,6 @@ release_version='CMSSW_1_2_%s' % uid
 site="cmssrm-%s.fnal.gov" %uid
 block="%s#%s" % (dataset, uid)
 child_block="%s#%s" % (child_dataset, uid)
-acquisition_era_name="acq_era_%s" %uid
-processing_version="%s" %(uid if (uid<9999) else uid%9999)
 run_num=uid
 flist=[]
 primary_ds_type='TEST'
@@ -159,6 +160,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	data={'acquisition_era_name': acquisition_era_name}
 	api.insert('acquisitioneras', data)
 
+    @checkException("acquisition_era_name")
     def test03b(self):
 	"""test03b: web.DBSWriterModel.insertAcquisitionEra: duplicate test """
 	data={'acquisition_era_name': acquisition_era_name}
@@ -205,7 +207,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	api.insert('datasets', data)
 	childdata = {
 		'physics_group_name': 'Tracker', 'dataset': child_dataset,
-	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': "child_"+procdataset, 'primary_ds_name': primary_ds_name,
+	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': childprocdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
 		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
@@ -316,9 +318,10 @@ class DBSWriterModel_t(unittest.TestCase):
 		}
 
         api.insert('datasets', data)
-		    
+
+    @checkException("acquisition_era_name")
     def test05h(self):
-	"""test05h: web.DBSWriterModel.insertDataset: no output_configs, should be fine insert!"""
+	"""test05h: web.DBSWriterModel.insertDataset: no output_configs, must raise an error!"""
 	data = {
 		'dataset': dataset,
 		'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
@@ -668,7 +671,7 @@ class DBSWriterModel_t(unittest.TestCase):
         uniq_id = int(time.time())
 
         bulk_primary_ds_name = 'unittest_web_primary_ds_name_%s' % (uniq_id)
-        bulk_procdataset = 'unittest_web_dataset_%s' % (uniq_id)
+        bulk_procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
         
         bulk_dataset = '/%s/%s/%s' % (bulk_primary_ds_name,
                                       bulk_procdataset,

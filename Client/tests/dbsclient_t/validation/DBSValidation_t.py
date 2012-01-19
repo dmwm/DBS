@@ -15,8 +15,11 @@ url=os.environ['DBS_WRITER_URL']
 api = DbsApi(url=url)
 uid = uuid.uuid4().time_mid
 print "****uid=%s******" %uid
+acquisition_era_name="acq_era_%s" %uid
+processing_version=(uid if (uid<9999) else uid%9999)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
-procdataset = 'unittest_web_dataset_%s' % uid 
+procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
+procdataset_parent = "%s-unittest_web_dataset_parent-v%s" % (acquisition_era_name, processing_version)
 tier = 'GEN-SIM-RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
 app_name='cmsRun%s' %uid
@@ -26,8 +29,7 @@ pset_hash='76e303993a1c2f842159dbfeeed9a0dd%s' %uid
 release_version='CMSSW_1_2_3%s' %uid
 site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
-acquisition_era_name="acq_era_%s" %uid
-processing_version="%s" %(uid if (uid<9999) else uid%9999)
+
 flist=[]
 
 class DBSValitaion_t(unittest.TestCase):
@@ -105,7 +107,7 @@ class DBSValitaion_t(unittest.TestCase):
 	#self.assertEqual(dsInDBS['output_module_label'], output_module_label)
 	self.assertEqual(dsInDBS['xtcrosssection'], 123)
 	self.assertEqual(dsInDBS['processing_version'], processing_version)
-	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name.upper())
+	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name)
 
     def test06(self):
 	"""test06 web.DBSClientWriter.Block: validation test"""
@@ -132,7 +134,7 @@ class DBSValitaion_t(unittest.TestCase):
 	                    'primary_ds_type':'test'}
         api.insertPrimaryDataset(primaryDSObj=pridata)
         primary_ds_name_parent = primary_ds_name+'_parent'
-        procdataset_parent = procdataset+"_parent"
+
         dataset_parent = "/%s/%s/%s" % (primary_ds_name_parent,procdataset_parent,tier)
 	data = {
 		'physics_group_name': 'Tracker', 'dataset': dataset_parent,
@@ -214,7 +216,7 @@ class DBSValitaion_t(unittest.TestCase):
 	# Get the dataset parent -- due to fact that files had parents, dataset parentage is also inserted
 	dsParentList=api.listDatasetParents(dataset=dataset)
 	self.assertEqual(len(dsParentList), 1)
-	self.assertEqual(dsParentList[0]['parent_dataset'], "/%s/%s/%s" % (primary_ds_name+"_parent", procdataset+"_parent", tier))
+	self.assertEqual(dsParentList[0]['parent_dataset'], "/%s/%s/%s" % (primary_ds_name+"_parent", procdataset_parent, tier))
 	# block parameters, such as file_count must also be updated, lets validate
     	blkList = api.listBlocks(block_name=block, detail=True)
 	self.assertEqual(len(blkList), 1)

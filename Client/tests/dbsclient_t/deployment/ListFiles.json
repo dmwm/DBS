@@ -5,11 +5,11 @@
         "event_count": 33472, 
         "file_type": "EDM", 
         "branch_hash_id": null, 
-        "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO", 
-        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
+        "dataset": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO", 
+        "block_name": "/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81", 
         "is_file_valid": 1, 
         "file_size": 2585460881, 
-        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_CHILD_v2/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root", 
+        "logical_file_name": "/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root", 
         "auto_cross_section": 0.0, 
         "md5": null
     }

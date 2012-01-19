@@ -280,6 +280,7 @@ class DBSReaderModel_t(unittest.TestCase):
         """test003zm: web.DBSReaderModel.listDatasets: basic test"""
         api.list('datasets', processing_version=testparams['processing_version'])
 
+    @checkException400
     def test003zn(self):
         """test003zn: web.DBSReaderModel.listDatasets: basic test"""
         api.list('datasets', processing_version=testparams['processing_version']+'*')
@@ -390,12 +391,12 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test007d(self):
         """test007d: web.DBSReaderModel.listFiles: with dataset, lumi list"""
-        api.list('files', dataset=testparams['dataset'], lumi_list='[27414, 26422, 29838]', maxrun=testparams['run_num'], 
+        api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]", maxrun=testparams['run_num'], 
 		  minrun=testparams['run_num'])
 
     def test007e(self):
         """test007e: web.DBSReaderModel.listFiles: with dataset and lumi intervals"""
-        api.list('files', dataset=testparams['dataset'], lumi_list='[[1, 100]]', maxrun=testparams['run_num'], 
+        api.list('files', dataset=testparams['dataset'], lumi_list=[[1, 100]], maxrun=testparams['run_num'], 
 		  minrun=testparams['run_num'])
 
     @checkException400
