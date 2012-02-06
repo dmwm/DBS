@@ -1,5 +1,5 @@
 """
-dao  unittests
+dao unittests
 """
 
 __revision__ = "$Id: List_t.py,v 1.2 2010/03/23 16:23:16 akhukhun Exp $"
@@ -7,30 +7,44 @@ __version__ = "$Revision: 1.2 $"
 
 import os
 import unittest
-import logging
-from WMCore.Database.DBFactory import DBFactory
+
+from dbsserver_t.utils.DaoConfig import DaoConfig
+from dbsserver_t.utils.DBSDataProvider import create_dbs_data_provider, strip_volatile_fields
 from dbs.dao.Oracle.Dataset.List import List as DatasetList
 
 class List_t(unittest.TestCase):
-    
+    @DaoConfig("DBSReader")
+    def __init__(self, methodName='runTest'):
+        super(List_t,self).__init__(methodName)
+        data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
+        self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
+        self.data = self.data_provider.get_dataset_data()
+                
     def setUp(self):
         """setup all necessary parameters"""
-        dburl = os.environ["DBS_TEST_DBURL_READER"] 
-        self.logger = logging.getLogger("dbs test logger")
-        self.dbowner = os.environ["DBS_TEST_DBOWNER_READER"]
-        self.dbi = DBFactory(self.logger, dburl).connect()
+        self.conn = self.dbi.connection()
+        self.dao = DatasetList(self.logger, self.dbi, self.dbowner)
+
+    def tearDown(self):
+        """Clean-up all necessary parameters"""
+        self.conn.close()
                         
     def test01(self):
         """dao.Oracle.Dataset.List: Basic"""
-	conn = self.dbi.connection()
-        dao = DatasetList(self.logger, self.dbi, self.dbowner)
-        dao.execute(conn)
-        dao.execute(conn, dataset="*")
-        result = dao.execute(conn, "ThisDoesNotExist")
+        result = self.dao.execute(self.conn)
+        self.assertTrue(type(result) == list)
+                
+    def test02(self):
+        """dao.Oracle.Dataset.List: Basic"""
+        result = self.dao.execute(self.conn, dataset=self.data[0]['dataset'])
+        self.assertEqual(strip_volatile_fields(result), self.data)
+        
+    def test03(self):
+        """dao.Oracle.Dataset.List: Basic"""
+        result = self.dao.execute(self.conn, "ThisDoesNotExist")
         self.assertTrue(type(result) == list)
         self.assertEqual(len(result), 0)
-	conn.close()
-        
+
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(List_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)

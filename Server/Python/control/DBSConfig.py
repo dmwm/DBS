@@ -1,38 +1,32 @@
 """
-DBS Server  configuration file
+DBS Server default configuration file
 """
 import os,logging,sys
 from WMCore.Configuration import Configuration
-from WMCore.WMInit import getWMBASE
 
-#ROOTDIR = os.path.normcase(os.path.abspath(__file__)).rsplit('/', 3)[0]
-#DBSVERSION = os.getenv('DBS3_VERSION')
-ROOTDIR = os.getenv('DBS3_ROOT')
+ROOTDIR = os.path.normcase(os.path.abspath(__file__)).rsplit('/', 3)[0]
+DBSVERSION = os.getenv('DBS3_VERSION')
 
-sys.path.append(os.path.join(ROOTDIR,'DBS/Server/Python/control'))
+sys.path.append(os.path.join(ROOTDIR,'auth/dbs'))
 
-from DBSSecrets import connectUrl
-from DBSSecrets import databaseOwner
+from DBSSecrets import dbs3_l3_i2
+from DBSSecrets import dbs3_p2_i2
+from DBSSecrets import dbs3_l1_i2
 
 config = Configuration()
 config.component_('SecurityModule')
-config.SecurityModule.key_file = os.path.join(ROOTDIR,'apache2/binkey')
+config.SecurityModule.key_file = os.path.join(ROOTDIR,'auth/wmcore-auth/header-auth-key')
 
 config.component_('Webtools')
+#config.Webtools.port = 8250
 config.Webtools.port = 8787
-config.Webtools.access_log_file = os.environ['DBS3_ROOT'] +"/Logs/single/cms_dbs_writer_access.log"
-config.Webtools.error_log_file = os.environ['DBS3_ROOT'] +"/Logs/single/cms_dbs_writer_error.log"
 config.Webtools.log_screen = True
-config.Webtools.environment = "develop"
-config.Webtools.autoreload = True
-config.Webtools.show_tracebacks = True
 config.Webtools.proxy_base = 'True'
 config.Webtools.application = 'dbs'
-config.Webtools.environment = 'development'
-config.Webtools.error_log_level = logging.DEBUG
+config.Webtools.environment = 'production'
 
 config.component_('dbs')
-config.dbs.templates = os.path.join(getWMBASE(),'../../templates/WMCore/WebTools')
+config.dbs.templates = os.path.join(ROOTDIR,'apps/dbs/data/templates/WMCore/WebTools')
 config.dbs.title = 'DBS Server'
 config.dbs.description = 'CMS DBS Service'
 config.dbs.section_('views')
@@ -51,21 +45,21 @@ active.DBSReader.section_('database')
 instances = active.DBSReader.database.section_('instances')
 
 ProductionGlobal = instances.section_('prod/global')
-ProductionGlobal.dbowner = databaseOwner['ProductionGlobal']
-#ProductionGlobal.version = DBSVERSION
-ProductionGlobal.connectUrl = connectUrl['ProductionGlobal']
+ProductionGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+ProductionGlobal.version = DBSVERSION
+ProductionGlobal.connectUrl = dbs3_p2_i2['connectUrl']['reader']
 ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 DevelopmentGlobal = instances.section_('dev/global')
-DevelopmentGlobal.dbowner = databaseOwner['DevelopmentGlobal']
-#DevelopmentGlobal.version = DBSVERSION
-DevelopmentGlobal.connectUrl = connectUrl['DevelopmentGlobal']
+DevelopmentGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+DevelopmentGlobal.version = DBSVERSION
+DevelopmentGlobal.connectUrl = dbs3_p2_i2['connectUrl']['reader']
 DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 IntegrationGlobal = instances.section_('int/global')
-IntegrationGlobal.dbowner = databaseOwner['IntegrationGlobal']
-#IntegrationGlobal.version = DBSVERSION
-IntegrationGlobal.connectUrl = connectUrl['IntegrationGlobal']
+IntegrationGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+IntegrationGlobal.version = DBSVERSION
+IntegrationGlobal.connectUrl = dbs3_p2_i2['connectUrl']['reader']
 IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 active.section_('DBSWriter')
@@ -78,19 +72,19 @@ active.DBSWriter.section_('database')
 instances = active.DBSWriter.database.section_('instances')
 
 ProductionGlobal = instances.section_('prod/global')
-ProductionGlobal.dbowner = databaseOwner['ProductionGlobal']
-#ProductionGlobal.version = DBSVERSION
-ProductionGlobal.connectUrl = connectUrl['ProductionGlobal']
+ProductionGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+ProductionGlobal.version = DBSVERSION
+ProductionGlobal.connectUrl = dbs3_p2_i2['connectUrl']['writer']
 ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 DevelopmentGlobal = instances.section_('dev/global')
-DevelopmentGlobal.dbowner = databaseOwner['DevelopmentGlobal']
-#DevelopmentGlobal.version = DBSVERSION
-DevelopmentGlobal.connectUrl = connectUrl['DevelopmentGlobal']
+DevelopmentGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+DevelopmentGlobal.version = DBSVERSION
+DevelopmentGlobal.connectUrl = dbs3_p2_i2['connectUrl']['writer']
 DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 IntegrationGlobal = instances.section_('int/global')
-IntegrationGlobal.dbowner = databaseOwner['IntegrationGlobal']
-#IntegrationGlobal.version = DBSVERSION
-IntegrationGlobal.connectUrl = connectUrl['IntegrationGlobal']
+IntegrationGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+IntegrationGlobal.version = DBSVERSION
+IntegrationGlobal.connectUrl = dbs3_p2_i2['connectUrl']['writer']
 IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
