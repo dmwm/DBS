@@ -120,7 +120,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=['acquisition_era_name'])
         self._addMethod('GET', 'acquisitioneras_ci', self.listAcquisitionEras_CI, args=['acquisition_era_name'])
         self._addMethod('GET', 'processingeras', self.listProcessingEras, args=['processing_version'])
-        self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version', 'dataset'])
+        self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version', 'dataset', 'logical_file_name'])
         self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'])
         self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'])
         self._addMethod('GET', 'help', self.getHelp, args=['call'])
@@ -796,16 +796,16 @@ self.logger.exception, sError)
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(release_version=str, dataset=str)
+    @inputChecks(release_version=str, dataset=str, logical_file_name=str)
     @tools.secmodv2()
-    def listReleaseVersions(self, release_version='', dataset=''):
+    def listReleaseVersions(self, release_version='', dataset='', logical_file_name=''):
         """
         lists release versions known to dbs
         """
         if release_version:
             release_version = release_version.replace("*","%")
         try:
-            return self.dbsReleaseVersion.listReleaseVersions(release_version, dataset )
+            return self.dbsReleaseVersion.listReleaseVersions(release_version, dataset, logical_file_name )
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:

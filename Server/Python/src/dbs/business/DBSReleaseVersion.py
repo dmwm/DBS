@@ -20,7 +20,7 @@ class DBSReleaseVersion:
 
         self.releaseVersion = daofactory(classname="ReleaseVersion.List")
 
-    def listReleaseVersions(self, release_version="", dataset=''):
+    def listReleaseVersions(self, release_version="", dataset='', logical_file_name=''):
         """
         List release versions
         """
@@ -28,9 +28,15 @@ class DBSReleaseVersion:
             dbsExceptionHandler('dbsException-invalid-input',
                 " DBSReleaseVersion/listReleaseVersions. No wildcards are" +
                 " allowed in dataset.\n.")
+
+        if logical_file_name and ('%' in logical_file_name or '*' in logical_file_name):
+            dbsExceptionHandler('dbsException-invalid-input',
+                " DBSReleaseVersion/listReleaseVersions. No wildcards are" +
+                " allowed in logical_file_name.\n.")
+
         try:
             conn = self.dbi.connection()
-            plist = self.releaseVersion.execute(conn, release_version.upper(), dataset )
+            plist = self.releaseVersion.execute(conn, release_version.upper(), dataset, logical_file_name)
             result = [{}]
             if plist:
                 t = []

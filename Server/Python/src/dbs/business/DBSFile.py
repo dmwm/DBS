@@ -74,6 +74,10 @@ class DBSFile:
                 msg = "No wildcard is allowed in block_name or dataset for listFileSummary API" 
                 dbsExceptionHandler('dbsException-invalid-input', msg)
             result = self.filesummarylist.execute(conn, block_name, dataset, run_num)
+            if len(result)==1:
+                if result[0]['num_file']==0 and result[0]['num_block']==0 \
+                        and result[0]['num_event']==0 and result[0]['file_size']==0:
+                    result=[]
             return result
         finally:
             if conn:

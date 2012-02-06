@@ -23,7 +23,7 @@ class List(DBFormatter):
 SELECT RV.RELEASE_VERSION FROM %sRELEASE_VERSIONS RV 
 """ % (self.owner)
 
-    def execute(self, conn, releaseVersion='', dataset='', transaction = False):
+    def execute(self, conn, releaseVersion='', dataset='', logical_file_name='', transaction = False):
 	if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ReleaseVersion/List. Expects db connection from upper layer.")
 
@@ -47,6 +47,21 @@ SELECT RV.RELEASE_VERSION FROM %sRELEASE_VERSIONS RV
             WHERE d.DATASET=:dataset and RV.RELEASE_VERSION %s :release_version" \
             %(self.owner, self.owner, self.owner, op)
             binds={"dataset":dataset, "release_version":releaseVersion}
+        elif logical_file_name and not releaseVersion:
+            sql += "join %sOUTPUT_MODULE_CONFIGS OMF on OMF.RELEASE_VERSION_ID=RV.RELEASE_VERSION_ID\
+                    join %sfile_output_mod_configs fo on fo.output_mod_config_id=OMF.OUTPUT_MOD_CONFIG_ID\
+                    join %sFILES F on F.FILE_ID=FO.FILE_ID\
+                    Where F.logical_file_name =:logical_file_name"%((self.owner,)*3)
+            binds={"logical_file_name":logical_file_name}
+        elif logical_file_name and releaseVersion:
+            op = ("=", "like")["%" in releaseVersion]
+            sql += "join %sOUTPUT_MODULE_CONFIGS OMF on OMF.RELEASE_VERSION_ID=RV.RELEASE_VERSION_ID\
+                    join %sfile_output_mod_configs fo on fo.output_mod_config_id=OMF.OUTPUT_MOD_CONFIG_ID\
+                    join %sFILES F on F.FILE_ID=FO.FILE_ID\
+                    Where F.logical_file_name =:logical_file_name and RV.RELEASE_VERSION %s :release_version \
+                    "%(self.owner, self.owner, self.owner, op)
+            binds={"logical_file_name":logical_file_name, "release_version":releaseVersion}
+
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)
         return plist
