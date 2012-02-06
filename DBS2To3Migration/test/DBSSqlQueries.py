@@ -37,17 +37,23 @@ class DBSSqlQueries(object):
 
         self.sqlDict = {'AcquisitionEras':
                         """SELECT ACQUISITION_ERA_NAME,
+                        START_DATE,
+                        END_DATE
                         CREATION_DATE,
                         CREATE_BY,
                         DESCRIPTION
                         FROM(
                         SELECT DISTINCT AE.ACQUISITION_ERA_NAME,
+                        AE.START_DATE,
+                        AE.END_DATE,
                         AE.CREATION_DATE,
                         AE.CREATE_BY,
                         AE.DESCRIPTION
                         FROM %s.ACQUISITION_ERAS AE
                         UNION ALL
                         SELECT DISTINCT PCD.AQUISITIONERA ACQUISITION_ERA_NAME,
+                        0 START_DATE,
+                        NULL END_DATE,
                         NULL CREATION_DATE,
                         NULL CREATE_BY,
                         NULL DESCRIPTION
@@ -55,6 +61,8 @@ class DBSSqlQueries(object):
                         WHERE AQUISITIONERA IS NOT NULL
                         )
                         GROUP BY ACQUISITION_ERA_NAME,
+                        START_DATE,
+                        END_DATE,
                         CREATION_DATE,
                         CREATE_BY,
                         DESCRIPTION
@@ -431,13 +439,15 @@ class DBSSqlQueries(object):
                         (SELECT FL.FILE_LUMI_ID,FL.RUN_NUM,FL.LUMI_SECTION_NUM,FL.FILE_ID
                         FROM %s.FILE_LUMIS FL
                         UNION ALL
-                        SELECT FRL.ID file_lumi_id, FRL.RUN run_num, FRL.LUMI lumi_section_num, FRL.FILEID file_id
+                        SELECT FRL.ID FILE_LUMI_ID, RU.RUNNUMBER RUN_NUM, LU.LUMISECTIONNUMBER LUMI_SECTION_NUM, FRL.FILEID FILE_ID
                         FROM %s.FILERUNLUMI FRL
+                        JOIN %s.RUNS RU ON FRL.RUN=RU.ID
+                        JOIN %s.LUMISECTION LU ON FRL.LUMI=LU.ID
                         )
                         GROUP BY FILE_LUMI_ID,RUN_NUM,LUMI_SECTION_NUM,FILE_ID
                         HAVING COUNT(*) = 1
                         ORDER BY FILE_LUMI_ID
-                        """ % (ownerDBS3,ownerDBS2),
+                        """ % (ownerDBS3, ownerDBS2, ownerDBS2, ownerDBS2),
                         ##############################################
                         'FileLumisMinMax':
                         """SELECT MIN(FRL.ID) AS MIN_ID,
@@ -450,14 +460,16 @@ class DBSSqlQueries(object):
                         (SELECT FL.FILE_LUMI_ID,FL.RUN_NUM,FL.LUMI_SECTION_NUM,FL.FILE_ID
                         FROM %s.FILE_LUMIS FL
                         UNION ALL
-                        SELECT FRL.ID file_lumi_id, FRL.RUN run_num, FRL.LUMI lumi_section_num, FRL.FILEID file_id
+                        SELECT FRL.ID file_lumi_id, RU.RUNNUMBER RUN_NUM, LU.LUMISECTIONNUMBER LUMI_SECTION_NUM, FRL.FILEID file_id
                         FROM %s.FILERUNLUMI FRL
+                        JOIN %s.RUNS RU ON FRL.RUN=RU.ID
+                        JOIN %s.LUMISECTION LU ON FRL.LUMI=LU.ID
                         )
                         WHERE FILE_LUMI_ID >= :min_id AND FILE_LUMI_ID <= :max_id
                         GROUP BY FILE_LUMI_ID,RUN_NUM,LUMI_SECTION_NUM,FILE_ID
                         HAVING COUNT(*) = 1
                         ORDER BY FILE_LUMI_ID
-                        """ % (ownerDBS3,ownerDBS2),
+                        """ % (ownerDBS3, ownerDBS2, ownerDBS2, ownerDBS2),
                         ##############################################
                         'FileOutputModConfigs':
                         """SELECT FILE_OUTPUT_CONFIG_ID,FILE_ID,OUTPUT_MOD_CONFIG_ID FROM
