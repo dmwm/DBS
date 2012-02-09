@@ -33,7 +33,7 @@ class Insert_t(unittest.TestCase):
         tran = self.conn.begin()
 
         try:
-            parentage = {'this_file_id' : self.file_id.execute(self.conn, self.data["logical_file_name"], tran),
+            parentage = {'this_file_id' : self.file_id.execute(self.conn, self.data["this_logical_file_name"], tran),
                          'parent_logical_file_name' : self.data["parent_logical_file_name"]}
 
             self.file_insert.execute(self.conn, parentage, tran)

@@ -17,8 +17,7 @@ class Insert_t(unittest.TestCase):
         data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
         self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
         self.lumi_data = self.data_provider.get_file_lumi_data(regenerate=True)[0]
-        self.file_data = self.data_provider.get_file_data(regenerate=True)[0]
-         
+                 
     def setUp(self):
         """setup all necessary parameters"""
         self.conn = self.dbi.connection()
@@ -34,7 +33,8 @@ class Insert_t(unittest.TestCase):
         tran = self.conn.begin()
         
         try:
-            self.lumi_data["file_id"] = self.file_id.execute(self.conn, self.file_data["logical_file_name"], tran)
+            self.lumi_data["file_id"] = self.file_id.execute(self.conn, self.lumi_data["logical_file_name"], tran)
+            del self.lumi_data["logical_file_name"]
             
             self.file_lumi_insert.execute(self.conn, self.lumi_data)
         except Exception as ex:

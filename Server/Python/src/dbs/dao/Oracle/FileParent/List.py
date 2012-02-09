@@ -20,7 +20,7 @@ class List(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
-SELECT F.LOGICAL_FILE_NAME, PF.LOGICAL_FILE_NAME parent_logical_file_name, 
+SELECT F.LOGICAL_FILE_NAME this_logical_file_name, PF.LOGICAL_FILE_NAME parent_logical_file_name, 
        PF.FILE_ID parent_file_id
 FROM %sFILES PF
 JOIN %sFILE_PARENTS FP ON FP.PARENT_FILE_ID = PF.FILE_ID

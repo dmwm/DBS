@@ -10,7 +10,7 @@ from dbs.exceptions.dbsClientException import dbsClientException
 def stripChangingParameters(data):
     keys2remove = ['create_by','creation_date','data_tier_id','primary_ds_type_id','primary_ds_id',
                    'last_modified_by','last_modification_date','dataset_id','origin_site_name','child_dataset_id',
-                   'parent_dataset_id', 'file_id', 'file_type_id', 'block_id']
+                   'parent_dataset_id', 'file_id', 'file_type_id', 'block_id', 'start_date', 'end_date']
 
     if isinstance(data,dict):
         for key in keys2remove:
@@ -308,7 +308,7 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_list_dataset_parents(self):
-        expected_data = [{u'dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO', u'parent_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW'}]
+        expected_data = [{u'this_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO', u'parent_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW'}]
         
         parents = stripChangingParameters(self.api.listDatasetParents(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO"))
 

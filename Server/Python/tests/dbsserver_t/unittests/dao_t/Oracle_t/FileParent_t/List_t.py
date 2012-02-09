@@ -31,7 +31,7 @@ class List_t(unittest.TestCase):
                     
     def test01(self):
         """dao.Oracle.FileParent.List: Basic"""
-        result = self.dao.execute(self.conn, logical_file_name=self.data[0]['logical_file_name'])
+        result = self.dao.execute(self.conn, logical_file_name=self.data[0]['this_logical_file_name'])
         self.assertTrue(type(result) == list)
         self.assertEqual(strip_volatile_fields(result), self.data)
         

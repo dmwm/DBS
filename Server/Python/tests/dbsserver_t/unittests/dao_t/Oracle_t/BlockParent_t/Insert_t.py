@@ -33,7 +33,7 @@ class Insert_t(unittest.TestCase):
         tran = self.conn.begin()
 
         try:
-            parentage = {'this_block_id' : self.block_id.execute(self.conn, self.data["block_name"], tran),
+            parentage = {'this_block_id' : self.block_id.execute(self.conn, self.data["this_block_name"], tran),
                          'block_name' : self.data["parent_block_name"]}
 
             self.block_insert.execute(self.conn, parentage, tran)

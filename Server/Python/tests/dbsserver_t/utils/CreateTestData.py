@@ -45,7 +45,7 @@ transient_data = {'acquisition_era':
                  }],
                   'block_parentage' :
                  [{
-                      'block_name' : child_block_name,
+                      'this_block_name' : child_block_name,
                       'parent_block_name' : block_name
                  }],
                   'child_block' :
@@ -117,7 +117,7 @@ transient_data = {'acquisition_era':
                  }],
                   'dataset_parentage' :
                  [{
-                      'dataset' : child_dataset_name,
+                      'this_dataset' : child_dataset_name,
                       'parent_dataset' : dataset_name
                  }],
                   'data_tier':
@@ -146,12 +146,13 @@ transient_data = {'acquisition_era':
                  }],
                   'file_lumi':
                  [{
+                      "logical_file_name" : logical_file_name,
                       "lumi_section_num": "@unique_id_9999@", 
                       "run_num": "@unique_id_9999@"
                  }], 
                   'file_parentage':
                  [{
-                      "logical_file_name" : child_logical_file_name,
+                      "this_logical_file_name" : child_logical_file_name,
                       "parent_logical_file_name" : logical_file_name
                  }],
                   'output_module_config':

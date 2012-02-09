@@ -22,7 +22,7 @@ class List(DBFormatter):
 """
 SELECT PD.DATASET parent_dataset, 
        PD.DATASET_ID parent_dataset_id,
-       D.DATASET
+       D.DATASET this_dataset
 FROM %sDATASETS PD
 JOIN %sDATASET_PARENTS DP ON DP.PARENT_DATASET_ID = PD.DATASET_ID
 JOIN %sDATASETS D ON  D.DATASET_ID = DP.THIS_DATASET_ID 

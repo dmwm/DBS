@@ -112,14 +112,14 @@ class TestCommand(Command):
           if not self.allTests and not self.weball:
               if self.web=="DBSReader":
                   TestSuite = unittest.TestSuite()
-                  module_names = get_test_names(web_tests,'[!.#]DBSReader*_t.py',base_dir)
+                  module_names = get_test_names(web_tests,'[!.#]*ReaderModel_t.py',base_dir)
                   loadedTests = unittest.TestLoader().loadTestsFromNames(module_names)
                   TestSuite.addTests(loadedTests)
                   unittest.TextTestRunner(verbosity=2).run(TestSuite)
 
               if self.web=="DBSWriter":
                   TestSuite = unittest.TestSuite()
-                  module_names = get_test_names(web_tests,'DBSWriter*_t.py',base_dir)
+                  module_names = get_test_names(web_tests,'[!.#]*WriterModel_t.py',base_dir)
                   loadedTests = unittest.TestLoader().loadTestsFromNames(module_names)
                   TestSuite.addTests(loadedTests)
                   unittest.TextTestRunner(verbosity=2).run(TestSuite)

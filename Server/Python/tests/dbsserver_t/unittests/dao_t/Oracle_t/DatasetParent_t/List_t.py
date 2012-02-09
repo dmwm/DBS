@@ -31,7 +31,7 @@ class List_t(unittest.TestCase):
                                                 
     def test01(self):
         """dao.Oracle.DatasetParent.List: Basic"""
-        result = self.dao.execute(self.conn, dataset=self.data[0]['dataset'])
+        result = self.dao.execute(self.conn, dataset=self.data[0]['this_dataset'])
         self.assertTrue(type(result) == list)
         self.assertEqual(strip_volatile_fields(result), self.data)
 

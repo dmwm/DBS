@@ -86,7 +86,7 @@ class DBSFile:
     def listFileParents(self, logical_file_name="", block_id=0, block_name=""):
         """
         required parameter: logical_file_name or block_name
-        returns: logical_file_name, parent_logical_file_name, parent_file_id
+        returns: this_logical_file_name, parent_logical_file_name, parent_file_id
         """
         try:
             conn = self.dbi.connection()
@@ -99,7 +99,7 @@ class DBSFile:
             d = {}
             #self.logger.debug(sqlresult)
             for i in range(len(sqlresult)):
-                k = sqlresult[i]['logical_file_name']
+                k = sqlresult[i]['this_logical_file_name']
                 v = sqlresult[i]['parent_logical_file_name']
                 if k in d:
                     d[k].append(v)

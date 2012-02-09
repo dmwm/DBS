@@ -33,7 +33,7 @@ class Insert_t(unittest.TestCase):
         tran = self.conn.begin()
 
         try:
-            parentage = {'this_dataset_id' : self.dataset_id.execute(self.conn, self.data["dataset"], tran),
+            parentage = {'this_dataset_id' : self.dataset_id.execute(self.conn, self.data["this_dataset"], tran),
                          'dataset' : self.data["parent_dataset"]}
 
             self.dataset_insert.execute(self.conn, parentage, tran)

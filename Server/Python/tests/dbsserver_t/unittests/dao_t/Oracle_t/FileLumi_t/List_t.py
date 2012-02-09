@@ -8,6 +8,7 @@ __version__ = "$Revision: 1.2 $"
 import os
 import unittest
 import logging
+import copy
 
 from dbsserver_t.utils.DaoConfig import DaoConfig
 from dbsserver_t.utils.DBSDataProvider import create_dbs_data_provider, strip_volatile_fields
@@ -20,7 +21,6 @@ class List_t(unittest.TestCase):
         data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
         self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
         self.lumi_data = self.data_provider.get_file_lumi_data()
-        self.file_data = self.data_provider.get_file_data()
         #needs to be regenerated, since it was not used in Insert_t
         self.block_data = self.data_provider.get_block_data(regenerate=True) 
         
@@ -35,9 +35,17 @@ class List_t(unittest.TestCase):
                            
     def test01(self):
         """dao.Oracle.FileLumi.List: Basic"""
-        result = self.dao.execute(self.conn, logical_file_name=self.file_data[0]['logical_file_name'])
+        result = self.dao.execute(self.conn, logical_file_name=self.lumi_data[0]['logical_file_name'])
+
+        #remove all logical_file_names from lumi dictionaries. The API does not return them, if logical_file_name is used as parameter
+        #IMHO that needs to be fixed. The problem is also described in https://svnweb.cern.ch/trac/CMSDMWM/ticket/3178
+        copied_lumi_data = copy.deepcopy(self.lumi_data)
+        for entry in copied_lumi_data:
+            if entry.has_key('logical_file_name'):
+                del entry['logical_file_name']
+                
         self.assertTrue(type(result) == list)
-        self.assertEqual(strip_volatile_fields(result), self.lumi_data)
+        self.assertEqual(strip_volatile_fields(result), copied_lumi_data)
 
     def test02(self):
         """dao.Oracle.FileLumi.List: Basic"""
