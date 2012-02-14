@@ -62,7 +62,7 @@ class DbsApi(object):
         else:
             raise ValueError, "unknown URL type: %s" % callType
         
-    def __callServer(self, method="", params={}, data={}, callmethod='GET'):
+    def __callServer(self, method="", params={}, data={}, callmethod='GET', content='application/json'):
         """
         A private method to make HTTP call to the DBS Server
         
@@ -72,10 +72,11 @@ class DbsApi(object):
         :type params: dict
         :param callmethod: The HTTP method used, by default it is HTTP-GET, possible values are GET, POST and PUT.
         :type callmethod: str
-        
+        :param content: The type of content the server is expected to return. Usually it is application/json 
+        :type content: str
         """
         UserID=os.environ['USER']+'@'+socket.gethostname()
-        headers =  {"Content-type": "application/json", "Accept": "application/json", "UserID": UserID }
+        headers =  {"Content-type": content, "Accept": content, "UserID": UserID }
         res=""
         try:
             calling=self.url+method
@@ -114,13 +115,15 @@ class DbsApi(object):
             raise e
         
         #FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
+        if content!="application/json":
+            return res
         try:
             json_ret=json.loads(res)
         except Exception, e:
             raise e
-        
+            
         return json_ret
-		
+    
     def __parseForException(self, httperror):
         """
         An internal method, should not be used by clients
@@ -333,6 +336,12 @@ class DbsApi(object):
         
         """
         return self.__callServer("/processingeras", data = procEraObj , callmethod='POST' )
+
+    def listApiDocumentation(self):
+        """
+        API to retrieve the documentation page from server
+        """
+        return self.__callServer(content="text/html")
 
     def listAcquisitionEras(self, **kwargs):
         """

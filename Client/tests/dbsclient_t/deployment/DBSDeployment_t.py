@@ -573,6 +573,10 @@ class PostDeploymentTests(unittest.TestCase):
 
         fp.close()
 
+    def test_wmcore_templates(self):
+        api_doc = self.api.listApiDocumentation()
+        self.assertNotEqual(api_doc.find("DBS Server RESTful API"), -1)
+
 if __name__ == "__main__":
     import sys
 
