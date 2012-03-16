@@ -4,7 +4,7 @@ from dbs.apis.dbsClient import *
 #url="https://dbs3-dev01.cern.ch/dbs/DBSReader"
 url="https://localhost:1443/dbs/int/global/DBSReader"
 # API Object    
-#dbs3api = DbsApi(url=url, cert="/uscms/home/yuyi/.globus/usercert.pem", key="/uscms/home/yuyi/.globus/userkey.pem")
+#dbs3api = DbsApi(url=url, cert="usercert.pem", key="userkey.pem")
 dbs3api = DbsApi(url=url)
 # Is service Alive
 #print dbs3api.ping()
