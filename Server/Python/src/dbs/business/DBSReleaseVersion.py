@@ -34,8 +34,8 @@ class DBSReleaseVersion:
                 " DBSReleaseVersion/listReleaseVersions. No wildcards are" +
                 " allowed in logical_file_name.\n.")
 
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             plist = self.releaseVersion.execute(conn, release_version.upper(), dataset, logical_file_name)
             result = [{}]
             if plist:

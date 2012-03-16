@@ -28,8 +28,8 @@ class DBSDataTier:
         if type(data_tier_name) is not str:
             dbsExceptionHandler('dbsException-invalid-input',
                                 'data_tier_name given is not valid : %s' % data_tier_name)
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             result = self.dataTier.execute(conn, data_tier_name.upper())
             return result
         finally:
@@ -45,10 +45,11 @@ class DBSDataTier:
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            businput["data_tier_id"] = self.sm.increment(conn, "SEQ_DT", tran)
+            businput["data_tier_id"] = self.sm.increment(conn, "SEQ_DT" )
             businput["data_tier_name"] = businput["data_tier_name"].upper()
             self.dtin.execute(conn, businput, tran)
             tran.commit()
+            tran = None
         except KeyError, ke:
             dbsExceptionHandler('dbsException-invalid-input', "Invalid input:"+ke.args[0])
         except Exception, ex:
@@ -62,6 +63,6 @@ class DBSDataTier:
                 raise
         finally:
             if tran:
-                tran.close()
+                tran.rollback()
             if conn:
                 conn.close()

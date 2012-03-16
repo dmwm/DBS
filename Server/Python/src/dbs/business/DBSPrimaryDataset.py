@@ -30,9 +30,10 @@ class DBSPrimaryDataset:
         """
         Returns all primary dataset if primary_ds_name or primary_ds_type are not passed.
         """
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             result = self.primdslist.execute(conn, primary_ds_name, primary_ds_type)
+            if conn: conn.close()
             return result
         finally:
             if conn:
@@ -42,9 +43,10 @@ class DBSPrimaryDataset:
         """
         Returns all primary dataset types if dataset or primary_ds_type are not passed.
         """
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             result = self.primdstypeList.execute(conn, primary_ds_type, dataset)
+            if conn: conn.close()
             return result
         finally:
             if conn:
@@ -64,13 +66,13 @@ class DBSPrimaryDataset:
                 " DBSPrimaryDataset/insertPrimaryDataset. " +
                 "Primary dataset Name is required for insertPrimaryDataset.")
         try:
-            businput["primary_ds_type_id"] = (self.primdstypeList.execute(conn, businput["primary_ds_type"], 
-                transaction=tran))[0]["primary_ds_type_id"] 
+            businput["primary_ds_type_id"] = (self.primdstypeList.execute(conn, businput["primary_ds_type"]
+                ))[0]["primary_ds_type_id"] 
             del businput["primary_ds_type"]
-            businput["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS",
-                                                            tran)
+            businput["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS")
             self.primdsin.execute(conn, businput, tran)
             tran.commit()
+            tran = None
         except KeyError as ke:
             dbsExceptionHandler("dbsException-invalid-input", 
                 " DBSPrimaryDataset/insertPrimaryDataset. Missing: %s" % ke)
@@ -88,9 +90,10 @@ class DBSPrimaryDataset:
             else:
                 if tran:
                     tran.rollback()
+                if conn: conn.close()    
                 raise 
         finally:
             if tran:
-                tran.close()
+                tran.rollback()
             if conn:
                 conn.close()

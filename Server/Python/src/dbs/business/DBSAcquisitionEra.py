@@ -33,17 +33,12 @@ class DBSAcquisitionEra:
         """
         if type(acq) is not str:
             dbsExceptionHandler('dbsException-invalid-input', 'acquistion_era_name given is not valid : %s' %acq)
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
-            tran = conn.begin()
-            result = self.acqlst.execute(conn, acq, tran)
-            tran.commit()
+            result = self.acqlst.execute(conn, acq)
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            if conn:
-                conn.close()
+            if conn:conn.close()
 
     def listAcquisitionEras_CI(self, acq=''):
         """
@@ -51,19 +46,12 @@ class DBSAcquisitionEra:
         """
         if type(acq) is not str:
             dbsExceptionHandler('dbsException-invalid-input', 'aquistion_era_name given is not valid : %s'%acq)
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
-            tran = conn.begin()
-            result = self.acqlst_ci.execute(conn, acq, tran)
-            tran.commit()
+            result = self.acqlst_ci.execute(conn, acq)
             return result
-        except Exception, ex:
-            raise ex
         finally:
-            if conn:
-                conn.close()
-
-
+            if conn:conn.close()
 
     def insertAcquisitionEra(self, businput):
         """
@@ -79,21 +67,17 @@ class DBSAcquisitionEra:
             #self.logger.warning(businput)
             self.acqin.execute(conn, businput, tran)
             tran.commit()
+            tran = None
         except KeyError, ke:
             dbsExceptionHandler('dbsException-invalid-input', "Invalid input:"+ke.args[0])
         except Exception, ex:
             if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
-                # already exists
-                #self.logger.warning("DBSAcquisitionEra/insertAcquisitionEra: Unique constraint violation being ignored...")
-                #self.logger.warning("%s" % ex)
                 dbsExceptionHandler('dbsException-invalid-input2', "Invalid input: acquisition_era_name already exists in DB",  serverError="%s" %ex)
             else:
-                if tran:
-                    tran.rollback()
                 raise
         finally:
             if tran:
-                tran.close()
+                tran.rollback()
             if conn:
                 conn.close()
 
@@ -104,19 +88,12 @@ class DBSAcquisitionEra:
         """
         if acquisition_era_name =="" or end_date==0:
             dbsExceptionHandler('dbsException-invalid-input', "acquisition_era_name and end_date are required")
+        conn = self.dbi.connection()
+        tran = conn.begin()
         try:
-            conn = self.dbi.connection()
-            tran = conn.begin()
             self.acqud.execute(conn, acquisition_era_name, end_date, tran)
-            tran.commit()
-        except Exception, ex:
-            if tran:
-                tran.rollback()
-            raise
+            if tran:tran.commit()
+            tran = None
         finally:
-            if tran:
-                tran.close()
-            if conn:
-                conn.close()
-
-
+            if tran:tran.rollback()
+            if conn:conn.close()

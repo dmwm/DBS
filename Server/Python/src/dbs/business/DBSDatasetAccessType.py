@@ -27,8 +27,8 @@ class DBSDatasetAccessType:
         """
         if type(dataset_access_type) is not str:
             dbsExceptionHandler('dbsException-invalid-input', 'dataset_access_type given is not valid : %s' %dataset_access_type)
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             plist = self.datasetAccessType.execute(conn, dataset_access_type.upper())
             result = [{}]
             if plist:

@@ -2,10 +2,10 @@
 from dbs.apis.dbsClient import *
 #url="http://cmssrv48.fnal.gov:8989/DBSServlet"
 #url="https://dbs3-dev01.cern.ch/dbs/DBSReader"
-url="https://localhost:1443/dbs/DBSReader"
+url="https://localhost:1443/dbs/int/global/DBSReader"
 # API Object    
-dbs3api = DbsApi(url=url, cert="/uscms/home/yuyi/.globus/usercert.pem", 
-key="/uscms/home/yuyi/.globus/userkey.pem")
+#dbs3api = DbsApi(url=url, cert="/uscms/home/yuyi/.globus/usercert.pem", key="/uscms/home/yuyi/.globus/userkey.pem")
+dbs3api = DbsApi(url=url)
 # Is service Alive
 #print dbs3api.ping()
 # All datasets, NOT implemented yet in server

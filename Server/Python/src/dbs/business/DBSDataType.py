@@ -23,8 +23,8 @@ class DBSDataType:
         """
         List data-type/primary-ds-type 
         """
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             if dataset and dataType:
                 dbsExceptionHandler('dbsException-invalid-input',
                     "DBSDataType/listDataType. Data Type can be only searched by data_type or by dataset, not both.")

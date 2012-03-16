@@ -12,10 +12,12 @@ sys.path.append(os.path.join(ROOTDIR,'auth/dbs'))
 from DBSSecrets import dbs3_l3_i2
 from DBSSecrets import dbs3_p2_i2
 from DBSSecrets import dbs3_l1_i2
+from DBSSecrets import cms_lum_cmscald
 
 config = Configuration()
 config.component_('SecurityModule')
-config.SecurityModule.key_file = os.path.join(ROOTDIR,'auth/wmcore-auth/header-auth-key')
+config.SecurityModule.dangerously_insecure = True
+#config.SecurityModule.key_file = os.path.join(ROOTDIR,'auth/wmcore-auth/header-auth-key')
 
 config.component_('Webtools')
 #config.Webtools.port = 8250
@@ -23,7 +25,9 @@ config.Webtools.port = 8787
 config.Webtools.log_screen = True
 config.Webtools.proxy_base = 'True'
 config.Webtools.application = 'dbs'
-config.Webtools.environment = 'production'
+#config.Webtools.environment = 'production'
+config.Webtools.environment = 'development'
+
 
 config.component_('dbs')
 config.dbs.templates = os.path.join(ROOTDIR,'apps/dbs/data/templates/WMCore/WebTools')
@@ -45,9 +49,9 @@ active.DBSReader.section_('database')
 instances = active.DBSReader.database.section_('instances')
 
 ProductionGlobal = instances.section_('prod/global')
-ProductionGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+ProductionGlobal.dbowner = cms_lum_cmscald['databaseOwner']
 ProductionGlobal.version = DBSVERSION
-ProductionGlobal.connectUrl = dbs3_p2_i2['connectUrl']['reader']
+ProductionGlobal.connectUrl = cms_lum_cmscald['connectUrl']['reader']
 ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 DevelopmentGlobal = instances.section_('dev/global')
@@ -72,9 +76,9 @@ active.DBSWriter.section_('database')
 instances = active.DBSWriter.database.section_('instances')
 
 ProductionGlobal = instances.section_('prod/global')
-ProductionGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+ProductionGlobal.dbowner = cms_lum_cmscald['databaseOwner']
 ProductionGlobal.version = DBSVERSION
-ProductionGlobal.connectUrl = dbs3_p2_i2['connectUrl']['writer']
+ProductionGlobal.connectUrl = cms_lum_cmscald['connectUrl']['writer']
 ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 DevelopmentGlobal = instances.section_('dev/global')

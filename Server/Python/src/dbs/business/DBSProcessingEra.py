@@ -29,8 +29,8 @@ class DBSProcessingEra:
         #    dbsExceptionHandler('dbsException-invalid-input',
         #                        'processing version given is not valid : %s' %
         #                        processing_version)
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             result = self.pelst.execute(conn, processing_version)
             return result
         finally:
@@ -50,6 +50,7 @@ class DBSProcessingEra:
             businput["processing_version"] = businput["processing_version"]
             self.pein.execute(conn, businput, tran)
             tran.commit()
+            tran = None
         except KeyError, ke:
             dbsExceptionHandler('dbsException-invalid-input',
                                 "Invalid input:" + ke.args[0])
@@ -63,9 +64,10 @@ class DBSProcessingEra:
             else:
                 if tran:
                     tran.rollback()
+                    tran = None
                 raise
         finally:
             if tran:
-                tran.close()
+                tran.rollback()
             if conn:
                 conn.close()

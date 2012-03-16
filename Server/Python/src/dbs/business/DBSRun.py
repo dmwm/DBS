@@ -32,9 +32,9 @@ class DBSRun:
         if( '%' in logical_file_name or '%' in block_name or '%' in dataset ):
             dbsExceptionHandler('dbsException-invalid-input', 
                                 " DBSDatasetRun/listRuns. No wildcards are allowed in logical_file_name, block_name or dataset.\n.")
+        conn = self.dbi.connection()
+        tran = False
         try:
-            conn = self.dbi.connection()
-            tran = False
             ret = self.runlist.execute(conn, minrun, maxrun, logical_file_name, block_name, dataset, tran)
             result = []
             rnum = []

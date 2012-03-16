@@ -53,8 +53,8 @@ class DBSFile:
             and (block_name=="" or '*' in block_name or '%' in block_name)):
             dbsExceptionHandler('dbsException-invalid-input', \
                 "Fully specified logical_file_name or block_name is required. No wildcards are allowed." )
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             result = self.filelumilist.execute(conn, logical_file_name, block_name, run_num)
             return result
         finally:
@@ -65,8 +65,8 @@ class DBSFile:
         """
         required parameter: full block_name or dataset name. No wildcards allowed. run_num is optional.
         """
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             if not block_name and not dataset:
                 msg =  "Block_name or dataset is required for listFileSummary API"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
@@ -88,9 +88,9 @@ class DBSFile:
         required parameter: logical_file_name or block_name
         returns: this_logical_file_name, parent_logical_file_name, parent_file_id
         """
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
-            self.logger.debug("lfn %s, block_name %s, block_id :%s" % (logical_file_name, block_name, block_id))
+            #self.logger.debug("lfn %s, block_name %s, block_id :%s" % (logical_file_name, block_name, block_id))
             if not logical_file_name and not block_name and not block_id:
                 dbsExceptionHandler('dbsException-invalid-input', \
                         "Logical_file_name, block_id or block_name is required for listFileParents api" )
@@ -118,8 +118,8 @@ class DBSFile:
         required parameter: logical_file_name
         returns: logical_file_name, child_logical_file_name, parent_file_id
         """
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             if not logical_file_name:
                 dbsExceptionHandler('dbsException-invalid-input',\
                         "Logical_file_name is required for listFileChildren api")
@@ -151,14 +151,16 @@ class DBSFile:
         try :
             self.updatestatus.execute(conn, logical_file_name, is_file_valid, trans)
             trans.commit()
+            trans = None
         except Exception, ex:
             if trans:
                 trans.rollback()
+                trans = None
             raise ex
                 
         finally:
             if trans:
-                trans.close()
+                trans.rollback()
             if conn:
                 conn.close()
 
@@ -186,8 +188,8 @@ class DBSFile:
                         use minrun==maxrun")
         else:
             pass
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             dao = (self.filebrieflist, self.filelist)[detail]
             result = dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
                             output_module_label, maxrun, minrun, origin_site_name, lumi_list)
@@ -256,16 +258,16 @@ class DBSFile:
                 # first check if the dataset exists
                 # and block exists that files are suppose to be going to and is OPEN for writing
                 if dataset != f["dataset"]:
-                    dataset_id = self.datasetid.execute(conn, dataset=f["dataset"], transaction=tran)
+                    dataset_id = self.datasetid.execute(conn, dataset=f["dataset"])
                     dataset = f["dataset"]
                     if dataset_id == -1 :
                         dbsExceptionHandler('dbsException-missing-data', "Required Dataset Not Found.", None, 
                         "Required Dataset %s does not exist"%f["dataset"] )
                     # get the list of configs in for this dataset
-                    dsconfigs = [x['output_mod_config_id'] for x in self.dsconfigids.execute(conn, dataset=f["dataset"], transaction=tran)]
+                    dsconfigs = [x['output_mod_config_id'] for x in self.dsconfigids.execute(conn, dataset=f["dataset"])]
                 fileconfigs = [] # this will hold file configs that we will list in the insert file logic below       
                 if block_name != f["block_name"]:
-                    block_info = self.blocklist.execute(conn, block_name=f["block_name"], transaction=tran)
+                    block_info = self.blocklist.execute(conn, block_name=f["block_name"])
                     if len(block_info) != 1 : dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,
                                                           "Cannot found required block %s in DB" %f["block_name"])
                     block_info = block_info[0]
@@ -279,14 +281,14 @@ class DBSFile:
                 else: dbsExceptionHandler('dbsException-missing-data', "Required block name Not Found in input.", 
                                             None, "Required block Not Found in input.")
                 #make the default file_type=EDM
-                file_type_id = self.ftypeid.execute( conn, f.get("file_type", "EDM"), transaction=tran)
+                file_type_id = self.ftypeid.execute( conn, f.get("file_type", "EDM"))
                 if file_type_id == -1: 
                     dbsExceptionHandler('dbsException-missing-data', "File type not found.", None, 
                                         "Required file type %s not found in DBS"%f.get("file_type", "EDM") )
 
                 iFile = 0
                 fileIncrement = 40
-                fID = self.sm.increment(conn, "SEQ_FL", transaction=tran, incCount=fileIncrement)
+                fID = self.sm.increment(conn, "SEQ_FL", incCount=fileIncrement)
                 #looping over the files, everytime create a new object 'filein' as you never know 
                 #whats in the original object and we do not want to know
                 #for f in businput:
@@ -311,7 +313,7 @@ class DBSFile:
                     "last_modified_by" : f.get("last_modified_by", None) 
                 }
                 if iFile == fileIncrement:
-                    fID = self.sm.increment(conn, "SEQ_FL", transaction=tran, incCount=fileIncrement)
+                    fID = self.sm.increment(conn, "SEQ_FL", incCount=fileIncrement)
                     iFile = 0
                 filein["file_id"] = fID + iFile
                 iFile += 1
@@ -371,7 +373,7 @@ class DBSFile:
                             fcdao["file_id"] = filein["file_id"]
                             fcdao["output_mod_config_id"] = self.outconfigid.execute(conn, fc["app_name"],
                                     fc["release_version"], fc["pset_hash"], fc["output_module_label"],
-                                    fc["global_tag"],transaction=tran)
+                                    fc["global_tag"])
                             if fcdao["output_mod_config_id"] == -1 : 
                                 dbsExceptionHandler('dbsException-missing-data', 'Config Not found.', None, "DBSFile/insertFile.\
                                         Output module config (%s, %s, %s, %s) \
@@ -439,14 +441,16 @@ class DBSFile:
 
             # All good ?. 
             tran.commit()
+            tran = None
 
         except Exception, ex:
             if tran:
                 tran.rollback()
+                tran = None
             raise
 
         finally:
             if tran:
-                tran.close()
+                tran.rollback()
             if conn:
                 conn.close()

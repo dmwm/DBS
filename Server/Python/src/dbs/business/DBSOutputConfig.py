@@ -39,9 +39,8 @@ class DBSOutputConfig:
                           output_module_label="", block_id=0, global_tag=''):
         if '*' in logical_file_name or '%' in logical_file_name:
             dbsExceptionHandler('dbsException-invalid-input', "Fully specified logical_file_name is required. No wildcards are allowed." )
-        
+        conn = self.dbi.connection()        
         try:
-            conn = self.dbi.connection()
             result = self.outputmoduleconfiglist.execute(conn, dataset,
                                                    logical_file_name,
                                                    app_name,
@@ -76,7 +75,7 @@ class DBSOutputConfig:
             businput['scenario'] = businput.get("scenario", None)
             self.outmodin.execute(conn, businput, tran)
             tran.commit()
-
+            tran = None
         except exceptions.IntegrityError, ex:
             if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                 #if the validation is due to a unique constrain break in OUTPUT_MODULE_CONFIGS
@@ -86,11 +85,13 @@ class DBSOutputConfig:
                     try:
                         self.outmodin.execute(conn, businput, tran)
                         tran.commit()
+                        tran =  None
                     except exceptions.IntegrityError, ex1:
                         if str(ex1).find("unique constraint") != -1 and str(ex1).find("TUC_OMC_1") != -1: pass
                     except Exception, e1:
                         if tran:
                             tran.rollback()
+                            tran = None
                         raise
             else:
                 raise
@@ -100,6 +101,6 @@ class DBSOutputConfig:
             raise
         finally:
             if tran:
-                tran.close()
+                tran.rollback()
             if conn:
                 conn.close()

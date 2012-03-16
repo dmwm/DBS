@@ -45,8 +45,8 @@ class DBSDataset:
         """
         if( dataset == "" ):
             dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/listDatasetParents. Child Dataset name is required.")
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             result = self.datasetparentlist.execute(conn, dataset)
             return result
         finally:
@@ -60,8 +60,8 @@ class DBSDataset:
         """
         if( dataset == "" ):
             dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/listDatasetChildren. Parent Dataset name is required.")
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             result = self.datasetchildlist.execute(conn, dataset)
             return result
         finally:
@@ -81,13 +81,14 @@ class DBSDataset:
         try:
             self.updatestatus.execute(conn, dataset, is_dataset_valid, trans)
             trans.commit()
+            trans = None
         except Exception, ex:
             if trans:
                 trans.rollback()
             raise ex
         finally:
             if trans:
-                trans.close()
+                trans.rollback()
             if conn:
                 conn.close()
     
@@ -104,13 +105,10 @@ class DBSDataset:
         try :
             self.updatetype.execute(conn, dataset, dataset_access_type.upper(), trans)
             trans.commit()
-        except Exception, ex:
-            if trans:
-                trans.rollback()
-            raise ex
+            trans = None
         finally:
             if trans:
-                trans.close()
+                trans.rollback()
             if conn:
                 conn.close()
    
@@ -127,13 +125,13 @@ class DBSDataset:
         The parameter can include % character. 
         all other parameters are not wild card ones.
         """
+        #import pdb
+        #pdb.set_trace()
         if(logical_file_name and logical_file_name.find("%")!=-1):
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasets API requires \
                 fullly qualified logical_file_name. NO wildcard is allowed in logical_file_name.')
+        conn = self.dbi.connection()
         try:
-            conn = None
-            conn = self.dbi.connection()
-
             dao = (self.datasetbrieflist, self.datasetlist)[detail]
             if dataset_access_type: dataset_access_type = dataset_access_type.upper()
             if data_tier_name: data_tier_name = data_tier_name.upper()
@@ -165,13 +163,12 @@ class DBSDataset:
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasetArray API requires \
                 at least a list of dataset.')
         else:
-            conn = None
+            conn = self.dbi.connection()
             try:
                 dataset = inputdata["dataset"]
                 is_dataset_valid = inputdata.get("is_dataset_valid", 1)
                 dataset_access_type = inputdata.get("dataset_access_type", None)
                 detail = inputdata.get("detail", False)
-                conn = self.dbi.connection()
                 dao = (self.datasetbrieflist, self.datasetlist)[detail]   
                 result = dao.execute(conn, dataset=dataset, is_dataset_valid=is_dataset_valid,
                     dataset_access_type=dataset_access_type, transaction=False)
@@ -186,9 +183,9 @@ class DBSDataset:
     def insertDataset(self, businput):
         """
         input dictionary must have the following keys:
-        dataset, primary_ds_name(name), processed_ds(name), data_tier(name)
+        dataset, primary_ds_name(name), processed_ds(name), data_tier(name),
+        acquisition_era(name), processing_version
         It may have following keys:
-        acquisition_era(name), processing_version, 
         physics_group(name), xtcrosssection, creation_date, create_by, 
         last_modification_date, last_modified_by
         """ 
@@ -224,13 +221,13 @@ class DBSDataset:
                 dbsExceptionHandler("dbsException-missing-data",  "insertDataset: Required acquisition_era_name or processing_version is not found in the input")
             
             if "physics_group_name" in businput:
-                dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
+                dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"])
                 if dsdaoinput["physics_group_id"]  == -1:
                     dbsExceptionHandler("dbsException-missing-data",  "insertDataset. physics_group_name not found in DB")
             else:
                 dsdaoinput["physics_group_id"] = None
 
-            dsdaoinput["dataset_id"] = self.sm.increment(conn, "SEQ_DS", tran)
+            dsdaoinput["dataset_id"] = self.sm.increment(conn, "SEQ_DS")
             # we are better off separating out what we need for the dataset DAO
             dsdaoinput.update({ 
                                "dataset" : "/%s/%s/%s" %
@@ -243,27 +240,31 @@ class DBSDataset:
                                "create_by" : businput.get("create_by", dbsUtils().getCreateBy()) ,
                                "last_modification_date" : businput.get("last_modification_date", dbsUtils().getTime()),
                                "last_modified_by" : businput.get("last_modified_by", dbsUtils().getModifiedBy())})
+            """
+            repeated again, why?  comment out by YG 3/14/2012
             #physics group
             if "physics_group_name" in businput:
-                dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"], tran)
+                dsdaoinput["physics_group_id"] = self.phygrpid.execute(conn, businput["physics_group_name"])
                 if dsdaoinput["physics_group_id"]  == -1:
                     dbsExceptionHandler("dbsException-missing-data",  "insertDataset. Physics Group : %s Not found"
                                                                                     % businput["physics_group_name"])
             else: dsdaoinput["physics_group_id"] = None
-
+            """
             # See if Processing Era exists
             if businput.has_key("processing_version") and businput["processing_version"] != 0:
-                dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"], tran)
+                dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"])
                 if dsdaoinput["processing_era_id"] == -1 :
                     dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: processing_version not found in DB") 
-            else: dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset: processing_version is required")
+            else:
+                dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset: processing_version is required")
 
             # See if Acquisition Era exists
             if businput.has_key("acquisition_era_name"):
-                dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"], tran)
-                if dsdaoinput["acquisition_era_id"] == -1 :
+                dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"])
+                if dsdaoinput["acquisition_era_id"] == -1:
                     dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: acquisition_era_name not found in DB")
-            else: dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset:  acquisition_era_name is required")
+            else:
+                dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset:  acquisition_era_name is required")
             try:
                 # insert the dataset
                 self.datasetin.execute(conn, dsdaoinput, tran)
@@ -275,7 +276,7 @@ class DBSDataset:
                             "Unique constraint violation being ignored...")
                     self.logger.warning("%s" % ex)
                     ds = "/%s/%s/%s" % (businput["primary_ds_name"], businput["processed_ds_name"], businput["data_tier_name"].upper())
-                    dsdaoinput["dataset_id"] = self.datasetid.execute(conn, ds , tran)
+                    dsdaoinput["dataset_id"] = self.datasetid.execute(conn, ds )
                     if dsdaoinput["dataset_id"] == -1 :
                         dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset. Strange error, the dataset %s does not exist ?" 
                                                     % ds )
@@ -286,6 +287,8 @@ class DBSDataset:
                 raise       
 
             #FIXME : What about the READ-only status of the dataset
+            #There is no READ-oly status for a dataset.
+
             # Create dataset_output_mod_mod_configs mapping
             if businput.has_key("output_configs"):
                 for anOutConfig in businput["output_configs"]:
@@ -295,8 +298,9 @@ class DBSDataset:
                                                                                 anOutConfig["release_version"],
                                                                                 anOutConfig["pset_hash"],
                                                                                 anOutConfig["output_module_label"],
-                                                                                anOutConfig["global_tag"], tran) 
+                                                                                anOutConfig["global_tag"]) 
                     if dsoutconfdaoin["output_mod_config_id"] == -1 : 
+
                         dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: Output config (%s, %s, %s, %s, %s) not found"
                                                                                 % (anOutConfig["app_name"],
                                                                                    anOutConfig["release_version"],
@@ -313,12 +317,14 @@ class DBSDataset:
             # Dataset parentage will NOT be added by this API it will be set by insertFiles()--deduced by insertFiles
             # Dataset  runs will NOT be added by this API they will be set by insertFiles()--deduced by insertFiles OR insertRun API call
             tran.commit()
+            tran = None
         except Exception:
             if tran:
                 tran.rollback()
+                tran = None
             raise
         finally:
             if tran:
-                tran.close()
+                tran.rollback()
             if conn:
                 conn.close()

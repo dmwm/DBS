@@ -28,8 +28,8 @@ class DBSPhysicsGroup:
             dbsExceptionHandler('dbsException-invalid-input',
                 'physics group name given is not valid : %s' %
                  physics_group_name)
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             result = self.pglist.execute(conn, physics_group_name)
             return result
         finally:

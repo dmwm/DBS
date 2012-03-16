@@ -45,15 +45,15 @@ class DBSBlock:
             open_for_writing = int(open_for_writing)
             self.updatestatus.execute(conn, block_name, open_for_writing, dbsUtils().getTime(), trans)
             trans.commit()
+            trans = None
         except Exception, ex:
             if trans:
                 trans.rollback()
+            if conn:conn.close()
             raise ex
         finally:
-            if trans:
-                trans.close()
-            if conn:
-                conn.close()
+            if trans:trans.rollback()
+            if conn:conn.close()
     
     def listBlockParents(self, block_name=""):
         """
@@ -76,8 +76,8 @@ class DBSBlock:
             msg = "DBSBlock/listBlockParents. Block_name must be provided as a string or a list.\
                 No wildcards allowed in block_name/s ."
             dbsExceptionHandler('dbsException-invalid-input', msg)
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             results = self.blockparentlist.execute(conn, block_name)
             return results
         finally:
@@ -90,8 +90,8 @@ class DBSBlock:
         """
         if (not block_name) or re.search("['%','*']", block_name):
             dbsExceptionHandler('dbsException-invalid-input', "DBSBlock/listBlockChildren. Block_name must be provided." )
+        conn = self.dbi.connection()
         try:
-            conn = self.dbi.connection()
             results = self.blockchildlist.execute(conn, block_name)
             return results
         finally:
@@ -159,16 +159,18 @@ class DBSBlock:
             self.blockin.execute(conn, blkinput, tran)
 
             tran.commit()
+            tran = None
         except Exception, e:
             if str(e).lower().find("unique constraint") != -1 or str(e).lower().find("duplicate") != -1:
                 pass
             else:
                 if tran:
                     tran.rollback()
+                if conn: conn.close()
                 raise
                 
         finally:
             if tran:
-                tran.close()
+                tran.rollback()
             if conn:
                 conn.close()
