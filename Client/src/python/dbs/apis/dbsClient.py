@@ -178,6 +178,7 @@ class DbsApi(object):
         elif os.path.exists('/tmp/x509up_u'+str(os.getuid())):
             cert = '/tmp/x509up_u'+str(os.getuid())
             key = cert
+
         elif sys.stdin.isatty():
             if os.path.exists(os.environ['HOME'] + '/.globus/usercert.pem'):
                 cert = os.environ['HOME'] + '/.globus/usercert.pem'
@@ -185,6 +186,9 @@ class DbsApi(object):
                     key = os.environ['HOME'] + '/.globus/userkey.pem'
                 else:
                     key = cert
+                    
+        else:
+            raise dbsClientException("auth-error","No valid X509 cert-key-pair found.")
 
         #Set but not found
         if  os.path.isfile(key) and  os.path.isfile(cert):
