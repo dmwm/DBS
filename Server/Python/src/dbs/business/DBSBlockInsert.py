@@ -387,8 +387,13 @@ class DBSBlockInsert :
         conn = self.dbi.connection()
 
         # First, check and see if the dataset exists.
-        datasetID = self.datasetid.execute(conn, dataset['dataset'])
-        dataset['dataset_id'] = datasetID
+        try:
+            datasetID = self.datasetid.execute(conn, dataset['dataset'])
+            dataset['dataset_id'] = datasetID
+        except KeyError, ex:
+            dbsExceptionHandler("dbsException-invalid-input", "DBSBlockInsert/InsertDataset: Dataset is required.\
+                Exception: %s.  troubled dataset are: %s" %(ex.args[0], dataset) )
+            if conn:conn.close()
         if datasetID > 0:
             # Then we already have a valid dataset. We only need to fill the map (dataset & output module config)
             # Skip to the END
