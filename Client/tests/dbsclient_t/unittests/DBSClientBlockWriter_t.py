@@ -33,11 +33,11 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         testparams['dataset_conf_list'][0]['app_name'] = "%s_%s"%(testparams['dataset_conf_list'][0]['app_name'], uid)
         for i in range(len(testparams['file_conf_list'])):
             testparams['file_conf_list'][i]['app_name'] = "%s_%s"%(testparams['file_conf_list'][i]['app_name'], uid)
-            testparams['file_conf_list'][i]['lfn'] =  "%s_%s" %(testparams['file_conf_list'][i]['lfn'],uid)
+            testparams['file_conf_list'][i]['lfn'] = testparams['file_conf_list'][i]['lfn'].replace('.root','_%s.root' %(uid))
 
         for k in range(len(testparams['files'])):
-             testparams['files'][k]['logical_file_name'] = "%s_%s" %(testparams['files'][k]['logical_file_name'], uid)
-
+             testparams['files'][k]['logical_file_name'] = testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (uid))
+             
         testparams['primds']['primary_ds_name'] ='%s_%s' %(testparams['primds']['primary_ds_name'], uid)
 
         testparams['dataset']['dataset'] = '%s_%s' %(testparams['dataset']['dataset'],uid)
@@ -56,14 +56,14 @@ class DBSClientBlockWriter_t(unittest.TestCase):
 	# insert chidren with parentage: the privious inserted files are the parents
         testparams['file_parent_list'] = []
         for k in range(len(testparams['files'])):
-            testparams['file_parent_list'].append({'logical_file_name':'%s-%s'%(testparams['files'][k]['logical_file_name'], 'chd'), 
+            testparams['file_parent_list'].append({'logical_file_name': testparams['files'][k]['logical_file_name'].replace('.root','_child.root'), 
                                              'parent_logical_file_name': testparams['files'][k]['logical_file_name']})
-            testparams['files'][k]['logical_file_name'] = "%s-%s" %(testparams['files'][k]['logical_file_name'], 'chd')   
+            testparams['files'][k]['logical_file_name'] = testparams['files'][k]['logical_file_name'].replace('.root','_child.root') 
         testparams['dataset']['dataset'] = '%s_%s' %(testparams['dataset']['dataset'],'chd')
         testparams['block']['block_name'] = '%s_%s' %(testparams['block']['block_name'],'chd')
 
         for i in range(len(testparams['file_conf_list'])):
-            testparams['file_conf_list'][i]['lfn'] =  "%s-%s" %(testparams['file_conf_list'][i]['lfn'],'chd')
+            testparams['file_conf_list'][i]['lfn'] =  testparams['file_conf_list'][i]['lfn'].replace('.root','_child.root')
 
 
 
