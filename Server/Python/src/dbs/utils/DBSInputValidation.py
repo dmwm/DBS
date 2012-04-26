@@ -117,7 +117,7 @@ validationFunction = {
     'primary_ds_name':primdataset,
     'processed_ds_name':procdataset,
     'processing_version':procversion,
-    'acquisition_era_name':acqname
+    'acquisition_era_name':acqname,
     'global_tag':globalTag
     }
 
