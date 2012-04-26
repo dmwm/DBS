@@ -55,6 +55,9 @@ def inputChecks(**_params_):
                                     else: lfn(value)
                                 elif name=='processing_version':
                                     procversion(value)
+                                elif name=='global_tag':
+                                    if '*' in value: searchstr(value)
+                                    else: globalTag(value)
                                 else:
                                     searchstr(value)
                             except AssertionError as ae:
@@ -115,6 +118,7 @@ validationFunction = {
     'processed_ds_name':procdataset,
     'processing_version':procversion,
     'acquisition_era_name':acqname
+    'global_tag':globalTag
     }
 
 
