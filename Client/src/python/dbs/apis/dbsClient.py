@@ -104,10 +104,13 @@ class DbsApi(object):
                 req.get_method = lambda: callmethod
                 
             return_data = self.opener.open(req)
-            return_info = return_data.info()
-            self.request_processing_time, self.request_time = tuple(item.split('=')[1] for item in return_info.getheader('CMS-Server-Time').split())
-            self.content_length = return_info.getheader('Content-Length')
-
+            #FIXME: We need to test if there is a front end before getting request time. YG 5/2/2012
+            try:
+                return_info = return_data.info()
+                self.request_processing_time, self.request_time = tuple(item.split('=')[1] for item in return_info.getheader('CMS-Server-Time').split())
+                self.content_length = return_info.getheader('Content-Length')
+            except AttributeError, ae:
+                pass
             res = return_data.read()
             return_data.close()
             

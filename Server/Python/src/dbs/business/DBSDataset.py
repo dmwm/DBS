@@ -206,7 +206,7 @@ class DBSDataset:
             dsdaoinput["data_tier_name"] =  businput["data_tier_name"].upper()
             dsdaoinput["dataset_access_type"] = businput["dataset_access_type"].upper()
             #not required pre-exist in the db. will insert with the dataset if not in yet
-            #processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version
+            #processed_ds_name=acquisition_era_name[-fileter_name][-processing_str]-vprocessing_version   Changed as 4/30/2012 YG.
             #althrough acquisition era and processing version is not required for a dataset in the schema(the schema is build this way because
             #we need to accomdate the DBS2 data), but we impose the requirement on the API. So both acquisition and processing eras are required 
             #YG 12/07/2011  TK-362
@@ -216,7 +216,7 @@ class DBSDataset:
                     dsdaoinput["processed_ds_name"] = businput["processed_ds_name"]
                 else:
                     dbsExceptionHandler('dbsException-invalid-input', "insertDataset:\
-                    processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version must be satisified.")
+                    processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified.")
             else:
                 dbsExceptionHandler("dbsException-missing-data",  "insertDataset: Required acquisition_era_name or processing_version is not found in the input")
             

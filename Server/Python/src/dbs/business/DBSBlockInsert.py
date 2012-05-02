@@ -437,7 +437,8 @@ class DBSBlockInsert :
             #processed ds is handled inside of dataset insertion, However we need to make sure it is formated correctly.
             #processed_ds_name is not required pre-exist in the db. will insert with the dataset if not in yet
             #  
-            #         processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version
+            #         processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
+            #         Note [-filterName] is new as 4/30/2012. See ticket #3655. YG 
             #
             #althrough acquisition era and processing version is not required for a dataset 
             #in the schema(the schema is build this way because
@@ -514,14 +515,14 @@ class DBSBlockInsert :
                 if conn:conn.close()
                 dbsExceptionHandler('dbsException-invalid-input', 'BlockInsert:processing version is required')
             #Make sure processed_ds_name is right format.
-            #processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version
+            #processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
             erals=dataset["processed_ds_name"].rsplit('-')
             if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
                 if tran:
                     tran.rollback()
                 if conn:conn.close()
                 dbsExceptionHandler('dbsException-invalid-input', "BlockInsert:\
-                    processed_ds_name=acquisition_era_name[-processing_str]-vprocessing_version must be satisified.")
+                    processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified.")
     
             #So far so good, let's committe first 4 db acativties before going on.
             tran.commit()
