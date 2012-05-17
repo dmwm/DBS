@@ -24,22 +24,10 @@ def authInsert(user, role, group, site):
     """
     Authorization function for general insert  
     """
-
+    if not role: return True
     for k, v in user['roles'].iteritems():
         for g in v['group']:
-            if g == 'dbs' and k == 'dbsoperator':
-                return True
-            elif g == 'dataops' and k == 'production-operator':
-                return True
-    return False
-
-def authKeyInsert(user, role, group, site):
-    """
-    Authorization function for keys' insertion, such as insert into DATA_TIERS and so on.
-    """
-    for k, v in user['roles'].iteritems():
-        for g in v['group']:
-            if g == 'dbs' and k == 'dbsoperator':
+            if k in role.get(g, '').split(':'):
                 return True
     return False
 
@@ -61,28 +49,39 @@ class DBSWriterModel(DBSReaderModel):
             config.database.connectUrl = urls['writer']
 
         DBSReaderModel.__init__(self, config)
+        
+        self.security_params = config.security.params
 
         self.sequenceManagerDAO = self.daofactory(classname="SequenceManager")
         self.dbsDataTierInsertDAO = self.daofactory(classname="DataTier.Insert")
         
-        self._addMethod('POST', 'primarydatasets', self.insertPrimaryDataset)
-        self._addMethod('POST', 'outputconfigs', self.insertOutputConfig)
-        self._addMethod('POST', 'acquisitioneras', self.insertAcquisitionEra)
-        self._addMethod('PUT', 'acquisitioneras', self.updateAcqEraEndDate, args=['acquisition_era_name','end_date'])
-        self._addMethod('POST', 'processingeras', self.insertProcessingEra)
-        self._addMethod('POST', 'datasets', self.insertDataset)
-        self._addMethod('POST', 'blocks', self.insertBlock)
-        self._addMethod('POST', 'files', self.insertFile, args=['qInserts'])
-        self._addMethod('PUT', 'files', self.updateFile, 
-                        args=['logical_file_name', 'is_file_valid'])
-        self._addMethod('PUT', 'datasets', self.updateDataset, 
-                        args=['dataset', 'dataset_access_type'])
-        self._addMethod('PUT', 'blocks', self.updateBlock,
-                        args=['block_name', 'open_for_writing'])
-        self._addMethod('POST', 'datatiers', self.insertDataTier)
-        self._addMethod('POST', 'bulkblocks', self.insertBulkBlock)
+        self._addMethod('POST', 'primarydatasets', self.insertPrimaryDataset, secured=True,
+                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('POST', 'outputconfigs', self.insertOutputConfig,  secured=True,
+                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('POST', 'acquisitioneras', self.insertAcquisitionEra, secured=True,
+                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('PUT', 'acquisitioneras', self.updateAcqEraEndDate, args=['acquisition_era_name','end_date'],
+                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('POST', 'processingeras', self.insertProcessingEra, secured=True, 
+                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('POST', 'datasets', self.insertDataset, secured=True,
+                        security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('POST', 'blocks', self.insertBlock, secured=True,
+                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('POST', 'files', self.insertFile, args=['qInserts'], secured=True,
+                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('PUT', 'files', self.updateFile, args=['logical_file_name', 'is_file_valid'],
+                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('PUT', 'datasets', self.updateDataset, args=['dataset', 'dataset_access_type'],
+                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('PUT', 'blocks', self.updateBlock,args=['block_name', 'open_for_writing'],
+                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('POST', 'datatiers', self.insertDataTier, secured=True,
+                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('POST', 'bulkblocks', self.insertBulkBlock, secured=True,
+                         security_params={'role':self.security_params, 'authzfunc':authInsert})
 
-    @tools.secmodv2(authzfunc=authInsert) 
     def insertPrimaryDataset(self):
         """
         Inserts a Primary Dataset in DBS
@@ -105,7 +104,6 @@ class DBSWriterModel(DBSReaderModel):
                         % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @tools.secmodv2(authzfunc=authInsert)
     def insertOutputConfig(self):
         """
         Insert an output configuration (formely known as algorithm config).
@@ -132,7 +130,6 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(acquisition_era_name=str, end_date=(int, str))
-    @tools.secmodv2(authzfunc=authInsert)
     def updateAcqEraEndDate(self, acquisition_era_name ="", end_date=0):
         """
         API to update Acquisition era's end_date.
@@ -151,7 +148,6 @@ class DBSWriterModel(DBSReaderModel):
 
 
 
-    @tools.secmodv2(authzfunc=authInsert)
     def insertAcquisitionEra(self):
         """
         Insert an AcquisitionEra in DBS
@@ -178,7 +174,6 @@ class DBSWriterModel(DBSReaderModel):
                         % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @tools.secmodv2(authzfunc=authInsert)
     def insertProcessingEra(self):
         """
         Insert an ProcessingEra in DBS
@@ -203,7 +198,6 @@ class DBSWriterModel(DBSReaderModel):
                             % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @tools.secmodv2(authzfunc=authInsert)                
     def insertDataset(self):
         """
         gets the input from cherrypy request body.
@@ -232,7 +226,6 @@ class DBSWriterModel(DBSReaderModel):
                         % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @tools.secmodv2(authzfunc=authInsert)
     def insertBulkBlock(self):
         """
         gets the input from cherrypy request body.
@@ -259,7 +252,6 @@ class DBSWriterModel(DBSReaderModel):
                     % (ex, traceback.format_exc()) 
                 dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @tools.secmodv2(authzfunc=authInsert)
     def insertBlock(self):
         """
         gets the input from cherrypy request body.
@@ -279,7 +271,6 @@ class DBSWriterModel(DBSReaderModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
         
-    @tools.secmodv2(authzfunc=authInsert)    
     def insertFile(self, qInserts=False):
         """
         gets the input from cherrypy request body
@@ -334,7 +325,6 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
  
     @inputChecks(logical_file_name=str, is_file_valid=(int, str))
-    @tools.secmodv2(authzfunc=authInsert)    
     def updateFile(self, logical_file_name="", is_file_valid=1):
         """
         API to update file status
@@ -351,7 +341,6 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(dataset=str, dataset_access_type=str)
-    @tools.secmodv2(authzfunc=authInsert)
     def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_access_type=""):
         """
         API to update dataset status
@@ -371,7 +360,6 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(block_name=str, open_for_writing=(int,str))
-    @tools.secmodv2(authzfunc=authInsert)
     def updateBlock(self, block_name="", open_for_writing=0):
         """
         API to update file status
@@ -386,7 +374,6 @@ class DBSWriterModel(DBSReaderModel):
             sError = "DBSWriterModel\updateStatus. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @tools.secmodv2(authzfunc=authKeyInsert)
     def insertDataTier(self):
 	"""
 	Inserts a data tier in DBS

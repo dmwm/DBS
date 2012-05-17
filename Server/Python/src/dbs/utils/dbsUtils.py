@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 """ DBS utility class """
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: dbsUtils.py,v 1.4 2010/08/09 10:59:14 akhukhun Exp $ "
-
+import cherrypy 
 import cjson
 from time import time
 import getpass
@@ -20,7 +18,7 @@ class dbsUtils:
 	return time()
 
     def getCreateBy(self):
-	return getpass.getuser()
+	return cherrypy.request.user.get('name', getpass.getuser())
 
     def getModifiedBy(self):
 	return self.getCreateBy()		

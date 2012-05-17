@@ -189,7 +189,6 @@ class DBSReaderModel(RESTModel):
     """
 
     @inputChecks(primary_ds_name=str, primary_ds_type=str)
-    @tools.secmodv2()
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
         Example url's: <br />
@@ -213,7 +212,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
     @inputChecks(primary_ds_type=str, dataset=str)
-    @tools.secmodv2()
     def listPrimaryDsTypes(self, primary_ds_type="", dataset=""):
         """
         Example URL's <br />
@@ -240,7 +238,6 @@ class DBSReaderModel(RESTModel):
                  primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str, 
                  min_cdate=(int,str), max_cdate=(int,str),
                  min_ldate=(int,str), max_ldate=(int, str), cdate=(int,str), ldate=(int,str), detail=(bool,str))
-    @tools.secmodv2()
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="",
         processing_version=0, acquisition_era_name="", run_num="0",
@@ -325,7 +322,6 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listdatasets. %s.\n Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @tools.secmodv2()
     def listDatasetArray(self):
         """
         To be called by datasets url with post call.
@@ -353,7 +349,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(data_tier_name=str)
-    @tools.secmodv2()
     def listDataTiers(self, data_tier_name=""):
 	"""
 	Example url's:
@@ -383,7 +378,6 @@ class DBSReaderModel(RESTModel):
 
     @inputChecks(dataset=str, block_name=str, origin_site_name=str, logical_file_name=str ,run_num=(long,int,str), min_cdate=(int,str), \
                  max_cdate=(int, str), min_ldate=(int,str), max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), detail=(str,bool))
-    @tools.secmodv2()
     def listBlocks(self, dataset="", block_name="", origin_site_name="",
         logical_file_name="",run_num='-1', min_cdate='0', max_cdate='0',
         min_ldate='0', max_ldate='0', cdate='0',  ldate='0', detail=False):
@@ -445,7 +439,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(block_name=str)
-    @tools.secmodv2()
     def listBlockParents(self, block_name=""):
         """
         Example url's:
@@ -461,7 +454,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'],  self.logger.exception, sError)
 
 
-    @tools.secmodv2()
     def listBlocksParents(self):
         """
         To be called by blockparents url with post call
@@ -487,7 +479,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
            
     @inputChecks(block_name=str)       
-    @tools.secmodv2()
     def listBlockChildren(self, block_name=""):
         """
         Example url's:
@@ -504,7 +495,6 @@ class DBSReaderModel(RESTModel):
 
     @inputChecks(dataset =str, block_name=str, logical_file_name =str, release_version=str, pset_hash=str, app_name=str,\
                  output_module_label=str, minrun=(long, int, str), maxrun=(long, int,str), origin_site_name=str, lumi_list=(str,list), detail=(str,bool))
-    @tools.secmodv2()
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "",
         release_version="", pset_hash="", app_name="", output_module_label="",
         minrun=-1, maxrun=-1, origin_site_name="", lumi_list="", detail=False):
@@ -548,7 +538,6 @@ class DBSReaderModel(RESTModel):
                     self.logger.exception, sError)
 
     @inputChecks(block_name=str, dataset=str, run_num=(long,int, str))
-    @tools.secmodv2()
     def listFileSummaries(self, block_name='', dataset='', run_num=0):
         """
         Example url's <br />
@@ -567,7 +556,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(dataset=str)
-    @tools.secmodv2()
     def listDatasetParents(self, dataset=''):
         """
         Example url's <br />
@@ -583,7 +571,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
    
     @inputChecks(dataset=str)
-    @tools.secmodv2()
     def listDatasetChildren(self, dataset):
         """
         Example url's <br />
@@ -600,7 +587,6 @@ class DBSReaderModel(RESTModel):
   
     @inputChecks(dataset=str, logical_file_name=str, release_version=str, pset_hash=str, app_name=str,\
                  output_module_label=str, block_id=(int,str), global_tag=str)
-    @tools.secmodv2()
     def listOutputConfigs(self, dataset="", logical_file_name="", 
                           release_version="", pset_hash="", app_name="",
                           output_module_label="", block_id=0, global_tag=''):
@@ -630,7 +616,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
    
     @inputChecks(logical_file_name=str, block_id=(int,str), block_name=str)
-    @tools.secmodv2()
     def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
         """
         Example url's <br />
@@ -646,7 +631,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(logical_file_name=str)
-    @tools.secmodv2()
     def listFileChildren(self, logical_file_name=''):
         """
         Example url's <br />
@@ -662,7 +646,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
     @inputChecks(logical_file_name=str, block_name=str, run_num=(long,int,str))
-    @tools.secmodv2()
     def listFileLumis(self, logical_file_name="", block_name="", run_num='0'):
         """
         Example url's <br />
@@ -683,7 +666,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(minrun=(long, int,str), maxrun=(long, int,str), logical_file_name=str, block_name=str, dataset=str)
-    @tools.secmodv2()     
     def listRuns(self, minrun=-1, maxrun=-1, logical_file_name="",
                  block_name="", dataset=""):
         """
@@ -719,7 +701,6 @@ class DBSReaderModel(RESTModel):
     #    return self.dbsSite.listSites(block_name, site_name)
 
     @inputChecks(datatype=str, dataset=str)
-    @tools.secmodv2()
     def listDataTypes(self, datatype="", dataset=""):
         """
         lists datatypes known to dbs
@@ -735,7 +716,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
     @inputChecks(block_name=str)
-    @tools.secmodv2()
     def dumpBlock(self, block_name):
         """
         Returns all information related with the block_name
@@ -750,7 +730,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(acquisition_era_name=str)
-    @tools.secmodv2()
     def listAcquisitionEras(self, acquisition_era_name=''):
         """
         lists acquisition eras known to dbs
@@ -765,7 +744,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(acquisition_era_name=str)
-    @tools.secmodv2()
     def listAcquisitionEras_CI(self, acquisition_era_name=''):
         """
         lists case sensitive acquisition eras known to dbs 
@@ -783,7 +761,6 @@ self.logger.exception, sError)
 
 
     @inputChecks(processing_version=(str,int))
-    @tools.secmodv2()
     def listProcessingEras(self, processing_version=0):
         """
         lists acquisition eras known to dbs
@@ -799,7 +776,6 @@ self.logger.exception, sError)
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(release_version=str, dataset=str, logical_file_name=str)
-    @tools.secmodv2()
     def listReleaseVersions(self, release_version='', dataset='', logical_file_name=''):
         """
         lists release versions known to dbs
@@ -816,7 +792,6 @@ self.logger.exception, sError)
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
     @inputChecks(dataset_access_type=str)
-    @tools.secmodv2()
     def listDatasetAccessTypes(self, dataset_access_type=''):
         """
         lists dataset access types known to dbs
@@ -833,7 +808,6 @@ self.logger.exception, sError)
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(physics_group_name=str)
-    @tools.secmodv2()
     def listPhysicsGroups(self, physics_group_name=''):
         """
         List physics group names know to DBS.
