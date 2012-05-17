@@ -28,6 +28,14 @@ testparams=importCode(infofile, "testparams", 0).info
 #['release_version', 'primary_ds_name', 'app_name', 'output_module_label', 'tier', 'pset_hash', 'procdataset', 'site', 'block', 'dataset']    
 
 class DBSClientReader_t(unittest.TestCase):
+
+    def test00a(self):
+        """test00 unittestDBSClientReader_t.requestTimingInfo"""
+        api.requestTimingInfo
+
+    def test00b(self):
+        """test00b unittestDBSClientReader_t.requestContentLength"""
+        api.requestContentLength
     
     def test01(self):
         """test01 unittestDBSClientReader_t.listPrimaryDatasets: basic test"""

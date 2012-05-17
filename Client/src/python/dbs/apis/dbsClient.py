@@ -104,13 +104,9 @@ class DbsApi(object):
                 req.get_method = lambda: callmethod
                 
             return_data = self.opener.open(req)
-            #FIXME: We need to test if there is a front end before getting request time. YG 5/2/2012
-            try:
-                return_info = return_data.info()
-                self.request_processing_time, self.request_time = tuple(item.split('=')[1] for item in return_info.getheader('CMS-Server-Time').split())
-                self.content_length = return_info.getheader('Content-Length')
-            except AttributeError, ae:
-                pass
+            
+            self.return_info = return_data.info() 
+
             res = return_data.read()
             return_data.close()
             
@@ -202,6 +198,27 @@ class DbsApi(object):
             return key, cert
         else:
             raise ValueError, "key or cert file does not exist: %s, %s" % (key,cert)
+
+    @property
+    def requestTimingInfo(self):
+        """
+        Returns the time needed to process the request by the frontend server in microseconds
+        and the EPOC timestamp of the request in microseconds. 
+        """
+        try:
+            return tuple(item.split('=')[1] for item in self.return_info.getheader('CMS-Server-Time').split())
+        except AttributeError:
+            return None, None
+        
+    @property
+    def requestContentLength(self):
+        """
+        Returns the content-length of the content return by the server
+        """
+        try:
+            return self.return_info.getheader('Content-Length')
+        except AttributeError:
+            return None
      
     def blockDump(self,**kwargs):
         """
