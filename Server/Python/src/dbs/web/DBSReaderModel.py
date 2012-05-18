@@ -47,13 +47,11 @@ if not getattr(tools,"secmodv2",None):
     class FakeAuthForDoc(object):
         def __init__(self,*args,**kwargs):
             pass
-        
-        def __call__(self,func,*args,**kwargs):
-            def wrapper(*args,**kwargs):
-                return func(*args,**kwargs)
-            return wrapper
+                
+        def callable(self, role=[], group=[], site=[], authzfunc=None):
+            pass
 
-    tools.secmodv2 = FakeAuthForDoc
+    tools.secmodv2 = FakeAuthForDoc()
 
 class DBSReaderModel(RESTModel):
     """

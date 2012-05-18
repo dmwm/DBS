@@ -8,6 +8,7 @@ __version__ = "$Revision: 1.17 $"
 
 import json
 import os, logging
+import getpass
 from cherrypy import request, log
 from optparse import OptionParser
 
@@ -15,7 +16,7 @@ from WMCore.Configuration import Configuration, loadConfigurationFile
 from WMCore.WebTools.RESTApi import RESTApi
 import traceback
 
-class FileLike(object):    
+class FileLike(object):
     """FileLike Object class with two methods:
     read - used for insert call
     write - as null device"""
@@ -62,20 +63,29 @@ class DBSRestApi:
         #config.DBS.database    = dbsconfig.database
 
         #Use dev/global for the unittest
-        dbconfig = getattr(dbsconfig.database.instances,dbinstance)
+        dbconfig = getattr(dbsconfig.database.instances, dbinstance)
         config.DBS.section_('database')
         config.DBS.database.connectUrl = dbconfig.connectUrl
         config.DBS.database.dbowner = dbconfig.dbowner
         #config.DBS.database.version = dbconfig.version
         config.DBS.database.engineParameters = dbconfig.engineParameters
+       
+        try:
+            secconfig = getattr(dbsconfig.security.instances, dbinstance)
+        except AttributeError:
+            pass
+        else:
+            config.DBS.section_('security')
+            config.DBS.security.params = secconfig.params
         
-        config.DBS.default_expires = 300
+        config.DBS.default_expires = 900
 		
         return config
 
     def list1(self, call, params={}):
         """takes parameters as a dictionary"""
         request.method = 'GET'
+        request.user = {'name' : getpass.getuser()}
         return self.rest.default(*[call], **params)
     
     def list(self, *args, **kwargs):
@@ -85,29 +95,32 @@ class DBSRestApi:
         """
 	#print "List API call ....."
         request.method = 'GET'
+        request.user = {'name' : getpass.getuser()}
         return self.parseForException(self.rest.default(*args, **kwargs))
 
     def insert(self, call, params={}):
         request.method = 'POST'
         request.body = FileLike(params)
+        request.user = {'name' : getpass.getuser()}
         #import pdb
         #pdb.set_trace()
 	#Forcing NO use of insert buffer during the unit tests
 	if call=='files':
-	    ret=self.rest.default(*[call, False])
+            ret=self.rest.default(*[call, False])
 	ret=self.rest.default(*[call])
         return self.parseForException(ret)
 
     def update(self, *args, **kwargs):
         request.method = 'PUT'
+        request.user = {'name' : getpass.getuser()}
         ret=self.rest.default(*args, **kwargs)
         return self.parseForException(ret)
 
     def parseForException(self, data):
         if type(data)==type("abc"):
-	    data=json.loads(data)	
+            data=json.loads(data)
 	if type(data) == type({}):
-	    if type(data) == type({}) and data.has_key('exception'):
+            if type(data) == type({}) and data.has_key('exception'):
                 raise Exception("DBS Server raised an exception: HTTPError %s :" %data['exception'] + (data['message']))
 	return data
 

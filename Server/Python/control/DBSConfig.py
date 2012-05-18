@@ -35,7 +35,7 @@ config.dbs.title = 'DBS Server'
 config.dbs.description = 'CMS DBS Service'
 config.dbs.section_('views')
 config.dbs.admin = 'cmsdbs'
-config.dbs.default_expires = 300
+config.dbs.default_expires = 900
 config.dbs.instances = ['prod/global','dev/global','int/global']
 
 active = config.dbs.views.section_('active')
@@ -92,3 +92,15 @@ IntegrationGlobal.dbowner = dbs3_p2_i2['databaseOwner']
 IntegrationGlobal.version = DBSVERSION
 IntegrationGlobal.connectUrl = dbs3_p2_i2['connectUrl']['writer']
 IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
+
+active.DBSWriter.section_('security')
+security_instances = active.DBSWriter.security.section_('instances')
+security_production_global = security_instances.section_('prod/global')
+security_production_global.params = {'dbs' : 'dbsoperator', 'dataops' : 'production operator'}
+security_development_global = security_instances.section_('dev/global')
+security_development_global.params = {}
+security_integration_global = security_instances.section_('int/global')
+security_integration_global.params = {}
+
+
+
