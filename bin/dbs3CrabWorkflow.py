@@ -36,8 +36,7 @@ timer.update_payload({'api' : 'listPrimaryDSTypes',
                       'server_request_timestamp' : int(api.request_time),
                       'request_content_length' : int(api.content_length)})
 
-with tempfile.NamedTemporaryFile(dir=stat_output_dir, suffix=".stat", delete=False) as f:
-    timer.stat_to_fileobject(f)
+timer.stat_to_server(stat_client)
 
 print "PrimaryDSType is %s" % (ds_type)
 
@@ -50,8 +49,7 @@ timer.update_payload({'api' : 'listFiles',
                       'server_request_timestamp' : int(api.request_time),
                       'request_content_length' : int(api.content_length)})
 
-with tempfile.NamedTemporaryFile(dir=stat_output_dir, suffix=".stat", delete=False) as f:  
-    timer.stat_to_fileobject(f)
+timer.stat_to_server(stat_client)
 
 print "Found %s files for dataset %s" % (len(files), initial)
 
@@ -67,9 +65,8 @@ for this_file in files:
                           'server_request_timestamp' : int(api.request_time),
                           'request_content_length' : int(api.content_length)})
     
-    with tempfile.NamedTemporaryFile(dir=stat_output_dir, suffix=".stat", delete=False) as f:
-        timer.stat_to_fileobject(f)
-
+    timer.stat_to_server(stat_client)
+    
     print "Found %s parents for file %s" % (len(parent_files), logical_file_name)
 
     with TimingStat(timing) as timer:
@@ -81,8 +78,7 @@ for this_file in files:
                           'server_request_timestamp' : int(api.request_time),
                           'request_content_length' : int(api.content_length)})
     
-    with tempfile.NamedTemporaryFile(dir=stat_output_dir, suffix=".stat", delete=False) as f:
-        timer.stat_to_fileobject(f)
-
+    timer.stat_to_server(stat_client)
+    
     print "Found %s lumis for file %s" % (len(file_lumis), logical_file_name)
                                           
