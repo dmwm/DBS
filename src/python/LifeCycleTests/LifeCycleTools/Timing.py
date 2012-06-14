@@ -14,7 +14,7 @@ class TimingStat(object):
     
     def __exit__(self, type, value, traceback):
         end = time.time()
-        self._payload.setdefault('stats',{}).update({'client_request_timimg' : end-self.start})
+        self._payload.setdefault('stats',{}).update({'client_request_timing' : end-self.start})
         
         return False
 
@@ -26,7 +26,8 @@ class TimingStat(object):
         json.dump(self._payload, fileobject)
 
     def stat_to_server(self, client):
-        client.send(json.dumps())
+        print self._payload
+        client.send(self._payload)
 
     def update_payload(self, value):
         self._payload.setdefault('stats',{}).update(value)

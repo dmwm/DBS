@@ -30,12 +30,12 @@ class SqlStats(object):
    
     def add_stats(self, stats):
         stats = stats.get("stats")
-
+        
         values = (str(stats.get('query')),
                   str(stats.get('api')),
                   float(stats.get("client_request_timing")),
                   float(stats.get("server_request_timing")),
-                  int(stats.get("server_request_timestamp")),
+                  float(stats.get("server_request_timestamp")),
                   int(stats.get("request_content_length")))
 
         with self.conn:

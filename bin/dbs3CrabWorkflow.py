@@ -3,7 +3,7 @@ from LifeCycleTools.APIFactory import create_api
 from LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTools.Timing import TimingStat
 from LifeCycleTools.OptParser import get_command_line_options
-from LifeCylceTools.StatsClient import StatsClient
+from LifeCycleTools.StatsClient import StatsClient
 
 import os
 import sys
@@ -31,10 +31,11 @@ timing = {'stats':{'query' : initial}}
 with TimingStat(timing) as timer:
     ds_type = api.listPrimaryDSTypes(dataset=initial)[0]
 
+request_processing_time, request_time = api.requestTimingInfo
 timer.update_payload({'api' : 'listPrimaryDSTypes',
-                      'server_request_timing' : float(api.request_processing_time)/1000000.0,
-                      'server_request_timestamp' : int(api.request_time),
-                      'request_content_length' : int(api.content_length)})
+                      'server_request_timing' : float(request_processing_time)/1000000.0,
+                      'server_request_timestamp' : float(request_time)/1000000.0,
+                      'request_content_length' : int(api.requestContentLength)})
 
 timer.stat_to_server(stat_client)
 
@@ -44,10 +45,11 @@ print "PrimaryDSType is %s" % (ds_type)
 with TimingStat(timing) as timer:
   files = api.listFiles(dataset=initial, detail=True)
 
+request_processing_time, request_time = api.requestTimingInfo
 timer.update_payload({'api' : 'listFiles',
-                      'server_request_timing' : float(api.request_processing_time)/1000000.0,
-                      'server_request_timestamp' : int(api.request_time),
-                      'request_content_length' : int(api.content_length)})
+                      'server_request_timing' : float(request_processing_time)/1000000.0,
+                      'server_request_timestamp' : float(request_time)/1000000.0,
+                      'request_content_length' : int(api.requestContentLength)})
 
 timer.stat_to_server(stat_client)
 
@@ -58,12 +60,13 @@ for this_file in files:
     logical_file_name = this_file.get("logical_file_name")
     with TimingStat(timing) as timer:
         parent_files = api.listFileParents(logical_file_name=logical_file_name)
-    
+
+    request_processing_time, request_time = api.requestTimingInfo
     timer.update_payload({'api' : 'listFileParents',
                           'query' : logical_file_name,
-                          'server_request_timing' : float(api.request_processing_time)/1000000.0,
-                          'server_request_timestamp' : int(api.request_time),
-                          'request_content_length' : int(api.content_length)})
+                          'server_request_timing' : float(request_processing_time)/1000000.0,
+                          'server_request_timestamp' : float(request_time)/1000000.0,
+                          'request_content_length' : int(api.requestContentLength)})
     
     timer.stat_to_server(stat_client)
     
@@ -71,12 +74,13 @@ for this_file in files:
 
     with TimingStat(timing) as timer:
         file_lumis = api.listFileLumis(logical_file_name=logical_file_name)
-    
+
+    request_processing_time, request_time = api.requestTimingInfo
     timer.update_payload({'api' : 'listFileLumis',
                           'query' : logical_file_name,
-                          'server_request_timing' : float(api.request_processing_time)/1000000.0,
-                          'server_request_timestamp' : int(api.request_time),
-                          'request_content_length' : int(api.content_length)})
+                          'server_request_timing' : float(request_processing_time)/1000000.0,
+                          'server_request_timestamp' : float(request_time)/1000000.0,
+                          'request_content_length' : int(api.requestContentLength)})
     
     timer.stat_to_server(stat_client)
     
