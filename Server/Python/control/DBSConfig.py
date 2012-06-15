@@ -39,6 +39,44 @@ config.dbs.default_expires = 900
 config.dbs.instances = ['prod/global','dev/global','int/global']
 
 active = config.dbs.views.section_('active')
+active.section_('DBSMigrator')
+active.DBSMigrator.object = 'WMCore.WebTools.RESTApi'
+active.DBSMigrator.section_('model')
+active.DBSMigrator.model.object = 'dbs.web.DBSMigrateModel'
+active.DBSMigrator.section_('formatter')
+active.DBSMigrator.formatter.object = 'WMCore.WebTools.RESTFormatter'
+active.DBSMigrator.section_('database')
+instances = active.DBSMigrator.database.section_('instances')
+
+ProductionGlobal = instances.section_('prod/global')
+ProductionGlobal.dbowner = cms_lum_cmscald['databaseOwner']
+ProductionGlobal.version = DBSVERSION
+ProductionGlobal.connectUrl = cms_lum_cmscald['connectUrl']['writer']
+ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
+
+DevelopmentGlobal = instances.section_('dev/global')
+DevelopmentGlobal.dbowner = cms_lum_cmscald['databaseOwner']
+DevelopmentGlobal.version = DBSVERSION
+DevelopmentGlobal.connectUrl = cms_lum_cmscald['connectUrl']['writer']
+DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
+
+IntegrationGlobal = instances.section_('int/global')
+IntegrationGlobal.dbowner = cms_lum_cmscald['databaseOwner']
+IntegrationGlobal.version = DBSVERSION
+IntegrationGlobal.connectUrl = cms_lum_cmscald['connectUrl']['writer']
+IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
+
+active.DBSMigrator.section_('security')
+security_instances = active.DBSMigrator.security.section_('instances')
+security_production_global = security_instances.section_('prod/global')
+security_production_global.params = {'dbs' : 'dbsoperator', 'dataops' : 'production operator'}
+security_development_global = security_instances.section_('dev/global')
+security_development_global.params = {}
+security_integration_global = security_instances.section_('int/global')
+security_integration_global.params = {}
+
+
+
 active.section_('DBSReader')
 active.DBSReader.object = 'WMCore.WebTools.RESTApi'
 active.DBSReader.section_('model')

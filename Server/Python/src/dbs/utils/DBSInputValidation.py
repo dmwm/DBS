@@ -105,7 +105,9 @@ acceptedInputKeys = {
              'file_parent_list','last_modified_by', 'last_modification_date', 'create_by', 'creation_date', 'auto_cross_section',\
               'adler32', 'dataset', 'block_name', 'md5'],
     ################
-    'file_lumi_list':['lumi_section_num', 'run_num']
+    'file_lumi_list':['lumi_section_num', 'run_num'],
+    ################
+    'migration_rqst':['migration_url','migration_input', 'migration_rqst_id']
     ################
     }
 
@@ -120,7 +122,6 @@ validationFunction = {
     'acquisition_era_name':acqname,
     'global_tag':globalTag
     }
-
 
 validationFunctionWwildcard = {
     'block_name':searchblock,
@@ -166,7 +167,10 @@ def validateStringInput(input_key,input_data):
         func = validationFunctionWwildcard.get(input_key)
         if func is None:
             func = searchstr
-    else:    
+    else:
+        if input_key == 'migration_input' :
+            if input_key.find('#') != -1 : func = block
+            else : func = dataset
         func = validationFunction.get(input_key)
         if func is None:
             func = namestr
