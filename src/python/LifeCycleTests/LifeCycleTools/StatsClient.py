@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import xmlrpclib
+import cPickle
 
-class StatsClient(object):
+class StatsXMLRPCClient(object):
     def __init__(self, host="localhost", port=9876):
         self.stats_server = xmlrpclib.ServerProxy('http://%s:%s' % (host, port))
 
@@ -11,6 +12,16 @@ class StatsClient(object):
     def shutdown_server(self):
         self.stats_server.shutdown()
 
+class StatsPipeClient(object):
+    def __init__(self, named_pipe):
+        self.f = open(named_pipe,'wb')
+
+    def __del__(self):
+        self.f.close()
+
+    def send(self, stats):
+        cPickle.dump(stats, self.f, cPickle.HIGHEST_PROTOCOL)
+
 if __name__ == "__main__":
     stats = {'stats':{'query' : "Test"}}
     stats['stats'].update({'api' : 'listPrimaryDSTypes',
@@ -19,6 +30,7 @@ if __name__ == "__main__":
                            'server_request_timestamp' : 123344667,
                            'request_content_length' : 102})
     
-    stats_client = StatsClient("localhost", 9876)
+    #stats_client = StatsXMLRPCClient("localhost", 9876)
+    stats_client = StatsPipeClient("/tmp/fifotest")
     stats_client.send(stats)
-    stats_client.shutdown_server()
+    #stats_client.shutdown_server()
