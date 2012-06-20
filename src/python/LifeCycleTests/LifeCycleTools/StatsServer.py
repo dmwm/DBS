@@ -119,6 +119,8 @@ class StatsPipeServer(object):
             self.f.close()
         except AttributeError: ### file object not yet created
             pass
+        finally:
+            os.unlink(self.pipe_name)
 
     def serve_forever(self):
         while not self.exit_server:
