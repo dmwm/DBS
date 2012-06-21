@@ -14,13 +14,12 @@ class StatsXMLRPCClient(object):
 
 class StatsPipeClient(object):
     def __init__(self, named_pipe):
-        self.f = open(named_pipe,'wb')
-
-    def __del__(self):
-        self.f.close()
+        self.named_pipe = named_pipe
 
     def send(self, stats):
+        self.f = open(self.named_pipe,'wb')
         cPickle.dump(stats, self.f, cPickle.HIGHEST_PROTOCOL)
+        self.f.close()
 
 if __name__ == "__main__":
     stats = {'stats':{'query' : "Test"}}

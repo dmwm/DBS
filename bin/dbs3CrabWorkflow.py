@@ -3,7 +3,7 @@ from LifeCycleTools.APIFactory import create_api
 from LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTools.Timing import TimingStat
 from LifeCycleTools.OptParser import get_command_line_options
-from LifeCycleTools.StatsClient import StatsClient
+from LifeCycleTools.StatsClient import StatsPipeClient
 
 import os
 import sys
@@ -21,7 +21,7 @@ payload_handler = PayloadHandler()
 
 payload_handler.load_payload(options.input)
 
-stat_client = StatsClient("localhost", 9876)
+stat_client = StatsPipeClient("/tmp/dbs3fifo")
 
 initial = payload_handler.payload['workflow']['dataset']
 
@@ -63,7 +63,7 @@ for this_file in files:
 
     request_processing_time, request_time = api.requestTimingInfo
     timer.update_payload({'api' : 'listFileParents',
-                          'query' : logical_file_name,
+                          'query' : str(logical_file_name),
                           'server_request_timing' : float(request_processing_time)/1000000.0,
                           'server_request_timestamp' : float(request_time)/1000000.0,
                           'request_content_length' : int(api.requestContentLength)})
@@ -77,7 +77,7 @@ for this_file in files:
 
     request_processing_time, request_time = api.requestTimingInfo
     timer.update_payload({'api' : 'listFileLumis',
-                          'query' : logical_file_name,
+                          'query' : str(logical_file_name),
                           'server_request_timing' : float(request_processing_time)/1000000.0,
                           'server_request_timestamp' : float(request_time)/1000000.0,
                           'request_content_length' : int(api.requestContentLength)})

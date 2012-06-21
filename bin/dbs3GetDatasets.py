@@ -3,7 +3,7 @@ from LifeCycleTools.APIFactory import create_api
 from LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTools.Timing import TimingStat
 from LifeCycleTools.OptParser import get_command_line_options
-from LifeCycleTools.StatsClient import StatsClient
+from LifeCycleTools.StatsClient import StatsPipeClient
 
 import os
 import sys
@@ -19,14 +19,14 @@ payload_handler = PayloadHandler()
 
 payload_handler.load_payload(options.input)
 
-stat_client = StatsClient("localhost", 9876)
+stat_client = StatsPipeClient("/tmp/dbs3fifo")
 
 initial = payload_handler.payload['workflow']['InitialRequest']
 print "Initial request string: %s" % (initial)
 
 ## first step (list all datasets in DBS3 below the 'initial' root)
 
-timing = {'stats':{'api':'listDatasets', 'query':initial}}
+timing = {'stats':{'api':'listDatasets', 'query':str(initial)}}
 
 with TimingStat(timing) as timer:
     datasets = api.listDatasets(dataset=initial)

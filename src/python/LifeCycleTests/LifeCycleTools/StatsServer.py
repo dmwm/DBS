@@ -45,6 +45,9 @@ class SqlStats(object):
         #clean-up and recreate db
         with self.conn:
             cur = self.conn.cursor()
+            ### Performance Tuning
+            cur.execute("PRAGMA cache_size=200000")
+            cur.execute("PRAGMA synchronous = 0")
             cur.execute("DROP TABLE IF EXISTS Statistics")
             cur.execute("CREATE TABLE Statistics(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, ClientTiming DOUBLE, ServerTiming DOUBLE, ServerTimeStamp INT, ContentLength INT)")
    
@@ -98,9 +101,8 @@ class StatsPipeServer(object):
             try:
                 input_data = cPickle.load(self.f)
             except EOFError: ### no new data available
-                return                
+                return
             else:
-                print input_data
                 self.func(input_data)
 
     def register_function(self, func):
@@ -130,7 +132,7 @@ class StatsPipeServer(object):
             self.handle_request()
             ### After EOFError the file needs to be closed and re-opened
             self.f.close()
-                
+
 if __name__ == "__main__":
     options = get_command_line_options(os.path.basename(__file__), sys.argv)
     sql_stats = SqlStats(dbfile=options.output)

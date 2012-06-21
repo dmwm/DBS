@@ -6,16 +6,16 @@ class TimingStat(object):
         self._payload = payload
 
         if executable and query:
-            self._payload.setdefault('stats',self._payload).update({'exe' : executable,
-                                                                    'query' : query})        
+            self._payload.setdefault('stats',self._payload).update({'exe' : str(executable),
+                                                                    'query' : str(query)})
     def __enter__(self):
         self.start = time.time()
         return self
-    
+
     def __exit__(self, type, value, traceback):
         end = time.time()
         self._payload.setdefault('stats',{}).update({'client_request_timing' : end-self.start})
-        
+
         return False
 
     def stat_to_file(self, filename):
@@ -26,7 +26,6 @@ class TimingStat(object):
         json.dump(self._payload, fileobject)
 
     def stat_to_server(self, client):
-        print self._payload
         client.send(self._payload)
 
     def update_payload(self, value):
