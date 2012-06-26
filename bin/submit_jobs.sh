@@ -11,6 +11,9 @@ kill_job_cmd=/usr/bin/bkill
 log_peek_cmd=/usr/bin/bpeek
 host_info_cmd=/usr/bin/bhosts
 
+GRIDENVSCRIPT=/afs/cern.ch/cms/LCG/LCG-2/UI/cms_ui_env.sh
+PRIVATEDIR=$HOME/private/
+
 function usage
 {
   echo -e "Wrapper script for the CERN LSF Batch System.
@@ -25,7 +28,29 @@ function usage
                       peeklog (Options -i <jobid>)
                       hostinfo (Options -q <queue>)
 
-           All options are mandatory.\n"
+           All options above are mandatory.
+           Options:
+                      -c X509 credentials are needed by the job. Can be fetched from private AFS.\n"
+}
+
+function handle_x509_proxy
+{
+  if [ ! -e $GRIDENVSCRIPT ]; then
+    echo "Grid environment cannot be set-up. $GRIDENVSCRIPT is missing."
+    exit 2
+  fi
+  
+  source $GRIDENVSCRIPT
+  if ! voms-proxy-info --exists &> /dev/null; then
+    echo "No valid x509 proxy found! Please, create one ..."
+    if ! voms-proxy-init --voms cms --valid 192:00; then
+      echo "Cannot create proxy certificate"
+      exit 2
+    fi
+  fi
+
+  local proxy_file=x509up_u$(id -u)
+  cp -a /tmp/$proxy_file $PRIVATEDIR/$proxy_file
 }
 
 function submit_job
@@ -34,6 +59,11 @@ function submit_job
   local local_queue=$2
   local local_executable=$3
   local local_job_args=${@:4}
+ 
+  if [ "x$credentials" != "x" ]; then
+    handle_x509_proxy
+  fi
+
   $job_submit_cmd -o $local_logfile -q $local_queue $local_executable $local_job_args
 }
 
@@ -84,6 +114,7 @@ while [ $# -ge 1 ]; do
     -i ) job_id=$2; shift 2 ;;
     -x ) executable=$2; shift 2 ;;
     -l ) logfile=$2; shift 2 ;;
+    -c ) credentials=1; shift ;;
     -h ) usage 1>&2; exit 1 ;;
     -* ) echo "$0: unrecognised option $1, use -h for help" 1>&2; exit 1 ;;
     *  ) args="$args;$1"; shift ;;
