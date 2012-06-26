@@ -19,6 +19,8 @@ LIFECYCLEAGENT=cms+PHEDEX-lifecycle+$LIFECYCLEAGENTVERSION
 
 PRIVATEDIR=$HOME/private
 
+GITZIPBALL=https://nodeload.github.com/giffels/LifeCycleTests/zipball/mydev-branch
+
 check_success() 
 {
   if [ $# -ne 2 ]; then
@@ -125,6 +127,17 @@ setup_lifecycle_agent()
   source $SWAREA/$SCRAM_ARCH/cms/PHEDEX-lifecycle/$LIFECYCLEAGENTVERSION/etc/profile.d/init.sh
 }
 
+setup_dbs_lifecycle_tests()
+{
+  cd $WORKDIR
+  wget $GITZIPBALL-O LifeCycleTests.zip
+  unzip LifeCycleTests.zip
+  cd giffels-LifeCycleTests*
+  python setup.py install_system -s LifeCycleTests --prefix=$WORKDIR/LifeCycleTests
+  cd $WORKDIR/LifeCycleTests
+  export PYTHONPATH=$WORKDIR/LifeCycleTests/lib/python2.6/site-packages:$PYTHONPATH
+}
+
 echo "Starting time: $(date)"
 echo "Running on $(/bin/hostname)"
 echo "Having following processors:"
@@ -138,6 +151,9 @@ check_x509_proxy
 
 ## set-up dbs client
 setup_dbs_client
+
+## set-up dbs lifecycle tests
+setup_dbs_lifecycle_tests
 
 ## cleaning-up workdir
 cleanup_workingdir

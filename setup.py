@@ -21,7 +21,8 @@ systems = \
             'bin/run_job_wn.sh',
             'bin/submit_jobs.sh'],
     'pythonmods': ['LifeCycleTests.__init__'],
-    'pythonpkg': ['LifeCycleTests.LifeCycleTools']
+    'pythonpkg': ['LifeCycleTests.LifeCycleTools'],
+    'conf' : ['DBS3AnalysisLifecycle.conf']
   },
 }
 
@@ -32,6 +33,7 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   # Expand various sources.
   docroot = "doc/build/html"
   system = systems[system_name]
+  confsrc = sum((glob("conf/%s" % x) for x in system.get('conf',[])), [])
   exsrc = sum((glob("%s" % x) for x in system.get('examples', [])), [])
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
 
@@ -41,7 +43,7 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.py_modules = system.get('pythonmods', [])
   dist.packages = system.get('pythonpkg', [])
   dist.package_dir = { '': system.get('srcdir', []) }
-  dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc)]
+  dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc), ('conf', confsrc)]
 
   if os.path.exists(docroot):
     for dirpath, dirs, files in os.walk(docroot):

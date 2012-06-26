@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-from LifeCycleTools.APIFactory import create_api
-from LifeCycleTools.PayloadHandler import PayloadHandler
-from LifeCycleTools.Timing import TimingStat
-from LifeCycleTools.OptParser import get_command_line_options
+from LifeCycleTests.LifeCycleTools.APIFactory import create_api
+from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler
+from LifeCycleTests.LifeCycleTools.Timing import TimingStat
+from LifeCycleTests.LifeCycleTools.OptParser import get_command_line_options
 
 import os
 import sys
