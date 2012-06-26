@@ -17,6 +17,7 @@ systems = \
             'bin/dbs3GetFileParents.py',
             'bin/dbs3GetFiles.py',
             'bin/dbs3GetPrimaryDSType.py',
+            'bin/StatsServer.py',
             'bin/run_job_wn.sh',
             'bin/submit_jobs.sh'],
     'pythonmods': ['LifeCycleTests.__init__'],
