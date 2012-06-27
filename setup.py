@@ -34,7 +34,6 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   docroot = "doc/build/html"
   system = systems[system_name]
   confsrc = sum((glob("conf/%s" % x) for x in system.get('conf',[])), [])
-  exsrc = sum((glob("%s" % x) for x in system.get('examples', [])), [])
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
 
   # Specify what to install.
@@ -43,8 +42,7 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.py_modules = system.get('pythonmods', [])
   dist.packages = system.get('pythonpkg', [])
   dist.package_dir = { '': system.get('srcdir', []) }
-  dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc), ('conf', confsrc)]
-
+  dist.data_files = [('%sbin' % patch_x, binsrc), ('conf', confsrc)]
   if os.path.exists(docroot):
     for dirpath, dirs, files in os.walk(docroot):
       dist.data_files.append(("%sdoc%s" % (patch_x, dirpath[len(docroot):]),
