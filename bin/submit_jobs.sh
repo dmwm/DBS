@@ -20,6 +20,9 @@ function usage
            Usage: submit_job.sh <argument> <options>
 
            Arguments: submit (Options -l <logfile> -q <queue> -x executable + job arguments)
+                      bulksubmit (Options -l <logfile_template> -q <queue> -n <number_of_jobs> -x executable + job arguments)
+                         * Logfiles will be enumerated by job number
+                         * The job number will automatically added as first job argument
                       listjobs
                       listqueue (Options -q queue)
                       stop (Options -i <jobid>)
@@ -51,6 +54,19 @@ function handle_x509_proxy
 
   local proxy_file=x509up_u$(id -u)
   cp -a /tmp/$proxy_file $PRIVATEDIR/$proxy_file
+}
+
+function bulk_submit_job
+{
+  local local_logfile_template=$1
+  local local_queue=$2
+  local local_number_of_jobs=$3
+  local local_executable=$4
+  local local_job_args=${@:5}
+
+  for job in $(seq $local_number_of_jobs); do
+    submit_job $local_logfile_template.$job $local_queue $local_executable $job $local_job_args
+  done
 }
 
 function submit_job
@@ -115,6 +131,7 @@ while [ $# -ge 1 ]; do
     -x ) executable=$2; shift 2 ;;
     -l ) logfile=$2; shift 2 ;;
     -c ) credentials=1; shift ;;
+    -n ) number_of_jobs=$2; shift 2 ;;
     -h ) usage 1>&2; exit 1 ;;
     -* ) echo "$0: unrecognised option $1, use -h for help" 1>&2; exit 1 ;;
     *  ) args="$args;$1"; shift ;;
@@ -125,10 +142,12 @@ done
 
 if [ $# -lt 1 ]; then
   echo "$0: Takes at least one argument, use -h for help" 1>&2
+  exit 1
 fi
 
 case $1 in
   submit ) submit_job $logfile $queue $executable "${@:2}"; shift ;;
+  bulksubmit ) bulk_submit_job $logfile $queue $number_of_jobs $executable "${@:2}"; shift ;;
   listjobs ) list_jobs; shift ;;
   listqueue ) list_queue $queue; shift ;;
   stop ) stop_job $job_id; shift ;;
