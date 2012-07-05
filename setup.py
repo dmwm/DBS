@@ -24,6 +24,15 @@ systems = \
     'pythonpkg': ['LifeCycleTests.LifeCycleTools'],
     'conf' : ['DBS3AnalysisLifecycle.conf']
   },
+  
+  'LifeCycleAnalysis':
+  {
+    'srcdir': 'src/python',
+    'bin': ['bin/LifeCyclePlots.py',
+            'bin/MergeDB.sh'],
+    'pythonmods': ['LifeCycleAnalysis.__init__'],
+    'pythonpkg': ['LifeCycleAnalysis.LifeCyclePlots']
+  }
 }
 
 def get_relative_path():
@@ -65,10 +74,10 @@ class BuildCommand(Command):
   def finalize_options(self):
     # Check options.
     if self.system == None:
-      print "System not specified, please use '-s LifeCycleTests'"
+      print "System not specified, please use '-s LifeCycleTests or -s LifeCycleAnalysis'"
       sys.exit(1)
     elif self.system not in systems:
-      print "System %s unrecognised, please use '-s LifeCycleTests'" % self.system
+      print "System %s unrecognised, please use '-s LifeCycleTests or -s LifeCycleAnalysis'" % self.system
       sys.exit(1)
 
     # Expand various sources and maybe do the c++ build.
@@ -90,7 +99,7 @@ class BuildCommand(Command):
 class InstallCommand(install):
   """Install a specific system."""
   description = \
-    "Install a specific system, 'LifeCycleTests'. You can\n" + \
+    "Install a specific system, 'LifeCycleTests' or 'LifeCycleAnalysis'. You can\n" + \
     "\t\t   patch an existing installation instead of normal full installation\n" + \
     "\t\t   using the '-p' option.\n"
   user_options = install.user_options
@@ -116,7 +125,7 @@ class InstallCommand(install):
 
     # Expand various sources, but don't build anything from c++ now.
     define_the_build(self, self.distribution, self.system,
-		     False, (self.patch and 'x') or '')
+                     False, (self.patch and 'x') or '')
 
     # Whack the metadata name.
     self.distribution.metadata.name = self.system
