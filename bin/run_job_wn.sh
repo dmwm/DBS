@@ -21,6 +21,7 @@ DBS3LIFECYCLEVERSION=0.0.1
 DBS3LIFECYCLE=cms+dbs3-lifecycle+$DBS3LIFECYCLEVERSION
 
 PRIVATEDIR=$HOME/private
+AFSWORKSPACE=/afs/cern.ch/work/g/giffels
 
 check_success() 
 {
@@ -157,12 +158,12 @@ run_dbs_lifecycle_tests()
 
 stage_out_output()
 {
-  echo "Create directory $SCRATCH/LifeCycleResults"
-  mkdir -p $SCRATCH/LifeCycleResults
-  echo "Copy data from $WORKINGDIR $SCRATCH/LifeCycleResults"
-  cp -a $WORKINGDIR/LifeCycle.log $SCRATCH/LifeCycleResults/LifeCycle_$JOBNUM.log
-  cp -a $WORKINGDIR/StatsServer.log $SCRATCH/LifeCycleResults/StatsServer_$JOBNUM.log
-  cp -a $WORKINGDIR/Output.db $SCRATCH/LifeCycleResults/Output_$JOBNUM.db
+  echo "Create directory $AFSWORKSPACE/LifeCycleResults"
+  mkdir -p $AFSWORKSPACE/LifeCycleResults
+  echo "Copy data from $WORKINGDIR $AFSWORKSPACE/LifeCycleResults"
+  cp -a $WORKINGDIR/LifeCycle.log $AFSWORKSPACE/LifeCycleResults/LifeCycle_$JOBNUM.log
+  cp -a $WORKINGDIR/StatsServer.log $AFSWORKSPACE/LifeCycleResults/StatsServer_$JOBNUM.log
+  cp -a $WORKINGDIR/Output.db $AFSWORKSPACE/LifeCycleResults/Output_$JOBNUM.db
 }
 
 create_steering_file()
