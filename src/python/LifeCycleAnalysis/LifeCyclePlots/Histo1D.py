@@ -19,6 +19,13 @@ class Histo1D(object):
             self._histogram.Fill(self._fill_fkt(self, data))
 
     def draw(self):
-        canvas = TCanvas(self._name, self._name)
-        canvas.cd()
+        self._canvas = TCanvas(self._name, self._name)
+        self._canvas.cd()
         self._histogram.Draw()
+
+    def save_as(self, format="png"):
+        try:
+            self._canvas.Print("%s.%s" % (self._name, format), format)
+        except AttributeError:
+            print "You have to draw histograms before saving."
+            pass

@@ -19,3 +19,7 @@ class HistoManager(object):
     def draw_histos(self):
         for histo in self._histos:
             histo.draw()
+
+    def save_histos_as(self, format="png"):
+        for histo in self._histos:
+            histo.save_as(format)
