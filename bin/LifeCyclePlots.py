@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.6
-from ROOT import gROOT
+from ROOT import gROOT, TFile
 from LifeCycleAnalysis.LifeCyclePlots.HistoManager import HistoManager
 from LifeCycleAnalysis.LifeCyclePlots.Histo1D import Histo1D
 
@@ -29,19 +29,43 @@ if __name__ == "__main__":
     histo_manager.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
                                     nbins=1000, xmin=0., xmax=10.,
                                     value_to_fill="ClientTiming"))
-    histo_manager.add_histo(Histo1D(name='ClientRequestTiminglistPrimaryDSTypes', title='Client Request Timing (listPrimaryDSTypes)',
-                                    nbins=1000, xmin=0., xmax=10.,
-                                    condition=lambda x: (x['ApiCall']=='listPrimaryDSTypes'),
-                                    value_to_fill="ClientTiming"))
-    ##histo_manager.add_histo(Histo1D(name='ClientRequestTimingNorm', title='Client Request Timing (norm.)',
-    ##                                value_to_fill="ClientTiming"))
+
     histo_manager.add_histo(Histo1D(name='ServerRequestTiming', title='Server Request Timing',
                                     nbins=1000, xmin=0., xmax=10.,
                                     value_to_fill="ServerTiming"))
-    histo_manager.add_histo(Histo1D(name='ServerRequestTiminglistPrimaryDSTypes', title='Server Request Timing (listPrimaryDSTypes)',
-                                    nbins=1000, xmin=0., xmax=10.,
-                                    condition=lambda x: (x['ApiCall']=='listPrimaryDSTypes'),
-                                    value_to_fill="ServerTiming"))
+    
+    histo_manager.add_histo(Histo1D(name='ContentLength', title='Content Length',
+                                     nbins=1000, xmin=0, xmax=1000,
+                                     value_to_fill="ContentLength"))
+
+    histo_manager.add_histo(Histo1D(name='AccessPerSecond', title='Access per Second',
+                                     nbins=1000, xmin=0, xmax=1000,
+                                     value_to_fill="ServerTimeStamp"))
+
+    for api in ['listDatasets', 'listPrimaryDSTypes', 'listFiles', 'listFileParents', 'listFileLumis']:
+        histo_manager.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
+                                        nbins=1000, xmin=0., xmax=10.,
+                                        condition=lambda x, local_api=api: (x['ApiCall']==local_api),
+                                        value_to_fill="ClientTiming"))
+        
+        histo_manager.add_histo(Histo1D(name='ServerRequestTiming%s' % api, title='Server Request Timing (%s)' % api,
+                                        nbins=1000, xmin=0., xmax=10.,
+                                        condition=lambda x, local_api=api: (x['ApiCall']==local_api),
+                                        value_to_fill="ServerTiming"))
+
+        histo_manager.add_histo(Histo1D(name='ContentLength%s' % api, title='Content Length (%s)' % api,
+                                        nbins=1000, xmin=0, xmax=1000,
+                                        condition=lambda x, local_api=api: (x['ApiCall']==local_api),
+                                        value_to_fill="ContentLength"))
+
+        histo_manager.add_histo(Histo1D(name='AccessPerSecond%s' % api, title='Access per Second (%s)' % api,
+                                        nbins=1000, xmin=0, xmax=1000,
+                                        condition=lambda x, local_api=api: (x['ApiCall']==local_api),
+                                        value_to_fill="ServerTimeStamp"))
+        
+    ##histo_manager.add_histo(Histo1D(name='ClientRequestTimingNorm', title='Client Request Timing (norm.)',
+    ##                                value_to_fill="ClientTiming"))
+   
     
     conn = sqlite.connect(options.input)
 
