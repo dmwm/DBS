@@ -25,6 +25,12 @@ if __name__ == "__main__":
 
     gROOT.Reset()
 
+    list_of_apis = ['listDatasets', 'listPrimaryDSTypes', 'listFiles', 'listFileParents', 'listFileLumis']
+
+    # api as keys and numbers as value, to fill 0,1,2,3,4 bins in APIAccessCounter histogramm and
+    # to set bin label later accordingly
+    enumerated_dict_of_apis = dict(zip(list_of_apis, xrange(len(list_of_apis))))
+
     histo_manager = HistoManager()
     histo_manager.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
                                     nbins=1000, xmin=0., xmax=10.,
@@ -35,14 +41,19 @@ if __name__ == "__main__":
                                     value_to_fill="ServerTiming"))
     
     histo_manager.add_histo(Histo1D(name='ContentLength', title='Content Length',
-                                     nbins=1000, xmin=0, xmax=1000,
-                                     value_to_fill="ContentLength"))
+                                    nbins=1000, xmin=0, xmax=1000,
+                                    value_to_fill="ContentLength"))
 
     histo_manager.add_histo(Histo1D(name='AccessPerSecond', title='Access per Second',
-                                     nbins=1000, xmin=0, xmax=1000,
-                                     value_to_fill="ServerTimeStamp"))
+                                    nbins=1000, xmin=0, xmax=1000,
+                                    value_to_fill="ServerTimeStamp"))
 
-    for api in ['listDatasets', 'listPrimaryDSTypes', 'listFiles', 'listFileParents', 'listFileLumis']:
+    histo_manager.add_histo(Histo1D(name='APIAccessCounter', title='Count of API Accesses',
+                                    nbins=len(list_of_apis), xmin=0, xmax=len(list_of_apis),
+                                    fill_fkt=lambda histo, x, api_dict=enumerated_dict_of_apis: api_dict.get(x[histo._value_to_fill], 0),
+                                    value_to_fill="ApiCall"))
+
+    for api in list_of_apis:
         histo_manager.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
                                         nbins=1000, xmin=0., xmax=10.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
@@ -80,3 +91,4 @@ if __name__ == "__main__":
         histo_manager.update_histos(row)
 
     histo_manager.draw_histos()
+    histo_manager.save_histos_as(format="png")
