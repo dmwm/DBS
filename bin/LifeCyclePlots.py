@@ -34,19 +34,27 @@ if __name__ == "__main__":
     histo_manager = HistoManager()
     histo_manager.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
                                     nbins=1000, xmin=0., xmax=10.,
-                                    value_to_fill="ClientTiming"))
+                                    value_to_fill="ClientTiming",
+                                    x_label="Time [s]",
+                                    y_label="#"))
 
     histo_manager.add_histo(Histo1D(name='ServerRequestTiming', title='Server Request Timing',
                                     nbins=1000, xmin=0., xmax=10.,
-                                    value_to_fill="ServerTiming"))
+                                    value_to_fill="ServerTiming",
+                                    x_label="Time [s]",
+                                    y_label="#"))
     
     histo_manager.add_histo(Histo1D(name='ContentLength', title='Content Length',
                                     nbins=1000, xmin=0, xmax=1000,
-                                    value_to_fill="ContentLength"))
+                                    value_to_fill="ContentLength",
+                                    x_label="Size [bytes]",
+                                    y_label="#"))
 
     histo_manager.add_histo(Histo1D(name='AccessPerSecond', title='Access per Second',
                                     nbins=1000, xmin=0, xmax=1000,
-                                    value_to_fill="ServerTimeStamp"))
+                                    value_to_fill="ServerTimeStamp",
+                                    x_label="unixtime [s]",
+                                    y_label="#"))
 
     histo_manager.add_histo(Histo1D(name='APIAccessCounter', title='Count of API Accesses',
                                     nbins=len(list_of_apis), xmin=0, xmax=len(list_of_apis),
@@ -57,27 +65,34 @@ if __name__ == "__main__":
         histo_manager.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
                                         nbins=1000, xmin=0., xmax=10.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
-                                        value_to_fill="ClientTiming"))
+                                        value_to_fill="ClientTiming",
+                                        x_label="Time [s]",
+                                        y_label="#"))
         
         histo_manager.add_histo(Histo1D(name='ServerRequestTiming%s' % api, title='Server Request Timing (%s)' % api,
                                         nbins=1000, xmin=0., xmax=10.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
-                                        value_to_fill="ServerTiming"))
+                                        value_to_fill="ServerTiming",
+                                        x_label="Time [s]",
+                                        y_label="#"))
 
         histo_manager.add_histo(Histo1D(name='ContentLength%s' % api, title='Content Length (%s)' % api,
                                         nbins=1000, xmin=0, xmax=1000,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
-                                        value_to_fill="ContentLength"))
+                                        value_to_fill="ContentLength",
+                                        x_label="Size [bytes]",
+                                        y_label="#"))
 
         histo_manager.add_histo(Histo1D(name='AccessPerSecond%s' % api, title='Access per Second (%s)' % api,
                                         nbins=1000, xmin=0, xmax=1000,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
-                                        value_to_fill="ServerTimeStamp"))
+                                        value_to_fill="ServerTimeStamp",
+                                        x_label="unixtime [s]",
+                                        y_label="#"))
         
     ##histo_manager.add_histo(Histo1D(name='ClientRequestTimingNorm', title='Client Request Timing (norm.)',
     ##                                value_to_fill="ClientTiming"))
-   
-    
+
     conn = sqlite.connect(options.input)
 
     with conn:
