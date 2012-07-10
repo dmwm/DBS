@@ -11,12 +11,13 @@ def get_command_line_options(executable_name, arguments):
     parser = OptionParser(usage="%s options" % executable_name)
     parser.add_option("-i", "--in", type="string", dest="input", help="Input DB File")
     parser.add_option("-o", "--out", type="string", dest="output", help="Output Root File")
+    parser.add_option("-p", "--print", type="string", dest="print_format", help="Print histograms in format")
 
     (options, args) = parser.parse_args()
     
-    if not (options.input and options.output):
+    if not options.input:
         parser.print_help()
-        parser.error("You need to provide following options, --in=input.sql, --out=plot.root")
+        parser.error("You need to provide following options, --in=input.sql (mandatory), --out=plot.root (optional), --print <format> (optional)")
 
     return options
 
@@ -106,4 +107,6 @@ if __name__ == "__main__":
         histo_manager.update_histos(row)
 
     histo_manager.draw_histos()
-    histo_manager.save_histos_as(format="png")
+    
+    if options.print_format:
+        histo_manager.save_histos_as(format=options.print_format)
