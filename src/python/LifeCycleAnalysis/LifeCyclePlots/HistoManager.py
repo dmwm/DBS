@@ -2,6 +2,11 @@ class HistoManager(object):
     def __init__(self):
         self._histos = []
 
+    def __iter__(self):
+        for histo in self._histos:
+            yield histo
+        return
+
     def add_histo(self, histo):
         if histo not in self._histos:
             self._histos.append(histo)
