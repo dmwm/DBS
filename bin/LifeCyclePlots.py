@@ -74,6 +74,32 @@ if __name__ == "__main__":
                                     y_value_to_fill="ServerTiming",
                                     label={'x':"Client Time [s]",'y':"Server Time [s]"}))
 
+    histo = Histo2D(name='ClientRequestTimingVsAPI', title='Client Request Timing Vs API',
+                    xnbins=len(list_of_apis), ymin=0., ymax=len(list_of_apis),
+                    ynbins=1000, xmin=0., xmax=10.,
+                    fill_fkt=lambda histo, x, bla=enumerated_dict_of_apis: (bla.get(x[histo._x_value_to_fill])-0.0001, x[histo._y_value_to_fill], 1),
+                    x_value_to_fill="ApiCall",
+                    y_value_to_fill="ClientTiming",
+                    label={'y':"Client Time [s]"})
+
+    for api in list_of_apis:
+        histo.histogram.GetXaxis().SetBinLabel(enumerated_dict_of_apis.get(api)+1,api) # Bin enumerations starts at 1
+
+    histo_manager.add_histo(histo)
+
+    histo = Histo2D(name='Client-ServerTimingVsAPI', title='Client Timing - Server Timing Vs API',
+                    xnbins=len(list_of_apis), ymin=0., ymax=len(list_of_apis),
+                    ynbins=1000, xmin=0., xmax=10.,
+                    fill_fkt=lambda histo, x, bla=enumerated_dict_of_apis: (bla.get(x[histo._x_value_to_fill])-0.0001, x[histo._y_value_to_fill]-x['ServerTiming'], 1),
+                    x_value_to_fill="ApiCall",
+                    y_value_to_fill="ClientTiming",
+                    label={'y':"Client Time [s]"})
+
+    for api in list_of_apis:
+        histo.histogram.GetXaxis().SetBinLabel(enumerated_dict_of_apis.get(api)+1,api) # Bin enumerations starts at 1
+
+    histo_manager.add_histo(histo)
+
     histo = Histo1D(name='APIAccessCounter', title='Count of API Accesses',
                     xnbins=len(list_of_apis), xmin=0, xmax=len(list_of_apis)+1,
                     fill_fkt=lambda histo, x: (x[histo._x_value_to_fill], 1),
