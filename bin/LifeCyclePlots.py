@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.6
-from ROOT import gROOT, TFile
+from ROOT import gROOT, TFile, TH1
 from LifeCycleAnalysis.LifeCyclePlots.HistoManager import HistoManager
-from LifeCycleAnalysis.LifeCyclePlots.Histo1D import Histo1D
+from LifeCycleAnalysis.LifeCyclePlots.Histogram import Histo1D, Histo2D
 
 from optparse import OptionParser
 import sqlite3 as sqlite
@@ -34,65 +34,84 @@ if __name__ == "__main__":
 
     histo_manager = HistoManager()
     histo_manager.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
-                                    nbins=1000, xmin=0., xmax=10.,
-                                    value_to_fill="ClientTiming",
-                                    x_label="Time [s]",
-                                    y_label="#"))
+                                    xnbins=1000, xmin=0., xmax=10.,
+                                    x_value_to_fill="ClientTiming",
+                                    label={'x':"Time [s]",'y':"#"}))
 
     histo_manager.add_histo(Histo1D(name='ServerRequestTiming', title='Server Request Timing',
-                                    nbins=1000, xmin=0., xmax=10.,
-                                    value_to_fill="ServerTiming",
-                                    x_label="Time [s]",
-                                    y_label="#"))
+                                    xnbins=1000, xmin=0., xmax=10.,
+                                    x_value_to_fill="ServerTiming",
+                                    label={'x':"Time [s]",'y':"#"}))
     
     histo_manager.add_histo(Histo1D(name='ContentLength', title='Content Length',
-                                    nbins=1000, xmin=0, xmax=1000,
-                                    value_to_fill="ContentLength",
-                                    x_label="Size [bytes]",
-                                    y_label="#"))
+                                    xnbins=1000, xmin=0, xmax=1000,
+                                    x_value_to_fill="ContentLength",
+                                    label={'x':"Size [bytes]",'y':"#"}))
 
     histo_manager.add_histo(Histo1D(name='AccessPerSecond', title='Access per Second',
-                                    nbins=1000, xmin=0, xmax=1000,
-                                    value_to_fill="ServerTimeStamp",
-                                    x_label="unixtime [s]",
-                                    y_label="#"))
+                                    xnbins=1000, xmin=0, xmax=1000,
+                                    x_value_to_fill="ServerTimeStamp",
+                                    label={'x':"unixtime [s]",'y':"#"}))
 
-    histo_manager.add_histo(Histo1D(name='APIAccessCounter', title='Count of API Accesses',
-                                    nbins=len(list_of_apis), xmin=0, xmax=len(list_of_apis),
-                                    fill_fkt=lambda histo, x, api_dict=enumerated_dict_of_apis: api_dict.get(x[histo._value_to_fill], 0),
-                                    value_to_fill="ApiCall"))
+    histo_manager.add_histo(Histo2D(name='ClientRequestTimingVsContentLength', title='Client Request Timing Vs Content Length',
+                                    xnbins=1000, xmin=0., xmax=10.,
+                                    ynbins=1000, ymin=0., ymax=10.,
+                                    x_value_to_fill="ClientTiming",
+                                    y_value_to_fill="ContentLength",
+                                    label={'x':"Time [s]",'y':"Content Length [bytes]"}))
+
+    histo_manager.add_histo(Histo2D(name='ServerRequestTimingVsContentLength', title='Server Request Timing Vs Content Length',
+                                    xnbins=1000, xmin=0., xmax=10.,
+                                    ynbins=1000, ymin=0., ymax=10.,
+                                    x_value_to_fill="ServerTiming",
+                                    y_value_to_fill="ContentLength",
+                                    label={'x':"Time [s]",'y':"Content Length [bytes]"}))
+
+    histo_manager.add_histo(Histo2D(name='ClientRequestTimingVsServerRequestTiming', title='Client Request Timing Vs Server Request Timing',
+                                    xnbins=1000, xmin=0., xmax=10.,
+                                    ynbins=1000, ymin=0., ymax=10.,
+                                    x_value_to_fill="ClientTiming",
+                                    y_value_to_fill="ServerTiming",
+                                    label={'x':"Client Time [s]",'y':"Server Time [s]"}))
+
+    histo = Histo1D(name='APIAccessCounter', title='Count of API Accesses',
+                    xnbins=len(list_of_apis), xmin=0, xmax=len(list_of_apis)+1,
+                    fill_fkt=lambda histo, x: (x[histo._x_value_to_fill], 1),
+                    x_value_to_fill="ApiCall",
+                    log={'y':True},
+                    color={'fill':2},
+                    draw_options="bar0")
+
+    histo.histogram.SetBarWidth(0.9)
+    histo.histogram.SetBarOffset(0.05)
+    histo.histogram.GetXaxis().SetLabelSize(0.042)
+
+    histo_manager.add_histo(histo)
 
     for api in list_of_apis:
         histo_manager.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
-                                        nbins=1000, xmin=0., xmax=10.,
+                                        xnbins=1000, xmin=0., xmax=10.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
-                                        value_to_fill="ClientTiming",
-                                        x_label="Time [s]",
-                                        y_label="#"))
+                                        x_value_to_fill="ClientTiming",
+                                        label={'x':"Time [s]",'y':"#"}))
         
         histo_manager.add_histo(Histo1D(name='ServerRequestTiming%s' % api, title='Server Request Timing (%s)' % api,
-                                        nbins=1000, xmin=0., xmax=10.,
+                                        xnbins=1000, xmin=0., xmax=10.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
-                                        value_to_fill="ServerTiming",
-                                        x_label="Time [s]",
-                                        y_label="#"))
+                                        x_value_to_fill="ServerTiming",
+                                        label={'x':"Time [s]",'y':"#"}))
 
         histo_manager.add_histo(Histo1D(name='ContentLength%s' % api, title='Content Length (%s)' % api,
-                                        nbins=1000, xmin=0, xmax=1000,
+                                        xnbins=1000, xmin=0, xmax=1000,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
-                                        value_to_fill="ContentLength",
-                                        x_label="Size [bytes]",
-                                        y_label="#"))
+                                        x_value_to_fill="ContentLength",
+                                        label={'x':"Size [bytes]",'y':"#"}))
 
         histo_manager.add_histo(Histo1D(name='AccessPerSecond%s' % api, title='Access per Second (%s)' % api,
-                                        nbins=1000, xmin=0, xmax=1000,
+                                        xnbins=1000, xmin=0, xmax=1000,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
-                                        value_to_fill="ServerTimeStamp",
-                                        x_label="unixtime [s]",
-                                        y_label="#"))
-        
-    ##histo_manager.add_histo(Histo1D(name='ClientRequestTimingNorm', title='Client Request Timing (norm.)',
-    ##                                value_to_fill="ClientTiming"))
+                                        x_value_to_fill="ServerTimeStamp",
+                                        label={'x':"unixtime [s]",'y':"#"}))
 
     conn = sqlite.connect(options.input)
 
