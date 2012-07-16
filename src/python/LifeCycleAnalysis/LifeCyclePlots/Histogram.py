@@ -62,9 +62,9 @@ class BasicHisto(object):
         #draw histogram to canvas
         self._histogram.Draw(self._draw_options)
 
-    def save_as(self, format="png"):
+    def save_as(self, output_directory, format="png"):
         try:
-            self._canvas.Print("%s.%s" % (self._name, format), format)
+            self._canvas.Print("%s/%s.%s" % (output_directory, self._name, format), format)
         except AttributeError:
             print "You have to draw histograms before saving."
             pass
