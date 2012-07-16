@@ -100,19 +100,16 @@ if __name__ == "__main__":
 
     histo_manager.add_histo(histo)
 
-    histo = Histo1D(name='APIAccessCounter', title='Count of API Accesses',
-                    xnbins=len(list_of_apis), xmin=0, xmax=len(list_of_apis)+1,
-                    fill_fkt=lambda histo, x: (x[histo._x_value_to_fill], 1),
-                    x_value_to_fill="ApiCall",
-                    log={'y':True},
-                    color={'fill':2},
-                    draw_options="bar0")
-
-    histo.histogram.SetBarWidth(0.9)
-    histo.histogram.SetBarOffset(0.05)
-    histo.histogram.GetXaxis().SetLabelSize(0.042)
-
-    histo_manager.add_histo(histo)
+    histo_manager.add_histo(Histo1D(name='APIAccessCounter', title='Count of API Accesses',
+                                    xnbins=len(list_of_apis), xmin=0, xmax=len(list_of_apis)+1,
+                                    fill_fkt=lambda histo, x: (x[histo._x_value_to_fill], 1),
+                                    x_value_to_fill="ApiCall",
+                                    log={'y':True},
+                                    color={'fill':2},
+                                    draw_options="bar0",
+                                    add_options={'SetBarWidth':(0.9,),
+                                                 'SetBarOffset':(0.05,),
+                                                 'GetXaxis.SetLabelSize': (0.042,)}))
 
     for api in list_of_apis:
         histo_manager.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
