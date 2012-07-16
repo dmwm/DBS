@@ -2,7 +2,7 @@ from ROOT import TCanvas, TFile, TH1F, TH2F
 
 class BasicHisto(object):
     def __init__(self, name, title, fill_fkt, condition, label,
-                 log, color, draw_options):
+                 log, color, draw_options, add_options):
         self._name = name
         self._title = title
         self._fill_fkt = fill_fkt
@@ -11,6 +11,7 @@ class BasicHisto(object):
         self._log = log
         self._color = color
         self._draw_options = draw_options
+        self._add_options = add_options
 
     @property
     def histogram(self):
@@ -35,6 +36,21 @@ class BasicHisto(object):
         # set log axis
         self._canvas.SetLogx(self._log.get('x',False))
         self._canvas.SetLogy(self._log.get('y',False))
+
+        # set additional options
+        for key, value in self._add_options.iteritems():
+            # initialize callable with histogramm to start for-loop
+            # to resolve nested calls like GetXaxis().SetLabelSize()
+            callable_fkt = self._histogram
+
+            for func in key.split('.'):
+                if callable(callable_fkt):# to address nested function calls in ROOT
+                    callable_fkt = getattr(callable_fkt(), func)
+                else: #not nested function call directly to histogram itself
+                    callable_fkt = getattr(callable_fkt, func)
+
+            callable_fkt(*value)
+
         #draw histogram to canvas
         self._histogram.Draw(self._draw_options)
 
@@ -53,8 +69,9 @@ class Histo1D(BasicHisto):
                  label={'x' : "", 'y' : ""},
                  log={'x' : False, 'y' : False},
                  color={'line':1, 'fill':0}, #ROOT Color Codes
-                 draw_options=""):
-        super(Histo1D, self).__init__(name, title, fill_fkt, condition, label, log, color, draw_options)
+                 draw_options="",
+                 add_options={}):
+        super(Histo1D, self).__init__(name, title, fill_fkt, condition, label, log, color, draw_options, add_options)
         self._histogram = TH1F(name, title, xnbins, xmin, xmin)
         self._x_value_to_fill = x_value_to_fill
 
@@ -68,8 +85,9 @@ class Histo2D(BasicHisto):
                  label={'x' : "", 'y' : ""},
                  log={'x' : False, 'y' : False},
                  color={'line':1, 'fill':0}, #ROOT Color Codes
-                 draw_options=""):
-        super(Histo2D, self).__init__(name, title, fill_fkt, condition, label, log, color, draw_options)
+                 draw_options="",
+                 add_options={}):
+        super(Histo2D, self).__init__(name, title, fill_fkt, condition, label, log, color, draw_options, add_options)
         self._histogram = TH2F(name, title, xnbins, xmin, xmin, ynbins, ymin, ymax)
         self._x_value_to_fill = x_value_to_fill
         self._y_value_to_fill = y_value_to_fill
