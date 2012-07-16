@@ -17,6 +17,14 @@ class BasicHisto(object):
     def histogram(self):
         return self._histogram
 
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def title(self):
+        return self._title
+
     def update(self, data):
         if self._condition(data):
             self._histogram.Fill(*self._fill_fkt(self, data))
