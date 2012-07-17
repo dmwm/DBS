@@ -28,8 +28,9 @@ class WebView(object):
         
     @html_tag_maker("body")
     def body(self):
+        yield '<h1>Description: %s</h1>' % (self._description)
         for picture in self._pictures:
-            yield '<img src="%s/%s"/>' % (self._description, picture)
+            yield '<img src="%s"/>' % (picture)
         
     def create_web_view(self, filename="index.html"):
         with open(os.path.join(self._description, filename) ,'w') as f:
