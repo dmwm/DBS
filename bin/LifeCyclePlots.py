@@ -2,6 +2,7 @@
 from ROOT import gROOT, TFile, TH1
 from LifeCycleAnalysis.LifeCyclePlots.HistoManager import HistoManager
 from LifeCycleAnalysis.LifeCyclePlots.Histogram import Histo1D, Histo2D
+from LifeCycleAnalysis.LifeCyclePlots.WebView import WebView
 
 from optparse import OptionParser
 import sqlite3 as sqlite
@@ -12,12 +13,22 @@ def get_command_line_options(executable_name, arguments):
     parser.add_option("-i", "--in", type="string", dest="input", help="Input DB File")
     parser.add_option("-o", "--out", type="string", dest="output", help="Output Root File")
     parser.add_option("-p", "--print", type="string", dest="print_format", help="Print histograms in format")
+    parser.add_option("-d", "--description", type="string", dest="description", help="Description for current measurement (name of output directory)")
+    parser.add_option("-w", "--web-site", action="store_true", dest="website", help="Create a web site from results", default=False)
 
     (options, args) = parser.parse_args()
+
+    error_msg = """You need to provide following options, --in=input.sql (mandatory), --out=plot.root (optional)\n
+        --print <format> (optional), but --description needed in that case (name of output directory)\n
+        --web-site (optional), but --print <format> and --description needed"""
     
     if not options.input:
         parser.print_help()
-        parser.error("You need to provide following options, --in=input.sql (mandatory), --out=plot.root (optional), --print <format> (optional)")
+        parser.error(error_msg)
+
+    if (options.print_format or options.website) and not (options.print_format and options.description):
+        parser.print_help()
+        parser.error(error_msg)
 
     return options
 
@@ -150,5 +161,10 @@ if __name__ == "__main__":
 
     histo_manager.draw_histos()
     
-    if options.print_format:
-        histo_manager.save_histos_as(format=options.print_format)
+    if options.description and options.print_format:
+        os.mkdir(options.description)
+        histo_manager.save_histos_as(output_directory=options.description, format=options.print_format)
+
+        if options.website:
+            web_view = WebView(options.description, histo_manager, options.print_format)
+            web_view.create_web_view('index.html')
