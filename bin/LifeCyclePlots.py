@@ -43,52 +43,68 @@ if __name__ == "__main__":
     # to set bin label later accordingly
     enumerated_dict_of_apis = dict(zip(list_of_apis, xrange(len(list_of_apis))))
 
+    # get start and end time of test
+    conn = sqlite.connect(options.input)
+    
+    with conn:
+        cur = conn.cursor()
+
+        cur.execute('SELECT min(ServerTimeStamp), max(ServerTimeStamp) FROM Statistics')
+        starttime, endtime = cur.fetchone()
+
     histo_manager = HistoManager()
     histo_manager.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
                                     xnbins=1000, xmin=0., xmax=10.,
                                     x_value_to_fill="ClientTiming",
-                                    label={'x':"Time [s]",'y':"#"}))
+                                    label={'x':"Time [s]",'y':"#"},
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
 
     histo_manager.add_histo(Histo1D(name='ServerRequestTiming', title='Server Request Timing',
                                     xnbins=1000, xmin=0., xmax=10.,
                                     x_value_to_fill="ServerTiming",
-                                    label={'x':"Time [s]",'y':"#"}))
+                                    label={'x':"Time [s]",'y':"#"},
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
     
     histo_manager.add_histo(Histo1D(name='ContentLength', title='Content Length',
-                                    xnbins=1000, xmin=0, xmax=1000,
+                                    xnbins=100, xmin=0, xmax=10000,
                                     x_value_to_fill="ContentLength",
-                                    label={'x':"Size [bytes]",'y':"#"}))
+                                    label={'x':"Size [bytes]",'y':"#"},
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,10000.0)}))
 
     histo_manager.add_histo(Histo1D(name='AccessPerSecond', title='Access per Second',
-                                    xnbins=1000, xmin=0, xmax=1000,
+                                    xnbins=int(endtime-starttime), xmin=0, xmax=endtime-starttime,
                                     x_value_to_fill="ServerTimeStamp",
-                                    label={'x':"unixtime [s]",'y':"#"}))
+                                    fill_fkt=lambda histo, x: (x[histo._x_value_to_fill]-starttime, 1),
+                                    label={'x':"time [s]",'y':"#"}))
 
     histo_manager.add_histo(Histo2D(name='ClientRequestTimingVsContentLength', title='Client Request Timing Vs Content Length',
                                     xnbins=1000, xmin=0., xmax=10.,
-                                    ynbins=1000, ymin=0., ymax=10.,
+                                    ynbins=100, ymin=0., ymax=10000.,
                                     x_value_to_fill="ClientTiming",
                                     y_value_to_fill="ContentLength",
-                                    label={'x':"Time [s]",'y':"Content Length [bytes]"}))
+                                    label={'x':"Time [s]",'y':"Content Length [bytes]"},
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,10.0)}))
 
     histo_manager.add_histo(Histo2D(name='ServerRequestTimingVsContentLength', title='Server Request Timing Vs Content Length',
                                     xnbins=1000, xmin=0., xmax=10.,
-                                    ynbins=1000, ymin=0., ymax=10.,
+                                    ynbins=100, ymin=0., ymax=10000.,
                                     x_value_to_fill="ServerTiming",
                                     y_value_to_fill="ContentLength",
-                                    label={'x':"Time [s]",'y':"Content Length [bytes]"}))
+                                    label={'x':"Time [s]",'y':"Content Length [bytes]"},
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,10.0)}))
 
     histo_manager.add_histo(Histo2D(name='ClientRequestTimingVsServerRequestTiming', title='Client Request Timing Vs Server Request Timing',
                                     xnbins=1000, xmin=0., xmax=10.,
                                     ynbins=1000, ymin=0., ymax=10.,
                                     x_value_to_fill="ClientTiming",
                                     y_value_to_fill="ServerTiming",
-                                    label={'x':"Client Time [s]",'y':"Server Time [s]"}))
+                                    label={'x':"Client Time [s]",'y':"Server Time [s]"},
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,10.0)}))
 
     histo = Histo2D(name='ClientRequestTimingVsAPI', title='Client Request Timing Vs API',
-                    xnbins=len(list_of_apis), ymin=0., ymax=len(list_of_apis),
-                    ynbins=1000, xmin=0., xmax=10.,
-                    fill_fkt=lambda histo, x, bla=enumerated_dict_of_apis: (bla.get(x[histo._x_value_to_fill])-0.0001, x[histo._y_value_to_fill], 1),
+                    xnbins=len(list_of_apis), xmin=0., xmax=len(list_of_apis),
+                    ynbins=1000, ymin=0., ymax=10.,
+                    fill_fkt=lambda histo, x, bla=enumerated_dict_of_apis: (bla.get(x[histo._x_value_to_fill])+0.0001, x[histo._y_value_to_fill], 1),
                     x_value_to_fill="ApiCall",
                     y_value_to_fill="ClientTiming",
                     label={'y':"Client Time [s]"})
@@ -99,12 +115,13 @@ if __name__ == "__main__":
     histo_manager.add_histo(histo)
 
     histo = Histo2D(name='Client-ServerTimingVsAPI', title='Client Timing - Server Timing Vs API',
-                    xnbins=len(list_of_apis), ymin=0., ymax=len(list_of_apis),
-                    ynbins=1000, xmin=0., xmax=10.,
-                    fill_fkt=lambda histo, x, bla=enumerated_dict_of_apis: (bla.get(x[histo._x_value_to_fill])-0.0001, x[histo._y_value_to_fill]-x['ServerTiming'], 1),
+                    xnbins=len(list_of_apis), xmin=0., xmax=len(list_of_apis),
+                    ynbins=1000, ymin=0., ymax=10.,
+                    fill_fkt=lambda histo, x, bla=enumerated_dict_of_apis: (bla.get(x[histo._x_value_to_fill])+0.0001, x[histo._y_value_to_fill]-x['ServerTiming'], 1),
                     x_value_to_fill="ApiCall",
                     y_value_to_fill="ClientTiming",
-                    label={'y':"Client Time [s]"})
+                    label={'y':"Client Time [s]"},
+                    add_options={'GetYaxis.SetRangeUser':(0.0,2.0)})
 
     for api in list_of_apis:
         histo.histogram.GetXaxis().SetBinLabel(enumerated_dict_of_apis.get(api)+1,api) # Bin enumerations starts at 1
@@ -124,30 +141,31 @@ if __name__ == "__main__":
 
     for api in list_of_apis:
         histo_manager.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
-                                        xnbins=1000, xmin=0., xmax=10.,
+                                        xnbins=100, xmin=0., xmax=10.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ClientTiming",
-                                        label={'x':"Time [s]",'y':"#"}))
+                                        label={'x':"Time [s]",'y':"#"},
+                                        add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
         
         histo_manager.add_histo(Histo1D(name='ServerRequestTiming%s' % api, title='Server Request Timing (%s)' % api,
-                                        xnbins=1000, xmin=0., xmax=10.,
+                                        xnbins=100, xmin=0., xmax=10.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ServerTiming",
-                                        label={'x':"Time [s]",'y':"#"}))
+                                        label={'x':"Time [s]",'y':"#"},
+                                        add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
 
         histo_manager.add_histo(Histo1D(name='ContentLength%s' % api, title='Content Length (%s)' % api,
-                                        xnbins=1000, xmin=0, xmax=1000,
+                                        xnbins=100, xmin=0, xmax=10000,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ContentLength",
                                         label={'x':"Size [bytes]",'y':"#"}))
 
         histo_manager.add_histo(Histo1D(name='AccessPerSecond%s' % api, title='Access per Second (%s)' % api,
-                                        xnbins=1000, xmin=0, xmax=1000,
+                                        xnbins=int(endtime-starttime), xmin=0, xmax=endtime-starttime,
+                                        fill_fkt=lambda histo, x: (x[histo._x_value_to_fill]-starttime, 1),
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ServerTimeStamp",
-                                        label={'x':"unixtime [s]",'y':"#"}))
-
-    conn = sqlite.connect(options.input)
+                                        label={'x':"Time [s]",'y':"#"}))
 
     with conn:
         conn.row_factory = sqlite.Row
