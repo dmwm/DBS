@@ -3,7 +3,7 @@
 function usage
 {
   echo -e "Script to merge multiple Statistics SQLite3 databases.
-           Usage: submit_job.sh -o Merged.db DB2Merge_1.db .... DB2Merge_n.db\n"
+           Usage: MergeDB.sh -o Merged.db DB2Merge_1.db .... DB2Merge_n.db\n"
 }
 
 while [ $# -ge 1 ]; do
