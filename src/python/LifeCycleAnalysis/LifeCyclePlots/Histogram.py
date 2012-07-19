@@ -80,7 +80,7 @@ class Histo1D(BasicHisto):
                  draw_options="",
                  add_options={}):
         super(Histo1D, self).__init__(name, title, fill_fkt, condition, label, log, color, draw_options, add_options)
-        self._histogram = TH1F(name, title, xnbins, xmin, xmin)
+        self._histogram = TH1F(name, title, xnbins, xmin, xmax)
         self._x_value_to_fill = x_value_to_fill
 
 
@@ -96,6 +96,6 @@ class Histo2D(BasicHisto):
                  draw_options="",
                  add_options={}):
         super(Histo2D, self).__init__(name, title, fill_fkt, condition, label, log, color, draw_options, add_options)
-        self._histogram = TH2F(name, title, xnbins, xmin, xmin, ynbins, ymin, ymax)
+        self._histogram = TH2F(name, title, xnbins, xmin, xmax, ynbins, ymin, ymax)
         self._x_value_to_fill = x_value_to_fill
         self._y_value_to_fill = y_value_to_fill
