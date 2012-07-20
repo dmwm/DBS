@@ -15,6 +15,7 @@ def get_command_line_options(executable_name, arguments):
     parser.add_option("-p", "--print", type="string", dest="print_format", help="Print histograms in format")
     parser.add_option("-d", "--description", type="string", dest="description", help="Description for current measurement (name of output directory)")
     parser.add_option("-w", "--web-site", action="store_true", dest="website", help="Create a web site from results", default=False)
+    parser.add_option("-b", "--batch", action="store_true", dest="batch", help="Run LifeCyclePlots in batch mode", default=False)
 
     (options, args) = parser.parse_args()
 
@@ -36,6 +37,9 @@ if __name__ == "__main__":
     options = get_command_line_options(os.path.basename(__file__), sys.argv)
 
     gROOT.Reset()
+
+    if options.batch:
+        gROOT.SetBatch(True)
 
     list_of_apis = ['listDatasets', 'listPrimaryDSTypes', 'listFiles', 'listFileParents', 'listFileLumis']
 
