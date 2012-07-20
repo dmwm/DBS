@@ -54,6 +54,7 @@ class BasicHisto(object):
         # set colors
         self._histogram.SetFillColor(self._color.get("fill",0))
         self._histogram.SetLineColor(self._color.get("line",1))
+        self._histogram.SetMarkerColor(self._color.get("marker",1))
         # set log axis
         self._canvas.SetLogx(self._log.get('x',False))
         self._canvas.SetLogy(self._log.get('y',False))
@@ -91,7 +92,8 @@ class BasicHisto(object):
     def set_stats_style(self):
         stat_box = TPaveStats(0.816092,0.7415254,0.9971264,0.9300847,"brNDC")
         stat_box.SetBorderSize(1);
-        stat_box.SetFillColor(0);
+        stat_box.SetFillColor(0)
+        stat_box.SetTextColor(self._color.get("line",1));
         stat_box.SetTextAlign(12);
         stat_box.SetTextFont(42);
         stat_box.SetName("stats_%s" % (self._name))
@@ -108,7 +110,7 @@ class Histo1D(BasicHisto):
                  condition=lambda x: True,
                  label={'x' : "", 'y' : ""},
                  log={'x' : False, 'y' : False},
-                 color={'line':1, 'fill':0}, #ROOT Color Codes
+                 color={'marker':1, 'line':1, 'fill':0}, #ROOT Color Codes
                  stats=True,
                  draw_options="",
                  add_options={}):
@@ -125,7 +127,7 @@ class Histo2D(BasicHisto):
                  condition=lambda x: True,
                  label={'x' : "", 'y' : ""},
                  log={'x' : False, 'y' : False},
-                 color={'line':1, 'fill':0}, #ROOT Color Codes
+                 color={'marker':1, 'line':1, 'fill':0}, #ROOT Color Codes
                  stats=True,
                  draw_options="",
                  add_options={}):
