@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.6
-from ROOT import gROOT, TFile, TH1
+from ROOT import gROOT, TFile
 from LifeCycleAnalysis.LifeCyclePlots.HistoManager import HistoManager
 from LifeCycleAnalysis.LifeCyclePlots.Histogram import Histo1D, Histo2D
 from LifeCycleAnalysis.LifeCyclePlots.WebView import WebView
@@ -54,13 +54,13 @@ if __name__ == "__main__":
 
     histo_manager = HistoManager()
     histo_manager.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
-                                    xnbins=1000, xmin=0., xmax=10.,
+                                    xnbins=400, xmin=0., xmax=4.,
                                     x_value_to_fill="ClientTiming",
                                     label={'x':"Time [s]",'y':"#"},
                                     add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
 
     histo_manager.add_histo(Histo1D(name='ServerRequestTiming', title='Server Request Timing',
-                                    xnbins=1000, xmin=0., xmax=10.,
+                                    xnbins=400, xmin=0., xmax=4.,
                                     x_value_to_fill="ServerTiming",
                                     label={'x':"Time [s]",'y':"#"},
                                     add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
@@ -134,6 +134,7 @@ if __name__ == "__main__":
                                     x_value_to_fill="ApiCall",
                                     log={'y':True},
                                     color={'fill':2},
+                                    stats=False,
                                     draw_options="bar0",
                                     add_options={'SetBarWidth':(0.9,),
                                                  'SetBarOffset':(0.05,),
@@ -141,14 +142,14 @@ if __name__ == "__main__":
 
     for api in list_of_apis:
         histo_manager.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
-                                        xnbins=100, xmin=0., xmax=10.,
+                                        xnbins=40, xmin=0., xmax=4.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ClientTiming",
                                         label={'x':"Time [s]",'y':"#"},
                                         add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
         
         histo_manager.add_histo(Histo1D(name='ServerRequestTiming%s' % api, title='Server Request Timing (%s)' % api,
-                                        xnbins=100, xmin=0., xmax=10.,
+                                        xnbins=40, xmin=0., xmax=4.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ServerTiming",
                                         label={'x':"Time [s]",'y':"#"},
