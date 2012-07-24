@@ -16,10 +16,27 @@ class StatsPipeClient(object):
     def __init__(self, named_pipe):
         self.named_pipe = named_pipe
 
+    def __send(self, stats):
+        try:
+            self.f = open(self.named_pipe,'wb')
+            cPickle.dump(stats, self.f, cPickle.HIGHEST_PROTOCOL)
+            self.f.close()
+        except IOError as self._ex:
+            if self._ex.errno == 32:
+                #means broken pipe, happens if the StatServer runs out of data
+                #and needs to re-open the connection, because of a thrown EOFError
+                return False
+            else:
+                raise self._ex
+        else:
+            return True
+
     def send(self, stats):
-        self.f = open(self.named_pipe,'wb')
-        cPickle.dump(stats, self.f, cPickle.HIGHEST_PROTOCOL)
-        self.f.close()
+        #if there is a broken pipe, try to send data again (Try five times)
+        for _ in xrange(5):
+            if self.__send(stats):
+                return
+        raise self._ex
 
 if __name__ == "__main__":
     stats = {'stats':{'query' : "Test"}}
