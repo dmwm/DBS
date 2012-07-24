@@ -14,7 +14,7 @@ class TimingStat(object):
         end = time.time()
         self._stats.setdefault('stats',{}).update({'client_request_timing' : end-self.start})
 
-        if tb_type and client:
+        if tb_type and self._client:
             failures = {'failures': {'type':str(tb_type),
                                      'value':str(tb_value),
                                      'traceback':str(tb)}}
