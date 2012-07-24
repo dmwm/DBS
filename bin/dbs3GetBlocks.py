@@ -3,6 +3,7 @@ from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
 from LifeCycleTests.LifeCycleTools.OptParser import get_command_line_options
+from LifeCycleTests.LifeCycleTools.StatsClient import StatsPipeClient
 
 import os
 import sys
@@ -17,13 +18,17 @@ payload_handler = PayloadHandler()
 
 payload_handler.load_payload(options.input)
 
+stat_client = StatsPipeClient("/tmp/dbs3fifo")
+
 initial = payload_handler.payload['workflow']['dataset']
 print "Dataset name: %s" % (initial)
 
 ## next step (list all blocks in DBS3 below the 'initial' root)
-with TimingStat({}):
+with TimingStat({}, stat_client):
   blocks = api.listBlocks(dataset=initial)
-  
+
+timer.stat_to_timer()
+
 print "Found %s blocks" % (len(blocks))
 
 for block in blocks:

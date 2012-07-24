@@ -49,21 +49,36 @@ class SqlStats(object):
             cur.execute("PRAGMA cache_size=200000")
             cur.execute("PRAGMA synchronous = 0")
             cur.execute("DROP TABLE IF EXISTS Statistics")
+            cur.execute("DROP TABLE IF EXISTS Failures")
             cur.execute("CREATE TABLE Statistics(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, ClientTiming DOUBLE, ServerTiming DOUBLE, ServerTimeStamp INT, ContentLength INT)")
+            cur.execute("CREATE TABLE Failures(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, Type TEXT, Value TEXT, Traceback TEXT)")
    
-    def add_stats(self, stats):
-        stats = stats.get("stats")
-        
-        values = (str(stats.get('query')),
-                  str(stats.get('api')),
-                  float(stats.get("client_request_timing")),
-                  float(stats.get("server_request_timing")),
-                  float(stats.get("server_request_timestamp")),
-                  int(stats.get("request_content_length")))
+    def add_data(self, data):
+        stats = data.get("stats")
+        failures = data.get("failures")
 
         with self.conn:
             cur = self.conn.cursor()
-            cur.execute('INSERT INTO Statistics(Query, ApiCall, ClientTiming, ServerTiming, ServerTimeStamp, ContentLength) VALUES%s' % str(values))
+
+            if stats:
+                values = (str(stats.get('query')),
+                          str(stats.get('api')),
+                          float(stats.get("client_request_timing")),
+                          float(stats.get("server_request_timing")),
+                          float(stats.get("server_request_timestamp")),
+                          int(stats.get("request_content_length")))
+
+                cur.execute('INSERT INTO Statistics(Query, ApiCall, ClientTiming, ServerTiming, ServerTimeStamp, ContentLength) VALUES%s' % str(values))
+
+            else:
+                values = (str(stats.get('query')),
+                          str(stats.get('api')),
+                          str(failures.get('type')),
+                          str(failures.get('value')),
+                          str(falures.get('traceback')))
+
+                cur.execute('INSERT INTO Failures(Query, ApiCall, Type, Value, Traceback) VALUES%s' % str(values))
+
         return 1
 
 class StatsXMLRPCServer(SimpleXMLRPCServer):
@@ -139,14 +154,14 @@ if __name__ == "__main__":
 
     if options.xml:
         stats_server = StatsXMLRPCServer(("localhost", options.port))
-        stats_server.register_function(sql_stats.add_stats)
+        stats_server.register_function(sql_stats.add_data)
         stats_server.register_function(stats_server.shutdown)
         stats_server.register_signal(signal.SIGHUP)
         stats_server.register_signal(signal.SIGINT)
 
     if options.pipe:
         stats_server = StatsPipeServer(pipe_name=options.pipe_name)
-        stats_server.register_function(sql_stats.add_stats)
+        stats_server.register_function(sql_stats.add_data)
         stats_server.register_signal(signal.SIGHUP)
         stats_server.register_signal(signal.SIGINT)
 

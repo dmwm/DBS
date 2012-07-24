@@ -28,15 +28,15 @@ print "Initial request string: %s" % (initial)
 
 timing = {'stats':{'api':'listDatasets', 'query':str(initial)}}
 
-with TimingStat(timing) as timer:
+with TimingStat(timing, stat_client) as timer:
     datasets = api.listDatasets(dataset=initial)
     
 request_processing_time, request_time = api.requestTimingInfo
-timer.update_payload({'server_request_timing' : float(request_processing_time)/1000000.0,
-                      'server_request_timestamp' : float(request_time)/1000000.0,
-                      'request_content_length' : api.requestContentLength})
+timer.update_stats({'server_request_timing' : float(request_processing_time)/1000000.0,
+                    'server_request_timestamp' : float(request_time)/1000000.0,
+                    'request_content_length' : api.requestContentLength})
 
-timer.stat_to_server(stat_client)
+timer.stat_to_server()
 
 print "Found %s datasets" % (len(datasets))
 

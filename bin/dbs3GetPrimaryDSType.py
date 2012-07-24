@@ -3,6 +3,7 @@ from LifeCycleTools.APIFactory import create_api
 from LifeCycleTools.PayloadHandler import PayloadHandler
 from LifeCycleTools.Timing import TimingStat
 from LifeCycleTools.OptParser import get_command_line_options
+from LifeCycleTests.LifeCycleTools.StatsClient import StatsPipeClient
 
 import os
 import sys
@@ -17,18 +18,20 @@ payload_handler = PayloadHandler()
 
 payload_handler.load_payload(options.input)
 
+stat_client = StatsPipeClient("/tmp/dbs3fifo")
+
 initial = payload_handler.payload['workflow']['dataset']
 
 timing = {'stats':{'exe':os.path.basename(__file__), 'query':initial}}
 
-with TimingStat(timing) as timer:
+with TimingStat(timing, stat_client) as timer:
     ds_type = api.listPrimaryDSTypes(dataset=initial)[0]
 
-timer.update_payload({'server_request_timing' : float(api.request_processing_time)/1000000.0,
-                      'server_request_timestamp' : (api.request_time),
-                      'request_content_length' : api.content_length})
+timer.update_stats({'server_request_timing' : float(api.request_processing_time)/1000000.0,
+                    'server_request_timestamp' : (api.request_time),
+                    'request_content_length' : api.content_length})
 
-timer.stat_to_file(options.output.replace(".out",".stat"))
+timer.stat_to_server()
 
 print "data type: %s" % (ds_type['data_type'])
 

@@ -3,6 +3,7 @@ from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
 from LifeCycleTests.LifeCycleTools.OptParser import get_command_line_options
+from LifeCycleTests.LifeCycleTools.StatsClient import StatsPipeClient
 
 import os
 import sys
@@ -17,19 +18,21 @@ payload_handler = PayloadHandler()
 
 payload_handler.load_payload(options.input)
 
+stat_client = StatsPipeClient("/tmp/dbs3fifo")
+
 initial = payload_handler.payload['workflow']['dataset']
 
 timing = {'stats':{'exe':os.path.basename(__file__), 'query':initial}}
 
 ## last step (list all files in DBS3 below the 'initial' root)
-with TimingStat(timing) as timer:
+with TimingStat(timing, stat_client) as timer:
   files = api.listFiles(dataset=initial, detail=True)
 
-timer.update_payload({'server_request_timing' : float(api.request_processing_time)/1000000.0,
-                      'server_request_timestamp' : (api.request_time),
-                      'request_content_length' : api.content_length})
+timer.update_stats({'server_request_timing' : float(api.request_processing_time)/1000000.0,
+                    'server_request_timestamp' : (api.request_time),
+                    'request_content_length' : api.content_length})
 
-timer.stat_to_file(options.output.replace(".out",".stat"))
+timer.stat_to_server()
 
 print "Found %s files"  %(len(files))
 

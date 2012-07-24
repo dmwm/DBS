@@ -28,61 +28,61 @@ initial = payload_handler.payload['workflow']['dataset']
 timing = {'stats':{'query' : initial}}
 
 ## list primary data type
-with TimingStat(timing) as timer:
+with TimingStat(timing, stat_client) as timer:
     ds_type = api.listPrimaryDSTypes(dataset=initial)[0]
 
 request_processing_time, request_time = api.requestTimingInfo
-timer.update_payload({'api' : 'listPrimaryDSTypes',
-                      'server_request_timing' : float(request_processing_time)/1000000.0,
-                      'server_request_timestamp' : float(request_time)/1000000.0,
-                      'request_content_length' : int(api.requestContentLength)})
+timer.update_stats({'api' : 'listPrimaryDSTypes',
+                    'server_request_timing' : float(request_processing_time)/1000000.0,
+                    'server_request_timestamp' : float(request_time)/1000000.0,
+                    'request_content_length' : int(api.requestContentLength)})
 
-timer.stat_to_server(stat_client)
+timer.stat_to_server()
 
 print "PrimaryDSType is %s" % (ds_type)
 
 ## list all files in DBS3 for a given dataset
-with TimingStat(timing) as timer:
+with TimingStat(timing, stat_client) as timer:
   files = api.listFiles(dataset=initial, detail=True)
 
 request_processing_time, request_time = api.requestTimingInfo
-timer.update_payload({'api' : 'listFiles',
-                      'server_request_timing' : float(request_processing_time)/1000000.0,
-                      'server_request_timestamp' : float(request_time)/1000000.0,
-                      'request_content_length' : int(api.requestContentLength)})
+timer.update_stats({'api' : 'listFiles',
+                    'server_request_timing' : float(request_processing_time)/1000000.0,
+                    'server_request_timestamp' : float(request_time)/1000000.0,
+                    'request_content_length' : int(api.requestContentLength)})
 
-timer.stat_to_server(stat_client)
+timer.stat_to_server()
 
 print "Found %s files for dataset %s" % (len(files), initial)
 
 ## list parent_files and file_lumis for all the files
 for this_file in files:
     logical_file_name = this_file.get("logical_file_name")
-    with TimingStat(timing) as timer:
+    with TimingStat(timing, stat_client) as timer:
         parent_files = api.listFileParents(logical_file_name=logical_file_name)
 
     request_processing_time, request_time = api.requestTimingInfo
-    timer.update_payload({'api' : 'listFileParents',
-                          'query' : str(logical_file_name),
-                          'server_request_timing' : float(request_processing_time)/1000000.0,
-                          'server_request_timestamp' : float(request_time)/1000000.0,
-                          'request_content_length' : int(api.requestContentLength)})
+    timer.update_stats({'api' : 'listFileParents',
+                        'query' : str(logical_file_name),
+                        'server_request_timing' : float(request_processing_time)/1000000.0,
+                        'server_request_timestamp' : float(request_time)/1000000.0,
+                        'request_content_length' : int(api.requestContentLength)})
     
-    timer.stat_to_server(stat_client)
+    timer.stat_to_server()
     
     print "Found %s parents for file %s" % (len(parent_files), logical_file_name)
 
-    with TimingStat(timing) as timer:
+    with TimingStat(timing, stat_client) as timer:
         file_lumis = api.listFileLumis(logical_file_name=logical_file_name)
 
     request_processing_time, request_time = api.requestTimingInfo
-    timer.update_payload({'api' : 'listFileLumis',
-                          'query' : str(logical_file_name),
-                          'server_request_timing' : float(request_processing_time)/1000000.0,
-                          'server_request_timestamp' : float(request_time)/1000000.0,
-                          'request_content_length' : int(api.requestContentLength)})
+    timer.update_stats({'api' : 'listFileLumis',
+                        'query' : str(logical_file_name),
+                        'server_request_timing' : float(request_processing_time)/1000000.0,
+                        'server_request_timestamp' : float(request_time)/1000000.0,
+                        'request_content_length' : int(api.requestContentLength)})
     
-    timer.stat_to_server(stat_client)
+    timer.stat_to_server()
     
     print "Found %s lumis for file %s" % (len(file_lumis), logical_file_name)
                                           
