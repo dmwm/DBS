@@ -22,7 +22,7 @@ stat_client = StatsPipeClient("/tmp/dbs3fifo")
 
 initial = payload_handler.payload['workflow']['dataset']
 
-timing = {'stats':{'exe':os.path.basename(__file__), 'query':initial}}
+timing = {'stats':{'api':'listFiles', 'query':initial}}
 
 ## last step (list all files in DBS3 below the 'initial' root)
 with TimingStat(timing, stat_client) as timer:

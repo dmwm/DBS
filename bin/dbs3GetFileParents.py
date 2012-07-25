@@ -22,7 +22,7 @@ stat_client = StatsPipeClient("/tmp/dbs3fifo")
 
 initial = payload_handler.payload['workflow']['logical_file_name']
 
-timing = {'stats':{'exe':os.path.basename(__file__), 'query':initial}}
+timing = {'stats':{'api':'listFileParents', 'query':initial}}
 
 with TimingStat(timing, stat_client) as timer:
     parent_files = api.listFileParents(logical_file_name=initial)[0]

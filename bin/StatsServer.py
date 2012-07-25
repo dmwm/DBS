@@ -60,7 +60,16 @@ class SqlStats(object):
         with self.conn:
             cur = self.conn.cursor()
 
-            if stats:
+            if failures:
+                values = (str(stats.get('query')),
+                          str(stats.get('api')),
+                          str(failures.get('type')),
+                          str(failures.get('value')),
+                          str(failures.get('traceback')))
+
+                cur.execute('INSERT INTO Failures(Query, ApiCall, Type, Value, Traceback) VALUES%s' % str(values))
+
+            else: #in case of failures do not insert stats
                 values = (str(stats.get('query')),
                           str(stats.get('api')),
                           float(stats.get("client_request_timing")),
@@ -69,15 +78,6 @@ class SqlStats(object):
                           int(stats.get("request_content_length")))
 
                 cur.execute('INSERT INTO Statistics(Query, ApiCall, ClientTiming, ServerTiming, ServerTimeStamp, ContentLength) VALUES%s' % str(values))
-
-            else:
-                values = (str(stats.get('query')),
-                          str(stats.get('api')),
-                          str(failures.get('type')),
-                          str(failures.get('value')),
-                          str(falures.get('traceback')))
-
-                cur.execute('INSERT INTO Failures(Query, ApiCall, Type, Value, Traceback) VALUES%s' % str(values))
 
         return 1
 

@@ -23,8 +23,10 @@ stat_client = StatsPipeClient("/tmp/dbs3fifo")
 initial = payload_handler.payload['workflow']['dataset']
 print "Dataset name: %s" % (initial)
 
+timing = {'stats':{'api':'listBlocks', 'query':str(initial)}}
+
 ## next step (list all blocks in DBS3 below the 'initial' root)
-with TimingStat({}, stat_client):
+with TimingStat(timing, stat_client):
   blocks = api.listBlocks(dataset=initial)
 
 timer.stat_to_timer()

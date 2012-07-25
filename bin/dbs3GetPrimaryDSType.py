@@ -22,7 +22,7 @@ stat_client = StatsPipeClient("/tmp/dbs3fifo")
 
 initial = payload_handler.payload['workflow']['dataset']
 
-timing = {'stats':{'exe':os.path.basename(__file__), 'query':initial}}
+timing = {'stats':{'api':'listPrimaryDSTypes', 'query':initial}}
 
 with TimingStat(timing, stat_client) as timer:
     ds_type = api.listPrimaryDSTypes(dataset=initial)[0]

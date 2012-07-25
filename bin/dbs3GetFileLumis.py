@@ -22,7 +22,7 @@ stat_client = StatsPipeClient("/tmp/dbs3fifo")
 
 initial = payload_handler.payload['workflow']['logical_file_name']
 
-timing = {'stats':{'exe':os.path.basename(__file__), 'query':initial}}
+timing = {'stats':{'api':'listFileLumis', 'query':initial}}
 
 with TimingStat(timing, stat_client) as timer:
     file_lumis = api.listFileLumis(logical_file_name=initial)
