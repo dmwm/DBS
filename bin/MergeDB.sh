@@ -27,6 +27,7 @@ tempfile=$(mktemp -t merge)
 cat >> $tempfile <<EOF
 BEGIN;
 CREATE TABLE Statistics(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, ClientTiming DOUBLE, ServerTiming DOUBLE, ServerTimeStamp INT, ContentLength INT);
+CREATE TABLE Failures(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, Type TEXT, Value TEXT, Traceback TEXT);
 COMMIT;
 EOF
 
@@ -35,6 +36,7 @@ for DB in ${@}; do
 ATTACH DATABASE "$DB" as Merge;
 BEGIN;
 INSERT INTO Statistics (Query, ApiCall, ClientTiming, ServerTiming, ServerTimeStamp, ContentLength) SELECT Query, ApiCall, ClientTiming, ServerTiming, ServerTimeStamp, ContentLength FROM Merge.Statistics;
+INSERT INTO Failures(Query, ApiCall, Type, Value, Traceback) SELECT Query, ApiCall, Type, Value, Traceback FROM Merge.Failures;
 COMMIT;
 DETACH DATABASE Merge;
 EOF
