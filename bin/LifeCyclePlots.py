@@ -33,6 +33,32 @@ def get_command_line_options(executable_name, arguments):
 
     return options
 
+def get_list_from_sqlite(conn, table, column):
+    with conn:
+        conn.row_factory = sqlite.Row
+        cur = conn.cursor()
+
+        cur.execute('SELECT DISTINCT %s FROM %s ORDER BY min(Id)' % (column, table))
+
+    return [str(row[column]) for row in cur]
+
+def get_min_max_from_sqlite(conn, table, column):
+    with conn:
+        cur = conn.cursor()
+
+        cur.execute('SELECT min(%(column)s), max(%(column)s) FROM %(table)s' % {'column':column, 'table':table})
+
+    return cur.fetchone()
+
+def get_rows_from_sqlite(conn, table, column='*'):
+    with conn:
+        conn.row_factory = sqlite.Row
+        cur = conn.cursor()
+
+        cur.execute('SELECT %s FROM %s' % (column, table))
+
+    return cur.fetchall()
+
 if __name__ == "__main__":
     options = get_command_line_options(os.path.basename(__file__), sys.argv)
 
@@ -45,54 +71,48 @@ if __name__ == "__main__":
     conn = sqlite.connect(options.input)
 
     ### fetch all APIs called during the test
-    with conn:
-        conn.row_factory = sqlite.Row
-        cur = conn.cursor()
-
-        cur.execute('SELECT DISTINCT ApiCall FROM Statistics ORDER BY min(Id)')
-        list_of_apis = [str(api['ApiCall']) for api in cur]
+    list_of_apis = get_list_from_sqlite(conn, 'Statistics', 'ApiCall')
 
     # api as keys and numbers as value, to fill 0,1,2,3,4 bins in APIAccessCounter histogramm and
     # to set bin label later accordingly
     enumerated_dict_of_apis = dict(zip(list_of_apis, xrange(len(list_of_apis))))
 
     ### fetch begin and end of the test
-    with conn:
-        cur = conn.cursor()
+    starttime, endtime = get_min_max_from_sqlite(conn, 'Statistics', 'ServerTimeStamp')
 
-        cur.execute('SELECT min(ServerTimeStamp), max(ServerTimeStamp) FROM Statistics')
-        starttime, endtime = cur.fetchone()
+    ### get list of errors occured
+    list_of_errors = get_list_from_sqlite(conn, 'Failures', 'Value')
 
-    histo_manager = HistoManager()
-    histo_manager.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
+    histo_manager_statistics = HistoManager()
+    histo_manager_statistics.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
                                     xnbins=400, xmin=0., xmax=4.,
                                     x_value_to_fill="ClientTiming",
                                     label={'x':"Time [s]",'y':"#"},
                                     color={'line':2,'fill':2},
                                     add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
 
-    histo_manager.add_histo(Histo1D(name='ServerRequestTiming', title='Server Request Timing',
+    histo_manager_statistics.add_histo(Histo1D(name='ServerRequestTiming', title='Server Request Timing',
                                     xnbins=400, xmin=0., xmax=4.,
                                     x_value_to_fill="ServerTiming",
                                     label={'x':"Time [s]",'y':"#"},
                                     color={'line':2, 'fill':2},
                                     add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
     
-    histo_manager.add_histo(Histo1D(name='ContentLength', title='Content Length',
+    histo_manager_statistics.add_histo(Histo1D(name='ContentLength', title='Content Length',
                                     xnbins=100, xmin=0, xmax=10000,
                                     x_value_to_fill="ContentLength",
                                     label={'x':"Size [bytes]",'y':"#"},
                                     color={'line':2,'fill':2},
                                     add_options={'GetXaxis.SetRangeUser':(0.0,10000.0)}))
 
-    histo_manager.add_histo(Histo1D(name='AccessPerSecond', title='Access per Second',
+    histo_manager_statistics.add_histo(Histo1D(name='AccessPerSecond', title='Access per Second',
                                     xnbins=int(endtime-starttime), xmin=0, xmax=endtime-starttime,
                                     x_value_to_fill="ServerTimeStamp",
                                     fill_fkt=lambda histo, x: (x[histo._x_value_to_fill]-starttime, 1),
                                     label={'x':"time [s]",'y':"#"},
                                     color={'line':2}))
 
-    histo_manager.add_histo(Histo2D(name='ClientRequestTimingVsContentLength', title='Client Request Timing Vs Content Length',
+    histo_manager_statistics.add_histo(Histo2D(name='ClientRequestTimingVsContentLength', title='Client Request Timing Vs Content Length',
                                     xnbins=1000, xmin=0., xmax=10.,
                                     ynbins=100, ymin=0., ymax=10000.,
                                     x_value_to_fill="ClientTiming",
@@ -101,7 +121,7 @@ if __name__ == "__main__":
                                     color={'line':2,'marker':2},
                                     add_options={'GetXaxis.SetRangeUser':(0.0,10.0)}))
 
-    histo_manager.add_histo(Histo2D(name='ServerRequestTimingVsContentLength', title='Server Request Timing Vs Content Length',
+    histo_manager_statistics.add_histo(Histo2D(name='ServerRequestTimingVsContentLength', title='Server Request Timing Vs Content Length',
                                     xnbins=1000, xmin=0., xmax=10.,
                                     ynbins=100, ymin=0., ymax=10000.,
                                     x_value_to_fill="ServerTiming",
@@ -110,7 +130,7 @@ if __name__ == "__main__":
                                     color={'line':2,'marker':2},
                                     add_options={'GetXaxis.SetRangeUser':(0.0,10.0)}))
 
-    histo_manager.add_histo(Histo2D(name='ClientRequestTimingVsServerRequestTiming', title='Client Request Timing Vs Server Request Timing',
+    histo_manager_statistics.add_histo(Histo2D(name='ClientRequestTimingVsServerRequestTiming', title='Client Request Timing Vs Server Request Timing',
                                     xnbins=1000, xmin=0., xmax=10.,
                                     ynbins=1000, ymin=0., ymax=10.,
                                     x_value_to_fill="ClientTiming",
@@ -131,7 +151,7 @@ if __name__ == "__main__":
     for api in list_of_apis:
         histo.histogram.GetXaxis().SetBinLabel(enumerated_dict_of_apis.get(api)+1,api) # Bin enumerations starts at 1
 
-    histo_manager.add_histo(histo)
+    histo_manager_statistics.add_histo(histo)
 
     histo = Histo2D(name='Client-ServerTimingVsAPI', title='Client Timing - Server Timing Vs API',
                     xnbins=len(list_of_apis), xmin=0., xmax=len(list_of_apis),
@@ -146,9 +166,9 @@ if __name__ == "__main__":
     for api in list_of_apis:
         histo.histogram.GetXaxis().SetBinLabel(enumerated_dict_of_apis.get(api)+1,api) # Bin enumerations starts at 1
 
-    histo_manager.add_histo(histo)
+    histo_manager_statistics.add_histo(histo)
 
-    histo_manager.add_histo(Histo1D(name='APIAccessCounter', title='Count of API Accesses',
+    histo_manager_statistics.add_histo(Histo1D(name='APIAccessCounter', title='Count of API Accesses',
                                     xnbins=len(list_of_apis), xmin=0, xmax=len(list_of_apis)+1,
                                     fill_fkt=lambda histo, x: (x[histo._x_value_to_fill], 1),
                                     x_value_to_fill="ApiCall",
@@ -161,7 +181,7 @@ if __name__ == "__main__":
                                                  'GetXaxis.SetLabelSize': (0.042,)}))
 
     for api in list_of_apis:
-        histo_manager.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
+        histo_manager_statistics.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
                                         xnbins=40, xmin=0., xmax=4.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ClientTiming",
@@ -169,7 +189,7 @@ if __name__ == "__main__":
                                         color={'line':2,'fill':2},
                                         add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
         
-        histo_manager.add_histo(Histo1D(name='ServerRequestTiming%s' % api, title='Server Request Timing (%s)' % api,
+        histo_manager_statistics.add_histo(Histo1D(name='ServerRequestTiming%s' % api, title='Server Request Timing (%s)' % api,
                                         xnbins=40, xmin=0., xmax=4.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ServerTiming",
@@ -177,14 +197,14 @@ if __name__ == "__main__":
                                         color={'line':2,'fill':2},
                                         add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
 
-        histo_manager.add_histo(Histo1D(name='ContentLength%s' % api, title='Content Length (%s)' % api,
+        histo_manager_statistics.add_histo(Histo1D(name='ContentLength%s' % api, title='Content Length (%s)' % api,
                                         xnbins=100, xmin=0, xmax=10000,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ContentLength",
                                         label={'x':"Size [bytes]",'y':"#"},
                                         color={'line':2,'fill':2}))
 
-        histo_manager.add_histo(Histo1D(name='AccessPerSecond%s' % api, title='Access per Second (%s)' % api,
+        histo_manager_statistics.add_histo(Histo1D(name='AccessPerSecond%s' % api, title='Access per Second (%s)' % api,
                                         xnbins=int(endtime-starttime), xmin=0, xmax=endtime-starttime,
                                         fill_fkt=lambda histo, x: (x[histo._x_value_to_fill]-starttime, 1),
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
@@ -192,22 +212,34 @@ if __name__ == "__main__":
                                         label={'x':"Time [s]",'y':"#"},
                                         color={'line':2}))
 
-    with conn:
-        conn.row_factory = sqlite.Row
-        cur = conn.cursor()
+    for row in get_rows_from_sqlite(conn, 'Statistics'):
+        histo_manager_statistics.update_histos(row)
 
-        cur.execute('SELECT * FROM Statistics')
-        rows = cur.fetchall()
+    histo_manager_failures = HistoManager()
 
-    for row in rows:
-        histo_manager.update_histos(row)
+    histo_manager_failures.add_histo(Histo1D(name="Exceptions", title='Exceptions',
+                                     xnbins=len(list_of_errors), xmin=0, xmax=len(list_of_errors)+1,
+                                     fill_fkt=lambda histo, x: (x[histo._x_value_to_fill].split(':')[0], 1) if x[histo._x_value_to_fill].find('HTTP Error')!=-1 else (x[histo._x_value_to_fill], 1),
+                                     x_value_to_fill="Value",
+                                     log={'y':False},
+                                     color={'fill':2},
+                                     stats=False,
+                                     draw_options="bar0",
+                                     add_options={'SetBarWidth':(0.9,),
+                                                  'SetBarOffset':(0.05,),
+                                                  'GetXaxis.SetLabelSize': (0.042,)}))
 
-    histo_manager.draw_histos()
+    for row in get_rows_from_sqlite(conn, 'Failures'):
+        histo_manager_failures.update_histos(row)
+
+    histo_manager_combined = histo_manager_statistics + histo_manager_failures
+
+    histo_manager_combined.draw_histos()
     
     if options.description and options.print_format:
         os.mkdir(options.description)
-        histo_manager.save_histos_as(output_directory=options.description, format=options.print_format)
+        histo_manager_combined.save_histos_as(output_directory=options.description, format=options.print_format)
 
         if options.website:
-            web_view = WebView(options.description, histo_manager, options.print_format)
+            web_view = WebView(options.description, histo_manager_combined, options.print_format)
             web_view.create_web_view('index.html')
