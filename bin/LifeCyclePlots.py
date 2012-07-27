@@ -41,15 +41,22 @@ if __name__ == "__main__":
     if options.batch:
         gROOT.SetBatch(True)
 
-    list_of_apis = ['listDatasets', 'listPrimaryDSTypes', 'listFiles', 'listFileParents', 'listFileLumis']
+    # get start and end time of test
+    conn = sqlite.connect(options.input)
+
+    ### fetch all APIs called during the test
+    with conn:
+        conn.row_factory = sqlite.Row
+        cur = conn.cursor()
+
+        cur.execute('SELECT DISTINCT ApiCall FROM Statistics ORDER BY min(Id)')
+        list_of_apis = [str(api['ApiCall']) for api in cur]
 
     # api as keys and numbers as value, to fill 0,1,2,3,4 bins in APIAccessCounter histogramm and
     # to set bin label later accordingly
     enumerated_dict_of_apis = dict(zip(list_of_apis, xrange(len(list_of_apis))))
 
-    # get start and end time of test
-    conn = sqlite.connect(options.input)
-    
+    ### fetch begin and end of the test
     with conn:
         cur = conn.cursor()
 
