@@ -221,7 +221,6 @@ if __name__ == "__main__":
                                      xnbins=len(list_of_errors), xmin=0, xmax=len(list_of_errors)+1,
                                      fill_fkt=lambda histo, x: (x[histo._x_value_to_fill].split(':')[0], 1) if x[histo._x_value_to_fill].find('HTTP Error')!=-1 else (x[histo._x_value_to_fill], 1),
                                      x_value_to_fill="Value",
-                                     log={'y':False},
                                      color={'fill':2},
                                      stats=False,
                                      draw_options="bar0",
