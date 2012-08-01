@@ -18,7 +18,9 @@ payload_handler = PayloadHandler()
 
 payload_handler.load_payload(options.input)
 
-stat_client = StatsPipeClient("/tmp/dbs3fifo")
+named_pipe = payload_handler.payload['workflow']['NamedPipe']
+
+stat_client = StatsPipeClient(named_pipe)
 
 initial = payload_handler.payload['workflow']['dataset']
 

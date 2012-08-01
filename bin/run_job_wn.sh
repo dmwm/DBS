@@ -17,7 +17,7 @@ DATAPROVIDER=cms+lifecycle-dataprovider+$DATAPROVIDERVERSION
 LIFECYCLEAGENTVERSION=1.0.5
 LIFECYCLEAGENT=cms+PHEDEX-lifecycle+$LIFECYCLEAGENTVERSION
 
-DBS3LIFECYCLEVERSION=0.0.1
+DBS3LIFECYCLEVERSION=0.0.3
 DBS3LIFECYCLE=cms+dbs3-lifecycle+$DBS3LIFECYCLEVERSION
 
 PRIVATEDIR=$HOME/private
@@ -74,6 +74,8 @@ cleanup_workingdir()
     check_success "Cleaning up $WORKINGDIR" $?
     rm -rf /tmp/$proxy_file
     check_success "Cleaning up /tmp/$proxy_file" $?
+    rm -rf $TMP_WORKFLOW
+    check_success "Cleaning up $TMP_WORKLFOW" $?
   fi
 }
 
@@ -132,14 +134,19 @@ setup_lifecycle_agent()
 run_dbs_lifecycle_tests()
 {
   ## remove potential fifo pipe
-  rm -rf /tmp/dbs3fifo
-  StatsServer.py -n -o $WORKINGDIR/Output.db -i /tmp/dbs3fifo &> $WORKINGDIR/StatsServer.log &
+  rm -rf /tmp/dbs3fifo.$JOBNUM
+  StatsServer.py -n -o $WORKINGDIR/Output.db -i /tmp/dbs3fifo.$JOBNUM &> $WORKINGDIR/StatsServer.log &
 
   if [ 'x$WORKFLOW' == 'x' ]; then
     WORKFLOW=$DBS3_LIFECYCLE_ROOT/conf/DBS3AnalysisLifecycle.conf
   fi
 
-  Lifecycle.pl --config $WORKFLOW &> $WORKINGDIR/LifeCycle.log &
+  TMP_WORKFLOW=$(mktemp -p /tmp LifeCycleWorkflow.conf.XXXXXXXXX)
+
+  ## change NamedPipe parameter in the Workflow
+  sed -e "s/@NamedPipe@/\/tmp\/dbs3fifo.$JOBNUM/g" $WORKFLOW &> $TMP_WORKFLOW
+
+  Lifecycle.pl --config $TMP_WORKFLOW &> $WORKINGDIR/LifeCycle.log &
 
   ## LifeCycleTests can be aborted by an external file
   create_steering_file
