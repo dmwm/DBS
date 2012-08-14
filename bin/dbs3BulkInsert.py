@@ -25,12 +25,12 @@ named_pipe = payload_handler.payload['workflow']['NamedPipe']
 
 stat_client = StatsPipeClient(named_pipe)
 
-initial = payload_handler.payload['workflow']['dataset']
+block_dump = payload_handler.payload['workflow']['blockDump']
 
 ## list primary data type
-timing = {'stats':{'query' : initial, 'api' : 'insertBulkBlock'}}
+timing = {'stats':{'query' : 'insertBulkBlock', 'api' : 'insertBulkBlock'}}
 with TimingStat(timing, stat_client) as timer:
-    ds_type = api.insertBulkBlock()
+    ds_type = api.insertBulkBlock(block_dump)
 
 request_processing_time, request_time = api.requestTimingInfo
 timer.update_stats({'server_request_timing' : float(request_processing_time)/1000000.0,
