@@ -11,8 +11,6 @@ import tempfile
 
 options = get_command_line_options(__name__, sys.argv)
 
-stat_output_dir = os.path.dirname(options.input)
-
 config = {'url':os.environ.get("DBS_WRITER_URL","https://cmsweb.cern.ch/dbs/int/global/DBSWriter/")}
 
 api = create_api('DbsApi',config=config)
