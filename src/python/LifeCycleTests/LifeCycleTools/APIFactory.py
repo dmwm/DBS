@@ -7,7 +7,7 @@ class DBS3ApiFactory(object):
     def get_api(self):
         return DbsApi(url=self.config.get("url","https://cmsweb.cern.ch/dbs/int/global/DBSReader/"))
 
-def create_api(api="DbsApi", config={}):
+def create_api(api="DbsApi", config=None):
     known_factory = {'DbsApi': DBS3ApiFactory(config)}
 
     factory = known_factory.get(api,None)
