@@ -10,13 +10,15 @@ systems = \
   'LifeCycleTests':
   {
     'srcdir': 'src/python',
-    'bin': ['bin/dbs3CrabWorkflow.py',
+    'bin': ['bin/dbs3BulkInsert.py',
+            'bin/dbs3CrabWorkflow.py',
             'bin/dbs3GetBlocks.py',
             'bin/dbs3GetDatasets.py',
             'bin/dbs3GetFileLumis.py',
             'bin/dbs3GetFileParents.py',
             'bin/dbs3GetFiles.py',
             'bin/dbs3GetPrimaryDSType.py',
+            'bin/getFakeData.py',
             'bin/StatsServer.py',
             'bin/run_job_wn.sh',
             'bin/submit_jobs.sh'],
