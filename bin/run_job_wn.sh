@@ -1,6 +1,19 @@
 #!/bin/bash
 
-WORKINGDIR=/tmp/$USER/DBS3_Life_Cycle_Agent_Test
+if [ $# -lt 1 ]; then
+  echo -e "$0: Takes at least one arguments.
+               JobNumber (mandatory)
+               Workflow (optional)\n"
+  exit 1
+fi
+
+JOBNUM=$1
+
+if [ $# -gt 1 ]; then
+  WORKFLOW=$2
+fi
+
+WORKINGDIR=/tmp/$USER/DBS3_Life_Cycle_Agent_Test.$JOBNUM
 SCRAM_ARCH=slc5_amd64_gcc461
 SWAREA=$WORKINGDIR/sw
 REPO=comp.pre
@@ -14,7 +27,7 @@ DBS3CLIENTDOC=cms+dbs3-client-webdoc+$DBS3CLIENTVERSION
 DATAPROVIDERVERSION=1.0.2
 DATAPROVIDER=cms+lifecycle-dataprovider+$DATAPROVIDERVERSION
 
-LIFECYCLEAGENTVERSION=1.0.5
+LIFECYCLEAGENTVERSION=1.0.10
 LIFECYCLEAGENT=cms+PHEDEX-lifecycle+$LIFECYCLEAGENTVERSION
 
 DBS3LIFECYCLEVERSION=0.0.3
@@ -203,19 +216,6 @@ kill_lifecycle_tests()
    sleep 10
    sync
 }
-
-if [ $# -lt 1 ]; then
-  echo -e "$0: Takes at least one arguments.
-               JobNumber (mandatory)
-               Workflow (optional)\n"
-  exit 1
-fi
-
-JOBNUM=$1
-
-if [ $# -gt 1 ]; then
-  WORKFLOW=$2
-fi
 
 echo "Starting time: $(date)"
 echo "Running on $(/bin/hostname)"
