@@ -22,8 +22,12 @@ def block_dump(block):
     block_name = block['name']
     dataset_name = block_name.split('#')[0]
     _, primary_ds_name, processed_ds_name, tier = dataset_name.split('/')
-    proc_era = dbs_data_provider.proc_eras(1)[0]
-    acq_era = dbs_data_provider.acq_eras(1)[0]
+    acquisition_era_name, _, processing_version = processed_ds_name.split("-")
+    proc_era = {"processing_version": processing_version[1:], #remove v from v4711
+                "description": "Test_proc_era"}
+    acq_era = {"acquisition_era_name": acquisition_era_name,
+               'start_date': 1234567890,
+               "description": "Test_acquisition_era"}
     primds = dbs_data_provider.prim_ds(1)[0].get('prim_ds')
     primds.update({"primary_ds_name":primary_ds_name})
 
