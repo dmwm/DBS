@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler
 from LifeCycleTests.LifeCycleTools.OptParser import get_command_line_options
 from DataProvider.core.dbs_provider import DBSDataProvider
@@ -97,8 +96,8 @@ fail_cksum_Phedex = payload_handler.payload['workflow']['FailCksumPhedex']
 fail_size_Phedex = payload_handler.payload['workflow']['FailSizePhedex']
 
 ### initialze DataProvider
-dbs_data_provider = DBSDataProvider()#create_api('DBSDataProvider')
-phedex_data_provider = PhedexDataProvider()#create_api('PhedexDataProvider')
+dbs_data_provider = DBSDataProvider()
+phedex_data_provider = PhedexDataProvider()
 
 ### create PhEDEx data
 phedex_datasets = phedex_data_provider.datasets(number_of_datasets)
