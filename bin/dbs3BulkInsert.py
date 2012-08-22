@@ -23,19 +23,21 @@ named_pipe = payload_handler.payload['workflow']['NamedPipe']
 
 stat_client = StatsPipeClient(named_pipe)
 
-block_dump = payload_handler.payload['workflow']['blockDump']
+block_dump = payload_handler.payload['workflow']['DBS']
 
 ## list primary data type
 timing = {'stats':{'query' : 'insertBulkBlock', 'api' : 'insertBulkBlock'}}
-with TimingStat(timing, stat_client) as timer:
-    ds_type = api.insertBulkBlock(block_dump)
+for block in block_dump:
+    with TimingStat(timing, stat_client) as timer:
+        ds_type = api.insertBulkBlock(block)
 
-request_processing_time, request_time = api.requestTimingInfo
-timer.update_stats({'server_request_timing' : float(request_processing_time)/1000000.0,
-                    'server_request_timestamp' : float(request_time)/1000000.0,
-                    'request_content_length' : int(api.requestContentLength)})
+    request_processing_time, request_time = api.requestTimingInfo
+    timer.update_stats({'server_request_timing' : float(request_processing_time)/1000000.0,
+                        'server_request_timestamp' : float(request_time)/1000000.0,
+                        'request_content_length' : int(api.requestContentLength)})
 
-timer.stat_to_server()
+    timer.stat_to_server()
+
 p = payload_handler.clone_payload()
 payload_handler.append_payload(p)
 
