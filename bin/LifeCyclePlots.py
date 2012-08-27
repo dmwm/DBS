@@ -226,7 +226,8 @@ if __name__ == "__main__":
                                      draw_options="bar0",
                                      add_options={'SetBarWidth':(0.9,),
                                                   'SetBarOffset':(0.05,),
-                                                  'GetXaxis.SetLabelSize': (0.042,)}))
+                                                  'GetXaxis.SetLabelSize': (0.042,),
+                                                  'SetMinimum':(0.0,)}))
 
     for row in get_rows_from_sqlite(conn, 'Failures'):
         histo_manager_failures.update_histos(row)
