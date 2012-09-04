@@ -20,8 +20,8 @@ class List(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """SELECT MIGRATION_BLOCK_ID, MIGRATION_REQUEST_ID, MIGRATION_BLOCK_NAME, MIGRATION_ORDER, 
 			MIGRATION_STATUS, CREATE_BY, CREATION_DATE, LAST_MODIFIED_BY, LAST_MODIFICATION_DATE 
-			FROM %s MIGRATION_BLOCKS 
-			WHERE MIGRATION_REQUEST_ID=:migration_request_id AND MIGRATION_STATUS='PENDING' ORDER BY MIGRATION_ORDER DESC
+			FROM %sMIGRATION_BLOCKS 
+			WHERE MIGRATION_REQUEST_ID=:migration_request_id AND MIGRATION_STATUS=0 ORDER BY MIGRATION_ORDER DESC
 			""" % (self.owner)
 
     def execute(self, conn, migration_request_id="", transaction=False):

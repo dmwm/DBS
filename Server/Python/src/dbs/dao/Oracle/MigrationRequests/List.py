@@ -27,7 +27,7 @@ SELECT MR.MIGRATION_REQUEST_ID, MR.MIGRATION_URL,
 FROM %sMIGRATION_REQUESTS MR
 """ % (self.owner)
 
-    def execute(self, conn, migration_url="", migration_input="", create_by="", migration_request_id="", transaction=False):
+    def execute(self, conn, migration_url="", migration_input="", create_by="", migration_request_id="", oldest= False, transaction=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
@@ -39,6 +39,11 @@ FROM %sMIGRATION_REQUESTS MR
 	if migration_request_id:
 	    sql += " WHERE MR.MIGRATION_REQUEST_ID=:migration_request_id"
 	    binds['migration_request_id']=migration_request_id
+        elif oldest:
+            sql += """ WHERE MR.MIGRATION_STATUS=0 and 
+                       MR.CREATION_DATE = (select min (MR1.CREATION_DATE) from %smigration_requests MR1 
+                       where MR1.MIGRATION_STATUS=0)
+                   """ %(self.owner)
 	else:    
 	    if  migration_url or migration_input or create_by:
 		sql += " WHERE "

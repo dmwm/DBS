@@ -20,7 +20,7 @@ class Insert(DBFormatter):
                    WHEN not exists (select release_version_id from %srelease_versions where release_version = release_v) THEN
                         INTO %srelease_versions(release_version_id, release_version) values (%sseq_rv.nextval, release_v)
                    WHEN not exists(select parameter_set_hash_id from %sparameter_set_hashes where pset_hash = pset_h) THEN
-                        INTO %sparameter_set_hashes ( parameter_set_hash_id, pset_hash ) values (%sseq_psh.nextval, pset_h)
+                        INTO %sparameter_set_hashes ( parameter_set_hash_id, pset_hash, name ) values (%sseq_psh.nextval, pset_h, pname)
                    WHEN 1=1 THEN
                         INTO %soutput_module_configs ( output_mod_config_id, app_exec_id, release_version_id,
                         parameter_set_hash_id, output_module_label, global_tag, scenario, creation_date, create_by
@@ -29,7 +29,7 @@ class Insert(DBFormatter):
                         NVL((select release_version_id from %srelease_versions where release_version = release_v), %sseq_rv.nextval),
                         NVL((select parameter_set_hash_id from  %sparameter_set_hashes where pset_hash = pset_h), %sseq_psh.nextval),
                         :output_module_label, :global_tag, :scenario, :creation_date, :create_by)
-                   select :app_name app_n, :release_version release_v, :pset_hash pset_h from dual
+                   select :app_name app_n, :release_version release_v, :pset_hash pset_h, :pname pname from dual
                 """% ((self.owner,)*17)
 
     def execute( self, conn, outputModConfigObj, transaction=False ):

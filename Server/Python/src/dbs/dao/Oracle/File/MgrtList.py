@@ -18,6 +18,7 @@ class MgrtList(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
+        #remove F.CREATION_DATE, F.CREATE_BY from the select , see TK#969. YG 7/13/2012
         self.sql = \
 """
 SELECT F.LOGICAL_FILE_NAME, F.IS_FILE_VALID, 
@@ -25,7 +26,6 @@ SELECT F.LOGICAL_FILE_NAME, F.IS_FILE_VALID,
        F.CHECK_SUM, F.EVENT_COUNT, F.FILE_SIZE,  
        F.BRANCH_HASH_ID, F.ADLER32, F.MD5, 
        F.AUTO_CROSS_SECTION,
-       F.CREATION_DATE, F.CREATE_BY, 
        F.LAST_MODIFICATION_DATE, F.LAST_MODIFIED_BY
 FROM %sFILES F 
 JOIN %sFILE_DATA_TYPES FT ON  FT.FILE_TYPE_ID = F.FILE_TYPE_ID 

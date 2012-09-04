@@ -21,10 +21,12 @@ class List(DBFormatter):
         self.sql1 = \
 	"""
 	SELECT R.RELEASE_VERSION,
-	    P.PSET_HASH,
+	    P.PSET_HASH, P.NAME
 	    A.APP_NAME,
 	    O.OUTPUT_MODULE_LABEL,
-            O.GLOBAL_TAG
+            O.GLOBAL_TAG,
+            O.CREATION_DATE,
+            O.CREATE_BY
 	"""
 	self.sql2 = \
 	"""

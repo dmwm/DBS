@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python:wq
 """
 This module provides Migration.Update data access object.
 """
@@ -28,13 +28,14 @@ class Update(DBFormatter):
         self.sql = \
 """UPDATE %sMIGRATION_BLOCKS
 SET MIGRATION_STATUS=:migration_status 
-WHERE MIGRATION_BLOCK_NAME=:migration_block_name""" %  self.owner 
+WHERE MIGRATION_BLOCK_ID =:migration_block_id""" %  self.owner 
         
     def execute(self, conn, daoinput, transaction = False):
         """
 	    daoinput keys:
-	    migration_status, migration_block
+	    migration_status, migration_block_id
         """
+        print daoinput['migration_block_id']
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationBlock/Update. Expects db connection from upper layer.")
         if daoinput['migration_status'] == 1:
@@ -43,5 +44,12 @@ WHERE MIGRATION_BLOCK_NAME=:migration_block_name""" %  self.owner
             sql = self.sql + " and MIGRATION_STATUS = 1 "
         else: 
             dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationBlock/Update. Expected migration status to be 1, 2 or 3") 
-        result = self.dbi.processData(sql, daoinput, conn, transaction)
-
+        #print sql
+        if type(daoinput['migration_block_id']) is not list:
+            result = self.dbi.processData(sql, daoinput, conn, transaction)
+        else:
+            #WMCore require the input has to be a list of dictionary in order to insert as bulk.
+            newdaoinput=[]
+            for id in daoinput['migration_block_id']:
+                newdaoinput.append({"migration_status":daoinput["migration_status"], "migration_block_id":id})
+            result = self.dbi.processData(sql, newdaoinput, conn, transaction)

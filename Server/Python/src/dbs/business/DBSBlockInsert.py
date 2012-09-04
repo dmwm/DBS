@@ -87,27 +87,31 @@ class DBSBlockInsert :
         # Others go to db in different jobs. YG 11/17/2010
         self.datasetCache = {'conf': {}}
 
-    def putBlock(self, blockcontent):
+    def putBlock(self, blockcontent, migration=False):
         """
         Insert the data in sereral steps and commit when each step finishes or rollback if there is a problem.
         """
         #YG
         try:
             #1 insert configuration
+            print "insert configuration"
             configList = self.insertOutputModuleConfig(
                             blockcontent['dataset_conf_list'])
             #2 insert dataset
-            datasetId = self.insertDataset(blockcontent, configList)
+            print "insert dataset"
+            datasetId = self.insertDataset(blockcontent, configList, migration)
             #3 Insert Block. 
+            print "Insert Block"
             blockId, newBlock = self.insertBlock(blockcontent, datasetId)
             #4 insert files. If the block is already in db, then we stop
             #inserting the file
+            print "insert files."
             if newBlock:
-                self.insertFile(blockcontent, blockId, datasetId)
+                self.insertFile(blockcontent, blockId, datasetId, migration)
         except Exception, ex:
             raise
     
-    def insertFile(self, blockcontent, blockId, datasetId):
+    def insertFile(self, blockcontent, blockId, datasetId, migration=False):
         conn = self.dbi.connection()
         fileLumiList = []
         fileConfObjs = []
@@ -163,13 +167,14 @@ class DBSBlockInsert :
             nfileparent = len(fileParentList)
             bkParentList = []
             dsParentList = []
-            #import pdb
-            #pdb.set_trace()
             for k in range(nfileparent):
-                #import pdb
-                #pdb.set_trace()
-                fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
-                del fileParentList[k]['logical_file_name']
+                if migration:
+                    fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['this_logical_file_name']]
+                    del fileParentList[k]['this_logical_file_name']
+                    del fileParentList[k]['parent_file_id']
+                else:
+                    fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
+                    del fileParentList[k]['logical_file_name']
                 bkParentage2insert={'this_block_id' : blockId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
                 dsParent2Insert = {'this_dataset_id' : datasetId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
                 if not any(d.get('parent_logical_file_name') == bkParentage2insert['parent_logical_file_name'] for d in bkParentList):
@@ -257,8 +262,6 @@ class DBSBlockInsert :
         block = blockcontent['block']
         newBlock = False
         #Insert the block
-        #import pdb
-        #pdb.set_trace()
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
@@ -268,13 +271,16 @@ class DBSBlockInsert :
             newBlock = True
             tran.commit()
             tran = None
-        except exceptions.IntegrityError:
+        except exceptions.IntegrityError, ex:
+            if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
             #not sure what happends to WMAgent: Does it try to insert a
             #block again? YG 10/05/2010
             #Talked with Matt N: We should stop insertng this block now.
             #This means there is some trouble.
             #Throw exception to let the up layer know. YG 11/17/2010
-            dbsExceptionHandler("dbsException-invalid-input","DBSBlockInsert/insertBlock. Block already exists.")
+                dbsExceptionHandler("dbsException-invalid-input","DBSBlockInsert/insertBlock. Block already exists.")
+            else:
+                raise
         #All Praentage will be deduced from file parentage. 
         finally:
             if tran:tran.rollback()
@@ -312,7 +318,6 @@ class DBSBlockInsert :
         if len(missingList)==0:
             if conn:conn.close()
             return otptIdList
-
         #Now insert the missing configs
         try:
             #tran = conn.begin()
@@ -333,7 +338,7 @@ class DBSBlockInsert :
                 try:
                     cfgid = 0
                     configObj = {"release_version": m["release_version"],
-                                 "pset_hash": m["pset_hash"],
+                                 "pset_hash": m["pset_hash"], "pname":m.get('pname', None), 
                                  "app_name": m["app_name"],                
                                  'output_module_label' : m['output_module_label'],
                                  'global_tag' : m['global_tag'],
@@ -346,7 +351,7 @@ class DBSBlockInsert :
                 except exceptions.IntegrityError, ex:
                     #Another job inserted it just 1/100000 second earlier than
                     #you!!  YG 11/17/2010
-                    if str(ex).find("unique constraint") != -1:
+                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") !=-1:
                         if str(ex).find("TUC_OMC_1") != -1: 
                             #the config is already in db, get the ID later
                             pass
@@ -357,7 +362,7 @@ class DBSBlockInsert :
                                 self.otptModCfgin.execute(conn, configObj, tran)
                                 tran.commit()
                                 tran = None
-                            except exception, ex2:
+                            except exceptions, ex2:
                                 if tran:tran.rollback()
                                 if conn:conn.close()
                                 raise ex2
@@ -377,12 +382,10 @@ class DBSBlockInsert :
             if conn:conn.close()
         return otptIdList
 
-    def insertDataset(self, blockcontent, otptIdList):
+    def insertDataset(self, blockcontent, otptIdList, migration=False):
         """
         This method insert a datsset from a block object into dbs.
         """
-        #import pdb
-        #pdb.set_trace()
         dataset = blockcontent['dataset']
         conn = self.dbi.connection()
 
@@ -423,13 +426,17 @@ class DBSBlockInsert :
                     primds["creation_date"] = primds.get("creation_date", dbsUtils().getTime())
                     primds["create_by"] = primds.get("create_by", dbsUtils().getCreateBy())
                     self.primdsin.execute(conn, primds, tran)
-                except exceptions.IntegrityError:
-                    primds["primary_ds_id"] = self.primdsid.execute(conn,
+                except exceptions.IntegrityError, ex:
+                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") !=-1:
+                        primds["primary_ds_id"] = self.primdsid.execute(conn,
                                                 primds["primary_ds_name"],
                                                 transaction=tran)
+                    else:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        raise
                 except Exception, ex:   
-                    if tran:
-                        tran.rollback()
+                    if tran:tran.rollback()
                     if conn:conn.close()
                     raise
             dataset['primary_ds_id'] = primds["primary_ds_id"]
@@ -456,21 +463,28 @@ class DBSBlockInsert :
                 if conn:conn.close()
                 dbsExceptionHandler("dbsException-invalid-input", "BlockInsert: Acquisition Era is required")    
             #is there acquisition?
-            if aq.has_key('acquisition_era_name'):
+            if aq.has_key('acquisition_era_name') and aq.has_key('start_date'):
+                #for migraction, some of the DBS2 Acquisition does not have start_date, so insert 0.
+                if(migration) and  not aq['start_date']:
+                    aq['start_date'] = 0
                 try:
                     #insert acquisition era into db
                     aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
                     self.acqin.execute(conn, aq, tran)
                     dataset['acquisition_era_id'] = aq['acquisition_era_id']
                 except exceptions.IntegrityError, ei:
-                    #ok, already in db
-                    dataset['acquisition_era_id'] = self.acqid.execute(conn,
-                                            aq['acquisition_era_name'])
-                    if dataset['acquisition_era_id'] <= 0:
-                        if tran:
-                            tran.rollback()
+                    #ORA-01400: cannot insert NULL into required columns, usually it is the NULL on start_date
+                    if "ORA-01400" in str(ei) :
+                        if tran:tran.rollback()
                         if conn:conn.close()
-                        dbsExceptionHandler("dbsException-invalid-input", "BlockInsert: Check the spelling of acquisition Era name.\
+                        raise
+                    #ok, already in db?
+                    if str(ei).find("ORA-00001") != -1 or str(ei).find("unique constraint") != -1 or str(ei).lower().find("duplicate") !=-1:
+                        dataset['acquisition_era_id'] = self.acqid.execute(conn, aq['acquisition_era_name'])
+                        if dataset['acquisition_era_id'] <= 0:
+                            if tran:tran.rollback()
+                            if conn:conn.close()
+                            dbsExceptionHandler("dbsException-invalid-input", "BlockInsert: Check the spelling of acquisition Era name.\
                                             the db may already have the same acquisition era, but with different casees.")
                 except Exception, ex:
                     if tran:
@@ -500,29 +514,36 @@ class DBSBlockInsert :
                     #pera['processing_version'] = pera['processing_version'].upper()
                     self.procsingin.execute(conn, pera, tran)
                     dataset['processing_era_id'] = pera['processing_era_id']
-                except exceptions.IntegrityError:
-                    #ok, already in db
-                    dataset['processing_era_id'] = self.procsingid.execute(
-                                            conn, pera['processing_version'])
+                except exceptions.IntegrityError, ex:
+                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") !=-1:
+                        #ok, already in db
+                        dataset['processing_era_id'] = self.procsingid.execute(conn, pera['processing_version'])
+                    else:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        raise
                 except Exception, ex:
-                    if tran:
-                        tran.rollback()
+                    if tran:tran.rollback()
                     if conn:conn.close()
                     raise
             else: 
-                if tran:
-                    tran.rollback()
+                if tran:tran.rollback()
                 if conn:conn.close()
                 dbsExceptionHandler('dbsException-invalid-input', 'BlockInsert:processing version is required')
             #Make sure processed_ds_name is right format.
             #processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
-            erals=dataset["processed_ds_name"].rsplit('-')
-            if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
-                if tran:
-                    tran.rollback()
-                if conn:conn.close()
-                dbsExceptionHandler('dbsException-invalid-input', "BlockInsert:\
-                    processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified.")
+            #In order to accomdate DBS2 data for migration, we turn off this check in migration.
+            #These will not cause any problem to none DBS2 datat because when we migration, the none DBS2 data is 
+            #already checked when they were inserted into the source dbs.  YG 7/12/2012
+            if migration:
+                pass
+            else:
+                erals=dataset["processed_ds_name"].rsplit('-')
+                if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
+                    if tran:tran.rollback()
+                    if conn:conn.close()
+                    dbsExceptionHandler('dbsException-invalid-input', "BlockInsert:\
+                        processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified.")
     
             #So far so good, let's committe first 4 db acativties before going on.
             tran.commit()
@@ -547,12 +568,15 @@ class DBSBlockInsert :
                     phygrp = {'physics_group_id':phgId, 'physics_group_name':phg}
                     try:
                         self.phygrpin.execute(conn, phygrp, tran)
-                    except exceptions.IntegrityError:
-                        phgId = self.phygrpid.execute(conn, phg,
-                                                      transaction=tran)
+                    except exceptions.IntegrityError, ex:
+                        if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1: 
+                            phgId = self.phygrpid.execute(conn, phg,transaction=tran)
+                        else:
+                            if tran:tran.rollback()
+                            if conn:conn.close()
+                            raise
                     except Exception, ex:
-                        if tran:
-                            tran.rollback()
+                        if tran:tran.rollback()
                         if conn:conn.close()
                         raise
                 dataset['physics_group_id'] = phgId
@@ -600,8 +624,6 @@ class DBSBlockInsert :
 
         The insertDataset flag is set to false if the dataset already exists
         """
-        #import pdb
-        #pdb.set_trace()
 
         tran = conn.begin()
         try:
@@ -621,15 +643,17 @@ class DBSBlockInsert :
                     dataset['prep_id'] = dataset.get('prep_id', None)
                     try:
                         self.datasetin.execute(conn, dataset, tran)
-                    except exceptions.IntegrityError:
-                        dataset['dataset_id'] = self.datasetid.execute(conn,
-                                                        dataset['dataset'])
+                    except exceptions.IntegrityError, ei:
+                        if str(ei).find("ORA-00001") != -1 or str(ei).find("unique constraint") != -1 or str(ei).lower().find("duplicate") !=-1: 
+                            dataset['dataset_id'] = self.datasetid.execute(conn,dataset['dataset'])
+                        else:
+                            if tran:tran.rollback()
+                            if conn:conn.close()
+                            raise
                         #
                     except Exception, ex:
-                        if tran:
-                            tran.rollback()
-                        if conn:
-                            conn.close()
+                        if tran:tran.rollback()
+                        if conn:conn.close()
                         raise
                 
             #9 Fill Dataset Parentage
@@ -644,16 +668,20 @@ class DBSBlockInsert :
                              'dataset_id' : dataset['dataset_id'],
                              'output_mod_config_id' : c }
                     self.dcin.execute(conn, dcObj, tran)
-                except exceptions.IntegrityError:
+                except exceptions.IntegrityError, ei:
+                    if str(ei).find("ORA-00001") != -1 or str(ei).find("unique constraint") != -1 or \
+                            str(ei).lower().find("duplicate")!=-1:
                     #ok, already in db
                     #FIXME: What happens when there are partially in db?
                     #YG 11/17/2010
-                    pass
+                        pass
+                    else:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        raise
                 except Exception, ex:
-                    if tran:
-                        tran.rollback()
-                    if conn:
-                        conn.close()
+                    if tran:tran.rollback()
+                    if conn:conn.close()
                     raise 
             #Now commit everything.
             tran.commit()

@@ -18,10 +18,14 @@ class dbsUtils:
 	return time()
 
     def getCreateBy(self):
-	user = cherrypy.request.user.get('name', getpass.getuser())
-        #in case a user does not assocate his dn with his HN account, name will be a empty string. 
-        if not user:
-            user = cherrypy.request.get('dn', None)
+        user = ''
+        try:
+            user = cherrypy.request.user.get('name', getpass.getuser())
+            #in case a user does not assocate his dn with his HN account, name will be a empty string. 
+            if not user:
+                user = cherrypy.request.get('dn', None)
+        except:
+            pass
         return user
 
     def getModifiedBy(self):

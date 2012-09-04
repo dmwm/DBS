@@ -44,8 +44,10 @@ class DBSMigrate:
         self.pelist         = daofactory(classname="ProcessingEra.List")
         self.mgrlist        = daofactory(classname="MigrationRequests.List")
         self.mgrin          = daofactory(classname="MigrationRequests.Insert")
+        self.mgrRqUp        = daofactory(classname="MigrationRequests.UpdateRequestStatus")
         self.mgrup          = daofactory(classname="MigrationBlock.Update")
         self.mgrblkin       = daofactory(classname="MigrationBlock.Insert")
+        self.mgrblklist     = daofactory(classname="MigrationBlock.List")
         self.blocklist      = daofactory(classname="Block.List")
         self.bparentlist    = daofactory(classname="BlockParent.List")
         self.dsparentlist   = daofactory(classname="DatasetParent.List")
@@ -80,9 +82,15 @@ class DBSMigrate:
                 ordered_dict.update(parent_ordered_dict)
             return ordered_dict  
         except Exception, ex:
+            if 'urlopen error' in str(ex):
+                message='Connection to source DBS server refued. Check your source url.'
+            elif 'Bad Request' in str(ex):
+                message='cannot get data from the source DBS server. Check your migration input.'
+            else:
+                message='Failed to make a dataset migration list.'
             dbsExceptionHandler('dbsException-invalid-input2', \
-                'DBSMigrate/prepareDatasetMigrationList failed\
-                 to prepare ordered block list: %s' %str(ex))
+                serverError="""DBSMigrate/prepareDatasetMigrationList failed 
+                to prepare ordered block list: %s""" %str(ex), message=message)
 
     def processDatasetBlocks(self, url, conn, inputdataset, order_counter):
         """
@@ -90,6 +98,7 @@ class DBSMigrate:
         and returns an ordered list of blocks not already at dst for migration
         """
         ordered_dict = {}
+        srcblks ={}
         srcblks = self.getSrcBlocks(url, dataset=inputdataset)
         if len(srcblks) < 0:
             dbsExceptionHandler('dbsException-invalid-input2', 
@@ -172,6 +181,8 @@ class DBSMigrate:
     def getParentBlocksOrderedList(self, url, conn, block_name, order_counter):
         ordered_dict = {}
         #3.
+        #import pdb
+        #pdb.set_trace()
         parentBlocksInSrc = self.getSrcBlockParents(url, block_name)
         parentBlocksInSrcNames = [ y['parent_block_name'] 
                                         for y in parentBlocksInSrc ]
@@ -185,7 +196,8 @@ class DBSMigrate:
             # Confirmed by S. Foulkes, all parent's blocks belongs to a same dataset. 
             parent_dataset = parentBlocksInSrcNames[0].split('#')[0]
             parentBlocksInDst = self.blocklist.execute(conn, parent_dataset)
-            parentBlocksInDstNames = [y['parent_block_name']
+            #YG 7/24/2012
+            parentBlocksInDstNames = [y['block_name']
                                             for y in parentBlocksInDst]
             for ablockAtSrc in parentBlocksInSrcNames:
                 if ablockAtSrc not in parentBlocksInDstNames:
@@ -222,7 +234,6 @@ class DBSMigrate:
         Method to insert use requests to MIGRATION_REQUESTS table.
         request keys: migration_url, migration_input
         """
-    
         conn = self.dbi.connection()
         # check if already queued.
         #If the migration_input is the same, but the src url is different,
@@ -299,7 +310,7 @@ class DBSMigrate:
             if conn: conn.close()
     
     def listMigrationRequests(self, migration_request_id="", block_name="",
-                              dataset="", user=""):
+                              dataset="", user="", oldest=False):
         """
         get the status of the migration
         migratee : can be dataset or block_name
@@ -314,10 +325,52 @@ class DBSMigrate:
                 migratee = dataset
             result = self.mgrlist.execute(conn, migration_url="",
                     migration_input=migratee, create_by=user,
-                    migration_request_id=migration_request_id)
+                    migration_request_id=migration_request_id, oldest=oldest)
             return result
+
         finally:
             if conn: conn.close()
+
+    def listMigrationBlocks(self, migration_request_id=""):
+        """
+        get eveything of block that is has status = 0 and migration_request_id as specified.
+        """
+
+        conn = self.dbi.connection()
+        try:
+            return self.mgrblklist.execute(conn, migration_request_id=migration_request_id)
+        finally:
+            if conn: conn.close()
+
+
+    def updateMigrationRequestStatus(self, migration_status, migration_request_id,last_modification_date):
+        """
+        migration_status: 
+        0=PENDING
+        1=IN PROGRESS
+        2=COMPLETED
+        3=FAILED
+        status change: 
+        0 -> 1
+        1 -> 2
+        1 -> 3
+        are only allowed changes.
+
+        """
+
+        conn = self.dbi.connection()
+        try:
+            upst = dict(migration_status=migration_status,
+                        migration_request_id=migration_request_id, 
+                        last_modification_date=last_modification_date)
+            self.mgrRqUp.execute(conn, upst)
+        finally:
+            #open transaction is committed when conn closed.
+            if conn:conn.close()
+
+    ##-- below are the actual migration methods
+
+
 
     def updateMigrationBlockStatus(self, migration_status, migration_block):
         """
@@ -337,7 +390,7 @@ class DBSMigrate:
         conn = self.dbi.connection()
         try:
             upst = dict(migration_status=migration_status, 
-                        migration_block_name=migration_block)
+                        migration_block_id=migration_block)
             self.mgrup.execute(conn, upst)
         finally:
             if conn:conn.close()
@@ -365,7 +418,10 @@ class DBSMigrate:
             #extras
             dataset1 = self.datasetlist.execute(conn,
                                                dataset=block["dataset"], dataset_access_type="")
-            if dataset1: dataset = dataset1[0]
+            if dataset1: 
+                dataset = dataset1[0]
+                dconfig_list = self.outputCoflist.execute(conn,dataset=dataset['dataset'])
+            else: return {}
 
             #get block parentage
             bparent = self.bparentlist.execute(conn, block['block_name'])
@@ -401,7 +457,7 @@ class DBSMigrate:
             result = dict(block=block, dataset=dataset, primds=primds,
                           files=files, block_parent_list=bparent,
                           ds_parent_list=dsparent, file_conf_list=fconfig_list,
-                          file_parent_list=fparent_list)
+                          file_parent_list=fparent_list, dataset_conf_list=dconfig_list)
             if acqEra:
                 result["acquisition_era"] = acqEra
             if prsEra:
@@ -520,4 +576,5 @@ class DBSMigrate:
             dbsExceptionHandler('dbsException-invalid-input2', 'Invalid inputs for\
                 DBSMigrate/getSrcBlocks. Either block or dataset name has to be\
                 provided.')
+        
         return self.callDBSService(resturl)

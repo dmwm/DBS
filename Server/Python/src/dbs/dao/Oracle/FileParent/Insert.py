@@ -23,7 +23,7 @@ class Insert(DBFormatter):
     def execute( self, conn, daoinput, transaction = False ):
         """
         daoinput must be validated to have the following keys:
-        file_parent_id, this_file_id, parent_file_id
+        this_file_id, parent_logical_file_name
         """
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileParent/Insert. Expects db connection from upper layer.")
