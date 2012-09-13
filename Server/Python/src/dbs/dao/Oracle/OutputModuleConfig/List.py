@@ -21,7 +21,7 @@ class List(DBFormatter):
         self.sql1 = \
 	"""
 	SELECT R.RELEASE_VERSION,
-	    P.PSET_HASH, P.NAME
+	    P.PSET_HASH, P.NAME,
 	    A.APP_NAME,
 	    O.OUTPUT_MODULE_LABEL,
             O.GLOBAL_TAG,

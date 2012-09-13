@@ -1,12 +1,10 @@
-import os, sys, socket
-import urllib, urllib2
-import urlparse
-import httplib
-from StringIO import StringIO
-import cjson
-import json
 from dbs.exceptions.dbsClientException import dbsClientException
-from dbs.apis.dbsHTTPSAuthHandler import HTTPSAuthHandler 
+from RestClient.ErrorHandling.RestClientExceptions import HTTPError
+from RestClient.RestApi import RestApi
+from RestClient.AuthHandling.X509Auth import X509Auth
+
+import os, socket
+import cjson
 
 def checkInputParameter(method,parameters,validParameters,requiredParameters=None):
     for parameter in parameters:
@@ -51,16 +49,8 @@ class DbsApi(object):
         self.proxy = proxy
         self.key = key
         self.cert = cert
-        spliturl = urlparse.urlparse(url)
-        callType = spliturl[0]
-        if callType == 'http':
-            self.opener =  urllib2.build_opener()
-        elif callType == 'https':
-            key1, cert1 = self.__getKeyCert()
-            https_handler  = HTTPSAuthHandler(key1, cert1, debug)
-            self.opener = urllib2.build_opener(https_handler)
-        else:
-            raise ValueError, "unknown URL type: %s" % callType
+                
+        self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key))
         
     def __callServer(self, method="", params={}, data={}, callmethod='GET', content='application/json'):
         """
@@ -75,129 +65,42 @@ class DbsApi(object):
         :param content: The type of content the server is expected to return. Usually it is application/json 
         :type content: str
         """
-        UserID=os.environ['USER']+'@'+socket.gethostname()
-        headers =  {"Content-type": content, "Accept": content, "UserID": UserID }
-        res=""
-        try:
-            calling=self.url+method
-            proxies = {}
-            if self.proxy not in (None, ""):
-                proxies = { 'http': self.proxy }
-            
-            if not callmethod in ('POST', 'PUT'):
-                if params == {}:
-                    req = urllib2.Request(url=calling, headers = headers)
-                else:
-                    parameters = urllib.urlencode(params)
-                    req = urllib2.Request(url=calling+'?'+parameters, headers = headers)
-            else:
-                data = cjson.encode(data)
-                headers['Content-length'] = str(len(data))
-                if params == {}:
-                    req = urllib2.Request(url=calling, data=data, headers = headers)
-                elif data == {}:
-                    parameters = urllib.urlencode(params)
-                    req = urllib2.Request(url=calling+'?'+parameters, headers = headers)
-                else:
-                    parameters = urllib.urlencode(params)
-                    req = urllib2.Request(url=calling+'?'+parameters, data=data, headers = headers)
-                req.get_method = lambda: callmethod
-                
-            return_data = self.opener.open(req)
-            
-            self.return_info = return_data.info() 
+        UserID = os.environ['USER']+'@'+socket.gethostname()
+        request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID }
 
-            res = return_data.read()
-            return_data.close()
-            
-        except urllib2.HTTPError, httperror:
-            self.__parseForException(httperror)
-        except urllib2.URLError, urlerror:
-            raise urlerror
-        except Exception, e:
-            raise e
+        method_func = getattr(self.rest_api, callmethod.lower())
+
+        data = cjson.encode(data)
         
-        #FIXME: We will always return JSON from DBS, even from POST, PUT, DELETE APIs, make life easy here
-        if content!="application/json":
-            return res
         try:
-            json_ret=json.loads(res)
-        except Exception, e:
-            raise e
+            self.http_response = method_func(self.url, method, params, data, request_headers)
+        except HTTPError as http_error:
+            self.__parseForException(http_error)
+                
+        if content!="application/json":
+            return self.http_response.body
+        
+        json_ret=cjson.decode(self.http_response.body)
             
         return json_ret
     
-    def __parseForException(self, httperror):
+    def __parseForException(self, http_error):
         """
         An internal method, should not be used by clients
 
         :param httperror: Throwns httperror by the server
-        
         """
-        data = httperror.read()
+        data = http_error.body
         try:
-            if type(data)==type("abc"):
-                data=json.loads(data)
-        except ValueError as ve:
-            raise httperror
+            if isinstance(data,str):
+                data=cjson.decode(data)
+        except:
+            raise http_error
             
-        if type(data) == type({}) and data.has_key('exception'):# re-raise more details with more details
-            raise urllib2.HTTPError(httperror.geturl(),data['exception'],data['message'],httperror.headers,httperror.fp)
+        if isinstance(data, dict) and data.has_key('exception'):# re-raise with more details
+            raise HTTPError(http_error.url, data['exception'], data['message'], http_error.header, http_error.body)
         
-        raise httperror
-
-    def __getKeyCert(self):
-        """
-        Get the user credentials if they exist, otherwise throw an exception.
-        
-        This code was modified from DBSAPI/dbsHttpService.py and WMCore/Services/Requests.py
-
-        """
-        # Zeroth case is if the class has over ridden the key/cert and has it
-        # stored in self
-        if getattr(self, 'cert', None) and getattr(self, 'key', None):
-            key = self.key
-            cert = self.cert
-
-        # Now we're trying to guess what the right cert/key combo is...
-        # First preference to HOST Certificate, This is how it set in Tier0
-        elif os.environ.has_key('X509_HOST_CERT'):
-            cert = os.environ['X509_HOST_CERT']
-            key = os.environ['X509_HOST_KEY']
-            
-        # Second preference to User Proxy, very common
-        elif (os.environ.has_key('X509_USER_PROXY')) and \
-                (os.path.exists( os.environ['X509_USER_PROXY'])):
-            cert = os.environ['X509_USER_PROXY']
-            key = cert
-
-        # Third preference to User Cert/Proxy combinition
-        elif os.environ.has_key('X509_USER_CERT'):
-            cert = os.environ['X509_USER_CERT']
-            key = os.environ['X509_USER_KEY']
-
-        # TODO: only in linux, unix case, add other os case
-        # look for proxy at default location /tmp/x509up_u$uid
-        elif os.path.exists('/tmp/x509up_u'+str(os.getuid())):
-            cert = '/tmp/x509up_u'+str(os.getuid())
-            key = cert
-
-        elif sys.stdin.isatty():
-            if os.path.exists(os.environ['HOME'] + '/.globus/usercert.pem'):
-                cert = os.environ['HOME'] + '/.globus/usercert.pem'
-                if os.path.exists(os.environ['HOME'] + '/.globus/userkey.pem'):
-                    key = os.environ['HOME'] + '/.globus/userkey.pem'
-                else:
-                    key = cert
-                    
-        else:
-            raise dbsClientException("auth-error","No valid X509 cert-key-pair found.")
-
-        #Set but not found
-        if  os.path.isfile(key) and  os.path.isfile(cert):
-            return key, cert
-        else:
-            raise ValueError, "key or cert file does not exist: %s, %s" % (key,cert)
+        raise http_error
 
     @property
     def requestTimingInfo(self):
@@ -206,7 +109,7 @@ class DbsApi(object):
         and the EPOC timestamp of the request in microseconds. 
         """
         try:
-            return tuple(item.split('=')[1] for item in self.return_info.getheader('CMS-Server-Time').split())
+            return tuple(item.split('=')[1] for item in self.http_response.header.get('CMS-Server-Time').split())
         except AttributeError:
             return None, None
         
@@ -216,7 +119,7 @@ class DbsApi(object):
         Returns the content-length of the content return by the server
         """
         try:
-            return self.return_info.getheader('Content-Length')
+            return self.http_response.header.get('Content-Length')
         except AttributeError:
             return None
      
@@ -234,7 +137,7 @@ class DbsApi(object):
 
         checkInputParameter(method="blockDump",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
 
-        return self.__callServer("/blockdump",params=kwargs)
+        return self.__callServer("blockdump",params=kwargs)
 
     def help(self,**kwargs):
         """
@@ -248,7 +151,7 @@ class DbsApi(object):
 
         checkInputParameter(method="help",parameters=kwargs.keys(),validParameters=validParameters)
 
-        return self.__callServer("/help",params=kwargs)
+        return self.__callServer("help",params=kwargs)
 
     def insertAcquisitionEra(self, acqEraObj={}):
         """
@@ -351,7 +254,7 @@ class DbsApi(object):
         :key primary_ds_name: Name of the primary dataset (Required)
         
         """
-        return self.__callServer("/primarydatasets", data = primaryDSObj, callmethod='POST' )
+        return self.__callServer("primarydatasets", data = primaryDSObj, callmethod='POST' )
 
     def insertProcessingEra(self, procEraObj={}):
         """
@@ -381,7 +284,7 @@ class DbsApi(object):
         """
         validParameters = ['acquisition_era_name']
         checkInputParameter(method="listAcquisitionEras",parameters=kwargs.keys(),validParameters=validParameters)
-        return self.__callServer("/acquisitioneras",params=kwargs)
+        return self.__callServer("acquisitioneras",params=kwargs)
 
 
     def listAcquisitionEras_ci(self, **kwargs):
@@ -396,7 +299,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listAcquisitionEras",parameters=kwargs.keys(),validParameters=validParameters)
         
-        return self.__callServer("/acquisitioneras_ci",params=kwargs)
+        return self.__callServer("acquisitioneras_ci",params=kwargs)
 
     def listBlockChildren(self, **kwargs):
         """
@@ -412,7 +315,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listBlockChildren",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
         
-        return self.__callServer("/blockchildren",params=kwargs)
+        return self.__callServer("blockchildren",params=kwargs)
 
     def listBlockParents(self, **kwargs):
         """
@@ -428,7 +331,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listBlockParents",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
 
-        return self.__callServer("/blockparents",params=kwargs)
+        return self.__callServer("blockparents",params=kwargs)
     
     def listBlocks(self, **kwargs):
         """
@@ -459,7 +362,7 @@ class DbsApi(object):
             
         checkInputParameter(method="listBlocks",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
 
-        return self.__callServer("/blocks",params=kwargs)
+        return self.__callServer("blocks",params=kwargs)
 
     def listDatasets(self, **kwargs):
         """
@@ -508,7 +411,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listDatasets",parameters=kwargs.keys(),validParameters=validParameters)
         
-        return self.__callServer("/datasets",params=kwargs)
+        return self.__callServer("datasets",params=kwargs)
 
     def listDatasetAccessTypes(self, **kwargs):
         """
@@ -522,7 +425,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listDatasetAccessTypes",parameters=kwargs.keys(),validParameters=validParameters)
 
-        return self.__callServer("/datasetaccesstypes",params=kwargs)
+        return self.__callServer("datasetaccesstypes",params=kwargs)
 
     def listDatasetArray(self, **kwargs):
         """
@@ -560,7 +463,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listDatasetChildren",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
 
-        return self.__callServer("/datasetchildren",params=kwargs)
+        return self.__callServer("datasetchildren",params=kwargs)
     
     def listDatasetParents(self, **kwargs):
         """
@@ -575,7 +478,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listDatasetParents",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
         
-        return self.__callServer("/datasetparents",params=kwargs)
+        return self.__callServer("datasetparents",params=kwargs)
 
     def listDataTiers(self, **kwargs):
         """
@@ -589,7 +492,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listDataTiers",parameters=kwargs.keys(),validParameters=validParameters)
 
-        return self.__callServer("/datatiers",params=kwargs)
+        return self.__callServer("datatiers",params=kwargs)
 
     def listDataTypes(self, **kwargs):
         """
@@ -603,7 +506,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listDataTypes",parameters=kwargs.keys(),validParameters=validParameters)
 
-        return self.__callServer("/datatypes",params=kwargs)
+        return self.__callServer("datatypes",params=kwargs)
     
     def listFileChildren(self, **kwargs):
         """
@@ -619,7 +522,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listFileChildren",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
         
-        return self.__callServer("/filechildren",params=kwargs)
+        return self.__callServer("filechildren",params=kwargs)
 
     def listFileLumis(self, **kwargs):
         """
@@ -635,7 +538,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listFileLumis",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
                 
-        return self.__callServer("/filelumis",params=kwargs)
+        return self.__callServer("filelumis",params=kwargs)
 
     def listFileParents(self, **kwargs):
         """
@@ -651,7 +554,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listFileParents",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
 
-        return self.__callServer("/fileparents",params=kwargs)
+        return self.__callServer("fileparents",params=kwargs)
 
     def listFiles(self, **kwargs):
         """
@@ -692,7 +595,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listFiles",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
         
-        return self.__callServer("/files",params=kwargs)
+        return self.__callServer("files",params=kwargs)
         
     def listFileSummaries(self, **kwargs):
         """
@@ -710,7 +613,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listFileSummaries",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
         
-        return self.__callServer("/filesummaries",params=kwargs)
+        return self.__callServer("filesummaries",params=kwargs)
 
     def listOutputConfigs(self, **kwargs):
         """
@@ -739,7 +642,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listOutputConfigs",parameters=kwargs.keys(),validParameters=validParameters)
         
-        return self.__callServer("/outputconfigs",params=kwargs)
+        return self.__callServer("outputconfigs",params=kwargs)
 
     def listPhysicsGroups(self, **kwargs):
         """
@@ -753,7 +656,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listPhysicsGroups",parameters=kwargs.keys(),validParameters=validParameters)
         
-        return self.__callServer("/physicsgroups",params=kwargs)
+        return self.__callServer("physicsgroups",params=kwargs)
 
     def listPrimaryDatasets(self, **kwargs):
         """
@@ -767,7 +670,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listPrimaryDatasets",parameters=kwargs.keys(),validParameters=validParameters)
         
-        return self.__callServer("/primarydatasets",params=kwargs)
+        return self.__callServer("primarydatasets",params=kwargs)
 
     def listPrimaryDSTypes(self,**kwargs):
         """
@@ -783,7 +686,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listPrimaryDSTypes",parameters=kwargs.keys(),validParameters=validParameters)
 
-        return self.__callServer("/primarydstypes",params=kwargs)
+        return self.__callServer("primarydstypes",params=kwargs)
 
     def listProcessingEras(self, **kwargs):
         """
@@ -797,7 +700,7 @@ class DbsApi(object):
         requiredParameters={'forced':validParameters}
         checkInputParameter(method="listProcessingEras",parameters=kwargs.keys(),validParameters=validParameters,
                                     requiredParameters=requiredParameters)
-        return self.__callServer("/processingeras",params=kwargs)
+        return self.__callServer("processingeras",params=kwargs)
 
     def listReleaseVersions(self, **kwargs):
         """
@@ -813,7 +716,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listReleaseVersions",parameters=kwargs.keys(),validParameters=validParameters)
 
-        return self.__callServer("/releaseversions",params=kwargs)
+        return self.__callServer("releaseversions",params=kwargs)
 
     def listRuns(self, **kwargs):
         """
@@ -833,7 +736,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listRuns",parameters=kwargs.keys(),validParameters=validParameters)
         
-        return self.__callServer("/runs",params=kwargs)
+        return self.__callServer("runs",params=kwargs)
 
     def migrateSubmit(self, inp):
         """
@@ -886,7 +789,7 @@ class DbsApi(object):
         * can be used as PING
 
         """
-        return self.__callServer("/serverinfo")
+        return self.__callServer("serverinfo")
   
     def updateBlockStatus(self, **kwargs):
         """
@@ -958,7 +861,7 @@ class DbsApi(object):
 
         checkInputParameter(method="updateFileStatus",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
         
-        return self.__callServer("/files", params=kwargs, callmethod='PUT')
+        return self.__callServer("files", params=kwargs, callmethod='PUT')
     
 if __name__ == "__main__":
     # DBS Service URL

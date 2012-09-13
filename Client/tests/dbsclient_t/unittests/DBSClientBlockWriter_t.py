@@ -7,11 +7,7 @@ import uuid
 import unittest
 from dbs.apis.dbsClient import *
 from ctypes import *
-    
-url=os.environ['DBS_WRITER_URL']     
-#url="http://cmssrv18.fnal.gov:8585/dbs3"
-api = DbsApi(url=url)
-print url
+import json
 
 def importCode(code,name,add_to_sys_modules=0):
     module = imp.new_module(name)
@@ -20,64 +16,65 @@ def importCode(code,name,add_to_sys_modules=0):
         sys.modules[name] = module
     return module
 
-uid = uuid.uuid4().time_mid
-print "****uid=%s******" %uid
-
 class DBSClientBlockWriter_t(unittest.TestCase):
+    def __init__(self, methodName='runTest'):
+        super(DBSClientBlockWriter_t, self).__init__(methodName)
+        self.setUpClass()
+        url=os.environ['DBS_WRITER_URL']
+        self.api = DbsApi(url=url)
 
+    @classmethod
+    def setUpClass(cls):
+        """Class method to set-up the class"""
+        ### necessary since one instance per test case is created and pid and testparams need to be shared between instances
+        infofile=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'blockdump.dict'),"r")
+        cls.testparams=importCode(infofile, "testparams", 0).blockDump
+        cls.uid = uuid.uuid4().time_mid
+        print "****uid=%s******" % cls.uid
+               
     def setUp(self):
         """setup all necessary parameters"""
-	
+      	
     def test1000(self):
 	"""test1000 web.DBSClientWriter.insertBlockBulk: basic test"""
-        testparams['dataset_conf_list'][0]['app_name'] = "%s_%s"%(testparams['dataset_conf_list'][0]['app_name'], uid)
-        for i in range(len(testparams['file_conf_list'])):
-            testparams['file_conf_list'][i]['app_name'] = "%s_%s"%(testparams['file_conf_list'][i]['app_name'], uid)
-            testparams['file_conf_list'][i]['lfn'] = testparams['file_conf_list'][i]['lfn'].replace('.root','_%s.root' %(uid))
+        self.testparams['dataset_conf_list'][0]['app_name'] = "%s_%s"%(self.testparams['dataset_conf_list'][0]['app_name'], self.uid)
+        for i in range(len(self.testparams['file_conf_list'])):
+            self.testparams['file_conf_list'][i]['app_name'] = "%s_%s"%(self.testparams['file_conf_list'][i]['app_name'], self.uid)
+            self.testparams['file_conf_list'][i]['lfn'] = self.testparams['file_conf_list'][i]['lfn'].replace('.root','_%s.root' %(self.uid))
 
-        for k in range(len(testparams['files'])):
-             testparams['files'][k]['logical_file_name'] = testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (uid))
+        for k in range(len(self.testparams['files'])):
+             self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (self.uid))
              
-        testparams['primds']['primary_ds_name'] ='%s_%s' %(testparams['primds']['primary_ds_name'], uid)
+        self.testparams['primds']['primary_ds_name'] ='%s_%s' %(self.testparams['primds']['primary_ds_name'], self.uid)
 
-        testparams['dataset']['dataset'] = '%s_%s' %(testparams['dataset']['dataset'],uid)
+        self.testparams['dataset']['dataset'] = '%s_%s' %(self.testparams['dataset']['dataset'],self.uid)
 
-        testparams['block']['block_name'] = '%s_%s' %(testparams['block']['block_name'],uid)
+        self.testparams['block']['block_name'] = '%s_%s' %(self.testparams['block']['block_name'],self.uid)
         
         #We hard coded the parent_logical_fil_name in the dict file for testing on lum db. It may not
         #fit to ask dbs. One have to change it before run the test for other dbs.
-        #for  k in range(len(testparams['file_parent_list'])):
-        #    testparams['file_parent_list'][k]['logical_file_name'] = "%s_%s" %(testparams['file_parent_list'][k]['logical_file_name'],uid)
+        #for  k in range(len(self.testparams['file_parent_list'])):
+        #    self.testparams['file_parent_list'][k]['logical_file_name'] = "%s_%s" %(self.testparams['file_parent_list'][k]['logical_file_name'],self.uid)
 
-        #print  testparams
-	api.insertBulkBlock(blockDump=testparams)
+	self.api.insertBulkBlock(blockDump=self.testparams)
         print "Done inserting parent files"
+        
     def test1001(self):
 	# insert chidren with parentage: the privious inserted files are the parents
-        testparams['file_parent_list'] = []
-        for k in range(len(testparams['files'])):
-            testparams['file_parent_list'].append({'logical_file_name': testparams['files'][k]['logical_file_name'].replace('.root','_child.root'), 
-                                             'parent_logical_file_name': testparams['files'][k]['logical_file_name']})
-            testparams['files'][k]['logical_file_name'] = testparams['files'][k]['logical_file_name'].replace('.root','_child.root') 
-        testparams['dataset']['dataset'] = '%s_%s' %(testparams['dataset']['dataset'],'chd')
-        testparams['block']['block_name'] = '%s_%s' %(testparams['block']['block_name'],'chd')
+        self.testparams['file_parent_list'] = []
+        for k in range(len(self.testparams['files'])):
+            self.testparams['file_parent_list'].append({'logical_file_name': self.testparams['files'][k]['logical_file_name'].replace('.root','_child.root'), 
+                                             'parent_logical_file_name': self.testparams['files'][k]['logical_file_name']})
+            self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root','_child.root') 
+        self.testparams['dataset']['dataset'] = '%s_%s' %(self.testparams['dataset']['dataset'],'chd')
+        self.testparams['block']['block_name'] = '%s_%s' %(self.testparams['block']['block_name'],'chd')
 
-        for i in range(len(testparams['file_conf_list'])):
-            testparams['file_conf_list'][i]['lfn'] =  testparams['file_conf_list'][i]['lfn'].replace('.root','_child.root')
-
-
-
-        api.insertBulkBlock(blockDump=testparams)
+        for i in range(len(self.testparams['file_conf_list'])):
+            self.testparams['file_conf_list'][i]['lfn'] =  self.testparams['file_conf_list'][i]['lfn'].replace('.root','_child.root')
+        
+        self.api.insertBulkBlock(blockDump=self.testparams)
         print "Done inserting child files"
-
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientBlockWriter_t)
-    infofile=open("blockdump.dict","r")
-    testparams=importCode(infofile, "testparams", 0).blockDump
-
     unittest.TextTestRunner(verbosity=2).run(SUITE)
-else:
-    testparams={}
-
-

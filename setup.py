@@ -66,6 +66,16 @@ systems = \
                   'dbs.dao.Oracle.StorageElement',
                   'dbs.utils'
                ]
+  },
+
+  'PycurlClient':
+  {
+    'srcdir': 'PycurlClient/src/python',
+    'pythonmods': ['RestClient.__init__',
+                   'RestClient.RestApi'],
+    'pythonpkg': ['RestClient.AuthHandling',
+                  'RestClient.ErrorHandling',
+                  'RestClient.RequestHandling']
   }
 }
 
@@ -97,7 +107,7 @@ class BuildCommand(Command):
   """Build python modules for a specific system."""
   description = \
     "Build python modules for the specified system. Possible\n" + \
-    "\t\t   systems are 'Server' or 'Client'.\n" + \
+    "\t\t   systems are 'Server', 'Client' or 'PycurlClient'.\n" + \
     "Use with --force to\n" + \
     "\t\t   ensure a clean build of only the requested parts.\n"
   user_options = build.user_options
@@ -109,10 +119,10 @@ class BuildCommand(Command):
   def finalize_options(self):
     # Check options.
     if self.system == None:
-      print "System not specified, please use '-s Server' or '-s Client'"
+      print "System not specified, please use '-s Server', '-s Client', or '-s PycurlClient'"
       sys.exit(1)
     elif self.system not in systems:
-      print "System %s unrecognised, please use '-s Server' or '-s Client'" % self.system
+      print "System %s unrecognised, please use '-s Server', '-s Client' or '-s PycurlClient'" % self.system
       sys.exit(1)
 
     # Expand various sources and maybe do the c++ build.
@@ -142,7 +152,7 @@ class BuildCommand(Command):
 class InstallCommand(install):
   """Install a specific system."""
   description = \
-    "Install a specific system, either 'Server' or 'Client'. You can\n" + \
+    "Install a specific system, either 'Server', 'Client' or 'PycurlClient'. You can\n" + \
     "\t\t   patch an existing installation instead of normal full installation\n" + \
     "\t\t   using the '-p' option.\n"
   user_options = install.user_options
@@ -157,10 +167,10 @@ class InstallCommand(install):
   def finalize_options(self):
     # Check options.
     if self.system == None:
-      print "System not specified, please use '-s Server' or 'Client'"
+      print "System not specified, please use '-s Server', 'Client' or 'PycurlClient'"
       sys.exit(1)
     elif self.system not in systems:
-      print "System %s unrecognised, please use '-s Server' or 'Client'" % self.system
+      print "System %s unrecognised, please use '-s Server', 'Client' or 'PycurlClient'" % self.system
       sys.exit(1)
     if self.patch and not os.path.isdir("%s/xbin" % self.prefix):
       print "Patch destination %s does not look like a valid location." % self.prefix

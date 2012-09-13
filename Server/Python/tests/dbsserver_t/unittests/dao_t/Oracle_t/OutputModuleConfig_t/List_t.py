@@ -40,21 +40,33 @@ class List_t(unittest.TestCase):
     def test02(self):
         """dao.Oracle.OutputModuleConfig.List: Basic"""
         result = self.dao.execute(self.conn, release_version = self.data[0]['release_version'])
+        self.data[0]['name'] = self.data[0].get('name', result[0]['name'])
+        self.data[0]['create_by'] = self.data[0].get('create_by', result[0]['create_by'])
+        self.data[0]['creation_date'] = self.data[0].get('creation_date', result[0]['creation_date'])
         self.assertEqual(strip_volatile_fields(result), self.data)
 
     def test05(self):
         """dao.Oracle.OutputModuleConfig.List: Basic"""
         result = self.dao.execute(self.conn, pset_hash = self.data[0]['pset_hash'])
+        self.data[0]['name'] = self.data[0].get('name', result[0]['name'])
+        self.data[0]['create_by'] = self.data[0].get('create_by', result[0]['create_by'])
+        self.data[0]['creation_date'] = self.data[0].get('creation_date', result[0]['creation_date'])
         self.assertEqual(strip_volatile_fields(result), self.data)
         
     def test06(self):
         """dao.Oracle.OutputModuleConfig.List: Basic"""
         result = self.dao.execute(self.conn, app = self.data[0]['app_name'])
+        self.data[0]['name'] = self.data[0].get('name', result[0]['name'])
+        self.data[0]['create_by'] = self.data[0].get('create_by', result[0]['create_by'])
+        self.data[0]['creation_date'] = self.data[0].get('creation_date', result[0]['creation_date'])
         self.assertTrue(self.data[0] in strip_volatile_fields(result))
         
     def test07(self):
         """dao.Oracle.OutputModuleConfig.List: Basic"""
         result = self.dao.execute(self.conn, output_label = self.data[0]['output_module_label'])
+        self.data[0]['name'] = self.data[0].get('name', result[0]['name'])
+        self.data[0]['create_by'] = self.data[0].get('create_by', result[0]['create_by'])
+        self.data[0]['creation_date'] = self.data[0].get('creation_date', result[0]['creation_date'])
         self.assertEqual(strip_volatile_fields(result), self.data)
         
     def test08(self):

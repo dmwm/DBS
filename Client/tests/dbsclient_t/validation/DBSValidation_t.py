@@ -33,7 +33,6 @@ block="%s#%s" % (dataset, uid)
 flist=[]
 
 class DBSValitaion_t(unittest.TestCase):
-
     def setUp(self):
         """setup all necessary parameters"""
 

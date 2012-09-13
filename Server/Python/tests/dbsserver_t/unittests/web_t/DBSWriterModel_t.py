@@ -690,7 +690,7 @@ class DBSWriterModel_t(unittest.TestCase):
         processing_dict = {u'processing_version': processing_version,
                            u'description':'this-is-a-test'}
 
-        acquisition_dict = {u'acquisition_era_name': acquisition_era_name}
+        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
 
         primary_dict = {u'primary_ds_name':bulk_primary_ds_name,
                         u'primary_ds_type':primary_ds_type}

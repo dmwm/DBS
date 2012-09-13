@@ -60,7 +60,6 @@ outDict={
 }
 
 class DBSClientWriter_t(unittest.TestCase):
-
     def setUp(self):
         """setup all necessary parameters"""
 
@@ -278,7 +277,7 @@ class DBSClientWriter_t(unittest.TestCase):
 	
     def test208(self):
 	"""test208 generating the output file for reader test"""
-	infoout=open("info.dict", "w")
+	infoout=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"info.dict"), "w")
 	infoout.write("info="+str(outDict))
 	infoout.close()
 

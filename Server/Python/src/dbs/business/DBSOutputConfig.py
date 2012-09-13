@@ -73,6 +73,7 @@ class DBSOutputConfig:
         try:
             # Proceed with o/p module insertion
             businput['scenario'] = businput.get("scenario", None)
+            businput['pname'] = businput.get("pname", None)
             self.outmodin.execute(conn, businput, tran)
             tran.commit()
             tran = None
