@@ -55,9 +55,9 @@ from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from dbs.business.DBSMigrate import DBSMigrate  
 from dbs.business.DBSBlockInsert import DBSBlockInsert
 from WMCore.Configuration import *
-import urllib, urllib2
+#import urllib, urllib2
 from cherrypy import HTTPError
-
+import json, cjson
 class SequencialTaskBase(object):
     
     def __init__(self, *args, **kwargs):
@@ -155,29 +155,32 @@ class MigrationTask(SequencialTaskBase):
             for b in blocks:
                 self.block_names.append(b['migration_block_name'])
                 self.migration_block_ids.append(b['migration_block_id'])
-            print "-"*20
+            print "-"*20, "block_names " 
             print self.block_names
-            #print "-"*20
-            #print self.migration_block_ids
-        except Exception, ex:
+            if not self.block_names : 
+                logmessage="No migration blocks found under the migration request id %s." %(self.migration_req_id )+ \
+                           "It could be the blocks in a wrong status due to privious error. Please check it."
+                #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
+                self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id,
+                                                dbsUtils().getTime())
+                #raise HTTPError 409
+                dbsExceptionHandler("dbsException-conflict-data", "No migration blocks found", self.logger.error, logmessage)
+            else:
+                #print "-"*20
+                #print self.migration_block_ids
+                #Update MIGRATION_STATUS for all the MIGRATION_BLOCK_IDs in the self.migration_block_id list
+                #in MIGRATION_BLOCKS table to 1 (in progress)
+                #set MIGRATION_STATUS = 1 and commit it immediately
+                self.dbsMigrate.updateMigrationBlockStatus(migration_status=1, migration_block=self.migration_block_ids)
+        except HTTPError, her:
             self.sourceUrl = None
-            self.logger.error(str(ex))
-
-        #Update MIGRATION_STATUS for all the MIGRATION_BLOCK_IDs in the self.migration_block_id list 
-        #in MIGRATION_BLOCKS table to 1 (in progress) 
-        try:
-            #set MIGRATION_STATUS = 1 and commit it immediately
-            #
-            self.dbsMigrate.updateMigrationBlockStatus(migration_status=1, migration_block=self.migration_block_ids) 
+            #print str(her)
+            raise her
         except Exception, ex:
             self.sourceUrl = None
             self.logger.error(str(ex))
             #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
-            self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id,
-                                                         dbsUtils().getTime())
-
-
-
+            self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id,dbsUtils().getTime())
     def insertBlock(self):
         print "_"*20, "insertBlock"
         self.inserted = True
@@ -186,9 +189,11 @@ class MigrationTask(SequencialTaskBase):
                 for bName in self.block_names:
                     #print "-"*20, "working on getting data from source"
                     #print "-"*20, bName
-                    blockname = bName.replace("#",urllib.quote_plus('#'))
-                    resturl = "%s/blockdump?block_name=%s" % (self.sourceUrl, blockname)
-                    data = self.dbsMigrate.callDBSService(resturl)
+                    #blockname = bName.replace("#",urllib.quote_plus('#'))
+                    #resturl = "%s/blockdump?block_name=%s" % (self.sourceUrl, blockname)
+                    params={'block_name':bName}
+                    data = self.dbsMigrate.callDBSService(self.sourceUrl, 'blockdump', params)
+                    data = cjson.decode(data)
                     #print data
                     #print "-"*20, "working on inserting data into destination"
                     idx = self.block_names.index(bName)
@@ -216,6 +221,9 @@ class MigrationTask(SequencialTaskBase):
                                                              dbsUtils().getTime())
             except Exception, ex:
                 self.inserted = False
+                #handle dbsException
+                if ex.message or ex.serverError:
+                    self.logger.error(ex.message + ex.serverError)
                 self.logger.error(str(ex))
                 #self.logger.error(ex.message)
                 self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id,

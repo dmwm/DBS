@@ -18,7 +18,11 @@ import httplib
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
-from dbs.utils.dbsHTTPSAuthHandler import HTTPSAuthHandler
+#from dbs.utils.dbsHTTPSAuthHandler import HTTPSAuthHandler
+from RestClient.ErrorHandling.RestClientExceptions import HTTPError
+from RestClient.RestApi import RestApi
+from RestClient.AuthHandling.X509Auth import X509Auth
+
 from sqlalchemy import exceptions
 
 def pprint(a):
@@ -181,8 +185,6 @@ class DBSMigrate:
     def getParentBlocksOrderedList(self, url, conn, block_name, order_counter):
         ordered_dict = {}
         #3.
-        #import pdb
-        #pdb.set_trace()
         parentBlocksInSrc = self.getSrcBlockParents(url, block_name)
         parentBlocksInSrcNames = [ y['parent_block_name'] 
                                         for y in parentBlocksInSrc ]
@@ -467,29 +469,26 @@ class DBSMigrate:
             if conn:
                 conn.close()
         
-    def callDBSService(self, resturl):
+    def callDBSService(self, resturl, method='', params={}, data={}):
         try:
             spliturl = urlparse.urlparse(resturl)
             callType = spliturl[0]
-            if callType == 'http':
-                opener =  urllib2.build_opener()
-            elif callType == 'https':
-                key1, cert1 = self.__getKeyCert()
-                debug=0
-                https_handler  = HTTPSAuthHandler(key1, cert1, debug)
-                opener = urllib2.build_opener(https_handler)
-            else:
+            if callType != 'http' and callType != 'https':
                 raise ValueError, "unknown URL type: %s" % callType
-        
-            req = urllib2.Request(url = resturl)
-            data = opener.open(req)
-            ddata = cjson.decode(data.read())
-            data.close()
-            return ddata
+            restapi = RestApi(auth=X509Auth(ca_path="/etc/grid-security/certificates"))
+            content = "application/json"
+            UserID = os.environ['USER']+'@'+socket.gethostname()
+            request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID }
+            #params = {'block_name':blockname}
+            data = cjson.encode(data)
+            httpresponse = restapi.get(resturl, method, params, data, request_headers)
+            return httpresponse.body 
         except urllib2.HTTPError, httperror:
             raise httperror
         except urllib2.URLError, urlerror:
             raise urlerror
+        except HTTPError, DBShttp_error:
+            raise DBShttp_error
         except Exception, e:
             raise e
    
@@ -550,16 +549,18 @@ class DBSMigrate:
         """
         List block at src DBS
         """
-        resturl = "%s/datasetparents?dataset=%s" % (url, dataset)
-        return self.callDBSService(resturl)
+        #resturl = "%s/datasetparents?dataset=%s" % (url, dataset)
+        params={'dataset':dataset}
+        return cjson.decode(self.callDBSService(url, 'datasetparents', params,{}))
     
     def getSrcBlockParents(self, url, block):
         """
         List block at src DBS
         """
-        blockname = block.replace("#", urllib.quote_plus('#'))
-        resturl = "%s/blockparents?block_name=%s" % (url, blockname)
-        return self.callDBSService(resturl)
+        #blockname = block.replace("#", urllib.quote_plus('#'))
+        #resturl = "%s/blockparents?block_name=%s" % (url, blockname)
+        params={'block_name':block}
+        return cjson.decode(self.callDBSService(url, 'blockparents', params, {}))
     
     def getSrcBlocks(self, url, dataset="", block=""):
         """
@@ -568,13 +569,15 @@ class DBSMigrate:
         Client type call...
         """
         if block:
-            blockname = block.replace("#", urllib.quote_plus('#'))
-            resturl = "%s/blocks?block_name=%s" % (url, blockname)
+            #blockname = block.replace("#", urllib.quote_plus('#'))
+            #resturl = "%s/blocks?block_name=%s" % (url, blockname)
+            params={'block_name':block}
         elif dataset:
-            resturl = "%s/blocks?dataset=%s" % (url, dataset)
+            params={'dataset':dataset}
+            #resturl = "%s/blocks?dataset=%s" % (url, dataset)
         else:
             dbsExceptionHandler('dbsException-invalid-input2', 'Invalid inputs for\
                 DBSMigrate/getSrcBlocks. Either block or dataset name has to be\
                 provided.')
         
-        return self.callDBSService(resturl)
+        return cjson.decode(self.callDBSService(url, 'blocks', params, {}))

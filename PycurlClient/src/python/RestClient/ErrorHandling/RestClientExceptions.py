@@ -19,7 +19,7 @@ class HTTPError(Exception):
         super(HTTPError, self).__init__(self, "HTTPError %d" % self.code)
 
     def __repr__(self):
-        return ('%s %r' % self.__class__.__name__, self.code)
+        return ('%s %r' % (self.__class__.__name__, self.code))
 
     def __str__(self):
         return ('HTTP Error %d: %s' % (self.code, self.msg))
