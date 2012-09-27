@@ -2,6 +2,7 @@ from dbs.exceptions.dbsClientException import dbsClientException
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from RestClient.RestApi import RestApi
 from RestClient.AuthHandling.X509Auth import X509Auth
+from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
 
 import os, socket
 import cjson
@@ -35,13 +36,13 @@ def checkInputParameter(method,parameters,validParameters,requiredParameters=Non
                 raise dbsClientException("Invalid input", "API %s does requires only *one* of the parameters %s." % (method, requiredParameters['standalone']))
                         
 class DbsApi(object):
-    def __init__(self, url="", proxy="", key=None, cert=None, debug=0):
+    def __init__(self, url="", proxy=None, key=None, cert=None, debug=0):
         """
         DbsApi CTOR
         
         :param url: server URL.
         :type url: str
-        :param proxy: http proxy. This feature is TURNED OFF at the moment
+        :param proxy: socks5 proxy format=(socks5://username:password@host:port)
         :type proxy: str
 
         """
@@ -50,7 +51,8 @@ class DbsApi(object):
         self.key = key
         self.cert = cert
                 
-        self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key))
+        self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key),
+                                proxy=Socks5Proxy(proxy_url=self.proxy) if self.proxy else None)
         
     def __callServer(self, method="", params={}, data={}, callmethod='GET', content='application/json'):
         """

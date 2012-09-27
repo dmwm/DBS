@@ -3,11 +3,13 @@ from RestClient.RequestHandling.HTTPRequest import HTTPRequest
 import pycurl
 
 class RestApi(object):
-    def __init__(self, auth=None):
+    def __init__(self, auth=None, proxy=None):
         self._curl = pycurl.Curl()
 
         if auth:
             auth.configure_auth(self._curl)
+        if proxy:
+            proxy.configure_proxy(self._curl)
 
     def __del__(self):
         self._curl.close()
