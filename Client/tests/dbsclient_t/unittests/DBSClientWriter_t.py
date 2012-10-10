@@ -16,9 +16,7 @@ from ctypes import *
 uid = uuid.uuid4().time_mid
 print "****uid=%s******" %uid
 
-url=os.environ['DBS_WRITER_URL']     
-#url="http://cmssrv18.fnal.gov:8585/dbs3"
-api = DbsApi(url=url)
+print os.environ['DBS_WRITER_URL']     
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 processing_version="%s" %(uid if (uid<9999) else uid%9999)
 acquisition_era_name="acq_era_%s" %uid
@@ -60,6 +58,15 @@ outDict={
 }
 
 class DBSClientWriter_t(unittest.TestCase):
+
+    def __init__(self, methodName='runTest'):
+        super(DBSClientWriter_t, self).__init__(methodName)
+        url=os.environ['DBS_WRITER_URL']
+        #print url
+        #proxy="socks5://localhost:5678"
+        proxy=os.environ['SOCKS5_PROXY']
+        self.api = DbsApi(url=url, proxy=proxy)
+
     def setUp(self):
         """setup all necessary parameters"""
 
@@ -67,35 +74,35 @@ class DBSClientWriter_t(unittest.TestCase):
         """test01: web.DBSClientWriter.insertPrimaryDataset: basic test"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'test'}
-        api.insertPrimaryDataset(primaryDSObj=data)
+        self.api.insertPrimaryDataset(primaryDSObj=data)
 
     def test02(self):
         """test02: web.DBSClientWriter.insertPrimaryDataset: duplicate should not riase an exception"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'test'}
-        api.insertPrimaryDataset(primaryDSObj=data)
+        self.api.insertPrimaryDataset(primaryDSObj=data)
 	
     def test04(self):
 	"""test04: web.DBSClientWriter.insertOutputModule: basic test"""
 	data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
                 'output_module_label': output_module_label, 'global_tag':global_tag}
-	api.insertOutputConfig(outputConfigObj=data)
+	self.api.insertOutputConfig(outputConfigObj=data)
 
     def test05(self):
         """test05: web.DBSClientWriter.insertOutputModule: re-insertion should not raise any errors"""
         data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
                 'output_module_label': output_module_label, 'global_tag':global_tag}
-        api.insertOutputConfig(outputConfigObj=data)
+        self.api.insertOutputConfig(outputConfigObj=data)
     
     def test06(self):
 	"""test06: web.DBSWriterModel.insertAcquisitionEra: Basic test """
 	data={'acquisition_era_name': acquisition_era_name}
-	api.insertAcquisitionEra(data)
+	self.api.insertAcquisitionEra(data)
 
     def test07(self):
 	"""test07: web.DBSWriterModel.insertProcessingEra: Basic test """
 	data={'processing_version': processing_version, 'description':'this_is_a_test'}
-	api.insertProcessingEra(data)
+	self.api.insertProcessingEra(data)
 					    
     def test08(self):
 	"""test08: web.DBSClientWriter.insertDataset: basic test"""
@@ -112,7 +119,7 @@ class DBSClientWriter_t(unittest.TestCase):
 		}
         #import pdb
         #pdb.set_trace()
-	api.insertDataset(datasetObj=data)
+	self.api.insertDataset(datasetObj=data)
 	# insert away the parent dataset as well
         #import pdb
         #pdb.set_trace()
@@ -127,7 +134,7 @@ class DBSClientWriter_t(unittest.TestCase):
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "testuser",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
-	api.insertDataset(datasetObj=parentdata)
+	self.api.insertDataset(datasetObj=parentdata)
 
 	
     def test09(self):
@@ -144,7 +151,7 @@ class DBSClientWriter_t(unittest.TestCase):
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	
-	api.insertDataset(datasetObj=data)
+	self.api.insertDataset(datasetObj=data)
 
     def test11(self):
 	"""test11: web.DBSClientWriter.insertDataset: no output_configs, should be fine insert!"""
@@ -157,24 +164,24 @@ class DBSClientWriter_t(unittest.TestCase):
                 : "testuser",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
-	api.insertDataset(datasetObj=data)
+	self.api.insertDataset(datasetObj=data)
 
     def test14(self):
 	"""test14 web.DBSClientWriter.insertBlock: basic test"""
 	data = {'block_name': block,
 		'origin_site_name': site }
 		
-	api.insertBlock(blockObj=data)
+	self.api.insertBlock(blockObj=data)
 	# insert the parent block as well
 	data = {'block_name': parent_block, 'origin_site_name': site }
-	api.insertBlock(blockObj=data)
+	self.api.insertBlock(blockObj=data)
 
     def test15(self):
 	"""test15 web.DBSClientWriter.insertBlock: duplicate insert should not raise exception"""
 	data = {'block_name': block,
 		'origin_site_name': site }
 		
-	api.insertBlock(blockObj=data)
+	self.api.insertBlock(blockObj=data)
 
     def test16(self):
 	"""test16 web.DBSClientWriter.insertFiles: insert parent file for later use : basic test"""
@@ -202,7 +209,7 @@ class DBSClientWriter_t(unittest.TestCase):
 			    #'is_file_valid': 1
                 }
 	    flist.append(f)
-        api.insertFiles(filesList={"files":flist})
+        self.api.insertFiles(filesList={"files":flist})
 	time.sleep(10)
 
     def test17(self):
@@ -233,7 +240,7 @@ class DBSClientWriter_t(unittest.TestCase):
                 }
 	    flist.append(f)
 	    outDict['parent_files'].append(f['file_parent_list'][0]['file_parent_lfn'])
-	api.insertFiles(filesList={"files":flist})
+	self.api.insertFiles(filesList={"files":flist})
 	time.sleep(10)
 
     def test18(self):
@@ -263,17 +270,17 @@ class DBSClientWriter_t(unittest.TestCase):
                 }
 	    flist.append(f)
 	    outDict['files'].append(f['logical_file_name'])
-	api.insertFiles(filesList={"files":flist})
+	self.api.insertFiles(filesList={"files":flist})
 	time.sleep(10)
 	
     def test19(self):
 	"""test19 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
 	logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 1)
-	api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
+	self.api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
 
     def test21(self):
         """test21 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
-        api.updateDatasetType(dataset=dataset, dataset_access_type="VALID")
+        self.api.updateDatasetType(dataset=dataset, dataset_access_type="VALID")
 	
     def test208(self):
 	"""test208 generating the output file for reader test"""

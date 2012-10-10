@@ -22,7 +22,7 @@ from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from RestClient.RestApi import RestApi
 from RestClient.AuthHandling.X509Auth import X509Auth
-
+from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
 from sqlalchemy import exceptions
 
 def pprint(a):
@@ -345,7 +345,7 @@ class DBSMigrate:
             if conn: conn.close()
 
 
-    def updateMigrationRequestStatus(self, migration_status, migration_request_id,last_modification_date):
+    def updateMigrationRequestStatus(self, migration_status, migration_request_id):
         """
         migration_status: 
         0=PENDING
@@ -364,7 +364,7 @@ class DBSMigrate:
         try:
             upst = dict(migration_status=migration_status,
                         migration_request_id=migration_request_id, 
-                        last_modification_date=last_modification_date)
+                        last_modification_date=dbsUtils().getTime())
             self.mgrRqUp.execute(conn, upst)
         finally:
             #open transaction is committed when conn closed.
@@ -374,7 +374,7 @@ class DBSMigrate:
 
 
 
-    def updateMigrationBlockStatus(self, migration_status, migration_block):
+    def updateMigrationBlockStatus(self, migration_status=0, migration_block=None, migration_request=None):
         """
         migration_status: 
         0=PENDING
@@ -391,8 +391,12 @@ class DBSMigrate:
         
         conn = self.dbi.connection()
         try:
-            upst = dict(migration_status=migration_status, 
-                        migration_block_id=migration_block)
+            if migration_block:
+                upst = dict(migration_status=migration_status, 
+                        migration_block_id=migration_block,last_modification_date=dbsUtils().getTime())
+            elif migration_request:
+                upst = dict(migration_status=migration_status, migration_request_id=migration_request,
+                            last_modification_date=dbsUtils().getTime())
             self.mgrup.execute(conn, upst)
         finally:
             if conn:conn.close()
@@ -475,7 +479,14 @@ class DBSMigrate:
             callType = spliturl[0]
             if callType != 'http' and callType != 'https':
                 raise ValueError, "unknown URL type: %s" % callType
-            restapi = RestApi(auth=X509Auth(ca_path="/etc/grid-security/certificates"))
+            #myproxy="socks5://localhost:5678"
+            try:
+                myproxy=os.environ['SOCKS5_PROXY']
+            except KeyError as ke:
+                raise ke
+            restapi = RestApi(auth=X509Auth(), proxy=Socks5Proxy(proxy_url=myproxy) if myproxy else None  )
+            #restapi = RestApi(auth=X509Auth(ca_path="/etc/grid-security/certificates"),
+            #                  proxy=Socks5Proxy(proxy_url=proxy) if proxy else None  )
             content = "application/json"
             UserID = os.environ['USER']+'@'+socket.gethostname()
             request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID }
@@ -491,60 +502,7 @@ class DBSMigrate:
             raise DBShttp_error
         except Exception, e:
             raise e
-   
-    def __getKeyCert(self):
-        """
-        Get the user credentials if they exist, otherwise throw an exception.
-        
-        This code was modified from DBSAPI/dbsHttpService.py and WMCore/Services/Requests.py
 
-        """
-        # Zeroth case is if the class has over ridden the key/cert and has it
-        # stored in self
-        if getattr(self, 'cert', None) and getattr(self, 'key', None):
-            key = self.key
-            cert = self.cert
-
-        # Now we're trying to guess what the right cert/key combo is...
-        # First preference to HOST Certificate, This is how it set in Tier0
-        elif os.environ.has_key('X509_HOST_CERT'):
-            cert = os.environ['X509_HOST_CERT']
-            key = os.environ['X509_HOST_KEY']
-
-        # Second preference to User Proxy, very common
-        elif (os.environ.has_key('X509_USER_PROXY')) and \
-                (os.path.exists( os.environ['X509_USER_PROXY'])):
-            cert = os.environ['X509_USER_PROXY']
-            key = cert
-
-        # Third preference to User Cert/Proxy combinition
-        elif os.environ.has_key('X509_USER_CERT'):
-            cert = os.environ['X509_USER_CERT']
-            key = os.environ['X509_USER_KEY']
-
-        # TODO: only in linux, unix case, add other os case
-        # look for proxy at default location /tmp/x509up_u$uid
-        elif os.path.exists('/tmp/x509up_u'+str(os.getuid())):
-            cert = '/tmp/x509up_u'+str(os.getuid())
-            key = cert
-
-        elif sys.stdin.isatty():
-            if os.path.exists(os.environ['HOME'] + '/.globus/usercert.pem'):
-                cert = os.environ['HOME'] + '/.globus/usercert.pem'
-                if os.path.exists(os.environ['HOME'] + '/.globus/userkey.pem'):
-                    key = os.environ['HOME'] + '/.globus/userkey.pem'
-                else:
-                    key = cert
-
-        else:
-            raise dbsClientException("auth-error","No valid X509 cert-key-pair found.")
-        #Set but not found
-        if  os.path.isfile(key) and  os.path.isfile(cert):
-            return key, cert
-        else:
-            raise ValueError, "key or cert file does not exist: %s, %s" % (key,cert)
-
- 
     def getSrcDatasetParents(self, url, dataset):
         """
         List block at src DBS

@@ -137,8 +137,7 @@ class MigrationTask(SequencialTaskBase):
                 #print "-"*20, self.sourceUrl
                 print "-"*20, self.migration_req_id
                 migration_status = 1
-                self.dbsMigrate.updateMigrationRequestStatus(migration_status, self.migration_req_id,
-                                                             dbsUtils().getTime())
+                self.dbsMigrate.updateMigrationRequestStatus(migration_status, self.migration_req_id)
                 #print "-"*20, "updated Request status"
             else: return #No request found. Exit.
         except Exception, ex:
@@ -161,8 +160,7 @@ class MigrationTask(SequencialTaskBase):
                 logmessage="No migration blocks found under the migration request id %s." %(self.migration_req_id )+ \
                            "It could be the blocks in a wrong status due to privious error. Please check it."
                 #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
-                self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id,
-                                                dbsUtils().getTime())
+                self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
                 #raise HTTPError 409
                 dbsExceptionHandler("dbsException-conflict-data", "No migration blocks found", self.logger.error, logmessage)
             else:
@@ -180,7 +178,7 @@ class MigrationTask(SequencialTaskBase):
             self.sourceUrl = None
             self.logger.error(str(ex))
             #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
-            self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id,dbsUtils().getTime())
+            self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
     def insertBlock(self):
         print "_"*20, "insertBlock"
         self.inserted = True
@@ -217,17 +215,16 @@ class MigrationTask(SequencialTaskBase):
                             migration_block=self.migration_block_ids[idx])
                         raise
                     print "-"*20, "Done insert block: %s" %bName
-                self.dbsMigrate.updateMigrationRequestStatus(2, self.migration_req_id,
-                                                             dbsUtils().getTime())
+                self.dbsMigrate.updateMigrationRequestStatus(2, self.migration_req_id)
             except Exception, ex:
                 self.inserted = False
                 #handle dbsException
-                if ex.message or ex.serverError:
+                if type(ex) == dbsException:
                     self.logger.error(ex.message + ex.serverError)
                 self.logger.error(str(ex))
                 #self.logger.error(ex.message)
-                self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id,
-                                                              dbsUtils().getTime())
+                self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
+                self.dbsMigrate.updateMigrationBlockStatus(migration_status=3, migration_request=self.migration_req_id)
                 return
 
     def cleanup(self):
@@ -241,7 +238,7 @@ class MigrationTask(SequencialTaskBase):
 
 if __name__ == '__main__':
     import cherrypy
-    for i in range(3):
+    for i in range(1):
         DBSMigrationServer(MigrationTask("/uscms/home/yuyi/dbs3-test/DBS/Server/Python/control/DBSConfig.py"), 5)
     cherrypy.config.update({'server.socket_port': 16666}) 
     cherrypy.quickstart()

@@ -9,7 +9,6 @@ class X509Auth(object):
         self._ssl_cert = ssl_cert
         self._ssl_key = ssl_key
         self._ssl_verifypeer = ssl_verifypeer
-
         if not (self._ssl_cert and self._ssl_key):
             self.__search_cert_key()
 
