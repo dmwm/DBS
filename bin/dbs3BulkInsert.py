@@ -19,9 +19,13 @@ payload_handler = PayloadHandler()
 
 payload_handler.load_payload(options.input)
 
-named_pipe = payload_handler.payload['workflow']['NamedPipe']
-
-stat_client = StatsPipeClient(named_pipe)
+# check if running a stress or integration test (Means collect statistics or not)
+try:
+    named_pipe = payload_handler.payload['workflow']['NamedPipe']
+except KeyError:
+    stat_client = None
+else:
+    stat_client = StatsPipeClient(named_pipe)
 
 block_dump = payload_handler.payload['workflow']['DBS']
 
@@ -35,8 +39,10 @@ for block in block_dump:
     timer.update_stats({'server_request_timing' : float(request_processing_time)/1000000.0,
                         'server_request_timestamp' : float(request_time)/1000000.0,
                         'request_content_length' : int(api.requestContentLength)})
+    if stat_client:
+        timer.stat_to_server()
 
-    timer.stat_to_server()
+    print "Inserted block %s" % (block['block']['block_name'])
 
 p = payload_handler.clone_payload()
 payload_handler.append_payload(p)
