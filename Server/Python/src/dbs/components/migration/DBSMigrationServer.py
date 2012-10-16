@@ -1,5 +1,31 @@
 import cherrypy
 from threading import *
+import logging
+from logging.handlers import HTTPHandler, RotatingFileHandler
+#from cherrypy import log as cplog
+#from cherrypy._cplogging import LogManager
+
+MgrLogger = cherrypy.log.error_log
+#MgrLogger2 = cherrypy.log.access_log
+
+class CheeryPyConfig():
+    def __init__(self, fileName='dbsMigration.log',  maxBytes = 2000000, backupCount = 30):
+        handler = RotatingFileHandler(fileName, "a", maxBytes, backupCount)
+        logging.getLogger().addHandler(handler)
+
+    def _configCherryPy(self):
+        cherrypy.config.update({'server.socket_port': 16666})
+        cherrypy.config.update({'log.screen' : True})
+        #cherrypy.config.update({'log.access_file':'/uscms/home/yuyi/dbs3-test/logs/migration.log'})
+        #cherrypy.config.update({'log.error_file':'/uscms/home/yuyi/dbs3-test/logs/migration.log'})
+        #not sure about the thread pool here
+        cherrypy.config.update({'server.thread_pool' :10})
+    #
+        cherrypy.log.error_log.setLevel(logging.INFO)
+        cherrypy.log.access_log.setLevel(logging.INFO)
+
+
+
 
 class DBSMigrationServer(Thread):
     
@@ -22,7 +48,7 @@ class DBSMigrationServer(Thread):
         cherrypy.engine.subscribe('stop', self.stop, priority = 100)
         
     def stop(self):
-        print "Stopping thread %s" %self.getName()
+        MgrLogger.info("Stopping thread %s" %self.getName())   #YG
         #shut down all the db connections before the stop.
         #cleanup everything. 
         #The condition lock should let the running job to finish all it need to be done.
@@ -40,12 +66,12 @@ class DBSMigrationServer(Thread):
     def run(self):
         while not self.stopFlag:
             self.wakeUp.acquire()
-            #print currentThread(), self.name 
+            #MgrLogger.info( str(currentThread()) + ',' + self.name )
             self.taskFunc(self.isStopFlagOn)
             self.wakeUp.wait(self.duration)
             self.wakeUp.release()
          
-import logging
+#import logging
 from WMCore.DAOFactory import DAOFactory
 from WMCore.Database.DBFactory import DBFactory
 from WMCore.Database.DBFormatter import DBFormatter
@@ -55,7 +81,6 @@ from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from dbs.business.DBSMigrate import DBSMigrate  
 from dbs.business.DBSBlockInsert import DBSBlockInsert
 from WMCore.Configuration import *
-#import urllib, urllib2
 from cherrypy import HTTPError
 import json, cjson
 class SequencialTaskBase(object):
@@ -75,8 +100,7 @@ class SequencialTaskBase(object):
             except Exception, ex:
                 #log the excpeiotn and break. 
                 #SequencialTasks are interconnected between functions  
-                #print (str(ex))
-                logging.error(str(ex))
+                MgrLogger.error(str(ex))  #YG
                 break
             
     def initialize(self, *args, **kwargs):
@@ -96,35 +120,30 @@ class SequencialTaskBase(object):
         raise NotImplementedError("need to implement setCallSequence assign self._callSequence")
 
    
-#this is the sckeleton of request data collector
 class MigrationTask(SequencialTaskBase):
     
     def initialize(self, config):
         self.config = loadConfigurationFile(config)
-        self.logger = logging
+        #self.logger = cherrypy.log.error_log
         self.sourceUrl = None
         self.migration_req_id = 0
         self.block_names = []
         self.migration_block_ids = []
         self.inserted = True
         connectUrl = None
-        #print self.config
         dbowner =  self.config.dbs.views.active.DBSMigrator.database.instances.section_('prod/global').dbowner
         connectUrl = self.config.dbs.views.active.DBSMigrator.database.instances.section_('prod/global').connectUrl
-        dbFactory = DBFactory(self.logger, connectUrl, options={})
+        dbFactory = DBFactory(MgrLogger, connectUrl, options={})
         self.dbi = dbFactory.connect()
-        self.dbFormatter = DBFormatter(self.logger,self.dbi)
-        self.dbsMigrate = DBSMigrate(self.logger, self.dbi, dbowner)
-        self.DBSBlockInsert = DBSBlockInsert(self.logger, self.dbi, dbowner)
-        #print dbowner
-        #print connectUrl
+        self.dbFormatter = DBFormatter(MgrLogger,self.dbi)
+        self.dbsMigrate = DBSMigrate(MgrLogger, self.dbi, dbowner)
+        self.DBSBlockInsert = DBSBlockInsert(MgrLogger, self.dbi, dbowner)
     
     def setCallSequence(self):
-        #print "_"*20, "call Sequence"
         self._callSequence = [self.getResource, self.insertBlock, self.cleanup]
     
     def getResource(self):
-        print "_"*20, "getResource"
+        #MgrLogger.info("_"*20+ "getResource")
         #query the MIGRATION_REQUESTS table to get a request with the smallest CREATION_DATE
         # and MIGRATION_STATUS = 0(pending)
         try:
@@ -134,14 +153,12 @@ class MigrationTask(SequencialTaskBase):
             if len(req) == 1 :
                 self.sourceUrl = req[0]['migration_url']
                 self.migration_req_id = req[0]['migration_request_id']
-                #print "-"*20, self.sourceUrl
-                print "-"*20, self.migration_req_id
+                MgrLogger.info("-"*20+ 'Migration request ID: '+ str(self.migration_req_id))
                 migration_status = 1
                 self.dbsMigrate.updateMigrationRequestStatus(migration_status, self.migration_req_id)
-                #print "-"*20, "updated Request status"
             else: return #No request found. Exit.
         except Exception, ex:
-            self.logger.error(str(ex))
+            MgrLogger.error(str(ex))
             self.sourceUrl = None
             return   # don't need to go down.
             
@@ -149,52 +166,42 @@ class MigrationTask(SequencialTaskBase):
         # and migration_block_id list. Both lists are ordered by MIGRATION_ORDER
         try:
             blocks = self.dbsMigrate.listMigrationBlocks(self.migration_req_id)
-            #print "-"*20
-            #print blocks
             for b in blocks:
                 self.block_names.append(b['migration_block_name'])
                 self.migration_block_ids.append(b['migration_block_id'])
-            print "-"*20, "block_names " 
-            print self.block_names
+            MgrLogger.info("-"*20+ 'Regester ID: %s '%self.migration_req_id + 'Migration Block Names: ')
+            MgrLogger.info("block_name: %s" %self.block_names)
             if not self.block_names : 
                 logmessage="No migration blocks found under the migration request id %s." %(self.migration_req_id )+ \
                            "It could be the blocks in a wrong status due to privious error. Please check it."
                 #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
                 self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
                 #raise HTTPError 409
-                dbsExceptionHandler("dbsException-conflict-data", "No migration blocks found", self.logger.error, logmessage)
+                dbsExceptionHandler("dbsException-conflict-data", "No migration blocks found", MgrLogger.error, logmessage)
             else:
-                #print "-"*20
-                #print self.migration_block_ids
                 #Update MIGRATION_STATUS for all the MIGRATION_BLOCK_IDs in the self.migration_block_id list
                 #in MIGRATION_BLOCKS table to 1 (in progress)
                 #set MIGRATION_STATUS = 1 and commit it immediately
                 self.dbsMigrate.updateMigrationBlockStatus(migration_status=1, migration_block=self.migration_block_ids)
         except HTTPError, her:
             self.sourceUrl = None
-            #print str(her)
             raise her
         except Exception, ex:
             self.sourceUrl = None
-            self.logger.error(str(ex))
+            MgrLogger.error(str(ex))
             #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
             self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
     def insertBlock(self):
-        print "_"*20, "insertBlock"
+        #MgrLogger.info("_"*20+"insertBlock")
         self.inserted = True
         if self.sourceUrl:
             try:
                 for bName in self.block_names:
-                    #print "-"*20, "working on getting data from source"
-                    #print "-"*20, bName
-                    #blockname = bName.replace("#",urllib.quote_plus('#'))
-                    #resturl = "%s/blockdump?block_name=%s" % (self.sourceUrl, blockname)
                     params={'block_name':bName}
                     data = self.dbsMigrate.callDBSService(self.sourceUrl, 'blockdump', params)
                     data = cjson.decode(data)
-                    #print data
-                    #print "-"*20, "working on inserting data into destination"
                     idx = self.block_names.index(bName)
+                    MgrLogger.info("-"*20 +"Inserting block: %s for request id: %s" %(bName, self.migration_req_id))
                     try:
                         self.DBSBlockInsert.putBlock(data, migration=True)
                         self.dbsMigrate.updateMigrationBlockStatus(migration_status=2,
@@ -203,7 +210,6 @@ class MigrationTask(SequencialTaskBase):
                         if "Block already exists" in de.message:
                             #the block maybe get into the destination by other means. 
                             #skip this block and continue.
-                            #print '-'*20, "Block already exists"
                             self.dbsMigrate.updateMigrationBlockStatus(migration_status=2, 
                                 migration_block=self.migration_block_ids[idx])
                         else:
@@ -214,21 +220,20 @@ class MigrationTask(SequencialTaskBase):
                         self.dbsMigrate.updateMigrationBlockStatus(migration_status=3,
                             migration_block=self.migration_block_ids[idx])
                         raise
-                    print "-"*20, "Done insert block: %s" %bName
+                    MgrLogger.info("-"*20 +"Done insert block: %s for request id: %s" %(bName,self.migration_req_id))
                 self.dbsMigrate.updateMigrationRequestStatus(2, self.migration_req_id)
             except Exception, ex:
                 self.inserted = False
                 #handle dbsException
                 if type(ex) == dbsException:
-                    self.logger.error(ex.message + ex.serverError)
-                self.logger.error(str(ex))
-                #self.logger.error(ex.message)
+                    MgrLogger.error(ex.message + ex.serverError)
+                MgrLogger.error(str(ex))
                 self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
                 self.dbsMigrate.updateMigrationBlockStatus(migration_status=3, migration_request=self.migration_req_id)
                 return
 
     def cleanup(self):
-        print "_"*20, "cleanup"
+        #MgrLogger.info("_"*20+"cleanup")
         #return to the initial status
         self.sourceUrl = None
         self.migration_req_id = 0
@@ -237,8 +242,10 @@ class MigrationTask(SequencialTaskBase):
         self.inserted = True 
 
 if __name__ == '__main__':
-    import cherrypy
-    for i in range(1):
+    for i in range(4):
+        #we need to use a simplfied config file for migration instead of the current DBS one? 
         DBSMigrationServer(MigrationTask("/uscms/home/yuyi/dbs3-test/DBS/Server/Python/control/DBSConfig.py"), 5)
-    cherrypy.config.update({'server.socket_port': 16666}) 
+    CheeryPyConfig(fileName=os.path.join('/uscms/home/yuyi/dbs3-test/logs', 'DBS333migration.log'))._configCherryPy()
+    MgrLogger.info("*********** DBS Migration Server Starting. ************")
     cherrypy.quickstart()
+
