@@ -24,7 +24,9 @@ systems = \
             'bin/submit_jobs.sh'],
     'pythonmods': ['LifeCycleTests.__init__'],
     'pythonpkg': ['LifeCycleTests.LifeCycleTools'],
-    'conf' : ['DBS3AnalysisLifecycle.conf']
+    'conf' : ['DBS3AnalysisLifecycle.conf',
+              'DBS3BulkInsertLifecycle.conf',
+              'PhedexDBSDASLifecylce.conf']
   },
   
   'LifeCycleAnalysis':
