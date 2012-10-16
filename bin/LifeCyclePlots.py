@@ -97,6 +97,20 @@ if __name__ == "__main__":
                                     label={'x':"Time [s]",'y':"#"},
                                     color={'line':2, 'fill':2},
                                     add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
+
+    histo_manager_statistics.add_histo(Histo1D(name='ClientRequestTimingHighRes', title='Client Request Timing',
+                                    xnbins=100, xmin=0., xmax=0.5,
+                                    x_value_to_fill="ClientTiming",
+                                    label={'x':"Time [s]",'y':"#"},
+                                    color={'line':2,'fill':2},
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,0.5)}))
+
+    histo_manager_statistics.add_histo(Histo1D(name='ServerRequestTimingHighRes', title='Server Request Timing',
+                                    xnbins=100, xmin=0., xmax=0.5,
+                                    x_value_to_fill="ServerTiming",
+                                    label={'x':"Time [s]",'y':"#"},
+                                    color={'line':2, 'fill':2},
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,0.5)}))
     
     histo_manager_statistics.add_histo(Histo1D(name='ContentLength', title='Content Length',
                                     xnbins=100, xmin=0, xmax=10000,
@@ -105,7 +119,7 @@ if __name__ == "__main__":
                                     color={'line':2,'fill':2},
                                     add_options={'GetXaxis.SetRangeUser':(0.0,10000.0)}))
 
-    histo_manager_statistics.add_histo(Histo1D(name='AccessPerSecond', title='Access per Second',
+    histo_manager_statistics.add_histo(Histo1D(name='AccessesPerSecond', title='Accesses per Second',
                                     xnbins=int(endtime-starttime), xmin=0, xmax=endtime-starttime,
                                     x_value_to_fill="ServerTimeStamp",
                                     fill_fkt=lambda histo, x: (x[histo._x_value_to_fill]-starttime, 1),
@@ -204,7 +218,7 @@ if __name__ == "__main__":
                                         label={'x':"Size [bytes]",'y':"#"},
                                         color={'line':2,'fill':2}))
 
-        histo_manager_statistics.add_histo(Histo1D(name='AccessPerSecond%s' % api, title='Access per Second (%s)' % api,
+        histo_manager_statistics.add_histo(Histo1D(name='AccessesPerSecond%s' % api, title='Accesses per Second (%s)' % api,
                                         xnbins=int(endtime-starttime), xmin=0, xmax=endtime-starttime,
                                         fill_fkt=lambda histo, x: (x[histo._x_value_to_fill]-starttime, 1),
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
