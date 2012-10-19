@@ -19,6 +19,7 @@ systems = \
             'bin/dbs3GetFileParents.py',
             'bin/dbs3GetFiles.py',
             'bin/dbs3GetPrimaryDSType.py',
+            'bin/dbs3WriterStressTest.py',
             'bin/getFakeData.py',
             'bin/StatsServer.py',
             'bin/run_job_wn.sh',
