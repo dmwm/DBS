@@ -22,14 +22,21 @@ def skip_file(block_dict, file_dict):
     block = block_dict['block']
     block['block_size'] -= file_size
     block['file_count'] -= 1
+
+    files_to_delete = []
+    file_conf_to_delete = []
     
     for count, this_file in enumerate(block_dict['files']):
         if this_file['logical_file_name'] == logical_file_name:
-            del block_dict['files'][count]
+            files_to_delete.append(count)
+            #del block_dict['files'][count]
 
     for count, file_conf in enumerate(block_dict['file_conf_list']):
         if file_conf['lfn'] == logical_file_name:
-            del block_dict['file_conf_list'][count]
+            file_conf_to_delete.append(count)
+            #del block_dict['file_conf_list'][count]
+
+    return files_to_delete, file_conf_to_delete
 
 failure_func = {"DBSSkipFileFail" : skip_file,
                 "DBSChangeCksumFail" : change_cksums,
@@ -44,13 +51,16 @@ payload_handler.load_payload(options.input)
 block_dump = payload_handler.payload['workflow']['DBS']
 
 for block in block_dump:
+    files_to_delete = []
+    file_conf_to_delete = []
+
     for this_file in block['files']:
         ###get last part of the logical_file_name, which is the actually
         filename = this_file['logical_file_name'].split('/')[-1]
 
         ###remove .root from filename
         filename = filename.replace('.root', '')
-        
+
         ###decode failures from filename
         failures = filename.split('_')[1:]
 
@@ -58,10 +68,18 @@ for block in block_dump:
             if failure.startswith('DBS'):
                 try:
                     ### call function to modify the block contents
-                    failure_func[failure](block, this_file)
+                    ret_val = failure_func[failure](block, this_file)
+                    if ret_val:
+                        files_to_delete.extend(ret_val[0])
+                        file_conf_to_delete.extend(ret_val[1])
                 except Exception as ex:
                     print "%s does not support the failure %s" % (os.path.basename(__file__), failure)
                     raise ex
+
+    for del_file in reversed(files_to_delete):
+        del block['files'][del_file]
+    for del_file_conf in reversed(file_conf_to_delete):
+        del block['file_conf_list'][del_file_conf]
 
 p = payload_handler.clone_payload()
 p['workflow']['DBS'] = block_dump
