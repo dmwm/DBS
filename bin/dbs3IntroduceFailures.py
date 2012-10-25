@@ -5,8 +5,8 @@ from LifeCycleTests.LifeCycleTools.OptParser import get_command_line_options
 import random, os, sys
 
 def change_cksums(block_dict, file_dict):
-    file_dict['check_sum'] = random.randint(1000, 9999)
-    file_dict['adler32'] = random.randint(1000, 9999)
+    file_dict['check_sum'] = str(random.randint(1000, 9999))
+    file_dict['adler32'] = str(random.randint(1000, 9999))
 
 def change_file_size(block_dict, file_dict):
     block = block_dict['block']
