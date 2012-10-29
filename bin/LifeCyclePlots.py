@@ -62,6 +62,14 @@ def get_rows_from_sqlite(conn, table, column='*'):
 if __name__ == "__main__":
     options = get_command_line_options(os.path.basename(__file__), sys.argv)
 
+    ### create output directory
+    if options.description and options.print_format:
+        try:
+            os.mkdir(options.description)
+        except OSError as oserr:
+            print "Directory %s does already exists, please clean-up." % (options.description)
+            raise oserr
+
     gROOT.Reset()
 
     if options.batch:
@@ -251,7 +259,6 @@ if __name__ == "__main__":
     histo_manager_combined.draw_histos()
     
     if options.description and options.print_format:
-        os.mkdir(options.description)
         histo_manager_combined.save_histos_as(output_directory=options.description, format=options.print_format)
 
         if options.website:
