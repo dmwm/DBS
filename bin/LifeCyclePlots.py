@@ -85,18 +85,18 @@ if __name__ == "__main__":
 
     histo_manager_statistics = HistoManager()
     histo_manager_statistics.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
-                                    xnbins=400, xmin=0., xmax=4.,
+                                    xnbins=1000, xmin=0., xmax=10.,
                                     x_value_to_fill="ClientTiming",
                                     label={'x':"Time [s]",'y':"#"},
                                     color={'line':2,'fill':2},
-                                    add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,10.0)}))
 
     histo_manager_statistics.add_histo(Histo1D(name='ServerRequestTiming', title='Server Request Timing',
-                                    xnbins=400, xmin=0., xmax=4.,
+                                    xnbins=1000, xmin=0., xmax=10.,
                                     x_value_to_fill="ServerTiming",
                                     label={'x':"Time [s]",'y':"#"},
                                     color={'line':2, 'fill':2},
-                                    add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
+                                    add_options={'GetXaxis.SetRangeUser':(0.0,10.0)}))
 
     histo_manager_statistics.add_histo(Histo1D(name='ClientRequestTimingHighRes', title='Client Request Timing',
                                     xnbins=100, xmin=0., xmax=0.5,
@@ -196,20 +196,20 @@ if __name__ == "__main__":
 
     for api in list_of_apis:
         histo_manager_statistics.add_histo(Histo1D(name='ClientRequestTiming%s' % api, title='Client Request Timing (%s)' % api,
-                                        xnbins=40, xmin=0., xmax=4.,
+                                        xnbins=100, xmin=0., xmax=10.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ClientTiming",
                                         label={'x':"Time [s]",'y':"#"},
                                         color={'line':2,'fill':2},
-                                        add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
+                                        add_options={'GetXaxis.SetRangeUser':(0.0,10.0)}))
         
         histo_manager_statistics.add_histo(Histo1D(name='ServerRequestTiming%s' % api, title='Server Request Timing (%s)' % api,
-                                        xnbins=40, xmin=0., xmax=4.,
+                                        xnbins=100, xmin=0., xmax=10.,
                                         condition=lambda x, local_api=api: (x['ApiCall']==local_api),
                                         x_value_to_fill="ServerTiming",
                                         label={'x':"Time [s]",'y':"#"},
                                         color={'line':2,'fill':2},
-                                        add_options={'GetXaxis.SetRangeUser':(0.0,4.0)}))
+                                        add_options={'GetXaxis.SetRangeUser':(0.0,10.0)}))
 
         histo_manager_statistics.add_histo(Histo1D(name='ContentLength%s' % api, title='Content Length (%s)' % api,
                                         xnbins=100, xmin=0, xmax=10000,
