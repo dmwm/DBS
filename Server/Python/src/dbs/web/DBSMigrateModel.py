@@ -111,36 +111,3 @@ class DBSMigrateModel(RESTModel):
         indata = cjson.decode(body)
         indata = validateJSONInputNoCopy("migration_rqst",indata)
         return self.dbsMigrate.removeMigrationRequest(indata['migration_rqst_id'])
-        
-
-    def getServerVersion(self):
-        """
-        Reading from __version__ tag, determines the version of the DBS Server
-        """
-        version = __server__version__.replace("$Name: ", "")
-        version = version.replace("$", "")
-        version = version.strip()
-        return version
-
-    def getHelp(self, call=""):
-        if call:
-            params = self.methods['GET'][call]['args']
-            doc = self.methods['GET'][call]['call'].__doc__
-            return dict(params=params, doc=doc)
-        else:
-            return self.methods['GET'].keys()
-
-
-    def getServerInfo(self):
-        """
-        Method that provides information about DBS Migration Server to the clients
-        The information includes
-        * Server Version - CVS Tag
-        * Schema Version - Version of Schema this DBS instance is working with
-        * ETC - TBD
-        """
-        ret = {}
-        ret["tagged_version"] = self.getServerVersion()
-        ret["schema"] = self.dbsStatus.getSchemaStatus()
-        ret["components"] = self.dbsStatus.getComponentStatus()
-        return ret 

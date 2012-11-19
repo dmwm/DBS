@@ -57,9 +57,31 @@ SELECT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
                 binds = {'block_name': block_name, 'run_num':run_num}
         else:
             dbsExceptionHandler('dbsException-invalid-input', "FileLumi/List: Either logocal_file_name or block_name must be provided.")
-        self.logger.debug(sql) 
+        #self.logger.debug(sql) 
 	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
 	if len(cursors) != 1:
             dbsExceptionHandler('dbsException-missing-data', "FileLumi/List: file lumi does not exist.")
         result = self.formatCursor(cursors[0])
-        return result
+        condensed_res=[]
+        if logical_file_name:
+            run_lumi={}
+            for i in result:
+                r = i['run_num']
+                if r in run_lumi:
+                    run_lumi[r].append(i['lumi_section_num'])
+                else:
+                    run_lumi[r]=[i['lumi_section_num']]
+            for k, v in run_lumi.iteritems():
+                condensed_res.append({'logical_file_name':logical_file_name, 'run_num':k, 'lumi_section_num':v})
+        else:
+            file_run_lumi={}
+            for i in result:
+                r = i['run_num']
+                f = i['logical_file_name']
+                if (f, r) in file_run_lumi:
+                    file_run_lumi[f,r].append(i['lumi_section_num'])
+                else:
+                    file_run_lumi[f,r] = [i['lumi_section_num']]
+            for k, v in file_run_lumi.iteritems():
+                condensed_res.append({'logical_file_name':k[0], 'run_num':k[1], 'lumi_section_num':v})
+        return condensed_res

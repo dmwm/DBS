@@ -118,7 +118,7 @@ class DBSDataset:
                      acquisition_era="", run_num=0, physics_group_name="",
                      logical_file_name="", primary_ds_name="",
                      primary_ds_type="", processed_ds_name="", data_tier_name="",
-                     dataset_access_type="VALID", prep_id="", min_cdate=0, max_cdate=0,
+                     dataset_access_type="VALID", prep_id="", create_by='', last_modified_by='', min_cdate=0, max_cdate=0,
                      min_ldate=0, max_ldate=0, cdate=0, ldate=0, detail=False):
         """
         lists all datasets if dataset parameter is not given.
@@ -150,7 +150,7 @@ class DBSDataset:
                                  logical_file_name,
                                  primary_ds_name, primary_ds_type,
                                  processed_ds_name, data_tier_name,
-                                 dataset_access_type, prep_id,
+                                 dataset_access_type, prep_id, create_by, last_modified_by, 
                                  min_cdate, max_cdate, min_ldate, max_ldate,
                                  cdate, ldate)    
             return result

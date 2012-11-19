@@ -88,7 +88,8 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version',
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
-                                'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name', 'dataset_access_type', 'prep_id',
+                                'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name', 
+                                'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                                 'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'])
         self._addMethod('POST', 'datasetlist', self.listDatasetArray)
         self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'origin_site_name',
@@ -234,13 +235,13 @@ class DBSReaderModel(RESTModel):
                  app_name=str, output_module_label=str,  processing_version=(int,str), acquisition_era_name=str,
                  run_num=(long,int,str), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
                  primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str, 
-                 min_cdate=(int,str), max_cdate=(int,str),
+                 create_by=(str), last_modified_by=(str), min_cdate=(int,str), max_cdate=(int,str),
                  min_ldate=(int,str), max_ldate=(int, str), cdate=(int,str), ldate=(int,str), detail=(bool,str))
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="",
         processing_version=0, acquisition_era_name="", run_num="0",
         physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="", 
-        processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='',
+        processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='', create_by="", last_modified_by="", 
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',
         ldate='0', detail=False):
         """
@@ -268,6 +269,13 @@ class DBSReaderModel(RESTModel):
         processed_ds_name = processed_ds_name.replace("*", "%")
         acquisition_era_name = acquisition_era_name.replace("*", "%")
         #processing_version =  processing_version.replace("*", "%")
+        #create_by and last_modified_by have be full spelled, no wildcard will allowed.
+        #We got them from request head so they can be either HN account name or DN. 
+        #This is depended on how an user's account is set up.
+        if create_by.find('*')!=-1 or create_by.find('%')!=-1 or last_modified_by.find('*')!=-1\
+                or last_modified_by.find('%')!=-1:
+            dbsExceptionHandler("dbsException-invalid-input", "Invalid Input for create_by or last_modified_by.\
+            No wildcard allowed.",  self.logger.exception, 'No wildcards allowed for create_by or last_modified_by')
         try:
             #run_num = run_num.replace("*", "%")
             if isinstance(run_num,str) and ('*' in run_num or '%' in run_num):
@@ -312,7 +320,7 @@ class DBSReaderModel(RESTModel):
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash,
                 app_name, output_module_label, processing_version, acquisition_era_name,
                 run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
-                data_tier_name, dataset_access_type, prep_id,
+                data_tier_name, dataset_access_type, prep_id, create_by, last_modified_by, 
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
@@ -820,3 +828,19 @@ self.logger.exception, sError)
             sError = "DBSReaderModel/listPhysicsGroups. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
+    def getServerInfo(self):
+        """
+        FIXME
+        Method that provides information about DBS Server to the clients
+        The information includes
+        * Server Version - SVN tag
+        * Schema Version - Version of Schema this DBS instance is working with
+        * ETC - TBD
+        """
+        ret = {}
+        ret["tagged_version"] = self.getServerVersion()
+        ret["schema"] = self.dbsStatus.getSchemaStatus()
+        ret["components"] = self.dbsStatus.getComponentStatus()
+        return ret
+

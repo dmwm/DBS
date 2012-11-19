@@ -58,6 +58,10 @@ def inputChecks(**_params_):
                                 elif name=='global_tag':
                                     if '*' in value: searchstr(value)
                                     else: globalTag(value)
+                                elif name == 'create_by':
+                                    DBSUser(value)
+                                elif name == 'last_modified_by':
+                                    DBSUser(value)
                                 else:
                                     searchstr(value)
                             except AssertionError as ae:

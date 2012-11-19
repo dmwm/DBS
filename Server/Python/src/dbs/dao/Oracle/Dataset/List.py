@@ -55,7 +55,7 @@ class List(DBFormatter):
                 processing_version=0, acquisition_era="", run_num=0,\
                 physics_group_name="", logical_file_name="", primary_ds_name="",\
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", prep_id="",\
-                min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,\
+                create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,\
                 ldate=0, transaction=False):
         #import pdb
         #pdb.set_trace()
@@ -107,6 +107,12 @@ class List(DBFormatter):
                 binds.update(max_ldate = max_ldate)
             else:
                 pass
+            if create_by:
+                wheresql +=  " AND D.CREATE_BY = :create_by "
+                binds.update(create_by = create_by)
+            if last_modified_by:
+                wheresql += " AND D.LAST_MODIFIED_BY = :last_modified_by "
+                binds.update(last_modified_by = last_modified_by)
             if prep_id:
                 wheresql += "AND D.PREP_ID = :prep_id "
                 binds.update(prep_id = prep_id)
