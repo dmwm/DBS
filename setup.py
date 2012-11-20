@@ -7,7 +7,7 @@ from glob import glob
 
 systems = \
 {
-  'Client':
+  'dbs-client':
   {
     'srcdir': 'Client/src/python',
     'bin': ['Client/cmdline/dbs.py'],
@@ -16,15 +16,49 @@ systems = \
     'examples': ['Client/utils/*.py']
   },
 
-  'Server':
+  'dbs-web':
   {
     'srcdir': 'Server/Python/src',
     'pythonmods': ['dbs.__init__',
                    'dbs.web.DBSReaderModel',
                    'dbs.web.DBSWriterModel',
                    'dbs.web.DBSMigrateModel'],
-    'pythonpkg': ['dbs.business',
-                  'dbs.dao',
+    'pythonpkg': [],
+    'dependencies' : ['dbs-business', 'dbs-dao', 'dbs-utils']
+  },
+
+  'pycurl-client':
+  {
+    'srcdir': 'PycurlClient/src/python',
+    'pythonmods': ['RestClient.__init__',
+                   'RestClient.RestApi'],
+    'pythonpkg': ['RestClient.AuthHandling',
+                  'RestClient.ErrorHandling',
+                  'RestClient.ProxyPlugins',
+                  'RestClient.RequestHandling']
+  },
+
+  'dbs-migration':
+  {
+    'srcdir': 'Server/Python/src',
+    'pythonmods': [],
+    'pythonpkg': ['dbs.components.migration'],
+    'dependencies' : ['dbs-business', 'dbs-dao', 'dbs-utils']
+  },
+
+  'dbs-business':
+  {
+    'srcdir': 'Server/Python/src',
+    'pythonmods': [],
+    'pythonpkg': ['dbs.business'],
+    'dependencies' : ['dbs-dao', 'dbs-utils']
+  },
+
+  'dbs-dao':
+  {
+    'srcdir': 'Server/Python/src',
+    'pythonmods': [],
+    'pythonpkg': ['dbs.dao',
                   'dbs.dao.Oracle',
                   'dbs.dao.Oracle.AcquisitionEra',
                   'dbs.dao.Oracle.ApplicationExecutable',
@@ -32,7 +66,6 @@ systems = \
                   'dbs.dao.Oracle.Block',
                   'dbs.dao.Oracle.BlockParent',
                   'dbs.dao.Oracle.BlockSite',
-                  'dbs.dao.Oracle.BlockStorageElement',
                   'dbs.dao.Oracle.BranchHashe',
                   'dbs.dao.Oracle.ComponentStatus',
                   'dbs.dao.Oracle.Dataset',
@@ -62,31 +95,53 @@ systems = \
                   'dbs.dao.Oracle.ProcessingEra',
                   'dbs.dao.Oracle.ReleaseVersion',
                   'dbs.dao.Oracle.Service',
-                  'dbs.dao.Oracle.Site',
-                  'dbs.dao.Oracle.StorageElement',
-                  'dbs.utils'
-               ]
+                  'dbs.dao.Oracle.Site'
+               ],
+    'dependencies' : ['dbs-utils']
   },
 
-  'PycurlClient':
+  'dbs-utils':
   {
-    'srcdir': 'PycurlClient/src/python',
-    'pythonmods': ['RestClient.__init__',
-                   'RestClient.RestApi'],
-    'pythonpkg': ['RestClient.AuthHandling',
-                  'RestClient.ErrorHandling',
-                  'RestClient.ProxyPlugins',
-                  'RestClient.RequestHandling']
+    'srcdir': 'Server/Python/src',
+    'pythonmods': [],
+    'pythonpkg': ['dbs.utils']
   }
 }
 
 def get_relative_path():
   return os.path.dirname(os.path.abspath(os.path.join(os.getcwd(), sys.argv[0])))
 
+def process_dependencies(system):
+  srcdir = system['srcdir']
+  binaries = set(system.get('bin', set()))
+  examples = set(system.get('examples', set()))
+  pythonmods = set(system.get('pythonmods', set()))
+  pythonpkg = set(system.get('pythonpkg', set()))
+
+  dependencies = system.get('dependencies', [])
+
+  for dependency in dependencies:
+    dependant_system = systems[dependency]
+    if dependant_system['srcdir'] != srcdir:
+      print "Dependencies have to be in the same root directory"
+      sys.exit(1)
+
+    dependants = process_dependencies(dependant_system)
+    binaries.update(dependants.get('bin', set()))
+    examples.update(dependants.get('examples', set()))
+    pythonmods.update(dependants.get('pythonmods', set()))
+    pythonpkg.update(dependants.get('pythonpkg', set()))
+
+  return {'srcdir' : srcdir,
+          'bin' : list(binaries),
+          'examples' : list(examples),
+          'pythonmods' : list(pythonmods),
+          'pythonpkg' : list(pythonpkg)}
+
 def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   # Expand various sources.
   docroot = "doc/build/html"
-  system = systems[system_name]
+  system = process_dependencies(systems[system_name])
   exsrc = sum((glob("%s" % x) for x in system.get('examples', [])), [])
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
 
@@ -108,7 +163,7 @@ class BuildCommand(Command):
   """Build python modules for a specific system."""
   description = \
     "Build python modules for the specified system. Possible\n" + \
-    "\t\t   systems are 'Server', 'Client' or 'PycurlClient'.\n" + \
+    "\t\t   systems are 'dbs-web', 'dbs-client', 'pycurl-client' or 'dbs-migration'.\n" + \
     "Use with --force to\n" + \
     "\t\t   ensure a clean build of only the requested parts.\n"
   user_options = build.user_options
@@ -120,10 +175,10 @@ class BuildCommand(Command):
   def finalize_options(self):
     # Check options.
     if self.system == None:
-      print "System not specified, please use '-s Server', '-s Client', or '-s PycurlClient'"
+      print "System not specified, please use '-s dbs-web', '-s dbs-client', '-s pycurl-client' or '-s dbs-migration'"
       sys.exit(1)
     elif self.system not in systems:
-      print "System %s unrecognised, please use '-s Server', '-s Client' or '-s PycurlClient'" % self.system
+      print "System %s unrecognised, please use '-s dbs-web', '-s dbs-client', '-s pycurl-client' or '-s dbs-migration'" % self.system
       sys.exit(1)
 
     # Expand various sources and maybe do the c++ build.
@@ -134,7 +189,7 @@ class BuildCommand(Command):
     shutil.rmtree("doc/build", True)
 
   def generate_docs(self):
-    if self.system=="Server":
+    if self.system=="dbs-web":
       os.environ["PYTHONPATH"] = "%s/WMCore/build/lib/:%s" % (os.path.dirname(os.getcwd()), os.environ["PYTHONPATH"])
     os.environ["PYTHONPATH"] = "%s/build/lib:%s" % (os.getcwd(), os.environ["PYTHONPATH"])
     #spawn(['make', '-C', 'doc', 'html', 'PROJECT=%s' % self.system.lower()])
@@ -147,13 +202,13 @@ class BuildCommand(Command):
     cmd.force = self.force
     cmd.ensure_finalized()
     cmd.run()
-    self.generate_docs()
+    #self.generate_docs()
     self.distribution.have_run[command] = 1
 
 class InstallCommand(install):
   """Install a specific system."""
   description = \
-    "Install a specific system, either 'Server', 'Client' or 'PycurlClient'. You can\n" + \
+    "Install a specific system, either 'dbs-web', 'dbs-client', 'pycurl-client' or 'dbs-migration'. You can\n" + \
     "\t\t   patch an existing installation instead of normal full installation\n" + \
     "\t\t   using the '-p' option.\n"
   user_options = install.user_options
@@ -168,10 +223,10 @@ class InstallCommand(install):
   def finalize_options(self):
     # Check options.
     if self.system == None:
-      print "System not specified, please use '-s Server', 'Client' or 'PycurlClient'"
+      print "System not specified, please use '-s dbs-web', 'dbs-client', 'pycurl-client' or 'dbs-migration'"
       sys.exit(1)
     elif self.system not in systems:
-      print "System %s unrecognised, please use '-s Server', 'Client' or 'PycurlClient'" % self.system
+      print "System %s unrecognised, please use '-s dbs-web', 'dbs-client', 'pycurl-client' or 'dbs-migration'" % self.system
       sys.exit(1)
     if self.patch and not os.path.isdir("%s/xbin" % self.prefix):
       print "Patch destination %s does not look like a valid location." % self.prefix
