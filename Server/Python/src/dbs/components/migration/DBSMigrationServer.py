@@ -9,26 +9,6 @@ from logging.handlers import HTTPHandler, RotatingFileHandler
 MgrLogger = cherrypy.log.error_log
 #MgrLogger2 = cherrypy.log.access_log
 
-#this should go to config file
-class CheeryPyConfig():
-    def __init__(self, fileName='dbsMigration.log',  maxBytes = 2000000, backupCount = 30):
-        handler = RotatingFileHandler(fileName, "a", maxBytes, backupCount)
-        logging.getLogger().addHandler(handler)
-
-    def _configCherryPy(self):
-        cherrypy.config.update({'server.socket_port':8251})
-        cherrypy.config.update({'log.screen' : True})
-        #cherrypy.config.update({'log.access_file':'/uscms/home/yuyi/dbs3-test/logs/migration.log'})
-        #cherrypy.config.update({'log.error_file':'/uscms/home/yuyi/dbs3-test/logs/migration.log'})
-        #not sure about the thread pool here
-        cherrypy.config.update({'server.thread_pool' :10})
-    #
-        cherrypy.log.error_log.setLevel(logging.INFO)
-        cherrypy.log.access_log.setLevel(logging.INFO)
-
-
-
-
 class DBSMigrationServer(threading.Thread):
     
     def __init__(self, func, duration=2):
@@ -240,12 +220,3 @@ class MigrationTask(SequencialTaskBase):
         self.block_name = []
         self.migration_block_id = []
         self.inserted = True 
-
-if __name__ == '__main__':
-    for i in range(4):
-        #we need to use a simplfied config file for migration instead of the current DBS one? 
-        DBSMigrationServer(MigrationTask("/uscms/home/yuyi/dbs3-test/DBS/Server/Python/control/DBSConfig.py"), 5)
-    CheeryPyConfig(fileName=os.path.join('/uscms/home/yuyi/dbs3-test/logs', 'DBS333migration.log'))._configCherryPy()
-    MgrLogger.info("*********** DBS Migration Server Starting. ************")
-    cherrypy.quickstart()
-

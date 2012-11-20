@@ -139,7 +139,6 @@ class DBSReaderModel(RESTModel):
 	self.dbsRun = DBSRun(self.logger, self.dbi, dbowner)
 	self.dbsDataType = DBSDataType(self.logger, self.dbi, dbowner)
         self.dbsStatus = DBSStatus(self.logger, self.dbi, dbowner)
-	self.dbsMigrate = DBSMigrate(self.logger, self.dbi, dbowner)
         self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, dbowner) 
         self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, dbowner)
         self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, dbowner)
@@ -727,7 +726,7 @@ class DBSReaderModel(RESTModel):
         Returns all information related with the block_name
         """
         try:
-            return self.dbsMigrate.dumpBlock(block_name)
+            return self.dbsBlock.dumpBlock(block_name)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
