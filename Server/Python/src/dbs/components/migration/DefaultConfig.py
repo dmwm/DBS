@@ -1,37 +1,42 @@
 """
-DBS migration service configuration file
+DBS3 Migration Server Configuration
 """
-
-__revision__ = "$Id: DefaultConfig.py,v 1.4 2010/08/02 20:49:36 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
-
-import os, logging
 from WMCore.Configuration import Configuration
+import os,sys
+
+ROOTDIR = os.path.normcase(os.path.abspath(__file__)).rsplit('/', 3)[0]
+
+sys.path.append(os.path.join(ROOTDIR,'auth/dbs'))
+
+from DBSSecrets import dbs3_l3_i2
+from DBSSecrets import dbs3_l2_i2
+from DBSSecrets import dbs3_l1_i2
 
 config = Configuration()
 
-config.section_("Agent")
-config.Agent.hostName = "cmssrv49.fnal.gov"
-config.Agent.contact = "anzar@fnal.gov"
-config.Agent.teamName = "DBS"
-config.Agent.agentName = "DBSMigrationService"
-config.Agent.useMsgService = False
-config.Agent.useTrigger = False
-    
-config.section_("General")
-config.General.workDir = "/uscms/home/anzar/devDBS3/DBS3_ROOT"
+config.component_('web')
+config.web.host = "127.0.0.1"
+config.web.port = 8251
+config.web.log_screen = False
+config.web.thread_pool = 10
 
-config.section_("CoreDatabase")
-config.CoreDatabase.connectUrl = "mysql://user:passwd@host:3306/Database"
-config.CoreDatabase.dialect = "mysql"
-config.CoreDatabase.dbowner = '__MYSQL__'
-#config.CoreDatabase.socket = os.getenv("DBSOCK")
+config.component_('dbsmigration')
+config.dbsmigration.threads = 4
+config.dbsmigration.instances = ['prod/global','dev/global','int/global']
+config.dbsmigration.section_('database')
+db_instances = config.dbsmigration.database.section_('instances')
 
-config.component_('DBSMigrationService')
-config.DBSMigrationService.default_expires=300
-config.DBSMigrationService.pollInterval = 1 
-config.DBSMigrationService.namespace= "dbs.components.migration.DBSMigrationService"
-config.DBSMigrationService.componentDir = config.General.workDir + "/DBSMigrationService"
-#config.DBSInsertBuffer.dbowner = '__MYSQL__'
-config.DBSMigrationService.workerThreads = 1
+db_production_global = db_instances.section_('prod/global')
+db_production_global.dbowner = dbs3_l2_i2['databaseOwner']
+db_production_global.connectUrl = dbs3_l2_i2['connectUrl']['writer']
+db_production_global.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }
 
+db_development_global = db_instances.section_('dev/global')
+db_development_global.dbowner = dbs3_l1_i2['databaseOwner']
+db_development_global.connectUrl = dbs3_l1_i2['connectUrl']['writer']
+db_development_global.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }
+
+db_integration_global = db_instances.section_('int/global')
+db_integration_global.dbowner = dbs3_l3_i2['databaseOwner']
+db_integration_global.connectUrl = dbs3_l3_i2['connectUrl']['writer']
+db_integration_global.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }

@@ -25,7 +25,7 @@ class List(DBFormatter):
 SELECT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 """
 
-    def execute(self, conn, logical_file_name='', block_name='', run_num=0):
+    def execute(self, conn, logical_file_name='', block_name='', run_num=0, migration=False):
         """
         Lists lumi section numbers with in a file or a block.
         """
@@ -62,6 +62,9 @@ SELECT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 	if len(cursors) != 1:
             dbsExceptionHandler('dbsException-missing-data', "FileLumi/List: file lumi does not exist.")
         result = self.formatCursor(cursors[0])
+        #for migration, we need flat format to load the data into another DB.
+        if migration:
+            return result
         condensed_res=[]
         if logical_file_name:
             run_lumi={}

@@ -409,14 +409,10 @@ class DBSMigrate:
             callType = spliturl[0]
             if callType != 'http' and callType != 'https':
                 raise ValueError, "unknown URL type: %s" % callType
-            #myproxy="socks5://localhost:5678"
-            try:
-                myproxy=os.environ['SOCKS5_PROXY']
-            except KeyError as ke:
-                raise ke
-            restapi = RestApi(auth=X509Auth(), proxy=Socks5Proxy(proxy_url=myproxy) if myproxy else None  )
-            #restapi = RestApi(auth=X509Auth(ca_path="/etc/grid-security/certificates"),
-            #                  proxy=Socks5Proxy(proxy_url=proxy) if proxy else None  )
+
+            myproxy=os.environ.get('SOCKS5_PROXY', None)
+
+            restapi = RestApi(auth=X509Auth(), proxy=Socks5Proxy(proxy_url=myproxy) if myproxy else None)
             content = "application/json"
             UserID = os.environ['USER']+'@'+socket.gethostname()
             request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID }

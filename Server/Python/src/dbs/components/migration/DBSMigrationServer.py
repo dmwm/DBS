@@ -1,13 +1,15 @@
 import cherrypy
 import threading
-#from threading import *
 import logging
 from logging.handlers import HTTPHandler, RotatingFileHandler
-#from cherrypy import log as cplog
-#from cherrypy._cplogging import LogManager
 
 MgrLogger = cherrypy.log.error_log
-#MgrLogger2 = cherrypy.log.access_log
+
+class MigrationWebMonitoring(object):
+    """Exposed web-site for lemon monitoring (only exposed to localhost)"""
+    def index(self):
+        return 'DBS3 Migration Service'
+    index.exposed = True
 
 class DBSMigrationServer(threading.Thread):
     
@@ -62,7 +64,6 @@ from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from dbs.business.DBSMigrate import DBSMigrate  
 from dbs.business.DBSBlockInsert import DBSBlockInsert
-from WMCore.Configuration import *
 from cherrypy import HTTPError
 import json, cjson
 class SequencialTaskBase(object):
@@ -102,16 +103,15 @@ class SequencialTaskBase(object):
    
 class MigrationTask(SequencialTaskBase):
     
-    def initialize(self, config):
-        self.config = loadConfigurationFile(config)
-        #self.logger = cherrypy.log.error_log
+    def initialize(self, db_config):
+        self.db_config = db_config
         self.sourceUrl = None
         self.migration_req_id = 0
         self.block_names = []
         self.migration_block_ids = []
         self.inserted = True
-        dbowner =  self.config.dbs.views.active.DBSMigrator.database.instances.section_('prod/global').dbowner
-        connectUrl = self.config.dbs.views.active.DBSMigrator.database.instances.section_('prod/global').connectUrl
+        dbowner = self.db_config.get('prod/global').get('dbowner')
+        connectUrl = self.db_config.get('prod/global').get('connectUrl')
         dbFactory = DBFactory(MgrLogger, connectUrl, options={})
         self.dbi = dbFactory.connect()
         self.dbFormatter = DBFormatter(MgrLogger,self.dbi)

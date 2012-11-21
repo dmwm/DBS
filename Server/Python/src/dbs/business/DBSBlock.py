@@ -94,7 +94,7 @@ class DBSBlock:
                 #We keep lumi sec in a file, but the file parentage seperate
                 #from file
                 f.update(file_lumi_list = self.fllist.execute(conn,
-                            logical_file_name=f['logical_file_name']))
+                            logical_file_name=f['logical_file_name'], migration=True))
                 del f['branch_hash_id']
             del dataset["acquisition_era_name"], dataset["processing_version"]
             del block["dataset"]

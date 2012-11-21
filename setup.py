@@ -41,7 +41,8 @@ systems = \
   'dbs-migration':
   {
     'srcdir': 'Server/Python/src',
-    'pythonmods': [],
+    'pythonmods': ['dbs.__init__',
+                   'dbs.components.__init__'],
     'pythonpkg': ['dbs.components.migration'],
     'dependencies' : ['dbs-business', 'dbs-dao', 'dbs-utils']
   },
@@ -202,7 +203,7 @@ class BuildCommand(Command):
     cmd.force = self.force
     cmd.ensure_finalized()
     cmd.run()
-    #self.generate_docs()
+    self.generate_docs()
     self.distribution.have_run[command] = 1
 
 class InstallCommand(install):
