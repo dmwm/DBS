@@ -30,7 +30,6 @@ from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
 from dbs.business.DBSDataType import DBSDataType
 from dbs.business.DBSStatus import DBSStatus
-from dbs.business.DBSMigrate import DBSMigrate
 from dbs.business.DBSBlockInsert import DBSBlockInsert
 from dbs.business.DBSReleaseVersion import DBSReleaseVersion
 from dbs.business.DBSDatasetAccessType import DBSDatasetAccessType
