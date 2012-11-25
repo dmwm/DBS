@@ -3,6 +3,7 @@ Input Validation to prohibit SQLInjection, XSS, ...
 To use with _validate_input method of the RESTModel implementation
 """
 import cjson
+import urlparse
 from cherrypy import log
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
@@ -10,6 +11,11 @@ from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from WMCore.Lexicon import *
 import logging
 from WMCore.WebTools.Page import Page
+
+def validateDbsUrl(url):#need to be replaced by an url regex in WMCore/Lexicon.py
+    url_segments = urlparse.urlparse(url)
+    for segment in url_segments:
+        namestr(segment)
 
 def inputChecks(**_params_):
     """
@@ -124,7 +130,8 @@ validationFunction = {
     'processed_ds_name':procdataset,
     'processing_version':procversion,
     'acquisition_era_name':acqname,
-    'global_tag':globalTag
+    'global_tag':globalTag,
+    'migration_url':validateDbsUrl
     }
 
 validationFunctionWwildcard = {
@@ -186,7 +193,6 @@ def validateStringInput(input_key,input_data):
         print serverLog
         dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input Data: Not Match Required Format", None, serverLog)
     return input_data
-
     
         
     
