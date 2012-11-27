@@ -24,9 +24,7 @@ class DBSClientReader_t(unittest.TestCase):
     def __init__(self, methodName='runTest'):
         super(DBSClientReader_t, self).__init__(methodName)
         url=os.environ['DBS_WRITER_URL']
-        #print url
-        #proxy="socks5://localhost:5678"
-        proxy=os.environ['SOCKS5_PROXY']
+        proxy=os.environ.get('SOCKS5_PROXY')
         self.api = DbsApi(url=url, proxy=proxy)
 
 

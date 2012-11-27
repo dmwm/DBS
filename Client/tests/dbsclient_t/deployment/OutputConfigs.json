@@ -1,7 +1,8 @@
 {
-    "release_version": "CMSSW_1_2_3", 
-    "pset_hash": "NO_PSET_HASH",      
-    "app_name": "cmsRun", 
-    "output_module_label": "DBS3_DEPLOYMENT_TEST", 
+    "release_version": "CMSSW_1_2_3",
+    "pset_hash": "NO_PSET_HASH",
+    "pset_name": "no_name",
+    "app_name": "cmsRun",
+    "output_module_label": "DBS3_DEPLOYMENT_TEST",
     "global_tag": "DBS3_DEPLOYMENT_TEST"
 }

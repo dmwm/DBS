@@ -409,7 +409,7 @@ class PostDeploymentTests(unittest.TestCase):
 
         fp.close()
 
-        expected_data = [{u'lumi_section_num': 24022, u'run_num': 43}, {u'lumi_section_num': 24122, u'run_num': 43}, {u'lumi_section_num': 24222, u'run_num': 43}]
+        expected_data = [{u'lumi_section_num': [24022, 24122, 24222], u'run_num': 43, u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
 
         lumis = sorted(self.api.listFileLumis(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"), key=lambda k: k["lumi_section_num"])
 

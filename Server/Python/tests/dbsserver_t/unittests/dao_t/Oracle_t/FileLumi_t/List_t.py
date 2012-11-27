@@ -29,6 +29,12 @@ class List_t(unittest.TestCase):
         self.conn = self.dbi.connection()
         self.dao = FileLumiList(self.logger, self.dbi, self.dbowner)
 
+        #List API returns a list of lumi sections, whereas the Insert API needs a single lumi_section_number per file
+        #IMHO that should be fixed
+        for entry in self.lumi_data:
+            if entry.has_key('lumi_section_num'):
+                entry['lumi_section_num'] = [entry['lumi_section_num']]
+
     def tearDown(self):
         """Clean-up all necessary parameters"""
         self.conn.close()
@@ -37,15 +43,8 @@ class List_t(unittest.TestCase):
         """dao.Oracle.FileLumi.List: Basic"""
         result = self.dao.execute(self.conn, logical_file_name=self.lumi_data[0]['logical_file_name'])
 
-        #remove all logical_file_names from lumi dictionaries. The API does not return them, if logical_file_name is used as parameter
-        #IMHO that needs to be fixed. The problem is also described in https://svnweb.cern.ch/trac/CMSDMWM/ticket/3178
-        copied_lumi_data = copy.deepcopy(self.lumi_data)
-        for entry in copied_lumi_data:
-            if entry.has_key('logical_file_name'):
-                del entry['logical_file_name']
-                
         self.assertTrue(type(result) == list)
-        self.assertEqual(strip_volatile_fields(result), copied_lumi_data)
+        self.assertEqual(strip_volatile_fields(result), self.lumi_data)
 
     def test02(self):
         """dao.Oracle.FileLumi.List: Basic"""

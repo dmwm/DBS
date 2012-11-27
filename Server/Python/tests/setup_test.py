@@ -1,8 +1,8 @@
-import sys,os
+import sys, os
 import fnmatch
 from glob import glob
 import unittest
-from distutils.core import setup,Command
+from distutils.core import setup, Command
 
 def get_relative_path():
     return os.path.dirname(os.path.abspath(os.path.join(os.getcwd(), sys.argv[0])))
@@ -25,12 +25,13 @@ def get_test_names(search_path,search_pattern,base_dir):
     
 class TestCommand(Command):
     
-    user_options =[('web=',None,'Run unittests on web-layer options are DBSReader,DBSWriter'),
-                   ('weball',None,'Run unittests on web-layer'),
-                   ('dao',None,'Run unittests on dao-layer'),
-                   ('business',None,'Run unittests on business-layer'),
-                   ('allTests',None,'Run unittests on all sub-layers'),
-                   ('config=',None,'Config file used for unittests')
+    user_options =[('web=', None,'Run unittests on web-layer options are DBSReader,DBSWriter'),
+                   ('weball', None,'Run unittests on web-layer'),
+                   ('dao', None,'Run unittests on dao-layer'),
+                   ('business', None,'Run unittests on business-layer'),
+                   ('allTests', None,'Run unittests on all sub-layers'),
+                   ('config=', None,'Config file used for unittests'),
+                   ('secrets=', None, 'Path to DBSSecrets file used for unittests')
                    ]
 
     description = """Test DBS3 using provided unittest, possible options are\n
@@ -39,7 +40,8 @@ class TestCommand(Command):
                    --dao to run unittests on the dao-layer\n
                    --business to run unittests on the business-layer\n
                    --allTest to run unittests on all sub-layers\n
-                   --config=<cfgfile> config file used for the unittests"""
+                   --config=<cfgfile> config file used for the unittests\n
+                   --secrets=<path_to_secretfile> Path to DBSSecrets file used for unittests"""
 
     def initialize_options(self):
         self.web=None
@@ -48,6 +50,7 @@ class TestCommand(Command):
         self.business = False
         self.allTests = False
         self.config = None
+        self.secrets = "/data/auth/dbs"
 
     def finalize_options(self):
         #Check if environment is set-up correctly
@@ -66,17 +69,22 @@ class TestCommand(Command):
           if not self.config:
               print "Please, specify a config file using --config=<cfgfile> argument"
               sys.exit(2)
+
+          if not self.secrets:
+              print "Please, specify the path to the DBSSecrets file using --secrets=<path_to_secretsfile> argument."
+              sys.exit(3)
+
           if not os.access(self.config,os.F_OK and os.R_OK):
               print "Cannot read config file %s.\n Please, ensure that it exists and you have the privileges to read it." %(self.config)
-              sys.exit(3)
+              sys.exit(4)
 
           if not self.web and not self.weball and not self.dao and not self.business and not self.allTests:
               print "Please, specify one of the following options.\n%s" % self.description
-              sys.exit(3)
+              sys.exit(5)
 
           if self.web not in [None,'DBSWriter','DBSReader']:
               print "Valid options for --web are DBSReader or DBSWriter"
-              sys.exit(4)
+              sys.exit(6)
 
     def run(self):
           base_dir = get_relative_path()
@@ -86,7 +94,7 @@ class TestCommand(Command):
           business_tests = os.path.join(test_dir,'business_t')
 
           #prepare environment
-          sys.path.append(base_dir)
+          sys.path.append(self.secrets)
           os.environ['DBS_TEST_CONFIG'] = self.config
 
           #some tests need to be executed in a specific order, since they depend on each other

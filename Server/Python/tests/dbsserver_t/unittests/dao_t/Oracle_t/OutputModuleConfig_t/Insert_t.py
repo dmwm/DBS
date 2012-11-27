@@ -32,7 +32,6 @@ class Insert_t(unittest.TestCase):
         
         try:
             self.data['scenario'] = self.data.get("scenario", None)
-            self.data['pname'] = self.data.get("pname", None)
             self.output_module_config_insert.execute(self.conn, self.data, tran)
         except Exception as ex:
             tran.rollback()
