@@ -169,7 +169,7 @@ class DBSMigrate:
             srcblock = self.getSrcBlocks(url, block=block_name)
             if len(srcblock) < 1:
                 dbsExceptionHandler('dbsException-invalid-input2', '''Invalid input for DBSMigration:
-                                       Required Block %s not found at source %s. ''' %(block, url))
+                                       Required Block %s not found at source %s. ''' %(srcblock, url))
             ##This block has to be migrated
             ordered_dict[order_counter] = []
             ordered_dict[order_counter].append(block_name)
