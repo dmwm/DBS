@@ -9,6 +9,7 @@ DBSVERSION = os.getenv('DBS3_VERSION')
 
 sys.path.append(os.path.join(ROOTDIR,'auth/dbs'))
 
+from DBSSecrets import dbs3_l2_i2
 from DBSSecrets import dbs3_l3_i2
 from DBSSecrets import dbs3_p2_i2
 from DBSSecrets import dbs3_l1_i2
@@ -55,9 +56,9 @@ ProductionGlobal.connectUrl = cms_lum_cmscald['connectUrl']['writer']
 ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 DevelopmentGlobal = instances.section_('dev/global')
-DevelopmentGlobal.dbowner = cms_lum_cmscald['databaseOwner']
+DevelopmentGlobal.dbowner = dbs3_l1_i2['databaseOwner']
 DevelopmentGlobal.version = DBSVERSION
-DevelopmentGlobal.connectUrl = cms_lum_cmscald['connectUrl']['writer']
+DevelopmentGlobal.connectUrl = dbs3_l1_i2['connectUrl']['writer']
 DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 IntegrationGlobal = instances.section_('int/global')
@@ -93,15 +94,15 @@ ProductionGlobal.connectUrl = cms_lum_cmscald['connectUrl']['reader']
 ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 DevelopmentGlobal = instances.section_('dev/global')
-DevelopmentGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+DevelopmentGlobal.dbowner = dbs3_l2_i2['databaseOwner']
 DevelopmentGlobal.version = DBSVERSION
-DevelopmentGlobal.connectUrl = dbs3_p2_i2['connectUrl']['reader']
+DevelopmentGlobal.connectUrl = dbs3_l2_i2['connectUrl']['reader']
 DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 IntegrationGlobal = instances.section_('int/global')
-IntegrationGlobal.dbowner = dbs3_p2_i2['databaseOwner']
+IntegrationGlobal.dbowner = dbs3_l2_i2['databaseOwner']
 IntegrationGlobal.version = DBSVERSION
-IntegrationGlobal.connectUrl = dbs3_p2_i2['connectUrl']['reader']
+IntegrationGlobal.connectUrl = dbs3_l2_i2['connectUrl']['reader']
 IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 active.section_('DBSWriter')

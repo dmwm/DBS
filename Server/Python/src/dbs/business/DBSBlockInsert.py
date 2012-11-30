@@ -278,7 +278,7 @@ class DBSBlockInsert :
             #Talked with Matt N: We should stop insertng this block now.
             #This means there is some trouble.
             #Throw exception to let the up layer know. YG 11/17/2010
-                dbsExceptionHandler("dbsException-invalid-input","DBSBlockInsert/insertBlock. Block already exists.")
+                dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertBlock. Block already exists.")
             else:
                 raise
         #All Praentage will be deduced from file parentage. 
@@ -394,7 +394,7 @@ class DBSBlockInsert :
             datasetID = self.datasetid.execute(conn, dataset['dataset'])
             dataset['dataset_id'] = datasetID
         except KeyError, ex:
-            dbsExceptionHandler("dbsException-invalid-input", "DBSBlockInsert/InsertDataset: Dataset is required.\
+            dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/InsertDataset: Dataset is required.\
                 Exception: %s.  troubled dataset are: %s" %(ex.args[0], dataset) )
             if conn:conn.close()
         if datasetID > 0:
@@ -461,7 +461,7 @@ class DBSBlockInsert :
                 aq = blockcontent['acquisition_era']
             else:
                 if conn:conn.close()
-                dbsExceptionHandler("dbsException-invalid-input", "BlockInsert: Acquisition Era is required")    
+                dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Acquisition Era is required")    
             #is there acquisition?
             if aq.has_key('acquisition_era_name') and aq.has_key('start_date'):
                 #for migraction, some of the DBS2 Acquisition does not have start_date, so insert 0.
@@ -484,7 +484,7 @@ class DBSBlockInsert :
                         if dataset['acquisition_era_id'] <= 0:
                             if tran:tran.rollback()
                             if conn:conn.close()
-                            dbsExceptionHandler("dbsException-invalid-input", "BlockInsert: Check the spelling of acquisition Era name.\
+                            dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Check the spelling of acquisition Era name.\
                                             the db may already have the same acquisition era, but with different casees.")
                 except Exception, ex:
                     if tran:
@@ -495,7 +495,7 @@ class DBSBlockInsert :
                 if tran:
                     tran.rollback()
                 if conn:conn.close() 
-                dbsExceptionHandler("dbsException-invalid-input", "BlockInsert: Acquisition Era is required")
+                dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Acquisition Era is required")
 
             #4 Deal with Processing era
             pera = {}
@@ -505,7 +505,7 @@ class DBSBlockInsert :
                 if tran:
                     tran.rollback()
                 if conn:conn.close() 
-                dbsExceptionHandler('dbsException-invalid-input', 'BlockInsert:processing version is required') 
+                dbsExceptionHandler('dbsException-invalid-input2', 'BlockInsert:processing version is required') 
             #is there processing era?
             if pera.has_key('processing_version'):
                 try:
@@ -529,7 +529,7 @@ class DBSBlockInsert :
             else: 
                 if tran:tran.rollback()
                 if conn:conn.close()
-                dbsExceptionHandler('dbsException-invalid-input', 'BlockInsert:processing version is required')
+                dbsExceptionHandler('dbsException-invalid-input2', 'BlockInsert:processing version is required')
             #Make sure processed_ds_name is right format.
             #processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
             #In order to accomdate DBS2 data for migration, we turn off this check in migration.
@@ -542,7 +542,7 @@ class DBSBlockInsert :
                 if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
                     if tran:tran.rollback()
                     if conn:conn.close()
-                    dbsExceptionHandler('dbsException-invalid-input', "BlockInsert:\
+                    dbsExceptionHandler('dbsException-invalid-input2', "BlockInsert:\
                         processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified.")
     
             #So far so good, let's committe first 4 db acativties before going on.

@@ -66,13 +66,19 @@ class DBSBlock:
                 dataset = dataset1[0]
                 dconfig_list = self.outputCoflist.execute(conn,dataset=dataset['dataset'])
             else: return {}
-
             #get block parentage
             bparent = self.blockparentlist.execute(conn, block['block_name'])
             #get dataset parentage
             dsparent = self.dsparentlist.execute(conn, dataset['dataset'])
             for p in dsparent:
-                del p['parent_dataset_id'], p['dataset']
+                del p['parent_dataset_id']
+                if 'dataset'in p:
+                    del p['dataset']
+                elif 'this_dataset' in p:
+                    del p['this_dataset']
+                else:
+                    pass
+
             fparent_list = self.fplist.execute(conn,
                                                block_id=block['block_id'])
             fconfig_list = self.outputCoflist.execute(conn,
