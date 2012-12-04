@@ -1,11 +1,11 @@
 /* ---------------------------------------------------------------------- */
-/* Script generated with: DeZign for Databases v6.1.2                     */
-/* Target DBMS:           Oracle 10g                                      */
+/* Script generated with: DeZign for Databases v6.3.4                     */
+/* Target DBMS:           Oracle 11g                                      */
 /* Project file:          DBS3.dez                                        */
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database drop script                            */
-/* Created on:            2011-05-31 10:59                                */
+/* Created on:            2012-12-03 17:23                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -81,8 +81,6 @@ ALTER TABLE MIGRATION_BLOCKS DROP CONSTRAINT MR_MB;
 
 /* Drop constraints */
 
-ALTER TABLE FILE_LUMIS DROP CONSTRAINT NN_FLM_FILE_LUMI_ID;
-
 ALTER TABLE FILE_LUMIS DROP CONSTRAINT NN_FLM_RUN_NUM;
 
 ALTER TABLE FILE_LUMIS DROP CONSTRAINT NN_FLM_LUMI_SECTION_NUM;
@@ -90,8 +88,6 @@ ALTER TABLE FILE_LUMIS DROP CONSTRAINT NN_FLM_LUMI_SECTION_NUM;
 ALTER TABLE FILE_LUMIS DROP CONSTRAINT NN_FLM_FILE_ID;
 
 ALTER TABLE FILE_LUMIS DROP CONSTRAINT PK_FLM;
-
-ALTER TABLE FILE_LUMIS DROP CONSTRAINT TUC_FLM_1;
 
 /* Drop table */
 
@@ -312,20 +308,6 @@ ALTER TABLE DATASETS DROP CONSTRAINT TUC_DS_DATASET;
 DROP TABLE DATASETS;
 
 /* ---------------------------------------------------------------------- */
-/* Drop table "COMPONENT_STATUS"                                          */
-/* ---------------------------------------------------------------------- */
-
-/* Drop constraints */
-
-ALTER TABLE COMPONENT_STATUS DROP CONSTRAINT NN_CSS_COMP_STATUS_ID;
-
-ALTER TABLE COMPONENT_STATUS DROP CONSTRAINT PK_CSS;
-
-/* Drop table */
-
-DROP TABLE COMPONENT_STATUS;
-
-/* ---------------------------------------------------------------------- */
 /* Drop table "MIGRATION_BLOCKS"                                          */
 /* ---------------------------------------------------------------------- */
 
@@ -360,20 +342,6 @@ ALTER TABLE MIGRATION_REQUESTS DROP CONSTRAINT TUC_MR_1;
 DROP TABLE MIGRATION_REQUESTS;
 
 /* ---------------------------------------------------------------------- */
-/* Drop table "FILE_BUFFERS"                                              */
-/* ---------------------------------------------------------------------- */
-
-/* Drop constraints */
-
-ALTER TABLE FILE_BUFFERS DROP CONSTRAINT NN_FB_LOGICAL_FILE_NAME;
-
-ALTER TABLE FILE_BUFFERS DROP CONSTRAINT PK_FB;
-
-/* Drop table */
-
-DROP TABLE FILE_BUFFERS;
-
-/* ---------------------------------------------------------------------- */
 /* Drop table "PROCESSING_ERAS"                                           */
 /* ---------------------------------------------------------------------- */
 
@@ -398,6 +366,8 @@ DROP TABLE PROCESSING_ERAS;
 ALTER TABLE ACQUISITION_ERAS DROP CONSTRAINT NN_AQE_ACQUISITION_ERA_ID;
 
 ALTER TABLE ACQUISITION_ERAS DROP CONSTRAINT NN_AQE_ACQUISITION_ERA_NAME;
+
+ALTER TABLE ACQUISITION_ERAS DROP CONSTRAINT NN_AQE_START_DATE;
 
 ALTER TABLE ACQUISITION_ERAS DROP CONSTRAINT PK_AQE;
 

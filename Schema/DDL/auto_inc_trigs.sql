@@ -59,9 +59,6 @@ CREATE OR REPLACE TRIGGER FC_TRIG before insert on FILE_OUTPUT_MOD_CONFIGS for e
 CREATE OR REPLACE TRIGGER AF_TRIG before insert on ASSOCIATED_FILES for each row begin if :NEW.ASSOCATED_FILE_ID is null then select SEQ_AF.nextval into :NEW.ASSOCATED_FILE_ID from dual; end if; end;
  /
 
-CREATE OR REPLACE TRIGGER FLM_TRIG before insert on FILE_LUMIS for each row begin if :NEW.FILE_LUMI_ID is null then select SEQ_FLM.nextval into :NEW.FILE_LUMI_ID from dual; end if; end;
- /
-
 CREATE OR REPLACE TRIGGER AQE_TRIG before insert on ACQUISITION_ERAS for each row begin if :NEW.ACQUISITION_ERA_ID is null then select SEQ_AQE.nextval into :NEW.ACQUISITION_ERA_ID from dual; end if; end;
  /
 
@@ -72,7 +69,4 @@ CREATE OR REPLACE TRIGGER MR_TRIG before insert on MIGRATION_REQUESTS for each r
  /
 
 CREATE OR REPLACE TRIGGER MB_TRIG before insert on MIGRATION_BLOCKS for each row begin if :NEW.MIGRATION_BLOCK_ID is null then select SEQ_MB.nextval into :NEW.MIGRATION_BLOCK_ID from dual; end if; end;
- /
-
-CREATE OR REPLACE TRIGGER CS_TRIG before insert on COMPONENT_STATUS for each row begin if :NEW.COMP_STATUS_ID is null then select SEQ_CS.nextval into :NEW.COMP_STATUS_ID from dual; end if; end;
  /

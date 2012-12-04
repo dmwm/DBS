@@ -20,7 +20,7 @@ class Insert(DBFormatter):
                    WHEN not exists (select release_version_id from %srelease_versions where release_version = release_v) THEN
                         INTO %srelease_versions(release_version_id, release_version) values (%sseq_rv.nextval, release_v)
                    WHEN not exists(select parameter_set_hash_id from %sparameter_set_hashes where pset_hash = pset_h) THEN
-                        INTO %sparameter_set_hashes ( parameter_set_hash_id, pset_hash, name ) values (%sseq_psh.nextval, pset_h, pname)
+                        INTO %sparameter_set_hashes ( parameter_set_hash_id, pset_hash, pset_name ) values (%sseq_psh.nextval, pset_h, pname)
                    WHEN 1=1 THEN
                         INTO %soutput_module_configs ( output_mod_config_id, app_exec_id, release_version_id,
                         parameter_set_hash_id, output_module_label, global_tag, scenario, creation_date, create_by
