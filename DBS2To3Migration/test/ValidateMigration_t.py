@@ -212,6 +212,3 @@ if __name__ == '__main__':
     TestSuite.addTest(CompareDBS2ToDBS3('test_release_versions'))
     
     unittest.TextTestRunner(verbosity=2).run(TestSuite)
-    
-
-

@@ -12,11 +12,6 @@ from WMCore.Lexicon import *
 import logging
 from WMCore.WebTools.Page import Page
 
-def validateDbsUrl(url):#need to be replaced by an url regex in WMCore/Lexicon.py
-    url_segments = urlparse.urlparse(url)
-    for segment in url_segments:
-        namestr(segment)
-
 def inputChecks(**_params_):
     """
     This is a function to check all the input for GET APIs.
@@ -131,7 +126,7 @@ validationFunction = {
     'processing_version':procversion,
     'acquisition_era_name':acqname,
     'global_tag':globalTag,
-    'migration_url':validateDbsUrl
+    'migration_url':validateUrl
     }
 
 validationFunctionWwildcard = {

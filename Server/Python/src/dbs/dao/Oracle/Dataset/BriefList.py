@@ -195,6 +195,7 @@ class BriefList(DBFormatter):
 
 	sql = "".join((selectsql, self.basesql, joinsql, wheresql)) 
 	#self.logger.debug( sql)
+        #self.logger.debug( binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []
         for i in cursors:

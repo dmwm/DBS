@@ -76,8 +76,10 @@ class DBApi(object):
         return self.dbFormatter.formatCursor(cursors[0])
 
 def generator():
+    #modify db info based on your schema
     ownerDBS3 = 'owner'
     connectUrlDBS3 = 'oracle://account:pd@mydb'
+    role = 'CMS_DBS3_INT_GLOBAL_R_ROLE'
 
     output = open('recreateSequence.sql', 'w') 
     logger = logging.getLogger()
@@ -102,7 +104,7 @@ def generator():
                   NOCYCLE
                   CACHE %s
                   NOORDER;""" %(ownerDBS3, s, int(maxID)+1,seqV[0]['inc'], maxID, seqV[0]['csz'] )
-           sql3 = """ GRANT SELECT ON %s.%s TO %s_R_ROLE;""" %(ownerDBS3, s, ownerDBS3) 
+           sql3 = """ GRANT SELECT ON %s.%s TO %s;""" %(ownerDBS3, s, role) 
            output.write(sql1+'\n')
            output.write(sql2+'\n')
            output.write(sql3+'\n\n')

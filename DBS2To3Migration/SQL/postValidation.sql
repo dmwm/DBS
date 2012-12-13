@@ -1,5 +1,5 @@
-#These sqls insert a fake acquisition era and processing era. So each DBS2 dataset will have them.
-#Theses are quired by DBS3 and migration.
+--These sqls insert a fake acquisition era and processing era. So each DBS2 dataset will have them.
+--Theses are required by DBS3 and migration.
 
 insert into ACQUISITION_ERAS (ACQUISITION_ERA_NAME, start_date) values('DBS2_UNKNOWN_ACQUISION_ERA', 0);
 
