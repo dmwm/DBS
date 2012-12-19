@@ -20,12 +20,12 @@ class dbsUtils:
     def getCreateBy(self):
         user = ''
         try:
-            user = cherrypy.request.user.get('name', getpass.getuser())
+            user = cherrypy.request.user.get('name')
             #in case a user does not assocate his dn with his HN account, name will be a empty string. 
             if not user:
-                user = cherrypy.request.get('dn', None)
-        except:
-            pass
+                user = cherrypy.request.get('dn')
+        except AttributeError::
+            user = getpass.getuser()
         return user
 
     def getModifiedBy(self):
