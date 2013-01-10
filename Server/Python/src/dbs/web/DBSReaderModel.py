@@ -94,6 +94,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'origin_site_name',
                         'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate',
                         'max_ldate', 'cdate', 'ldate', 'detail'])
+        self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset'])
         self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'minrun', 'maxrun',
                         'origin_site_name', 'lumi_list', 'detail'])
@@ -441,6 +442,23 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
+    @inputChecks(origin_site_name=str, dataset=str)
+    def listBlockOrigin(self, origin_site_name="",  dataset=""):
+        """
+        Example url's:
+        http://dbs3/blockorigin?origin_site_name=T1_FNAL_Buff <br />
+        http://dbs3/blockorigin?origin_site_name=T1_FNAL_Buff&dataset=mydataset<br />
+        """
+        try:
+            return self.dbsBlock.listBlocksOrigin(origin_site_name, dataset)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+        except Exception, ex:
+            sError = "DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
+                    % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
 
     @inputChecks(block_name=str)
     def listBlockParents(self, block_name=""):

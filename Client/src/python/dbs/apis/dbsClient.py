@@ -366,6 +366,24 @@ class DbsApi(object):
 
         return self.__callServer("blocks",params=kwargs)
 
+
+    def listBlockOrigin(self, **kwargs):
+        """
+        API to list blocks first generated in origin_site_name 
+       
+        :param origin_site_name: Origin Site Name (No wildcards)
+        :type origin_site_name: str 
+        :param dataset: dataset (No wildcards)
+        :type dataset: str
+        
+        """
+        validParameters = ['origin_site_name', 'dataset']
+
+        requiredParameters={'multiple':validParameters}
+
+        checkInputParameter(method="listBlockOrigin",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
+
+
     def listDatasets(self, **kwargs):
         """
         API to list dataset(s) in DBS

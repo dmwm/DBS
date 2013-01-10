@@ -24,7 +24,7 @@ class dbsUtils:
             #in case a user does not assocate his dn with his HN account, name will be a empty string. 
             if not user:
                 user = cherrypy.request.get('dn')
-        except AttributeError::
+        except AttributeError:
             user = getpass.getuser()
         return user
 

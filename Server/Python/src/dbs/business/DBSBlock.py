@@ -36,6 +36,7 @@ class DBSBlock:
         self.primdslist      =    daofactory(classname = "PrimaryDataset.List")
         self.filelist        =    daofactory(classname = "File.MgrtList")
         self.fllist          =    daofactory(classname = "FileLumi.List")
+        self.bkOriginlist    =    daofactory(classname = "Block.ListBlockOrigin")
         
 
     ##-- dumpBlock is for migration purpose. Moved from DBSMIgration.py to here
@@ -208,7 +209,25 @@ class DBSBlock:
             if conn:
                 conn.close()
     
-    
+    def listBlocksOrigin(self, origin_site_name="", dataset=""):
+        """
+        This is the API to list all the blocks/datasets first generated in the site called origin_site_name.   
+        origin_site_name must be provided w/ no wildcards allow.
+        if a fully spelled dataset is provided, then it will only list the blocks first generated from origin_site_name under the give dataset. 
+        """
+        if not origin_site_name:
+            dbsExceptionHandler("dbsException-invalid-input", "DBSBlock/listBlocksOrigin: origin_site_name is required.")
+        if dataset and re.search("['%','*']", dataset):
+            dbsExceptionHandler("dbsException-invalid-input", "DBSBlock/listBlocksOrigin: dataset with wildcard is not supported.")
+        try:
+            conn = self.dbi.connection()
+            result = self.bkOriginlist.execute(conn, origin_site_name, dataset)
+            return result
+        finally:
+            if conn:
+                conn.close()   
+
+ 
     def insertBlock(self, businput):
         """
         Input dictionary has to have the following keys:

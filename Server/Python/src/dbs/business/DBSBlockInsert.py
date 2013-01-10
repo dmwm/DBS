@@ -456,6 +456,8 @@ class DBSBlockInsert :
             #YG 12/07/2011  TK-362
 
             #3 Deal with Acquisition era
+            #import pdb
+            #pdb.set_trace()
             aq = {}
             if blockcontent.has_key('acquisition_era'):
                 aq = blockcontent['acquisition_era']
@@ -477,7 +479,7 @@ class DBSBlockInsert :
                     if "ORA-01400" in str(ei) :
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        raise
+                        dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert:  acquisition_era_name and start_date are required. NULL was received from user input. Please correct your data.")
                     #ok, already in db?
                     if str(ei).find("ORA-00001") != -1 or str(ei).find("unique constraint") != -1 or str(ei).lower().find("duplicate") !=-1:
                         dataset['acquisition_era_id'] = self.acqid.execute(conn, aq['acquisition_era_name'])

@@ -1,10 +1,6 @@
 """
 web unittests
 """
-
-__revision__ = "$Id: DBSClientReader_t.py,v 1.19 2010/05/28 21:20:36 afaq Exp $"
-__version__ = "$Revision: 1.19 $"
-
 import os
 import json
 import unittest
@@ -442,6 +438,16 @@ class DBSClientReader_t(unittest.TestCase):
     def test92(self):
         """test92: web.DBSReaderModel.listDatasetArray with detail"""
         self.api.listDatasetArray(dataset=[self.testparams['dataset']], detail=True)
+
+    def test93(self):
+        """test93 unittestDBSClientReader_t.listBlockOrigin: """
+        self.api.listBlockOrigin(origin_site_name=self.testparams['site'], dataset=self.testparams['dataset'])
+
+    def test94(self):
+        """test94 unittestDBSClientReader_t.listBlockOrigin: """
+        self.api.listBlockOrigin(origin_site_name=self.testparams['site'])
+
+
         
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
