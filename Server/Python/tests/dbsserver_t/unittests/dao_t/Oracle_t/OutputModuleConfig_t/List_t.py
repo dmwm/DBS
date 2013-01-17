@@ -19,10 +19,7 @@ class List_t(unittest.TestCase):
         data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
         self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
         self.data = self.data_provider.get_output_module_config_data()
-        #remove create_by and creation_date from data, since DBS3 does not return it
-        del self.data[0]['create_by']
-        del self.data[0]['creation_date']
-        
+
     def setUp(self):
         """setup all necessary parameters"""
         self.conn = self.dbi.connection()

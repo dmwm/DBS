@@ -87,7 +87,7 @@ acceptedInputKeys = {
     ################
     'file_parent_list':['file_parent_lfn', 'parent_logical_file_name', 'logical_file_name'],
     ################
-    'dataset_conf_list':['release_version', 'pset_hash', 'app_name', 'output_module_label', 'global_tag'],
+    'dataset_conf_list':['release_version', 'pset_hash', 'pset_name', 'app_name', 'output_module_label', 'global_tag'],
     ################
     'output_configs':['release_version', 'pset_hash', 'app_name', 'output_module_label', 'global_tag'],
     ################

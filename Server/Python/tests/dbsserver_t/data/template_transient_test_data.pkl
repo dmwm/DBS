@@ -264,7 +264,7 @@ sS'global_tag'
 p92
 S'DBS3UnitTestTag_@unique_id@'
 p93
-sS'pname'
+sS'pset_name'
 p94
 S'DBS3UnitTestLabel_@unique_id@'
 p95

@@ -12,7 +12,10 @@ class HTTPResponse(object):
         self._header_dict = {}
         for header in self._response_header.getvalue().split('\r\n'):
             if header.startswith('HTTP'):
-                self._version, self._code, self._msg = header.split(' ', 2)
+                #self._version, self._code, self._msg = header.split(' ', 2)
+                initial_header = header.split(' ', 2)
+                self._version, self._code = initial_header[0:2]
+                self._msg = initial_header[2] if len(initial_header) > 2 else '' 
             elif header != "":
                 self._header_dict.update(dict([header.split(':',1)]))
 

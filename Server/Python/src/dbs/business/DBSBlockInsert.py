@@ -338,7 +338,7 @@ class DBSBlockInsert :
                 try:
                     cfgid = 0
                     configObj = {"release_version": m["release_version"],
-                                 "pset_hash": m["pset_hash"], "pname":m.get('pname', None), 
+                                 "pset_hash": m["pset_hash"], "pset_name":m.get('pset_name', None),
                                  "app_name": m["app_name"],                
                                  'output_module_label' : m['output_module_label'],
                                  'global_tag' : m['global_tag'],
@@ -557,6 +557,8 @@ class DBSBlockInsert :
             raise
         
         #Continue for the rest.
+        #import pdb
+        #pdb.set_trace()
         tran = conn.begin()
         try:
             #5 Deal with physics gruop
@@ -571,8 +573,12 @@ class DBSBlockInsert :
                     try:
                         self.phygrpin.execute(conn, phygrp, tran)
                     except exceptions.IntegrityError, ex:
-                        if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1: 
+                        if str(ex).find("ORA-00001") != -1 and str(ex).find("PK_PG") != -1:
+                            dbsExceptionHandler(message='InsertPhysicsGroup Error', logger=self.logger.exception, serverError="InsertPhysicsGroup: "+ str(ex))
+                        if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_PG_PHYSICS_GROUP_NAME") != -1) or str(ex).lower().find("duplicate") != -1: 
                             phgId = self.phygrpid.execute(conn, phg,transaction=tran)
+                            if phgId <= 0:
+                                dbsExceptionHandler(message='InsertPhysicsGroup Error ', logger=self.logger.exception, serverError="InsertPhysicsGroup: "+str(ex))
                         else:
                             if tran:tran.rollback()
                             if conn:conn.close()
@@ -646,14 +652,17 @@ class DBSBlockInsert :
                     try:
                         self.datasetin.execute(conn, dataset, tran)
                     except exceptions.IntegrityError, ei:
-                        if str(ei).find("ORA-00001") != -1 or str(ei).find("unique constraint") != -1 or str(ei).lower().find("duplicate") !=-1: 
+                        if (str(ei).find("ORA-00001") != -1 or str(ei).find("TUC_DS_DATASET") != -1) or str(ei).lower().find("duplicate") !=-1: 
                             dataset['dataset_id'] = self.datasetid.execute(conn,dataset['dataset'])
+                            if dataset['dataset_id'] <= 0:
+                                dbsExceptionHandler(message='InsertDataset Error', logger=self.logger, serverError="InsertDataset: " + str(ex))
                         else:
                             if tran:tran.rollback()
                             if conn:conn.close()
                             raise
                         #
                     except Exception, ex:
+                        #should catch all above exception to rollback. YG Jan 17, 2013
                         if tran:tran.rollback()
                         if conn:conn.close()
                         raise
@@ -671,6 +680,7 @@ class DBSBlockInsert :
                              'output_mod_config_id' : c }
                     self.dcin.execute(conn, dcObj, tran)
                 except exceptions.IntegrityError, ei:
+                    #FIXME YG 01/17/2013
                     if str(ei).find("ORA-00001") != -1 or str(ei).find("unique constraint") != -1 or \
                             str(ei).lower().find("duplicate")!=-1:
                     #ok, already in db
@@ -690,7 +700,8 @@ class DBSBlockInsert :
             tran = None
         except exceptions.IntegrityError:
             # Then is it already in the database?
-            # Maybe.  See what happens if we ignore
+            # Not really. We have to check it again. YG Jan 17, 2013
+            #FIXME
             pass
         except Exception, ex:
             if tran:

@@ -159,7 +159,7 @@ transient_data = {'acquisition_era':
                  [{
                       "release_version" : "CMSSW_1_2_@unique_id@",
                       "pset_hash" : "@unique_hash@",
-                      "pname" : "DBS3UnitTestLabel_@unique_id@",
+                      "pset_name" : "DBS3UnitTestLabel_@unique_id@",
                       "app_name" : "cmsRun",
                       "output_module_label" : "DBS3UnitTestLabel_@unique_id@",
                       "global_tag" : "DBS3UnitTestTag_@unique_id@",

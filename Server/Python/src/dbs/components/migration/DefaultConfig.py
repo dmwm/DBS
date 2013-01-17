@@ -11,7 +11,7 @@ sys.path.append(os.path.join(ROOTDIR,'auth/dbs'))
 from DBSSecrets import dbs3_l3_i2
 from DBSSecrets import dbs3_l2_i2
 from DBSSecrets import dbs3_l1_i2
-
+from DBSSecrets import dbs3_dp01_i2
 config = Configuration()
 
 config.component_('web')
@@ -27,13 +27,13 @@ config.dbsmigration.section_('database')
 db_instances = config.dbsmigration.database.section_('instances')
 
 db_production_global = db_instances.section_('prod/global')
-db_production_global.dbowner = dbs3_l2_i2['databaseOwner']
-db_production_global.connectUrl = dbs3_l2_i2['connectUrl']['writer']
+db_production_global.dbowner = dbs3_dp01_i2['databaseOwner']
+db_production_global.connectUrl = dbs3_dp01_i2['connectUrl']['writer']
 db_production_global.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }
 
 db_development_global = db_instances.section_('dev/global')
-db_development_global.dbowner = dbs3_l1_i2['databaseOwner']
-db_development_global.connectUrl = dbs3_l1_i2['connectUrl']['writer']
+db_development_global.dbowner = dbs3_dp01_i2['databaseOwner']
+db_development_global.connectUrl = dbs3_dp01_i2['connectUrl']['writer']
 db_development_global.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }
 
 db_integration_global = db_instances.section_('int/global')
