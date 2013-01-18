@@ -20,10 +20,10 @@ class dbsUtils:
     def getCreateBy(self):
         user = ''
         try:
-            user = cherrypy.request.user.get('name')
+            user = cherrypy.request.user.get('login')
             #in case a user does not assocate his dn with his HN account, name will be a empty string. 
             if not user:
-                user = cherrypy.request.get('dn')
+                user = cherrypy.request.user.get('dn')
         except AttributeError:
             user = getpass.getuser()
         return user
