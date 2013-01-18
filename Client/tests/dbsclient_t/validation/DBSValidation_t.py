@@ -87,26 +87,44 @@ class DBSValitaion_t(unittest.TestCase):
 		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
-        try:
-            api.insertDataset(datasetObj=data)
-            dsList = api.listDatasets(dataset=dataset, detail=True, dataset_access_type='PRODUCTION')
-        except Exception, e:
-            print e
+        api.insertDataset(datasetObj=data)
+        dsList = api.listDatasets(dataset=dataset, detail=True, dataset_access_type='PRODUCTION')
+
         #print dsList
 	self.assertEqual(len(dsList), 1)
 	dsInDBS=dsList[0]
+        #store create_by and last_modified_by information
+        create_by = dsInDBS['create_by']
+        last_modified_by = dsInDBS['last_modified_by']
 	self.assertEqual(dsInDBS['dataset'], dataset)
 	self.assertEqual(dsInDBS['physics_group_name'], 'Tracker')
 	self.assertEqual(dsInDBS['dataset_access_type'], 'PRODUCTION')
 	self.assertEqual(dsInDBS['processed_ds_name'], procdataset)
 	self.assertEqual(dsInDBS['primary_ds_name'], primary_ds_name)
-	#self.assertEqual(dsInDBS['release_version'], release_version)
-	#self.assertEqual(dsInDBS['pset_hash'], pset_hash)
-	#self.assertEqual(dsInDBS['app_name'], app_name)
-	#self.assertEqual(dsInDBS['output_module_label'], output_module_label)
+        self.assertEqual(dsInDBS['primary_ds_type'], 'test')
+        self.assertEqual(dsInDBS['data_tier_name'], tier)
 	self.assertEqual(dsInDBS['xtcrosssection'], 123)
 	self.assertEqual(dsInDBS['processing_version'], processing_version)
 	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name)
+        self.assertEqual(dsInDBS['prep_id'], None)
+
+        api.insertDataset(datasetObj=data)
+        dsList = api.listDatasets(dataset=dataset, detail=True, create_by=create_by, last_modified_by=last_modified_by)
+
+        self.assertEqual(len(dsList), 1)
+	dsInDBS=dsList[0]
+
+        self.assertEqual(dsInDBS['dataset'], dataset)
+	self.assertEqual(dsInDBS['physics_group_name'], 'Tracker')
+	self.assertEqual(dsInDBS['dataset_access_type'], 'PRODUCTION')
+	self.assertEqual(dsInDBS['processed_ds_name'], procdataset)
+	self.assertEqual(dsInDBS['primary_ds_name'], primary_ds_name)
+        self.assertEqual(dsInDBS['primary_ds_type'], 'test')
+        self.assertEqual(dsInDBS['data_tier_name'], tier)
+	self.assertEqual(dsInDBS['xtcrosssection'], 123)
+	self.assertEqual(dsInDBS['processing_version'], processing_version)
+	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name)
+        self.assertEqual(dsInDBS['prep_id'], None)
 
     def test06(self):
 	"""test06 web.DBSClientWriter.Block: validation test"""
@@ -123,6 +141,7 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(blkInDBS['block_name'], block)
 	self.assertEqual(blkInDBS['file_count'], 0)
 	self.assertEqual(blkInDBS['block_size'], 0)
+
     def test07(self):
 	"""test07 web.DBSClientWriter.Files: validation test"""
 	#
@@ -253,7 +272,6 @@ class DBSValitaion_t(unittest.TestCase):
         self.assertEqual(len(dsInDBS), 1)
 	self.assertEqual(dsInDBS[0]['dataset_access_type'], "VALID")
 
-	
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSValitaion_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)

@@ -164,7 +164,7 @@ class DbsApi(object):
         :key acquisition_era_name: Acquisition Era Name (Required)
                 
         """
-        return self.__callServer("/acquisitioneras", data = acqEraObj , callmethod='POST' )
+        return self.__callServer("acquisitioneras", data = acqEraObj , callmethod='POST' )
 
     def insertBlock(self, blockObj={}):
         """
@@ -179,7 +179,7 @@ class DbsApi(object):
         :key origin_site_name: Origin Site Name (Required)
         
         """
-        return self.__callServer("/blocks", data = blockObj , callmethod='POST' )
+        return self.__callServer("blocks", data = blockObj , callmethod='POST' )
 
     def insertBulkBlock(self, blockDump={}):
         """
@@ -188,7 +188,7 @@ class DbsApi(object):
         :type blockDump: dict
         
         """
-        return self.__callServer("/bulkblocks", data = blockDump , callmethod='POST' )
+        return self.__callServer("bulkblocks", data = blockDump , callmethod='POST' )
 
     def insertDataset(self, datasetObj={}):
         """
@@ -204,7 +204,7 @@ class DbsApi(object):
         :key output_configs: Output Configs (dict)
         
         """
-        return self.__callServer("/datasets", data = datasetObj , callmethod='POST' )
+        return self.__callServer("datasets", data = datasetObj , callmethod='POST' )
     
     def insertDataTier(self, dataTierObj={}):
         """
@@ -215,7 +215,7 @@ class DbsApi(object):
         :key data_tier_name: Data Tier that needs to be inserted
         
         """
-        return self.__callServer("/datatiers", data = dataTierObj , callmethod='POST' )
+        return self.__callServer("datatiers", data = dataTierObj , callmethod='POST' )
 
     def insertFiles(self, filesList=[], qInserts=False):
         """
@@ -229,8 +229,8 @@ class DbsApi(object):
         """
 
         if qInserts==False: #turn off qInserts
-            return self.__callServer("/files", params={'qInserts':qInserts}, data = filesList , callmethod='POST' )    
-        return self.__callServer("/files", data = filesList , callmethod='POST' )
+            return self.__callServer("files", params={'qInserts':qInserts}, data = filesList , callmethod='POST' )    
+        return self.__callServer("files", data = filesList , callmethod='POST' )
 
     def insertOutputConfig(self, outputConfigObj={}):
         """
@@ -244,7 +244,7 @@ class DbsApi(object):
         :key output_module_label: Output Module Label (Required)
         
         """
-        return self.__callServer("/outputconfigs", data = outputConfigObj , callmethod='POST' )
+        return self.__callServer("outputconfigs", data = outputConfigObj , callmethod='POST' )
 
     def insertPrimaryDataset(self, primaryDSObj={}):
         """
@@ -268,7 +268,7 @@ class DbsApi(object):
         :key description: Description (Required)
         
         """
-        return self.__callServer("/processingeras", data = procEraObj , callmethod='POST' )
+        return self.__callServer("processingeras", data = procEraObj , callmethod='POST' )
 
     def listApiDocumentation(self):
         """
@@ -412,6 +412,12 @@ class DbsApi(object):
         :type data_tier_name: str
         :param dataset_access_type: Dataset Access Type ( PRODUCTION, DEPRECATED etc.)
         :type dataset_access_type: str
+        :param prep_id: prep_id
+        :type prep_id: str
+        :param create_by: Creator of the dataset
+        :type create_by: str
+        :param last_modified_by: Last modifer of the dataset
+        :type last_modified_by: str
         
         * You can use ANY combination of these parameters in this API
         * In absence of parameters, all datasets known to DBS instance will be returned
@@ -422,8 +428,9 @@ class DbsApi(object):
                            'output_module_label','processing_version','acquisition_era_name',
                            'run_num','physics_group_name','logical_file_name',
                            'primary_ds_name','primary_ds_type','data_tier_name',
-                           'dataset_access_type','min_cdate','max_cdate',
-                           'min_ldate','max_ldate','cdate','ldate','detail']
+                           'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
+                           'min_cdate','max_cdate', 'min_ldate','max_ldate','cdate','ldate',
+                           'detail']
 
         #set defaults
         if 'detail' not in kwargs.keys():
@@ -468,7 +475,7 @@ class DbsApi(object):
         if 'detail' not in kwargs.keys():
             kwargs['detail']=False
 
-        return self.__callServer("/datasetlist",data=kwargs,callmethod='POST')
+        return self.__callServer("datasetlist",data=kwargs,callmethod='POST')
 
     def listDatasetChildren(self, **kwargs):
         """
@@ -758,21 +765,24 @@ class DbsApi(object):
         
         return self.__callServer("runs",params=kwargs)
 
-    def migrateSubmit(self, inp):
+    def submitMigration(self, migrationObj):
         """
         Submit a migrate request to migration service
 
-        :param inp:
+        :param migrationObj: migration request object
+        :type migrationObj: dict
+        :key migration_url: The source DBS url for migration (required)
+        :key migraiton_input: The block or dataset names to be migrated (required)
         
         """
-        return self.__callServer("/submit", data=inp, callmethod='POST') 
+        return self.__callServer("submit", data=migrationObj, callmethod='POST') 
 
-    def migrateStatus(self, migration_request_id="", block_name="", dataset="", user=""):
+    def statusMigration(self, **kwargs):
         """
         Check the status of migration request
 
-        :param migration_request_id: Migration Request ID
-        :type migration_request_id: str
+        :param migration_rqst_id: Migration Request ID
+        :type migration_rqst_id: str, int, long
         :param block_name: Block name
         :type block_name: str
         :param dataset: Dataset name
@@ -781,28 +791,27 @@ class DbsApi(object):
         :type user: str
 
         """
-        amp=False
-        add_to_url=""
-        if  migration_request_id:
-            add_to_url+="migration_request_id=%s" %migration_request_id
-            amp=True
-        if dataset:
-            if amp: add_to_url += "&"
-            add_to_url+="dataset=%s" %dataset
-            amp=True
-        if block_name:
-            parts=block_name.split('#')
-            block_name=parts[0]+urllib.quote_plus('#')+parts[1]
-            if amp: add_to_url += "&"
-            add_to_url += "block_name=%s" %block_name
-            amp=True
-        if user:
-            if amp: add_to_url += "&"
-            add_to_url += "user=%s" %user
-        if add_to_url:
-            return self.__callServer("/status?%s" % add_to_url )
-        return self.__callServer("/status")
-		
+        validParameters = ['migration_rqst_id', 'block_name', 'dataset', 'user']
+
+        requiredParameters = {'standalone':validParameters}
+
+        checkInputParameter(method='statusMigration', parameters=kwargs.keys(), validParameters=validParameters, requiredParameters=requiredParameters)
+
+        return self.__callServer("status", params=kwargs)
+
+    def removeMigration(self, migrationObj):
+        """
+        Remove a migration request from the queue. Only FAILED (status 3) and
+        PENDING (status 0) requests can be removed. Running and succeeded
+        requests cannot be removed.
+
+        :param migrationObj: migration request object
+        :type migrationObj: dict
+        :key migration_rqst_id: The migration request id (required)
+
+        """
+        return self.__callServer("remove", migrationObj, callmethod='POST')
+
     def serverinfo(self):
         """
         * API to retrieve DAS interface and status information
@@ -830,14 +839,14 @@ class DbsApi(object):
         parts=kwargs['block_name'].split('#')
         kwargs['block_name'] = xsparts[0]+urllib.quote_plus('#')+parts[1]
 
-        return self.__callServer("/blocks", params=kwargs, callmethod='PUT')
+        return self.__callServer("blocks", params=kwargs, callmethod='PUT')
 
     def updateAcqEraEndDate(self, **kwargs):
         """
         API to update the end_date of an acquisition era
 
         :acquisition_era_name: str  (Required)
-        :end_date: int and not zero (Required)        
+        :end_date: int and not zero (Required)
         """
         validParameters = ['end_date','acquisition_era_name']
 
@@ -845,7 +854,7 @@ class DbsApi(object):
 
         checkInputParameter(method="updateAcqEraEndDate",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
 
-        return self.__callServer("/acquisitioneras", params=kwargs, callmethod='PUT')
+        return self.__callServer("acquisitioneras", params=kwargs, callmethod='PUT')
 
     def updateDatasetType(self, **kwargs):
         """
@@ -863,7 +872,7 @@ class DbsApi(object):
 
         checkInputParameter(method="updateDatasetType",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
         
-        return self.__callServer("/datasets", params=kwargs, callmethod='PUT')    
+        return self.__callServer("datasets", params=kwargs, callmethod='PUT')
 
     def updateFileStatus(self, **kwargs):
         """

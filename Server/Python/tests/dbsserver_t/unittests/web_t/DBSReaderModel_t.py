@@ -302,8 +302,16 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('datasets', processed_ds_name=testparams['procdataset']+'*')
 
     def test003zs(self):
-        """test030zs: web.DBSReaderModel.listDatasets: processing_version, acquisition_era, processed_ds_name"""
+        """test003zs: web.DBSReaderModel.listDatasets: processing_version, acquisition_era, processed_ds_name"""
         api.list('datasets', processed_ds_name=testparams['procdataset'], processing_version=testparams['processing_version'], acquisition_era_name=testparams['acquisition_era'])
+
+    def test003zt(self):
+        """test003zt: web.DBSReaderModel.listDatasets: create_by"""
+        api.list('datasets', create_by='giffels')
+
+    def test003zu(self):
+        """test003zu: web.DBSReaderModel.listDatasets: modified_by"""
+        api.list('datasets', last_modified_by='giffels')
 
     def test004a(self):
         """test004a: web.DBSReaderModel.listDatasetArray: basic test"""

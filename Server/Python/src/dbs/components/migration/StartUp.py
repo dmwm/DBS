@@ -34,14 +34,15 @@ def configure(configfile):
 
     migration_cfg = cfg.dbsmigration
 
-    migration_config = {'threads' : migration_cfg.threads}
+    migration_config = {}
 
     for instance in migration_cfg.instances:
-        db_settings = getattr(migration_cfg.database.instances, instance)
+        instance_settings = getattr(migration_cfg.database.instances, instance)
         migration_config.setdefault('database',{}).update({instance :
-                                                           {'dbowner' : db_settings.dbowner,
-                                                            'engineParameters' : db_settings.engineParameters,
-                                                            'connectUrl' : db_settings.connectUrl}})
+                                                           {'threads' : instance_settings.threads,
+                                                            'dbowner' : instance_settings.dbowner,
+                                                            'engineParameters' : instance_settings.engineParameters,
+                                                            'connectUrl' : instance_settings.connectUrl}})
 
     return migration_config
 
@@ -49,8 +50,9 @@ if __name__ == '__main__':
     options = get_command_line_options(__name__, sys.argv)
     migration_config = configure(options.config)
 
-    for thread in xrange(migration_config['threads']):
-        DBSMigrationServer(MigrationTask(migration_config['database']), duration = 5)
+    for instance in migration_config['database'].keys():
+        for thread in xrange(migration_config['database'][instance]['threads']):
+            DBSMigrationServer(MigrationTask(migration_config['database'][instance]), duration = 5)
 
     root = MigrationWebMonitoring()
 

@@ -69,7 +69,6 @@ class DBSClientReader_t(unittest.TestCase):
 	"""test08 unittestDBSClientReader_t.listDatasets: """
 	self.api.listDatasets(release_version=self.testparams['release_version'])
     
-    
     def test09(self):
 	"""test09 unittestDBSClientReader_t.listDatasets: """
 	self.api.listDatasets(pset_hash=self.testparams['pset_hash'])
@@ -95,6 +94,14 @@ class DBSClientReader_t(unittest.TestCase):
     def test14(self):
 	"""test14 unittestDBSClientReader_t.listDatasets: """
 	self.api.listDatasets(dataset=self.testparams['dataset'], release_version=self.testparams['release_version'])
+
+    def test14a(self):
+        """test14a unittestDBSCLientReader_t.listDatasets: using create_by"""
+        self.api.listDatasets(create_by='Manuel Giffels')
+
+    def test14b(self):
+        """test14a unittestDBSCLientReader_t.listDatasets: using last_modified_by"""
+        self.api.listDatasets(last_modified_by='Manuel Giffels')
 
     def test15(self):
 	"""test15 unittestDBSClientReader_t.listOutputModules: basic test"""

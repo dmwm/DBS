@@ -110,8 +110,8 @@ class MigrationTask(SequencialTaskBase):
         self.block_names = []
         self.migration_block_ids = []
         self.inserted = True
-        dbowner = self.db_config.get('prod/global').get('dbowner')
-        connectUrl = self.db_config.get('prod/global').get('connectUrl')
+        dbowner = self.db_config.get('dbowner')
+        connectUrl = self.db_config.get('connectUrl')
         dbFactory = DBFactory(MgrLogger, connectUrl, options={})
         self.dbi = dbFactory.connect()
         self.dbFormatter = DBFormatter(MgrLogger,self.dbi)
