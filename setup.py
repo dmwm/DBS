@@ -12,6 +12,7 @@ systems = \
     'srcdir': 'src/python',
     'bin': ['bin/dbs3BulkInsert.py',
             'bin/dbs3CrabWorkflow.py',
+            'bin/dbs3dasComparision.py',
             'bin/dbs3IntroduceFailures.py',
             'bin/dbs3GetBlocks.py',
             'bin/dbs3GetDatasets.py',
