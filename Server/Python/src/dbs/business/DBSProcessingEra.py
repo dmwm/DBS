@@ -5,6 +5,7 @@ This module provides business object class to interact with DBSProcessingEra.
 """
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsUtils import dbsUtils
 
 class DBSProcessingEra:
     """
@@ -40,7 +41,7 @@ class DBSProcessingEra:
     def insertProcessingEra(self, businput):
         """
         Input dictionary has to have the following keys:
-        processing_version, creation_date, create_by, description
+        processing_version, creation_date,  create_by, description
         it builds the correct dictionary for dao input and executes the dao
         """
         conn = self.dbi.connection()

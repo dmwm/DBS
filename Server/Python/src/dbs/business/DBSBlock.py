@@ -248,8 +248,10 @@ class DBSBlock:
         try:
             blkinput = {
                 "last_modification_date":businput.get("last_modification_date",  dbsUtils().getTime()),
-                "last_modified_by":businput.get("last_modified_by", dbsUtils().getCreateBy()),
-                "create_by":businput.get("create_by", dbsUtils().getCreateBy()),
+                #"last_modified_by":businput.get("last_modified_by", dbsUtils().getCreateBy()),
+                "last_modified_by":dbsUtils().getCreateBy(),
+                #"create_by":businput.get("create_by", dbsUtils().getCreateBy()),
+                "create_by":dbsUtils().getCreateBy(),
                 "creation_date":businput.get("creation_date", dbsUtils().getTime()),
                 "open_for_writing":businput.get("open_for_writing", 1),
                 "block_size":businput.get("block_size", 0),

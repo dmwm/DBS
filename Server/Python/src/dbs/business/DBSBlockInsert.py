@@ -101,13 +101,12 @@ class DBSBlockInsert :
             print "insert dataset"
             datasetId = self.insertDataset(blockcontent, configList, migration)
             #3 Insert Block. 
-            print "Insert Block"
-            blockId, newBlock = self.insertBlock(blockcontent, datasetId)
+            #print "Insert Block"
+            #blockId, newBlock = self.insertBlock(blockcontent, datasetId)
             #4 insert files. If the block is already in db, then we stop
             #inserting the file
-            print "insert files."
-            if newBlock:
-                self.insertFile(blockcontent, blockId, datasetId, migration)
+            print "insert block & files."
+            self.insertBlockFile(blockcontent, datasetId, migration)
         except Exception, ex:
             raise
     
@@ -145,7 +144,8 @@ class DBSBlockInsert :
                 #fileList[i]['creation_date'] = fileList[i].get('creation_date', None) #see ticket 965
                 #fileList[i]['create_by'] = fileList[i].get('create_by', None)
                 fileList[i]['last_modification_date'] = fileList[i].get('last_modification_date', dbsUtils().getTime())
-                fileList[i]['last_modified_by'] = fileList[i].get('last_modified_by', dbsUtils().getCreateBy())
+                #fileList[i]['last_modified_by'] = fileList[i].get('last_modified_by', dbsUtils().getCreateBy())
+                fileList[i]['last_modified_by'] = dbsUtils().getCreateBy()
 
                 #get lumi info
                 lumi = fileList[i]['file_lumi_list']
@@ -241,7 +241,7 @@ class DBSBlockInsert :
                     elif str(ex).find("ORA-01400") != -1: 
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        raise
+                        dbsExceptionHandler("dbsException-missing-data","Failed to insert file. IntegrityError in DB", self.log, str(ex))
                     else:
                         if tran:tran.rollback()
                         if conn:conn.close()
@@ -252,6 +252,179 @@ class DBSBlockInsert :
         finally:
             if tran:tran.rollback()
             if conn:conn.close()
+
+
+
+    def insertBlockFile(self, blockcontent, datasetId, migration=False):
+
+        block = blockcontent['block']
+        newBlock = False
+        #Insert the block
+        conn = self.dbi.connection()
+        tran = conn.begin()
+        print "Block name: %s" %block['block_name']
+        try:
+            block['block_id'] = self.sm.increment(conn, "SEQ_BK",)
+            block['dataset_id'] =  datasetId
+            self.blockin.execute(conn, block, tran)
+            newBlock = True
+        except exceptions.IntegrityError, ex:
+            if (str(ex).find("ORA-00001: unique constraint") != -1 and str(ex).find("TUC_BK_BLOCK_NAME") != -1) or str(ex).lower().find("duplicate") != -1:
+            #not sure what happends to WMAgent: Does it try to insert a
+            #block again? YG 10/05/2010
+            #Talked with Matt N: We should stop insertng this block now.
+            #This means there is some trouble.
+            #Throw exception to let the up layer know. YG 11/17/2010
+                dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertBlock. Block already exists.")
+            else:
+                tran.rollback()
+                conn.close()
+                raise
+        #All Praentage will be deduced from file parentage. 
+        blockId = block['block_id']
+        fileLumiList = []
+        fileConfObjs = []
+        logicalFileName = {}
+        fileList = blockcontent['files']
+        fileConfigList = blockcontent['file_conf_list']
+        if blockcontent.has_key('file_parent_list'):
+            fileParentList = blockcontent['file_parent_list']
+        else:
+            fileParentList = []
+        if not fileList:
+            return
+        intval = 40
+        try:
+            for i in range(len(fileList)):
+                if (i % intval == 0):
+                    id = self.sm.increment(conn, "SEQ_FL", False, intval)
+                fileList[i]['file_id'] = id
+                logicalFileName[fileList[i]['logical_file_name']] = id
+                fileList[i]['block_id'] = blockId
+                fileList[i]['dataset_id'] = datasetId
+                #other fields. YG 11/23/2010
+                #print fileList[i]['logical_file_name']
+                fileList[i]['is_file_valid'] = fileList[i].get('is_file_valid', 1)
+                fileList[i]['check_sum'] = fileList[i].get('check_sum', None)
+                fileList[i]['event_count'] = fileList[i].get('event_count', -1)
+                fileList[i]['file_size'] = fileList[i].get('file_size', -1)
+                fileList[i]['adler32'] = fileList[i].get('adler32', None)
+                fileList[i]['md5'] = fileList[i].get('md5', None)
+                fileList[i]['auto_cross_section'] = fileList[i].get('auto_cross_section', None)
+                #fileList[i]['creation_date'] = fileList[i].get('creation_date', None) #see ticket 965
+                #fileList[i]['create_by'] = fileList[i].get('create_by', None)
+                #fileList[i]['last_modification_date'] = fileList[i].get('last_modification_date', dbsUtils().getTime())
+                #fileList[i]['last_modified_by'] = fileList[i].get('last_modified_by', dbsUtils().getCreateBy())
+                fileList[i]['last_modification_date'] = dbsUtils().getTime()
+                fileList[i]['last_modified_by'] = dbsUtils().getCreateBy()
+
+                #get lumi info
+                lumi = fileList[i]['file_lumi_list']
+                nlumi = len(lumi)
+                for j in range(nlumi):
+                    lumi[j]['file_id'] = id
+                fileLumiList[len(fileLumiList):] = lumi
+                #remove the lumi list from the file 
+                del fileList[i]['file_lumi_list']
+                id += 1
+        except Exception, ex:
+            if conn:conn.close()
+            raise
+        try:
+            #deal with file parentage. 
+            #At the meantime, we need to build block and dataset parentage.
+            #All parentage is deduced from file paretage,
+            #10/16/2011
+            nfileparent = len(fileParentList)
+            bkParentList = []
+            dsParentList = []
+            for k in range(nfileparent):
+                if migration:
+                    fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['this_logical_file_name']]
+                    del fileParentList[k]['this_logical_file_name']
+                    del fileParentList[k]['parent_file_id']
+                else:
+                    fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
+                    del fileParentList[k]['logical_file_name']
+                bkParentage2insert={'this_block_id' : blockId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
+                dsParent2Insert = {'this_dataset_id' : datasetId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
+                if not any(d.get('parent_logical_file_name') == bkParentage2insert['parent_logical_file_name'] for d in bkParentList):
+                    #not exist yet
+                    bkParentList.append(bkParentage2insert)
+                    dsParentList.append(dsParent2Insert)
+
+            #deal with file config
+            for fc in fileConfigList:
+                key = (fc['app_name'] + ':' + fc['release_version'] + ':' +
+                       fc['pset_hash'] + ':' +
+                       fc['output_module_label'] + ':' + fc['global_tag'])
+                if not key in (self.datasetCache['conf']).keys():
+                    #we expect the config is inserted when the dataset is in.
+                    dbsExceptionHandler('dbsException-missing-data', 'Required Configuration application name, release version,\
+                        pset hash and global tag: %s, %s\
+                        ,%s,%s not found in DB' %(fc['app_name'], fc['release_version'], fc['pset_hash'], fc['global_tag']))
+                fcObj = {'file_id' : logicalFileName[fc['lfn']],
+                         'output_mod_config_id': self.datasetCache['conf'][key]}
+                fileConfObjs.append(fcObj)
+        except Exception, ex:
+            if conn: conn.close()
+            raise
+        try:
+            #now we build everything to insert the files.
+            #tran = conn.begin()
+            #insert files
+            if fileList:
+                self.filein.execute(conn, fileList, tran)
+            #insert file parents
+            if fileParentList:
+                self.fparentin.execute(conn, fileParentList, tran)
+            #insert file lumi
+            if fileLumiList:
+                self.flumiin.execute(conn, fileLumiList, tran)
+            #insert file configration
+            if fileConfObjs:
+                self.fconfigin.execute(conn, fileConfObjs, tran)
+            #insert bk and dataset parentage
+            #we cannot do bulk insertion for the block and dataset parentage because they may be duplicated.
+            lbk = len(bkParentList)
+            dsk = len(dsParentList)
+            for k in range(lbk):
+                try:
+                    self.blkparentin2.execute(conn, bkParentList[k], transaction=tran)
+                except exceptions.IntegrityError, ex:
+                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                        pass
+                    elif str(ex).find("ORA-01400") != -1:
+                        if tran:
+                            tran.rollback()
+                        if conn:conn.close()
+                        raise
+                    else:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        raise
+            for k in range(dsk):
+                try:
+                    self.dsparentin2.execute(conn, dsParentList[k], transaction=tran)
+                except exceptions.IntegrityError, ex:
+                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                        pass
+                    elif str(ex).find("ORA-01400") != -1:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        dbsExceptionHandler("dbsException-missing-data","Failed to insert file. IntegrityError in DB", self.log, str(ex))
+                    else:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        raise
+            #finally, commit everything for file.
+            if tran:tran.commit()
+            if conn:conn.close()
+        finally:
+            if tran:tran.rollback()
+            if conn:conn.close()
+
+
 
     def insertBlock(self, blockcontent, datasetId):
         """
@@ -272,7 +445,7 @@ class DBSBlockInsert :
             tran.commit()
             tran = None
         except exceptions.IntegrityError, ex:
-            if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+            if (str(ex).find("ORA-00001: unique constraint") != -1 and str(ex).find("TUC_BK_BLOCK_NAME") != -1) or str(ex).lower().find("duplicate") != -1:
             #not sure what happends to WMAgent: Does it try to insert a
             #block again? YG 10/05/2010
             #Talked with Matt N: We should stop insertng this block now.
@@ -344,7 +517,9 @@ class DBSBlockInsert :
                                  'global_tag' : m['global_tag'],
                                  'scenario' : m.get('scenario', None),
                                  'creation_date' : m.get('creation_date', dbsUtils().getTime()),
-                                 'create_by':m.get('create_by', dbsUtils().getCreateBy())}              
+                                 #'create_by':m.get('create_by', dbsUtils().getCreateBy())
+                                 'create_by':dbsUtils().getCreateBy()
+                                  }              
                     self.otptModCfgin.execute(conn, configObj, tran)
                     tran.commit()
                     tran = None
@@ -424,7 +599,8 @@ class DBSBlockInsert :
                 try:
                     primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS")
                     primds["creation_date"] = primds.get("creation_date", dbsUtils().getTime())
-                    primds["create_by"] = primds.get("create_by", dbsUtils().getCreateBy())
+                    #primds["create_by"] = primds.get("create_by", dbsUtils().getCreateBy())
+                    primds["create_by"] = dbsUtils().getCreateBy()
                     self.primdsin.execute(conn, primds, tran)
                 except exceptions.IntegrityError, ex:
                     if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") !=-1:
@@ -644,9 +820,11 @@ class DBSBlockInsert :
                     dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
                     dataset['xtcrosssection'] = dataset.get('xtcrosssection', None)
                     dataset['creation_date'] = dataset.get('creation_date', dbsUtils().getTime())
-                    dataset['create_by'] = dataset.get('create_by', dbsUtils().getCreateBy())
+                    #dataset['create_by'] = dataset.get('create_by', dbsUtils().getCreateBy())
+                    dataset['create_by'] = dbsUtils().getCreateBy()
                     dataset['last_modification_date'] = dataset.get('last_modification_date', dbsUtils().getTime())
-                    dataset['last_modified_by'] = dataset.get('last_modified_by', dbsUtils().getCreateBy())
+                    #dataset['last_modified_by'] = dataset.get('last_modified_by', dbsUtils().getCreateBy())
+                    dataset['last_modified_by'] = dbsUtils().getCreateBy()
                     dataset['xtcrosssection'] = dataset.get('xtcrosssection', None)
                     dataset['prep_id'] = dataset.get('prep_id', None)
                     try:

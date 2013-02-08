@@ -163,7 +163,7 @@ class DBSWriterModel(DBSReaderModel):
             indata = validateJSONInputNoCopy("acquisition_era",indata)
             indata.update({"start_date": indata.get("start_date", dbsUtils().getTime()),\
                            "creation_date": indata.get("creation_date", dbsUtils().getTime()), \
-                           "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })
+                           "create_by" : dbsUtils().getCreateBy() })
             self.dbsAcqEra.insertAcquisitionEra(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
@@ -187,7 +187,7 @@ class DBSWriterModel(DBSReaderModel):
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy('processing_era', indata)
             indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
-                           "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })
+                           "create_by" : dbsUtils().getCreateBy() })
             self.dbsProcEra.insertProcessingEra(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
@@ -306,7 +306,7 @@ class DBSWriterModel(DBSReaderModel):
                 f.update({
                      #"dataset":f["dataset"],
                      "creation_date": f.get("creation_date", dbsUtils().getTime()),
-                     "create_by" : f.get("create_by" , dbsUtils().getCreateBy()),
+                     "create_by" : dbsUtils().getCreateBy(),
                      "last_modification_date": f.get("last_modification_date", dbsUtils().getTime()),
                      "last_modified_by": f.get("last_modified_by" , dbsUtils().getCreateBy()),
                      "file_lumi_list":f.get("file_lumi_list",[]),
@@ -385,7 +385,7 @@ class DBSWriterModel(DBSReaderModel):
             indata = validateJSONInputNoCopy("dataTier", indata)
 
             indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
-                           "create_by" : indata.get("create_by", dbsUtils().getCreateBy()) })
+                           "create_by" : dbsUtils().getCreateBy()})
 
             conn = self.dbi.connection()
             tran = conn.begin()

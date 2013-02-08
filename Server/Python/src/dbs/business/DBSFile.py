@@ -6,6 +6,7 @@ This module provides business object class to interact with File.
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from sqlalchemy import exceptions
+from dbs.utils.dbsUtils import dbsUtils
 
 class DBSFile:
     """
@@ -310,7 +311,8 @@ class DBSFile:
                     #"creation_date" : f.get("creation_date", None),  See Ticket #965 YG. 
                     #"create_by": f.get("create_by", None),
                     "last_modification_date": f.get("last_modification_date", None), 
-                    "last_modified_by" : f.get("last_modified_by", None) 
+                    #"last_modified_by" : f.get("last_modified_by", None) 
+                    "last_modified_by" : dbsUtils().getCreateBy()
                 }
                 if iFile == fileIncrement:
                     fID = self.sm.increment(conn, "SEQ_FL", incCount=fileIncrement)

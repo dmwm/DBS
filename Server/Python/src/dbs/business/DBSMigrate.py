@@ -155,6 +155,8 @@ class DBSMigrate:
             5. add 'order' to parent and then this block (ascending)
             6. return the ordered list
         """
+        #import pdb
+        #pdb.set_trace()
         ordered_dict = {}
         block_name = request["migration_input"]
         url = request["migration_url"]
@@ -185,6 +187,8 @@ class DBSMigrate:
     def getParentBlocksOrderedList(self, url, conn, block_name, order_counter):
         ordered_dict = {}
         #3.
+        #import pdb
+        #pdb.set_trace()
         parentBlocksInSrc = self.getSrcBlockParents(url, block_name)
         parentBlocksInSrcNames = [ y['parent_block_name'] 
                                         for y in parentBlocksInSrc ]
@@ -210,8 +214,13 @@ class DBSMigrate:
                     tmp_ordered_dict = self.getParentBlocksOrderedList(url,
                                             conn, ablockAtSrc, order_counter+1)
                     if tmp_ordered_dict != {}:
-                        ordered_dict[order_counter+1] = []
-                        ordered_dict.update(tmp_ordered_dict)
+                        #ordered_dict[order_counter+1] = []
+                        #ordered_dict.update(tmp_ordered_dict)
+                        for i in tmp_ordered_dict.keys():
+                                if i in ordered_dict.keys():
+                                    ordered_dict[i] += tmp_ordered_dict[i]
+                                else:
+                                    ordered_dict[i] = tmp_ordered_dict[i]
         return ordered_dict
 
     def removeMigrationRequest(self, migration_rqst_id):
@@ -280,7 +289,8 @@ class DBSMigrate:
                         "creation_date" : request['creation_date'],
                         "last_modification_date" : request['last_modification_date'],
                         "create_by" : request['create_by'],
-                        "last_modified_by" : request['last_modified_by'] }
+                        "last_modified_by" : request['last_modified_by'] 
+                        }
                              for blk in ordered_list[iter]]
                     self.mgrblkin.execute(conn, daoinput, tran) 
                     totalQueued += len(ordered_list[iter])

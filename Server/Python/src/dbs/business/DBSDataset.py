@@ -239,7 +239,9 @@ class DBSDataset:
                                "creation_date" : businput.get("creation_date",dbsUtils().getTime() ),
                                "create_by" : businput.get("create_by", dbsUtils().getCreateBy()) ,
                                "last_modification_date" : businput.get("last_modification_date", dbsUtils().getTime()),
-                               "last_modified_by" : businput.get("last_modified_by", dbsUtils().getModifiedBy())})
+                               #"last_modified_by" : businput.get("last_modified_by", dbsUtils().getModifiedBy())
+                               "last_modified_by" : dbsUtils().getModifiedBy()
+                               })
             """
             repeated again, why?  comment out by YG 3/14/2012
             #physics group

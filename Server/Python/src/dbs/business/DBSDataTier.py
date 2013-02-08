@@ -5,6 +5,7 @@ This module provides business object class to interact with datatiers table.
 """
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsUtils import dbsUtils
 
 class DBSDataTier:
     """

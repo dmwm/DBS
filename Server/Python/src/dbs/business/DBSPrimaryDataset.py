@@ -9,6 +9,7 @@ __version__ = "$Revision: 1.21 $"
 
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsUtils import dbsUtils
 
 class DBSPrimaryDataset:
     """
@@ -55,7 +56,7 @@ class DBSPrimaryDataset:
     def insertPrimaryDataset(self, businput):
         """
         Input dictionary has to have the following keys:
-        primary_ds_name, primary_ds_type, creation_date, create_by
+        primary_ds_name, primary_ds_type, creation_date, create_by. 
         it builds the correct dictionary for dao input and executes the dao
         """
         conn = self.dbi.connection()
