@@ -130,7 +130,7 @@ setup_dbs_lifecylce()
 
   source $SWAREA/$SCRAM_ARCH/cms/dbs3-lifecycle/$DBS3LIFECYCLEVERSION/etc/profile.d/init.sh
   ## setup dbs_client
-  export DBS_READER_URL=https://cmsweb-testbed.cern.ch/dbs/prod/global/DBSReader
+  export DBS_READER_URL=https://cmsweb-testbed.cern.ch/dbs/dev/global/DBSReader
   export DBS_WRITER_URL=https://cmsweb-testbed.cern.ch/dbs/dev/global/DBSWriter
 }
 
