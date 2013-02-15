@@ -56,6 +56,24 @@ function handle_x509_proxy
   cp -a /tmp/$proxy_file $PRIVATEDIR/$proxy_file
 }
 
+function check_running_jobs
+{
+  local local_first_job_number=1
+
+  if [ -f $PRIVATEDIR/LifeCycleJob_*.cmd ]; then
+    local local_file_list=$(ls $PRIVATEDIR/LifeCycleJob_*.cmd | sort -k2 -t_ -n)
+
+    for job in $local_file_list; do
+      local local_job_running=$(cat $job)
+      if [ $local_job_running -eq 1 ]; then
+        let local_first_job_number=$(echo $job | tr -cd '[[:digit:]]')+1
+      fi
+    done
+  fi
+
+  echo $local_first_job_number
+}
+
 function bulk_submit_job
 {
   local local_logfile_template=$1
@@ -64,7 +82,10 @@ function bulk_submit_job
   local local_executable=$4
   local local_job_args=${@:5}
 
-  for job in $(seq $local_number_of_jobs); do
+  local local_first_job_number=$(check_running_jobs)
+  local local_last_job_number=$(expr $local_first_job_number + $local_number_of_jobs - 1)
+
+  for job in $(seq $local_first_job_number $local_last_job_number); do
     submit_job $local_logfile_template.$job $local_queue $local_executable $job $local_job_args
   done
 }

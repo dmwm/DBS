@@ -1,5 +1,5 @@
 import copy
-import json
+import cjson
 
 def increase_interval(start=0.0, step=0.2):
     value = start
@@ -17,11 +17,11 @@ class PayloadHandler(object):
 
     def load_payload(self, filename):
         with open(filename, 'r') as f:
-            self._initial_payload = json.load(f)
+            self._initial_payload = cjson.decode(f.read())
 
     def save_payload(self, filename):
         with open(filename, 'w') as f:
-            json.dump(self._new_payload, f)
+            f.write(cjson.encode(self._new_payload))
             
     def clone_payload(self):
         return copy.deepcopy(self._initial_payload)
