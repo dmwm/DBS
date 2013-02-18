@@ -189,18 +189,19 @@ class DBSReaderModel(RESTModel):
     @inputChecks(primary_ds_name=str, primary_ds_type=str)
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
-        Example url's: <br />
-        http://dbs3/primarydatasets <br />
-        http://dbs3/primarydatasets/qcd_20_30 <br />
-        http://dbs3/primarydatasets?primaryDSName=qcd* <br />
-        http://dbs3/primarydatasets?primaryDSType=qcd* <br />
+        API to list ALL primary datasets in DBS
+
+        :param primary_ds_name: If provided, will list that primary dataset
+        :type primary_ds_name: str
+        :param primary_ds_type:  If provided, will list all primary dataset having that type
+        :type primary_ds_name: str
+        :returns: List of dictionaries containing the following keys (create_by, primary_ds_type, primary_ds_id, primary_ds_name, creation_date)
+        :rtype: list of dicts
+
         """
-        #import pdb
-        #pdb.set_trace()
         primary_ds_name = primary_ds_name.replace("*","%")
         primary_ds_type = primary_ds_type.replace("*","%")
         try:
-            #print"-----ListPrimaryDatasets___"
             return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name, primary_ds_type)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
@@ -212,9 +213,15 @@ class DBSReaderModel(RESTModel):
     @inputChecks(primary_ds_type=str, dataset=str)
     def listPrimaryDsTypes(self, primary_ds_type="", dataset=""):
         """
-        Example URL's <br />
-        http://dbs3/primarydstypes <br />
-        http://dbs3/primarydstypes?primary_ds_type=qcd* <br />
+        API to list primary dataset types
+
+        :param primary_ds_type: If provided, will list that primary dataset type
+        :type primary_ds_type: str
+        :param dataset: List the primary dataset type for that dataset
+        :type dataset: str
+        :returns: List of dictionaries containing the following keys (primary_ds_type_id, data_type)
+        :rtype: list of dicts
+
         """
         if primary_ds_type:
             primary_ds_type = primary_ds_type.replace("*","%")
@@ -244,14 +251,46 @@ class DBSReaderModel(RESTModel):
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',
         ldate='0', detail=False):
         """
-        This API lists the dataset paths and associated information.
-        If no parameter is given, all datasets will be returned.
-        <dataset> parameter can include one or several '*' as wildcards.
-        <detail> parameter is defaulted to False, which means only
-        dataset paths will be returned in the output dictionary. 
-        In order to get more information, one needs to provide detail=True.
-        <run_num> can be only be passed as a single number. No interval of
-        run numbers is supported for this api for now.
+        API to list dataset(s) in DBS
+
+        :param dataset:  Full dataset (path) of the dataset
+        :type dataset: str
+        :param parent_dataset: Full dataset (path) of the dataset
+        :type parent_dataset: str
+        :param release_version: cmssw version
+        :type release_version: str
+        :param pset_hash: pset hash
+        :type pset_hash: str
+        :param app_name: Application name (generally it is cmsRun)
+        :type app_name: str
+        :param output_module_label: output_module_label
+        :type output_module_label: str
+        :param processing_version: Processing Version
+        :type processing_version: str
+        :param acquisition_era_name: Acquisition Era
+        :type acquisition_era_name: str
+        :param primary_ds_name: Primary Dataset Name
+        :type primary_ds_name: str
+        :param primary_ds_type: Primary Dataset Type (Type of data, MC/DATA)
+        :type primary_ds_type: str
+        :param data_tier_name: Data Tier
+        :type data_tier_name: str
+        :param dataset_access_type: Dataset Access Type ( PRODUCTION, DEPRECATED etc.)
+        :type dataset_access_type: str
+        :param prep_id: prep_id
+        :type prep_id: str
+        :param create_by: Creator of the dataset
+        :type create_by: str
+        :param last_modified_by: Last modifier of the dataset
+        :type last_modified_by: str
+        :param detail: List all details of a dataset
+        :type detail: bool
+        :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contain the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
+        :rtype: list of dicts
+
+        * You can use ANY combination of these parameters in this API
+        * In absence of parameters, all datasets known to the DBS instance will be returned
+
         """
         dataset = dataset.replace("*", "%")
         parent_dataset = parent_dataset.replace("*", "%")
@@ -311,10 +350,8 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listDatasets.  %s \n. Exception trace: \n %s" \
                 % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-        #
+
         detail = detail in (True, 1, "True", "1", 'true')
-        #import pdb
-        #pdb.set_trace()
         try:
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash,
                 app_name, output_module_label, processing_version, acquisition_era_name,
@@ -329,8 +366,19 @@ class DBSReaderModel(RESTModel):
 
     def listDatasetArray(self):
         """
-        To be called by datasets url with post call.
-        input: A list of dataset [dataset1, dataset2, dataset3 ...].
+        API to list datasets in DBS
+
+        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required)
+        :type dataset: list
+        :param dataset_access_type: If provided list only datasets having that dataset access type (Optional)
+        :type dataset_access_type: str
+        :param detail: brief list or detailed list 1/0
+        :type detail: bool
+        :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contain the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
+        :rtype: list of dicts
+
+        To be called by datasetlist url with post call.
+
         """
         try :
             body = request.body.read()
@@ -356,9 +404,12 @@ class DBSReaderModel(RESTModel):
     @inputChecks(data_tier_name=str)
     def listDataTiers(self, data_tier_name=""):
 	"""
-	Example url's:
-	    http://dbs3/datatiers
-	    http://dbs3/datatiers?data_tier_name=...
+        API to list data tiers  known to DBS
+
+        :param datatier: When supplied, dbs will list details on this tier (Optional)
+        :type datatier: str
+        :returns: List of dictionaries containing the following keys (data_tier_id, data_tier_name, create_by, creation_date)
+
 	"""
 	data_tier_name = data_tier_name.replace("*","%")
 
@@ -387,11 +438,23 @@ class DBSReaderModel(RESTModel):
         logical_file_name="",run_num='-1', min_cdate='0', max_cdate='0',
         min_ldate='0', max_ldate='0', cdate='0',  ldate='0', detail=False):
         """
-        Example url's:
-        http://dbs3/blocks?dataset=myDataset ||?origin_site_name=mySite <br />
-        http://dbs3/blocks?block_name=myBlock ||?origin_site_name=mySite <br />
-        http://dbs3/blocks?logical_file_name=my_lfn ||?origin_site_name=mySite<br />
-        http://dbs3/blocks?logical_file_name=my_lfn*?dataset=myDataset*?block_name=myBlock ||?origin_site_name=mySite<br />
+        API to list a block in DBS. At least one of the parameters block_name, dataset or logical_file_name are required.
+
+        :param block_name: name of the block
+        :type block_name: str
+        :param dataset: dataset
+        :type dataset: str
+        :param logical_file_name: Logical File Name
+        :type logical_file_name: str
+        :param origin_site_name: Origin Site Name (Optional)
+        :type origin_site_name: str
+        :param run_num: Run Number (Optional)
+        :type run_num: int
+        :param detail: Get detailed information of a block (Optional)
+        :type detail: bool
+        :returns: List of dictionaries containing following keys (block_name). If option detail is used the dictionaries contain the following keys (block_id, create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, dataset_id and block_size)
+        :rtype: list of dicts
+
         """
         dataset = dataset.replace("*","%")
         block_name = block_name.replace("*","%")
@@ -446,9 +509,15 @@ class DBSReaderModel(RESTModel):
     @inputChecks(origin_site_name=str, dataset=str)
     def listBlockOrigin(self, origin_site_name="",  dataset=""):
         """
-        Example url's:
-        http://dbs3/blockorigin?origin_site_name=T1_FNAL_Buff <br />
-        http://dbs3/blockorigin?origin_site_name=T1_FNAL_Buff&dataset=mydataset<br />
+        API to list blocks first generated in origin_site_name
+
+        :param origin_site_name: Origin Site Name (Required, No wildcards)
+        :type origin_site_name: str
+        :param dataset: dataset (Required, No wildcards)
+        :type dataset: str
+        :returns: List of dictionaries containg the following keys (create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, block_size)
+        :rtype: list of dicts
+
         """
         try:
             return self.dbsBlock.listBlocksOrigin(origin_site_name, dataset)
@@ -463,8 +532,13 @@ class DBSReaderModel(RESTModel):
     @inputChecks(block_name=str)
     def listBlockParents(self, block_name=""):
         """
-        Example url's:
-        http://dbs3/blockparents?block_name=/a/b/c%23*d <br />
+        API to list block parents
+
+        :param block_name: name of block whoes parents needs to be found (Required)
+        :type block_name: str
+        :returns: List of dictionaries containing following keys (block_name)
+        :rtype: list of dicts
+
         """
         try:
             return self.dbsBlock.listBlockParents(block_name)
@@ -478,8 +552,13 @@ class DBSReaderModel(RESTModel):
 
     def listBlocksParents(self):
         """
+        API to list block parents of multiple blocks
+
+        :param block_names: list of block names [block_name1, block_name2, ...] (Required)
+        :type block_names: list
+
         To be called by blockparents url with post call
-        Input: A list of block_names [block_name1, block_name2, ...]
+
         """
         try :
             body = request.body.read()
@@ -503,8 +582,13 @@ class DBSReaderModel(RESTModel):
     @inputChecks(block_name=str)       
     def listBlockChildren(self, block_name=""):
         """
-        Example url's:
-        http://dbs3/blockchildren?block_name=/a/b/c%23*d <br />
+        API to list block children
+
+        :param block_name: name of block whoes children needs to be found (Required)
+        :type block_name: str
+        :returns: List of dictionaries containing following keys (block_name)
+        :rtype: list of dicts
+
         """
         block_name = block_name.replace("*","%")
         try:
@@ -521,16 +605,41 @@ class DBSReaderModel(RESTModel):
         release_version="", pset_hash="", app_name="", output_module_label="",
         minrun=-1, maxrun=-1, origin_site_name="", lumi_list="", detail=False):
         """
-        This API returns logical file names and associated information.
-        One of the following three parameters must be provided: dataset, block, logical_file_name.
-        <detail> parameter is defaulted to False, which means only logical_file_names will be returned in the output json. 
-        In order to get more information, one needs to provide detail=True.
-        Run numbers must be passed as two parameters, minrun and maxrun. 
-        for lumi_list the following two json formats are supported:
+        API to list A file in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset or non-wildcarded block_name is required.
+        The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
+
+        :param logical_file_name: logical_file_name of the file
+        :type logical_file_name: str
+        :param dataset: dataset
+        :type dataset: str
+        :param block_name: block name
+        :type block_name: str
+        :param release_version: release version
+        :type release_version: str
+        :param pset_hash: parameter set hash
+        :type pset_hash: str
+        :param app_name: Name of the application
+        :type app_name: str
+        :param output_module_label: name of the used output module
+        :type output_module_label: str
+        :param minrun: Minimal run number. If you want to look for a run range use minrun and maxrun
+        :type minrun: int
+        :param maxrun: Maximal run number. If you want to look for a run range use minrun and maxrun
+        :type maxrun: int
+        :param origin_site_name: site where the file was created
+        :type origin_site_name: str
+        :param detail: Get detailed information about a file
+        :type detail: bool
+        :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
+        :rtype: list of dicts
+
+        * Run numbers must be passed as two parameters, minrun and maxrun.
+        * Use minrun,maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
+        * For lumi_list the following two json formats are supported:
             - '[a1, a2, a3,]' 
             - '[[a,b], [c, d],]'
-        Also if lumi_list is provided, one also needs to provide both minrun and maxrun parameters(equal) 
-        No POST/PUT call for run-lumi json combination is provided as input for now...
+        * If lumi_list is provided, one also needs to provide both minrun and maxrun parameters (equal)
+
         """
         logical_file_name = logical_file_name.replace("*", "%")
         release_version = release_version.replace("*", "%")
@@ -562,11 +671,18 @@ class DBSReaderModel(RESTModel):
     @inputChecks(block_name=str, dataset=str, run_num=(long,int, str))
     def listFileSummaries(self, block_name='', dataset='', run_num=0):
         """
-        Example url's <br />
-        http://dbs3/filesummaries?dataset=/a/b/c
-        http://dbs3/filesummaries?block_name=/a/b/c#1234
-        Both block_name and dataset will not allow wildcards.
-        Return: number of files, event counts and number of lumi sections in a given block or dataset. 
+        API to list number of files, event counts and number of lumis in a given block of dataset.If the optional run_num
+        parameter is used, the summaries just for this run number. Either block_name or dataset name is required. No wild-cards are allowed
+
+        :param block_name: Block name
+        :type block_name: str
+        :param dataset: Dataset name
+        :type dataset: str
+        :param run_num: Run number (Optional)
+        :type run_num: int
+        :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
+        :rtype: list of dicts
+
         """
         try:
             return self.dbsFile.listFileSummary(block_name, dataset, run_num)
@@ -580,8 +696,13 @@ class DBSReaderModel(RESTModel):
     @inputChecks(dataset=str)
     def listDatasetParents(self, dataset=''):
         """
-        Example url's <br />
-        http://dbs3/datasetparents?dataset=/a/b/c
+        API to list A datasets parents in DBS
+
+        :param dataset: dataset (Required)
+        :type dataset: str
+        :returns: List of dictionaries containing the following keys (this_dataset, parent_dataset_id, parent_dataset)
+        :rtype: list of dicts
+
         """
         try:
             return self.dbsDataset.listDatasetParents(dataset)
@@ -595,8 +716,13 @@ class DBSReaderModel(RESTModel):
     @inputChecks(dataset=str)
     def listDatasetChildren(self, dataset):
         """
-        Example url's <br />
-        http://dbs3/datasetchildren?dataset=/a/b/c
+        API to list A datasets children in DBS
+
+        :param dataset: dataset (Required)
+        :type dataset: str
+        :returns: List of dictionaries containing the following keys (child_dataset_id, child_dataset, dataset)
+        :rtype: list of dicts
+
         """
         try:
             return self.dbsDataset.listDatasetChildren(dataset)
@@ -613,14 +739,30 @@ class DBSReaderModel(RESTModel):
                           release_version="", pset_hash="", app_name="",
                           output_module_label="", block_id=0, global_tag=''):
         """
-        Example url's: <br />
-        http://dbs3/outputconfigurations <br />
-        http://dbs3/outputconfigurations?dataset=a/b/c <br />
-        http://dbs3/outputconfigurations?logical_file_name=lfn <br />
-        http://dbs3/outputconfigurations?release_version=version <br />
-        http://dbs3/outputconfigurations?pset_hash=hash <br/>
-        http://dbs3/outputconfigurations?app_name=app_name <br/>
-        http://dbs3/outputconfigurations?output_module_label="output_module_label" <br/>
+        API to list OutputConfigs in DBS
+
+        :param dataset: Full dataset (path) of the dataset
+        :type dataset: str
+        :param logical_file_name: logical_file_name of the file
+        :type logical_file_name: str
+        :param release_version: cmssw version
+        :type release_version: str
+        :param pset_hash: pset hash
+        :type pset_hash: str
+        :param app_name: Application name (generally it is cmsRun)
+        :type app_name: str
+        :param output_module_label: output_module_label
+        :type output_module_label: str
+        :param block_id: ID of the block
+        :type block_id: int
+        :param global_tag: Global Tag
+        :type global_tag: str
+        :returns: List of dictionaries containing the following keys (app_name, output_module_label, create_by, pset_hash, creation_date, release_version, global_tag, pset_name)
+        :rtype: list of dicts
+
+        * You can use ANY combination of these parameters in this API
+        * All parameters are optional, if you do not provide any parameter, All configs will be listed from DBS
+
         """
         release_version = release_version.replace("*", "%")
         pset_hash = pset_hash.replace("*", "%")
@@ -640,8 +782,13 @@ class DBSReaderModel(RESTModel):
     @inputChecks(logical_file_name=str, block_id=(int,str), block_name=str)
     def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
         """
-        Example url's <br />
-        http://dbs3/fileparents?logical_file_name=lfn
+        API to list file parents
+
+        :param logical_file_name: logical_file_name of file (Required)
+        :type logical_file_name: str
+        :returns: List of dictionaries containing the following keys (parent_logical_file_name, logical_file_name)
+        :rtype: list of dicts
+
         """
         try:
             return self.dbsFile.listFileParents(logical_file_name, block_id, block_name)
@@ -655,8 +802,13 @@ class DBSReaderModel(RESTModel):
     @inputChecks(logical_file_name=str)
     def listFileChildren(self, logical_file_name=''):
         """
-        Example url's <br />
-        http://dbs3/filechildren?logical_file_name=lfn
+        API to list file children
+
+        :param logical_file_name: logical_file_name of file (Required)
+        :type logical_file_name: str
+        :returns: List of dictionaries containing the following keys (child_logical_file_name, logical_file_name)
+        :rtype: List of dicts
+
         """
         try:
             return self.dbsFile.listFileChildren(logical_file_name)
@@ -670,9 +822,17 @@ class DBSReaderModel(RESTModel):
     @inputChecks(logical_file_name=str, block_name=str, run_num=(long,int,str))
     def listFileLumis(self, logical_file_name="", block_name="", run_num='0'):
         """
-        Example url's <br />
-        http://dbs3/filelumis?logical_file_name=lfn
-        http://dbs3/filelumis?block_name=block_name
+        API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support on this API
+
+        :param block_name: Name of the block
+        :type block_name: str
+        :param logical_file_name: logical_file_name of file
+        :type logical_file_name: str
+        :param run_num: List lumi sections for a given run number (Optional)
+        :type run_num: int
+        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
+        :rtype: list of dicts
+
         """
         if isinstance(run_num,str) and ('*' in run_num or '%' in run_num):
             run_num = 0
@@ -691,8 +851,22 @@ class DBSReaderModel(RESTModel):
     def listRuns(self, minrun=-1, maxrun=-1, logical_file_name="",
                  block_name="", dataset=""):
         """
-        http://dbs3/runs?runmin=1&runmax=10
-        http://dbs3/runs
+        API to list all runs in DBS. All parameters are optional.
+
+        :param logical_file_name: List all runs in the file
+        :type logical_file_name: str
+        :param block_name: List all runs in the block
+        :type block_name: str
+        :param dataset: List all runs in that dataset
+        :type dataset: str
+        :param minrun: List all runs large than minimum run number
+        :type minrun: int
+        :param maxrun: List all runs lower than maximum run number
+        :type maxrun: int
+
+        * If you omit both min/maxrun, then all runs known to DBS will be listed
+        * Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
+
         """
         try:
             if(logical_file_name):
@@ -713,20 +887,16 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    #def listSites(self, block_name="", site_name=""):
-    #    """
-    #    Example url's <br />
-    #    http://dbs3/sites
-    #   http://dbs3/sites?block_name=block_name
-    #   http://dbs3/sites?site_name=T1_FNAL
-    #    """
-    #    return self.dbsSite.listSites(block_name, site_name)
-
     @inputChecks(datatype=str, dataset=str)
     def listDataTypes(self, datatype="", dataset=""):
         """
-        lists datatypes known to dbs
-        dataset : lists datatype of a dataset
+        API to list data types known to dbs (when no parameter supplied)
+
+        :param dataset: Returns data type (of primary dataset) of the dataset (Optional)
+        :type dataset: str
+        :returns: List of dictionaries containing the following keys (primary_ds_type_id, data_type)
+        :rtype: list of dicts
+
         """
         try:
             return  self.dbsDataType.listDataType(dataType=datatype, dataset=dataset)
@@ -740,7 +910,11 @@ class DBSReaderModel(RESTModel):
     @inputChecks(block_name=str)
     def dumpBlock(self, block_name):
         """
-        Returns all information related with the block_name
+        API the list all information related with the block_name
+
+        :param block_name: Name of block whoes children needs to be found (Required)
+        :type block_name: str
+
         """
         try:
             return self.dbsBlock.dumpBlock(block_name)
@@ -754,7 +928,13 @@ class DBSReaderModel(RESTModel):
     @inputChecks(acquisition_era_name=str)
     def listAcquisitionEras(self, acquisition_era_name=''):
         """
-        lists acquisition eras known to dbs
+        API to list ALL Acquisition Eras in DBS
+
+        :param acquisition_era_name: Acquisition era name (Optional, wild cards allowed)
+        :type acquisition_era_name: str
+        :returns: List of dictionaries containing following keys (description, end_date, acquisition_era_name, create_by, creation_date and start_date)
+        :rtype: list of dicts
+
         """
         try:
             acquisition_era_name = acquisition_era_name.replace('*', '%')
@@ -768,7 +948,13 @@ class DBSReaderModel(RESTModel):
     @inputChecks(acquisition_era_name=str)
     def listAcquisitionEras_CI(self, acquisition_era_name=''):
         """
-        lists case sensitive acquisition eras known to dbs 
+        API to list ALL Acquisition Eras (case insensitive) in DBS
+
+        :param acquisition_era_name: Acquisition era name (Optional, wild cards allowed)
+        :type acquisition_era_name: str
+        :returns: List of dictionaries containing following keys (description, end_date, acquisition_era_name, create_by, creation_date and start_date)
+        :rtype: list of dicts
+
         """
         try:
             acquisition_era_name = acquisition_era_name.replace('*', '%')
@@ -780,12 +966,16 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
 self.logger.exception, sError)
 
-
-
     @inputChecks(processing_version=(str,int))
     def listProcessingEras(self, processing_version=0):
         """
-        lists acquisition eras known to dbs
+        API to list all Processing Eras in DBS
+
+        :param processing_version: Processing Version (Optional). If provided just this processing_version will be listed
+        :type processing_version: str
+        :returns: List of dictionaries containg the following keys (create_by, processing_version, description, creation_date)
+        :rtype: list of dicts
+
         """
         try:
             #processing_version = processing_version.replace("*", "%")
@@ -800,7 +990,17 @@ self.logger.exception, sError)
     @inputChecks(release_version=str, dataset=str, logical_file_name=str)
     def listReleaseVersions(self, release_version='', dataset='', logical_file_name=''):
         """
-        lists release versions known to dbs
+        API to list all release versions in DBS
+
+        :param release_version: If provided, will list only that release version
+        :type release_version: str
+        :param dataset: If provided, will list release version of the specified dataset
+        :type dataset: str
+        :param logical_file_name: logical file name of the file
+        :type logical_file_name: str
+        :returns: List of dictionaries containing following keys (release_version)
+        :rtype: list of dicts
+
         """
         if release_version:
             release_version = release_version.replace("*","%")
@@ -816,7 +1016,13 @@ self.logger.exception, sError)
     @inputChecks(dataset_access_type=str)
     def listDatasetAccessTypes(self, dataset_access_type=''):
         """
-        lists dataset access types known to dbs
+        API to list ALL dataset access types
+
+        :param dataset_access_type: If provided, list that dataset access type (Optional)
+        :type dataset_access_type: str
+        :returns: List of dictionary containg the following key (dataset_access_type).
+        :rtype: List of dicts
+
         """
         if dataset_access_type:
             dataset_access_type = dataset_access_type.replace("*","%")
@@ -832,7 +1038,13 @@ self.logger.exception, sError)
     @inputChecks(physics_group_name=str)
     def listPhysicsGroups(self, physics_group_name=''):
         """
-        List physics group names know to DBS.
+        API to list ALL physics groups
+
+        :param physics_group_name: If provided, list that specific physics group
+        :type physics_group_name: str
+        :returns: List of dictionaries containing the following key (physics_group_name)
+        :rtype: list of dicts
+
         """
         if physics_group_name:
             physics_group_name = physics_group_name.replace('*', '%')

@@ -28,7 +28,8 @@ dataset2="%s_2" %dataset
 app_name='cmsRun'
 output_module_label='Merged'
 global_tag='my-cms-gtag_%s' % uid
-pset_hash='76e303993a1c2f842159dbfeeed9a0dd' 
+pset_hash='76e303993a1c2f842159dbfeeed9a0dd'
+pset_name='UnitestPsetName'
 release_version='CMSSW_1_2_3'
 site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
@@ -89,7 +90,7 @@ class DBSClientWriter_t(unittest.TestCase):
     def test05(self):
         """test05: web.DBSClientWriter.insertOutputModule: re-insertion should not raise any errors"""
         data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
-                'output_module_label': output_module_label, 'global_tag':global_tag}
+                'output_module_label': output_module_label, 'global_tag':global_tag, 'pset_name':pset_name}
         self.api.insertOutputConfig(outputConfigObj=data)
     
     def test06(self):

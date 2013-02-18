@@ -84,10 +84,13 @@ class DBSWriterModel(DBSReaderModel):
 
     def insertPrimaryDataset(self):
         """
-        Inserts a Primary Dataset in DBS
-        Gets the input from cherrypy request body.
-        input must be a dictionary with the following two keys:
-        primary_ds_name, primary_ds_type
+        API to insert A primary dataset in DBS
+
+        :param primaryDSObj: primary dataset object
+        :type primaryDSObj: dict
+        :key primary_ds_type: TYPE (out of valid types in DBS, MC, DATA) (Required)
+        :key primary_ds_name: Name of the primary dataset (Required)
+
         """
         try :
             body = request.body.read()
@@ -106,13 +109,19 @@ class DBSWriterModel(DBSReaderModel):
 
     def insertOutputConfig(self):
         """
-        Insert an output configuration (formely known as algorithm config).
-        Gets the input from cherrypy request body.
-        input must be a dictionary with at least the following keys:
-        app_name, release_version, pset_hash , output_module_label
+        API to insert An OutputConfig in DBS
+
+        :param outputConfigObj: Output Config object
+        :type outputConfigObj: dict
+        :key app_name: App Name (Required)
+        :key release_version: Release Version (Required)
+        :key pset_hash: Pset Hash (Required)
+        :key output_module_label: Output Module Label (Required)
+        :key global_tag: Global Tag (Required)
+        :key scenario: Scenario (Optional, default is None)
+        :key pset_name: Pset Name (Optional, default is None)
 
         """
-
         try:
             body = request.body.read()
             indata = cjson.decode(body)
@@ -132,7 +141,13 @@ class DBSWriterModel(DBSReaderModel):
     @inputChecks(acquisition_era_name=str, end_date=(int, str))
     def updateAcqEraEndDate(self, acquisition_era_name ="", end_date=0):
         """
-        API to update Acquisition era's end_date.
+        API to update the end_date of an acquisition era
+
+        :param acquisition_era_name: acquisition_era_name to update (Required)
+        :type acquisition_era_name: str
+        :param end_date: end_date not zero (Required)
+        :type end_date: int
+
         """
         try:
             self.dbsAcqEra.UpdateAcqEraEndDate( acquisition_era_name, end_date)
@@ -145,18 +160,17 @@ class DBSWriterModel(DBSReaderModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-
-
-
     def insertAcquisitionEra(self):
         """
-        Insert an AcquisitionEra in DBS
-        Gets the input from cherrypy request body.
-        input must be a dictionary with at least the following keys:
-        'acquisition_era_name'
+        API to insert an Acquisition Era in DBS
+
+        :param acqEraObj: Acquisition Era object
+        :type acqEraObj: dict
+        :key acquisition_era_name: Acquisition Era Name (Required)
+        :key start_date: start date of the acquisition era (unixtime, int) (Optional, default current date)
+        :key end_date: end data of the acquisition era (unixtime, int) (Optional)
 
         """
-
         try:
             body = request.body.read()
             indata = cjson.decode(body)
@@ -176,10 +190,12 @@ class DBSWriterModel(DBSReaderModel):
 
     def insertProcessingEra(self):
         """
-        Insert an ProcessingEra in DBS
-        Gets the input from cherrypy request body.
-        input must be a dictionary with at least the following keys:
-        'processing_version', 'description'
+        API to insert A Processing Era in DBS
+
+        :param procEraObj: Processing Era object
+        :type procEraObj: dict
+        :key processing_version: Processing Version (Required)
+        :key description: Description (Optional)
 
         """
         try:
@@ -200,12 +216,23 @@ class DBSWriterModel(DBSReaderModel):
 
     def insertDataset(self):
         """
-        gets the input from cherrypy request body.
-        input must have the following keys:
-        KEYS : required/optional:default = ...
-        ...
-        """
+        API to insert a dataset in DBS
 
+        :param datasetObj: Dataset object
+        :type datasetObj: dict
+        :key primary_ds_name: Primary Dataset Name (Required)
+        :key dataset: Name of the dataset (Required)
+        :key dataset_access_type: Dataset Access Type (Required)
+        :key processed_ds_name: Processed Dataset Name (Required)
+        :key data_tier_name: Data Tier Name (Required)
+        :key acquisition_era_name: Acquisition Era Name (Required)
+        :key processing_version: Processing Version (Required)
+        :key physics_group_name: Physics Group Name (Optional, default None)
+        :key prep_id: ID of the Production and Reprocessing management tool (Optional, default None)
+        :key xtcrosssection: Xtcrosssection (Optional, default None)
+        :key output_configs: List(dict) with keys release_version, pset_hash, app_name, output_module_label and global tag
+
+        """
         try:
             body = request.body.read()
             indata = cjson.decode(body)
@@ -228,8 +255,11 @@ class DBSWriterModel(DBSReaderModel):
 
     def insertBulkBlock(self):
         """
-        gets the input from cherrypy request body.
-        input must be a dictionaryi that match blockDump output.
+        API to insert a bulk block
+
+        :param blockDump: Output of the block dump command
+        :type blockDump: dict
+
         """
         try:
             body = request.body.read()
@@ -254,10 +284,16 @@ class DBSWriterModel(DBSReaderModel):
 
     def insertBlock(self):
         """
-        gets the input from cherrypy request body.
-        input must be a dictionary with the following keys:
-        KEYS: required/optional : default = ...
-        ...
+        API to insert a block into DBS
+
+        :param blockObj: Block object
+        :type blockObj: dict
+        :key open_for_writing: Open For Writing (1/0) (Optional, default 1)
+        :key block_size: Block Size (Optional, default 0)
+        :key file_count: File Count (Optional, default 0)
+        :key block_name: Block Name (Required)
+        :key origin_site_name: Origin Site Name (Required)
+
         """	
 	try:
 	    body = request.body.read()
@@ -273,23 +309,28 @@ class DBSWriterModel(DBSReaderModel):
         
     def insertFile(self, qInserts=False):
         """
-        gets the input from cherrypy request body
-        input must be a (list of) dictionary with the following keys: <br />
-        logical_file_name (required) : string  <br />
-        is_file_valid: (optional, default = 1): 1/0 <br />
-        block_name, required: /a/b/c#d <br />
-        dataset, required: /a/b/c <br />
-        file_type (optional, default = EDM): one of the predefined types, <br />
-        check_sum (optional, default = '-1'): string <br />
-        event_count (optional, default = -1): int <br />
-        file_size (optional, default = -1.): float <br />
-        adler32 (optional, default = ''): string <br />
-        md5 (optional, default = ''): string <br />
-        auto_cross_section (optional, default = -1.): float <br />
-        file_lumi_list (optional, default = []): [{'run_num': 123, 'lumi_section_num': 12},{}....] <br />
-        file_parent_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....] <br />
-        file_assoc_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....] <br />
-        file_output_config_list(optional, default = []) :[{'app_name':..., 'release_version':..., 'pset_hash':...., output_module_label':...},{}.....] <br />
+        API to insert a list of file into DBS in DBS. Up to 10 files can be inserted in one request.
+
+        :param qInserts: True means that inserts will be queued instead of done immediately. INSERT QUEUE Manager will perform the inserts, within few minutes.
+        :type qInserts: bool
+        :param filesList: List of dictionaries containing following information
+        :type filesList: list of dicts
+        :key logical_file_name: File to be inserted (str) (Required)
+        :key is_file_valid: (optional, default = 1): (bool)
+        :key block: required: /a/b/c#d (str)
+        :key dataset: required: /a/b/c (str)
+        :key file_type: (optional, default = EDM) one of the predefined types, (str)
+        :key check_sum: (optional, default = '-1') (str)
+        :key event_count: (optional, default = -1) (int)
+        :key file_size: (optional, default = -1.) (float)
+        :key adler32: (optional, default = '') (str)
+        :key md5: (optional, default = '') (str)
+        :key auto_cross_section: (optional, default = -1.) (float)
+        :key file_lumi_list: (optional, default = []) [{'run_num': 123, 'lumi_section_num': 12},{}....]
+        :key file_parent_list: (optional, default = []) [{'file_parent_lfn': 'mylfn'},{}....]
+        :key file_assoc_list: (optional, default = []) [{'file_parent_lfn': 'mylfn'},{}....]
+        :key file_output_config_list: (optional, default = []) [{'app_name':..., 'release_version':..., 'pset_hash':...., output_module_label':...},{}.....]
+
         """
 	if qInserts in (False, 'False'): qInserts=False
 	try:
@@ -328,6 +369,12 @@ class DBSWriterModel(DBSReaderModel):
     def updateFile(self, logical_file_name="", is_file_valid=1):
         """
         API to update file status
+
+        :param logical_file_name: logical_file_name to update (Required)
+        :type logical_file_name: str
+        :param is_file_valid: valid=1, invalid=0 (Required)
+        :type is_file_valid: bool
+
         """
         try:
             self.dbsFile.updateStatus(logical_file_name, is_file_valid)
@@ -343,7 +390,13 @@ class DBSWriterModel(DBSReaderModel):
     @inputChecks(dataset=str, dataset_access_type=str)
     def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_access_type=""):
         """
-        API to update dataset status
+        API to update dataset type
+
+        :param dataset: Dataset to update (Required)
+        :type dataset: str
+        :param dataset_access_type: production, deprecated, etc (Required)
+        :type dataset_access_type: str
+
         """
         try:
             if dataset_access_type != "":
@@ -362,7 +415,13 @@ class DBSWriterModel(DBSReaderModel):
     @inputChecks(block_name=str, open_for_writing=(int,str))
     def updateBlock(self, block_name="", open_for_writing=0):
         """
-        API to update file status
+        API to update block status
+
+        :param block_name: block name (Required)
+        :type block_name: str
+        :param open_for_writing: open_for_writing=0 (close), open_for_writing=1 (open) (Required)
+        :type open_for_writing: str
+
         """
         try:
             self.dbsBlock.updateStatus(block_name, open_for_writing)
@@ -376,7 +435,12 @@ class DBSWriterModel(DBSReaderModel):
 
     def insertDataTier(self):
 	"""
-	Inserts a data tier in DBS
+        API to insert A Data Tier in DBS
+
+        :param dataTierObj: Data Tier object
+        :type dataTierObj: dict
+        :key data_tier_name: Data Tier that needs to be inserted
+
 	"""
       	try:
             body = request.body.read()

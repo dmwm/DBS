@@ -10,7 +10,7 @@ from ctypes import *
 import time
 import uuid
 
-url=os.environ['DBS_WRITER_URL']    
+url=os.environ['DBS_WRITER_URL']
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
 api = DbsApi(url=url)
 uid = uuid.uuid4().time_mid
@@ -108,8 +108,7 @@ class DBSValitaion_t(unittest.TestCase):
 	self.assertEqual(dsInDBS['acquisition_era_name'], acquisition_era_name)
         self.assertEqual(dsInDBS['prep_id'], None)
 
-        api.insertDataset(datasetObj=data)
-        dsList = api.listDatasets(dataset=dataset, detail=True, create_by=create_by, last_modified_by=last_modified_by)
+        dsList = api.listDatasets(dataset=dataset, detail=True, create_by=create_by, last_modified_by=last_modified_by, dataset_access_type='PRODUCTION')
 
         self.assertEqual(len(dsList), 1)
 	dsInDBS=dsList[0]

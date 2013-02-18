@@ -274,6 +274,7 @@ class PostDeploymentTests(unittest.TestCase):
         #store create_by and last_modified_by information
         create_by = ret_val[0]['create_by']
         last_modified_by = ret_val[0]['last_modified_by']
+
         datasets = stripChangingParameters(ret_val)
 
         self.assertEqual([expected_data],datasets)
@@ -292,7 +293,7 @@ class PostDeploymentTests(unittest.TestCase):
 
         self.assertEqual([expected_data],datasets)
 
-        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", create_by=create_by, last_modified_by=last_modified_by))
+        datasets = stripChangingParameters(self.api.listDatasets(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW", create_by=create_by, last_modified_by=last_modified_by, dataset_access_type="*", detail=True))
 
         self.assertEqual([expected_data],datasets)
 
@@ -370,8 +371,8 @@ class PostDeploymentTests(unittest.TestCase):
     def test_list_datatypes(self):
         fp = file(os.path.join(self.base_dir,"DataTypes.json"),'r')
         expected_data = [json.load(fp)]
-    
-        datatypes = self.api.listDataTypes(datatype="TEST")
+
+        datatypes = self.api.listDataTypes(datatype="mc")
         
         self.assertEqual(expected_data,stripChangingParameters(datatypes))
 
@@ -518,13 +519,13 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file(os.path.join(self.base_dir,"OutputConfigs.json"),'r')
         expected_data = [json.load(fp)]
         
-        configs = self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",app_name="cmsRun")
+        configs = stripChangingParameters(self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",app_name="cmsRun"))
         self.assertEqual(expected_data,configs)
 
-        configs = self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
+        configs = stripChangingParameters(self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"))
         self.assertEqual(expected_data,configs)
         
-        configs = self.api.listOutputConfigs(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
+        configs = stripChangingParameters(self.api.listOutputConfigs(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"))
         self.assertEqual(expected_data,configs)
 
         fp.close()

@@ -97,11 +97,11 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test14a(self):
         """test14a unittestDBSCLientReader_t.listDatasets: using create_by"""
-        self.api.listDatasets(create_by='Manuel Giffels')
+        self.api.listDatasets(create_by='giffels')
 
     def test14b(self):
         """test14a unittestDBSCLientReader_t.listDatasets: using last_modified_by"""
-        self.api.listDatasets(last_modified_by='Manuel Giffels')
+        self.api.listDatasets(last_modified_by='giffels')
 
     def test15(self):
 	"""test15 unittestDBSClientReader_t.listOutputModules: basic test"""
