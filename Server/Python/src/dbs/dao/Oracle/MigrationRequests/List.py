@@ -7,6 +7,7 @@ __version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsUtils import dbsUtils
 
 class List(DBFormatter):
     """
@@ -23,28 +24,41 @@ class List(DBFormatter):
 SELECT MR.MIGRATION_REQUEST_ID, MR.MIGRATION_URL, 
        MR.MIGRATION_INPUT, MR.MIGRATION_STATUS,
        MR.CREATE_BY, MR.CREATION_DATE,
-       MR.LAST_MODIFIED_BY, MR.LAST_MODIFICATION_DATE
+       MR.LAST_MODIFIED_BY, MR.LAST_MODIFICATION_DATE, MR.RETRY_COUNT
 FROM %sMIGRATION_REQUESTS MR
 """ % (self.owner)
 
     def execute(self, conn, migration_url="", migration_input="", create_by="", migration_request_id="", oldest= False, transaction=False):
         """
-        Lists all primary datasets if pattern is not provided.
+        Lists all requests if pattern is not provided.
         """
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/List. Expects db connection from upper layer.")
-
+        #import pdb
+        #pdb.set_trace()
         sql = self.sql
         binds = {}
 	if migration_request_id:
 	    sql += " WHERE MR.MIGRATION_REQUEST_ID=:migration_request_id"
 	    binds['migration_request_id']=migration_request_id
         elif oldest:
-            sql += """ WHERE MR.MIGRATION_STATUS=0 and 
-                       MR.CREATION_DATE = (select min (MR1.CREATION_DATE) from %smigration_requests MR1 
-                       where MR1.MIGRATION_STATUS=0)
-                   """ %(self.owner)
-	else:    
+            #FIXME: Need to write the sql.YG
+            #current_date = dbsUtils().getTime()
+            #we require waiting time for 
+            #retry_count=0 is 1 minutes
+            #retry_count=1 is 2 minutes
+            #retyr_count=2 is 4 minutes
+
+            sql += """
+                       WHERE MR.MIGRATION_STATUS=0 
+                       or (MR.migration_status=3 and MR.retry_count=0 and MR.last_modification_date <= :current_date-60)    
+                       or (MR.migration_status=3 and MR.retry_count=1 and MR.last_modification_date <= :current_date-120)  
+                       or (MR.migration_status=3 and MR.retry_count=2 and MR.last_modification_date <= :current_date-240)
+                       ORDER BY MR.creation_date
+                   """ 
+            binds['current_date'] = dbsUtils().getTime()
+            print "time= " + str(binds['current_date'])
+        else:    
 	    if  migration_url or migration_input or create_by:
 		sql += " WHERE "
 	    if migration_url:

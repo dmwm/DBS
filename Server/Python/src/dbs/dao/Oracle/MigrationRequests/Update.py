@@ -2,8 +2,6 @@
 """
 This module provides Migration.Update data access object.
 """
-__revision__ = "$Id: Update.py,v 1.2 2010/06/28 21:29:24 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler

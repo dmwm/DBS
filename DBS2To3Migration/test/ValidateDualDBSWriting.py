@@ -47,7 +47,7 @@ def get_lfns_from_block(block):
     ownerDBS2 = DBS2Secret['databaseOwner']
     connectUrlDBS2 = DBS2Secret['connectUrl']['reader']
 
-    db_query = DBQuery(connectUrlDBS3)
+    db_query = DBQuery(connectUrlDBS2)
 
     sql_queries = SQLFactory(db_owner_dbs2=ownerDBS2,
                              db_owner_dbs3=ownerDBS3)
@@ -64,14 +64,12 @@ class SQLFactory(object):
                                 SELECT BLOCK_NAME,
                                 PATH,
                                 OPEN_FOR_WRITING,
-                                ORIGIN_SITE_NAME,
                                 BLOCK_SIZE,
                                 FILE_COUNT
                                 FROM(
                                 SELECT BL.BLOCK_NAME,
                                 DS.DATASET PATH,
                                 BL.OPEN_FOR_WRITING,
-                                BL.ORIGIN_SITE_NAME,
                                 BL.BLOCK_SIZE,
                                 BL.FILE_COUNT
                                 FROM {db_owner_dbs3}.BLOCKS BL
@@ -81,7 +79,6 @@ class SQLFactory(object):
                                 SELECT BL2.NAME BLOCK_NAME,
                                 BL2.PATH,
                                 BL2.OPENFORWRITING OPEN_FOR_WRITING,
-                                'UNKNOWN' ORIGIN_SITE_NAME,
                                 BL2.BLOCKSIZE BLOCK_SIZE, BL2.NUMBEROFFILES FILE_COUNT
                                 FROM {db_owner_dbs2}.BLOCK BL2
                                 JOIN {db_owner_dbs2}.PROCESSEDDATASET DS ON DS.ID=BL2.DATASET
@@ -93,7 +90,6 @@ class SQLFactory(object):
                                 BLOCK_NAME,
                                 PATH,
                                 OPEN_FOR_WRITING,
-                                ORIGIN_SITE_NAME,
                                 BLOCK_SIZE,
                                 FILE_COUNT
                                 HAVING COUNT(*) = 1
@@ -134,7 +130,6 @@ class SQLFactory(object):
                                 DATA_TIER_NAME,
                                 DATASET_ACCESS_TYPE,
                                 ACQUISITION_ERA_NAME,
-                                PROCESSING_VERSION,
                                 PHYSICS_GROUP_NAME,
                                 PREP_ID
                                 FROM(
@@ -143,12 +138,21 @@ class SQLFactory(object):
                                 D.CREATE_BY,
                                 D.LAST_MODIFIED_BY,
                                 P.PRIMARY_DS_NAME,
-                                PDT.PRIMARY_DS_TYPE,
+                                LOWER(PDT.PRIMARY_DS_TYPE) PRIMARY_DS_TYPE,
                                 PD.PROCESSED_DS_NAME,
                                 DT.DATA_TIER_NAME,
                                 DP.DATASET_ACCESS_TYPE,
-                                AE.ACQUISITION_ERA_NAME,
-                                PE.PROCESSING_VERSION,
+                                CASE
+                                WHEN (SELECT
+                                DS.AQUISITIONERA ACQUISITION_ERA_NAME
+                                FROM {db_owner_dbs2}.PROCESSEDDATASET DS
+                                JOIN {db_owner_dbs2}.DATATIER DT2 ON DS.DATATIER=DT2.ID
+                                JOIN {db_owner_dbs2}.PRIMARYDATASET PD2 ON PD2.ID=DS.PRIMARYDATASET
+                                WHERE PD2.NAME='$primary_ds' and DS.NAME='$processed_ds' and DT2.NAME='$tier'
+                                ) IS NOT NULL
+                                THEN AE.ACQUISITION_ERA_NAME
+                                ELSE NULL
+                                END AS ACQUISITION_ERA_NAME,
                                 PH.PHYSICS_GROUP_NAME,
                                 D.PREP_ID
                                 FROM {db_owner_dbs3}.DATASETS D
@@ -157,7 +161,6 @@ class SQLFactory(object):
                                 JOIN {db_owner_dbs3}.PROCESSED_DATASETS PD ON PD.PROCESSED_DS_ID = D.PROCESSED_DS_ID
                                 JOIN {db_owner_dbs3}.DATA_TIERS DT ON DT.DATA_TIER_ID = D.DATA_TIER_ID
                                 JOIN {db_owner_dbs3}.DATASET_ACCESS_TYPES DP on DP.DATASET_ACCESS_TYPE_ID= D.DATASET_ACCESS_TYPE_ID
-                                JOIN {db_owner_dbs3}.PROCESSING_ERAS PE on D.PROCESSING_ERA_ID=PE.PROCESSING_ERA_ID
                                 JOIN {db_owner_dbs3}.ACQUISITION_ERAS AE ON AE.ACQUISITION_ERA_ID = D.ACQUISITION_ERA_ID
                                 LEFT OUTER JOIN {db_owner_dbs3}.PHYSICS_GROUPS PH ON PH.PHYSICS_GROUP_ID = D.PHYSICS_GROUP_ID
                                 WHERE DATASET='/$primary_ds/$processed_ds/$tier'
@@ -172,7 +175,6 @@ class SQLFactory(object):
                                 DT2.NAME DATA_TIER_NAME,
                                 ST.STATUS DATASET_ACCESS_TYPE,
                                 DS.AQUISITIONERA ACQUISITION_ERA_NAME,
-                                -1 PROCESSING_VERSION,
                                 PG.PHYSICSGROUPNAME physics_group_name,
                                 NULL PREP_ID
                                 FROM {db_owner_dbs2}.PROCESSEDDATASET DS
@@ -195,7 +197,6 @@ class SQLFactory(object):
                                 DATA_TIER_NAME,
                                 DATASET_ACCESS_TYPE,
                                 ACQUISITION_ERA_NAME,
-                                PROCESSING_VERSION,
                                 PHYSICS_GROUP_NAME,
                                 PREP_ID
                                 HAVING COUNT(*) = 1
@@ -212,11 +213,20 @@ class SQLFactory(object):
                                 GLOBAL_TAG
                                 FROM
                                 (
-                                SELECT APE.APP_NAME,
+                                SELECT DISTINCT APE.APP_NAME,
                                 RV.RELEASE_VERSION,
                                 PSH.PSET_HASH,
                                 PSH.PSET_NAME,
-                                OMC.GLOBAL_TAG
+                                CASE
+                                WHEN (SELECT COUNT(DISTINCT PDS.GLOBALTAG)
+                                FROM cms_dbs_prod_global.PROCALGO PA2
+                                INNER JOIN cms_dbs_prod_global.PROCESSEDDATASET PDS ON PA2.DATASET = PDS.ID
+                                INNER JOIN cms_dbs_prod_global.ALGORITHMCONFIG AC2 on AC2.ID = PA2.ALGORITHM
+                                WHERE PDS.GLOBALTAG IS NOT NULL
+                                ) = 1
+                                THEN OMC.GLOBAL_TAG
+                                ELSE 'UNKNOWN'
+                                END AS GLOBAL_TAG
                                 FROM {db_owner_dbs3}.DATASETS DS
                                 JOIN {db_owner_dbs3}.DATASET_OUTPUT_MOD_CONFIGS DOMC ON DOMC.DATASET_ID=DS.DATASET_ID
                                 JOIN {db_owner_dbs3}.OUTPUT_MODULE_CONFIGS OMC ON OMC.OUTPUT_MOD_CONFIG_ID=DOMC.OUTPUT_MOD_CONFIG_ID
@@ -225,7 +235,7 @@ class SQLFactory(object):
                                 JOIN {db_owner_dbs3}.PARAMETER_SET_HASHES PSH ON PSH.PARAMETER_SET_HASH_ID=OMC.PARAMETER_SET_HASH_ID
                                 WHERE DS.DATASET='/$primary_ds/$processed_ds/$tier'
                                 UNION ALL
-                                SELECT APPEX.EXECUTABLENAME APP_NAME,
+                                SELECT DISTINCT APPEX.EXECUTABLENAME APP_NAME,
                                 APPVER.VERSION RELEASE_VERSION,
                                 QPS.HASH PSET_HASH,
                                 QPS.NAME PSET_NAME,
@@ -233,12 +243,14 @@ class SQLFactory(object):
                                 WHEN (SELECT COUNT(DISTINCT PDS.GLOBALTAG)
                                 FROM {db_owner_dbs2}.PROCALGO PA2
                                 INNER JOIN {db_owner_dbs2}.PROCESSEDDATASET PDS ON PA2.DATASET = PDS.ID
-                                WHERE PDS.GLOBALTAG IS NOT NULL AND AC.ID = PA2.ALGORITHM
+                                INNER JOIN {db_owner_dbs2}.ALGORITHMCONFIG AC2 on AC2.ID = PA2.ALGORITHM
+                                WHERE PDS.GLOBALTAG IS NOT NULL
                                 ) = 1
                                 THEN (SELECT DISTINCT PDS.GLOBALTAG
                                 FROM {db_owner_dbs2}.PROCALGO PA2
-                                LEFT JOIN {db_owner_dbs2}.PROCESSEDDATASET PDS ON PA2.DATASET = PDS.ID
-                                WHERE PDS.GLOBALTAG IS NOT NULL AND AC.ID = PA2.ALGORITHM)
+                                INNER JOIN {db_owner_dbs2}.PROCESSEDDATASET PDS ON PA2.DATASET = PDS.ID
+                                INNER JOIN {db_owner_dbs2}.ALGORITHMCONFIG AC2 on AC2.ID = PA2.ALGORITHM
+                                WHERE PDS.GLOBALTAG IS NOT NULL)
                                 ELSE 'UNKNOWN'
                                 END AS GLOBAL_TAG
                                 FROM {db_owner_dbs2}.PROCESSEDDATASET DS
@@ -322,7 +334,10 @@ class SQLFactory(object):
                                 FS2.FILEBRANCH branch_hash_id,
                                 FS2.ADLER32,
                                 FS2.MD5,
-                                FS2.AUTOCROSSSECTION auto_cross_section
+                                CASE
+                                WHEN FS2.AUTOCROSSSECTION IS NULL
+                                THEN 0.0
+                                END AS auto_cross_section
                                 FROM {db_owner_dbs2}.FILES FS2
                                 JOIN {db_owner_dbs2}.PROCESSEDDATASET DS2 ON DS2.ID=FS2.DATASET
                                 JOIN {db_owner_dbs2}.PRIMARYDATASET PD2 on DS2.PRIMARYDATASET=PD2.ID
@@ -399,7 +414,16 @@ class SQLFactory(object):
                                 RV.RELEASE_VERSION,
                                 PSH.PSET_HASH,
                                 PSH.PSET_NAME,
-                                OMC.GLOBAL_TAG
+                                CASE
+                                WHEN (SELECT COUNT(DISTINCT PDS.GLOBALTAG)
+                                FROM cms_dbs_prod_global.PROCALGO PA2
+                                INNER JOIN {db_owner_dbs2}.PROCESSEDDATASET PDS ON PA2.DATASET = PDS.ID
+                                INNER JOIN {db_owner_dbs2}.ALGORITHMCONFIG AC2 on AC2.ID = PA2.ALGORITHM
+                                WHERE PDS.GLOBALTAG IS NOT NULL
+                                ) = 1
+                                THEN OMC.GLOBAL_TAG
+                                ELSE 'UNKNOWN'
+                                END AS GLOBAL_TAG
                                 FROM {db_owner_dbs3}.FILES FL
                                 JOIN {db_owner_dbs3}.FILE_OUTPUT_MOD_CONFIGS FOMC ON FOMC.FILE_ID=FL.FILE_ID
                                 JOIN {db_owner_dbs3}.OUTPUT_MODULE_CONFIGS OMC ON OMC.OUTPUT_MOD_CONFIG_ID=FOMC.OUTPUT_MOD_CONFIG_ID
@@ -416,12 +440,14 @@ class SQLFactory(object):
                                 WHEN (SELECT COUNT(DISTINCT PDS.GLOBALTAG)
                                 FROM {db_owner_dbs2}.PROCALGO PA2
                                 INNER JOIN {db_owner_dbs2}.PROCESSEDDATASET PDS ON PA2.DATASET = PDS.ID
-                                WHERE PDS.GLOBALTAG IS NOT NULL AND AC.ID = PA2.ALGORITHM
+                                INNER JOIN {db_owner_dbs2}.ALGORITHMCONFIG AC2 on AC2.ID = PA2.ALGORITHM
+                                WHERE PDS.GLOBALTAG IS NOT NULL
                                 ) = 1
                                 THEN (SELECT DISTINCT PDS.GLOBALTAG
                                 FROM {db_owner_dbs2}.PROCALGO PA2
                                 LEFT JOIN {db_owner_dbs2}.PROCESSEDDATASET PDS ON PA2.DATASET = PDS.ID
-                                WHERE PDS.GLOBALTAG IS NOT NULL AND AC.ID = PA2.ALGORITHM)
+                                LEFT JOIN {db_owner_dbs2}.ALGORITHMCONFIG AC2 on AC2.ID = PA2.ALGORITHM
+                                WHERE PDS.GLOBALTAG IS NOT NULL)
                                 ELSE 'UNKNOWN'
                                 END AS GLOBAL_TAG
                                 FROM {db_owner_dbs2}.FILES FL
@@ -511,7 +537,7 @@ class ValidateDualDBSWriting(unittest.TestCase):
         self.ownerDBS2 = DBS2Secret['databaseOwner']
         self.connectUrlDBS2 = DBS2Secret['connectUrl']['reader']
 
-        self.db_query = DBQuery(self.connectUrlDBS3)
+        self.db_query = DBQuery(self.connectUrlDBS2)
 
         self.sql_queries = SQLFactory(db_owner_dbs2=self.ownerDBS2,
                                       db_owner_dbs3=self.ownerDBS3)
@@ -549,11 +575,11 @@ class ValidateDatasetData(ValidateDualDBSWriting):
                                                                                   self.data_tier))
         self.assertEqual(results, [], msg=pprint.pformat(results))
 
-    def test_dataset_parents(self):
-        results = self.db_query.execute(self.sql_queries.create_dataset_parents_query(self.primary_dataset,
-                                                                                      self.processed_dataset,
-                                                                                      self.data_tier))
-        self.assertEqual(results, [], msg=pprint.pformat(results))
+##     def test_dataset_parents(self):
+##         results = self.db_query.execute(self.sql_queries.create_dataset_parents_query(self.primary_dataset,
+##                                                                                       self.processed_dataset,
+##                                                                                       self.data_tier))
+##         self.assertEqual(results, [], msg=pprint.pformat(results))
 
 class ValidateFileData(ValidateDualDBSWriting):
     def __str__(self):

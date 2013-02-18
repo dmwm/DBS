@@ -133,6 +133,7 @@ class MigrationTask(SequencialTaskBase):
                 request =req[0]
                 self.sourceUrl = request['migration_url']
                 self.migration_req_id = request['migration_request_id']
+                print ("-"*20+ 'Migration request ID: '+ str(self.migration_req_id))
                 MgrLogger.info("-"*20+ 'Migration request ID: '+ str(self.migration_req_id))
                 migration_status = 1
                 self.dbsMigrate.updateMigrationRequestStatus(migration_status, self.migration_req_id)
@@ -147,12 +148,14 @@ class MigrationTask(SequencialTaskBase):
         # and migration_block_id list. Both lists are ordered by MIGRATION_ORDER
         try:
             blocks = self.dbsMigrate.listMigrationBlocks(self.migration_req_id)
+            print ("-"*20+ 'Migration request ID: '+ str(self.migration_req_id))
+            print ("-"*20+ 'Migration blocks: '+ str(blocks))
             for b in blocks:
                 self.block_names.append(b['migration_block_name'])
                 self.migration_block_ids.append(b['migration_block_id'])
             if not self.block_names : 
                 logmessage="No migration blocks found under the migration request id %s." %(self.migration_req_id )+ \
-                           "It could be the blocks in a wrong status due to privious error. Please check it."
+                           "DBS Operator please check it."
                 #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
                 self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
                 self.sourceUrl = None

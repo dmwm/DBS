@@ -256,13 +256,20 @@ class DBSMigrate:
             if len(alreadyqueued) > 0 and alreadyqueued[0]['migration_status'] != 3:
                 return {"migration_report" : "REQUEST ALREADY QUEUED",
                         "migration_details" : alreadyqueued[0] }
-            # not already queued            
-            #Determine if its a dataset or block migration
-            #The prepare list calls will check if the requested blocks/dataset already in destination.
-            if request["migration_input"].find("#") != -1:
-                ordered_list = self.prepareBlockMigrationList(conn, request)
+            elif len(alreadyqueued) > 0 and alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] < 3:
+                return {"migration_report" : "REQUEST ALREADY QUEUED and will try the migration again ",
+                        "migration_details" : alreadyqueued[0] }
+            elif len(alreadyqueued) > 0 and (alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] == 3):
+                return {"migration_report" : "REQUEST ALREADY QUEUED and failed in three tries again ",
+                         "migration_details" : alreadyqueued[0] }
             else:
-                ordered_list = self.prepareDatasetMigrationList(conn, request)
+                # not already queued            
+                #Determine if its a dataset or block migration
+                #The prepare list calls will check if the requested blocks/dataset already in destination.
+                if request["migration_input"].find("#") != -1:
+                    ordered_list = self.prepareBlockMigrationList(conn, request)
+                else:
+                    ordered_list = self.prepareDatasetMigrationList(conn, request)
             # now we have the blocks that need to be queued (ordered)
         except Exception, ex:
             if conn: conn.close()
@@ -306,6 +313,7 @@ class DBSMigrate:
             if conn: conn.close()
             if (str(ex).find("unique constraint") != -1 or
                 str(ex).lower().find("duplicate") != -1):
+                #FIXME: Need to check which unique key. YG 2/11/13
                 #The unique constraints are: MIGRATION_REQUESTS(MIGRATION_INPUT)
                 #MIGRATION_BLOCKS(MIGRATION_BLOCK_NAME, MIGRATION_REQUEST_ID)
                 return {
@@ -355,7 +363,7 @@ class DBSMigrate:
             if conn: conn.close()
 
 
-    def updateMigrationRequestStatus(self, migration_status, migration_request_id):
+    def updateMigrationRequestStatus(self, migration_status, migration_request_id, updateretryCount=False):
         """
         migration_status: 
         0=PENDING
@@ -366,7 +374,8 @@ class DBSMigrate:
         0 -> 1
         1 -> 2
         1 -> 3
-        are only allowed changes.
+        are only allowed changes for working through migration.
+        3 -> 1 is allowed for retrying and retry count +1.
 
         """
 
@@ -395,7 +404,8 @@ class DBSMigrate:
         0 -> 1
         1 -> 2
         1 -> 3
-        are only allowed changes.
+        are only allowed changes for working through migration.
+        3 -> 0 allowed for retrying.
 
         """
         

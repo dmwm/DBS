@@ -20,7 +20,8 @@ class UpdateRequestStatus(DBFormatter):
         0 -> 1
         1 -> 2
         1 -> 3
-        are only allowed changes.
+        are only allowed changes for working through .
+        3 -> 0 allowed for retrying with retry_count <3
 
     """
     def __init__(self, logger, dbi, owner):
@@ -34,7 +35,21 @@ class UpdateRequestStatus(DBFormatter):
 SET MIGRATION_STATUS=:migration_status, 
 LAST_MODIFICATION_DATE=:last_modification_date
 WHERE MIGRATION_REQUEST_ID=:migration_request_id""" %  self.owner 
-        
+       
+        self.sql2 = \
+"""update %smigration_requests set migration_status=1, retry_count=
+       (select 
+            (CASE migration_status
+                when 1 then 0
+                when 3 then retry_count+1 
+                else 0  
+            END
+            )count
+        from %smigration_requests where migration_request_id=:migration_request_id
+       )
+where migration_request_id=:migration_request_id;
+""" %((self.owner,)*2)
+
     def execute(self, conn, daoinput, transaction = False):
         """
 	    required keys:
@@ -43,7 +58,7 @@ WHERE MIGRATION_REQUEST_ID=:migration_request_id""" %  self.owner
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/UpdateRequestStatus. Expects db connection from upper layer.")
         if daoinput['migration_status'] == 1:
-           sql = self.sql + " and MIGRATION_STATUS = 0 "
+           sql = self.sql2 
         elif daoinput['migration_status'] == 2 or daoinput['migration_status'] == 3:
             sql = self.sql + " and MIGRATION_STATUS = 1 "
         else:

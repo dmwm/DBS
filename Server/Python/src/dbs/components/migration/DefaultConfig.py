@@ -26,7 +26,7 @@ config.dbsmigration.section_('database')
 db_instances = config.dbsmigration.database.section_('instances')
 
 db_production_global = db_instances.section_('prod/global')
-db_production_global.threads = 4
+db_production_global.threads = 1
 db_production_global.dbowner = dbs3_dp01_i2['databaseOwner']
 db_production_global.connectUrl = dbs3_dp01_i2['connectUrl']['writer']
 db_production_global.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }

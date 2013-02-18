@@ -534,7 +534,8 @@ class DBSSqlQueries(object):
                         WHEN (SELECT COUNT(DISTINCT PDS.GLOBALTAG) 
                         FROM {ownerDBS2}.PROCALGO PA
                         INNER JOIN {ownerDBS2}.PROCESSEDDATASET PDS ON PA.DATASET = PDS.ID
-                        WHERE PDS.GLOBALTAG IS NOT NULL AND AC.ID = PA.ALGORITHM
+                        INNER JOIN {ownerDBS2}.ALGORITHMCONFIG AC2 on AC2.ID = PA.ALGORITHM
+                        WHERE PDS.GLOBALTAG IS NOT NULL
                         ) = 1  
                         THEN (SELECT DISTINCT PDS.GLOBALTAG
                         FROM {ownerDBS2}.PROCALGO PA

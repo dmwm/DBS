@@ -17,7 +17,8 @@ class Update(DBFormatter):
         0 -> 1
         1 -> 2
         1 -> 3
-        are only allowed changes.
+        are only allowed changes for working through.
+        3 ->) allowed for retrying when retry_count <3.
     """
     def __init__(self, logger, dbi, owner):
         """
@@ -39,7 +40,7 @@ WHERE """ %  self.owner
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationBlock/Update. Expects db connection from upper layer.")
         if daoinput['migration_status'] == 1:
-           sql = self.sql + "  MIGRATION_STATUS = 0 " 
+           sql = self.sql + "  (MIGRATION_STATUS = 0  or MIGRATION_STATUS = 3)" 
         elif daoinput['migration_status'] == 2 or daoinput['migration_status'] == 3:
             sql = self.sql + " MIGRATION_STATUS = 1 "
         else: 
