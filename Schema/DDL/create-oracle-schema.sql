@@ -5,7 +5,7 @@
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2012-12-11 12:21                                */
+/* Created on:            2013-02-20 11:15                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -583,6 +583,7 @@ CREATE TABLE MIGRATION_REQUESTS (
     CREATE_BY VARCHAR2(500),
     LAST_MODIFICATION_DATE INTEGER,
     LAST_MODIFIED_BY VARCHAR2(500),
+    RETRY_COUNT INTEGER,
     CONSTRAINT PK_MR PRIMARY KEY (MIGRATION_REQUEST_ID),
     CONSTRAINT TUC_MR_1 UNIQUE (MIGRATION_INPUT)
 );
