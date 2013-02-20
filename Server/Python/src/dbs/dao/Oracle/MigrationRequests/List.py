@@ -34,8 +34,6 @@ FROM %sMIGRATION_REQUESTS MR
         """
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/List. Expects db connection from upper layer.")
-        #import pdb
-        #pdb.set_trace()
         sql = self.sql
         binds = {}
 	if migration_request_id:
@@ -57,7 +55,7 @@ FROM %sMIGRATION_REQUESTS MR
                        ORDER BY MR.creation_date
                    """ 
             binds['current_date'] = dbsUtils().getTime()
-            print "time= " + str(binds['current_date'])
+            #print "time= " + str(binds['current_date'])
         else:    
 	    if  migration_url or migration_input or create_by:
 		sql += " WHERE "

@@ -148,8 +148,6 @@ class MigrationTask(SequencialTaskBase):
         # and migration_block_id list. Both lists are ordered by MIGRATION_ORDER
         try:
             blocks = self.dbsMigrate.listMigrationBlocks(self.migration_req_id)
-            print ("-"*20+ 'Migration request ID: '+ str(self.migration_req_id))
-            print ("-"*20+ 'Migration blocks: '+ str(blocks))
             for b in blocks:
                 self.block_names.append(b['migration_block_name'])
                 self.migration_block_ids.append(b['migration_block_id'])
@@ -164,8 +162,8 @@ class MigrationTask(SequencialTaskBase):
                 #Update MIGRATION_STATUS for all the MIGRATION_BLOCK_IDs in the self.migration_block_id list
                 #in MIGRATION_BLOCKS table to 1 (in progress)
                 #set MIGRATION_STATUS = 1 and commit it immediately
-                MgrLogger.info("-"*20+ 'Regester ID: %s '%self.migration_req_id + 'Migration Block Names: ')
-                MgrLogger.info("block_name: %s" %self.block_names)
+                #MgrLogger.info("-"*20+ 'Regester ID: %s '%self.migration_req_id + 'Migration Block Names: ')
+                #MgrLogger.info("block_name: %s" %self.block_names)
                 self.dbsMigrate.updateMigrationBlockStatus(migration_status=1, migration_block=self.migration_block_ids)
         except Exception, ex:
             self.sourceUrl = None
@@ -220,6 +218,6 @@ class MigrationTask(SequencialTaskBase):
         #return to the initial status
         self.sourceUrl = None
         self.migration_req_id = 0
-        self.block_name = []
+        self.block_names = []
         self.migration_block_id = []
         self.inserted = True 

@@ -155,8 +155,6 @@ class DBSMigrate:
             5. add 'order' to parent and then this block (ascending)
             6. return the ordered list
         """
-        #import pdb
-        #pdb.set_trace()
         ordered_dict = {}
         block_name = request["migration_input"]
         url = request["migration_url"]
@@ -187,8 +185,6 @@ class DBSMigrate:
     def getParentBlocksOrderedList(self, url, conn, block_name, order_counter):
         ordered_dict = {}
         #3.
-        #import pdb
-        #pdb.set_trace()
         parentBlocksInSrc = self.getSrcBlockParents(url, block_name)
         parentBlocksInSrcNames = [ y['parent_block_name'] 
                                         for y in parentBlocksInSrc ]
@@ -363,7 +359,7 @@ class DBSMigrate:
             if conn: conn.close()
 
 
-    def updateMigrationRequestStatus(self, migration_status, migration_request_id, updateretryCount=False):
+    def updateMigrationRequestStatus(self, migration_status, migration_request_id):
         """
         migration_status: 
         0=PENDING

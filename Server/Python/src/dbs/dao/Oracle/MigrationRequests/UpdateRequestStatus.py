@@ -36,24 +36,12 @@ SET MIGRATION_STATUS=:migration_status,
 LAST_MODIFICATION_DATE=:last_modification_date
 WHERE MIGRATION_REQUEST_ID=:migration_request_id""" %  self.owner 
        
-        self.sql2 = \
-"""update %smigration_requests set migration_status=1, retry_count=
-       (select 
-            (CASE migration_status
-                when 1 then 0
-                when 3 then retry_count+1 
-                else 0  
-            END
-            )count
-        from %smigration_requests where migration_request_id=:migration_request_id
-       )
-where migration_request_id=:migration_request_id;
-""" %((self.owner,)*2)
+        self.sql2 = """update %smigration_requests set migration_status=:migration_status, LAST_MODIFICATION_DATE=:last_modification_date, retry_count= (select (CASE migration_status when 1 then 0 when 3 then retry_count+1 else 0  END)count from %smigration_requests where migration_request_id=:migration_request_id) where migration_request_id=:migration_request_id """ %((self.owner,)*2)
 
     def execute(self, conn, daoinput, transaction = False):
         """
 	    required keys:
-	    migration_status, migration_request_id, threadID
+	    migration_status, migration_request_id
         """	
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/UpdateRequestStatus. Expects db connection from upper layer.")
@@ -64,7 +52,4 @@ where migration_request_id=:migration_request_id;
         else:
             dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationRequest/UpdateRequestStatus. Expected migration status to be 1, 2 or 3")
         
-	#binds = {"migration_status":migration_status, "threadID":threadID,
-	#"last_mod_date":last_mod_date,
-	# "migration_request_id":migration_request_id}
-	result = self.dbi.processData(self.sql, daoinput, conn, transaction)
+	result = self.dbi.processData(sql, daoinput, conn, transaction)
