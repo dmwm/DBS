@@ -427,7 +427,7 @@ class DBSFile:
                             self.dsparentin.execute(conn, dsParentage2insert, transaction=tran)
                         except exceptions.IntegrityError, ex:
                             #ORA-00001
-                            if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                            if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP") != -1) or str(ex).lower().find("duplicate") != -1:
                                 pass
                             elif str(ex).find("ORA-01400") != -1:
                                 raise

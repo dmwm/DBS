@@ -221,7 +221,8 @@ class DBSBlockInsert :
                 try:
                     self.blkparentin2.execute(conn, bkParentList[k], transaction=tran)
                 except exceptions.IntegrityError, ex:
-                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                    if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_BP") != -1) or\
+                        str(ex).lower().find("duplicate") != -1:
                         pass
                     elif str(ex).find("ORA-01400") != -1:
                         if tran:
@@ -236,7 +237,7 @@ class DBSBlockInsert :
                 try:
                     self.dsparentin2.execute(conn, dsParentList[k], transaction=tran)
                 except exceptions.IntegrityError, ex: 
-                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1: 
+                    if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP") != -1) or str(ex).lower().find("duplicate") != -1: 
                         pass
                     elif str(ex).find("ORA-01400") != -1: 
                         if tran:tran.rollback()
@@ -266,10 +267,14 @@ class DBSBlockInsert :
         try:
             block['block_id'] = self.sm.increment(conn, "SEQ_BK",)
             block['dataset_id'] =  datasetId
+            block['creation_date'] = block.get('creation_date', dbsUtils().getTime())
+            block['create_by'] = dbsUtils().getCreateBy()
+            block['last_modification_date'] = dbsUtils().getTime()
+            block['last_modified_by'] = dbsUtils().getCreateBy()
             self.blockin.execute(conn, block, tran)
             newBlock = True
         except exceptions.IntegrityError, ex:
-            if (str(ex).find("ORA-00001: unique constraint") != -1 and str(ex).find("TUC_BK_BLOCK_NAME") != -1) or str(ex).lower().find("duplicate") != -1:
+            if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_BK_BLOCK_NAME") != -1) or str(ex).lower().find("duplicate") != -1:
             #not sure what happends to WMAgent: Does it try to insert a
             #block again? YG 10/05/2010
             #Talked with Matt N: We should stop insertng this block now.
@@ -392,7 +397,8 @@ class DBSBlockInsert :
                 try:
                     self.blkparentin2.execute(conn, bkParentList[k], transaction=tran)
                 except exceptions.IntegrityError, ex:
-                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                    if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_BP"))\
+                         or str(ex).lower().find("duplicate") != -1:
                         pass
                     elif str(ex).find("ORA-01400") != -1:
                         if tran:
@@ -407,7 +413,8 @@ class DBSBlockInsert :
                 try:
                     self.dsparentin2.execute(conn, dsParentList[k], transaction=tran)
                 except exceptions.IntegrityError, ex:
-                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
+                    if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP"))\
+                        or str(ex).lower().find("duplicate") != -1:
                         pass
                     elif str(ex).find("ORA-01400") != -1:
                         if tran:tran.rollback()
@@ -445,7 +452,7 @@ class DBSBlockInsert :
             tran.commit()
             tran = None
         except exceptions.IntegrityError, ex:
-            if (str(ex).find("ORA-00001: unique constraint") != -1 and str(ex).find("TUC_BK_BLOCK_NAME") != -1) or str(ex).lower().find("duplicate") != -1:
+            if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_BK_BLOCK_NAME") != -1) or str(ex).lower().find("duplicate") != -1:
             #not sure what happends to WMAgent: Does it try to insert a
             #block again? YG 10/05/2010
             #Talked with Matt N: We should stop insertng this block now.
@@ -526,7 +533,7 @@ class DBSBlockInsert :
                 except exceptions.IntegrityError, ex:
                     #Another job inserted it just 1/100000 second earlier than
                     #you!!  YG 11/17/2010
-                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") !=-1:
+                    if str(ex).find("ORA-00001") != -1 or str(ex).lower().find("duplicate") !=-1:
                         if str(ex).find("TUC_OMC_1") != -1: 
                             #the config is already in db, get the ID later
                             pass
@@ -603,7 +610,8 @@ class DBSBlockInsert :
                     primds["create_by"] = dbsUtils().getCreateBy()
                     self.primdsin.execute(conn, primds, tran)
                 except exceptions.IntegrityError, ex:
-                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") !=-1:
+                    if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_PDS_PRIMARY_DS_NAME") != -1)\
+                        or str(ex).lower().find("duplicate") !=-1:
                         primds["primary_ds_id"] = self.primdsid.execute(conn,
                                                 primds["primary_ds_name"],
                                                 transaction=tran)
@@ -657,7 +665,8 @@ class DBSBlockInsert :
                         if conn:conn.close()
                         dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert:  acquisition_era_name and start_date are required. NULL was received from user input. Please correct your data.")
                     #ok, already in db?
-                    if str(ei).find("ORA-00001") != -1 or str(ei).find("unique constraint") != -1 or str(ei).lower().find("duplicate") !=-1:
+                    if (str(ei).find("ORA-00001") != -1 and str(ei).find("TUC_AQE_ACQUISITION_ERA_NAME") != -1)\
+                        or str(ei).lower().find("duplicate") !=-1:
                         dataset['acquisition_era_id'] = self.acqid.execute(conn, aq['acquisition_era_name'])
                         if dataset['acquisition_era_id'] <= 0:
                             if tran:tran.rollback()
@@ -693,7 +702,8 @@ class DBSBlockInsert :
                     self.procsingin.execute(conn, pera, tran)
                     dataset['processing_era_id'] = pera['processing_era_id']
                 except exceptions.IntegrityError, ex:
-                    if str(ex).find("ORA-00001") != -1 or str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") !=-1:
+                    if (str(ex).find("ORA-00001: unique constraint") != -1 and str(ex).find("TUC_PE_PROCESSING_VERSION") != -1)\
+                        or str(ex).lower().find("duplicate") !=-1:
                         #ok, already in db
                         dataset['processing_era_id'] = self.procsingid.execute(conn, pera['processing_version'])
                     else:
@@ -751,7 +761,8 @@ class DBSBlockInsert :
                     except exceptions.IntegrityError, ex:
                         if str(ex).find("ORA-00001") != -1 and str(ex).find("PK_PG") != -1:
                             dbsExceptionHandler(message='InsertPhysicsGroup Error', logger=self.logger.exception, serverError="InsertPhysicsGroup: "+ str(ex))
-                        if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_PG_PHYSICS_GROUP_NAME") != -1) or str(ex).lower().find("duplicate") != -1: 
+                        if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_PG_PHYSICS_GROUP_NAME") != -1) or\
+                            str(ex).lower().find("duplicate") != -1: 
                             phgId = self.phygrpid.execute(conn, phg,transaction=tran)
                             if phgId <= 0:
                                 dbsExceptionHandler(message='InsertPhysicsGroup Error ', logger=self.logger.exception, serverError="InsertPhysicsGroup: "+str(ex))
@@ -830,7 +841,8 @@ class DBSBlockInsert :
                     try:
                         self.datasetin.execute(conn, dataset, tran)
                     except exceptions.IntegrityError, ei:
-                        if (str(ei).find("ORA-00001") != -1 or str(ei).find("TUC_DS_DATASET") != -1) or str(ei).lower().find("duplicate") !=-1: 
+                        if (str(ei).find("ORA-00001") != -1 and str(ei).find("TUC_DS_DATASET") != -1) or\
+                            str(ei).lower().find("duplicate") !=-1: 
                             dataset['dataset_id'] = self.datasetid.execute(conn,dataset['dataset'])
                             if dataset['dataset_id'] <= 0:
                                 dbsExceptionHandler(message='InsertDataset Error', logger=self.logger, serverError="InsertDataset: " + str(ex))
@@ -859,7 +871,7 @@ class DBSBlockInsert :
                     self.dcin.execute(conn, dcObj, tran)
                 except exceptions.IntegrityError, ei:
                     #FIXME YG 01/17/2013
-                    if str(ei).find("ORA-00001") != -1 or str(ei).find("unique constraint") != -1 or \
+                    if (str(ei).find("ORA-00001") != -1 and str(ei).find("TUC_DC_1") != -1) or \
                             str(ei).lower().find("duplicate")!=-1:
                     #ok, already in db
                     #FIXME: What happens when there are partially in db?
