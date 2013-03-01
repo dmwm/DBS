@@ -13,6 +13,8 @@ systems = \
     'bin': ['bin/dbs3BulkInsert.py',
             'bin/dbs3CrabWorkflow.py',
             'bin/dbs3dasComparision.py',
+            'bin/das_logfile_analyser.py',
+            'bin/das_logfile_parser.py',
             'bin/dbs3IntroduceFailures.py',
             'bin/dbs3GetBlocks.py',
             'bin/dbs3GetDatasets.py',
@@ -31,7 +33,7 @@ systems = \
               'DBS3BulkInsertLifecycle.conf',
               'PhedexDBSDASLifecylce.conf']
   },
-  
+
   'LifeCycleAnalysis':
   {
     'srcdir': 'src/python',
