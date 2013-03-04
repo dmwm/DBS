@@ -15,6 +15,8 @@ systems = \
             'bin/dbs3dasComparision.py',
             'bin/das_logfile_analyser.py',
             'bin/das_logfile_parser.py',
+            'bin/dbs3DASAccess.py',
+            'bin/dbs3DASGetQueries.py',
             'bin/dbs3IntroduceFailures.py',
             'bin/dbs3GetBlocks.py',
             'bin/dbs3GetDatasets.py',
