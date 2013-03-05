@@ -29,7 +29,7 @@ api_call_name = das_query.keys()[0]
 api_call = getattr(api, api_call_name)
 query = das_query[api_call_name]
 
-timing = {'stats':{'query' : str(query), 'api' : api_call_name}}
+timing = {'stats':{'query' : str(query).replace(' ', '+'), 'api' : api_call_name}}
 
 with TimingStat(timing, stat_client) as timer:
     result = api_call(**das_query[api_call_name])
