@@ -26,7 +26,7 @@ stat_client = StatsPipeClient(named_pipe)
 
 data_file = payload_handler.payload['workflow']['DASQueryDataFile']
 
-data_file = os.path.join(os.getenv('DBS3_LIFECYCLE_ROOT'), data_file)
+data_file = os.path.join(os.getenv('DBS3_LIFECYCLE_ROOT'), 'data', data_file)
 
 with open(data_file, 'r') as f:
     queries = json.load(f)
