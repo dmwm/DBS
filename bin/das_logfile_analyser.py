@@ -31,21 +31,48 @@ class DASMapping(object):
     def _create_das_mapping(self):
         """
         das_map = {'lookup' : [{params : {'param1' : 'required', 'param2' : 'optional', 'param3' : 'default_value' ...},
-                                url : 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader/acquisitioneras/'
+                                url : 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader/acquisitioneras/',
+                                das_map : {'das_param1' : dbs_param1, ...}
                                 }]
                                 }
         """
         with open(self._mapfile,'r') as f:
             for entry in yaml.load_all(f):
-                if entry.has_key('lookup'):
-                    self._das_map.setdefault(entry['lookup'],[]).append({'params' : entry['params'],
-                                                                   'url' : entry['url']})
+                das2dbs_param_map = {}
+                if not entry.has_key('lookup'):
+                    continue
+                for param_map in entry['das_map']:
+                    if param_map.has_key('api_arg'):
+                        das2dbs_param_map[param_map['das_key']] = param_map['api_arg']
+
+                self._das_map.setdefault(entry['lookup'],[]).append({'params' : entry['params'],
+                                                                     'url' : entry['url'],
+                                                                     'das2dbs_param_map' : das2dbs_param_map})
+
     def create_dbs_query(self, lookup, das_params):
         apis = self._das_map[lookup]
         matching_api = None
-        das_param_keys = set(das_params.keys())
+
+        #run parameter is yet not finalized in DBS3/DAS
+        #translate to minrun, maxrun
+        try:
+            run = das_params['run']
+        except KeyError:
+            pass
+        else:
+            das_params['minrun'] = run
+            das_params['maxrun'] = run
+            del das_params['run']
+
         for api_call in apis:
+            ###DAS and DBS3 do not use the parameters, for example block in DAS vs. block_name in DBS3
+            ###Needs translation using das3dbs_param_map
+            das2dbs_param_map = api_call['das2dbs_param_map']
+            das2dbs_key_changer = lambda key, map=das2dbs_param_map: map[key] if map.has_key(key) else key
+            das_param_keys = set(map(das2dbs_key_changer, das_params.keys()))
+
             api_params = set(api_call['params'].keys())
+
             if das_param_keys.issubset(api_params):
                 matching_api = api_call
                 break
