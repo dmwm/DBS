@@ -24,22 +24,23 @@ named_pipe = payload_handler.payload['workflow']['NamedPipe']
 
 stat_client = StatsPipeClient(named_pipe)
 
-das_query = payload_handler.payload['workflow']['DASQuery']
+das_queries = payload_handler.payload['workflow']['DASQueries']
 
-api_call_name = das_query.keys()[0]
-api_call = getattr(api, api_call_name)
-query = das_query[api_call_name]
+for das_query in das_queries:
+    api_call_name = das_query.keys()[0]
+    api_call = getattr(api, api_call_name)
+    query = das_query[api_call_name]
 
-encoded_query = urllib.urlencode(query,doseq=True)
+    encoded_query = urllib.urlencode(query,doseq=True)
 
-timing = {'stats':{'query' : encoded_query, 'api' : api_call_name}}
+    timing = {'stats':{'query' : encoded_query, 'api' : api_call_name}}
 
-with TimingStat(timing, stat_client) as timer:
-    result = api_call(**das_query[api_call_name])
+    with TimingStat(timing, stat_client) as timer:
+        result = api_call(**das_query[api_call_name])
 
-request_processing_time, request_time = api.requestTimingInfo
-timer.update_stats({'server_request_timing' : float(request_processing_time)/1000000.0,
+    request_processing_time, request_time = api.requestTimingInfo
+    timer.update_stats({'server_request_timing' : float(request_processing_time)/1000000.0,
                     'server_request_timestamp' : float(request_time)/1000000.0,
                     'request_content_length' : int(api.requestContentLength)})
 
-timer.stat_to_server()
+    timer.stat_to_server()
