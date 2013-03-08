@@ -2,10 +2,10 @@
 from ROOT import gROOT, TFile
 from LifeCycleAnalysis.LifeCyclePlots.HistoManager import HistoManager
 from LifeCycleAnalysis.LifeCyclePlots.Histogram import Histo1D, Histo2D
+from LifeCycleAnalysis.LifeCyclePlots.SqliteDAO import SqliteDAO
 from LifeCycleAnalysis.LifeCyclePlots.WebView import WebView
 
 from optparse import OptionParser
-import sqlite3 as sqlite
 import os, sys
 
 def get_command_line_options(executable_name, arguments):
@@ -33,32 +33,6 @@ def get_command_line_options(executable_name, arguments):
 
     return options
 
-def get_list_from_sqlite(conn, table, column):
-    with conn:
-        conn.row_factory = sqlite.Row
-        cur = conn.cursor()
-
-        cur.execute('SELECT DISTINCT %s FROM %s ORDER BY min(Id)' % (column, table))
-
-    return [str(row[column]) for row in cur]
-
-def get_min_max_from_sqlite(conn, table, column):
-    with conn:
-        cur = conn.cursor()
-
-        cur.execute('SELECT min(%(column)s), max(%(column)s) FROM %(table)s' % {'column':column, 'table':table})
-
-    return cur.fetchone()
-
-def get_rows_from_sqlite(conn, table, column='*'):
-    with conn:
-        conn.row_factory = sqlite.Row
-        cur = conn.cursor()
-
-        cur.execute('SELECT %s FROM %s' % (column, table))
-
-    return cur.fetchall()
-
 if __name__ == "__main__":
     options = get_command_line_options(os.path.basename(__file__), sys.argv)
 
@@ -75,21 +49,20 @@ if __name__ == "__main__":
     if options.batch:
         gROOT.SetBatch(True)
 
-    # get start and end time of test
-    conn = sqlite.connect(options.input)
+    sqlite_dao = SqliteDAO(options.input)
 
     ### fetch all APIs called during the test
-    list_of_apis = get_list_from_sqlite(conn, 'Statistics', 'ApiCall')
+    list_of_apis = sqlite_dao.get_unique_column_list('Statistics', 'ApiCall')
 
     # api as keys and numbers as value, to fill 0,1,2,3,4 bins in APIAccessCounter histogramm and
     # to set bin label later accordingly
     enumerated_dict_of_apis = dict(zip(list_of_apis, xrange(len(list_of_apis))))
 
     ### fetch begin and end of the test
-    starttime, endtime = get_min_max_from_sqlite(conn, 'Statistics', 'ServerTimeStamp')
+    starttime, endtime = sqlite_dao.get_column_min_max('Statistics', 'ServerTimeStamp')
 
     ### get list of errors occured
-    list_of_errors = get_list_from_sqlite(conn, 'Failures', 'Value')
+    list_of_errors = sqlite_dao.get_unique_column_list('Failures', 'Value')
 
     histo_manager_statistics = HistoManager()
     histo_manager_statistics.add_histo(Histo1D(name='ClientRequestTiming', title='Client Request Timing',
@@ -234,7 +207,7 @@ if __name__ == "__main__":
                                         label={'x':"Time [s]",'y':"#"},
                                         color={'line':2}))
 
-    for row in get_rows_from_sqlite(conn, 'Statistics'):
+    for row in sqlite_dao.get_rows('Statistics'):
         histo_manager_statistics.update_histos(row)
 
     histo_manager_failures = HistoManager()
@@ -251,7 +224,7 @@ if __name__ == "__main__":
                                                   'GetXaxis.SetLabelSize': (0.042,),
                                                   'SetMinimum':(0.0,)}))
 
-    for row in get_rows_from_sqlite(conn, 'Failures'):
+    for row in sqlite_dao.get_rows('Failures'):
         histo_manager_failures.update_histos(row)
 
     histo_manager_combined = histo_manager_statistics + histo_manager_failures
