@@ -6,6 +6,10 @@ def increase_interval(start=0.0, step=0.2):
     while True:
         yield value
         value += step
+
+def split_list(this_list, split_size):
+    for element in xrange(0, len(this_list), split_size):
+        yield this_list[element:element+split_size]
         
 class PayloadHandler(object):
     def __init__(self):

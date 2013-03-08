@@ -13,6 +13,10 @@ systems = \
     'bin': ['bin/dbs3BulkInsert.py',
             'bin/dbs3CrabWorkflow.py',
             'bin/dbs3dasComparision.py',
+            'bin/das_logfile_analyser.py',
+            'bin/das_logfile_parser.py',
+            'bin/dbs3DASAccess.py',
+            'bin/dbs3DASGetQueries.py',
             'bin/dbs3IntroduceFailures.py',
             'bin/dbs3GetBlocks.py',
             'bin/dbs3GetDatasets.py',
@@ -29,9 +33,10 @@ systems = \
     'pythonpkg': ['LifeCycleTests.LifeCycleTools'],
     'conf' : ['DBS3AnalysisLifecycle.conf',
               'DBS3BulkInsertLifecycle.conf',
-              'PhedexDBSDASLifecylce.conf']
+              'PhedexDBSDASLifecylce.conf'],
+    'data' : ['dbs_queries_20120828.json']
   },
-  
+
   'LifeCycleAnalysis':
   {
     'srcdir': 'src/python',
@@ -50,6 +55,7 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   docroot = "doc/build/html"
   system = systems[system_name]
   confsrc = sum((glob("conf/%s" % x) for x in system.get('conf',[])), [])
+  datasrc = sum((glob("data/%s" % x) for x in system.get('data',[])), [])
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
 
   # Specify what to install.
@@ -58,7 +64,7 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.py_modules = system.get('pythonmods', [])
   dist.packages = system.get('pythonpkg', [])
   dist.package_dir = { '': system.get('srcdir', []) }
-  dist.data_files = [('%sbin' % patch_x, binsrc), ('conf', confsrc)]
+  dist.data_files = [('%sbin' % patch_x, binsrc), ('conf', confsrc), ('data', datasrc)]
   if os.path.exists(docroot):
     for dirpath, dirs, files in os.walk(docroot):
       dist.data_files.append(("%sdoc%s" % (patch_x, dirpath[len(docroot):]),

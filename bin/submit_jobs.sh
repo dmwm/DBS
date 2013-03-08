@@ -60,7 +60,7 @@ function check_running_jobs
 {
   local local_first_job_number=1
 
-  if [ -f $PRIVATEDIR/LifeCycleJob_*.cmd ]; then
+  if ls $PRIVATEDIR/LifeCycleJob_*.cmd &> /dev/null; then
     local local_file_list=$(ls $PRIVATEDIR/LifeCycleJob_*.cmd | sort -k2 -t_ -n)
 
     for job in $local_file_list; do

@@ -15,6 +15,9 @@ class TimingStat(object):
         self._stats.setdefault('stats',{}).update({'client_request_timing' : end-self.start})
 
         if tb_type and self._client:
+            #replace "\'" in dbs client exception, since it leads to a crash, while injection in sqlite
+            #needs to be fixed in client code
+            tb_value = str(tb_value).replace("\'", " ")
             self._stats.setdefault('failures',{}).update({'type':str(tb_type),
                                                           'value':str(tb_value),
                                                           'traceback':str(tb)})
