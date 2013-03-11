@@ -118,7 +118,6 @@ class Histo1D(BasicHisto):
         self._histogram = TH1F(name, title, xnbins, xmin, xmax)
         self._x_value_to_fill = x_value_to_fill
 
-
 class Histo2D(BasicHisto):
     def __init__(self, name, title, xnbins, xmin, xmax, ynbins, ymin, ymax,
                  x_value_to_fill,
