@@ -59,18 +59,34 @@ if __name__ == "__main__":
     ### get list of errors occured
     list_of_errors = sqlite_dao.get_unique_column_list('Failures', 'Value')
 
+    ### plot reader or/and writer tests
+    reader_tests = filter(lambda x: x.startswith('list'), list_of_apis)
+    writer_tests = filter(lambda x: x.startswith('insert') or x.startswith('update'), list_of_apis)
+
+    statistic_categories = list()
+
+    if reader_tests:
+        statistic_categories.append('reader_stats')
+    if writer_tests:
+        statistic_categories.append('writer_stats')
+
+    categories = statistic_categories + ['failures']
+
     ### create all plots
-    plot_manager = LifeCyclePlotManager(categories=['reader_stats', 'failures'],
+    plot_manager = LifeCyclePlotManager(categories=categories,
                                         list_of_apis=list_of_apis,
                                         list_of_errors=list_of_errors,
                                         starttime=starttime,
                                         endtime=endtime)
 
     for row in sqlite_dao.get_rows('Statistics'):
-        plot_manager.update_histos(row, 'reader_stats')
+        if row['ApiCall'] in reader_tests:
+            plot_manager.update_histos(row, category='reader_stats')
+        else:
+            plot_manager.update_histos(row, category='writer_stats')
 
     for row in sqlite_dao.get_rows('Failures'):
-        plot_manager.update_histos(row, 'failures')
+        plot_manager.update_histos(row, category='failures')
 
     plot_manager.draw_histos()
 

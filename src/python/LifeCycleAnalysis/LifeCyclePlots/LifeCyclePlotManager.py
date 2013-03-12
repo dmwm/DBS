@@ -18,15 +18,18 @@ class StatisticPlots(object):
                           '_create_client_server_timing_vs_api',
                           '_create_api_access_counter']
 
-    def __init__(self, list_of_apis, starttime, endtime, color):
+    def __init__(self, list_of_apis, starttime, endtime, test_type):
         self._list_of_apis = list_of_apis
         # api as keys and numbers as value, to fill 0,1,2,3,4 bins in APIAccessCounter histogramm and
         # to set bin label later accordingly
         self._enumerated_dict_of_apis = dict(zip(self._list_of_apis, xrange(len(self._list_of_apis))))
         self._starttime = starttime
         self._endtime = endtime
-        self._color = color
-        self._marker = 2 #dots
+        self._test_type = test_type
+        if self._test_type == 'reader_stats':
+            self._color = 2
+        else:
+            self._color = 4
         self._plots = list()
 
     def __iter__(self):
@@ -52,7 +55,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ClientRequestTiming%s' %api, title='Client Request Timing (%s)' % api,
+        return [Histo1D(name='ClientRequestTiming%s%s' % (self._test_type, api), title='Client Request Timing (%s, %s)'  % (self._test_type, api),
                         xnbins=1000, xmin=0., xmax=10.,
                         condition=condition,
                         x_value_to_fill="ClientTiming",
@@ -66,7 +69,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ServerRequestTiming%s' % api, title='Server Request Timing (%s)' % api,
+        return [Histo1D(name='ServerRequestTiming%s%s'  % (self._test_type, api), title='Server Request Timing (%s, %s)'  % (self._test_type, api),
                         xnbins=1000, xmin=0., xmax=10.,
                         condition=condition,
                         x_value_to_fill="ServerTiming",
@@ -80,7 +83,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ClientRequestTimingHighRes%s' % api, title='Client Request Timing (%s)' % api,
+        return [Histo1D(name='ClientRequestTimingHighRes%s%s'  % (self._test_type, api), title='Client Request Timing (%s, %s)'  % (self._test_type, api),
                         xnbins=100, xmin=0., xmax=0.5,
                         condition=condition,
                         x_value_to_fill="ClientTiming",
@@ -94,7 +97,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ServerRequestTimingHighRes%s' % api, title='Server Request Timing (%s)' % api,
+        return [Histo1D(name='ServerRequestTimingHighRes%s%s'  % (self._test_type, api), title='Server Request Timing (%s, %s)'  % (self._test_type, api),
                         xnbins=100, xmin=0., xmax=0.5,
                         condition=condition,
                         x_value_to_fill="ServerTiming",
@@ -108,7 +111,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ContentLength%s' % api, title='Content Length (%s)' % api,
+        return [Histo1D(name='ContentLength%s%s'  % (self._test_type, api), title='Content Length (%s, %s)'  % (self._test_type, api),
                         xnbins=100, xmin=0, xmax=10000,
                         condition=condition,
                         x_value_to_fill="ContentLength",
@@ -122,7 +125,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='AccessesPerSecond%s' % api, title='Accesses per Second (%s)' % api,
+        return [Histo1D(name='AccessesPerSecond%s%s'  % (self._test_type, api), title='Accesses per Second (%s, %s)'  % (self._test_type, api),
                         xnbins=int(self._endtime-self._starttime), xmin=0, xmax=self._endtime-self._starttime,
                         condition=condition,
                         x_value_to_fill="ServerTimeStamp",
@@ -131,44 +134,44 @@ class StatisticPlots(object):
                         color={'line':self._color})]
 
     def _create_client_request_timing_vs_content_length(self):
-        return [Histo2D(name='ClientRequestTimingVsContentLength', title='Client Request Timing Vs Content Length',
+        return [Histo2D(name='ClientRequestTimingVsContentLength%s' % self._test_type, title='Client Request Timing Vs Content Length (%s)' % self._test_type,
                         xnbins=1000, xmin=0., xmax=10.,
                         ynbins=100, ymin=0., ymax=10000.,
                         x_value_to_fill="ClientTiming",
                         y_value_to_fill="ContentLength",
                         label={'x':"Time [s]",'y':"Content Length [bytes]"},
-                        color={'line':self._color,'marker':self._marker},
+                        color={'line':self._color,'marker':self._color},
                         add_options={'GetXaxis.SetRangeUser':(0.0,10.0)})]
 
     def _create_server_request_timing_vs_content_length(self):
-        return [Histo2D(name='ServerRequestTimingVsContentLength', title='Server Request Timing Vs Content Length',
+        return [Histo2D(name='ServerRequestTimingVsContentLength%s' % self._test_type, title='Server Request Timing Vs Content Length (%s)' % self._test_type,
                         xnbins=1000, xmin=0., xmax=10.,
                         ynbins=100, ymin=0., ymax=10000.,
                         x_value_to_fill="ServerTiming",
                         y_value_to_fill="ContentLength",
                         label={'x':"Time [s]",'y':"Content Length [bytes]"},
-                        color={'line':self._color, 'marker':self._marker},
+                        color={'line':self._color, 'marker':self._color},
                         add_options={'GetXaxis.SetRangeUser':(0.0,10.0)})]
 
     def _create_client_request_timing_vs_server_request_timing(self):
-        return [Histo2D(name='ClientRequestTimingVsServerRequestTiming', title='Client Request Timing Vs Server Request Timing',
+        return [Histo2D(name='ClientRequestTimingVsServerRequestTiming%s' % self._test_type, title='Client Request Timing Vs Server Request Timing (%s)' % self._test_type,
                         xnbins=1000, xmin=0., xmax=10.,
                         ynbins=1000, ymin=0., ymax=10.,
                         x_value_to_fill="ClientTiming",
                         y_value_to_fill="ServerTiming",
                         label={'x':"Client Time [s]",'y':"Server Time [s]"},
-                        color={'line':self._color,'marker':self._marker},
+                        color={'line':self._color,'marker':self._color},
                         add_options={'GetXaxis.SetRangeUser':(0.0,10.0)})]
 
     def _create_client_request_timing_vs_api(self):
-        histo = Histo2D(name='ClientRequestTimingVsAPI', title='Client Request Timing Vs API',
+        histo = Histo2D(name='ClientRequestTimingVsAPI%s' % self._test_type, title='Client Request Timing Vs API (%s)' % self._test_type,
                         xnbins=len(self._list_of_apis), xmin=0., xmax=len(self._list_of_apis),
                         ynbins=1000, ymin=0., ymax=10.,
                         fill_fkt=lambda histo, x, bla=self._enumerated_dict_of_apis: (bla.get(x[histo._x_value_to_fill])+0.0001, x[histo._y_value_to_fill], 1),
                         x_value_to_fill="ApiCall",
                         y_value_to_fill="ClientTiming",
                         label={'y':"Client Time [s]"},
-                        color={'line':self._color,'marker':self._marker})
+                        color={'line':self._color,'marker':self._color})
 
         for api in self._list_of_apis:
             histo.histogram.GetXaxis().SetBinLabel(self._enumerated_dict_of_apis.get(api)+1,api) # Bin enumerations starts at 1
@@ -176,14 +179,14 @@ class StatisticPlots(object):
         return [histo]
 
     def _create_client_server_timing_vs_api(self):
-        histo = Histo2D(name='Client-ServerTimingVsAPI', title='Client Timing - Server Timing Vs API',
+        histo = Histo2D(name='Client-ServerTimingVsAPI%s' % self._test_type, title='Client Timing - Server Timing Vs API (%s)' % self._test_type,
                         xnbins=len(self._list_of_apis), xmin=0., xmax=len(self._list_of_apis),
                         ynbins=1000, ymin=0., ymax=10.,
                         fill_fkt=lambda histo, x, bla=self._enumerated_dict_of_apis: (bla.get(x[histo._x_value_to_fill])+0.0001, x[histo._y_value_to_fill]-x['ServerTiming'], 1),
                         x_value_to_fill="ApiCall",
                         y_value_to_fill="ClientTiming",
                         label={'y':"Client Time [s]"},
-                        color={'line':self._color,'marker':self._marker},
+                        color={'line':self._color,'marker':self._color},
                         add_options={'GetYaxis.SetRangeUser':(0.0,2.0)})
 
         for api in self._list_of_apis:
@@ -192,12 +195,12 @@ class StatisticPlots(object):
         return [histo]
 
     def _create_api_access_counter(self):
-        return [Histo1D(name='APIAccessCounter', title='Count of API Accesses',
+        return [Histo1D(name='APIAccessCounter%s' % self._test_type, title='Count of API Accesses (%s)' % self._test_type,
                         xnbins=len(self._list_of_apis), xmin=0, xmax=len(self._list_of_apis)+1,
                         fill_fkt=lambda histo, x: (x[histo._x_value_to_fill], 1),
                         x_value_to_fill="ApiCall",
                         log={'y':True},
-                        color={'fill':2},
+                        color={'fill':self._color},
                         stats=False,
                         draw_options="bar0",
                         add_options={'SetBarWidth':(0.9,),
@@ -239,11 +242,11 @@ class LifeCyclePlotManager(object):
         plot_creator = {'reader_stats' : StatisticPlots(filter(lambda x: x.startswith('list'), list_of_apis),
                                                         starttime=starttime,
                                                         endtime=endtime,
-                                                        color=2),
+                                                        test_type='reader_stats'),
                         'writer_stats' : StatisticPlots(filter(lambda x: x.startswith('insert') or x.startswith('update'), list_of_apis),
                                                         starttime=starttime,
                                                         endtime=endtime,
-                                                        color=2),
+                                                        test_type='writer_stats'),
                         'failures' : FailurePlots(list_of_errors,
                                                   color=2)}
 
