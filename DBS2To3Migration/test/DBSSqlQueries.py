@@ -66,7 +66,7 @@ class DBSSqlQueries(object):
                         CREATION_DATE,
                         CREATE_BY,
                         DESCRIPTION
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY ACQUISITION_ERA_NAME
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -84,7 +84,7 @@ class DBSSqlQueries(object):
                         )
                         GROUP BY APP_EXEC_ID,
                         APP_NAME
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY APP_EXEC_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -149,7 +149,7 @@ class DBSSqlQueries(object):
                         CREATE_BY,
                         LAST_MODIFICATION_DATE,
                         LAST_MODIFIED_BY
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY BLOCK_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -165,7 +165,7 @@ class DBSSqlQueries(object):
                         ITSPARENT parent_block_id
                         FROM {ownerDBS2}.BLOCKPARENT)
                         GROUP BY THIS_BLOCK_ID,PARENT_BLOCK_ID
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY THIS_BLOCK_ID, PARENT_BLOCK_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -192,7 +192,7 @@ class DBSSqlQueries(object):
                         DATA_TIER_NAME,
                         CREATION_DATE,
                         CREATE_BY
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY data_tier_id
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -280,7 +280,7 @@ class DBSSqlQueries(object):
                         PROCESSING_ERA_ID,
                         PHYSICS_GROUP_NAME,
                         PREP_ID
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY DATASET_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -300,7 +300,7 @@ class DBSSqlQueries(object):
                         )
                         GROUP BY DATASET_ACCESS_TYPE_ID,
                         DATASET_ACCESS_TYPE
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY DATASET_ACCESS_TYPE_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                          ##############################################
@@ -322,7 +322,7 @@ class DBSSqlQueries(object):
                         GROUP BY DS_OUTPUT_MOD_CONF_ID,
                         DATASET_ID,
                         OUTPUT_MOD_CONFIG_ID
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY DS_OUTPUT_MOD_CONF_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -340,7 +340,7 @@ class DBSSqlQueries(object):
                         )
                         GROUP BY THIS_DATASET_ID,
                         PARENT_DATASET_ID
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY this_dataset_id,parent_dataset_id
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################    
@@ -410,7 +410,7 @@ class DBSSqlQueries(object):
                         AUTO_CROSS_SECTION,
                         CREATION_DATE, CREATE_BY,
                         LAST_MODIFICATION_DATE, LAST_MODIFIED_BY
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY FILE_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -428,7 +428,7 @@ class DBSSqlQueries(object):
                         )
                         GROUP BY FILE_TYPE_ID,
                         FILE_TYPE
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY FILE_TYPE_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -443,7 +443,7 @@ class DBSSqlQueries(object):
                         JOIN {ownerDBS2}.LUMISECTION LU ON FRL.LUMI=LU.ID
                         )
                         GROUP BY RUN_NUM,LUMI_SECTION_NUM,FILE_ID
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY FILE_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -465,7 +465,7 @@ class DBSSqlQueries(object):
                         )
                         WHERE FILE_ID >= :min_id AND FILE_ID <= :max_id
                         GROUP BY RUN_NUM,LUMI_SECTION_NUM,FILE_ID
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY FILE_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -478,7 +478,7 @@ class DBSSqlQueries(object):
                         FROM {ownerDBS2}.FILEALGO FA
                         )
                         GROUP BY FILE_OUTPUT_CONFIG_ID,FILE_ID,OUTPUT_MOD_CONFIG_ID
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY FILE_OUTPUT_CONFIG_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -490,7 +490,7 @@ class DBSSqlQueries(object):
                         SELECT FP2.THISFILE this_file_id, FP2.ITSPARENT parent_file_id
                         FROM {ownerDBS2}.FILEPARENTAGE FP2)
                         GROUP BY THIS_FILE_ID,PARENT_FILE_ID
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY THIS_FILE_ID,PARENT_FILE_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -563,7 +563,7 @@ class DBSSqlQueries(object):
                         SCENARIO,
                         CREATION_DATE,
                         CREATE_BY
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY OUTPUT_MOD_CONFIG_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -586,7 +586,7 @@ class DBSSqlQueries(object):
                         GROUP BY PARAMETER_SET_HASH_ID,
                         PSET_HASH,
                         PSET_NAME
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY PARAMETER_SET_HASH_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -604,7 +604,7 @@ class DBSSqlQueries(object):
                         )
                         GROUP BY PHYSICS_GROUP_ID,
                         PHYSICS_GROUP_NAME
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY PHYSICS_GROUP_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -637,7 +637,7 @@ class DBSSqlQueries(object):
                         CREATION_DATE,
                         CREATE_BY,
                         PRIMARY_DS_TYPE
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY PRIMARY_DS_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -655,7 +655,7 @@ class DBSSqlQueries(object):
                         )
                         GROUP BY PRIMARY_DS_TYPE_ID,
                         PRIMARY_DS_TYPE
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY PRIMARY_DS_TYPE_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -669,7 +669,7 @@ class DBSSqlQueries(object):
                         FROM {ownerDBS2}.PROCESSEDDATASET PCD2
                         )
                         GROUP BY PROCESSED_DS_NAME
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY PROCESSED_DS_NAME
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
@@ -688,7 +688,7 @@ class DBSSqlQueries(object):
                         )
                         GROUP BY RELEASE_VERSION_ID,
                         RELEASE_VERSION
-                        HAVING COUNT(*) = 1
+                        HAVING COUNT(*) <> 2
                         ORDER BY RELEASE_VERSION_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         }

@@ -28,7 +28,9 @@ except:
 
 def get_command_line_options(executable_name, arguments):
     parser = OptionParser(usage="%s options" % executable_name)
-    parser.add_option("-i", "--in", type="string", dest="input", help="Input File Containing datasets")
+    parser.add_option("-i", "--in", type="string", dest="input", help="Input File Containing datasets/blocks")
+    parser.add_option("-d", "--datasets", action="store_true", dest="datasets", help="Input file contains datasets", default=True)
+    parser.add_option("-b", "--blocks", action="store_true", dest="blocks", help="Input file contains blocks")
 
     (options, args) = parser.parse_args()
 
@@ -621,33 +623,64 @@ class ValidateFileData(ValidateDualDBSWriting):
         results = self.db_query.execute(self.sql_queries.create_file_parents_query(self.lfn))
         self.assertEqual(results, [], msg=pprint.pformat(results))
 
+class TestFactory(object):
+    def create_dataset_test_cases(self, dataset):
+        test_cases_datasets = unittest.TestLoader().loadTestsFromTestCase(ValidateDatasetData)
+        for test_case in test_cases_datasets:
+            test_case.dataset = dataset
+        return test_cases_datasets
+
+    def create_block_test_cases(self, block):
+        test_cases_blocks = unittest.TestLoader().loadTestsFromTestCase(ValidateBlockData)
+        for test_case in test_cases_blocks:
+            test_case.block = block
+        return test_cases_blocks
+
+    def create_file_test_cases(self, this_file):
+        test_cases_files = unittest.TestLoader().loadTestsFromTestCase(ValidateFileData)
+        for test_case in test_cases_files:
+            test_case.lfn = this_file
+        return test_cases_files
+
 if __name__ == '__main__':
     options = get_command_line_options(os.path.basename(__file__), sys.argv)
-    test_cases_datasets = unittest.TestLoader().loadTestsFromTestCase(ValidateDatasetData)
-    test_cases_blocks = unittest.TestLoader().loadTestsFromTestCase(ValidateBlockData)
-    test_cases_files = unittest.TestLoader().loadTestsFromTestCase(ValidateFileData)
+    test_cases_factory = TestFactory()
 
     with open(options.input, 'r') as f:
-        for dataset in f:
-            dataset = dataset.strip()
-            blocks = get_blocks_from_dataset(dataset)
+        unique_datasets = set()
 
-            TestSuite = unittest.TestSuite()
-            for test_case in test_cases_datasets:
-                test_case.dataset = dataset
-            TestSuite.addTest(test_cases_datasets)
-
-            for block in blocks:
+        if options.blocks:
+            for block in f:
+                TestSuite = unittest.TestSuite()
                 block = block.strip()
-                for test_case in test_cases_blocks:
-                    test_case.block = block
-                TestSuite.addTest(test_cases_blocks)
+                dataset = block.split('#')[0]
+
+                if dataset not in unique_datasets:
+                    TestSuite.addTest(test_cases_factory.create_dataset_test_cases(dataset))
+                    unique_datasets.add(dataset)
+
+                TestSuite.addTest(test_cases_factory.create_block_test_cases(block))
 
                 files = get_lfns_from_block(block)
 
                 for this_file in files:
-                    for test_case in test_cases_files:
-                        test_case.lfn = this_file
-                    TestSuite.addTest(test_cases_files)
+                    TestSuite.addTest(test_cases_factory.create_file_test_cases(this_file))
 
-            unittest.TextTestRunner(verbosity=2).run(TestSuite)
+                unittest.TextTestRunner(verbosity=2).run(TestSuite)
+
+        else:
+            for dataset in f:
+                TestSuite = unittest.TestSuite()
+                dataset = dataset.strip()
+                TestSuite.addTest(test_cases_factory.create_dataset_test_cases(dataset))
+
+                blocks = get_blocks_from_dataset(dataset)
+                for block in blocks:
+                    block = block.strip()
+                    TestSuite.addTest(test_cases_factory.create_block_test_cases(block))
+
+                files = get_lfns_from_block(block)
+                for this_file in files:
+                    TestSuite.addTest(test_cases_factory.create_file_test_cases(this_file))
+
+                unittest.TextTestRunner(verbosity=2).run(TestSuite)
