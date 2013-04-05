@@ -28,7 +28,7 @@ except:
 
 def get_command_line_options(executable_name, arguments):
     parser = OptionParser(usage="%s options" % executable_name)
-    parser.add_option("-i", "--in", type="string", dest="input", help="Input File Containing blocks")
+    parser.add_option("-i", "--in", type="string", dest="input", help="Input File Containing datasets")
 
     (options, args) = parser.parse_args()
 
@@ -39,6 +39,20 @@ def get_command_line_options(executable_name, arguments):
         parser.error(error_msg)
 
     return options
+
+def get_blocks_from_dataset(dataset):
+    ownerDBS3 = DBS3Secret['databaseOwner']
+    connectUrlDBS3 = DBS3Secret['connectUrl']['reader']
+
+    ownerDBS2 = DBS2Secret['databaseOwner']
+    connectUrlDBS2 = DBS2Secret['connectUrl']['reader']
+
+    db_query = DBQuery(connectUrlDBS2)
+
+    sql_queries = SQLFactory(db_owner_dbs2=ownerDBS2,
+                             db_owner_dbs3=ownerDBS3)
+
+    return [this_block['block_name'] for this_block in db_query.execute(sql_queries.create_get_blocks_query(dataset))]
 
 def get_lfns_from_block(block):
     ownerDBS3 = DBS3Secret['databaseOwner']
@@ -473,6 +487,14 @@ class SQLFactory(object):
                                 FROM {db_owner_dbs3}.FILES F
                                 JOIN {db_owner_dbs3}.BLOCKS B ON B.BLOCK_ID=F.BLOCK_ID
                                 WHERE B.BLOCK_NAME='$block'
+                                """.format(db_owner_dbs3=db_owner_dbs3)),
+                                ######################################################
+                                "GetListOfBlocks":
+                                Template("""
+                                SELECT BLOCK_NAME
+                                FROM {db_owner_dbs3}.BLOCKS B
+                                JOIN {db_owner_dbs3}.DATASETS D ON D.DATASET_ID=B.DATASET_ID
+                                WHERE D.DATASET='$dataset'
                                 """.format(db_owner_dbs3=db_owner_dbs3))
                                 }
 
@@ -505,6 +527,9 @@ class SQLFactory(object):
 
     def create_get_files_query(self, block):
         return self.query_templates['GetListOfFiles'].substitute(block=block)
+
+    def create_get_blocks_query(self, dataset):
+        return self.query_templates['GetListOfBlocks'].substitute(dataset=dataset)
 
 class DBQuery(object):
     def __init__(self, connectUrl):
@@ -575,12 +600,6 @@ class ValidateDatasetData(ValidateDualDBSWriting):
                                                                                   self.data_tier))
         self.assertEqual(results, [], msg=pprint.pformat(results))
 
-##     def test_dataset_parents(self):
-##         results = self.db_query.execute(self.sql_queries.create_dataset_parents_query(self.primary_dataset,
-##                                                                                       self.processed_dataset,
-##                                                                                       self.data_tier))
-##         self.assertEqual(results, [], msg=pprint.pformat(results))
-
 class ValidateFileData(ValidateDualDBSWriting):
     def __str__(self):
         """Override this so that we know which instance it is"""
@@ -604,33 +623,31 @@ class ValidateFileData(ValidateDualDBSWriting):
 
 if __name__ == '__main__':
     options = get_command_line_options(os.path.basename(__file__), sys.argv)
-
-    TestSuite = unittest.TestSuite()
+    test_cases_datasets = unittest.TestLoader().loadTestsFromTestCase(ValidateDatasetData)
+    test_cases_blocks = unittest.TestLoader().loadTestsFromTestCase(ValidateBlockData)
+    test_cases_files = unittest.TestLoader().loadTestsFromTestCase(ValidateFileData)
 
     with open(options.input, 'r') as f:
-        unique_datasets = set([])
-        for block in f:
-            block = block.strip()
-            dataset = block.split('#')[0]
-            unique_datasets.add(dataset)
+        for dataset in f:
+            dataset = dataset.strip()
+            blocks = get_blocks_from_dataset(dataset)
 
-            test_cases = unittest.TestLoader().loadTestsFromTestCase(ValidateBlockData)
-            for test_case in test_cases:
-                test_case.block = block
-            TestSuite.addTest(test_cases)
-
-            files = get_lfns_from_block(block)
-
-            for this_file in files:
-                test_cases = unittest.TestLoader().loadTestsFromTestCase(ValidateFileData)
-                for test_case in test_cases:
-                    test_case.lfn = this_file
-                TestSuite.addTest(test_cases)
-
-        for dataset in unique_datasets:
-            test_cases = unittest.TestLoader().loadTestsFromTestCase(ValidateDatasetData)
-            for test_case in test_cases:
+            TestSuite = unittest.TestSuite()
+            for test_case in test_cases_datasets:
                 test_case.dataset = dataset
-            TestSuite.addTest(test_cases)
+            TestSuite.addTest(test_cases_datasets)
 
-        unittest.TextTestRunner(verbosity=2).run(TestSuite)
+            for block in blocks:
+                block = block.strip()
+                for test_case in test_cases_blocks:
+                    test_case.block = block
+                TestSuite.addTest(test_cases_blocks)
+
+                files = get_lfns_from_block(block)
+
+                for this_file in files:
+                    for test_case in test_cases_files:
+                        test_case.lfn = this_file
+                    TestSuite.addTest(test_cases_files)
+
+            unittest.TextTestRunner(verbosity=2).run(TestSuite)
