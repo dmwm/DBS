@@ -46,7 +46,7 @@ for dataset, interval in zip(datasets, increase_interval(start=0.0, step=0.2)):
   p = payload_handler.clone_payload()
   p['workflow']['dataset'] = dataset['dataset']
   #p['workflow']['Intervals']['getPrimaryDatasetType'] += interval
-  p['workflow']['Intervals']['CrabWorkflow'] += interval
+  #p['workflow']['Intervals']['CrabWorkflow'] += interval
   payload_handler.append_payload(p)
 
 payload_handler.save_payload(options.output)
