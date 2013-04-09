@@ -8,6 +8,7 @@ from LifeCycleTests.LifeCycleTools.StatsClient import StatsPipeClient
 import os
 import sys
 import json
+from random import shuffle
 
 options = get_command_line_options(__name__, sys.argv)
 
@@ -40,11 +41,18 @@ timer.update_stats({'server_request_timing' : float(request_processing_time)/100
 
 timer.stat_to_server()
 
+#remove T0TEST datasets, since they are not analysed by users
+datasets = map(lambda x: x['dataset'], datasets)
+datasets = filter(lambda x: x.find('T0TEST')==-1, datasets)
+
+#re-arrange the order of datasets, to have a more realistic chaotic use
+shuffle(datasets)
+
 print "Found %s datasets" % (len(datasets))
 
 for dataset, interval in zip(datasets, increase_interval(start=0.0, step=0.2)):
   p = payload_handler.clone_payload()
-  p['workflow']['dataset'] = dataset['dataset']
+  p['workflow']['dataset'] = dataset
   #p['workflow']['Intervals']['getPrimaryDatasetType'] += interval
   #p['workflow']['Intervals']['CrabWorkflow'] += interval
   payload_handler.append_payload(p)
