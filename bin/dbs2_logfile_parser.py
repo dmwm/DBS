@@ -22,9 +22,8 @@ def replace_values(log_entry):
         log_entry["user"] = None
 
     log_entry["status"] = int(log_entry["status"])
-        
+
     log_entry["size"] = 0 if log_entry["size"] == "-" else int(log_entry["size"])
-    
 
     if log_entry["referer"] == "-":
         log_entry["referer"] = None
@@ -57,7 +56,6 @@ with open(options.input, 'r') as f:
         except AttributeError:
             print "The following line does not match the pattern:\n %s" % (line.strip())
             pass
-        
 
 if options.output:
     with open(options.output, 'w') as f:
