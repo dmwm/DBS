@@ -1,7 +1,7 @@
 --run the alter command in sqlplus.
 alter session set NLS_DATE_FORMAT='yyyy/mm/dd:hh:mi:ssam';
 
-spool on;
+spool on-migrateDBS2To3..txt
 select sysdate from dual;
 
 INSERT INTO PRIMARY_DS_TYPES ( PRIMARY_DS_TYPE_ID,  PRIMARY_DS_TYPE) SELECT ID, TYPE FROM CMS_DBS_PROD_GLOBAL.PRIMARYDSTYPE;
@@ -257,4 +257,5 @@ ALTER TABLE FILE_OUTPUT_MOD_CONFIGS ADD (
 select 'Done recreate  FILE_OUTPUT_MOD_CONFIGS constraint' as job from dual;
 select sysdate from dual;
 
-spool off;
+spool off
+EXIT;
