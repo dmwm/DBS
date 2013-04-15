@@ -14,6 +14,7 @@ if [ $# -gt 1 ]; then
 fi
 
 WORKINGDIR=/tmp/$USER/DBS3_Life_Cycle_Agent_Test.$JOBNUM
+TMP_DIR=/tmp/$USER/Payloads.$JOBNUM
 SCRAM_ARCH=slc5_amd64_gcc461
 SWAREA=$WORKINGDIR/sw
 REPO=comp.pre.giffels
@@ -156,8 +157,8 @@ run_dbs_lifecycle_tests()
 
   TMP_WORKFLOW=$(mktemp -p /tmp LifeCycleWorkflow.conf.XXXXXXXXX)
 
-  ## change NamedPipe parameter in the Workflow
-  sed -e "s/@NamedPipe@/\/tmp\/dbs3fifo.$JOBNUM/g" $WORKFLOW &> $TMP_WORKFLOW
+  ## change NamedPipe and TmpDir parameter in the Workflow
+  sed -e "s/@NamedPipe@/\/tmp\/dbs3fifo.$JOBNUM/g;s/@TmpDir@/$(echo $TMP_DIR | sed -e "s,/,\\\\/,g")/g" $WORKFLOW &> $TMP_WORKFLOW
 
   Lifecycle.pl --config $TMP_WORKFLOW &> $WORKINGDIR/LifeCycle.log &
 
