@@ -55,14 +55,16 @@ print "Found %s files for dataset %s" % (len(files), initial)
 
 ### get blocks for the dataset
 blocks = set()
+block_ids = set()
 for this_file in files:
     blocks.add(this_file['block_name'])
+    block_ids.add(this_file['block_id'])
 
 ## list parent_files and file_lumis for all the files in blocks
-for block in blocks:
-    timing.get('stats').update({'api' : 'listFileParents','query' : str(block)})
+for block, block_id in zip(blocks, block_ids):
+    timing.get('stats').update({'api' : 'listFileParents','query' : str(block_id)})
     with TimingStat(timing, stat_client) as timer:
-        parent_files = api.listFileParents(block_name=block)
+        parent_files = api.listFileParents(block_id=block_id)
 
     request_processing_time, request_time = api.requestTimingInfo
     timer.update_stats({'server_request_timing' : float(request_processing_time)/1000000.0,
