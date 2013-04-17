@@ -7,7 +7,7 @@ from LifeCycleTests.LifeCycleTools.StatsClient import StatsPipeClient
 
 import os
 import sys
-import tempfile
+import time
 
 options = get_command_line_options(__name__, sys.argv)
 
@@ -29,7 +29,12 @@ else:
 
 block_dump = payload_handler.payload['workflow']['DBS']
 
-## list primary data type
+injection_repetition_rate = payload_handler.payload['workflow']['InjectionRepetitionRate']
+
+if injection_repetition_rate != -1:
+    time.sleep(injection_repetition_rate)
+
+## insert block to DBS using bulk block insertion
 timing = {'stats':{'query' : 'insertBulkBlock', 'api' : 'insertBulkBlock'}}
 for block in block_dump:
     with TimingStat(timing, stat_client) as timer:
