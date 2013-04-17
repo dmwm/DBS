@@ -14,9 +14,9 @@ def html_tag_maker(tag):
 class WebView(object):
     doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'
 
-    def __init__(self, description, histo_manager, picture_format='png'):
+    def __init__(self, description, histo_names, picture_format='png'):
         self._description = description
-        self._pictures = ["%s.%s" % (histo.name, picture_format) for histo in histo_manager]
+        self._pictures = ["%s.%s" % (histo_name, picture_format) for histo_name in histo_names]
 
     @html_tag_maker("html")
     def html_code(self):
@@ -36,4 +36,3 @@ class WebView(object):
         with open(os.path.join(self._description, filename) ,'w') as f:
             f.write(self.doctype)
             f.writelines(self.html_code())
-            
