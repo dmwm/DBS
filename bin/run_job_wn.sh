@@ -90,6 +90,8 @@ cleanup_workingdir()
     check_success "Cleaning up /tmp/$proxy_file" $?
     rm -rf $TMP_WORKFLOW
     check_success "Cleaning up $TMP_WORKLFOW" $?
+    rm -rf $TMP_DIR
+    check_success "Cleaning up $TMP_DIR" $?
   fi
 }
 
