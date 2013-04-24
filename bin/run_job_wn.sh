@@ -13,10 +13,11 @@ if [ $# -gt 1 ]; then
   WORKFLOW=$2
 fi
 
-WORKINGDIR=/tmp/$USER/DBS3_Life_Cycle_Agent_Test.$JOBNUM
-TMP_DIR=/tmp/$USER/Payloads.$JOBNUM
+#On LSF is set to /pool/...
+WORKING_DIR=$TMPDIR/DBS3_Life_Cycle_Agent_Test.$JOBNUM
+PAYLOAD_DIR=$WORKING_DIR/Payloads.$JOBNUM
 SCRAM_ARCH=slc5_amd64_gcc461
-SWAREA=$WORKINGDIR/sw
+SWAREA=$WORKING_DIR/sw
 REPO=comp.pre.giffels
 
 GRIDENVSCRIPT=/afs/cern.ch/cms/LCG/LCG-2/UI/cms_ui_env.sh
@@ -72,7 +73,10 @@ copy_x509_proxy()
 {
   local proxy_file=x509up_u$(id -u)
   if [ -f $PRIVATEDIR/$proxy_file ]; then
-    cp -a $PRIVATEDIR/$proxy_file /tmp/$proxy_file
+    #create $WORKING_DIR
+    mkdir -p $WORKING_DIR
+    cp -a $PRIVATEDIR/$proxy_file $WORKING_DIR/$proxy_file
+    export X509_USER_PROXY=$WORKING_DIR/$proxy_file
     check_success "Copying X509 Proxy failed" $?
   fi
 }
@@ -82,16 +86,16 @@ cleanup_workingdir()
   ## Clean up pre-exists workdir
   local proxy_file=x509up_u$(id -u)
 
-  if [ -d $WORKINGDIR ]; then
-    echo "$WORKINGDIR already exists. Cleaning up ..."
-    rm -rf $WORKINGDIR
-    check_success "Cleaning up $WORKINGDIR" $?
-    rm -rf /tmp/$proxy_file
-    check_success "Cleaning up /tmp/$proxy_file" $?
+  if [ -d $WORKING_DIR ]; then
+    echo "$WORKING_DIR already exists. Cleaning up ..."
+    rm -rf $WORKING_DIR
+    check_success "Cleaning up $WORKING_DIR" $?
+    rm -rf $WORKING_DIR/$proxy_file
+    check_success "Cleaning up $WORKING_DIR/$proxy_file" $?
     rm -rf $TMP_WORKFLOW
     check_success "Cleaning up $TMP_WORKLFOW" $?
-    rm -rf $TMP_DIR
-    check_success "Cleaning up $TMP_DIR" $?
+    rm -rf $PAYLOAD_DIR
+    check_success "Cleaning up $PAYLOAD_DIR" $?
   fi
 }
 
@@ -113,7 +117,6 @@ bootstrapping()
 
 install_software()
 {
-  cleanup_workingdir
   prepare_bootstrap
   bootstrapping
 
@@ -150,19 +153,22 @@ setup_lifecycle_agent()
 run_dbs_lifecycle_tests()
 {
   ## remove potential fifo pipe
-  rm -rf /tmp/dbs3fifo.$JOBNUM
-  StatsServer.py -n -o $WORKINGDIR/Output.db -i /tmp/dbs3fifo.$JOBNUM &> $WORKINGDIR/StatsServer.log &
+  rm -rf $PAYLOAD_DIR/dbs3fifo.$JOBNUM
+  ##create payload directory
+  mkdir $PAYLOAD_DIR
+  StatsServer.py -n -o $WORKING_DIR/Output.db -i $PAYLOAD_DIR/dbs3fifo.$JOBNUM &> $WORKING_DIR/StatsServer.log &
 
   if [ 'x$WORKFLOW' == 'x' ]; then
     WORKFLOW=$DBS3_LIFECYCLE_ROOT/conf/DBS3AnalysisLifecycle.conf
   fi
 
-  TMP_WORKFLOW=$(mktemp -p /tmp LifeCycleWorkflow.conf.XXXXXXXXX)
+  TMP_WORKFLOW=$(mktemp -p $PAYLOAD_DIR LifeCycleWorkflow.conf.XXXXXXXXX)
 
   ## change NamedPipe and TmpDir parameter in the Workflow
-  sed -e "s/@NamedPipe@/\/tmp\/dbs3fifo.$JOBNUM/g;s/@TmpDir@/$(echo $TMP_DIR | sed -e "s,/,\\\\/,g")/g" $WORKFLOW &> $TMP_WORKFLOW
+  SED_PAYLOAD_DIR=$(echo $PAYLOAD_DIR | sed -e "s,/,\\\\/,g")
+  sed -e "s/@NamedPipe@/$SED_PAYLOAD_DIR\/dbs3fifo.$JOBNUM/g;s/@TmpDir@/$SED_PAYLOAD_DIR/g" $WORKFLOW &> $TMP_WORKFLOW
 
-  Lifecycle.pl --config $TMP_WORKFLOW &> $WORKINGDIR/LifeCycle.log &
+  Lifecycle.pl --config $TMP_WORKFLOW &> $WORKING_DIR/LifeCycle.log &
 
   ## LifeCycleTests can be aborted by an external file
   create_steering_file
@@ -183,10 +189,10 @@ stage_out_output()
 {
   echo "Create directory $AFSWORKSPACE/LifeCycleResults"
   mkdir -p $AFSWORKSPACE/LifeCycleResults
-  echo "Copy data from $WORKINGDIR $AFSWORKSPACE/LifeCycleResults"
-  cp -a $WORKINGDIR/LifeCycle.log $AFSWORKSPACE/LifeCycleResults/LifeCycle_$JOBNUM.log
-  cp -a $WORKINGDIR/StatsServer.log $AFSWORKSPACE/LifeCycleResults/StatsServer_$JOBNUM.log
-  cp -a $WORKINGDIR/Output.db $AFSWORKSPACE/LifeCycleResults/Output_$JOBNUM.db
+  echo "Copy data from $WORKING_DIR $AFSWORKSPACE/LifeCycleResults"
+  cp -a $WORKING_DIR/LifeCycle.log $AFSWORKSPACE/LifeCycleResults/LifeCycle_$JOBNUM.log
+  cp -a $WORKING_DIR/StatsServer.log $AFSWORKSPACE/LifeCycleResults/StatsServer_$JOBNUM.log
+  cp -a $WORKING_DIR/Output.db $AFSWORKSPACE/LifeCycleResults/Output_$JOBNUM.db
 }
 
 create_steering_file()
@@ -224,6 +230,10 @@ echo "Starting time: $(date)"
 echo "Running on $(/bin/hostname)"
 echo "Having following processors:"
 cat /proc/cpuinfo
+echo "Working directory is $WORKING_DIR"
+
+## cleaning-up workdir
+cleanup_workingdir
 
 ## Copy proxy from private AFS space
 copy_x509_proxy
