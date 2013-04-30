@@ -28,7 +28,7 @@ JOIN %sFILE_PARENTS FP ON FP.THIS_FILE_ID = CF.FILE_ID
 JOIN %sFILES F ON  F.FILE_ID = FP.PARENT_FILE_ID
 """ % ((self.owner,)*3)
 
-    def execute(self, conn, logical_file_name, transaction=False):
+    def execute(self, conn, logical_file_names, block_name, block_id, transaction=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
@@ -36,8 +36,25 @@ JOIN %sFILES F ON  F.FILE_ID = FP.PARENT_FILE_ID
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileParent/ListChild. Expects db connection from upper layer.")
 
         sql = self.sql
-        sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
-        binds = {"logical_file_name":logical_file_name}
-	cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
+        binds = {}
+        bindlist=[]
+        if type(file_logical_names) is str:
+            sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_names"
+            binds = {"logical_file_name":logical_file_names}
+        elif type(file_logical_names) is list:
+            sql += "WHERE F.LOGICAL_FILE_NAME in :logical_file_names"
+            for f in logical_file_names:
+                binds = {"logical_file_names": f}
+                bindlist.append(binds)
+        elif block_name:
+            sql += "WHERE F.BLOCK_NAME = :block_name"
+            binds = {"block_name":block_name}
+        elif block_id:
+            sql += "WHERE F.BLOCK_ID = :block_id"
+            binds = {"block_name":block_name}
+        else:
+            dbsExceptionHandler('dbsException-invalid-input', "Logical_file_names is required for listChild dao.")
+
+        cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
         result = self.formatCursor(cursors[0])
         return result

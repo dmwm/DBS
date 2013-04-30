@@ -71,7 +71,7 @@ class DBSWriterModel(DBSReaderModel):
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'files', self.insertFile, args=['qInserts'], secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
-        self._addMethod('PUT', 'files', self.updateFile, args=['logical_file_name', 'is_file_valid'],
+        self._addMethod('PUT', 'files', self.updateFile, args=['logical_file_names', 'is_file_valid', 'lost'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('PUT', 'datasets', self.updateDataset, args=['dataset', 'dataset_access_type'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
@@ -156,7 +156,7 @@ class DBSWriterModel(DBSReaderModel):
         except HTTPError as he:
             raise he
         except Exception, ex:
-            sError = "DBSWriterModel/updateFile. %s\n. Exception trace: \n %s" \
+            sError = "DBSWriterModel/update.AcqEraEndDate %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
@@ -365,8 +365,8 @@ class DBSWriterModel(DBSReaderModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
  
-    @inputChecks(logical_file_name=str, is_file_valid=(int, str))
-    def updateFile(self, logical_file_name="", is_file_valid=1):
+    @inputChecks(logical_file_names=(str,list), is_file_valid=(int, str), lost=(int, str, bool ))
+    def updateFile(self, logical_file_names=[], is_file_valid=1, lost=0):
         """
         API to update file status
 
@@ -374,10 +374,25 @@ class DBSWriterModel(DBSReaderModel):
         :type logical_file_name: str
         :param is_file_valid: valid=1, invalid=0 (Required)
         :type is_file_valid: bool
+        :param lost: default lost=0 (optional)
+        :type lost: bool
 
         """
+
+        if lost in [1, True, 'True','true', '1', 'y', 'yes']:
+            lost = 1:
+            if is_file_valid in [1, True, 'True','true', '1', 'y', 'yes']:
+                dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,\
+                                    "Lost file must set to invalid" )
+        else: lost = 0
         try:
-            self.dbsFile.updateStatus(logical_file_name, is_file_valid)
+            self.dbsFile.updateStatus(logical_file_names, is_file_valid, lost)
+        except dbsException as de:
+            for f in logical_file_names:
+                if '*' in f or '%' in f:
+                    dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,"No \
+                    wildcard allow in LFN" )
+            self.dbsFile.updateStatus(logical_file_names, is_file_valid, lost)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
@@ -458,12 +473,6 @@ class DBSWriterModel(DBSReaderModel):
                 dbsExceptionHandler("dbsException-invalid-input", "DBSWriterModel/insertDataTier. data_tier_name is required.")
 
             indata['data_tier_id'] = self.sequenceManagerDAO.increment(conn, "SEQ_DT", tran)
-
-            indata['data_tier_name'] = indata['data_tier_name'].upper()
-            
-            self.dbsDataTierInsertDAO.execute(conn, indata, tran)
-        except dbsException as de:
-            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
         except Exception as ex:

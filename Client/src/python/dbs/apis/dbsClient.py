@@ -620,9 +620,9 @@ class DbsApi(object):
         :rtype: List of dicts
 
         """
-        validParameters = ['logical_file_name']
+        validParameters = ['logical_file_names', 'block_name', 'block_id']
 
-        requiredParameters = {'forced':validParameters}
+        requiredParameters = {'standalone':validParameters}
 
         checkInputParameter(method="listFileChildren",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
         
@@ -1010,15 +1010,19 @@ class DbsApi(object):
         """
         API to update file status
         
-        :param logical_file_name: logical_file_name to update (Required)
-        :type logical_file_name: str
+        :param logical_file_names: logical_file_name to update (Required)
+        :type logical_file_names: str or a list of str
         :param is_file_valid: valid=1, invalid=0 (Required)
         :type is_file_valid: bool
+        :param lost: default lost=0 to indicate a file is not lost in transfer
+        :type lost: bool
 
         """
-        validParameters = ['logical_file_name','is_file_valid']
 
-        requiredParameters= {'forced':validParameters}
+        validParameters = ['logical_file_names','is_file_valid', 'lost']
+
+        requiredParameters = {'forced': ['logical_file_names','is_file_valid']}
+
 
         checkInputParameter(method="updateFileStatus",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
         

@@ -106,7 +106,7 @@ class DBSReaderModel(RESTModel):
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id', 'global_tag'])
         self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id', 
                         'block_name'])
-        self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name'])
+        self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_names', 'block_name', 'block_id'])
         self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num'])
         self._addMethod('GET', 'runs', self.listRuns, args=['minrun', 'maxrun', 'logical_file_name',
                         'block_name', 'dataset'])
@@ -799,8 +799,8 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(logical_file_name=str)
-    def listFileChildren(self, logical_file_name=''):
+    @inputChecks(logical_file_names=(str, list), block_name=(str), block_id=(str, int))
+    def listFileChildren(self, logical_file_names='', block_name='', block_id=0):
         """
         API to list file children
 
@@ -810,8 +810,13 @@ class DBSReaderModel(RESTModel):
         :rtype: List of dicts
 
         """
+        for f in logical_file_names:
+            if '*' in f or '%' in f:
+                dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,"No \
+                                     wildcard allow in LFN list" )
+
         try:
-            return self.dbsFile.listFileChildren(logical_file_name)
+            return self.dbsFile.listFileChildren(logical_file_names, block_name, block_id)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:

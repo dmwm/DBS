@@ -36,8 +36,8 @@ def inputChecks(**_params_):
                         #raise TypeError, "Expected '%s' to be %s; was %s." % (name, types, type(value))
                         dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input DataType", logging.exception, serverlog)
                     else:
-                        if type(value) == str:
-                            try:
+                        try:
+                            if type(value) == str:
                                 if name == 'dataset':
                                     if '*' in value: searchdataset(value)
                                     else: dataset(value)
@@ -65,10 +65,15 @@ def inputChecks(**_params_):
                                     DBSUser(value)
                                 else:
                                     searchstr(value)
-                            except AssertionError as ae:
-                                serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(name, value)
-                                #print ae
-                                dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input Data: Not Match Required Format",\
+                            elif type(value) == list:
+                                if name == 'logical_file_names':
+                                    for f in value:
+                                        if '*' in f: searchstr(f)
+                                        else: lfn(f)
+                        except AssertionError as ae:
+                            serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(name, value)
+                            #print ae
+                            dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input Data: Not Match Required Format",\
                                         logging.exception, serverLog)
             return _func_(*args, **kw)
         return wrapped

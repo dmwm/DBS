@@ -20,15 +20,29 @@ class UpdateStatus(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid where LOGICAL_FILE_NAME = :logical_file_name""" %  self.owner 
         
-    def execute ( self, conn, logical_file_name, is_file_valid, transaction=False ):
+    def execute ( self, conn, logical_file_names, is_file_valid, transaction=False ):
         """
-        for a given file
+        for a given file or a list of files
         """
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/UpdateStatus. Expects db connection from upper layer.")
+        binds={}
+        bindlist=[]
 
-	binds = { "logical_file_name" : logical_file_name , "is_file_valid" : is_file_valid }
+        op = ("=", "in")[type(logical_file_names) is list]
+        if lost == 1:
+            self.sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid and file_size=0 where LOGICAL_FILE_NAME %s :logical_file_names""" %(self.owner,op)
+        else:
+            sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid where LOGICAL_FILE_NAME %s :logical_file_names""" %  (self.owner, op)
+        if op =='=':
+            binds = {"is_file_valid" : is_file_valid, "logical_file_names": logical_file_names }
+        else:
+            for f in logical_file_names:
+                binds = {"is_file_valid" : is_file_valid, "logical_file_names":f}
+                bindlist=append(binds)
+        if  bindlist:
+            binds=bindlist
+
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     
