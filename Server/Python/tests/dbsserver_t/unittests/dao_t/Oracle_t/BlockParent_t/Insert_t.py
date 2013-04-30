@@ -17,13 +17,13 @@ class Insert_t(unittest.TestCase):
         data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
         self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
         self.data = self.data_provider.get_block_parentage_data(regenerate=True)[0]
-         
+
     def setUp(self):
         """setup all necessary parameters"""
         self.conn = self.dbi.connection()
         self.block_insert = BlockParentInsert(self.logger, self.dbi, self.dbowner)
         self.block_id = BlockID(self.logger, self.dbi, self.dbowner)
-                  
+
     def tearDown(self):
         """Clean-up all necessary parameters"""
         self.conn.close()

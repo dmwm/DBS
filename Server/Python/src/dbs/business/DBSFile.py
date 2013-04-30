@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #pylint: disable=C0103
 """
-This module provides business object class to interact with File. 
+This module provides business object class to interact with File.
 """
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
@@ -45,7 +45,7 @@ class DBSFile:
         self.filelumilist = daofactory(classname="FileLumi.List")
         self.filebufin = daofactory(classname = "FileBuffer.Insert")
 
-    def listFileLumis(self, logical_file_name="", block_name="", run_num=0): 
+    def listFileLumis(self, logical_file_name="", block_name="", run_num=0):
         """
         optional parameter: logical_file_name, block_name
         returns: logical_file_name, file_lumi_id, run_num, lumi_section_num
@@ -72,7 +72,7 @@ class DBSFile:
                 msg =  "Block_name or dataset is required for listFileSummary API"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
             if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
-                msg = "No wildcard is allowed in block_name or dataset for listFileSummary API" 
+                msg = "No wildcard is allowed in block_name or dataset for listFileSummary API"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
             result = self.filesummarylist.execute(conn, block_name, dataset, run_num)
             if len(result)==1:
@@ -114,14 +114,14 @@ class DBSFile:
             if conn:
                 conn.close()
 
-    def listFileChildren(self, logical_file_names='', block_name='', block_id=0): 
+    def listFileChildren(self, logical_file_names='', block_name='', block_id=0):
         """
         required parameter: logical_file_names or block_name or block_id
         returns: logical_file_name, child_logical_file_name, parent_file_id
         """
         conn = self.dbi.connection()
         try:
-            if not logical_file_name:
+            if not logical_file_names:
                 dbsExceptionHandler('dbsException-invalid-input',\
                         "Logical_file_name is required for listFileChildren api")
             sqlresult = self.filechildlist.execute(conn, logical_file_names, block_name, block_id)
@@ -158,7 +158,7 @@ class DBSFile:
                 trans.rollback()
                 trans = None
             raise ex
-                
+
         finally:
             if trans:
                 trans.rollback()
@@ -167,12 +167,12 @@ class DBSFile:
 
     def listFiles(self, dataset="", block_name="", logical_file_name="",
                   release_version="", pset_hash="", app_name="",
-                  output_module_label="",  maxrun=-1, minrun=-1, 
+                  output_module_label="",  maxrun=-1, minrun=-1,
                   origin_site_name="", lumi_list=[], detail=False):
         """
-        One of below parameter groups must be present: 
-        non-patterned dataset, non-patterned block, non-patterned dataset with lfn,  non-patterned block with lfn, 
-        non-patterned lfn 
+        One of below parameter groups must be present:
+        non-patterned dataset, non-patterned block, non-patterned dataset with lfn,  non-patterned block with lfn,
+        non-patterned lfn
         """
         if ('%' in block_name):
             dbsExceptionHandler('dbsException-invalid-input', "You must specify exact block name not a pattern")
@@ -202,47 +202,47 @@ class DBSFile:
     def insertFile(self, businput, qInserts=False):
         """
         This method supports bulk insert of files
-        performing other operations such as setting Block and Dataset parentages, 
+        performing other operations such as setting Block and Dataset parentages,
         setting mapping between OutputConfigModules and File(s) etc.
 
         :param qInserts: True means that inserts will be queued instead of done immediately. INSERT QUEUE Manager will perform the inserts, within few minutes.
         :type qInserts: bool
-        :param logical_file_name (required) : string 
-        :param is_file_valid: (optional, default = 1): 1/0 
-        :param block, required: /a/b/c#d 
-        :param dataset, required: /a/b/c 
-        :param file_type (optional, default = EDM): one of the predefined types, 
-        :param check_sum (optional, default = '-1'): string 
-        :param event_count (optional, default = -1): int 
-        :param file_size (optional, default = -1.): float 
-        :param adler32 (optional, default = ''): string 
-        :param md5 (optional, default = ''): string 
-        :param auto_cross_section (optional, default = -1.): float 
-        :param file_lumi_list (optional, default = []): [{'run_num': 123, 'lumi_section_num': 12},{}....] 
-        :param file_parent_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....] 
-        :param file_assoc_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....] 
+        :param logical_file_name (required) : string
+        :param is_file_valid: (optional, default = 1): 1/0
+        :param block, required: /a/b/c#d
+        :param dataset, required: /a/b/c
+        :param file_type (optional, default = EDM): one of the predefined types,
+        :param check_sum (optional, default = '-1'): string
+        :param event_count (optional, default = -1): int
+        :param file_size (optional, default = -1.): float
+        :param adler32 (optional, default = ''): string
+        :param md5 (optional, default = ''): string
+        :param auto_cross_section (optional, default = -1.): float
+        :param file_lumi_list (optional, default = []): [{'run_num': 123, 'lumi_section_num': 12},{}....]
+        :param file_parent_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....]
+        :param file_assoc_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....]
         :param file_output_config_list(optional, default = []) :
-        [{'app_name':..., 'release_version':..., 'pset_hash':...., output_module_label':...},{}.....] 
+        [{'app_name':..., 'release_version':..., 'pset_hash':...., output_module_label':...},{}.....]
         """
 
         # We do not want to go be beyond 10 files at a time
-        # If user wants to insert over 10 files in one shot, we run into risks of locking the database 
-        # tables for longer time, and in case of error, it will be hard to see where error occured 
+        # If user wants to insert over 10 files in one shot, we run into risks of locking the database
+        # tables for longer time, and in case of error, it will be hard to see where error occured
         if len(businput) > 10:
             dbsExceptionHandler('dbsException-input-too-large', "DBS cannot insert \
                     more than 10 files in one bulk call")
             return
-        
+
         conn = self.dbi.connection()
         tran = conn.begin()
         try:
-            #Now we are dealing with independent files that have different dataset/block and so on. 
-            #See Trac #358.  
-            #The expected input data format is a list of dictionary to insert independent files into DBS, 
+            #Now we are dealing with independent files that have different dataset/block and so on.
+            #See Trac #358.
+            #The expected input data format is a list of dictionary to insert independent files into DBS,
             #inputdata={'files':[{}, {}, {}]}
             #YG  09/15/2011
-        
-            # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise 
+
+            # AA- 01/06/2010 -- we have to do this file-by-file, there is no real good way to do this complex operation otherwise
             #files2insert = []
             #fidl = []
             fileInserted = False
@@ -262,56 +262,56 @@ class DBSFile:
                     dataset_id = self.datasetid.execute(conn, dataset=f["dataset"])
                     dataset = f["dataset"]
                     if dataset_id == -1 :
-                        dbsExceptionHandler('dbsException-missing-data', "Required Dataset Not Found.", None, 
+                        dbsExceptionHandler('dbsException-missing-data', "Required Dataset Not Found.", None,
                         "Required Dataset %s does not exist"%f["dataset"] )
                     # get the list of configs in for this dataset
                     dsconfigs = [x['output_mod_config_id'] for x in self.dsconfigids.execute(conn, dataset=f["dataset"])]
-                fileconfigs = [] # this will hold file configs that we will list in the insert file logic below       
+                fileconfigs = [] # this will hold file configs that we will list in the insert file logic below
                 if block_name != f["block_name"]:
                     block_info = self.blocklist.execute(conn, block_name=f["block_name"])
                     if len(block_info) != 1 : dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,
                                                           "Cannot found required block %s in DB" %f["block_name"])
                     block_info = block_info[0]
                     if  block_info["open_for_writing"] != 1 : dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,
-                                                                           "Block %s is not open for writting" %f["block_name"])  
+                                                                           "Block %s is not open for writting" %f["block_name"])
                     if block_info.has_key("block_id"):
                         block_id = block_info["block_id"]
                     else:
                         dbsExceptionHandler("dbsException-missing-data", "Block not found", None,
                                           "Cannot found required block %s in DB" %f["block_name"])
-                else: dbsExceptionHandler('dbsException-missing-data', "Required block name Not Found in input.", 
+                else: dbsExceptionHandler('dbsException-missing-data', "Required block name Not Found in input.",
                                             None, "Required block Not Found in input.")
                 #make the default file_type=EDM
                 file_type_id = self.ftypeid.execute( conn, f.get("file_type", "EDM"))
-                if file_type_id == -1: 
-                    dbsExceptionHandler('dbsException-missing-data', "File type not found.", None, 
+                if file_type_id == -1:
+                    dbsExceptionHandler('dbsException-missing-data', "File type not found.", None,
                                         "Required file type %s not found in DBS"%f.get("file_type", "EDM") )
 
                 iFile = 0
                 fileIncrement = 40
                 fID = self.sm.increment(conn, "SEQ_FL", incCount=fileIncrement)
-                #looping over the files, everytime create a new object 'filein' as you never know 
+                #looping over the files, everytime create a new object 'filein' as you never know
                 #whats in the original object and we do not want to know
                 #for f in businput:
                 file_clob = {}
                 fparents2insert = []
                 flumis2insert = []
                 fconfigs2insert = []
-                # create the file object from the original 
+                # create the file object from the original
                 # taking care of defaults, and required
                 filein = {
                     "logical_file_name" : f["logical_file_name"],
                     "is_file_valid" : f.get("is_file_valid", 1),
-                    "check_sum" : f.get("check_sum", -1), 
-                    "event_count" : f.get("event_count", -1), 
+                    "check_sum" : f.get("check_sum", -1),
+                    "event_count" : f.get("event_count", -1),
                     "file_size" : f.get("file_size", -1),
-                    "adler32" : f.get("adler32", ""), 
+                    "adler32" : f.get("adler32", ""),
                     "md5" : f.get("md5", ""),
                     "auto_cross_section" : f.get("auto_cross_section", -1),
-                    #"creation_date" : f.get("creation_date", None),  See Ticket #965 YG. 
+                    #"creation_date" : f.get("creation_date", None),  See Ticket #965 YG.
                     #"create_by": f.get("create_by", None),
-                    "last_modification_date": f.get("last_modification_date", None), 
-                    #"last_modified_by" : f.get("last_modified_by", None) 
+                    "last_modification_date": f.get("last_modification_date", None),
+                    #"last_modified_by" : f.get("last_modified_by", None)
                     "last_modified_by" : dbsUtils().getCreateBy()
                 }
                 if iFile == fileIncrement:
@@ -322,7 +322,7 @@ class DBSFile:
                 filein["dataset_id"] = dataset_id
                 filein["block_id"] = block_id
                 filein["file_type_id"] = file_type_id
-                #FIXME: Add this later if f.get("branch_hash", "") not in ("", None): 
+                #FIXME: Add this later if f.get("branch_hash", "") not in ("", None):
                 #filein["branch_hash"]=self.fbranchid.execute( f.get("branch_hash"), conn, transaction=tran)
                 # insert file  -- as decided, one file at a time
                 # filein will be what goes into database
@@ -335,14 +335,14 @@ class DBSFile:
                 except exceptions.IntegrityError, ex:
                     if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                         # Lets move on to NEXT file, we do not want to continue processing this file
-                        
+
                         #Nothing about this file is updated when it is already in DB. No file parentage, block parentage, dataset parentage and so on.
                         #Is this right?  YG  Oct. 24
-                        self.logger.warning("DBSFile/insertFile. File already exists in DBS, not changing it: %s" 
+                        self.logger.warning("DBSFile/insertFile. File already exists in DBS, not changing it: %s"
                                             %filein["logical_file_name"] )
                         continue
                     else:
-                        raise   
+                        raise
 
                 #process file parents, file lumi, file outputmodconfigs, ...
                 #file lumi sections
@@ -350,17 +350,17 @@ class DBSFile:
                     fllist = f["file_lumi_list"]
                     if len(fllist) > 0:
                         for fl in fllist:
-                            fldao = { 
+                            fldao = {
                                 "run_num" : fl["run_num"],
                                 "lumi_section_num" : fl["lumi_section_num"]
                             }
                             fldao["file_id"] = filein["file_id"]
                             flumis2insert.append(fldao)
-                 
+
                 if f.has_key("file_parent_list"):
-                    #file parents    
+                    #file parents
                     fplist = f["file_parent_list"]
-                    
+
                     for fp in fplist:
                         fpdao = {}
                         fpdao["this_file_id"] = filein["file_id"]
@@ -376,16 +376,16 @@ class DBSFile:
                             fcdao["output_mod_config_id"] = self.outconfigid.execute(conn, fc["app_name"],
                                     fc["release_version"], fc["pset_hash"], fc["output_module_label"],
                                     fc["global_tag"])
-                            if fcdao["output_mod_config_id"] == -1 : 
+                            if fcdao["output_mod_config_id"] == -1 :
                                 dbsExceptionHandler('dbsException-missing-data', 'Config Not found.', None, "DBSFile/insertFile.\
                                         Output module config (%s, %s, %s, %s) \
-                                        not found" % (fc["app_name"], 
+                                        not found" % (fc["app_name"],
                                         fc["release_version"], fc["pset_hash"], fc["output_module_label"]) )
-                            fileconfigs.append(fcdao["output_mod_config_id"]) 
+                            fileconfigs.append(fcdao["output_mod_config_id"])
                             fconfigs2insert.append(fcdao)
                 #FIXME: file associations?-- in a later release
                 #
-                # insert file - lumi   
+                # insert file - lumi
                 if flumis2insert:
                     file_clob['file_lumi_list'] = flumis2insert
                     if not qInserts:
@@ -405,17 +405,17 @@ class DBSFile:
                 if fconfigs2insert:
                     file_clob['file_output_config_list'] = fconfigs2insert
                     if not qInserts:
-                        self.fconfigin.execute(conn, fconfigs2insert, transaction=tran)  
+                        self.fconfigin.execute(conn, fconfigs2insert, transaction=tran)
                 if qInserts:
-                    try: 
+                    try:
                         self.logger.warning(file_clob)
                         self.filebufin.execute(conn, filein['logical_file_name'], block_id, file_clob, transaction=tran)
                     except exceptions.IntegrityError, ex:
                         if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                             pass
                         else:
-                            raise                  
-                                
+                            raise
+
                 #insert block parentages and dataset parentages based on file parentages
                 # Do this one by one, as it is sure to have duplicate in dest table
                 if fileInserted and fparents2insert:
@@ -427,7 +427,7 @@ class DBSFile:
                             self.dsparentin.execute(conn, dsParentage2insert, transaction=tran)
                         except exceptions.IntegrityError, ex:
                             #ORA-00001
-                            if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP") != -1) or str(ex).lower().find("duplicate") != -1:
+                            if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP") != -1) or str(ex).find("PK_BP") != -1 or str(ex).lower().find("duplicate") != -1:
                                 pass
                             elif str(ex).find("ORA-01400") != -1:
                                 raise
@@ -441,7 +441,7 @@ class DBSFile:
                     blkParams['block_size'] = long(blkParams['block_size'])
                     self.blkstatsin.execute(conn, blkParams, transaction=tran)
 
-            # All good ?. 
+            # All good ?
             tran.commit()
             tran = None
 

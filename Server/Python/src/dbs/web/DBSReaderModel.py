@@ -46,7 +46,7 @@ if not getattr(tools,"secmodv2",None):
     class FakeAuthForDoc(object):
         def __init__(self,*args,**kwargs):
             pass
-                
+
         def callable(self, role=[], group=[], site=[], authzfunc=None):
             pass
 
@@ -54,7 +54,7 @@ if not getattr(tools,"secmodv2",None):
 
 class DBSReaderModel(RESTModel):
     """
-    DBS3 Server API Documentation 
+    DBS3 Server API Documentation
     """
     def __init__(self, config):
         """
@@ -68,7 +68,7 @@ class DBSReaderModel(RESTModel):
             config.database.connectUrl = urls['reader']
 
         dbowner = config.database.dbowner
-        
+
         RESTModel.__init__(self, config)
         self.dbsUtils2 = dbsUtils()
         self.version = self.getServerVersion()
@@ -79,7 +79,7 @@ class DBSReaderModel(RESTModel):
         self.daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=dbowner)
 
         self.dbsDataTierListDAO = self.daofactory(classname="DataTier.List")
-        
+
 	self._addMethod('GET', 'serverinfo', self.getServerInfo)
         #self._addMethod('GET', 'donothing', self.donothing)
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
@@ -87,7 +87,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version',
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
-                                'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name', 
+                                'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                                 'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'])
         self._addMethod('POST', 'datasetlist', self.listDatasetArray)
@@ -104,7 +104,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'datasetchildren', self.listDatasetChildren, args=['dataset'])
         self._addMethod('GET', 'outputconfigs', self.listOutputConfigs, args=['dataset', 'logical_file_name',
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id', 'global_tag'])
-        self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id', 
+        self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id',
                         'block_name'])
         self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_names', 'block_name', 'block_id'])
         self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num'])
@@ -139,11 +139,11 @@ class DBSReaderModel(RESTModel):
 	self.dbsRun = DBSRun(self.logger, self.dbi, dbowner)
 	self.dbsDataType = DBSDataType(self.logger, self.dbi, dbowner)
         self.dbsStatus = DBSStatus(self.logger, self.dbi, dbowner)
-        self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, dbowner) 
+        self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, dbowner)
         self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, dbowner)
         self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, dbowner)
         self.dbsPhysicsGroup = DBSPhysicsGroup(self.logger, self.dbi, dbowner)
-    """ 
+    """
     def checkList(self, input):
         if type(input['block_name']) is not str:
                 raise Val....
@@ -165,7 +165,7 @@ class DBSReaderModel(RESTModel):
             return dict(params=params, doc=doc)
         else:
             return self.methods['GET'].keys()
-    
+
     def getServerInfo(self):
         """
         Method that provides information about DBS Server to the clients
@@ -181,7 +181,7 @@ class DBSReaderModel(RESTModel):
         return ret
 
     """
-    Used for Stress test. 
+    Used for Stress test.
     def donothing(self):
         return self.dbsDoNothing.listNone()
     """
@@ -209,7 +209,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listPrimaryDatasets. %s\n Exception trace: \n %s." \
                     % (ex, traceback.format_exc() )
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    
+
     @inputChecks(primary_ds_type=str, dataset=str)
     def listPrimaryDsTypes(self, primary_ds_type="", dataset=""):
         """
@@ -235,19 +235,19 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listPrimaryDsTypes. %s\n. Exception trace: \n %s" \
                 % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    
+
     #@expose
     @inputChecks( dataset=str, parent_dataset=str, release_version=str, pset_hash=str,
                  app_name=str, output_module_label=str,  processing_version=(int,str), acquisition_era_name=str,
                  run_num=(long,int,str), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
-                 primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str, 
+                 primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str,
                  create_by=(str), last_modified_by=(str), min_cdate=(int,str), max_cdate=(int,str),
                  min_ldate=(int,str), max_ldate=(int, str), cdate=(int,str), ldate=(int,str), detail=(bool,str))
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="",
         processing_version=0, acquisition_era_name="", run_num="0",
-        physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="", 
-        processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='', create_by="", last_modified_by="", 
+        physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="",
+        processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='', create_by="", last_modified_by="",
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',
         ldate='0', detail=False):
         """
@@ -308,7 +308,7 @@ class DBSReaderModel(RESTModel):
         acquisition_era_name = acquisition_era_name.replace("*", "%")
         #processing_version =  processing_version.replace("*", "%")
         #create_by and last_modified_by have be full spelled, no wildcard will allowed.
-        #We got them from request head so they can be either HN account name or DN. 
+        #We got them from request head so they can be either HN account name or DN.
         #This is depended on how an user's account is set up.
         if create_by.find('*')!=-1 or create_by.find('%')!=-1 or last_modified_by.find('*')!=-1\
                 or last_modified_by.find('%')!=-1:
@@ -356,7 +356,7 @@ class DBSReaderModel(RESTModel):
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash,
                 app_name, output_module_label, processing_version, acquisition_era_name,
                 run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
-                data_tier_name, dataset_access_type, prep_id, create_by, last_modified_by, 
+                data_tier_name, dataset_access_type, prep_id, create_by, last_modified_by,
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
@@ -500,7 +500,7 @@ class DBSReaderModel(RESTModel):
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
 
         except dbsException as de:
-            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError) 
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
             sError = "DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
@@ -578,8 +578,8 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listBlockParents. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-           
-    @inputChecks(block_name=str)       
+
+    @inputChecks(block_name=str)
     def listBlockChildren(self, block_name=""):
         """
         API to list block children
@@ -636,7 +636,7 @@ class DBSReaderModel(RESTModel):
         * Run numbers must be passed as two parameters, minrun and maxrun.
         * Use minrun,maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
         * For lumi_list the following two json formats are supported:
-            - '[a1, a2, a3,]' 
+            - '[a1, a2, a3,]'
             - '[[a,b], [c, d],]'
         * If lumi_list is provided, one also needs to provide both minrun and maxrun parameters (equal)
 
@@ -654,11 +654,11 @@ class DBSReaderModel(RESTModel):
 
         if lumi_list:
             lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
-            
+
         detail = detail in (True, 1, "True", "1", 'true')
         output_module_label = output_module_label.replace("*", "%")
         try:
-            return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name, 
+            return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name,
                                         output_module_label, maxrun, minrun, origin_site_name, lumi_list, detail)
 
         except dbsException as de:
@@ -712,7 +712,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listDatasetParents. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-   
+
     @inputChecks(dataset=str)
     def listDatasetChildren(self, dataset):
         """
@@ -732,10 +732,10 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listDatasetChildren. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-  
+
     @inputChecks(dataset=str, logical_file_name=str, release_version=str, pset_hash=str, app_name=str,\
                  output_module_label=str, block_id=(int,str), global_tag=str)
-    def listOutputConfigs(self, dataset="", logical_file_name="", 
+    def listOutputConfigs(self, dataset="", logical_file_name="",
                           release_version="", pset_hash="", app_name="",
                           output_module_label="", block_id=0, global_tag=''):
         """
@@ -769,7 +769,7 @@ class DBSReaderModel(RESTModel):
         app_name = app_name.replace("*", "%")
         output_module_label = output_module_label.replace("*", "%")
         try:
-            return self.dbsOutputConfig.listOutputConfigs(dataset, 
+            return self.dbsOutputConfig.listOutputConfigs(dataset,
                 logical_file_name, release_version, pset_hash, app_name,
                 output_module_label, block_id, global_tag)
         except dbsException as de:
@@ -778,7 +778,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listOutputConfigs. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-   
+
     @inputChecks(logical_file_name=str, block_id=(int,str), block_name=str)
     def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
         """
@@ -823,7 +823,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listFileChildren. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    
+
     @inputChecks(logical_file_name=str, block_name=str, run_num=(long,int,str))
     def listFileLumis(self, logical_file_name="", block_name="", run_num='0'):
         """
@@ -876,7 +876,7 @@ class DBSReaderModel(RESTModel):
         try:
             if(logical_file_name):
                 logical_file_name = logical_file_name.replace("*", "%")
-                #print ("LFN=%s\n" %logical_file_name) 
+                #print ("LFN=%s\n" %logical_file_name)
             if(block_name):
                 block_name = block_name.replace("*", "%")
                 #print("Block=%s\n" %block_name)
@@ -911,7 +911,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listDataTypes. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    
+
     @inputChecks(block_name=str)
     def dumpBlock(self, block_name):
         """
@@ -1017,7 +1017,7 @@ self.logger.exception, sError)
             sError = "DBSReaderModel/listReleaseVersions. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    
+
     @inputChecks(dataset_access_type=str)
     def listDatasetAccessTypes(self, dataset_access_type=''):
         """

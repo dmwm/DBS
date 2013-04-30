@@ -20,7 +20,7 @@ class ListChild(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """
-SELECT CF.LOGICAL_FILE_NAME child_logical_file_name, 
+SELECT CF.LOGICAL_FILE_NAME child_logical_file_name,
        CF.FILE_ID child_file_id,
        F.LOGICAL_FILE_NAME
 FROM %sFILES CF
@@ -33,15 +33,15 @@ JOIN %sFILES F ON  F.FILE_ID = FP.PARENT_FILE_ID
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileParent/ListChild. Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileParent/ListChild. Expects db connection from upper layer.")
 
         sql = self.sql
         binds = {}
         bindlist=[]
-        if type(file_logical_names) is str:
+        if isinstance(logical_file_names, str):
             sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_names"
-            binds = {"logical_file_name":logical_file_names}
-        elif type(file_logical_names) is list:
+            binds = {"logical_file_names":logical_file_names}
+        elif isinstance(logical_file_names, list):
             sql += "WHERE F.LOGICAL_FILE_NAME in :logical_file_names"
             for f in logical_file_names:
                 binds = {"logical_file_names": f}

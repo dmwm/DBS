@@ -20,8 +20,8 @@ class UpdateStatus(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        
-    def execute ( self, conn, logical_file_names, is_file_valid, transaction=False ):
+
+    def execute ( self, conn, logical_file_names, is_file_valid, lost, transaction=False ):
         """
         for a given file or a list of files
         """
@@ -34,7 +34,7 @@ class UpdateStatus(DBFormatter):
         if lost == 1:
             self.sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid and file_size=0 where LOGICAL_FILE_NAME %s :logical_file_names""" %(self.owner,op)
         else:
-            sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid where LOGICAL_FILE_NAME %s :logical_file_names""" %  (self.owner, op)
+            self.sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid where LOGICAL_FILE_NAME %s :logical_file_names""" %  (self.owner, op)
         if op =='=':
             binds = {"is_file_valid" : is_file_valid, "logical_file_names": logical_file_names }
         else:
@@ -45,4 +45,3 @@ class UpdateStatus(DBFormatter):
             binds=bindlist
 
         result = self.dbi.processData(self.sql, binds, conn, transaction)
-    
