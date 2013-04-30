@@ -16,7 +16,7 @@ from cherrypy import request, response, HTTPError
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
 from WMCore.WebTools.FrontEndAuth import FrontEndAuth
 
-config = os.environ["DBS_TEST_CONFIG"] 
+config = os.environ["DBS_TEST_CONFIG"]
 service = os.environ.get("DBS_TEST_SERVICE","DBSWriter")
 api = DBSRestApi(config, service)
 uid = uuid.uuid4().time_mid
@@ -25,21 +25,21 @@ acquisition_era_name="acq_era_%s" %uid
 processing_version="%s" %(uid if (uid<9999) else uid%9999)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
-childprocdataset = '%s-unittest_web_child_dataset-v%s' % (acquisition_era_name, processing_version) 
+childprocdataset = '%s-unittest_web_child_dataset-v%s' % (acquisition_era_name, processing_version)
 tier = 'GEN-SIM-RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
 child_dataset="/%s/%s/%s" % (primary_ds_name, childprocdataset, tier)
 app_name='cmsRun'
 output_module_label='Merged-%s' %uid
 global_tag='my_tag-%s'%uid
-pset_hash='76e303993a1c2f842159dbfeeed9a0dd' 
+pset_hash='76e303993a1c2f842159dbfeeed9a0dd'
 release_version='CMSSW_1_2_%s' % uid
 site="cmssrm-%s.fnal.gov" %uid
 block="%s#%s" % (dataset, uid)
 child_block="%s#%s" % (child_dataset, uid)
 run_num=uid
 flist=[]
-primary_ds_type='TEST'
+primary_ds_type='test'
 prep_id = 'MC_12344'
 child_prep_id = 'MC_3455'
 
@@ -82,7 +82,7 @@ class checkException(object):
                     test_class.fail("Exception was expected and was not raised")
             else:
                 test_class.fail("Exception was expected and was not raised")
-                
+
             return out
         return wrapper
 
@@ -98,7 +98,7 @@ class DBSWriterModel_t(unittest.TestCase):
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':primary_ds_type}
         api.insert('primarydatasets', data)
-        
+
     @checkException("Primary dataset Name is required for insertPrimaryDataset")
     def test01c(self):
 	"""test01c: web.DBSWriterModel.insertPrimaryDataset: missing primary_ds_name, must throw exception\n"""
@@ -108,29 +108,29 @@ class DBSWriterModel_t(unittest.TestCase):
 
     def test02a(self):
 	"""test 02a: web.DBSWriterModel.insertOutputModule: basic test"""
-	data = {'release_version': release_version, 'pset_hash': pset_hash, 
+	data = {'release_version': release_version, 'pset_hash': pset_hash,
 	'app_name': app_name, 'output_module_label': output_module_label, 'global_tag':global_tag}
 	api.insert('outputconfigs', data)
 
     def test02b(self):
         """test02b: web.DBSWriterModel.insertOutputModule: re-insertion should not raise any errors"""
-        data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+        data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                 'output_module_label': output_module_label, 'global_tag':global_tag}
         api.insert('outputconfigs', data)
 
     @checkException("app_name")
     def test02c(self):
 	"""test02c: web.DBSWriterModel.insertOutputModule: missing parameter must cause an exception"""
-	data = {'pset_hash': pset_hash, 
+	data = {'pset_hash': pset_hash,
         'output_module_label': output_module_label,
 	'release_version': release_version}
- 	
+
         api.insert('outputconfigs', data)
 
     @checkException("pset_hash")
     def test02d(self):
 	"""test02d: web.DBSWriterModel.insertOutputModule: missing parameter must cause an exception"""
-	data = {'app_name': app_name, 
+	data = {'app_name': app_name,
 	'output_module_label': output_module_label,
 	'release_version': release_version}
 
@@ -139,8 +139,8 @@ class DBSWriterModel_t(unittest.TestCase):
     @checkException("output_module_label")
     def test02e(self):
 	"""test02e: web.DBSWriterModel.insertOutputModule: missing parameter must cause an exception"""
-	data = {'pset_hash': pset_hash, 
-                'app_name': app_name, 
+	data = {'pset_hash': pset_hash,
+                'app_name': app_name,
                 'release_version': release_version}
 
         api.insert('outputconfigs', data)
@@ -154,7 +154,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 }
 
         api.insert('outputconfigs', data)
- 	
+
     def test03a(self):
 	"""test03a: web.DBSWriterModel.insertAcquisitionEra: Basic test """
 	data={'acquisition_era_name': acquisition_era_name}
@@ -172,7 +172,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	data={}
 
         api.insert('acquisitioneras', data)
-            
+
     def test04a(self):
 	"""test04a: web.DBSWriterModel.insertProcessingEra: Basic test """
 	data={'processing_version': processing_version, 'description':'this-is-a-test'}
@@ -189,14 +189,14 @@ class DBSWriterModel_t(unittest.TestCase):
 	data={'description':'this-is-a-test'}
 
         api.insert('processingeras', data)
-        
+
     def test05a(self):
 	"""test05a: web.DBSWriterModel.insertDataset(Dataset is construct by DBSDatset.): basic test"""
 	data = {
 		'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
@@ -209,7 +209,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		'physics_group_name': 'Tracker', 'dataset': child_dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': childprocdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
@@ -217,21 +217,21 @@ class DBSWriterModel_t(unittest.TestCase):
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
 		}
 	api.insert('datasets', childdata)
-	
+
     def test05b(self):
 	"""test05b: web.DBSWriterModel.insertDataset: duplicate insert should be ignored"""
 	data = {
                 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
                 'prep_id':prep_id,
 		'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name
 		}
-	
+
 	api.insert('datasets', data)
 
     @checkException("primary_ds_name")
@@ -241,7 +241,7 @@ class DBSWriterModel_t(unittest.TestCase):
 		'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
@@ -258,7 +258,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
@@ -275,7 +275,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'physics_group_name': 'Tracker',
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
@@ -292,7 +292,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
@@ -309,7 +309,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'physics_group_name': 'Tracker', 'dataset': dataset,
 	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
 		'output_configs': [
-		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+		    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 		    'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
 		'xtcrosssection': 123, 'primary_ds_type': 'test',
@@ -329,14 +329,14 @@ class DBSWriterModel_t(unittest.TestCase):
 		'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
                 'prep_id':prep_id
 		}
-        
+
 	api.insert('datasets', data)
 
     def test06a(self):
 	"""test06a: web.DBSWriterModel.insertBlock: basic test"""
 	data = {'block_name': block,
 		'origin_site_name': site }
-		
+
 	api.insert('blocks', data)
 	# insert the child block as well
 	data = {'block_name': child_block, 'origin_site_name': site }
@@ -346,7 +346,7 @@ class DBSWriterModel_t(unittest.TestCase):
 	"""test06b: web.DBSWriterModel.insertBlock: duplicate insert should not raise exception"""
 	data = {'block_name': block,
 		'origin_site_name': site }
-		
+
 	api.insert('blocks', data)
 
     @checkException("block_name")
@@ -362,21 +362,21 @@ class DBSWriterModel_t(unittest.TestCase):
 	data = {'block_name': block}
 
         api.insert('blocks', data)
-        
+
     def test07a(self):
 	"""test07a: web.DBSWriterModel.insertFiles: basic test"""
 	data={}
 	flist=[]
  	for i in range(10):
-	    f={  
+	    f={
 		'adler32': '', 'file_type': 'EDM',
-                'file_output_config_list': 
-		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                'file_output_config_list':
+		    [
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 			'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': uid},
@@ -392,21 +392,21 @@ class DBSWriterModel_t(unittest.TestCase):
 	    flist.append(f)
 	data={"files":flist}
 	api.insert('files', data)
-	
+
     def test07b(self):
 	"""test07b: web.DBSWriterModel.insertFiles: duplicate insert file shuld not raise any errors"""
 	data={}
 	flist=[]
  	for i in range(10):
-	    f={  
+	    f={
 		'adler32': '', 'file_type': 'EDM',
-                'file_output_config_list': 
-		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                'file_output_config_list':
+		    [
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 			'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
@@ -463,15 +463,15 @@ class DBSWriterModel_t(unittest.TestCase):
 	data={}
 	flist=[]
  	for i in range(10):
-	    f={  
+	    f={
 		'adler32': '', 'file_type': 'EDM',
-                'file_output_config_list': 
-		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                'file_output_config_list':
+		    [
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 			'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
@@ -494,15 +494,15 @@ class DBSWriterModel_t(unittest.TestCase):
 	data={}
 	flist=[]
  	for i in range(10):
-	    f={  
+	    f={
 		'adler32': '', 'file_type': 'EDM',
-                'file_output_config_list': 
-		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                'file_output_config_list':
+		    [
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 			'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
@@ -525,14 +525,14 @@ class DBSWriterModel_t(unittest.TestCase):
 	data={}
 	flist=[]
  	for i in range(10):
-	    f={  
+	    f={
 		'adler32': '', 'file_type': 'EDM',
-                'file_output_config_list': 
-		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                'file_output_config_list':
+		    [
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
 			'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
-                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
@@ -549,13 +549,13 @@ class DBSWriterModel_t(unittest.TestCase):
         data={"files":flist}
 
         api.insert('files', data)
-        
+
     def test07g(self):
 	"""test07g: web.DBSWriterModel.insertFiles: minimal set of parameter  should not raise an exception"""
 	data={}
 	flist=[]
  	for i in range(10):
-	    f={  
+	    f={
                 'dataset': dataset,
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
                 'block_name': block,
@@ -565,7 +565,7 @@ class DBSWriterModel_t(unittest.TestCase):
         data={"files":flist}
 
         api.insert('files', data)
-        
+
     def test08a(self):
         """test08a: testweb.DBSWriterModel.insertDataTier: Basic test"""
         data = {'data_tier_name':tier}
@@ -593,16 +593,16 @@ class DBSWriterModel_t(unittest.TestCase):
         """test09c: web.DBSWriterModel.updateDatasetType: Basic test """
 
         api.update('datasets',dataset_access_type="DEPRECATED")
-        
+
     def test10a(self):
 	"""test10a: web.DBSWriterModel.updateFileStatus: Basic test """
 	lfn = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" %(uid, 1)
-	api.update('files', logical_file_name=lfn, is_file_valid=0)
+	api.update('files', logical_file_names=lfn, is_file_valid=0)
 
     def test11a(self):
         """test11a: web.DBSWriterModel.updateBlock: Basic test"""
         api.update('blocks', block_name=block, open_for_writing=0)
-    
+
     @checkException("block_name")
     def test11b(self):
         """test11b: web.DBSWriterModel.updateBlock: missing data should raise exception"""
@@ -628,7 +628,7 @@ class DBSWriterModel_t(unittest.TestCase):
         primary_dict = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':primary_ds_type}
 
-        output_module_dict = {'release_version': release_version, 'pset_hash': pset_hash, 
+        output_module_dict = {'release_version': release_version, 'pset_hash': pset_hash,
                               'app_name': app_name, 'output_module_label': output_module_label,
                               'global_tag':global_tag}
 
@@ -636,10 +636,10 @@ class DBSWriterModel_t(unittest.TestCase):
                             'output_module_label': output_module_label, 'global_tag': global_tag}
         fileList=[]
  	for i in range(10):
-	    f={  
+	    f={
 		'adler32': '', 'file_type': 'EDM',
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0, 
+                'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
@@ -651,7 +651,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
               }
 	    fileList.append(f)
-        
+
         data = {'file_conf_list' : [file_output_dict],
                 'dataset_conf_list' : [output_module_dict],
                 'block_parent_list' : [],
@@ -663,21 +663,21 @@ class DBSWriterModel_t(unittest.TestCase):
                 'ds_parent_list' : [],
                 'block' : block_dict,
                 'file_parent_list' : []}
-        
+
         api.insert('bulkblocks', data)
-         
+
     def test12b(self):
         """test12b: web.DBSWriterModel.insertBulkBlock: basic test"""
         uniq_id = int(time.time())
 
         bulk_primary_ds_name = 'unittest_web_primary_ds_name_%s' % (uniq_id)
         bulk_procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
-        
+
         bulk_dataset = '/%s/%s/%s' % (bulk_primary_ds_name,
                                       bulk_procdataset,
                                       tier)
         bulk_block="%s#%s" % (dataset, uniq_id)
-        
+
         dataset_dict = {u'dataset': bulk_dataset,
                         u'physics_group_name': 'Tracker',
                         u'dataset_access_type': 'PRODUCTION', u'processed_ds_name': bulk_procdataset,
@@ -695,16 +695,16 @@ class DBSWriterModel_t(unittest.TestCase):
         primary_dict = {u'primary_ds_name':bulk_primary_ds_name,
                         u'primary_ds_type':primary_ds_type}
 
-        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash, 
+        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
                               u'app_name': app_name, u'output_module_label': output_module_label,
                               u'global_tag':global_tag}
-        
+
         fileList = []
         fileConfigList = []
  	for i in range(10):
-	    f={  
+	    f={
 		u'adler32': 'NOTSET', u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0, 
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
                 u'check_sum': '1504266448',
                 u'file_lumi_list': [
 	                              {u'lumi_section_num': '27414', u'run_num': '1'},
@@ -715,11 +715,11 @@ class DBSWriterModel_t(unittest.TestCase):
                 u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
               }
 	    fileList.append(f)
-            
+
             file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
                                 u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
             fileConfigList.append(file_output_dict)
-        
+
         data = {'file_conf_list' : fileConfigList,
                 'dataset_conf_list' : [output_module_dict],
                 'processing_era' : processing_dict,
@@ -729,7 +729,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'acquisition_era' : acquisition_dict,
                 'block' : block_dict,
                 }
-        
+
         api.insert('bulkblocks', data)
 
     def test999(self):
