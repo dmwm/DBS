@@ -25,7 +25,7 @@ dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
 app_name='cmsRun%s' %uid
 output_module_label='Merged'
 global_tag='dbs-client-validation-%s' %uid
-pset_hash='76e303993a1c2f842159dbfeeed9a0dd%s' %uid 
+pset_hash='76e303993a1c2f842159dbfeeed9a0dd%s' %uid
 release_version='CMSSW_1_2_3%s' %uid
 site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
@@ -40,7 +40,7 @@ class DBSValitaion_t(unittest.TestCase):
         """test01: web.DBSClientWriter.PrimaryDataset: validation test"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'test'}
-        #print "data=%s" %data        
+        #print "data=%s" %data
         api.insertPrimaryDataset(primaryDSObj=data)
 	primaryList = api.listPrimaryDatasets(primary_ds_name=primary_ds_name)
 	self.assertEqual(len(primaryList), 1)
@@ -50,7 +50,7 @@ class DBSValitaion_t(unittest.TestCase):
 
     def test02(self):
 	"""test02: web.DBSClientWriter.OutputModule: validation test"""
-	data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+	data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
             'output_module_label': output_module_label, 'global_tag':global_tag}
 	api.insertOutputConfig(outputConfigObj=data)
 	confList=api.listOutputConfigs(release_version=release_version, pset_hash=pset_hash, \
@@ -73,7 +73,7 @@ class DBSValitaion_t(unittest.TestCase):
 	"""test04: web.DBSWriterModel.insertProcessingEra: Basic test """
         data={'processing_version': processing_version, 'description':'this_is_a_test'}
 	api.insertProcessingEra(data)
-           
+
     def test05(self):
 	"""test05: web.DBSClientWriter.Dataset: validation test"""
 	data = {
@@ -129,7 +129,7 @@ class DBSValitaion_t(unittest.TestCase):
 	"""test06 web.DBSClientWriter.Block: validation test"""
 	data = {'block_name': block,
 		'origin_site_name': site }
-		
+
 	api.insertBlock(blockObj=data)
 	blkList = api.listBlocks(block_name=block, detail=True)
 	self.assertEqual(len(blkList), 1)
@@ -173,10 +173,10 @@ class DBSValitaion_t(unittest.TestCase):
 	#parent files
 	pflist=[]
  	for i in range(10):
-	    f={  
+	    f={
 		'adler32': u'NOTSET', 'file_type': 'EDM',
                 'dataset': dataset_parent,
-                'file_size': u'201221191', 'auto_cross_section': 0.0, 
+                'file_size': u'201221191', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" %(uid, i),
@@ -191,15 +191,15 @@ class DBSValitaion_t(unittest.TestCase):
 	api.insertFiles(filesList={"files":pflist}, qInserts=False)
 	#### This next block of test will now actually insert the files in the "test 'block' in this module, using the upper files as parent
  	for i in range(10):
-	    f={  
+	    f={
 		'adler32': u'NOTSET', 'file_type': 'EDM',
-                'file_output_config_list': 
-		    [ 
-			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, 
+                'file_output_config_list':
+		    [
+			{'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                         'output_module_label': output_module_label, 'global_tag': global_tag},
 		    ],
                 'dataset': dataset,
-                'file_size': u'201221191', 'auto_cross_section': 0.0, 
+                'file_size': u'201221191', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
 	                              {'lumi_section_num': u'27414', 'run_num': u'1'},
@@ -215,7 +215,7 @@ class DBSValitaion_t(unittest.TestCase):
 	    flist.append(f)
 
         api.insertFiles(filesList={"files":flist}, qInserts=False)
-        
+
 	### Lets begin the validation now
 	# our block, 'block' now has these 10 files, and that is basis of our validation
 	flList=api.listFiles(block_name=block, detail=True)
@@ -251,19 +251,19 @@ class DBSValitaion_t(unittest.TestCase):
 	"""update file status and validate that it got updated"""
 	logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 0)
 	#print "WARNING : DBS cannot list INVALID file, so for now this test is commented out"
-	api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
+	api.updateFileStatus(logical_file_names=logical_file_name, is_file_valid=0)
 	#listfile
 	filesInDBS=api.listFiles(logical_file_name=logical_file_name, detail=True)
 	self.assertEqual(len(filesInDBS) ,1)
 	self.assertEqual(filesInDBS[0]['is_file_valid'], 0)
-	
+
     def test09(self):
 	"""test09 web.DBSClientWriter.updateDatasetStatus: should be able to update dataset status and validate it"""
 	#api.updateDatasetStatus(dataset=dataset, is_dataset_valid=1)
 	dsInDBS=api.listDatasets(dataset=dataset,  dataset_access_type="PRODUCTION", detail=True)
 	self.assertEqual(len(dsInDBS), 1)
 	#self.assertEqual(dsInDBS[0]['is_dataset_valid'], 1)
-	
+
     def test10(self):
 	"""test10 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
         api.updateDatasetType(dataset=dataset, dataset_access_type="VALID")

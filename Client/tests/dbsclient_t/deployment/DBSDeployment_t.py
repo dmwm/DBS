@@ -28,7 +28,7 @@ def stripChangingParameters(data):
 class PrepareDeploymentsTests(unittest.TestCase):
     def __init__(self, methodName='runTest'):
         super(PrepareDeploymentsTests, self).__init__(methodName)
-        self.url=os.environ['DBS_WRITER_URL']       
+        self.url=os.environ['DBS_WRITER_URL']
         self.api = DbsApi(url=self.url)
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -42,18 +42,18 @@ class PrepareDeploymentsTests(unittest.TestCase):
         data = json.load(fp)
 
         fp.close()
-        
+
         self.api.insertPrimaryDataset(data)
-        
+
     def test_02_insert_output_config(self):
         fp = file(os.path.join(self.base_dir,"OutputConfigs.json"),'r')
 
         data = json.load(fp)
 
         fp.close()
-        
+
         self.api.insertOutputConfig(data)
-        
+
     def test_03_insert_acquisition_era(self):
         fp = file(os.path.join(self.base_dir,"Acquisitioneras.json"),'r')
 
@@ -78,7 +78,7 @@ class PrepareDeploymentsTests(unittest.TestCase):
         data = json.load(fp)
 
         fp.close()
-        
+
         self.api.insertDataTier(data)
 
     def test_06_insert_dataset(self):
@@ -87,7 +87,7 @@ class PrepareDeploymentsTests(unittest.TestCase):
         data = json.load(fp)
 
         fp.close()
-        
+
         self.api.insertDataset(data)
 
     def test_07_insert_child_dataset(self):
@@ -96,7 +96,7 @@ class PrepareDeploymentsTests(unittest.TestCase):
         data = json.load(fp)
 
         fp.close()
-        
+
         self.api.insertDataset(data)
 
     def test_08_insert_block(self):
@@ -129,7 +129,7 @@ class PrepareDeploymentsTests(unittest.TestCase):
         ##spit data into chunks of 10 files, because DBS3 has a limitation of injecting max. 10 files in a chunk
 
         fileList = data['files']
-        
+
         fileList = [fileList[i:i+10] for i  in range(0, len(fileList), 10)]
 
         for entry in fileList:
@@ -145,7 +145,7 @@ class PrepareDeploymentsTests(unittest.TestCase):
         ##spit data into chunks of 10 files, because DBS3 has a limitation of injecting max. 10 files in a chunk
 
         fileList = data['files']
-        
+
         fileList = [fileList[i:i+10] for i  in range(0, len(fileList), 10)]
 
         for entry in fileList:
@@ -168,7 +168,7 @@ class PostDeploymentTests(unittest.TestCase):
             self.url=os.environ['DBS_READER_URL']
         else:
             self.url=os.environ['DBS_WRITER_URL']
-            
+
         self.api = DbsApi(url=self.url)
 
     def get_rest_model(self):
@@ -200,7 +200,7 @@ class PostDeploymentTests(unittest.TestCase):
 
     def test_list_block_children(self):
         expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
-        
+
         blockchildren = sorted(self.api.listBlockChildren(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["block_name"])
 
         self.assertEqual(expected_data,blockchildren)
@@ -213,16 +213,16 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
 
     def test_list_block_parents(self):
         expected_data = [{u'parent_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81', u'this_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
-        
+
         blockparents = self.api.listBlockParents(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81")
 
         self.assertEqual(expected_data,blockparents)
-        
+
         try:
             self.api.listBlockParents()
         except dbsClientException:
@@ -231,13 +231,13 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
 
     def test_list_blocks(self):
         fp = file(os.path.join(self.base_dir,"BlockList.json"),'r')
         expected_data = stripChangingParameters(sorted(json.load(fp), key=lambda k: k["block_name"]))
-        
+
         blocks = sorted(self.api.listBlocks(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW"), key=lambda k: k["block_name"])
 
         self.assertEqual(expected_data,blocks)
@@ -245,14 +245,14 @@ class PostDeploymentTests(unittest.TestCase):
         fp.close()
 
         expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
-        
+
         blocks = self.api.listBlocks(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
 
         self.assertEqual(expected_data,blocks)
 
         blocks = self.api.listBlocks(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
 
-        self.assertEqual(expected_data,blocks)        
+        self.assertEqual(expected_data,blocks)
 
         try:
             self.api.listBlocks()
@@ -262,7 +262,7 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
 
     def test_list_datasets(self):
@@ -301,7 +301,7 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file(os.path.join(self.base_dir,"DatasetAccessTypes.json"),'r')
         expected_data = json.load(fp)
         expected_data[0]["dataset_access_type"].sort()
-        
+
         datasetaccesstypes = self.api.listDatasetAccessTypes()
         datasetaccesstypes[0]["dataset_access_type"].sort()
 
@@ -311,7 +311,7 @@ class PostDeploymentTests(unittest.TestCase):
 
     def test_list_dataset_children(self):
         expected_data = [{u'child_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO', u'dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW'}]
-        
+
         children = stripChangingParameters(self.api.listDatasetChildren(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW"))
 
         self.assertEqual(expected_data,children)
@@ -324,12 +324,12 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
 
     def test_list_dataset_parents(self):
         expected_data = [{u'this_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO', u'parent_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW'}]
-        
+
         parents = stripChangingParameters(self.api.listDatasetParents(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO"))
 
         self.assertEqual(expected_data,parents)
@@ -342,9 +342,9 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
-                    
+
     def test_list_datatiers(self):
         fp = file(os.path.join(self.base_dir,"DataTiers.json"),'r')
         expected_data = [json.load(fp)]
@@ -373,7 +373,7 @@ class PostDeploymentTests(unittest.TestCase):
         expected_data = [json.load(fp)]
 
         datatypes = self.api.listDataTypes(datatype="mc")
-        
+
         self.assertEqual(expected_data,stripChangingParameters(datatypes))
 
         fp.close()
@@ -385,14 +385,14 @@ class PostDeploymentTests(unittest.TestCase):
         if len(datatypes)!=0:
             result.append(datatypes[0].has_key("primary_ds_type_id"))
             result.append(datatypes[0].has_key("data_type"))
-        
+
         self.assertTrue(len(datatypes)!=0)
         self.assertFalse(False in result)
 
     def test_list_file_children(self):
         expected_data = [{u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'], u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
-        
-        children = self.api.listFileChildren(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
+
+        children = self.api.listFileChildren(logical_file_names="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
 
         self.assertEqual(expected_data,children)
 
@@ -404,7 +404,7 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
 
     def test_list_file_lumis(self):
@@ -431,13 +431,13 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
 
     def test_list_file_parents(self):
         fp = file(os.path.join(self.base_dir,"FileParents.json"),'r')
         expected_data = sorted(json.load(fp), key=lambda k: k["parent_logical_file_name"])
-        
+
         parents = sorted(self.api.listFileParents(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["parent_logical_file_name"])
 
         self.assertEqual(expected_data,parents)
@@ -445,9 +445,9 @@ class PostDeploymentTests(unittest.TestCase):
         fp.close()
 
         expected_data = [{u'parent_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'], u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
-        
+
         parents = self.api.listFileParents(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root")
-        
+
         self.assertEqual(expected_data,parents)
 
         try:
@@ -458,15 +458,14 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
 
     def test_list_files(self):
         fp = file(os.path.join(self.base_dir,"ListFiles.json"),'r')
         expected_data = json.load(fp)
-        
+
         files = self.api.listFiles(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
-        
 
         self.assertEqual(expected_data,stripChangingParameters(files))
 
@@ -475,7 +474,7 @@ class PostDeploymentTests(unittest.TestCase):
         self.assertEqual(expected_data,stripChangingParameters(files))
 
         files = self.api.listFiles(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",detail="True")
-        
+
         self.assertEqual(expected_data,stripChangingParameters(files))
 
         fp.close()
@@ -488,18 +487,18 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
 
     def test_list_file_summaries(self):
         expected_data = [{u'num_block': 1, u'num_file': 10, u'num_event': 553964, u'num_lumi': 30, u'file_size': 25350778463}]
-        
+
         summaries = self.api.listFileSummaries(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
 
         self.assertEqual(expected_data,summaries)
 
         expected_data = [{u'num_block': 1, u'num_file': 10, u'num_event': 553964, u'num_lumi': 30, u'file_size': 25350778463}]
-        
+
         self.api.listFileSummaries(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW")
 
         self.assertEqual(expected_data,summaries)
@@ -512,26 +511,26 @@ class PostDeploymentTests(unittest.TestCase):
             result = False
         else:
             result = False
-            
+
         self.assertTrue(result)
 
     def test_list_output_configs(self):
         fp = file(os.path.join(self.base_dir,"OutputConfigs.json"),'r')
         expected_data = [json.load(fp)]
-        
+
         configs = stripChangingParameters(self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root",app_name="cmsRun"))
         self.assertEqual(expected_data,configs)
 
         configs = stripChangingParameters(self.api.listOutputConfigs(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW",logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"))
         self.assertEqual(expected_data,configs)
-        
+
         configs = stripChangingParameters(self.api.listOutputConfigs(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"))
         self.assertEqual(expected_data,configs)
 
         fp.close()
 
     def test_list_physics_groups(self):
-        
+
         self.api.listPhysicsGroups()
 
         groups = self.api.listPhysicsGroups(physics_group_name="Top")
@@ -551,7 +550,7 @@ class PostDeploymentTests(unittest.TestCase):
     def test_list_processing_eras(self):
         fp = file(os.path.join(self.base_dir,"ProcessingEras.json"),'r')
         expected_data = [json.load(fp)]
-        
+
         eras = stripChangingParameters(self.api.listProcessingEras(processing_version="4711"))
 
         self.assertEqual(expected_data,eras)
@@ -561,7 +560,7 @@ class PostDeploymentTests(unittest.TestCase):
     def test_list_release_versions(self):
         fp = file(os.path.join(self.base_dir,"ReleaseVersions.json"),'r')
         expected_data = json.load(fp)
-        
+
         versions = self.api.listReleaseVersions(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW")
 
         self.assertEqual(expected_data,versions)
@@ -576,9 +575,9 @@ class PostDeploymentTests(unittest.TestCase):
     def test_list_runs(self):
         fp = file(os.path.join(self.base_dir,"RunList.json"),'r')
         expected_data = json.load(fp)
-        
+
         runs = self.api.listRuns(minrun=43,maxrun=43)
-        
+
         self.assertEqual(expected_data,runs)
 
         fp.close()
@@ -602,7 +601,7 @@ if __name__ == "__main__":
 
     message =  "Usage:   python DBSDeployment_t.py insert=True \n\
                 or python DBSDeployment_t.py insert=False "
-    
+
     args = sys.argv
     if len(args) == 1:
         print message
@@ -611,16 +610,16 @@ if __name__ == "__main__":
         print message
         sys.exit()
     else:
-        if args[1] not in ['insert=True', 'insert=False']: 
+        if args[1] not in ['insert=True', 'insert=False']:
             print message
             sys.exit()
-        
-    
+
+
     RESTModel = ('DBSReader','DBSWriter')
 
     TestSuite = unittest.TestSuite()
 
-    if args[1] == 'insert=True': 
+    if args[1] == 'insert=True':
         prepareTests = unittest.TestLoader().loadTestsFromTestCase(PrepareDeploymentsTests)
         TestSuite.addTests(prepareTests)
     else:
@@ -632,5 +631,5 @@ if __name__ == "__main__":
             test.RESTModel = model
 
         TestSuite.addTests(loadedTests)
-        
+
     unittest.TextTestRunner(verbosity=2).run(TestSuite)
