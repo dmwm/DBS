@@ -1,64 +1,68 @@
 #!/usr/bin/env python
 """
-_DBS3InvalidateFiles_ 
+_DBS3InvalidateFiles_
 
 Command line tool to invalidate files.
 
 Give the file list, block name, the new status and DBS Instance url (writer), it will
 set the new status.
 """
+from optparse import OptionParser
+import logging
+import os
 import sys
+
 from dbs.apis.dbsClient import DbsApi
 from dbs.exceptions.dbsClientException import dbsClientException
 
-def isFileValid(dbsApi, files=[], blocks=[], fstatus=0):
-    #Return dictionary that has a list of invalid files' LFNs and a list of valida files' LFN.
+def isFileValid(files=[], blocks=[], fstatus=0):
+    #Return dictionary that has a list of invalid files' LFNs and a list of valid files' LFN.
     invalidfilelst = []
     validfilelst = []
-    if files:
-        for f in files:
-            rslt = dbsApi.listFiles(logical_file_name=f, details=1)
-            if rslt[0].is_file_valid == fstatus :
-                invalidfilelst.append(f)
-            else:
-                validfilelst.append(f)
-    #
+
+    for f in files:
+        rslt = dbsApi.listFiles(logical_file_name=f, detail=True)
+        if rslt[0]['is_file_valid'] == fstatus :
+            invalidfilelst.append(f)
+        else:
+            validfilelst.append(f)
+
     for block in blocks:
-        rslt = dbsApi.listFiles(block_name=block, details=1)
+        rslt = dbsApi.listFiles(block_name=block, detail=True)
         for r in rslt:
             if r.is_file_valid == fstatus :
                 invalidfilelst.append(r.logical_file_name)
             else:
                 validfilelst.append(r.logical_file_name)
-    #
+
     return {'validfilelst':validfilelst, 'invalidfilelst':invalidfilelst}
 
-def listFileChildren(dbsApi, files=[]):
+def listFileChildren(files=[]):
     for cf in dbsApi.listFileChildren(logical_file_names=files):
-        print('Found children file %s' % (cf['child_logical_file_name']))
+        logging.debug('Found children file %s' % (cf['child_logical_file_name']))
         yield cf['child_logical_file_name']
 
-def listBlockChildren(dbsApi, block=None):
+def listBlockChildren(blocks=[]):
     for cb in dbsApi.listBlockChildren(block_name=block):
-        print('Found children block %s' % (cb['block_name']))
+        logging.debug('Found children block %s' % (cb['block_name']))
         yield cb['block_name']
 
-def isChildrenValid(dbsApi, files=[], blocks=[], pstatus=0):
+def isChildrenValid(files=[], blocks=[], pstatus=0):
     allfiles, child = list(), files
     allblocks, childb = list(), blocks
     while child:
         c = child.pop()
         allfiles.append(c)
-        child.extend(listFileChildren(dbsApi, files=files))
-    
+        child.extend(listFileChildren(files=c))
+
     while childb :
         b = childb.pop()
         allblocks.append(b)
-        childb.extend(listBlockchildren(dbsApi, b))
-    
-    return isFileValid(files=allfiles, block=allblocks, fstatus=pstatus)
+        childb.extend(listBlockchildren(b))
 
-def updateFileStatus(dbsApi, status, recursive, files=[], block=None):
+    return isFileValid(files=allfiles, blocks=allblocks, fstatus=pstatus)
+
+def updateFileStatus(status, recursive, files=[], blocks=[]):
     lost = 0
     if status == "invalid":
         fstatus = 0
@@ -67,58 +71,66 @@ def updateFileStatus(dbsApi, status, recursive, files=[], block=None):
     elif status == "lost":
         fstatus = 0
         lost = 1
-    else: 
-        print "invalid file status from user. DBS cannot set file status to be %s" %status
-        sys.exit(1)
-    try:
-        if recursive:
-            flst = isChildrenValid(dbsApi, files=files, blocks=[block],  pstatus=fstatus )
-        else:
-            flst = isFileValid(dbsApi, files=files, blocks=[block], status=fstatus)
-
-        if flst['validfilelst']:
-            dbsApi.updateFileStatus(logical_file_name=flst['validfilelst'], is_file_valid=fstatus, lost=lost)
-        if flst['invalidfilelst']:   
-            print "cannot %sate part of files that are %s. The files are %fst" %(status, status, flst['invalidfilelst'])
-            sys.exit(1)
-    except Exception, ex:
-        print "Caught exception %s:"%str(ex)
+    else:
+        logging.error("invalid file status from user. DBS cannot set file status to be %s" % status)
         sys.exit(1)
 
-def main ():
-    from optparse import OptionParser
-    import os
- 
-    usage="""\npython DBS3SetFileStatus <options> \nOptions: \n --url=<url> \t\t\t\t Required. dbs url \n --status=<valid/invalid/lost> \t\t Required.
-    status to set \n --recursive=<True/False> \t\t Required. valida/invalida down to chlidren \n --files=<file_list> \t\t\t file list to be re-validate. Use --files or --block \n --block=<block_name> \t\t\t re-validate all the files in block_name """
+    if recursive in ['True','true', '1', 'y', 'yes', 'yeah', 'yup', 'certainly']:
+        flst = isChildrenValid(files=files, blocks=blocks,  pstatus=fstatus )
+    else:
+        flst = isFileValid(files=files, blocks=blocks, fstatus=fstatus)
+
+    if flst['validfilelst']:
+        logging.debug('updateFileStatus: lfn:%s, is_file_valid:%s, lost:%s' % (flst['validfilelst'], fstatus, lost))
+        dbsApi.updateFileStatus(logical_file_names=flst['validfilelst'], is_file_valid=fstatus, lost=lost)
+    if flst['invalidfilelst']:
+        logging.error("cannot %s  part of files that are %s. The files are %s" % (status, status, flst['invalidfilelst']))
+        sys.exit(1)
+
+def main():
+    usage="%prog <options>"
 
     parser = OptionParser(usage=usage)
-    parser.add_option("-u", "--url", dest="url", help="DBS Instance url")
-    parser.add_option("-s", "--status", dest="status", help="file status to be set")
-    parser.add_option("-c", "--recursive", dest="recursive", help="True means in/validate will go down to chidren. False means only validate current files.")
-    parser.add_option("-f", "--files", dest="files", help="list of files to be validated/invalidated. use either --files or --block")
-    parser.add_option("-b", "--block", dest="block", help="block to validate/invalidate. use either --files or --block")
+    parser.add_option("-u", "--url", dest="url", help="DBS Instance url (Required)", metavar="<url>")
+    parser.add_option("-s", "--status", dest="status", help="File status to be set (Required)", metavar="<valid/invalid/lost>")
+    parser.add_option("-r", "--recursive", dest="recursive", help="True means (in)validate will go down to chidren. False means only validate given files. (Required)", metavar="<True/False>")
+    parser.add_option("-f", "--files", dest="files", help="List of files to be validated/invalidated. Can be either a file containg lfns or a comma separated list of lfn's. Use either --files or --block", metavar="<lfn1,..,lfnx or filename>")
+    parser.add_option("-b", "--block", dest="blocks", help="Block to validate/invalidate. use either --files or --block", metavar="<block_name>")
+    parser.add_option("-p", "--proxy", dest="proxy", help="Use Socks5 proxy to connect to server", metavar="socks5://127.0.0.1:1234")
+    parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="Increase verbosity")
+
+    #set default values
+    parser.set_defaults(files=[])
+    parser.set_defaults(blocks=[])
 
     (opts, args) = parser.parse_args()
     if not (opts.url and opts.status and opts.recursive and (opts.files or opts.block)):
-        print usage
-        sys.exit(1)
+        parser.print_help()
+        parser.error('Mandatory options are --block or --file, --status, --url and --recursive')
 
-    print opts
-    proxy=os.environ.get('SOCKS5_PROXY')
-    dbsApi = DbsApi(url=opts.url, proxy=proxy)
-    try:
-        if opts.files or opts.block:
-            if opts.files:
-                files=opts.files.split(",")
-            else: files = []
-            updateFileStatus(dbsApi, opts.status, opts.recursive, files=files, block=opts.block)
-    except Exception, ex:
-        print "Caught exception %s:"%str(ex)
-        sys.exit(1)
+    log_level = logging.DEBUG if opts.verbose else logging.INFO
+    logging.basicConfig(format='%(message)s', level=log_level)
+    
+    global dbsApi
+    dbsApi = DbsApi(url=opts.url, proxy=opts.proxy)
 
-    print "All done"
-    sys.exit(0)
+    if opts.files:
+        try:
+            with open(opts.files, 'r') as f:
+                files = [lfn for lfn in f]
+        except IOError:
+            files=opts.files.split(",")
+        finally:
+            blocks = []
+
+    elif opts.blocks:
+        blocks = opts.blocks.split(",")
+        files = []
+    #import pdb
+    #pdb.set_trace()
+    updateFileStatus(opts.status, opts.recursive, files=files, blocks=blocks)
+
+    logging.info("All done")
 
 if __name__ == "__main__":
   main()

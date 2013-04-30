@@ -20,6 +20,7 @@ def get_command_line_options():
     parser.add_option("-d", "--dataset", dest="dataset", help="Dataset to change status", metavar="/specify/dataset/path")
     parser.add_option("-s", "--status", dest="new_status", help="New status of the dataset", metavar="newStatus")
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="Increase verbosity")
+    parser.add_option("-p", "--proxy", dest="proxy", help="Use Socks5 proxy to connect to server", metavar="socks5://127.0.0.1:1234")
     (options, args) = parser.parse_args()
 
     if not (options.url and options.dataset and options.new_status and options.recursive):
@@ -54,22 +55,21 @@ if __name__ == "__main__":
 
     log_level = logging.DEBUG if options.verbose else logging.INFO
     logging.basicConfig(format='%(message)s', level=log_level)
-    proxy=os.environ.get('SOCKS5_PROXY')
-    api = DbsApi(url=options.url, proxy=proxy)
+
+    api = DbsApi(url=options.url, proxy=options.proxy)
+
+    new_status = options.new_status.upper()
 
     ###update file status
-    update_file_status(dataset=options.dataset, new_status=options.new_status)
+    update_file_status(dataset=options.dataset, new_status=new_status)
 
     ###update status of the dataset
-    update_dataset_type(dataset=options.dataset, new_status=options.new_status)
+    update_dataset_type(dataset=options.dataset, new_status=new_status)
 
     if options.recursive in ['True','true', '1', 'y', 'yes', 'yeah', 'yup', 'certainly']:
         ###update status of children datasets as well
         for child_dataset in list_dataset_children(options.dataset):
-            update_file_status(dataset=child_dataset, new_status=options.new_status)
-            update_dataset_type(dataset=child_dataset, new_status=options.new_status)
+            update_file_status(dataset=child_dataset, new_status=new_status)
+            update_dataset_type(dataset=child_dataset, new_status=new_status)
 
     logging.info("Done")
-
-
-
