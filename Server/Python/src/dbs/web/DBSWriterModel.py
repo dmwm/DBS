@@ -12,7 +12,7 @@ import cjson
 
 from cherrypy import request, tools, HTTPError
 from WMCore.DAOFactory import DAOFactory
-from dbs.utils.dbsUtils import dbsUtils 
+from dbs.utils.dbsUtils import dbsUtils
 from dbs.web.DBSReaderModel import DBSReaderModel
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
@@ -22,7 +22,7 @@ import traceback
 
 def authInsert(user, role, group, site):
     """
-    Authorization function for general insert  
+    Authorization function for general insert
     """
     if not role: return True
     for k, v in user['roles'].iteritems():
@@ -33,7 +33,7 @@ def authInsert(user, role, group, site):
 
 class DBSWriterModel(DBSReaderModel):
     """
-    DBS3 Server API Documentation 
+    DBS3 Server API Documentation
     """
     def __init__(self, config):
         """
@@ -49,12 +49,12 @@ class DBSWriterModel(DBSReaderModel):
             config.database.connectUrl = urls['writer']
 
         DBSReaderModel.__init__(self, config)
-        
+
         self.security_params = config.security.params
 
         self.sequenceManagerDAO = self.daofactory(classname="SequenceManager")
         self.dbsDataTierInsertDAO = self.daofactory(classname="DataTier.Insert")
-        
+
         self._addMethod('POST', 'primarydatasets', self.insertPrimaryDataset, secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'outputconfigs', self.insertOutputConfig,  secured=True,
@@ -63,7 +63,7 @@ class DBSWriterModel(DBSReaderModel):
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('PUT', 'acquisitioneras', self.updateAcqEraEndDate, args=['acquisition_era_name','end_date'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
-        self._addMethod('POST', 'processingeras', self.insertProcessingEra, secured=True, 
+        self._addMethod('POST', 'processingeras', self.insertProcessingEra, secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'datasets', self.insertDataset, secured=True,
                         security_params={'role':self.security_params, 'authzfunc':authInsert})
@@ -101,7 +101,7 @@ class DBSWriterModel(DBSReaderModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
-            raise he 
+            raise he
         except Exception, ex:
             sError = "DBSWriterModel/insertPrimaryDataset. %s\n Exception trace: \n %s" \
                         % (ex, traceback.format_exc())
@@ -241,7 +241,7 @@ class DBSWriterModel(DBSReaderModel):
                             "last_modification_date" : dbsUtils().getTime(),
                             "create_by" : dbsUtils().getCreateBy() ,
                             "last_modified_by" : dbsUtils().getCreateBy() })
-                
+
             # need proper validation
             self.dbsDataset.insertDataset(indata)
         except dbsException as de:
@@ -279,7 +279,7 @@ class DBSWriterModel(DBSReaderModel):
                 dbsExceptionHandler("dbsException-invalid-input2", "illegal variable name/number from input",  self.logger.exception, str(ex))
             else:
                 sError = "DBSWriterModel/insertBulkBlock. %s\n. Exception trace: \n %s" \
-                    % (ex, traceback.format_exc()) 
+                    % (ex, traceback.format_exc())
                 dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     def insertBlock(self):
@@ -294,7 +294,7 @@ class DBSWriterModel(DBSReaderModel):
         :key block_name: Block Name (Required)
         :key origin_site_name: Origin Site Name (Required)
 
-        """	
+        """
 	try:
 	    body = request.body.read()
 	    indata = cjson.decode(body)
@@ -306,7 +306,7 @@ class DBSWriterModel(DBSReaderModel):
             sError = "DBSWriterModel/insertBlock. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-        
+
     def insertFile(self, qInserts=False):
         """
         API to insert a list of file into DBS in DBS. Up to 10 files can be inserted in one request.
@@ -364,7 +364,7 @@ class DBSWriterModel(DBSReaderModel):
             sError = "DBSWriterModel/insertFile. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
- 
+
     @inputChecks(logical_file_names=(str,list), is_file_valid=(int, str), lost=(int, str, bool ))
     def updateFile(self, logical_file_names=[], is_file_valid=1, lost=0):
         """
@@ -378,13 +378,13 @@ class DBSWriterModel(DBSReaderModel):
         :type lost: bool
 
         """
-
         if lost in [1, True, 'True','true', '1', 'y', 'yes']:
-            lost = 1:
+            lost = 1
             if is_file_valid in [1, True, 'True','true', '1', 'y', 'yes']:
                 dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,\
                                     "Lost file must set to invalid" )
         else: lost = 0
+
         try:
             self.dbsFile.updateStatus(logical_file_names, is_file_valid, lost)
         except dbsException as de:
@@ -418,7 +418,7 @@ class DBSWriterModel(DBSReaderModel):
                 self.dbsDataset.updateType(dataset, dataset_access_type)
             else:
                 dbsExceptionHandler("dbsException-invalid-input", "DBSWriterModel/updateDataset. dataset_access_type is required.")
-                
+
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
@@ -473,6 +473,13 @@ class DBSWriterModel(DBSReaderModel):
                 dbsExceptionHandler("dbsException-invalid-input", "DBSWriterModel/insertDataTier. data_tier_name is required.")
 
             indata['data_tier_id'] = self.sequenceManagerDAO.increment(conn, "SEQ_DT", tran)
+
+            indata['data_tier_name'] = indata['data_tier_name'].upper()
+
+            self.dbsDataTierInsertDAO.execute(conn, indata, tran)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+
         except HTTPError as he:
             raise he
         except Exception as ex:
