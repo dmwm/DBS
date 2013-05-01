@@ -63,6 +63,9 @@ def isChildrenValid(files=[], blocks=[], pstatus=0):
     return isFileValid(files=allfiles, blocks=allblocks, fstatus=pstatus)
 
 def updateFileStatus(status, recursive, files=[], blocks=[]):
+    #import pdb
+    #pdb.set_trace()
+    flst={}
     lost = 0
     if status == "invalid":
         fstatus = 0
@@ -83,8 +86,10 @@ def updateFileStatus(status, recursive, files=[], blocks=[]):
     if flst['validfilelst']:
         logging.debug('updateFileStatus: lfn:%s, is_file_valid:%s, lost:%s' % (flst['validfilelst'], fstatus, lost))
         dbsApi.updateFileStatus(logical_file_names=flst['validfilelst'], is_file_valid=fstatus, lost=lost)
+        #for f in flst['validfilelst']:
+            #dbsApi.updateFileStatus(logical_file_names=f, is_file_valid=fstatus, lost=lost)
     if flst['invalidfilelst']:
-        logging.error("cannot %s  part of files that are %s. The files are %s" % (status, status, flst['invalidfilelst']))
+        logging.error("cannot %s some of files that are already %s. These files are %s" % (status, status, flst['invalidfilelst']))
         sys.exit(1)
 
 def main():
@@ -113,21 +118,20 @@ def main():
     
     global dbsApi
     dbsApi = DbsApi(url=opts.url, proxy=opts.proxy)
-
+    files = []
     if opts.files:
         try:
             with open(opts.files, 'r') as f:
                 files = [lfn for lfn in f]
         except IOError:
-            files=opts.files.split(",")
+            opts.files = opts.files.strip(",").strip()
+            for f in opts.files.split(","):
+                files.append(f.strip())
         finally:
             blocks = []
 
     elif opts.blocks:
         blocks = opts.blocks.split(",")
-        files = []
-    #import pdb
-    #pdb.set_trace()
     updateFileStatus(opts.status, opts.recursive, files=files, blocks=blocks)
 
     logging.info("All done")

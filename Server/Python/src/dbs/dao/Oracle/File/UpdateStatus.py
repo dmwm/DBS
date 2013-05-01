@@ -32,7 +32,7 @@ class UpdateStatus(DBFormatter):
 
         op = ("=", "in")[type(logical_file_names) is list]
         if lost == 1:
-            self.sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid and file_size=0 where LOGICAL_FILE_NAME %s :logical_file_names""" %(self.owner,op)
+            self.sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid, file_size=0 where LOGICAL_FILE_NAME %s :logical_file_names""" %(self.owner,op)
         else:
             self.sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid where LOGICAL_FILE_NAME %s :logical_file_names""" %  (self.owner, op)
         if op =='=':
