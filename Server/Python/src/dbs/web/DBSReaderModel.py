@@ -812,10 +812,11 @@ class DBSReaderModel(RESTModel):
         :rtype: List of dicts
 
         """
-        for f in logical_file_names:
-            if '*' in f or '%' in f:
-                dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,"No \
-                                     wildcard allow in LFN list" )
+        if isinstance(logical_file_names, list):
+            for f in logical_file_names:
+                if '*' in f or '%' in f:
+                    dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,"No \
+                                         wildcard allow in LFN list" )
 
         try:
             return self.dbsFile.listFileChildren(logical_file_names, block_name, block_id)

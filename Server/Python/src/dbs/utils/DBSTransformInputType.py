@@ -15,6 +15,8 @@ def transformInputType(*convert):
                     pass
                 except SyntaxError:
                     pass
+                except KeyError:
+                    pass
             return f(*args, **kwargs)
         return wrapper
     return wrap_f
