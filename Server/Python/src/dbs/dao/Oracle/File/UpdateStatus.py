@@ -26,7 +26,7 @@ class UpdateStatus(DBFormatter):
         for a given file or a list of files
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/UpdateStatus. Expects db connection from upper layer.")
+           dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/UpdateStatus. Expects db connection from upper layer.")
         binds={}
         bindlist=[]
 
@@ -40,7 +40,7 @@ class UpdateStatus(DBFormatter):
         else:
             for f in logical_file_names:
                 binds = {"is_file_valid" : is_file_valid, "logical_file_names":f}
-                bindlist=append(binds)
+                bindlist.append(binds)
         if  bindlist:
             binds=bindlist
 

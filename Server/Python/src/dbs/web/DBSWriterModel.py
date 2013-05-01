@@ -17,6 +17,7 @@ from dbs.web.DBSReaderModel import DBSReaderModel
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSInputValidation import *
+from dbs.utils.DBSTransformInputType import transformInputType
 
 import traceback
 
@@ -365,6 +366,7 @@ class DBSWriterModel(DBSReaderModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @transformInputType('logical_file_names')
     @inputChecks(logical_file_names=(str,list), is_file_valid=(int, str), lost=(int, str, bool ))
     def updateFile(self, logical_file_names=[], is_file_valid=1, lost=0):
         """

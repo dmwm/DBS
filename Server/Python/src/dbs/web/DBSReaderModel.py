@@ -37,6 +37,7 @@ from dbs.business.DBSPhysicsGroup import DBSPhysicsGroup
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSInputValidation import *
+from dbs.utils.DBSTransformInputType import transformInputType
 from WMCore.DAOFactory import DAOFactory
 
 __server__version__ = "$Name:  $"
@@ -799,6 +800,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
+    @transformInputType('logical_file_names')
     @inputChecks(logical_file_names=(str, list), block_name=(str), block_id=(str, int))
     def listFileChildren(self, logical_file_names='', block_name='', block_id=0):
         """

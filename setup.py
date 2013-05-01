@@ -13,7 +13,7 @@ systems = \
     'bin': ['Client/cmdline/dbs.py'],
     'pythonmods': ['dbs.__init__'],
     'pythonpkg': ['dbs.apis', 'dbs.exceptions'],
-    'examples': ['Client/utils/*.py']
+    'examples': ['Client/utils/*.py', 'Client/utils/DataOpsScripts/*.py']
   },
 
   'dbs-web':
