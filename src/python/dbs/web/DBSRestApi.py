@@ -1,7 +1,7 @@
 import cherrypy
 
 from WMCore.Configuration import Configuration
-from WMCore.REST.Server import RestApi
+from WMCore.REST.Server import RESTApi
 
 from dbs.web.DBSHelloWorld import HelloWorld
 
@@ -12,7 +12,8 @@ class DBSRestApi(RESTApi):
         :arg config: configuration object passed to all entities
         :arg mount: API URL mount point passed to all entities
         """
-        super(DBSRestApi, self).__init__(app, config, mount)
+        ### MiniRESTApi is not a new style class, super does not work
+        RESTApi.__init__(self, app, config, mount)
 
         cherrypy.log('Starting up DBSRestv2 test')
 
