@@ -10,10 +10,15 @@ systems = \
   'dbs-web':
   {
     'srcdir': 'src/python',
-    'pythonmods': ['dbs.__init__',
-                   'dbs.web.DBSHelloWorld'],
-    'pythonpkg': [],
-    'dependencies' : []
+    'pythonmods': ['dbs.__init__'],
+    'pythonpkg': ['dbs.web'],
+    'dependencies' : ['dbs-utils']
+  },
+  'dbs-utils':
+  {
+    'srcdir': 'src/python',
+    'pythonmods': [],
+    'pythonpkg': ['dbs.utils']
   }
 }
 
