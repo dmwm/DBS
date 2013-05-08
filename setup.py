@@ -70,7 +70,15 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.py_modules = system.get('pythonmods', [])
   dist.packages = system.get('pythonpkg', [])
   dist.package_dir = { '': system.get('srcdir', []) }
-  dist.data_files = [('examples', exsrc), ('%sdata' % patch_x, datasrc), ('%sbin' % patch_x, binsrc)]
+  dist.data_files = [('%sbin' % patch_x, binsrc)]
+
+  for directory in set(os.path.dirname(path.replace('src/','',1)) for path in datasrc):
+      files = [x for x in datasrc if x.startswith('src/%s/' % directory)]
+      dist.data_files.append(('%sdata/%s' % (patch_x, directory), files))
+
+  for directory in set(os.path.dirname(path.replace('src/','',1)) for path in exsrc):
+      files = [x for x in exsrc if x.startswith('src/%s/' % directory)]
+      dist.data_files.append(('examples/%s' % (directory), files))
 
   if os.path.exists(docroot):
     for dirpath, dirs, files in os.walk(docroot):

@@ -18,5 +18,5 @@ class DBSRestApi(DatabaseRESTApi):
 
         cherrypy.log('Starting up DBSRestv2 test')
 
-        self._add({"hello" : HelloWorld(self, app, config, mount),
-                   "datasets" : Datasets(self, app, config, mount)})
+        self._add({"hello" : HelloWorld(app, self, config, mount),
+                   "datasets" : Datasets(app, self, config, mount)})
