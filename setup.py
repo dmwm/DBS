@@ -12,7 +12,8 @@ systems = \
     'srcdir': 'src/python',
     'pythonmods': ['dbs.__init__'],
     'pythonpkg': ['dbs.web'],
-    'dependencies' : ['dbs-utils']
+    'dependencies' : ['dbs-utils'],
+    'data' : ['templates/*.html']
   },
   'dbs-utils':
   {
@@ -29,6 +30,7 @@ def process_dependencies(system):
   srcdir = system['srcdir']
   binaries = set(system.get('bin', set()))
   examples = set(system.get('examples', set()))
+  data = set(system.get('data', set()))
   pythonmods = set(system.get('pythonmods', set()))
   pythonpkg = set(system.get('pythonpkg', set()))
 
@@ -43,12 +45,14 @@ def process_dependencies(system):
     dependants = process_dependencies(dependant_system)
     binaries.update(dependants.get('bin', set()))
     examples.update(dependants.get('examples', set()))
+    data.update(dependants.get('data', set()))
     pythonmods.update(dependants.get('pythonmods', set()))
     pythonpkg.update(dependants.get('pythonpkg', set()))
 
   return {'srcdir' : srcdir,
           'bin' : list(binaries),
           'examples' : list(examples),
+          'data' : list(data),
           'pythonmods' : list(pythonmods),
           'pythonpkg' : list(pythonpkg)}
 
@@ -57,6 +61,7 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   docroot = "doc/build/html"
   system = process_dependencies(systems[system_name])
   exsrc = sum((glob("%s" % x) for x in system.get('examples', [])), [])
+  datasrc = sum((glob("src/%s" % x) for x in system.get('data', [])), [])
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
 
   # Specify what to install.
@@ -65,7 +70,15 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.py_modules = system.get('pythonmods', [])
   dist.packages = system.get('pythonpkg', [])
   dist.package_dir = { '': system.get('srcdir', []) }
-  dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc)]
+  dist.data_files = [('%sbin' % patch_x, binsrc)]
+
+  for directory in set(os.path.dirname(path.replace('src/','',1)) for path in datasrc):
+      files = [x for x in datasrc if x.startswith('src/%s/' % directory)]
+      dist.data_files.append(('%sdata/%s' % (patch_x, directory), files))
+
+  for directory in set(os.path.dirname(path.replace('src/','',1)) for path in exsrc):
+      files = [x for x in exsrc if x.startswith('src/%s/' % directory)]
+      dist.data_files.append(('examples/%s' % (directory), files))
 
   if os.path.exists(docroot):
     for dirpath, dirs, files in os.walk(docroot):
