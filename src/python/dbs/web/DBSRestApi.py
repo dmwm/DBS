@@ -5,6 +5,7 @@ from WMCore.REST.Server import DatabaseRESTApi
 
 from dbs.web.DBSHelloWorld import HelloWorld
 from dbs.web.DBSDatasets import Datasets
+from dbs.web.DBSFiles import Files
 
 class DBSRestApi(DatabaseRESTApi):
     def __init__(self, app, config, mount):
@@ -19,4 +20,5 @@ class DBSRestApi(DatabaseRESTApi):
         cherrypy.log('Starting up DBSRestv2 test')
 
         self._add({"hello" : HelloWorld(app, self, config, mount),
-                   "datasets" : Datasets(app, self, config, mount)})
+                   "datasets" : Datasets(app, self, config, mount),
+                   "files" : Files(app, self, config, mount)})

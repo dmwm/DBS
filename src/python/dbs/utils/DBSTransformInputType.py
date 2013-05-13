@@ -18,3 +18,6 @@ def transformInputType(*convert):
             return f(*args, **kwargs)
         return wrapper
     return wrap_f
+
+def parseRunRange(run_range):
+    return run_range
