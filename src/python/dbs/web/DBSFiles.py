@@ -19,6 +19,7 @@ class Files(RESTEntity):
 
         run_param = param.kwargs.get('run')
         if isinstance(run_param, list):
+            ###to simplify input validation, convert every item to a string
             param.kwargs['run'] = map(str, run_param)
         validate_strlist("run", param, safe, run_validation_rx)
 
