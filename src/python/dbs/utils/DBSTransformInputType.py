@@ -30,12 +30,10 @@ def parseRunRange(run_range):
                 yield new_item
     elif isinstance(run_range, str):
         try:
-            min_run, max_run = map(int, run_range.split('-', 1))
+            min_run, max_run = run_range.split('-', 1)
         except ValueError:
-            yield int(run_range)
+            yield run_range
         else:
             yield run_tuple(min_run, max_run)
-    elif isinstance(run_range, int):
-        yield run_range
     else:
         raise HTTPError("500 Server Error", "Run_rage error")
