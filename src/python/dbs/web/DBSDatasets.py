@@ -7,8 +7,10 @@ from WMCore.REST.Tools import tools
 from WMCore.REST.Validation import *
 
 from dbs.utils.Validation import dataset_validation_rx
+from dbs.utils.DBSTransformInputType import transformInputType
 
 class Datasets(RESTEntity):
+    @transformInputType('datasets')
     def validate(self, apiobj, method, api, param, safe):
         """
         Validate input data
