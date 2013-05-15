@@ -115,14 +115,14 @@ def main():
 
     log_level = logging.DEBUG if opts.verbose else logging.INFO
     logging.basicConfig(format='%(message)s', level=log_level)
-    
+
     global dbsApi
     dbsApi = DbsApi(url=opts.url, proxy=opts.proxy)
     files = []
     if opts.files:
         try:
             with open(opts.files, 'r') as f:
-                files = [lfn for lfn in f]
+                files = [lfn.strip() for lfn in f]
         except IOError:
             opts.files = opts.files.strip(",").strip()
             for f in opts.files.split(","):

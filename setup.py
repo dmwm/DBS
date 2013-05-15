@@ -154,6 +154,11 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.package_dir = { '': system.get('srcdir', []) }
   dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc)]
 
+  for directory in set(os.path.dirname(path.replace('Client/utils/','',1)) for path in exsrc):
+      print directory
+      files = [x for x in exsrc if x.startswith('Client/utils/%s/' % directory)]
+      dist.data_files.append(('examples/%s' % (directory), files))
+
   if os.path.exists(docroot):
     for dirpath, dirs, files in os.walk(docroot):
       dist.data_files.append(("%sdoc%s" % (patch_x, dirpath[len(docroot):]),
