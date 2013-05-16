@@ -12,8 +12,18 @@ systems = \
     'srcdir': 'src/python',
     'pythonmods': ['dbs.__init__'],
     'pythonpkg': ['dbs.web'],
-    'dependencies' : ['dbs-utils'],
+    'dependencies' : ['dbs-utils', 'dbs-dao'],
     'data' : ['templates/*.html']
+  },
+  'dbs-dao':
+  {
+    'srcdir': 'src/python',
+    'pythonmods': [],
+    'pythonpkg': ['dbs.dao',
+                  'dbs.dao.Oracle',
+                  'dbs.dao.Oracle.Dataset'
+               ],
+    'dependencies' : ['dbs-utils']
   },
   'dbs-utils':
   {
