@@ -37,3 +37,8 @@ def parseRunRange(run_range):
             yield run_tuple(min_run, max_run)
     else:
         raise HTTPError("500 Server Error", "Run_rage error")
+
+def addDefaults(param, **kwargs):
+    for key, default_value in kwargs.iteritems():
+        if not param.kwargs.has_key(key):
+            param.kwargs[key] = default_value
