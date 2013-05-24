@@ -2,12 +2,10 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.24 2010/08/09 20:02:46 yuyi Exp $"
-__version__ = "$Revision: 1.24 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
-from WMCore.Database.MySQLCore import  MySQLInterface
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.DBSTransformInputType import parseRunRange
+from dbs.utils.DBSTransformInputType import run_tuple
 
 class List(DBFormatter):
     """
@@ -26,128 +24,127 @@ SELECT B.BLOCK_ID, B.BLOCK_NAME, B.OPEN_FOR_WRITING,
         B.DATASET_ID, DS.DATASET,
         B.ORIGIN_SITE_NAME, B.CREATION_DATE, B.CREATE_BY,
         B.LAST_MODIFICATION_DATE, B.LAST_MODIFIED_BY
-FROM %sBLOCKS B
-JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID 
+    """
+        self.fromsql = \
+    """
+FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID 
     """ % ((self.owner,)*2)
-#
+
     def execute(self, conn, dataset="", block_name="", origin_site_name="", logical_file_name="", 
-                run_num=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,  ldate=0,
-                transaction = False):
+                run=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, 
+                ldate=0, transaction = False):
 	"""
 	dataset: /a/b/c
 	block: /a/b/c#d
 	"""	
-	if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Block/List.  Expects db connection from upper layer.")
-	sql = self.sql
 	binds = {}
 
-        if logical_file_name and logical_file_name != "%":
-	    op = ("=", "like")["%" in logical_file_name] 
-	    sql += " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID " %(self.owner)
-	    if run_num and run_num !=-1:
-		sql += " JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID " %(self.owner)
-	    sql += " WHERE LOGICAL_FILE_NAME %s :logical_file_name " % op
-	    binds.update( logical_file_name = logical_file_name)
-	    if run_num and run_num !=-1:
-		sql += " AND RUN_NUM = :run_num "
-		binds.update(run_num = run_num)
-	    if  block_name and  block_name !="%":
-		op = ("=", "like")["%" in block_name]
-		sql += " AND B.BLOCK_NAME %s :block_name " % op
-		binds.update({"block_name":block_name})
-		if dataset and dataset !="%": 
-		    op = ("=", "like")["%" in dataset]
-		    sql += " AND DS.DATASET %s :dataset " %op
-		    binds.update(dataset=dataset)
-		if origin_site_name and  origin_site_name != "%":
-		    op = ("=", "like")["%" in origin_site_name]
-		    sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
-		    binds.update(origin_site_name = origin_site_name)	
-            elif dataset and dataset !="%": 
-		op = ("=", "like")["%" in dataset]
-		sql += " AND DS.DATASET %s :dataset " %op
-		binds.update(dataset=dataset)
-		if origin_site_name and  origin_site_name != "%":
-		    op = ("=", "like")["%" in origin_site_name]
-		    sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
-		    binds.update(origin_site_name = origin_site_name)
-	    elif origin_site_name and  origin_site_name != "%": 
-		op = ("=", "like")["%" in origin_site_name] 
-		sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
-		binds.update(origin_site_name = origin_site_name)
-	elif block_name and  block_name !="%":
-	    if run_num and run_num !=-1:
-		sql += """ JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID
-		            JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID 
-			""" %((self.owner,)*2)
-	    op = ("=", "like")["%" in block_name]
-	    sql += " WHERE B.BLOCK_NAME %s :block_name " % op
-	    binds.update({"block_name":block_name}) 
-	    if run_num and run_num !=-1:
-                sql += " AND RUN_NUM = :run_num "
-                binds.update(run_num = run_num)
-	    if dataset and dataset !="%": 
-		op = ("=", "like")["%" in dataset]
-		sql += " AND DS.DATASET %s :dataset " %op
-		binds.update(dataset=dataset)
-	    if origin_site_name and  origin_site_name != "%":
-		op = ("=", "like")["%" in origin_site_name]
-		sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
-		binds.update(origin_site_name = origin_site_name)	
-	elif dataset and dataset !="%":
-	    if run_num and run_num !=-1:
-                sql += """ JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID 
-		            JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID 
-			""" %((self.owner,)*2)
-	    op = ("=", "like")["%" in dataset] 
-	    sql += " WHERE DS.DATASET %s :dataset " %op
-	    binds.update(dataset=dataset) 
-	    if run_num and run_num !=-1:
-		sql += " AND RUN_NUM = :run_num "
-                binds.update(run_num = run_num)
-	    if origin_site_name and  origin_site_name != "%": 
-		op = ("=", "like")["%" in origin_site_name] 
-		sql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " %op
-		binds.update(origin_site_name = origin_site_name)
-        #date search cannot work alone. YG
-        if "WHERE" in sql:
-            if cdate != 0:
-                 sql += "AND B.CREATION_DATE = :cdate "
-                 binds.update(cdate = cdate)
-            elif min_cdate != 0 and max_cdate != 0:
-                sql += "AND B.CREATION_DATE BETWEEN :min_cdate and :max_cdate "
-                binds.update(min_cdate = min_cdate)
-                binds.update(max_cdate = max_cdate)
-            elif min_cdate != 0 and max_cdate == 0:
-                sql += "AND B.CREATION_DATE > :min_cdate "
-                binds.update(min_cdate = min_cdate)
-            elif min_cdate ==0 and max_cdate != 0:
-                sql += "AND B.CREATION_DATE < :max_cdate "
-                binds.update(max_cdate = max_cdate)
-            else:
-                pass
-            if ldate != 0:
-                sql += "AND B.LAST_MODIFICATION_DATE = :ldate "
-                binds.update(ldate = ldate)
-            elif min_ldate != 0 and max_ldate != 0:
-                sql += "AND B.LAST_MODIFICATION_DATE BETWEEN :min_ldate and :max_ldate "
-                binds.update(min_ldate = min_ldate)
-                binds.update(max_ldate = max_ldate)
-            elif min_ldate != 0 and max_ldate == 0:
-                sql += "AND B.LAST_MODIFICATION_DATE > :min_ldate "
-                binds.update(min_ldate = min_ldate)
-            elif min_cdate ==0 and max_cdate != 0:
-                sql += "AND B.LAST_MODIFICATION_DATE < :max_ldate "
-                binds.update(max_ldate = max_ldate)
-            else:
-                pass    
-	if run_num and run_num !=-1:
-	    sql = sql.replace("SELECT ", "SELECT DISTINCT ")
+	basesql = self.sql
+	joinsql = ""
+	wheresql = ""
 
-	#print "sql=%s" %sql
-	#print "binds=%s" %binds
+	if logical_file_name and logical_file_name != "%":
+	    joinsql +=  " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID " %(self.owner)
+	    op =  ("=", "like")["%" in logical_file_name]
+	    wheresql +=  " WHERE LOGICAL_FILE_NAME %s :logical_file_name " % op
+	    binds.update( logical_file_name = logical_file_name )
+
+	if  block_name and  block_name !="%": 
+	    andorwhere = ("WHERE", "AND")[bool(wheresql)]
+	    op =  ("=", "like")["%" in block_name]
+	    wheresql +=  " %s B.BLOCK_NAME %s :block_name " % ((andorwhere, op))
+	    binds.update( block_name = block_name )
+
+	if dataset and dataset !="%":
+	    joinsql += "JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID "  % (self.owner)
+	    andorwhere = ("WHERE", "AND")[bool(wheresql)]
+	    op = ("=", "like")["%" in dataset]
+	    wheresql += " %s DS.DATASET %s :dataset " % ((andorwhere, op))
+	    binds.update(dataset=dataset)
+        #optional condition
+	if origin_site_name and  origin_site_name != "%": 
+	    op = ("=", "like")["%" in origin_site_name]
+	    wheresql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " % op
+	    binds.update(origin_site_name = origin_site_name)	
+        if cdate != 0:
+            wheresql += "AND B.CREATION_DATE = :cdate "
+            binds.update(cdate = cdate)
+        elif min_cdate != 0 and max_cdate != 0:
+            wheresql += "AND B.CREATION_DATE BETWEEN :min_cdate and :max_cdate "
+            binds.update(min_cdate = min_cdate)
+            binds.update(max_cdate = max_cdate)
+        elif min_cdate != 0 and max_cdate == 0:
+            wheresql += "AND B.CREATION_DATE > :min_cdate "
+            binds.update(min_cdate = min_cdate)
+        elif min_cdate ==0 and max_cdate != 0:
+            wheresql += "AND B.CREATION_DATE < :max_cdate "
+            binds.update(max_cdate = max_cdate)
+        else:
+            pass
+        if ldate != 0:
+            wheresql += "AND B.LAST_MODIFICATION_DATE = :ldate "
+            binds.update(ldate = ldate)
+        elif min_ldate != 0 and max_ldate != 0:
+            wheresql += "AND B.LAST_MODIFICATION_DATE BETWEEN :min_ldate and :max_ldate "
+            binds.update(min_ldate = min_ldate)
+            binds.update(max_ldate = max_ldate)
+        elif min_ldate != 0 and max_ldate == 0:
+            wheresql += "AND B.LAST_MODIFICATION_DATE > :min_ldate "
+            binds.update(min_ldate = min_ldate)
+        elif min_cdate ==0 and max_cdate != 0:
+            wheresql += "AND B.LAST_MODIFICATION_DATE < :max_ldate "
+            binds.update(max_ldate = max_ldate)
+        else:
+            pass
+
+        #one may provide a list of runs , so it has to be the last one in building the bind.
+        if run !=-1 :
+            basesql = basesql.replace("SELECT", "SELECT DISTINCT") + " , FLM.RUN_NUM  "
+            if not logical_file_name:
+                joinsql +=  " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID " %(self.owner)
+            joinsql += " JOIN %sFILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID " %(self.owner)
+            run_list=[]
+            wheresql_run_list=''
+            wheresql_run_range=''
+            #
+            for r in parseRunRange(run):
+                if isinstance(r, str) or isinstance(r, int):
+                    if not wheresql_run_list:
+                        wheresql_run_list = " FLM.RUN_NUM in :run_list "
+                    run_list.append(r)
+                if isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                    wheresql_run_range = " FLM.RUN_NUM between :minrun and :maxrun "
+                    binds.update({"minrun":r[0]})
+                    binds.update({"maxrun":r[1]})
+            # 
+            if wheresql_run_range and len(run_list) == 1:
+                wheresql += " and (" + wheresql_run_range + " or FLM.RUN_NUM = :run_list )"
+            elif wheresql_run_range and len(run_list) > 1:
+                wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
+            elif wheresql_run_range and not run_list:
+                wheresql +=  " and " + wheresql_run_range
+            elif not wheresql_run_range and len(run_list) == 1:
+                wheresql += " and FLM.RUN_NUM = :run_list "
+            elif not wheresql_run_range and len(run_list) > 1:
+                wheresql += " and "  + wheresql_run_list
+            # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
+            if len(run_list) == 1:
+                binds["run_list"] = run_list[0]
+            elif len(run_list) > 1:
+                newbinds = []
+                for r in run_list:
+                    b = {}
+                    b.update(binds)
+                    b["run_list"] = r
+                    newbinds.append(b)
+                binds = newbinds
+        
+	sql = " ".join((basesql, self.fromsql, joinsql, wheresql))  
+		
+	print "sql=%s" %sql
+	print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	assert len(cursors) == 1, "block does not exist"
 	result = self.formatCursor(cursors[0])
 	return result

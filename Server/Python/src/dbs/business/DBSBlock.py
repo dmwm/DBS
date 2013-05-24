@@ -188,7 +188,7 @@ class DBSBlock:
                 conn.close()
 
     def listBlocks(self, dataset="", block_name="", origin_site_name="",
-                   logical_file_name="",run_num=-1, min_cdate=0, max_cdate=0,
+                   logical_file_name="",run=-1, min_cdate=0, max_cdate=0,
                    min_ldate=0, max_ldate=0, cdate=0,  ldate=0, detail=False):
         """
         dataset, block_name, or logical_file_name must be passed.
@@ -202,7 +202,7 @@ class DBSBlock:
         try:
             conn = self.dbi.connection()
             dao = (self.blockbrieflist, self.blocklist)[detail]
-            result = dao.execute(conn, dataset, block_name, origin_site_name, logical_file_name, run_num,
+            result = dao.execute(conn, dataset, block_name, origin_site_name, logical_file_name, run,
                                  min_cdate, max_cdate, min_ldate, max_ldate, cdate,  ldate)
             return result
         finally:

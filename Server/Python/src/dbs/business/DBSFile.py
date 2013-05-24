@@ -62,9 +62,9 @@ class DBSFile:
             if conn:
                 conn.close()
 
-    def listFileSummary(self, block_name="", dataset="", run_num=0):
+    def listFileSummary(self, block_name="", dataset="", run=-1):
         """
-        required parameter: full block_name or dataset name. No wildcards allowed. run_num is optional.
+        required parameter: full block_name or dataset name. No wildcards allowed. run is optional.
         """
         conn = self.dbi.connection()
         try:
@@ -74,7 +74,7 @@ class DBSFile:
             if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
                 msg = "No wildcard is allowed in block_name or dataset for listFileSummary API"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
-            result = self.filesummarylist.execute(conn, block_name, dataset, run_num)
+            result = self.filesummarylist.execute(conn, block_name, dataset, run)
             if len(result)==1:
                 if result[0]['num_file']==0 and result[0]['num_block']==0 \
                         and result[0]['num_event']==0 and result[0]['file_size']==0:
@@ -167,7 +167,7 @@ class DBSFile:
 
     def listFiles(self, dataset="", block_name="", logical_file_name="",
                   release_version="", pset_hash="", app_name="",
-                  output_module_label="",  maxrun=-1, minrun=-1,
+                  output_module_label="",  run=-1,
                   origin_site_name="", lumi_list=[], detail=False):
         """
         One of below parameter groups must be present:
@@ -184,16 +184,32 @@ class DBSFile:
                     non-pattern block , non-pattern dataset with lfn ,\
                     non-pattern block with lfn or no-pattern lfn. """)
         elif (lumi_list and len(lumi_list) != 0):
-            if (maxrun==-1 and minrun==-1) or (minrun!=maxrun):
+            if run==-1:
                 dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number, \
-                        use minrun==maxrun")
+                        use run=123")
+            elif isinstance(run, str):
+                try:
+                    run = int(run)
+                except:
+                    dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
+                        use run=123")
+            elif isinstance(run, list):
+                if len(run) == 1:
+                    try:
+                        run = int(run[0])
+                    except:
+                        dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
+                            use run=123")
+                else:
+                    dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
+                        use run=123")
         else:
             pass
         conn = self.dbi.connection()
         try:
             dao = (self.filebrieflist, self.filelist)[detail]
             result = dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
-                            output_module_label, maxrun, minrun, origin_site_name, lumi_list)
+                            output_module_label, run, origin_site_name, lumi_list)
             return result
         finally:
             if conn:

@@ -2,11 +2,10 @@
 """
 This module provides Block.List data access object.
 """
-__revision__ = "$Id: BriefList.py,v 1.1 2010/08/01 19:03:30 akhukhun Exp $"
-__version__ = "$Revision: 1.1 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
-
+from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.DBSTransformInputType import parseRunRange
+from dbs.utils.DBSTransformInputType import run_tuple
 
 class BriefList(DBFormatter):
     """
@@ -18,16 +17,16 @@ class BriefList(DBFormatter):
 	"""
 	DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = """ SELECT  B.BLOCK_NAME FROM %sBLOCKS B """ % self.owner
+        self.sql = """ SELECT  B.BLOCK_NAME """ 
+        self.fromsql = """  FROM %sBLOCKS B """ % self.owner
 
     def execute(self, conn, dataset="", block_name="", origin_site_name="", logical_file_name="", 
-                run_num=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, 
+                run=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, 
                 ldate=0, transaction = False):
 	"""
 	dataset: /a/b/c
 	block: /a/b/c#d
 	"""	
-
 	binds = {}
 
 	basesql = self.sql
@@ -53,20 +52,10 @@ class BriefList(DBFormatter):
 	    wheresql += " %s DS.DATASET %s :dataset " % ((andorwhere, op))
 	    binds.update(dataset=dataset)
 
-	assert wheresql, 'Either logical_file_name, block_name or dataset parameter must be provided'
-
 	if origin_site_name and  origin_site_name != "%": 
 	    op = ("=", "like")["%" in origin_site_name]
 	    wheresql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " % op
 	    binds.update(origin_site_name = origin_site_name)	
-
-	if run_num !=-1:
-	    if not logical_file_name:
-		joinsql +=  " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID " %(self.owner)
-	    joinsql += " JOIN %s FILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID " %(self.owner)
-	    wheresql += " AND FLM.RUN_NUM = :run_num "
-	    basesql = basesql.replace("SELECT ", "SELECT DISTINCT ")
-	    binds.update(run_num = run_num)
         if cdate != 0:
             wheresql += "AND B.CREATION_DATE = :cdate "
             binds.update(cdate = cdate)
@@ -97,11 +86,55 @@ class BriefList(DBFormatter):
             binds.update(max_ldate = max_ldate)
         else:
             pass
-	sql = " ".join((basesql, joinsql, wheresql))  
+
+        #one may provide a list of runs , so it has to be the last one in building the bind.
+        if run !=-1 :
+            basesql = basesql.replace("SELECT", "SELECT DISTINCT") + " , FLM.RUN_NUM  "
+            if not logical_file_name:
+                joinsql +=  " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID " %(self.owner)
+            joinsql += " JOIN %sFILE_LUMIS FLM on FLM.FILE_ID = FL.FILE_ID " %(self.owner)
+            run_list=[]
+            wheresql_run_list=''
+            wheresql_run_range=''
+            #
+            for r in parseRunRange(run):
+                if isinstance(r, str) or isinstance(r, int):
+                    if not wheresql_run_list:
+                        wheresql_run_list = " FLM.RUN_NUM in :run_list "
+                    run_list.append(r)
+                if isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                    wheresql_run_range = " FLM.RUN_NUM between :minrun and :maxrun "
+                    binds.update({"minrun":r[0]})
+                    binds.update({"maxrun":r[1]})
+            # 
+            if wheresql_run_range and len(run_list) == 1:
+                wheresql += " and (" + wheresql_run_range + " or FLM.RUN_NUM = :run_list )"
+            elif wheresql_run_range and len(run_list) > 1:
+                wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
+            elif wheresql_run_range and not run_list:
+                wheresql +=  " and " + wheresql_run_range
+            elif not wheresql_run_range and len(run_list) == 1:
+                wheresql += " and FLM.RUN_NUM = :run_list "
+            elif not wheresql_run_range and len(run_list) > 1:
+                wheresql += " and "  + wheresql_run_list
+            # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
+            if len(run_list) == 1:
+                binds["run_list"] = run_list[0]
+            elif len(run_list) > 1:
+                newbinds = []
+                for r in run_list:
+                    b = {}
+                    b.update(binds)
+                    b["run_list"] = r
+                    newbinds.append(b)
+                binds = newbinds
+        
+	sql = " ".join((basesql, self.fromsql, joinsql, wheresql))  
 		
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	assert len(cursors) == 1, "block does not exist"
 	result = self.formatCursor(cursors[0])
 	return result

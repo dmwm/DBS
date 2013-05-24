@@ -7,6 +7,8 @@ __version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.DBSTransformInputType import parseRunRange
+from dbs.utils.DBSTransformInputType import run_tuple
 
 class BriefList(DBFormatter):
     """
@@ -19,11 +21,12 @@ class BriefList(DBFormatter):
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
 	#all listFile APIs should return the same data structure defined by self.sql
-        self.sql = " SELECT F.LOGICAL_FILE_NAME FROM %sFILES F  " % self.owner
+        self.sql = " SELECT F.LOGICAL_FILE_NAME "
+        self.fromsql = "  FROM %sFILES F  " % self.owner
 
     def execute(self, conn, dataset="", block_name="", logical_file_name="",
             release_version="", pset_hash="", app_name="", output_module_label="",
-	    maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[], transaction=False):
+	    run=-1, origin_site_name="", lumi_list=[], transaction=False):
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/BriefList. Expects db connection from upper layer.")
 
@@ -78,20 +81,55 @@ class BriefList(DBFormatter):
 	    wheresql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label" % op
 	    binds.update(output_module_label=output_module_label)
 
-	
-	if (minrun and minrun != -1 and maxrun and maxrun != -1):
-	    basesql = basesql.replace("SELECT", "SELECT DISTINCT")
-	    joinsql += " JOIN %sFILE_LUMIS FL on  FL.FILE_ID=F.FILE_ID " %(self.owner)
-	    wheresql += " AND FL.RUN_NUM between :minrun and :maxrun " 
-	    binds.update({"minrun":minrun})
-	    binds.update({"maxrun":maxrun})
-
 	if (origin_site_name):
 	    if not block_name:
 		joinsql += " JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID" % (self.owner)
 	    op = ("=","like")["%" in origin_site_name]
     	    wheresql += " AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
 	    binds.update({"origin_site_name":origin_site_name})
+
+        if run != -1 :
+            basesql = basesql.replace("SELECT", "SELECT DISTINCT") + " , FL.RUN_NUM"
+            joinsql += " JOIN %sFILE_LUMIS FL on  FL.FILE_ID=F.FILE_ID " %(self.owner)
+            #
+            run_list = []
+            wheresql_run_list = ''
+            wheresql_run_range = ''
+            #
+            for r in parseRunRange(run):
+                if isinstance(r, str) or isinstance(r, int):
+                    if not wheresql_run_list:
+                        wheresql_run_list = " FL.RUN_NUM in :run_list "
+                    run_list.append(r)
+                if isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                    wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
+                    binds.update({"minrun":r[0]})
+                    binds.update({"maxrun":r[1]})
+            # 
+            if wheresql_run_range and len(run_list) == 1:
+                wheresql += " and (" + wheresql_run_range + " or FL.RUN_NUM = :run_list )"
+            elif wheresql_run_range and len(run_list) > 1:
+                wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
+            elif wheresql_run_range and not run_list:
+                wheresql += " and " + wheresql_run_range
+            elif not wheresql_run_range and len(run_list) == 1:
+                wheresql += " and FL.RUN_NUM = :run_list "
+            elif not wheresql_run_range and len(run_list) > 1:
+                wheresql += " and "  + wheresql_run_list
+            # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
+            if len(run_list) == 1:
+                binds["run_list"] = run_list[0]
+            elif len(run_list) > 1:
+                newbinds = []
+                for r in run_list:
+                    b = {}
+                    b.update(binds)
+                    b["run_list"] = r
+                    newbinds.append(b)
+                binds = newbinds
+        # Make sure when we have a lumi_list, there is only ONE run  -- YG 14/05/2013
 
         # KEEP lumi_list as the LAST CHECK in this DAO, this is a MUST ---  ANZAR 08/23/2010
         if (lumi_list and len(lumi_list) != 0):
@@ -105,7 +143,7 @@ class BriefList(DBFormatter):
 		counter+=1
 	    wheresql += ")"
 
-	sql = " ".join((basesql, joinsql, wheresql))
+	sql = " ".join((basesql, self.fromsql, joinsql, wheresql))
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
