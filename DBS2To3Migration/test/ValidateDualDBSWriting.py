@@ -138,8 +138,6 @@ class SQLFactory(object):
                                 Template("""
                                 SELECT DATASET,
                                 XTCROSSSECTION,
-                                CREATE_BY,
-                                LAST_MODIFIED_BY,
                                 PRIMARY_DS_NAME,
                                 PRIMARY_DS_TYPE,
                                 PROCESSED_DS_NAME,
@@ -151,8 +149,6 @@ class SQLFactory(object):
                                 FROM(
                                 SELECT D.DATASET,
                                 D.XTCROSSSECTION,
-                                D.CREATE_BY,
-                                D.LAST_MODIFIED_BY,
                                 P.PRIMARY_DS_NAME,
                                 LOWER(PDT.PRIMARY_DS_TYPE) PRIMARY_DS_TYPE,
                                 PD.PROCESSED_DS_NAME,
@@ -183,8 +179,6 @@ class SQLFactory(object):
                                 UNION ALL
                                 SELECT '/' || PD2.NAME || '/' || DS.NAME || '/' || DT2.NAME DATASET,
                                 DS.XTCROSSSECTION,
-                                PS1.DISTINGUISHEDNAME CREATE_BY,
-                                PS2.DISTINGUISHEDNAME LAST_MODIFIED_BY,
                                 PD2.NAME PRIMARY_DS_NAME,
                                 PT.TYPE PRIMARY_DS_TYPE,
                                 DS.NAME PROCESSED_DS_NAME,
@@ -198,15 +192,11 @@ class SQLFactory(object):
                                 JOIN {db_owner_dbs2}.PRIMARYDATASET PD2 ON PD2.ID=DS.PRIMARYDATASET
                                 JOIN {db_owner_dbs2}.PHYSICSGROUP PG ON PG.ID=DS.PHYSICSGROUP
                                 JOIN {db_owner_dbs2}.PROCDSSTATUS ST ON ST.ID=DS.STATUS
-                                JOIN {db_owner_dbs2}.PERSON PS1 ON DS.CREATEDBY=PS1.ID
-                                JOIN {db_owner_dbs2}.PERSON PS2 ON DS.LASTMODIFIEDBY=PS2.ID
                                 JOIN {db_owner_dbs2}.PRIMARYDSTYPE PT ON PT.ID=PD2.TYPE
                                 WHERE PD2.NAME='$primary_ds' and DS.NAME='$processed_ds' and DT2.NAME='$tier'
                                 )
                                 GROUP BY DATASET,
                                 XTCROSSSECTION,
-                                CREATE_BY,
-                                LAST_MODIFIED_BY,
                                 PRIMARY_DS_NAME,
                                 PRIMARY_DS_TYPE,
                                 PROCESSED_DS_NAME,
@@ -340,7 +330,10 @@ class SQLFactory(object):
                                 UNION ALL
                                 SELECT
                                 FS2.LOGICALFILENAME logical_file_name,
-                                FS2.VALIDATIONSTATUS is_file_valid,
+                                CASE
+                                WHEN FST.STATUS='VALID'
+                                THEN 1
+                                ELSE 0 END AS is_file_valid,
                                 '/' || PD2.NAME || '/' || DS2.NAME || '/' || DT2.NAME dataset,
                                 BL2.NAME block_name,
                                 FT2.TYPE file_type,
@@ -350,16 +343,14 @@ class SQLFactory(object):
                                 FS2.FILEBRANCH branch_hash_id,
                                 FS2.ADLER32,
                                 FS2.MD5,
-                                CASE
-                                WHEN FS2.AUTOCROSSSECTION IS NULL
-                                THEN 0.0
-                                END AS auto_cross_section
+                                FS2.AUTOCROSSSECTION auto_cross_section
                                 FROM {db_owner_dbs2}.FILES FS2
                                 JOIN {db_owner_dbs2}.PROCESSEDDATASET DS2 ON DS2.ID=FS2.DATASET
                                 JOIN {db_owner_dbs2}.PRIMARYDATASET PD2 on DS2.PRIMARYDATASET=PD2.ID
                                 JOIN {db_owner_dbs2}.DATATIER DT2 ON DS2.DATATIER=DT2.ID
                                 JOIN {db_owner_dbs2}.BLOCK BL2 ON FS2.BLOCK=BL2.ID
                                 JOIN {db_owner_dbs2}.FILETYPE FT2 ON FT2.ID=FS2.FILETYPE
+                                JOIN {db_owner_dbs2}.FILESTATUS FST ON FST.ID=FS2.FILESTATUS
                                 WHERE FS2.LOGICALFILENAME='$lfn'
                                 )
                                 GROUP BY LOGICAL_FILE_NAME, IS_FILE_VALID,

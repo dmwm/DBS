@@ -9,11 +9,10 @@ from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsUtils import dbsUtils
 
 class DBSBlockInsert :
+    """
+    Insert a Block and everything under this block.
+    """
 
-    """
-    Insert a Block and everything under this block. 
-    """
-    
     def __init__(self, logger, dbi, owner):
         daofactory = DAOFactory(package='dbs.dao', logger=logger,
                                 dbinterface=dbi, owner=owner)
@@ -40,10 +39,8 @@ class DBSBlockInsert :
         self.procdsid       = daofactory(classname="ProcessedDataset.GetID")
         self.otptModCfgid   = daofactory(classname="OutputModuleConfig.GetID")
         self.releaseVid     = daofactory(classname="ReleaseVersion.GetID")
-        self.psetHashid     = daofactory(classname="ParameterSetHashe.GetID") 
-        self.appid          = daofactory(classname=
-                                            "ApplicationExecutable.GetID") 
-
+        self.psetHashid     = daofactory(classname="ParameterSetHashe.GetID")
+        self.appid          = daofactory(classname="ApplicationExecutable.GetID")
         self.procsingin     = daofactory(classname="ProcessingEra.Insert")
         self.acqin          = daofactory(classname="AcquisitionEra.Insert")
         self.procdsin       = daofactory(classname="ProcessedDataset.Insert")
@@ -94,18 +91,18 @@ class DBSBlockInsert :
         #YG
         try:
             #1 insert configuration
-            print "insert configuration"
+            self.logger.debug("insert configuration")
             configList = self.insertOutputModuleConfig(
                             blockcontent['dataset_conf_list'])
             #2 insert dataset
-            print "insert dataset"
+            self.logger.debug("insert dataset")
             datasetId = self.insertDataset(blockcontent, configList, migration)
             #3 insert block & files
-            print "insert block & files."
+            self.logger.debug("insert block & files.")
             self.insertBlockFile(blockcontent, datasetId, migration)
         except Exception, ex:
             raise
-    
+
     def insertBlockFile(self, blockcontent, datasetId, migration=False):
 
         block = blockcontent['block']
@@ -113,7 +110,7 @@ class DBSBlockInsert :
         #Insert the block
         conn = self.dbi.connection()
         tran = conn.begin()
-        print "Block name: %s" %block['block_name']
+        self.logger.info("Inserted block name: %s" %block['block_name'])
         try:
             block['block_id'] = self.sm.increment(conn, "SEQ_BK",)
             block['dataset_id'] =  datasetId
@@ -132,12 +129,12 @@ class DBSBlockInsert :
             #Throw exception to let the up layer know. YG 11/17/2010
                 if tran:tran.rollback()
                 if conn:conn.close()
-                dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertBlock. Block already exists.")
+                dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertBlock. Block %s already exists." % (block['block_name']))
             else:
                 if tran:tran.rollback()
                 if conn:conn.close()
                 raise
-        #All Praentage will be deduced from file parentage. 
+        #All Praentage will be deduced from file parentage.
         blockId = block['block_id']
         fileLumiList = []
         fileConfObjs = []
@@ -181,7 +178,7 @@ class DBSBlockInsert :
                 for j in range(nlumi):
                     lumi[j]['file_id'] = id
                 fileLumiList[len(fileLumiList):] = lumi
-                #remove the lumi list from the file 
+                #remove the lumi list from the file
                 del fileList[i]['file_lumi_list']
                 id += 1
         except Exception, ex:
@@ -189,7 +186,7 @@ class DBSBlockInsert :
             if conn:conn.close()
             raise
         try:
-            #deal with file parentage. 
+            #deal with file parentage.
             #At the meantime, we need to build block and dataset parentage.
             #All parentage is deduced from file paretage,
             #10/16/2011
@@ -338,14 +335,14 @@ class DBSBlockInsert :
                     cfgid = 0
                     configObj = {"release_version": m["release_version"],
                                  "pset_hash": m["pset_hash"], "pset_name":m.get('pset_name', None),
-                                 "app_name": m["app_name"],                
+                                 "app_name": m["app_name"],
                                  'output_module_label' : m['output_module_label'],
                                  'global_tag' : m['global_tag'],
                                  'scenario' : m.get('scenario', None),
                                  'creation_date' : m.get('creation_date', dbsUtils().getTime()),
                                  #'create_by':m.get('create_by', dbsUtils().getCreateBy())
                                  'create_by':dbsUtils().getCreateBy()
-                                  }              
+                                  }
                     self.otptModCfgin.execute(conn, configObj, tran)
                     tran.commit()
                     tran = None
@@ -353,11 +350,11 @@ class DBSBlockInsert :
                     #Another job inserted it just 1/100000 second earlier than
                     #you!!  YG 11/17/2010
                     if str(ex).find("ORA-00001") != -1 or str(ex).lower().find("duplicate") !=-1:
-                        if str(ex).find("TUC_OMC_1") != -1: 
+                        if str(ex).find("TUC_OMC_1") != -1:
                             #the config is already in db, get the ID later
                             pass
                         else:
-                            #reinsert it if one or two or three of the three attributes (vresion, hash and app) are inserted 
+                            #reinsert it if one or two or three of the three attributes (vresion, hash and app) are inserted
                             #just 1/100000 second eailer.
                             try:
                                 self.otptModCfgin.execute(conn, configObj, tran)
@@ -371,15 +368,15 @@ class DBSBlockInsert :
                     if tran:tran.rollback()
                     if conn:conn.close()
                     raise ex3
-                cfgid = self.otptModCfgid.execute(conn, 
+                cfgid = self.otptModCfgid.execute(conn,
                                     app = m["app_name"],
                                     release_version = m["release_version"],
                                     pset_hash = m["pset_hash"],
                                     output_label = m["output_module_label"],
-                                    global_tag=m['global_tag'])             
+                                    global_tag=m['global_tag'])
                 otptIdList.append(cfgid)
-                key = (m['app_name'] + ':' + m['release_version'] + ':' + 
-                       m['pset_hash'] + ':' +m['output_module_label'] + ':' + 
+                key = (m['app_name'] + ':' + m['release_version'] + ':' +
+                       m['pset_hash'] + ':' +m['output_module_label'] + ':' +
                        m['global_tag'])
                 self.datasetCache['conf'][key] = cfgid
         finally:
@@ -409,7 +406,7 @@ class DBSBlockInsert :
             # Then we already have a valid dataset. We only need to fill the map (dataset & output module config)
             # Skip to the END
             try:
-                self.insertDatasetWOannex(dataset = dataset, 
+                self.insertDatasetWOannex(dataset = dataset,
                                         blockcontent = blockcontent,
                                         otptIdList = otptIdList, conn = conn,
                                         insertDataset = False)
@@ -422,13 +419,13 @@ class DBSBlockInsert :
         tran = conn.begin()
         try:
             #1. Deal with primary dataset. Most primary datasets are
-            #pre-installed in db  
+            #pre-installed in db
             primds = blockcontent["primds"]
-            
+
             primds["primary_ds_id"] = self.primdsid.execute(conn,
                                       primds["primary_ds_name"],transaction=tran)
             if primds["primary_ds_id"] <= 0:
-                #primary dataset is not in db yet. 
+                #primary dataset is not in db yet.
                 try:
                     primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS")
                     primds["creation_date"] = primds.get("creation_date", dbsUtils().getTime())
@@ -445,7 +442,7 @@ class DBSBlockInsert :
                         if tran:tran.rollback()
                         if conn:conn.close()
                         raise
-                except Exception, ex:   
+                except Exception, ex:
                     if tran:tran.rollback()
                     if conn:conn.close()
                     raise
@@ -453,14 +450,14 @@ class DBSBlockInsert :
             #2 Deal with processed ds
             #processed ds is handled inside of dataset insertion, However we need to make sure it is formated correctly.
             #processed_ds_name is not required pre-exist in the db. will insert with the dataset if not in yet
-            #  
-            #         processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
-            #         Note [-filterName] is new as 4/30/2012. See ticket #3655. YG 
             #
-            #althrough acquisition era and processing version is not required for a dataset 
+            #         processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
+            #         Note [-filterName] is new as 4/30/2012. See ticket #3655. YG
+            #
+            #althrough acquisition era and processing version is not required for a dataset
             #in the schema(the schema is build this way because
-            #we need to accomdate the DBS2 data), but we impose the requirement on the API. 
-            #So both acquisition and processing eras are required. 
+            #we need to accomdate the DBS2 data), but we impose the requirement on the API.
+            #So both acquisition and processing eras are required.
             #We do the format checking after we deal with acquision era and processing era.
             #
             #YG 12/07/2011  TK-362
@@ -473,7 +470,7 @@ class DBSBlockInsert :
                 aq = blockcontent['acquisition_era']
             else:
                 if conn:conn.close()
-                dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Acquisition Era is required")    
+                dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Acquisition Era is required")
             #is there acquisition?
             if aq.has_key('acquisition_era_name') and aq.has_key('start_date'):
                 #for migraction, some of the DBS2 Acquisition does not have start_date, so insert 0.
@@ -505,7 +502,7 @@ class DBSBlockInsert :
                     raise
             else:
                 if tran:tran.rollback()
-                if conn:conn.close() 
+                if conn:conn.close()
                 dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Acquisition Era is required")
 
             #4 Deal with Processing era
@@ -514,8 +511,8 @@ class DBSBlockInsert :
                 pera = blockcontent['processing_era']
             else:
                 if tran:tran.rollback()
-                if conn:conn.close() 
-                dbsExceptionHandler('dbsException-invalid-input2', 'BlockInsert:processing version is required') 
+                if conn:conn.close()
+                dbsExceptionHandler('dbsException-invalid-input2', 'BlockInsert:processing version is required')
             #is there processing era?
             if pera.has_key('processing_version'):
                 try:
@@ -537,14 +534,14 @@ class DBSBlockInsert :
                     if tran:tran.rollback()
                     if conn:conn.close()
                     raise
-            else: 
+            else:
                 if tran:tran.rollback()
                 if conn:conn.close()
                 dbsExceptionHandler('dbsException-invalid-input2', 'BlockInsert:processing version is required')
             #Make sure processed_ds_name is right format.
             #processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
             #In order to accomdate DBS2 data for migration, we turn off this check in migration.
-            #These will not cause any problem to none DBS2 datat because when we migration, the none DBS2 data is 
+            #These will not cause any problem to none DBS2 datat because when we migration, the none DBS2 data is
             #already checked when they were inserted into the source dbs.  YG 7/12/2012
             if migration:
                 pass
@@ -555,14 +552,14 @@ class DBSBlockInsert :
                     if conn:conn.close()
                     dbsExceptionHandler('dbsException-invalid-input2', "BlockInsert:\
                         processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified.")
-    
+
             #So far so good, let's committe first 4 db acativties before going on.
             tran.commit()
         except:
             if tran:tran.rollback()
             if conn:conn.close()
             raise
-        
+
         #Continue for the rest.
         #import pdb
         #pdb.set_trace()
@@ -571,7 +568,7 @@ class DBSBlockInsert :
             #5 Deal with physics gruop
             phg = dataset['physics_group_name']
             if phg:
-                #Yes, the dataset has physica group. 
+                #Yes, the dataset has physica group.
                 phgId = self.phygrpid.execute(conn, phg, transaction=tran)
                 if phgId <= 0 :
                     #not in db yet, insert it
@@ -585,7 +582,7 @@ class DBSBlockInsert :
                             if conn:conn.close()
                             dbsExceptionHandler(message='InsertPhysicsGroup Error', logger=self.logger.exception, serverError="InsertPhysicsGroup: "+ str(ex))
                         if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_PG_PHYSICS_GROUP_NAME") != -1) or\
-                            str(ex).lower().find("duplicate") != -1: 
+                            str(ex).lower().find("duplicate") != -1:
                             phgId = self.phygrpid.execute(conn, phg,transaction=tran)
                             if phgId <= 0:
                                 if tran:tran.rollback()
@@ -625,7 +622,7 @@ class DBSBlockInsert :
         finally:
             if tran:tran.rollback()
             if conn:conn.close()
-            
+
         return dataset['dataset_id']
 
 
@@ -663,7 +660,7 @@ class DBSBlockInsert :
                         self.datasetin.execute(conn, dataset, tran)
                     except exceptions.IntegrityError, ei:
                         if (str(ei).find("ORA-00001") != -1 and str(ei).find("TUC_DS_DATASET") != -1) or\
-                            str(ei).lower().find("duplicate") !=-1: 
+                            str(ei).lower().find("duplicate") !=-1:
                             dataset['dataset_id'] = self.datasetid.execute(conn,dataset['dataset'])
                             if dataset['dataset_id'] <= 0:
                                 if tran:tran.rollback()
@@ -679,10 +676,10 @@ class DBSBlockInsert :
                         if tran:tran.rollback()
                         if conn:conn.close()
                         raise
-                
+
             #9 Fill Dataset Parentage
             #All parentage are deduced from file parenttage.
-            
+
             #10 Before we commit, make dataset and output module configuration
             #mapping.  We have to try to fill the map even if dataset is
             #already in dest db
@@ -707,7 +704,7 @@ class DBSBlockInsert :
                 except Exception, ex:
                     if tran:tran.rollback()
                     if conn:conn.close()
-                    raise 
+                    raise
             #Now commit everything.
             tran.commit()
         except exceptions.IntegrityError:
