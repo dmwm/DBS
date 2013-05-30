@@ -7,6 +7,7 @@ __version__ = "$Revision: 1.4 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsUtils import dbsUtils
 
 class UpdateType(DBFormatter):
 
@@ -20,7 +21,8 @@ class UpdateType(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = """UPDATE %sDATASETS SET DATASET_ACCESS_TYPE_ID = ( select DATASET_ACCESS_TYPE_ID from %sDATASET_ACCESS_TYPES where
+        self.sql = """UPDATE %sDATASETS SET LAST_MODIFIED_BY=:myuser, LAST_MODIFICATION_DATE=:mydate, 
+        DATASET_ACCESS_TYPE_ID = ( select DATASET_ACCESS_TYPE_ID from %sDATASET_ACCESS_TYPES where
 	DATASET_ACCESS_TYPE=:dataset_access_type) where DATASET = :dataset""" %  ((self.owner,)*2) 
         
     def execute ( self, conn, dataset, dataset_access_type, transaction=False ):
@@ -29,6 +31,6 @@ class UpdateType(DBFormatter):
         """	
 	if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/UpdateType.  Expects db connection from upper layer.")
-	binds = { "dataset" : dataset , "dataset_access_type" : dataset_access_type }
+	binds = { "dataset" : dataset , "dataset_access_type" : dataset_access_type ,"myuser": dbsUtils().getTime(), "mydate": dbsUtils().getCreateBy() }
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

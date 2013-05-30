@@ -720,7 +720,6 @@ class DbsApi(object):
             kwargs['detail']=False
 
         checkInputParameter(method="listFiles",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
-        
         return self.__callServer("files",params=kwargs)
         
     def listFileSummaries(self, **kwargs):

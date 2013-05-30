@@ -7,6 +7,7 @@ __version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsUtils import dbsUtils
 
 class UpdateStatus(DBFormatter):
 
@@ -20,7 +21,7 @@ class UpdateStatus(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = """UPDATE %sBLOCKS SET OPEN_FOR_WRITING = :open_for_writing , LAST_MODIFICATION_DATE = :ltime where BLOCK_NAME = :block_name""" %  self.owner 
+        self.sql = """UPDATE %sBLOCKS SET OPEN_FOR_WRITING = :open_for_writing , LAST_MODIFIED_BY=:myuser, LAST_MODIFICATION_DATE = :ltime where BLOCK_NAME = :block_name""" %  self.owner 
         
     def execute ( self, conn, block_name, open_for_writing, ltime, transaction=False ):
         """
@@ -28,6 +29,6 @@ class UpdateStatus(DBFormatter):
         """	
 	if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Block/UpdateStatus.  Expects db connection from upper layer.")
-	binds = { "block_name" : block_name , "open_for_writing" : open_for_writing , 'ltime':ltime}
+	binds = { "block_name" : block_name , "open_for_writing" : open_for_writing , 'ltime':ltime, 'myuser':dbsUtils().getTime()}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

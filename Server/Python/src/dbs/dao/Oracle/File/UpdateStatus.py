@@ -7,6 +7,7 @@ __version__ = "$Revision: 1.5 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.dbsUtils import dbsUtils
 
 class UpdateStatus(DBFormatter):
 
@@ -32,11 +33,13 @@ class UpdateStatus(DBFormatter):
 
         op = ("=", "in")[type(logical_file_names) is list]
         if lost == 1:
-            self.sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid, file_size=0 where LOGICAL_FILE_NAME %s :logical_file_names""" %(self.owner,op)
+            self.sql = """UPDATE %sFILES SET LAST_MODIFIED_BY=:myuser, LAST_MODIFICATION_DATE=:mydate, IS_FILE_VALID = :is_file_valid, 
+            file_size=0 where LOGICAL_FILE_NAME %s :logical_file_names""" %(self.owner,op)
         else:
-            self.sql = """UPDATE %sFILES SET IS_FILE_VALID = :is_file_valid where LOGICAL_FILE_NAME %s :logical_file_names""" %  (self.owner, op)
+            self.sql = """UPDATE %sFILES SET LAST_MODIFIED_BY=:myuser, LAST_MODIFICATION_DATE=:mydate, IS_FILE_VALID = :is_file_valid 
+            where LOGICAL_FILE_NAME %s :logical_file_names""" %  (self.owner, op)
         if op =='=':
-            binds = {"is_file_valid" : is_file_valid, "logical_file_names": logical_file_names }
+            binds = {"is_file_valid" : is_file_valid, "logical_file_names": logical_file_names, "myuser":dbsUtils().getTime(), "mydate": dbsUtils().getCreateBy()}
         else:
             for f in logical_file_names:
                 binds = {"is_file_valid" : is_file_valid, "logical_file_names":f}
