@@ -4,11 +4,10 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
-__revision__ = "$Id: List.py,v 1.36 2010/07/09 19:38:10 afaq Exp $"
-__version__ = "$Revision: 1.36 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.DBSTransformInputType import parseRunRange
+from dbs.utils.DBSTransformInputType import run_tuple
 
 class List(DBFormatter):
     """
@@ -52,7 +51,7 @@ class List(DBFormatter):
 
     def execute(self, conn, dataset="", is_dataset_valid=1, parent_dataset="",\
                 release_version="", pset_hash="", app_name="", output_module_label="",\
-                processing_version=0, acquisition_era="", run_num=0,\
+                processing_version=0, acquisition_era="", run=-1,\
                 physics_group_name="", logical_file_name="", primary_ds_name="",\
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", prep_id="",\
                 create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,\
@@ -71,7 +70,7 @@ class List(DBFormatter):
                 op = ("=", "like")["%" in dataset_access_type]
                 wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op
                 binds = [{'dataset_access_type':dataset_access_type, 'is_dataset_valid':is_dataset_valid, 'dataset': x } for x in dataset]
-                self.logger.debug(binds)
+                #self.logger.debug(binds)
             else:
                 binds = [{'is_dataset_valid':is_dataset_valid, 'dataset': x } for x in dataset]
             sql ='SELECT' + basesql + wheresql
@@ -198,11 +197,11 @@ class List(DBFormatter):
                 binds.update(aera=acquisition_era)
     	
             # This should resolve to original cases that were in the business logic
-            if (not logical_file_name or  logical_file_name=="%") and (not run_num or run_num==0):
+            if (not logical_file_name or  logical_file_name=="%") and (run==-1):
     		# """JUST EXECUTE THE QUERY HERE"""
                 sql = "SELECT " + basesql + wheresql 
     	
-            elif (not run_num or run_num==0) and logical_file_name and logical_file_name !="%":
+            elif (run==-1) and logical_file_name and logical_file_name !="%":
                 # """DO execute 1 thingy"""
     		sql = "SELECT DISTINCT " + basesql
     		sql += " JOIN %sFILES FL on FL.DATASET_ID = D.DATASET_ID " % self.owner
@@ -210,7 +209,7 @@ class List(DBFormatter):
     		binds.update(logical_file_name = logical_file_name)
     		sql += wheresql
     
-            elif(run_num and run_num!=0):
+            elif(run != -1 ):
                 # """Do execute 2 thingy"""
     		sql += "SELECT DISTINCT " + basesql
     		if logical_file_name:
@@ -219,9 +218,40 @@ class List(DBFormatter):
     			binds.update(logical_file_name = logical_file_name)
     		else:
     		    sql += " JOIN %sFILES FL on FL.DATASET_ID = D.DATASET_ID " % (self.owner)
+                #
                 sql += " JOIN %sFILE_LUMIS FLLU on FLLU.FILE_ID=FL.FILE_ID " % (self.owner)
-    		wheresql += " AND FLLU.RUN_NUM = :run_num "
-    		binds.update(run_num = run_num)
+    		run_list = []
+                wheresql_run_list=''
+                wheresql_run_range=''
+                for r in parseRunRange(run):
+                    if isinstance(r, str) or isinstance(r, int):
+                        if not wheresql_run_list:
+                            wheresql_run_list = " FLLU.RUN_NUM = :run_list "
+                        run_list.append(r)
+                    if isinstance(r, run_tuple):
+                        if r[0] == r[1]:
+                            dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                        wheresql_run_range = " FLLU.RUN_NUM between :minrun and :maxrun "
+                        binds.update({"minrun":r[0]})
+                        binds.update({"maxrun":r[1]})
+                # 
+                if wheresql_run_range and len(run_list) >= 1:
+                    wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
+                elif wheresql_run_range and not run_list:
+                    wheresql += " and " + wheresql_run_range
+                elif not wheresql_run_range and len(run_list) >= 1:
+                    wheresql += " and " + wheresql_run_list
+                # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
+                if len(run_list) == 1:
+                    binds["run_list"] = run_list[0]
+                if len(run_list) > 1:
+                    newbinds = []
+                    for r in run_list:
+                        b = {}
+                        b.update(binds)
+                        b["run_list"] = r
+                        newbinds.append(b)
+                    binds = newbinds
     		sql += wheresql
             else:
                 dbsExceptionHandler("dbsException-invalid-input", "Oracle/Dataset/List. Proper parameters are not\

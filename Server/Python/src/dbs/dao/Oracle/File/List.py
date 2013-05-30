@@ -101,7 +101,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
             for r in parseRunRange(run):
                 if isinstance(r, str) or isinstance(r, int):
                     if not sql_run_list:
-                        sql_run_list = " FL.RUN_NUM in :run_list "
+                        sql_run_list = " FL.RUN_NUM = :run_list "
                     run_list.append(r)
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
@@ -109,16 +109,13 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
                     sql_run_range = " FL.RUN_NUM between :minrun and :maxrun " 
                     binds.update({"minrun":r[0]})
                     binds.update({"maxrun":r[1]})
-            # 
-            if sql_run_range and len(run_list) == 1:
-                sql += " and (" + sql_run_range + " or FL.RUN_NUM = :run_list )"
-            elif sql_run_range and len(run_list) > 1:
+            #
+            print sql
+            if sql_run_range and len(run_list) >= 1:
                 sql += " and (" + sql_run_range + " or " +  sql_run_list + " )"
             elif sql_run_range and not run_list:
                 sql += " and " + sql_run_range 
-            elif not sql_run_range and len(run_list) == 1:
-                sql += " and FL.RUN_NUM = :run_list "
-            elif not sql_run_range and len(run_list) > 1:
+            elif not sql_run_range and len(run_list) >= 1:
                 sql += " and "  + sql_run_list
             # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
             if len(run_list) == 1:
@@ -133,7 +130,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
                 binds = newbinds
         # Make sure when we have a lumi_list, there is only ONE run  -- YG 14/05/2013
         if (lumi_list and len(lumi_list) != 0):
-            sql += " AND FL.LUMI_SECTION_NUM in :lumi_list"
+            sql += " AND FL.LUMI_SECTION_NUM = :lumi_list"
             newbinds=[]
             for alumi in lumi_list:
                 cpbinds={}
@@ -146,5 +143,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	result = self.formatCursor(cursors[0])
+        result = []
+        for i in range(len(cursors)):
+            result.extend(self.formatCursor(cursors[i]))
 	return result

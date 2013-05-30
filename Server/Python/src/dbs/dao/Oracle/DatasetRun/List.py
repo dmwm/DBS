@@ -7,6 +7,8 @@ __version__ = "$Revision: 1.9 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.DBSTransformInputType import parseRunRange
+from dbs.utils.DBSTransformInputType import run_tuple
 
 class List(DBFormatter):
     """
@@ -23,7 +25,7 @@ class List(DBFormatter):
 	SELECT DISTINCT FL.RUN_NUM
 	FROM %sFILE_LUMIS FL"""% (self.owner)
 	
-    def execute(self, conn, minrun=-1, maxrun=-1, logical_file_name="", block_name="", dataset="", trans=False):
+    def execute(self, conn, run=-1, logical_file_name="", block_name="", dataset="", trans=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
@@ -48,19 +50,45 @@ class List(DBFormatter):
 	    binds["dataset"] = dataset
 	else:
 	    pass
-	if minrun > 0:
-	    if "WHERE" in sql:
-		sql += " and FL.RUN_NUM >= :min_run"
-	    else:
-		sql += " WHERE FL.RUN_NUM >= :min_run"
-	    binds["min_run"] = minrun
-	if maxrun > 0:
-		if "WHERE" in sql:
-		    sql += " AND FL.RUN_NUM <= :max_run"
-		else:
-		    sql += " where FL.RUN_NUM <= :max_run"
-		binds["max_run"] = maxrun
+        
+	if run != -1:
+            andorwhere = ("WHERE", "AND")["WHERE" in sql]
+            run_list = []
+            wheresql_run_list = ''
+            wheresql_run_range = ''
+            #
+            for r in parseRunRange(run):
+                if isinstance(r, str) or isinstance(r, int):
+                    if not wheresql_run_list:
+                        wheresql_run_list = " FL.RUN_NUM = :run_list "
+                    run_list.append(r)
+                if isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                    wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
+                    binds.update({"minrun":r[0]})
+                    binds.update({"maxrun":r[1]})
+            # 
+            if wheresql_run_range and len(run_list) >= 1:
+                sql += " %s (" %andorwhere    + wheresql_run_range + " or " +  wheresql_run_list + " )"
+            elif wheresql_run_range and not run_list:
+                sql += " %s " %andorwhere  + wheresql_run_range
+            elif not wheresql_run_range and len(run_list) >= 1:
+                sql += " %s " %andorwhere  + wheresql_run_list
+            # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
+            if len(run_list) == 1:
+                binds["run_list"] = run_list[0]
+            elif len(run_list) > 1:
+                newbinds = []
+                for r in run_list:
+                    b = {}
+                    b.update(binds)
+                    b["run_list"] = r
+                    newbinds.append(b)
+                binds = newbinds
         self.logger.debug(sql)
 	cursors = self.dbi.processData(sql, binds, conn, transaction=trans, returnCursor=True)
-	result = self.formatCursor(cursors[0])
+        result=[]
+        for i in range(len(cursors)):
+            result.extend(self.formatCursor(cursors[i]))
         return result

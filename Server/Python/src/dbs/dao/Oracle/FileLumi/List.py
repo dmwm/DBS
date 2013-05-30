@@ -8,6 +8,8 @@ __version__ = "$Revision: 1.7 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.DBSTransformInputType import parseRunRange
+from dbs.utils.DBSTransformInputType import run_tuple
 
 class List(DBFormatter):
     """
@@ -22,46 +24,86 @@ class List(DBFormatter):
         self.logger = logger
         self.sql = \
 """
-SELECT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
+SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 """
 
-    def execute(self, conn, logical_file_name='', block_name='', run_num=0, migration=False):
+    def execute(self, conn, logical_file_name='', block_name='', run=-1, migration=False):
         """
         Lists lumi section numbers with in a file or a block.
         """
 	if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/List. Expects db connection from upper layer.")            
         #sql = self.sql
+                
         
-        if logical_file_name:
-            if run_num<=0:
+        if run == -1:
+            if logical_file_name:
                 sql = self.sql + """ FROM %sFILE_LUMIS FL JOIN %sFILES F ON F.FILE_ID = FL.FILE_ID 
                 WHERE F.LOGICAL_FILE_NAME = :logical_file_name""" % ((self.owner,)*2)
                 binds = {'logical_file_name': logical_file_name}
-            else:
-                sql = self.sql + """ FROM %sFILE_LUMIS FL JOIN %sFILES F ON F.FILE_ID = FL.FILE_ID
-                WHERE F.LOGICAL_FILE_NAME = :logical_file_name and FL.RUN_NUM=:run_num""" % ((self.owner,)*2)
-                binds = {'logical_file_name': logical_file_name, 'run_num':run_num}
-        elif block_name:
-            if run_num<=0:
+            elif block_name:
                 sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME   
-	              FROM %sFILE_LUMIS FL JOIN %sFILES F ON F.FILE_ID = FL.FILE_ID  
-	              JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID  
-		      WHERE B.BLOCK_NAME = :block_name"""  % ((self.owner,)*3)
+                      FROM %sFILE_LUMIS FL JOIN %sFILES F ON F.FILE_ID = FL.FILE_ID  
+                      JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID  
+                      WHERE B.BLOCK_NAME = :block_name"""  % ((self.owner,)*3)
                 binds = {'block_name': block_name}
             else:
+                dbsExceptionHandler('dbsException-invalid-input', "FileLumi/List: Either logocal_file_name or block_name must be provided.")
+        else:
+            if logical_file_name:
+                sql = self.sql + """ FROM %sFILE_LUMIS FL JOIN %sFILES F ON F.FILE_ID = FL.FILE_ID
+                WHERE F.LOGICAL_FILE_NAME = :logical_file_name """ %((self.owner,)*2)
+                binds = {'logical_file_name': logical_file_name}
+            elif block_name:
                 sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME
                     FROM %sFILE_LUMIS FL JOIN %sFILES F ON F.FILE_ID = FL.FILE_ID
                     JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
-                    WHERE B.BLOCK_NAME = :block_name and  FL.RUN_NUM=:run_num"""  % ((self.owner,)*3)
-                binds = {'block_name': block_name, 'run_num':run_num}
-        else:
-            dbsExceptionHandler('dbsException-invalid-input', "FileLumi/List: Either logocal_file_name or block_name must be provided.")
+                    WHERE B.BLOCK_NAME = :block_name """  % ((self.owner,)*3)
+                binds = {'block_name': block_name}
+            else:
+                dbsExceptionHandler('dbsException-invalid-input', "FileLumi/List: Either logocal_file_name or block_name must be provided.")
+            #
+            run_list = []
+            wheresql_run_list=''
+            wheresql_run_range=''
+            for r in parseRunRange(run):
+                if isinstance(r, str) or isinstance(r, int):
+                    if not wheresql_run_list:
+                        wheresql_run_list = " FL.RUN_NUM = :run_list "
+                    run_list.append(r)
+                if isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                    wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
+                    binds.update({"minrun":r[0]})
+                    binds.update({"maxrun":r[1]})
+            # 
+            if wheresql_run_range and len(run_list) >= 1:
+                sql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
+            elif wheresql_run_range and not run_list:
+                sql += " and " + wheresql_run_range
+            elif not wheresql_run_range and len(run_list) >= 1:
+                sql += " and " + wheresql_run_list
+            # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
+            if len(run_list) == 1:
+                binds["run_list"] = run_list[0]
+            if len(run_list) > 1:
+                newbinds = []
+                for r in run_list:
+                    b = {}
+                    b.update(binds)
+                    b["run_list"] = r
+                    newbinds.append(b)
+                binds = newbinds
+
         #self.logger.debug(sql) 
-	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
-	if len(cursors) != 1:
-            dbsExceptionHandler('dbsException-missing-data', "FileLumi/List: file lumi does not exist.")
-        result = self.formatCursor(cursors[0])
+	#self.logger.debug(binds)
+        cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
+	#if len(cursors) != 1:
+            #dbsExceptionHandler('dbsException-missing-data', "FileLumi/List: file lumi does not exist.")
+        result=[]
+        for i in range(len(cursors)):
+            result.extend(self.formatCursor(cursors[i]))
         #for migration, we need flat format to load the data into another DB.
         if migration:
             return result

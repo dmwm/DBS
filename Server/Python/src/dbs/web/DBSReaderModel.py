@@ -88,7 +88,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'])
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version',
-                                'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
+                                'acquisition_era_name', 'run','physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                                 'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'])
@@ -109,8 +109,8 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id',
                         'block_name'])
         self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_names', 'block_name', 'block_id'])
-        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num'])
-        self._addMethod('GET', 'runs', self.listRuns, args=['minrun', 'maxrun', 'logical_file_name',
+        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run'])
+        self._addMethod('GET', 'runs', self.listRuns, args=['run', 'logical_file_name',
                         'block_name', 'dataset'])
         self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'])
         self._addMethod('GET','datatiers',self.listDataTiers, args=['data_tier_name'])
@@ -239,15 +239,16 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     #@expose
+    @transformInputType('run')
     @inputChecks( dataset=str, parent_dataset=str, release_version=str, pset_hash=str,
                  app_name=str, output_module_label=str,  processing_version=(int,str), acquisition_era_name=str,
-                 run_num=(long,int,str), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
+                 run=(long,int,str,list), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
                  primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str,
                  create_by=(str), last_modified_by=(str), min_cdate=(int,str), max_cdate=(int,str),
                  min_ldate=(int,str), max_ldate=(int, str), cdate=(int,str), ldate=(int,str), detail=(bool,str))
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="",
-        processing_version=0, acquisition_era_name="", run_num="0",
+        processing_version=0, acquisition_era_name="", run=-1,
         physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="",
         processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='', create_by="", last_modified_by="",
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',
@@ -317,11 +318,6 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler("dbsException-invalid-input", "Invalid Input for create_by or last_modified_by.\
             No wildcard allowed.",  self.logger.exception, 'No wildcards allowed for create_by or last_modified_by')
         try:
-            #run_num = run_num.replace("*", "%")
-            if isinstance(run_num,str) and ('*' in run_num or '%' in run_num):
-                run_num = 0
-            else:
-                run_num = int(run_num)
             if isinstance(min_cdate,str) and ('*' in min_cdate or '%' in min_cdate):
                 min_cdate = 0
             else:
@@ -357,7 +353,7 @@ class DBSReaderModel(RESTModel):
         try:
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash,
                 app_name, output_module_label, processing_version, acquisition_era_name,
-                run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
+                run, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
                 data_tier_name, dataset_access_type, prep_id, create_by, last_modified_by,
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
         except dbsException as de:
@@ -819,9 +815,10 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listFileChildren. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-
-    @inputChecks(logical_file_name=str, block_name=str, run_num=(long,int,str))
-    def listFileLumis(self, logical_file_name="", block_name="", run_num='0'):
+    
+    @transformInputType('run')
+    @inputChecks(logical_file_name=str, block_name=str, run=(long,int,str,list))
+    def listFileLumis(self, logical_file_name="", block_name="", run=-1):
         """
         API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support on this API
 
@@ -829,18 +826,14 @@ class DBSReaderModel(RESTModel):
         :type block_name: str
         :param logical_file_name: logical_file_name of file
         :type logical_file_name: str
-        :param run_num: List lumi sections for a given run number (Optional)
-        :type run_num: int
-        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
+        :param run: List lumi sections for a given run number (Optional)
+        :type run: int, str, or list
+        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run)
         :rtype: list of dicts
 
         """
-        if isinstance(run_num,str) and ('*' in run_num or '%' in run_num):
-            run_num = 0
-        else:
-            run_num = int(run_num)
         try:
-            return self.dbsFile.listFileLumis(logical_file_name, block_name, run_num )
+            return self.dbsFile.listFileLumis(logical_file_name, block_name, run )
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
@@ -848,9 +841,9 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(minrun=(long, int,str), maxrun=(long, int,str), logical_file_name=str, block_name=str, dataset=str)
-    def listRuns(self, minrun=-1, maxrun=-1, logical_file_name="",
-                 block_name="", dataset=""):
+    @transformInputType('run')
+    @inputChecks(run=(long, int, str, list), logical_file_name=str, block_name=str, dataset=str)
+    def listRuns(self, run=-1, logical_file_name="", block_name="", dataset=""):
         """
         API to list all runs in DBS. All parameters are optional.
 
@@ -860,13 +853,10 @@ class DBSReaderModel(RESTModel):
         :type block_name: str
         :param dataset: List all runs in that dataset
         :type dataset: str
-        :param minrun: List all runs large than minimum run number
-        :type minrun: int
-        :param maxrun: List all runs lower than maximum run number
-        :type maxrun: int
+        :param run: List all runs 
+        :type run: int, string or list
 
-        * If you omit both min/maxrun, then all runs known to DBS will be listed
-        * Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
+        * If you omit run, then all runs known to DBS will be listed
 
         """
         try:
@@ -879,8 +869,7 @@ class DBSReaderModel(RESTModel):
             if(dataset):
                 dataset = dataset.replace("*", "%")
                 #print("ds=%s\n" %dataset)
-            #print ("maxrun=%s, minrun=%s\n" %(maxrun, minrun) )
-            return self.dbsRun.listRuns(minrun, maxrun, logical_file_name, block_name, dataset)
+            return self.dbsRun.listRuns(run, logical_file_name, block_name, dataset)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:

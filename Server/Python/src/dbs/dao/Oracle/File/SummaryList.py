@@ -35,7 +35,7 @@ class SummaryList(DBFormatter):
             for r in parseRunRange(run):
                 if isinstance(r, str) or isinstance(r, int):
                     if not wheresql_run_list:
-                        wheresql_run_list = " fl.RUN_NUM in :run_list "
+                        wheresql_run_list = " fl.RUN_NUM = :run_list "
                     run_list.append(r)
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
@@ -198,6 +198,7 @@ class SummaryList(DBFormatter):
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-
-	result = self.formatCursor(cursors[0])
+        result=[]
+        for i in range(len(cursors)):
+            result.extend(self.formatCursor(cursors[i]))
 	return result

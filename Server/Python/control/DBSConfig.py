@@ -10,7 +10,7 @@ DBSVERSION = os.getenv('DBS3_VERSION')
 sys.path.append(os.path.join(ROOTDIR,'auth/dbs'))
 
 from DBSSecrets import dbs3_p2_i2
-from DBSSecrets import cms_lum_cmscald
+from DBSSecrets import dbs3_pg_r
 from DBSSecrets import dbs3_dp01_i2
 
 config = Configuration()
@@ -60,9 +60,9 @@ DevelopmentGlobal.connectUrl = dbs3_p2_i2['connectUrl']['writer']
 DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 IntegrationGlobal = instances.section_('int/global')
-IntegrationGlobal.dbowner = cms_lum_cmscald['databaseOwner']
+IntegrationGlobal.dbowner = dbs3_pg_r['databaseOwner']
 IntegrationGlobal.version = DBSVERSION
-IntegrationGlobal.connectUrl = cms_lum_cmscald['connectUrl']['writer']
+IntegrationGlobal.connectUrl = dbs3_pg_r['connectUrl']['writer']
 IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 active.DBSMigrator.section_('security')
@@ -96,9 +96,9 @@ DevelopmentGlobal.connectUrl = dbs3_p2_i2['connectUrl']['reader']
 DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 IntegrationGlobal = instances.section_('int/global')
-IntegrationGlobal.dbowner = cms_lum_cmscald['databaseOwner']
+IntegrationGlobal.dbowner = dbs3_pg_r['databaseOwner']
 IntegrationGlobal.version = DBSVERSION
-IntegrationGlobal.connectUrl = cms_lum_cmscald['connectUrl']['reader']
+IntegrationGlobal.connectUrl = dbs3_pg_r['connectUrl']['reader']
 IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 active.section_('DBSWriter')
@@ -123,9 +123,9 @@ DevelopmentGlobal.connectUrl = dbs3_p2_i2['connectUrl']['writer']
 DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 IntegrationGlobal = instances.section_('int/global')
-IntegrationGlobal.dbowner = cms_lum_cmscald['databaseOwner']
+IntegrationGlobal.dbowner = dbs3_pg_r['databaseOwner']
 IntegrationGlobal.version = DBSVERSION
-IntegrationGlobal.connectUrl = cms_lum_cmscald['connectUrl']['writer']
+IntegrationGlobal.connectUrl = dbs3_pg_r['connectUrl']['writer']
 IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
 active.DBSWriter.section_('security')

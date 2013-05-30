@@ -24,7 +24,7 @@ class DBSRun:
 
         self.runlist = daofactory(classname="DatasetRun.List")
 
-    def listRuns(self, minrun=-1, maxrun=-1, logical_file_name="",
+    def listRuns(self, run=-1, logical_file_name="",
                  block_name="", dataset=""):
         """
         List run known to DBS.
@@ -35,7 +35,7 @@ class DBSRun:
         conn = self.dbi.connection()
         tran = False
         try:
-            ret = self.runlist.execute(conn, minrun, maxrun, logical_file_name, block_name, dataset, tran)
+            ret = self.runlist.execute(conn, run, logical_file_name, block_name, dataset, tran)
             result = []
             rnum = []
             for i in ret:

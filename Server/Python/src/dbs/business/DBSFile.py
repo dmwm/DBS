@@ -45,10 +45,10 @@ class DBSFile:
         self.filelumilist = daofactory(classname="FileLumi.List")
         self.filebufin = daofactory(classname = "FileBuffer.Insert")
 
-    def listFileLumis(self, logical_file_name="", block_name="", run_num=0):
+    def listFileLumis(self, logical_file_name="", block_name="", run=-1):
         """
         optional parameter: logical_file_name, block_name
-        returns: logical_file_name, file_lumi_id, run_num, lumi_section_num
+        returns: logical_file_name, file_lumi_id, run, lumi_section_num
         """
         if((logical_file_name=='' or '*'in logical_file_name or '%' in logical_file_name) \
             and (block_name=="" or '*' in block_name or '%' in block_name)):
@@ -56,7 +56,7 @@ class DBSFile:
                 "Fully specified logical_file_name or block_name is required. No wildcards are allowed." )
         conn = self.dbi.connection()
         try:
-            result = self.filelumilist.execute(conn, logical_file_name, block_name, run_num)
+            result = self.filelumilist.execute(conn, logical_file_name, block_name, run)
             return result
         finally:
             if conn:

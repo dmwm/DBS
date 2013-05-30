@@ -9,6 +9,9 @@ __version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from dbs.utils.DBSTransformInputType import parseRunRange
+from dbs.utils.DBSTransformInputType import run_tuple
+
 
 class BriefList(DBFormatter):
     """
@@ -24,7 +27,7 @@ class BriefList(DBFormatter):
 
     def execute(self, conn, dataset="", is_dataset_valid=1, parent_dataset="",
                 release_version="", pset_hash="", app_name="", output_module_label="",
-                processing_version=0, acquisition_era="", run_num=0,
+                processing_version=0, acquisition_era="", run=-1,
                 physics_group_name="", logical_file_name="", primary_ds_name="",
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", 
                 prep_id="", create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, ldate=0,
@@ -184,14 +187,44 @@ class BriefList(DBFormatter):
                 joinsql += " JOIN %sFILES FL on FL.DATASET_ID = D.DATASET_ID " % self.owner
                 wheresql += " AND FL.LOGICAL_FILE_NAME = :logical_file_name "
                 binds.update(logical_file_name = logical_file_name)
-
-            if  run_num and run_num!=0:
+            #
+            if  run != -1:
                 if not logical_file_name:
                     selectsql += "DISTINCT "
                     joinsql += " JOIN %sFILES FL on FL.DATASET_ID = D.DATASET_ID " % (self.owner)
                 joinsql += " JOIN %sFILE_LUMIS FLLU on FLLU.FILE_ID=FL.FILE_ID " % (self.owner)
-                wheresql += " AND FLLU.RUN_NUM = :run_num "
-                binds.update(run_num = run_num)
+                run_list = []
+                wheresql_run_list=''
+                wheresql_run_range=''
+                for r in parseRunRange(run):
+                    if isinstance(r, str) or isinstance(r, int):
+                        if not wheresql_run_list:
+                            wheresql_run_list = " FLLU.RUN_NUM = :run_list "
+                        run_list.append(r)
+                    if isinstance(r, run_tuple):
+                        if r[0] == r[1]:
+                            dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                        wheresql_run_range = " FLLU.RUN_NUM between :minrun and :maxrun "
+                        binds.update({"minrun":r[0]})
+                        binds.update({"maxrun":r[1]})
+                # 
+                if wheresql_run_range and len(run_list) >= 1:
+                    wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
+                elif wheresql_run_range and not run_list:
+                    wheresql += " and " + wheresql_run_range
+                elif not wheresql_run_range and len(run_list) >= 1:
+                    wheresql += " and " + wheresql_run_list 
+                # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
+                if len(run_list) == 1:
+                    binds["run_list"] = run_list[0]
+                if len(run_list) > 1:
+                    newbinds = []
+                    for r in run_list:
+                        b = {}
+                        b.update(binds)
+                        b["run_list"] = r
+                        newbinds.append(b)
+                    binds = newbinds
 
 	sql = "".join((selectsql, self.basesql, joinsql, wheresql)) 
 	#self.logger.debug( sql)

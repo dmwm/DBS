@@ -110,7 +110,7 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
             for r in parseRunRange(run):
                 if isinstance(r, str) or isinstance(r, int):
                     if not wheresql_run_list:
-                        wheresql_run_list = " FLM.RUN_NUM in :run_list "
+                        wheresql_run_list = " FLM.RUN_NUM = :run_list "
                     run_list.append(r)
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
@@ -119,15 +119,11 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
                     binds.update({"minrun":r[0]})
                     binds.update({"maxrun":r[1]})
             # 
-            if wheresql_run_range and len(run_list) == 1:
-                wheresql += " and (" + wheresql_run_range + " or FLM.RUN_NUM = :run_list )"
-            elif wheresql_run_range and len(run_list) > 1:
+            if wheresql_run_range and len(run_list) >= 1:
                 wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
             elif wheresql_run_range and not run_list:
                 wheresql +=  " and " + wheresql_run_range
-            elif not wheresql_run_range and len(run_list) == 1:
-                wheresql += " and FLM.RUN_NUM = :run_list "
-            elif not wheresql_run_range and len(run_list) > 1:
+            elif not wheresql_run_range and len(run_list) >= 1:
                 wheresql += " and "  + wheresql_run_list
             # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
             if len(run_list) == 1:
@@ -143,8 +139,10 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
         
 	sql = " ".join((basesql, self.fromsql, joinsql, wheresql))  
 		
-	print "sql=%s" %sql
-	print "binds=%s" %binds
+	#print "sql=%s" %sql
+	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	result = self.formatCursor(cursors[0])
-	return result
+	result=[]
+        for i in range(len(cursors)):
+            result.extend(self.formatCursor(cursors[i]))
+        return result
