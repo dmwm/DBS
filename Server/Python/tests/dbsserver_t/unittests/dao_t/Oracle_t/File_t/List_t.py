@@ -19,7 +19,7 @@ class List_t(unittest.TestCase):
         data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
         self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
         self.data = self.data_provider.get_file_data()
-                
+
     def setUp(self):
         """setup all necessary parameters"""
         self.conn = self.dbi.connection()
@@ -28,7 +28,7 @@ class List_t(unittest.TestCase):
     def tearDown(self):
         """Clean-up all necessary parameters"""
         self.conn.close()
-   
+
     def test01(self):
         """dao.Oracle.File.List: Basic"""
         result = self.dao.execute(self.conn, dataset=self.data[0]["dataset"])
@@ -43,8 +43,7 @@ class List_t(unittest.TestCase):
         """dao.Oracle.File.List: Basic"""
         result = self.dao.execute(self.conn, logical_file_name=self.data[0]["logical_file_name"])
         self.assertEqual(strip_volatile_fields(result), self.data)
-       
+
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(List_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
-        

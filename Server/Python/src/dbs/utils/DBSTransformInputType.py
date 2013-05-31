@@ -40,7 +40,7 @@ def parseRunRange(run_range):
                 yield run_range
             else:
                 yield run_tuple(min_run, max_run)
-    elif isinstance(run_range, int):
+    elif isinstance(run_range, (int, long)):
         yield run_range
     else:
         dbsExceptionHandler('dbsException-invalid-input2', "Invalid input: run/run_range.",

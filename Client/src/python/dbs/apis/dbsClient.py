@@ -32,7 +32,7 @@ def checkInputParameter(method,parameters,validParameters,requiredParameters=Non
                     break
             if not match:
                 raise dbsClientException("Invalid input", "API %s does require one of the parameters %s" % (method, requiredParameters['multiple']))
-                
+
         if requiredParameters.has_key('forced'):
             for requiredParameter in requiredParameters['forced']:
                 if requiredParameter not in parameters:
@@ -45,12 +45,12 @@ def checkInputParameter(method,parameters,validParameters,requiredParameters=Non
                     overlap.append(requiredParameter)
             if len(overlap)!=1:
                 raise dbsClientException("Invalid input", "API %s does requires only *one* of the parameters %s." % (method, requiredParameters['standalone']))
-                        
+
 class DbsApi(object):
     def __init__(self, url="", proxy=None, key=None, cert=None, debug=0):
         """
         DbsApi Constructor
-        
+
         :param url: server URL.
         :type url: str
         :param proxy: socks5 proxy format=(socks5://username:password@host:port)
@@ -68,14 +68,14 @@ class DbsApi(object):
         self.proxy = proxy
         self.key = key
         self.cert = cert
-                
+
         self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key),
                                 proxy=Socks5Proxy(proxy_url=self.proxy) if self.proxy else None)
-        
+
     def __callServer(self, method="", params={}, data={}, callmethod='GET', content='application/json'):
         """
         A private method to make HTTP call to the DBS Server
-        
+
         :param method: REST API to call, e.g. 'datasets, blocks, files, ...'.
         :type method: str
         :param params: Parameters to the API call, e.g. {'dataset':'/PrimaryDS/ProcessedDS/TIER'}.
@@ -92,19 +92,19 @@ class DbsApi(object):
         method_func = getattr(self.rest_api, callmethod.lower())
 
         data = cjson.encode(data)
-        
+
         try:
             self.http_response = method_func(self.url, method, params, data, request_headers)
         except HTTPError as http_error:
             self.__parseForException(http_error)
-                
+
         if content!="application/json":
             return self.http_response.body
-        
+
         json_ret=cjson.decode(self.http_response.body)
-            
+
         return json_ret
-    
+
     def __parseForException(self, http_error):
         """
         An internal method, should not be used by clients
@@ -117,10 +117,10 @@ class DbsApi(object):
                 data=cjson.decode(data)
         except:
             raise http_error
-            
+
         if isinstance(data, dict) and data.has_key('exception'):# re-raise with more details
             raise HTTPError(http_error.url, data['exception'], data['message'], http_error.header, http_error.body)
-        
+
         raise http_error
 
     @property
@@ -134,7 +134,7 @@ class DbsApi(object):
             return tuple(item.split('=')[1] for item in self.http_response.header.get('CMS-Server-Time').split())
         except AttributeError:
             return None, None
-        
+
     @property
     def requestContentLength(self):
         """
@@ -145,14 +145,14 @@ class DbsApi(object):
             return self.http_response.header.get('Content-Length')
         except AttributeError:
             return None
-     
+
     def blockDump(self,**kwargs):
         """
         API the list all information related with the block_name
-        
+
         :param block_name: Name of block whoes children needs to be found (Required)
         :type block_name: str
-        
+
         """
         validParameters = ['block_name']
 
@@ -169,7 +169,7 @@ class DbsApi(object):
 
         :param call: RESTAPI call for which help is desired (Optional)
         :type call: str
-        
+
         """
         validParameters = ['call']
 
@@ -210,7 +210,7 @@ class DbsApi(object):
         API to insert a bulk block
         :param blockDump: Output of the block dump command, example can be found in https://svnweb.cern.ch/trac/CMSDMWM/browser/DBS/trunk/Client/tests/dbsclient_t/unittests/blockdump.dict
         :type blockDump: dict
-        
+
         """
         return self.__callServer("bulkblocks", data = blockDump , callmethod='POST' )
 
@@ -234,7 +234,7 @@ class DbsApi(object):
 
         """
         return self.__callServer("datasets", data = datasetObj , callmethod='POST' )
-    
+
     def insertDataTier(self, dataTierObj={}):
         """
         API to insert A Data Tier in DBS
@@ -273,7 +273,7 @@ class DbsApi(object):
         """
 
         if qInserts==False: #turn off qInserts
-            return self.__callServer("files", params={'qInserts':qInserts}, data = filesList , callmethod='POST' )    
+            return self.__callServer("files", params={'qInserts':qInserts}, data = filesList , callmethod='POST' )
         return self.__callServer("files", data = filesList , callmethod='POST' )
 
     def insertOutputConfig(self, outputConfigObj={}):
@@ -345,18 +345,18 @@ class DbsApi(object):
         :type acquisition_era_name: str
         :returns: List of dictionaries containing following keys (description, end_date, acquisition_era_name, create_by, creation_date and start_date)
         :rtype: list of dicts
-        
+
         """
         validParameters = ['acquisition_era_name']
 
         checkInputParameter(method="listAcquisitionEras",parameters=kwargs.keys(),validParameters=validParameters)
-        
+
         return self.__callServer("acquisitioneras_ci",params=kwargs)
 
     def listBlockChildren(self, **kwargs):
         """
         API to list block children
-        
+
         :param block_name: name of block whoes children needs to be found (Required)
         :type block_name: str
         :returns: List of dictionaries containing following keys (block_name)
@@ -368,7 +368,7 @@ class DbsApi(object):
         requiredParameters={'forced':validParameters}
 
         checkInputParameter(method="listBlockChildren",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
-        
+
         return self.__callServer("blockchildren",params=kwargs)
 
     def listBlockParents(self, **kwargs):
@@ -388,7 +388,7 @@ class DbsApi(object):
         checkInputParameter(method="listBlockParents",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
 
         return self.__callServer("blockparents",params=kwargs)
-    
+
     def listBlocks(self, **kwargs):
         """
         API to list a block in DBS. At least one of the parameters block_name, dataset or logical_file_name are required.
@@ -401,8 +401,8 @@ class DbsApi(object):
         :type logical_file_name: str
         :param origin_site_name: Origin Site Name (Optional)
         :type origin_site_name: str
-        :param run_num: Run Number (Optional)
-        :type run_num: int
+        :param run: Run Number (Optional)
+        :type run: int,str,list
         :param detail: Get detailed information of a block (Optional)
         :type detail: bool
         :returns: List of dictionaries containing following keys (block_name). If option detail is used the dictionaries contain the following keys (block_id, create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, dataset_id and block_size)
@@ -410,7 +410,7 @@ class DbsApi(object):
 
         """
         validParameters = ['dataset','block_name','origin_site_name',
-                           'logical_file_name','run_num','min_cdate',
+                           'logical_file_name','run','min_cdate',
                            'max_cdate','min_ldate','max_ldate',
                            'cdate','ldate','detail']
 
@@ -419,7 +419,7 @@ class DbsApi(object):
         #set defaults
         if 'detail' not in kwargs.keys():
             kwargs['detail']=False
-            
+
         checkInputParameter(method="listBlocks",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
 
         return self.__callServer("blocks",params=kwargs)
@@ -427,10 +427,10 @@ class DbsApi(object):
 
     def listBlockOrigin(self, **kwargs):
         """
-        API to list blocks first generated in origin_site_name 
+        API to list blocks first generated in origin_site_name
 
         :param origin_site_name: Origin Site Name (Required, No wildcards)
-        :type origin_site_name: str 
+        :type origin_site_name: str
         :param dataset: dataset (Optional, No wildcards)
         :type dataset: str
         :returns: List of dictionaries containg the following keys (create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, block_size)
@@ -468,7 +468,7 @@ class DbsApi(object):
         :type primary_ds_name: str
         :param primary_ds_type: Primary Dataset Type (Type of data, MC/DATA)
         :type primary_ds_type: str
-        :param data_tier_name: Data Tier 
+        :param data_tier_name: Data Tier
         :type data_tier_name: str
         :param dataset_access_type: Dataset Access Type ( PRODUCTION, DEPRECATED etc.)
         :type dataset_access_type: str
@@ -490,7 +490,7 @@ class DbsApi(object):
         validParameters = ['dataset','parent_dataset','is_dataset_valid',
                            'release_version','pset_hash','app_name',
                            'output_module_label','processing_version','acquisition_era_name',
-                           'run_num','physics_group_name','logical_file_name',
+                           'run','physics_group_name','logical_file_name',
                            'primary_ds_name','primary_ds_type','data_tier_name',
                            'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                            'min_cdate','max_cdate', 'min_ldate','max_ldate','cdate','ldate',
@@ -501,7 +501,7 @@ class DbsApi(object):
             kwargs['detail']=False
 
         checkInputParameter(method="listDatasets",parameters=kwargs.keys(),validParameters=validParameters)
-        
+
         return self.__callServer("datasets",params=kwargs)
 
     def listDatasetAccessTypes(self, **kwargs):
@@ -523,7 +523,7 @@ class DbsApi(object):
     def listDatasetArray(self, **kwargs):
         """
         API to list datasets in DBS
-        
+
         :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required)
         :type dataset: list
         :param dataset_access_type: If provided list only datasets having that dataset access type (Optional)
@@ -561,7 +561,7 @@ class DbsApi(object):
         checkInputParameter(method="listDatasetChildren",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
 
         return self.__callServer("datasetchildren",params=kwargs)
-    
+
     def listDatasetParents(self, **kwargs):
         """
         API to list A datasets parents in DBS
@@ -576,7 +576,7 @@ class DbsApi(object):
         requiredParameters = {'forced':validParameters}
 
         checkInputParameter(method="listDatasetParents",parameters=kwargs.keys(),validParameters=validParameters,requiredParameters=requiredParameters)
-        
+
         return self.__callServer("datasetparents",params=kwargs)
 
     def listDataTiers(self, **kwargs):
@@ -609,11 +609,11 @@ class DbsApi(object):
         checkInputParameter(method="listDataTypes",parameters=kwargs.keys(),validParameters=validParameters)
 
         return self.__callServer("datatypes",params=kwargs)
-    
+
     def listFileChildren(self, **kwargs):
         """
         API to list file children
-        
+
         :param logical_file_name: logical_file_name of file (Required)
         :type logical_file_name: str
         :returns: List of dictionaries containing the following keys (child_logical_file_name, logical_file_name)
@@ -625,20 +625,20 @@ class DbsApi(object):
         requiredParameters = {'standalone':validParameters}
 
         checkInputParameter(method="listFileChildren",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
-        
+
         return self.__callServer("filechildren",params=kwargs)
 
     def listFileLumis(self, **kwargs):
         """
         API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support on this API
-        
+
         :param block_name: Name of the block
         :type block_name: str
         :param logical_file_name: logical_file_name of file
         :type logical_file_name: str
-        :param run_num: List lumi sections for a given run number (Optional)
-        :type run_num: int
-        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
+        :param run: List lumi sections for a given run number (Optional)
+        :type run: int,str,list
+        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run)
         :rtype: list of dicts
 
         """
@@ -647,7 +647,7 @@ class DbsApi(object):
         requiredParameters = {'standalone':validParameters}
 
         checkInputParameter(method="listFileLumis",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
-                
+
         return self.__callServer("filelumis",params=kwargs)
 
     def listFileParents(self, **kwargs):
@@ -687,10 +687,8 @@ class DbsApi(object):
         :type app_name: str
         :param output_module_label: name of the used output module
         :type output_module_label: str
-        :param minrun: Minimal run number. If you want to look for a run range use minrun and maxrun
-        :type minrun: int
-        :param maxrun: Maximal run number. If you want to look for a run range use minrun and maxrun
-        :type maxrun: int
+        :param run: run number. Either a run number 123, a list of run numbers ['123','345'], a run range '123-345' or a list of both ['123','345-678']
+        :type run: int,str,list
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
         :param lumi_list: List of lumi sections.
@@ -700,17 +698,15 @@ class DbsApi(object):
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
 
-        * Run numbers must be passed as two parameters, minrun and maxrun.
-        * Use minrun,maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
         * For lumi_list the following two json formats are supported:
             - '[a1, a2, a3,]'
             - '[[a,b], [c, d],]'
-        * If lumi_list is provided, one also needs to provide both minrun and maxrun parameters (equal)
+        * If lumi_list is provided, one also needs to provide run parameter
 
         """
         validParameters = ['dataset','block_name','logical_file_name',
                           'release_version','pset_hash','app_name',
-                          'output_module_label','minrun','maxrun',
+                          'output_module_label','run',
                           'origin_site_name','lumi_list','detail']
 
         requiredParameters = {'multiple':validParameters}
@@ -720,35 +716,36 @@ class DbsApi(object):
             kwargs['detail']=False
 
         checkInputParameter(method="listFiles",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
+
         return self.__callServer("files",params=kwargs)
-        
+
     def listFileSummaries(self, **kwargs):
         """
-        API to list number of files, event counts and number of lumis in a given block of dataset.If the optional run_num
+        API to list number of files, event counts and number of lumis in a given block of dataset.If the optional run
         parameter is used, the summaries just for this run number. Either block_name or dataset name is required. No wild-cards are allowed
 
         :param block_name: Block name
         :type block_name: str
         :param dataset: Dataset name
         :type dataset: str
-        :param run_num: Run number (Optional)
-        :type run_num: int
+        :param run: Run number (Optional)
+        :type run: int, str, list
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
         """
-        validParameters = ['block_name','dataset', 'run_num']
+        validParameters = ['block_name','dataset', 'run']
 
         requiredParameters = {'standalone':['block_name', 'dataset']}
 
         checkInputParameter(method="listFileSummaries",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
-        
+
         return self.__callServer("filesummaries",params=kwargs)
 
     def listOutputConfigs(self, **kwargs):
         """
         API to list OutputConfigs in DBS
-        
+
         :param dataset: Full dataset (path) of the dataset
         :type dataset: str
         :param logical_file_name: logical_file_name of the file
@@ -770,14 +767,14 @@ class DbsApi(object):
 
         * You can use ANY combination of these parameters in this API
         * All parameters are optional, if you do not provide any parameter, All configs will be listed from DBS
-        
+
         """
         validParameters = ['dataset','logical_file_name','release_version',
                            'pset_hash','app_name','output_module_label',
                            'block_id','global_tag']
 
         checkInputParameter(method="listOutputConfigs",parameters=kwargs.keys(),validParameters=validParameters)
-        
+
         return self.__callServer("outputconfigs",params=kwargs)
 
     def listPhysicsGroups(self, **kwargs):
@@ -793,13 +790,13 @@ class DbsApi(object):
         validParameters = ['physics_group_name']
 
         checkInputParameter(method="listPhysicsGroups",parameters=kwargs.keys(),validParameters=validParameters)
-        
+
         return self.__callServer("physicsgroups",params=kwargs)
 
     def listPrimaryDatasets(self, **kwargs):
         """
         API to list ALL primary datasets in DBS
-        
+
         :param primary_ds_name: If provided, will list that primary dataset
         :type primary_ds_name: str
         :param primary_ds_type:  If provided, will list all primary dataset having that type
@@ -811,13 +808,13 @@ class DbsApi(object):
         validParameters = ['primary_ds_name', 'primary_ds_type']
 
         checkInputParameter(method="listPrimaryDatasets",parameters=kwargs.keys(),validParameters=validParameters)
-        
+
         return self.__callServer("primarydatasets",params=kwargs)
 
     def listPrimaryDSTypes(self,**kwargs):
         """
         API to list primary dataset types
-        
+
         :param primary_ds_type: If provided, will list that primary dataset type
         :type primary_ds_type: str
         :param dataset: List the primary dataset type for that dataset
@@ -851,7 +848,7 @@ class DbsApi(object):
     def listReleaseVersions(self, **kwargs):
         """
         API to list all release versions in DBS
-        
+
         :param release_version: If provided, will list only that release version
         :type release_version: str
         :param dataset: If provided, will list release version of the specified dataset
@@ -878,19 +875,16 @@ class DbsApi(object):
         :type block_name: str
         :param dataset: List all runs in that dataset
         :type dataset: str
-        :param minrun: List all runs large than minimum run number
-        :type minrun: int
-        :param maxrun: List all runs lower than maximum run number
-        :type maxrun: int
-                
-        * If you omit both min/maxrun, then all runs known to DBS will be listed
-        * Use minrun=maxrun for a specific run, say for runNumber 2000 use minrun=2000, maxrun=2000
+        :param run: run number. Either a run number 123, a list of run numbers ['123','345'], a run range '123-345' or a list of both ['123','345-678']
+        :type run: int,str,list
+
+        * If you omit run parameter, then all runs known to DBS will be listed
 
         """
-        validParameters = ['minrun','maxrun','logical_file_name','block_name','dataset']
+        validParameters = ['run','logical_file_name','block_name','dataset']
 
         checkInputParameter(method="listRuns",parameters=kwargs.keys(),validParameters=validParameters)
-        
+
         return self.__callServer("runs",params=kwargs)
 
     def submitMigration(self, migrationObj):
@@ -903,7 +897,7 @@ class DbsApi(object):
         :key migraiton_input: The block or dataset names to be migrated (required)
 
         """
-        return self.__callServer("submit", data=migrationObj, callmethod='POST') 
+        return self.__callServer("submit", data=migrationObj, callmethod='POST')
 
     def statusMigration(self, **kwargs):
         """
@@ -947,16 +941,16 @@ class DbsApi(object):
 
         """
         return self.__callServer("serverinfo")
-  
+
     def updateBlockStatus(self, **kwargs):
         """
         API to update block status
-        
+
         :param block_name: block name (Required)
         :type block_name: str
         :param open_for_writing: open_for_writing=0 (close), open_for_writing=1 (open) (Required)
         :type open_for_writing: str
-        
+
         """
         validParameters = ['block_name','open_for_writing']
 
@@ -1002,13 +996,13 @@ class DbsApi(object):
         requiredParameters = {'forced':validParameters}
 
         checkInputParameter(method="updateDatasetType",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
-        
+
         return self.__callServer("datasets", params=kwargs, callmethod='PUT')
 
     def updateFileStatus(self, **kwargs):
         """
         API to update file status
-        
+
         :param logical_file_names: logical_file_name to update (Required)
         :type logical_file_names: str or a list of str
         :param is_file_valid: valid=1, invalid=0 (Required)
@@ -1024,9 +1018,9 @@ class DbsApi(object):
 
 
         checkInputParameter(method="updateFileStatus",parameters=kwargs.keys(),validParameters=validParameters, requiredParameters=requiredParameters)
-        
+
         return self.__callServer("files", params=kwargs, callmethod='PUT')
-    
+
 if __name__ == "__main__":
     # DBS Service URL
     url="http://cmssrv18.fnal.gov:8585/dbs3"

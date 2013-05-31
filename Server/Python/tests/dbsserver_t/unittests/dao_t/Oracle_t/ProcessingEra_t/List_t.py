@@ -16,7 +16,7 @@ class List_t(unittest.TestCase):
         data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
         self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
         self.data = self.data_provider.get_processing_era_data()
-    
+
     def setUp(self):
         """setup all necessary parameters"""
         self.conn = self.dbi.connection()
@@ -25,7 +25,7 @@ class List_t(unittest.TestCase):
     def tearDown(self):
         """Clean-up all necessary parameters"""
         self.conn.close()
-    
+
     def test01(self):
         """dao.Oracle.ProcessingEra.List: Basic"""
         result = self.dao.execute(self.conn)
@@ -35,13 +35,13 @@ class List_t(unittest.TestCase):
         """dao.Oracle.ProcessingEra.List: Basic"""
         result = self.dao.execute(self.conn, processingV=self.data[0]['processing_version'])
         self.assertEqual(strip_volatile_fields(result), self.data)
-        
+
     def test03(self):
         """dao.Oracle.ProcessingEra.List: Basic"""
         result = self.dao.execute(self.conn, -1)
         self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
-        
+
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(List_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)

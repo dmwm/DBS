@@ -413,13 +413,21 @@ class PostDeploymentTests(unittest.TestCase):
 
         lumis = sorted(self.api.listFileLumis(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: k["lumi_section_num"])
 
-        self.assertEqual(expected_data,lumis)
+        for element in lumis:
+            ###lumi sections are not necessary sorted in DBS as expected in the result
+            element['lumi_section_num'] = sorted(element['lumi_section_num'])
+
+        self.assertEqual(expected_data, lumis)
 
         fp.close()
 
         expected_data = [{u'lumi_section_num': [24022, 24122, 24222], u'run_num': 43, u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
 
         lumis = sorted(self.api.listFileLumis(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root"), key=lambda k: k["lumi_section_num"])
+
+        for element in lumis:
+            ###lumi sections are not necessary sorted in DBS as expected in the result
+            element['lumi_section_num'] = sorted(element['lumi_section_num'])
 
         self.assertEqual(expected_data,lumis)
 
@@ -497,9 +505,9 @@ class PostDeploymentTests(unittest.TestCase):
 
         self.assertEqual(expected_data,summaries)
 
-        expected_data = [{u'num_block': 1, u'num_file': 10, u'num_event': 553964, u'num_lumi': 30, u'file_size': 25350778463}]
+        expected_data = [{'num_block': 10, 'num_file': 100, 'num_event': 4906372, 'num_lumi': 300, 'file_size': 247736288622}]
 
-        self.api.listFileSummaries(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW")
+        summaries = self.api.listFileSummaries(dataset="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW")
 
         self.assertEqual(expected_data,summaries)
 
@@ -576,7 +584,7 @@ class PostDeploymentTests(unittest.TestCase):
         fp = file(os.path.join(self.base_dir,"RunList.json"),'r')
         expected_data = json.load(fp)
 
-        runs = self.api.listRuns(minrun=43,maxrun=43)
+        runs = self.api.listRuns(run=43)
 
         self.assertEqual(expected_data,runs)
 
