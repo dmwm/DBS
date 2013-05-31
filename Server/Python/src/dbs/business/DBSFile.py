@@ -72,7 +72,7 @@ class DBSFile:
                 msg =  "Block_name or dataset is required for listFileSummary API"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
             if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
-                msg = "No wildcard is allowed in block_name or dataset for listFileSummary API"
+                msg = "No wildcard is allowed in block_name or dataset for filesummaries API"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
             result = self.filesummarylist.execute(conn, block_name, dataset, run)
             if len(result)==1:
@@ -94,7 +94,7 @@ class DBSFile:
             #self.logger.debug("lfn %s, block_name %s, block_id :%s" % (logical_file_name, block_name, block_id))
             if not logical_file_name and not block_name and not block_id:
                 dbsExceptionHandler('dbsException-invalid-input', \
-                        "Logical_file_name, block_id or block_name is required for listFileParents api" )
+                        "Logical_file_name, block_id or block_name is required for fileparents api" )
             sqlresult = self.fileparentlist.execute(conn, logical_file_name, block_id, block_name)
             result = []
             d = {}
