@@ -321,7 +321,7 @@ class SQLFactory(object):
                                 FT.FILE_TYPE,
                                 F.CHECK_SUM, F.EVENT_COUNT, F.FILE_SIZE,
                                 F.BRANCH_HASH_ID, F.ADLER32, F.MD5,
-                                F.AUTO_CROSS_SECTION
+                                NVL(F.AUTO_CROSS_SECTION, 0.0) auto_cross_section
                                 FROM {db_owner_dbs3}.FILES F
                                 JOIN {db_owner_dbs3}.FILE_DATA_TYPES FT ON  FT.FILE_TYPE_ID = F.FILE_TYPE_ID
                                 JOIN {db_owner_dbs3}.DATASETS D ON  D.DATASET_ID = F.DATASET_ID
@@ -343,7 +343,7 @@ class SQLFactory(object):
                                 FS2.FILEBRANCH branch_hash_id,
                                 FS2.ADLER32,
                                 FS2.MD5,
-                                FS2.AUTOCROSSSECTION auto_cross_section
+                                NVL(FS2.AUTOCROSSSECTION, 0.0) auto_cross_section
                                 FROM {db_owner_dbs2}.FILES FS2
                                 JOIN {db_owner_dbs2}.PROCESSEDDATASET DS2 ON DS2.ID=FS2.DATASET
                                 JOIN {db_owner_dbs2}.PRIMARYDATASET PD2 on DS2.PRIMARYDATASET=PD2.ID
