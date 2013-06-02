@@ -29,6 +29,6 @@ class UpdateStatus(DBFormatter):
         """	
 	if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Block/UpdateStatus.  Expects db connection from upper layer.")
-	binds = { "block_name" : block_name , "open_for_writing" : open_for_writing , 'ltime':ltime, 'myuser':dbsUtils().getTime()}
+	binds = { "block_name" : block_name , "open_for_writing" : open_for_writing , 'ltime':ltime, 'myuser':dbsUtils().getCreateBy()}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

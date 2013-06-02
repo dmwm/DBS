@@ -30,6 +30,6 @@ class UpdateStatus(DBFormatter):
         """	
 	if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/UpdateStatus.  Expects db connection from upper layer.")
-	binds = { "dataset" : dataset , "is_dataset_valid" : is_dataset_valid, "myuser": dbsUtils().getTime(), "mydate": dbsUtils().getCreateBy()}
+	binds = { "dataset" : dataset , "is_dataset_valid" : is_dataset_valid, "mydate": dbsUtils().getTime(), "myuser": dbsUtils().getCreateBy()}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     
