@@ -6,6 +6,7 @@ from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
 
 import os, socket
 import cjson
+import urllib
 
 def checkInputParameter(method,parameters,validParameters,requiredParameters=None):
     """
@@ -45,6 +46,60 @@ def checkInputParameter(method,parameters,validParameters,requiredParameters=Non
                     overlap.append(requiredParameter)
             if len(overlap)!=1:
                 raise dbsClientException("Invalid input", "API %s does requires only *one* of the parameters %s." % (method, requiredParameters['standalone']))
+
+def list_parameter_splitting(data, key, size_limit=8000):
+    """
+    Helper function split list used as input parameter for requests,
+    since Apache has a limitation to 8190 Bytes for the lenght of an URI.
+    :param data: url parameters
+    :type data: dict
+    :param key: key of parameter dictionary to split by lenght
+    :type used_size: str
+    :param size_limit: Split list in chunks of maximal size_limit bytes
+    :type size_limit: int
+
+    """
+    values = list(data[key])
+    data[key] = []
+
+    for element in values:
+        data[key].append(element)
+        size = len(urllib.urlencode(data))
+        if size>size_limit:
+            last_element = data[key].pop()
+            yield data
+            data[key] = [last_element]
+
+    yield data
+
+def split_calls(func):
+    """
+    Decorator to split up server calls for methods using url parameters, due to the lenght
+    limitation of the URI in Apache. By default 8190 bytes
+    """
+    def wrapper(*args, **kwargs):
+        #The size limit is 8190 bytes minus url and api to call
+        #For example (https://cmsweb-testbed.cern.ch/dbs/prod/global/filechildren), so 192 bytes should be safe.
+        size_limit = 8000
+        encoded_url = urllib.urlencode(kwargs)
+        if len(encoded_url) > size_limit:
+            for key, value in kwargs.iteritems():
+                ###only one (first) list at a time is splitted,
+                ###currently only file lists are supported
+                if key in ('logical_file_names',) and isinstance(value, list):
+                    ret_val = []
+                    for splitted_param in list_parameter_splitting(data=dict(kwargs), #make a copy, since it is manipulated
+                                                                   key=key,
+                                                                   size_limit=size_limit):
+                        try:
+                            ret_val.extend(func(*args, **splitted_param))
+                        except (TypeError, AttributeError):#update function call do not return lists
+                            ret_val= None
+                    return ret_val
+            raise dbsClientException("Invalid input", "The lenght of the urlencoded parameters to API %s is exceeding %s bytes and cannot be splitted." % (func.__name__, size_limit))
+        else:
+            return func(*args, **kwargs)
+    return wrapper
 
 class DbsApi(object):
     def __init__(self, url="", proxy=None, key=None, cert=None, debug=0):
@@ -610,6 +665,7 @@ class DbsApi(object):
 
         return self.__callServer("datatypes",params=kwargs)
 
+    @split_calls
     def listFileChildren(self, **kwargs):
         """
         API to list file children
@@ -999,6 +1055,7 @@ class DbsApi(object):
 
         return self.__callServer("datasets", params=kwargs, callmethod='PUT')
 
+    @split_calls
     def updateFileStatus(self, **kwargs):
         """
         API to update file status

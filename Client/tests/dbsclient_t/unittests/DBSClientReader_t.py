@@ -382,6 +382,16 @@ class DBSClientReader_t(unittest.TestCase):
         """test76 web.DBSReaderModel.listFileChildren with logical_file_name"""
         self.api.listFileChildren(logical_file_names=self.testparams['parent_files'][0])
 
+    def test76a(self):
+        """test76a web.DBSReaderModel.listFileChildren with list of logical_file_names"""
+        file_list = [self.testparams['parent_files'][0] for i in xrange(200)]
+        self.api.listFileChildren(logical_file_names=file_list)
+
+    def test76b(self):
+        """test76b web.DBSReaderModel.listFileChildren with non splitable parameter"""
+        file_list = [self.testparams['parent_files'][0] for i in xrange(200)]
+        self.assertRaises(dbsClientException,self.api.listFileChildren, logical_file_name=file_list)
+
     def test77(self):
         """test77: call help method"""
         self.api.help()
