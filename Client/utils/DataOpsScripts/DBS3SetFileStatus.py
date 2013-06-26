@@ -22,10 +22,14 @@ def isFileValid(files=[], blocks=[], fstatus=0):
 
     for f in files:
         rslt = dbsApi.listFiles(logical_file_name=f, detail=True)
-        if rslt[0]['is_file_valid'] == fstatus :
-            invalidfilelst.append(f)
-        else:
-            validfilelst.append(f)
+        try:
+            if rslt[0]['is_file_valid'] == fstatus :
+                invalidfilelst.append(f)
+            else:
+                validfilelst.append(f)
+        except IndexError:
+            logging.error('The file %s does not exists in DBS. Please, check your input!' % (f))
+            sys.exit(1)
 
     for block in blocks:
         rslt = dbsApi.listFiles(block_name=block, detail=True)
