@@ -3,12 +3,9 @@ DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
 import os
-import sys
 import unittest
 from dbsclient_t.utils.DBSDataProvider import DBSDataProvider
 from dbs.apis.dbsClient import *
-from ctypes import *
-import time
 import uuid
 
 uid = uuid.uuid4().time_mid
@@ -90,7 +87,7 @@ class DBSValitaion_t(unittest.TestCase):
         """test05: web.DBSClientWriter.Dataset: validation test"""
         data = {
             'physics_group_name': 'Tracker', 'dataset': dataset,
-	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
             'output_configs': [
                 {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, \
                  'output_module_label': output_module_label, 'global_tag' : global_tag},
@@ -166,7 +163,7 @@ class DBSValitaion_t(unittest.TestCase):
         dataset_parent = "/%s/%s/%s" % (primary_ds_name_parent,procdataset_parent,tier)
         data = {
             'physics_group_name': 'Tracker', 'dataset': dataset_parent,
-	        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset_parent, 'primary_ds_name': primary_ds_name_parent,
+            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset_parent, 'primary_ds_name': primary_ds_name_parent,
             'output_configs': [
                 {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, \
                  'output_module_label': output_module_label, 'global_tag':global_tag},
@@ -263,7 +260,7 @@ class DBSValitaion_t(unittest.TestCase):
         logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 0)
         #print "WARNING : DBS cannot list INVALID file, so for now this test is commented out"
         self.api.updateFileStatus(logical_file_names=logical_file_name, is_file_valid=0)
-	    #listfile
+        #listfile
         filesInDBS=self.api.listFiles(logical_file_name=logical_file_name, detail=True)
         self.assertEqual(len(filesInDBS) ,1)
         self.assertEqual(filesInDBS[0]['is_file_valid'], 0)
@@ -283,7 +280,7 @@ class DBSValitaion_t(unittest.TestCase):
         self.assertEqual(dsInDBS[0]['dataset_access_type'], "VALID")
 
     def test11(self):
-        """tes11 web.DBSClientWriter.insertBulkBlock"""
+        """test11 web.DBSClientWriter.insertBulkBlock"""
         input_block_dump = self.data_provider.block_dump()[0]
         self.api.insertBulkBlock(input_block_dump)
         block_dump = self.api.blockDump(block_name=input_block_dump['block']['block_name'])
