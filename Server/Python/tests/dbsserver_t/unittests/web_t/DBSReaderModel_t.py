@@ -1004,6 +1004,29 @@ class DBSReaderModel_t(unittest.TestCase):
         """test026g: web.DBSReaderModel.listBlockSummaries: simple block_list example"""
         api.list('blocksummaries', block_name=[testparams['block'], testparams['block']])
 
+    @checkException400
+    def test027a(self):
+        """test027a: web.DBSReaderModel.listRunSummaries: input validation test"""
+        api.list('runsummaries')
+
+    @checkException400
+    def test027b(self):
+        """test027a: web.DBSReaderModel.listRunSummaries: input validation test"""
+        api.list('runsummaries', dataset=testparams['dataset'])
+
+    @checkException400
+    def test027c(self):
+        """test027c: web.DBSReaderModel.listRunSummaries: input validation test"""
+        api.list('runsummaries', dataset='/A/B*/C', run=testparams['run'])
+
+    def test027d(self):
+        """test027d: web.DBSReaderModel.listRunSummaries: simple run example"""
+        api.list('runsummaries', run=testparams['run'])
+
+    def test027e(self):
+        """test027e: web.DBSReaderModel.listRunSummaries: simple run dataset example"""
+        api.list('runsummaries', dataset=testparams['dataset'], run=testparams['run'])
+
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSReaderModel_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)

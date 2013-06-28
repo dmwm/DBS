@@ -95,6 +95,7 @@ systems = \
                   'dbs.dao.Oracle.ProcessedDataset',
                   'dbs.dao.Oracle.ProcessingEra',
                   'dbs.dao.Oracle.ReleaseVersion',
+                  'dbs.dao.Oracle.Run',
                   'dbs.dao.Oracle.Service',
                   'dbs.dao.Oracle.Site'
                ],

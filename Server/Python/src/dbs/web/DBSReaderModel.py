@@ -79,6 +79,7 @@ class DBSReaderModel(RESTModel):
 
         self.dbsDataTierListDAO = self.daofactory(classname="DataTier.List")
         self.dbsBlockSummaryListDAO = self.daofactory(classname="Block.SummaryList")
+        self.dbsRunSummaryListDAO = self.daofactory(classname="Run.SummaryList")
 
         self._addMethod('GET', 'serverinfo', self.getServerInfo)
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
@@ -122,6 +123,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version', 'dataset', 'logical_file_name'])
         self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'])
         self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'])
+        self._addMethod('GET', 'runsummaries', self.listRunSummaries, args=['dataset', 'run'])
         self._addMethod('GET', 'help', self.getHelp, args=['call'])
 
         self.dbsDoNothing = DBSDoNothing(self.logger, self.dbi, dbowner)
@@ -1083,6 +1085,44 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listPhysicsGroups. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
+    @inputChecks(dataset=str, run=(str, int, long))
+    def listRunSummaries(self, dataset="", run=-1):
+        """
+        API to list run summaries, like the maximal lumisection in a run.
+
+        :param dataset: dataset name, optional paramater
+        :type dataset: str
+        :param run: Run number, which is a mandatory parameter
+        :type run: str, long, int
+        :rtype: list containing a dictionary with key max_lumi
+        """
+        if run==-1:
+            dbsExceptionHandler("dbsException-invalid-input2",
+                                dbsExceptionCode["dbsException-invalid-input2"],
+                                self.logger.exception,
+                                "The run parameter is mandatory")
+
+        if re.search('[*,%]', dataset):
+            dbsExceptionHandler("dbsException-invalid-input2",
+                                dbsExceptionCode["dbsException-invalid-input2"],
+                                self.logger.exception,
+                                "No wildcards are allowed in dataset")
+
+        conn = None
+        try:
+            conn = self.dbi.connection()
+            return self.dbsRunSummaryListDAO.execute(conn, dataset, run)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+        except Exception, ex:
+            sError = "DBSReaderModel/listRunSummaries. %s\n. Exception trace: \n %s" \
+                    % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
+                                self.logger.exception, sError)
+        finally:
+            if conn:
+                conn.close()
 
     def getServerInfo(self):
         """
