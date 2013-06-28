@@ -30,7 +30,7 @@ SELECT B.BLOCK_ID, B.BLOCK_NAME, B.OPEN_FOR_WRITING,
 FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID 
     """ % ((self.owner,)*2)
 
-    def execute(self, conn, dataset="", block_name="", origin_site_name="", logical_file_name="", 
+    def execute(self, conn, dataset="", block_name="", data_tier_name="", origin_site_name="", logical_file_name="",
                 run=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, 
                 ldate=0, transaction = False):
 	"""

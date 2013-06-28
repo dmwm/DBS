@@ -70,6 +70,9 @@ def inputChecks(**_params_):
                                     for f in value:
                                         if '*' in f: searchstr(f)
                                         else: lfn(f)
+                                elif name == 'block_names':
+                                    for block_name in value:
+                                        block(block_name)
                         except AssertionError as ae:
                             serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(name, value)
                             #print ae

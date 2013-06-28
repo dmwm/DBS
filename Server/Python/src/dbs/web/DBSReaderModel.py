@@ -8,11 +8,10 @@ __revision__ = "$Id: DBSReaderModel.py,v 1.50 2010/08/13 20:38:37 yuyi Exp $"
 __version__ = "$Revision: 1.50 $"
 
 import cjson
-import inspect
+import re
 import traceback
 
 from cherrypy.lib import profiler
-import cProfile
 from cherrypy import request, tools, HTTPError
 
 
@@ -74,16 +73,14 @@ class DBSReaderModel(RESTModel):
         RESTModel.__init__(self, config)
         self.dbsUtils2 = dbsUtils()
         self.version = self.getServerVersion()
-        #self.warning("DBSReaderModle")
-        #self.logger.warning("DBSReaderModle")
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 
         self.daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=dbowner)
 
         self.dbsDataTierListDAO = self.daofactory(classname="DataTier.List")
+        self.dbsBlockSummaryListDAO = self.daofactory(classname="Block.SummaryList")
 
-	self._addMethod('GET', 'serverinfo', self.getServerInfo)
-        #self._addMethod('GET', 'donothing', self.donothing)
+        self._addMethod('GET', 'serverinfo', self.getServerInfo)
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
         self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'])
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
@@ -93,8 +90,8 @@ class DBSReaderModel(RESTModel):
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                                 'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'])
         self._addMethod('POST', 'datasetlist', self.listDatasetArray)
-        self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'origin_site_name',
-                        'logical_file_name', 'run', 'min_cdate', 'max_cdate', 'min_ldate',
+        self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'data_tier_name',
+                        'origin_site_name', 'logical_file_name', 'run', 'min_cdate', 'max_cdate', 'min_ldate',
                         'max_ldate', 'cdate', 'ldate', 'detail'])
         self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset'])
         self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',
@@ -113,11 +110,12 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'runs', self.listRuns, args=['run', 'logical_file_name',
                         'block_name', 'dataset'])
         self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'])
-        self._addMethod('GET','datatiers',self.listDataTiers, args=['data_tier_name'])
+        self._addMethod('GET', 'datatiers',self.listDataTiers, args=['data_tier_name'])
         self._addMethod('GET', 'blockparents', self.listBlockParents, args=['block_name'])
         self._addMethod('POST', 'blockparents', self.listBlocksParents)
         self._addMethod('GET', 'blockchildren', self.listBlockChildren, args=['block_name'])
         self._addMethod('GET', 'blockdump', self.dumpBlock, args=['block_name'])
+        self._addMethod('GET', 'blocksummaries', self.listBlockSummaries, args=['block_name', 'dataset'])
         self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=['acquisition_era_name'])
         self._addMethod('GET', 'acquisitioneras_ci', self.listAcquisitionEras_CI, args=['acquisition_era_name'])
         self._addMethod('GET', 'processingeras', self.listProcessingEras, args=['processing_version'])
@@ -131,26 +129,18 @@ class DBSReaderModel(RESTModel):
         self.dbsDataset = DBSDataset(self.logger, self.dbi, dbowner)
         self.dbsBlock = DBSBlock(self.logger, self.dbi, dbowner)
         self.dbsFile = DBSFile(self.logger, self.dbi, dbowner)
-        self.dbsAcqEra = DBSAcquisitionEra(self.logger, self.dbi,
-            dbowner)
-        self.dbsOutputConfig = DBSOutputConfig(self.logger, self.dbi,
-            dbowner)
-        self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi,
-            dbowner)
+        self.dbsAcqEra = DBSAcquisitionEra(self.logger, self.dbi, dbowner)
+        self.dbsOutputConfig = DBSOutputConfig(self.logger, self.dbi, dbowner)
+        self.dbsProcEra = DBSProcessingEra(self.logger, self.dbi, dbowner)
         self.dbsSite = DBSSite(self.logger, self.dbi, dbowner)
-	self.dbsRun = DBSRun(self.logger, self.dbi, dbowner)
-	self.dbsDataType = DBSDataType(self.logger, self.dbi, dbowner)
+        self.dbsRun = DBSRun(self.logger, self.dbi, dbowner)
+        self.dbsDataType = DBSDataType(self.logger, self.dbi, dbowner)
         self.dbsStatus = DBSStatus(self.logger, self.dbi, dbowner)
         self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, dbowner)
         self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, dbowner)
         self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, dbowner)
         self.dbsPhysicsGroup = DBSPhysicsGroup(self.logger, self.dbi, dbowner)
-    """
-    def checkList(self, input):
-        if type(input['block_name']) is not str:
-                raise Val....
-        return input
-    """
+
     def getServerVersion(self):
         """
         Reading from __version__ tag, determines the version of the DBS Server
@@ -181,12 +171,6 @@ class DBSReaderModel(RESTModel):
         ret["schema"] = self.dbsStatus.getSchemaStatus()
         ret["components"] = self.dbsStatus.getComponentStatus()
         return ret
-
-    """
-    Used for Stress test.
-    def donothing(self):
-        return self.dbsDoNothing.listNone()
-    """
 
     @inputChecks(primary_ds_name=str, primary_ds_type=str)
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
@@ -238,7 +222,6 @@ class DBSReaderModel(RESTModel):
                 % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    #@expose
     @transformInputType('run')
     @inputChecks( dataset=str, parent_dataset=str, release_version=str, pset_hash=str,
                  app_name=str, output_module_label=str,  processing_version=(int,str), acquisition_era_name=str,
@@ -382,8 +365,6 @@ class DBSReaderModel(RESTModel):
             body = request.body.read()
             if body:
                 data = cjson.decode(body)
-                #import pdb
-                #pdb.set_trace()
                 data = validateJSONInputNoCopy("dataset",data)
             else:
                 data=''
@@ -401,15 +382,15 @@ class DBSReaderModel(RESTModel):
 
     @inputChecks(data_tier_name=str)
     def listDataTiers(self, data_tier_name=""):
-	"""
+        """
         API to list data tiers  known to DBS
 
         :param datatier: When supplied, dbs will list details on this tier (Optional)
         :type datatier: str
         :returns: List of dictionaries containing the following keys (data_tier_id, data_tier_name, create_by, creation_date)
 
-	"""
-	data_tier_name = data_tier_name.replace("*","%")
+        """
+        data_tier_name = data_tier_name.replace("*","%")
 
         try:
             conn = self.dbi.connection()
@@ -431,18 +412,23 @@ class DBSReaderModel(RESTModel):
                 conn.close()
 
     @transformInputType('run')
-    @inputChecks(dataset=str, block_name=str, origin_site_name=str, logical_file_name=str ,run=(long,int,str,list), min_cdate=(int,str), \
-                 max_cdate=(int, str), min_ldate=(int,str), max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), detail=(str,bool))
-    def listBlocks(self, dataset="", block_name="", origin_site_name="",
-        logical_file_name="",run=-1, min_cdate='0', max_cdate='0',
-        min_ldate='0', max_ldate='0', cdate='0',  ldate='0', detail=False):
+    @inputChecks(dataset=str, block_name=str, data_tier_name=str, origin_site_name=str, logical_file_name=str,
+                 run=(long,int,str,list), min_cdate=(int,str), max_cdate=(int, str), min_ldate=(int,str),
+                 max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), detail=(str,bool))
+    def listBlocks(self, dataset="", block_name="", data_tier_name="", origin_site_name="",
+                   logical_file_name="",run=-1, min_cdate='0', max_cdate='0',
+                   min_ldate='0', max_ldate='0', cdate='0',  ldate='0', detail=False):
         """
-        API to list a block in DBS. At least one of the parameters block_name, dataset or logical_file_name are required.
+        API to list a block in DBS. At least one of the parameters block_name, dataset, data_tier_name or
+        logical_file_name are required. If data_tier_name is provided, min_cdate and max_cdate have to be specified and
+        the difference in time have to be less than 31 days.
 
         :param block_name: name of the block
         :type block_name: str
         :param dataset: dataset
         :type dataset: str
+        :param data_tier_name: data tier
+        :type data_tier_name: str
         :param logical_file_name: Logical File Name
         :type logical_file_name: str
         :param origin_site_name: Origin Site Name (Optional)
@@ -490,8 +476,8 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-invalid-input2',  str(ex), self.logger.exception, sError )
         detail = detail in (True, 1, "True", "1", 'true')
         try:
-            return self.dbsBlock.listBlocks(dataset, block_name, origin_site_name, logical_file_name, run,
-                min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
+            return self.dbsBlock.listBlocks(dataset, block_name, data_tier_name, origin_site_name, logical_file_name,
+                                            run, min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
 
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
@@ -592,6 +578,57 @@ class DBSReaderModel(RESTModel):
         except Exception, ex:
             sError = "DBSReaderModel/listBlockChildren. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
+    @transformInputType('block_name')
+    @inputChecks(block_name=(str, list), dataset=str)
+    def listBlockSummaries(self, block_name="", dataset=""):
+        """
+        API that returns summary information like total size and total number of events in a dataset or a list of blocks
+        created in a given time range. The time range must be specified and the maximal time range allowed is 32 days
+
+        :param block_name:
+        :type block_name: str, list
+        :param dataset:
+        :type dataset: str
+        :returns: list of dicts containing total BLOCK_SIZES, FILE_COUNTS and EVENT_COUNTS of dataset or blocks provided
+
+        """
+        if bool(dataset)+bool(block_name)!=1:
+            dbsExceptionHandler("dbsException-invalid-input2",
+                                dbsExceptionCode["dbsException-invalid-input2"],
+                                self.logger.exception,
+                                "Dataset or block_names must be specified at a time.")
+
+        if block_name and isinstance(block_name, str):
+            block_name = [block_name]
+
+        for this_block_name in block_name:
+            if re.search("[*, %]", this_block_name):
+                dbsExceptionHandler("dbsException-invalid-input2",
+                                    dbsExceptionCode["dbsException-invalid-input2"],
+                                    self.logger.exception,
+                                    "No wildcards are allowed in block_name list")
+
+        if re.search("[*, %]", dataset):
+            dbsExceptionHandler("dbsException-invalid-input2",
+                                dbsExceptionCode["dbsException-invalid-input2"],
+                                self.logger.exception,
+                                "No wildcards are allowed in dataset")
+        conn = None
+        try:
+            conn = self.dbi.connection()
+            return self.dbsBlockSummaryListDAO.execute(conn, block_name, dataset)
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+        except Exception, ex:
+            sError = "DBSReaderModel/listBlockSummaries. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error',
+                                dbsExceptionCode['dbsException-server-error'],
+                                self.logger.exception,
+                                sError)
+        finally:
+            if conn:
+                conn.close()
 
     @transformInputType( 'run')
     @inputChecks(dataset =str, block_name=str, logical_file_name =(str), release_version=str, pset_hash=str, app_name=str,\
@@ -954,7 +991,7 @@ class DBSReaderModel(RESTModel):
         except Exception as ex:
             sError = "DBSReaderModel/listAcquisitionEras. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
-self.logger.exception, sError)
+                                self.logger.exception, sError)
 
     @inputChecks(processing_version=(str,int))
     def listProcessingEras(self, processing_version=0):
@@ -1061,4 +1098,3 @@ self.logger.exception, sError)
         ret["schema"] = self.dbsStatus.getSchemaStatus()
         ret["components"] = self.dbsStatus.getComponentStatus()
         return ret
-

@@ -2,7 +2,6 @@
 web unittests
 """
 import os, sys, imp
-import json
 import unittest
 import time
 from functools import wraps
@@ -15,17 +14,14 @@ def checkException400(f):
     @wraps(f)
     def wrapper(self,*args,**kwargs):
         out = None
-
         try:
             out = f(self,*args,**kwargs)
         except Exception, ex:
-	    if 'HTTPError 400' not in ex.args[0]:
+            if 'HTTPError 400' not in ex.args[0]:
                 self.fail("Exception was expected and was not raised.")
         else:
             self.fail("Exception was expected and was not raised.")
-
         return out
-
     return wrapper
 
 def importCode(code,name,add_to_sys_modules=0):
@@ -49,6 +45,8 @@ class DBSReaderModel_t(unittest.TestCase):
 
         if len(testparams) == 0:
             testparams = outDict
+
+        self._current_unixtime = int(time.time())
 
     def test001a(self):
         """test001a: web.DBSReaderModel.listPrimaryDatasets: basic test"""
@@ -383,17 +381,48 @@ class DBSReaderModel_t(unittest.TestCase):
         """test006k: web.DBSReaderModel.listBlocks: Must raise an exception if no parameter is passed."""
         api.list('blocks')
 
+    @checkException400
     def test006l(self):
-        """test006l: web.DBSReaderModel.listBlockOrigin: basic test """
-        api.list('blockorigin',  origin_site_name=testparams['site'])
+        """test006l: web.DBSReaderModel.listBlocks: input validation test wildcard data_tier_name."""
+        api.list('blocks', data_tier_name='*')
 
+    @checkException400
     def test006m(self):
-        """test006m: web.DBSReaderModel.listBlockOrigin: basic test """
-        api.list('blockorigin',  origin_site_name=testparams['site'], dataset=testparams['dataset'])
+        """test006m: web.DBSReaderModel.listBlocks: input validation test only data_tier_name."""
+        api.list('blocks', data_tier_name=testparams['tier'])
 
     @checkException400
     def test006n(self):
-        """test006n: web.DBSReaderModel.listBlockOrigin: Must raise an exception if no parameter is passed. """
+        """test006n: web.DBSReaderModel.listBlocks: input validation test only data_tier_name and min_cdate."""
+        api.list('blocks', data_tier_name=testparams['tier'], min_cdate=self._current_unixtime-30*24*3600)
+
+    @checkException400
+    def test006o(self):
+        """test006o: web.DBSReaderModel.listBlocks: input validation test only data_tier_name and max_cdate."""
+        api.list('blocks', data_tier_name=testparams['tier'], max_cdate=self._current_unixtime)
+
+    @checkException400
+    def test006p(self):
+        """test006p: web.DBSReaderModel.listBlocks: input validation test exceeded time range"""
+        api.list('blocks', data_tier_name=testparams['tier'], min_cdate=self._current_unixtime-35*24*3600,
+                 max_cdate=self._current_unixtime)
+
+    def test006q(self):
+        """test006q: web.DBSReaderModel.listBlocks: data_tier_name, min_cdate, max_cdate"""
+        api.list('blocks', data_tier_name=testparams['tier'], min_cdate=self._current_unixtime-30*24*3600,
+                 max_cdate=self._current_unixtime)
+
+    def test006r(self):
+        """test006r: web.DBSReaderModel.listBlockOrigin: basic test """
+        api.list('blockorigin',  origin_site_name=testparams['site'])
+
+    def test006s(self):
+        """test006s: web.DBSReaderModel.listBlockOrigin: basic test """
+        api.list('blockorigin',  origin_site_name=testparams['site'], dataset=testparams['dataset'])
+
+    @checkException400
+    def test006t(self):
+        """test006t: web.DBSReaderModel.listBlockOrigin: Must raise an exception if no parameter is passed. """
         api.list('blockorigin')
 
     @checkException400
@@ -942,6 +971,38 @@ class DBSReaderModel_t(unittest.TestCase):
     def test025c(self):
         """test025c: web.DBSReaderModel.listPhysicsGroups: basic test"""
         api.list('physicsgroups', physics_group_name='SUSY'+'*')
+
+    @checkException400
+    def test026a(self):
+        """test026a: web.DBSReaderModel.listBlockSummaries: input validation test"""
+        api.list('blocksummaries')
+
+    @checkException400
+    def test026b(self):
+        """test026b: web.DBSReaderModel.listBlockSummaries: input validation test"""
+        api.list('blocksummaries', block_name='/*/B/C#abcdef12345')
+
+    @checkException400
+    def test026c(self):
+        """test026c: web.DBSReaderModel.listBlockSummaries: input validation test"""
+        api.list('blocksummaries', dataset='/*/B/C')
+
+    @checkException400
+    def test026d(self):
+        """test026d: web.DBSReaderModel.listBlockSummaries: input validation test"""
+        api.list('blocksummaries', dataset=testparams['dataset'], block_name=testparams['block'])
+
+    def test026e(self):
+        """test026e: web.DBSReaderModel.listBlockSummaries: simple block example"""
+        api.list('blocksummaries', block_name=testparams['block'])
+
+    def test026f(self):
+        """test026f: web.DBSReaderModel.listBlockSummaries: simple dataset example"""
+        api.list('blocksummaries', dataset=testparams['dataset'])
+
+    def test026g(self):
+        """test026g: web.DBSReaderModel.listBlockSummaries: simple block_list example"""
+        api.list('blocksummaries', block_name=[testparams['block'], testparams['block']])
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSReaderModel_t)
