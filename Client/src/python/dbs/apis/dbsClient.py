@@ -470,6 +470,8 @@ class DbsApi(object):
         :type dataset: str
         :param logical_file_name: Logical File Name
         :type logical_file_name: str
+        :param data_tier_name: data_tier_name, when present min_cdate and max_cdate have to be specified
+        :type data_tier_name: str
         :param origin_site_name: Origin Site Name (Optional)
         :type origin_site_name: str
         :param run: Run Number (Optional)
@@ -480,7 +482,7 @@ class DbsApi(object):
         :rtype: list of dicts
 
         """
-        validParameters = ['dataset','block_name', 'origin_site_name',
+        validParameters = ['dataset','block_name', 'data_tier_name', 'origin_site_name',
                            'logical_file_name', 'run', 'min_cdate',
                            'max_cdate', 'min_ldate', 'max_ldate',
                            'cdate', 'ldate', 'detail']
