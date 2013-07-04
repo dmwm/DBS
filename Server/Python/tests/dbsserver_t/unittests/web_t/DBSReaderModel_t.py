@@ -862,13 +862,25 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('fileparents', logical_file_name=testparams['files'][0])
 
     def test019a(self):
-        """test019a: web.DBSReaderModel.listFileChildren: basic"""
+        """test019a: web.DBSReaderModel.listFileChildren: basic logical_file_name test"""
         api.list('filechildren', logical_file_names=testparams['parent_files'][0])
 
     @checkException400
     def test019b(self):
         """test019b: web.DBSReaderModel.listFileChildren: basic negative test"""
         api.list('filechildren')
+
+    def test019c(self):
+        """test019c: web.DBSReaderModel.listFileChildren: basic block test"""
+        api.list('filechildren', block_name=testparams['block'])
+
+    def test019d(self):
+        """test019d: web.DBSReaderModel.listFileChildren: basic lfn list test"""
+        api.list('filechildren', logical_file_names=testparams['parent_files'])
+
+    def test019e(self):
+        """test019e: web.DBSReaderModel.listFileChildren: basic block_id test"""
+        api.list('filechildren', block_id=123)
 
     @checkException400
     def test020a(self):

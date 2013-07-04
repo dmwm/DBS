@@ -409,6 +409,14 @@ class DBSClientReader_t(unittest.TestCase):
         file_list = [self.testparams['parent_files'][0] for i in xrange(200)]
         self.assertRaises(dbsClientException,self.api.listFileChildren, logical_file_name=file_list)
 
+    def test076c(self):
+        """test76c unittestDBSClientReader_t.listFileChildren with block_name"""
+        self.api.listFileChildren(block_name=self.testparams['block'])
+
+    def test076d(self):
+        """test76d unittestDBSClientReader_t.listFileChildren with block_id"""
+        self.api.listFileChildren(block_id=123)
+
     def test077(self):
         """test77: call help method"""
         self.api.help()

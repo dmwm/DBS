@@ -595,9 +595,26 @@ class DBSWriterModel_t(unittest.TestCase):
         api.update('datasets',dataset_access_type="DEPRECATED")
 
     def test10a(self):
-        """test10a: web.DBSWriterModel.updateFileStatus: Basic test """
+        """test10a: web.DBSWriterModel.updateFileStatus: Basic test logical_file_name"""
         lfn = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" %(uid, 1)
         api.update('files', logical_file_names=lfn, is_file_valid=0)
+
+    def test10b(self):
+        """test10b: web.DBSWriterModel.updateFileStatus: Basic test logical_file_name list"""
+        lfn = ["/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" % (uid, 1),
+               "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" % (uid, 2)]
+        api.update('files', logical_file_names=lfn, is_file_valid=0)
+
+    def test10c(self):
+        """test10c: web.DBSWriterModel.updateFileStatus: Basic test logical_file_name and lost"""
+        lfn = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" %(uid, 1)
+        api.update('files', logical_file_names=lfn, is_file_valid=0, lost=1)
+
+    def test10d(self):
+        """test10d: web.DBSWriterModel.updateFileStatus: Basic test logical_file_name list and lost"""
+        lfn = ["/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" % (uid, 1),
+               "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" % (uid, 2)]
+        api.update('files', logical_file_names=lfn, is_file_valid=0, lost=1)
 
     def test11a(self):
         """test11a: web.DBSWriterModel.updateBlock: Basic test"""

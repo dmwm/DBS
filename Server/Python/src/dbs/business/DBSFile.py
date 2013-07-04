@@ -121,9 +121,9 @@ class DBSFile:
         """
         conn = self.dbi.connection()
         try:
-            if not logical_file_names:
+            if not logical_file_names and not block_name and not block_id:
                 dbsExceptionHandler('dbsException-invalid-input',\
-                        "Logical_file_name is required for listFileChildren api")
+                        "Logical_file_name, block_id or block_name is required for listFileChildren api")
             sqlresult = self.filechildlist.execute(conn, logical_file_names, block_name, block_id)
             d = {}
             result = []

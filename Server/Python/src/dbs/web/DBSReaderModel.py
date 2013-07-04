@@ -832,10 +832,14 @@ class DBSReaderModel(RESTModel):
     @inputChecks(logical_file_names=(str, list), block_name=(str), block_id=(str, int))
     def listFileChildren(self, logical_file_names='', block_name='', block_id=0):
         """
-        API to list file children
+        API to list file children. One of the parameters in mandatory
 
         :param logical_file_name: logical_file_name of file (Required)
-        :type logical_file_name: str
+        :type logical_file_name: str, list
+        :param block_name: block_name
+        :type block_name: str
+        :param block_id: block_id
+        :type block_id: str, int
         :returns: List of dictionaries containing the following keys (child_logical_file_name, logical_file_name)
         :rtype: List of dicts
 
