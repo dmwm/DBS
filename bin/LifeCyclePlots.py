@@ -88,6 +88,9 @@ if __name__ == "__main__":
     for row in sqlite_dao.get_rows('Failures'):
         plot_manager.update_histos(row, category='failures')
 
+    if reader_tests and writer_tests:
+        plot_manager.add_stacked_histos(categories=['reader_stats','writer_stats'])
+
     plot_manager.draw_histos()
 
     if options.description and options.print_format:

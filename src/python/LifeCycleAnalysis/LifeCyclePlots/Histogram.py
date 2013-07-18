@@ -1,4 +1,4 @@
-from ROOT import gStyle, TCanvas, TFile, TH1F, TH2F, TPaveStats
+from ROOT import gStyle, TCanvas, TFile, TH1F, TH2F, THStack, TPaveStats
 
 class BasicHisto(object):
     def __init__(self, name, title, fill_fkt, condition, label,
@@ -134,3 +134,44 @@ class Histo2D(BasicHisto):
         self._histogram = TH2F(name, title, xnbins, xmin, xmax, ynbins, ymin, ymax)
         self._x_value_to_fill = x_value_to_fill
         self._y_value_to_fill = y_value_to_fill
+
+class StackedHisto(object):
+    def __init__(self, name, title):
+        self._name = name
+        self._title = title
+        self._hstack = THStack(self._name, self._title)
+
+    def addHisto(histo):
+        self._hstack.Add(histo.histogram)
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def title(self):
+        return self._title
+
+    def create_canvas(self):
+        self._canvas = TCanvas(self._name, self._name)
+
+        gStyle.SetCanvasBorderMode(0);
+        gStyle.SetPadBorderMode(0);
+
+        self._canvas.cd()
+
+    def draw(self):
+        # create canvas to draw histogram
+        if not getattr(self,'_canvas', None):
+            self.create_canvas()
+        self._hstack.Draw('nostack')
+
+    def save_as(self, output_directory, format="png"):
+        try:
+            self._canvas.Print("%s/%s.%s" % (output_directory, self._name, format), format)
+        except AttributeError:
+            print "You have to draw histograms before saving."
+            pass
+
+    def set_stats_style(self):
+        pass
