@@ -25,20 +25,22 @@ def get_test_names(search_path,search_pattern,base_dir):
     
 class TestCommand(Command):
     
-    user_options =[('web=', None,'Run unittests on web-layer options are DBSReader,DBSWriter'),
+    user_options =[('web=', None,'Run unittests on web-layer options are DBSReader,DBSWriter, DBSMigrate'),
                    ('weball', None,'Run unittests on web-layer'),
                    ('dao', None,'Run unittests on dao-layer'),
                    ('business', None,'Run unittests on business-layer'),
+                   ('migration', None,'Run unittests on migration service'),
                    ('allTests', None,'Run unittests on all sub-layers'),
                    ('config=', None,'Config file used for unittests'),
                    ('secrets=', None, 'Path to DBSSecrets file used for unittests')
                    ]
 
     description = """Test DBS3 using provided unittest, possible options are\n
-                   --web=DBSReader or --web=DBSWriter to run unittests on the web-layer\n
+                   --web=DBSReader, --web=DBSWriter or --web=DBSMigrate to run unittests on the web-layer\n
                    --weball to run reader and writer unittests on the web-layer\n
                    --dao to run unittests on the dao-layer\n
                    --business to run unittests on the business-layer\n
+                   --migration to run unittests on migration service\n
                    --allTest to run unittests on all sub-layers\n
                    --config=<cfgfile> config file used for the unittests\n
                    --secrets=<path_to_secretfile> Path to DBSSecrets file used for unittests"""
@@ -48,13 +50,14 @@ class TestCommand(Command):
         self.weball = False
         self.dao = False
         self.business = False
+        self.migration = False
         self.allTests = False
         self.config = None
         self.secrets = "/data/auth/dbs"
 
     def finalize_options(self):
         #Check if environment is set-up correctly
-          if not os.environ.get("DBS3_SERVER_ROOT"):
+        if not os.environ.get("DBS3_SERVER_ROOT"):
             if not os.environ.get("DBS3_ROOT"):  
                 print """You have to source init.sh before running unittests\n
                 If you are using rpm based development environment on a VM,\n
@@ -66,25 +69,25 @@ class TestCommand(Command):
             else:
                 os.environ['DBS3_SERVER_ROOT'] = os.environ['DBS3_ROOT']
 
-          if not self.config:
-              print "Please, specify a config file using --config=<cfgfile> argument"
-              sys.exit(2)
+        if not self.config:
+            print "Please, specify a config file using --config=<cfgfile> argument"
+            sys.exit(3)
 
-          if not self.secrets:
-              print "Please, specify the path to the DBSSecrets file using --secrets=<path_to_secretsfile> argument."
-              sys.exit(3)
+        if not self.secrets:
+            print "Please, specify the path to the DBSSecrets file using --secrets=<path_to_secretsfile> argument."
+            sys.exit(4)
 
-          if not os.access(self.config,os.F_OK and os.R_OK):
-              print "Cannot read config file %s.\n Please, ensure that it exists and you have the privileges to read it." %(self.config)
-              sys.exit(4)
+        if not os.access(self.config,os.F_OK and os.R_OK):
+            print "Cannot read config file %s.\n Please, ensure that it exists and you have the privileges to read it." %(self.config)
+            sys.exit(5)
 
-          if not self.web and not self.weball and not self.dao and not self.business and not self.allTests:
-              print "Please, specify one of the following options.\n%s" % self.description
-              sys.exit(5)
+        if not self.web and not self.weball and not self.dao and not self.business and not self.migration and not self.allTests:
+            print "Please, specify one of the following options.\n%s" % self.description
+            sys.exit(6)
 
-          if self.web not in [None,'DBSWriter','DBSReader']:
-              print "Valid options for --web are DBSReader or DBSWriter"
-              sys.exit(6)
+        if self.web not in [None,'DBSWriter','DBSReader', 'DBSMigrate']:
+            print "Valid options for --web are DBSReader, DBSWriter or DBSMigrate"
+            sys.exit(7)
 
     def run(self):
           base_dir = get_relative_path()
@@ -92,6 +95,7 @@ class TestCommand(Command):
           web_tests = os.path.join(test_dir,'web_t')
           dao_tests = os.path.join(test_dir,'dao_t')
           business_tests = os.path.join(test_dir,'business_t')
+          migration_tests = os.path.join(test_dir,'components_t','migration_t')
 
           #prepare environment
           sys.path.append(self.secrets)
@@ -132,6 +136,13 @@ class TestCommand(Command):
                   TestSuite.addTests(loadedTests)
                   unittest.TextTestRunner(verbosity=2).run(TestSuite)
 
+              if self.web=="DBSMigrate":
+                  TestSuite = unittest.TestSuite()
+                  module_names = get_test_names(web_tests,'[!.#]*MigrateModel_t.py',base_dir)
+                  loadedTests = unittest.TestLoader().loadTestsFromNames(module_names)
+                  TestSuite.addTests(loadedTests)
+                  unittest.TextTestRunner(verbosity=2).run(TestSuite)
+
           if self.allTests or self.weball:
               TestSuite = unittest.TestSuite()
               module_names = get_test_names(web_tests,'[!.#]*_t.py',base_dir)
@@ -164,6 +175,16 @@ class TestCommand(Command):
               #loadedTests = unittest.TestLoader().loadTestsFromNames(module_names)
               #TestSuite.addTests(loadedTests)
               #unittest.TextTestRunner(verbosity=2).run(TestSuite)
+
+              #this will reset unique_id's used for the unittests
+              del TestSuite
+
+          if self.allTests or self.migration:
+              TestSuite = unittest.TestSuite()
+              module_names = get_test_names(migration_tests,'[!.#]*_t.py',base_dir)
+              loadedTests = unittest.TestLoader().loadTestsFromNames(module_names)
+              TestSuite.addTests(loadedTests)
+              unittest.TextTestRunner(verbosity=2).run(TestSuite)
 
               #this will reset unique_id's used for the unittests
               del TestSuite

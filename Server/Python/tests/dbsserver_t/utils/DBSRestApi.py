@@ -14,7 +14,6 @@ from optparse import OptionParser
 
 from WMCore.Configuration import Configuration, loadConfigurationFile
 from WMCore.WebTools.RESTApi import RESTApi
-import traceback
 
 class FileLike(object):
     """FileLike Object class with two methods:
@@ -30,8 +29,11 @@ class FileLike(object):
         pass
 
 class DBSRestApi:
-    def __init__(self, configfile, service='DBS', dbinstance='dev/global'):
+    def __init__(self, configfile, service='DBS', dbinstance='dev/global', migration_test=False):
+        """migration_test is used to point the DBSRestApi to one specific database, no matter,
+        to which DB the original config file points to."""
         log.error_log.setLevel(logging.ERROR)
+        self.migration_test = migration_test
         config = self.configure(configfile, service, dbinstance)
         config = config.section_("DBS")
         self.rest = RESTApi(config)
@@ -44,42 +46,53 @@ class DBSRestApi:
         
         appconfig = cfg.section_(app)
         dbsconfig = getattr(appconfig.views.active, service)
-	
-	# Eitehr we change formatter 
-	# OR change the 'Accept' type to application/json (which we don't know how to do at thi moment)	
-	dbsconfig.formatter.object="WMCore.WebTools.RESTFormatter"
+
+        # Either we change formatter
+        # OR change the 'Accept' type to application/json (which we don't know how to do at the moment)
+        dbsconfig.formatter.object="WMCore.WebTools.RESTFormatter"
         config = Configuration()
          
         config.component_('SecurityModule')
         config.SecurityModule.dangerously_insecure = True
-	
+
         config.component_('DBS')
         config.DBS.application = app
-	config.DBS.model       = dbsconfig.model
-	config.DBS.formatter   = dbsconfig.formatter
+        config.DBS.model       = dbsconfig.model
+        config.DBS.formatter   = dbsconfig.formatter
 
         #Does not support instances
         #config.DBS.instances   = cfg.dbs.instances
         #config.DBS.database    = dbsconfig.database
 
-        #Use dev/global for the unittest
-        dbconfig = getattr(dbsconfig.database.instances, dbinstance)
-        config.DBS.section_('database')
-        config.DBS.database.connectUrl = dbconfig.connectUrl
-        config.DBS.database.dbowner = dbconfig.dbowner
-        #config.DBS.database.version = dbconfig.version
-        config.DBS.database.engineParameters = dbconfig.engineParameters
-       
-        try:
-            secconfig = getattr(dbsconfig.security.instances, dbinstance)
-        except AttributeError:
-            pass
-        else:
+        if self.migration_test:
+            #Use one specific database cms_dbs3_dev_phys02@int2r for migration unittests
+            from DBSSecrets import dbs3_dp2_i2
+            config.DBS.section_('database')
+            config.DBS.database.connectUrl = dbs3_dp2_i2['connectUrl']['writer']
+            config.DBS.database.dbowner = dbs3_dp2_i2['databaseOwner']
+            config.DBS.database.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }
+
             config.DBS.section_('security')
-            config.DBS.security.params = secconfig.params
-        
+            config.DBS.security.params = {}
+
+        else:
+            #Use dev/global from dbs configuration for the reader, writer and dao unittests
+            dbconfig = getattr(dbsconfig.database.instances, dbinstance)
+            config.DBS.section_('database')
+            config.DBS.database.connectUrl = dbconfig.connectUrl
+            config.DBS.database.dbowner = dbconfig.dbowner
+            config.DBS.database.engineParameters = dbconfig.engineParameters
+
+            try:
+                secconfig = getattr(dbsconfig.security.instances, dbinstance)
+            except AttributeError:
+                pass
+            else:
+                config.DBS.section_('security')
+                config.DBS.security.params = secconfig.params
+
         config.DBS.default_expires = 900
-		
+
         return config
 
     def list1(self, call, params={}):
@@ -93,7 +106,7 @@ class DBSRestApi:
         takes individual parameters
         Example: api.list('files',dataset='/a/b/c')
         """
-	#print "List API call ....."
+        #print "List API call ....."
         request.method = 'GET'
         request.user = {'name' : getpass.getuser()}
         return self.parseForException(self.rest.default(*args, **kwargs))
@@ -104,10 +117,12 @@ class DBSRestApi:
         request.user = {'name' : getpass.getuser()}
         #import pdb
         #pdb.set_trace()
-	#Forcing NO use of insert buffer during the unit tests
-	if call=='files':
+        #Forcing NO use of insert buffer during the unit tests
+        if call=='files':
             ret=self.rest.default(*[call, False])
-	ret=self.rest.default(*[call])
+        else:
+            ret=self.rest.default(*[call])
+
         return self.parseForException(ret)
 
     def update(self, *args, **kwargs):
@@ -119,10 +134,9 @@ class DBSRestApi:
     def parseForException(self, data):
         if type(data)==type("abc"):
             data=json.loads(data)
-	if type(data) == type({}):
-            if type(data) == type({}) and data.has_key('exception'):
-                raise Exception("DBS Server raised an exception: HTTPError %s :" %data['exception'] + (data['message']))
-	return data
+        if type(data) == type({}) and data.has_key('exception'):
+            raise Exception("DBS Server raised an exception: HTTPError %s :" %data['exception'] + (data['message']))
+        return data
 
 def options():
     defaultcfg = os.environ["DBS_TEST_CONFIG"]

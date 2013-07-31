@@ -38,14 +38,14 @@ config.dbs.default_expires = 900
 config.dbs.instances = ['prod/global','dev/global','int/global']
 
 active = config.dbs.views.section_('active')
-active.section_('DBSMigrator')
-active.DBSMigrator.object = 'WMCore.WebTools.RESTApi'
-active.DBSMigrator.section_('model')
-active.DBSMigrator.model.object = 'dbs.web.DBSMigrateModel'
-active.DBSMigrator.section_('formatter')
-active.DBSMigrator.formatter.object = 'WMCore.WebTools.RESTFormatter'
-active.DBSMigrator.section_('database')
-instances = active.DBSMigrator.database.section_('instances')
+active.section_('DBSMigrate')
+active.DBSMigrate.object = 'WMCore.WebTools.RESTApi'
+active.DBSMigrate.section_('model')
+active.DBSMigrate.model.object = 'dbs.web.DBSMigrateModel'
+active.DBSMigrate.section_('formatter')
+active.DBSMigrate.formatter.object = 'WMCore.WebTools.RESTFormatter'
+active.DBSMigrate.section_('database')
+instances = active.DBSMigrate.database.section_('instances')
 
 ProductionGlobal = instances.section_('prod/global')
 ProductionGlobal.dbowner = dbs3_dp01_i2['databaseOwner']
@@ -65,8 +65,8 @@ IntegrationGlobal.version = DBSVERSION
 IntegrationGlobal.connectUrl = dbs3_pg_r['connectUrl']['writer']
 IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
 
-active.DBSMigrator.section_('security')
-security_instances = active.DBSMigrator.security.section_('instances')
+active.DBSMigrate.section_('security')
+security_instances = active.DBSMigrate.security.section_('instances')
 security_production_global = security_instances.section_('prod/global')
 security_production_global.params = {'dbs' : 'dbsoperator', 'dataops' : 'production operator'}
 security_development_global = security_instances.section_('dev/global')
