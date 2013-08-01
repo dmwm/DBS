@@ -34,10 +34,10 @@ def isFileValid(files=[], blocks=[], fstatus=0):
     for block in blocks:
         rslt = dbsApi.listFiles(block_name=block, detail=True)
         for r in rslt:
-            if r.is_file_valid == fstatus :
-                invalidfilelst.append(r.logical_file_name)
+            if r['is_file_valid'] == fstatus :
+                invalidfilelst.append(r['logical_file_name'])
             else:
-                validfilelst.append(r.logical_file_name)
+                validfilelst.append(r['logical_file_name'])
 
     return {'validfilelst':validfilelst, 'invalidfilelst':invalidfilelst}
 
@@ -93,7 +93,8 @@ def updateFileStatus(status, recursive, files=[], blocks=[]):
         #for f in flst['validfilelst']:
             #dbsApi.updateFileStatus(logical_file_names=f, is_file_valid=fstatus, lost=lost)
     if flst['invalidfilelst']:
-        logging.error("cannot %s some of files that are already %s. These files are %s" % (status, status, flst['invalidfilelst']))
+        logging.error("cannot %s some of files that are already %s. These files are %s" % (status, status,
+                                                                                           flst['invalidfilelst']))
         sys.exit(1)
 
 def main():
@@ -101,11 +102,20 @@ def main():
 
     parser = OptionParser(usage=usage)
     parser.add_option("-u", "--url", dest="url", help="DBS Instance url (Required)", metavar="<url>")
-    parser.add_option("-s", "--status", dest="status", help="File status to be set (Required)", metavar="<valid/invalid/lost>")
-    parser.add_option("-r", "--recursive", dest="recursive", help="True means (in)validate will go down to chidren. False means only validate given files. (Required)", metavar="<True/False>")
-    parser.add_option("-f", "--files", dest="files", help="List of files to be validated/invalidated. Can be either a file containg lfns or a comma separated list of lfn's. Use either --files or --block", metavar="<lfn1,..,lfnx or filename>")
-    parser.add_option("-b", "--block", dest="blocks", help="Block to validate/invalidate. use either --files or --block", metavar="<block_name>")
-    parser.add_option("-p", "--proxy", dest="proxy", help="Use Socks5 proxy to connect to server", metavar="socks5://127.0.0.1:1234")
+    parser.add_option("-s", "--status", dest="status", help="File status to be set (Required)",
+                      metavar="<valid/invalid/lost>")
+    parser.add_option("-r", "--recursive", dest="recursive",
+                      help="True means (in)validate will go down to chidren. False means only validate given files.\
+                      (Required)",
+                      metavar="<True/False>")
+    parser.add_option("-f", "--files", dest="files",
+                      help="List of files to be validated/invalidated. Can be either a file containg lfns or a \
+                      comma separated list of lfn's. Use either --files or --block",
+                      metavar="<lfn1,..,lfnx or filename>")
+    parser.add_option("-b", "--block", dest="blocks", help="Blocks to validate/invalidate. \
+                      use either --files or --block", metavar="<block_name>")
+    parser.add_option("-p", "--proxy", dest="proxy", help="Use Socks5 proxy to connect to server",
+                      metavar="socks5://127.0.0.1:1234")
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="Increase verbosity")
 
     #set default values
@@ -113,7 +123,7 @@ def main():
     parser.set_defaults(blocks=[])
 
     (opts, args) = parser.parse_args()
-    if not (opts.url and opts.status and opts.recursive and (opts.files or opts.block)):
+    if not (opts.url and opts.status and opts.recursive and (opts.files or opts.blocks)):
         parser.print_help()
         parser.error('Mandatory options are --block or --file, --status, --url and --recursive')
 
