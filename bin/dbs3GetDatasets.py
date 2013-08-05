@@ -7,7 +7,7 @@ from LifeCycleTests.LifeCycleTools.StatsClient import StatsPipeClient
 
 import os
 import sys
-import json
+
 from random import shuffle
 
 options = get_command_line_options(__name__, sys.argv)

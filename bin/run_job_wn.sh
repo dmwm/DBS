@@ -22,7 +22,7 @@ REPO=comp.pre.giffels
 
 GRIDENVSCRIPT=/afs/cern.ch/cms/LCG/LCG-2/UI/cms_ui_env.sh
 
-DBS3CLIENTVERSION=3.1.2b
+DBS3CLIENTVERSION=3.1.5a
 DBS3CLIENT=cms+dbs3-client+$DBS3CLIENTVERSION
 DBS3CLIENTDOC=cms+dbs3-client-webdoc+$DBS3CLIENTVERSION
 
@@ -138,6 +138,7 @@ setup_dbs_lifecylce()
   ## setup dbs_client
   export DBS_READER_URL=https://cmsweb-testbed.cern.ch/dbs/dev/global/DBSReader
   export DBS_WRITER_URL=https://cmsweb-testbed.cern.ch/dbs/dev/global/DBSWriter
+  export DBS_MIGRATE_URL=https://cmsweb-testbed.cern.ch/dbs/dev/global/DBSMigrate
 }
 
 setup_lifecycle_agent()
