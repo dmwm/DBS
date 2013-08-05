@@ -118,13 +118,18 @@ class DBSMigrationServer_t(unittest.TestCase):
                 self._migration_task.cleanup()
 
     def test_04_insert_migration_requests(self):
-        """test04: Test to request a migration between different DBS instances by dataset"""
+        """negative test04: Test to request a migration between different DBS instances by dataset"""
         datasets = set((block['dataset']['dataset'] for block in chain(self._data_provider.block_dump(),
                                                                        self._child_data_provider.block_dump())))
         for dataset in datasets:
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : dataset}
-            self._migrate_api.insert('submit', toMigrate)
+            try:
+                self._migrate_api.insert('submit', toMigrate)
+            except Exception, de:
+                if "already in destination" in de.message:
+                    pass
+
 
     def test_05_handle_migration_requests(self):
         """test05: Test to handle migration requests between different DBS instances by dataset"""

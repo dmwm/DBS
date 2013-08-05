@@ -78,13 +78,17 @@ class DBSMigrate:
             if tmp_ordered_dict != {}:  
                 ordered_dict.update(tmp_ordered_dict)
             else:
-                return {}
+                #return {}
+                m = 'Requested dataset %s is already in destination' %srcdataset
+                dbsExceptionHandler('dbsException-invalid-input2', message=m, serverError=m)
             # Now process the parent datasets
             parent_ordered_dict = self.getParentDatastesOrderedList(url, conn,
                                                 srcdataset, order_counter+1)
             if parent_ordered_dict != {}:
                 ordered_dict.update(parent_ordered_dict)
             return ordered_dict  
+        except dbsException:
+            raise
         except Exception, ex:
             if 'urlopen error' in str(ex):
                 message='Connection to source DBS server refued. Check your source url.'
@@ -105,9 +109,8 @@ class DBSMigrate:
         srcblks ={}
         srcblks = self.getSrcBlocks(url, dataset=inputdataset)
         if len(srcblks) < 0:
-            dbsExceptionHandler('dbsException-invalid-input2', 
-                "Invalid input for DBSMigration: No blocks in the required dataset %s \
-                found at source %s." % (inputdataset, url))
+            e = "DBSMigration: No blocks in the required dataset %s found at source %s."%(inputdataset, url)
+            dbsExceptionHandler('dbsException-invalid-input2', message=e, serverError=e) 
         dstblks = self.blocklist.execute(conn, dataset=inputdataset)
         blocksInSrcNames = [ y['block_name'] for y in srcblks]
         blocksInDstNames = [ x['block_name'] for x in dstblks]
@@ -168,8 +171,8 @@ class DBSMigrate:
             #2.
             srcblock = self.getSrcBlocks(url, block=block_name)
             if len(srcblock) < 1:
-                dbsExceptionHandler('dbsException-invalid-input2', '''Invalid input for DBSMigration:
-                                       Required Block %s not found at source %s. ''' %(srcblock, url))
+                e = 'DBSMigration: Invalid input. Required Block %s not found at source %s.' %(srcblock, url)
+                dbsExceptionHandler('dbsException-invalid-input2', message=e, serverError=e) 
             ##This block has to be migrated
             ordered_dict[order_counter] = []
             ordered_dict[order_counter].append(block_name)
@@ -317,11 +320,15 @@ class DBSMigrate:
                     "migration_details" : request }
             else:
                 if conn: conn.close()
-                dbsExceptionHandler('dbsException-invalid-input2',"DBSMigration:  ENQUEUEING_FAILED; reason may be (%s)" %ex)
+                m = "DBSMigration:  ENQUEUEING_FAILED."
+                e = "DBSMigration:  ENQUEUEING_FAILED; reason may be (%s)" %str(ex)
+                dbsExceptionHandler('dbsException-invalid-input2', message=m, serverError=e)
         except Exception, ex:
             if tran: tran.rollback()
             if conn: conn.close()
-            dbsExceptionHandler('dbsException-invalid-input2',"DBSMigration:  ENQUEUEING_FAILED; reason may be (%s)" %ex)
+            m = "DBSMigration:  ENQUEUEING_FAILED."
+            e = "DBSMigration:  ENQUEUEING_FAILED; reason may be (%s)" %str(ex)
+            dbsExceptionHandler('dbsException-invalid-input2',message=m, serverError=e)
         finally:
             if conn: conn.close()
     
@@ -476,8 +483,8 @@ class DBSMigrate:
             params={'dataset':dataset}
             #resturl = "%s/blocks?dataset=%s" % (url, dataset)
         else:
-            dbsExceptionHandler('dbsException-invalid-input2', 'Invalid inputs for\
-                DBSMigrate/getSrcBlocks. Either block or dataset name has to be\
-                provided.')
+            m = 'DBSMigration: Invalid input.  Either block or dataset name has to be provided'
+            e = 'DBSMigrate/getSrcBlocks: Invalid input.  Either block or dataset name has to be provided'
+            dbsExceptionHandler('dbsException-invalid-input2', message=m, serverError=e )
         
         return cjson.decode(self.callDBSService(url, 'blocks', params, {}))

@@ -27,5 +27,6 @@ WHERE MIGRATION_REQUEST_ID=:migration_request_id and (migration_status=0 or migr
         """
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/Remove. Expects db connection from upper layer.")
-
         result = self.dbi.processData(self.sql, daoinput, conn, transaction)
+        if result[0].rowcount == 0:
+            dbsExceptionHandler('dbsException-invalid-input2',"DBSMigration: Invalid request. Sucessfully processed or processing requests cannot be removed. ")
