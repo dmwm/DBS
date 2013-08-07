@@ -24,7 +24,8 @@ systems = \
                    'dbs.web.DBSWriterModel',
                    'dbs.web.DBSMigrateModel'],
     'pythonpkg': [],
-    'dependencies' : ['dbs-business', 'dbs-dao', 'dbs-utils']
+    'dependencies' : ['dbs-business', 'dbs-dao', 'dbs-utils'],
+    'statics': ['Server/templates/*.tmpl']
   },
 
   'pycurl-client':
@@ -117,6 +118,7 @@ def process_dependencies(system):
   srcdir = system['srcdir']
   binaries = set(system.get('bin', set()))
   examples = set(system.get('examples', set()))
+  statics = set(system.get('statics', set()))
   pythonmods = set(system.get('pythonmods', set()))
   pythonpkg = set(system.get('pythonpkg', set()))
 
@@ -131,20 +133,23 @@ def process_dependencies(system):
     dependants = process_dependencies(dependant_system)
     binaries.update(dependants.get('bin', set()))
     examples.update(dependants.get('examples', set()))
+    statics.update(dependants.get('statics', set()))
     pythonmods.update(dependants.get('pythonmods', set()))
     pythonpkg.update(dependants.get('pythonpkg', set()))
 
-  return {'srcdir' : srcdir,
-          'bin' : list(binaries),
-          'examples' : list(examples),
-          'pythonmods' : list(pythonmods),
-          'pythonpkg' : list(pythonpkg)}
+  return {'srcdir': srcdir,
+          'bin': list(binaries),
+          'examples': list(examples),
+          'statics': list(statics),
+          'pythonmods': list(pythonmods),
+          'pythonpkg': list(pythonpkg)}
 
 def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   # Expand various sources.
   docroot = "doc/build/html"
   system = process_dependencies(systems[system_name])
   exsrc = sum((glob("%s" % x) for x in system.get('examples', [])), [])
+  statics = sum((glob("%s" % x) for x in system.get('statics', [])), [])
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
 
   # Specify what to install.
@@ -153,10 +158,9 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.py_modules = system.get('pythonmods', [])
   dist.packages = system.get('pythonpkg', [])
   dist.package_dir = { '': system.get('srcdir', []) }
-  dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc)]
+  dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc), ('statics', statics)]
 
   for directory in set(os.path.dirname(path.replace('Client/utils/','',1)) for path in exsrc):
-      print directory
       files = [x for x in exsrc if x.startswith('Client/utils/%s/' % directory)]
       dist.data_files.append(('examples/%s' % (directory), files))
 
@@ -200,7 +204,7 @@ class BuildCommand(Command):
       os.environ["PYTHONPATH"] = "%s/WMCore/build/lib/:%s" % (os.path.dirname(os.getcwd()), os.environ["PYTHONPATH"])
     os.environ["PYTHONPATH"] = "%s/build/lib:%s" % (os.getcwd(), os.environ["PYTHONPATH"])
     #spawn(['make', '-C', 'doc', 'html', 'PROJECT=%s' % self.system.lower()])
-    spawn(['make', '-C', 'doc', 'html', 'PROJECT=dbs'])  
+    spawn(['make', '-C', 'doc', 'html', 'PROJECT=dbs'])
 
   def run(self):
     command = 'build'
@@ -272,5 +276,5 @@ class InstallCommand(install):
 setup(name = 'dbs',
       version = '3.0',
       maintainer_email = 'hn-cms-dmDevelopment@cern.ch',
-      cmdclass = { 'build_system': BuildCommand,
-                   'install_system': InstallCommand })
+      cmdclass = {'build_system': BuildCommand,
+                  'install_system': InstallCommand})

@@ -106,7 +106,8 @@ class DBSReaderModel(RESTModel):
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id', 'global_tag'])
         self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id',
                         'block_name'])
-        self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_names', 'block_name', 'block_id'])
+        self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_names', 'block_name',
+                                                                            'block_id'])
         self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run'])
         self._addMethod('GET', 'runs', self.listRuns, args=['run', 'logical_file_name',
                         'block_name', 'dataset'])
@@ -120,7 +121,8 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=['acquisition_era_name'])
         self._addMethod('GET', 'acquisitioneras_ci', self.listAcquisitionEras_CI, args=['acquisition_era_name'])
         self._addMethod('GET', 'processingeras', self.listProcessingEras, args=['processing_version'])
-        self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version', 'dataset', 'logical_file_name'])
+        self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version', 'dataset',
+                                                                                  'logical_file_name'])
         self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'])
         self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'])
         self._addMethod('GET', 'runsummaries', self.listRunSummaries, args=['dataset', 'run'])
@@ -145,7 +147,11 @@ class DBSReaderModel(RESTModel):
 
     def getServerVersion(self):
         """
-        Reading from __version__ tag, determines the version of the DBS Server
+        API reading the __version__ tag and determines the version of the DBS Server
+
+        :return: Return the version of the DBS Server
+        :rtype: str
+
         """
         version = __server__version__.replace("$Name: ", "")
         version = version.replace("$", "")
@@ -153,6 +159,16 @@ class DBSReaderModel(RESTModel):
         return version
 
     def getHelp(self, call=""):
+        """
+        API to get a list of supported REST APIs. In the case a particular API is specified,
+        the docstring of that API is displayed.
+
+        :param call: call to get detailed information about (Optional)
+        :type call: str
+        :return: List of APIs or detailed information about a specific call (parameters and docstring)
+        :rtype: List of strings or a dictionary containing params and doc keys depending on the input parameter
+
+        """
         if call:
             params = self.methods['GET'][call]['args']
             doc = self.methods['GET'][call]['call'].__doc__
@@ -164,9 +180,10 @@ class DBSReaderModel(RESTModel):
         """
         Method that provides information about DBS Server to the clients
         The information includes
-        * Server Version - CVS Tag
-        * Schema Version - Version of Schema this DBS instance is working with
-        * ETC - TBD
+
+        :return: Server Version - CVS Tag, Schema Version - Version of Schema this DBS instance is working with, ETC - TBD
+        :rtype: dictionary containing tagged_version, schema, and components keys
+
         """
         ret = {}
         ret["tagged_version"] = self.getServerVersion()
@@ -177,12 +194,14 @@ class DBSReaderModel(RESTModel):
     @inputChecks(primary_ds_name=str, primary_ds_type=str)
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
-        API to list ALL primary datasets in DBS
+        API to list primary datasets
 
-        :param primary_ds_name: If provided, will list that primary dataset
+        :param primary_ds_type: List primary datasets with primary dataset type (Optional)
+        :type primary_ds_type: str
+        :param primary_ds_name: List that primary dataset (Optional)
         :type primary_ds_name: str
-        :param primary_ds_type:  If provided, will list all primary dataset having that type
-        :type primary_ds_name: str
+        :returns: List of dictionaries containing the following keys (primary_ds_type_id, data_type)
+        :rtype: list of dicts
         :returns: List of dictionaries containing the following keys (create_by, primary_ds_type, primary_ds_id, primary_ds_name, creation_date)
         :rtype: list of dicts
 
@@ -203,9 +222,9 @@ class DBSReaderModel(RESTModel):
         """
         API to list primary dataset types
 
-        :param primary_ds_type: If provided, will list that primary dataset type
+        :param primary_ds_type: List that primary dataset type (Optional)
         :type primary_ds_type: str
-        :param dataset: List the primary dataset type for that dataset
+        :param dataset: List the primary dataset type for that dataset (Optional)
         :type dataset: str
         :returns: List of dictionaries containing the following keys (primary_ds_type_id, data_type)
         :rtype: list of dicts
@@ -240,6 +259,8 @@ class DBSReaderModel(RESTModel):
         ldate='0', detail=False):
         """
         API to list dataset(s) in DBS
+        * You can use ANY combination of these parameters in this API
+        * In absence of parameters, all valid datasets known to the DBS instance will be returned
 
         :param dataset:  Full dataset (path) of the dataset
         :type dataset: str
@@ -271,13 +292,22 @@ class DBSReaderModel(RESTModel):
         :type create_by: str
         :param last_modified_by: Last modifier of the dataset
         :type last_modified_by: str
+        :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
+        :type min_cdate: int, str
+        :param max_cdate: Upper limit for the creation date (unixtime) (Optional)
+        :type max_cdate: int, str
+        :param min_ldate: Lower limit for the last modification date (unixtime) (Optional)
+        :type min_ldate: int, str
+        :param max_ldate: Upper limit for the last modification date (unixtime) (Optional)
+        :type max_ldate: int, str
+        :param cdate: creation date (unixtime) (Optional)
+        :type cdate: int, str
+        :param ldate: last modification date (unixtime) (Optional)
+        :type ldate: int, str
         :param detail: List all details of a dataset
         :type detail: bool
         :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contain the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
         :rtype: list of dicts
-
-        * You can use ANY combination of these parameters in this API
-        * In absence of parameters, all datasets known to the DBS instance will be returned
 
         """
         dataset = dataset.replace("*", "%")
@@ -349,18 +379,16 @@ class DBSReaderModel(RESTModel):
 
     def listDatasetArray(self):
         """
-        API to list datasets in DBS
+        API to list datasets in DBS. To be called by datasetlist url with post call.
 
         :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required)
         :type dataset: list
-        :param dataset_access_type: If provided list only datasets having that dataset access type (Optional)
+        :param dataset_access_type: List only datasets with that dataset access type (Optional)
         :type dataset_access_type: str
         :param detail: brief list or detailed list 1/0
         :type detail: bool
-        :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contain the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
+        :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contains the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
         :rtype: list of dicts
-
-        To be called by datasetlist url with post call.
 
         """
         try :
@@ -385,10 +413,10 @@ class DBSReaderModel(RESTModel):
     @inputChecks(data_tier_name=str)
     def listDataTiers(self, data_tier_name=""):
         """
-        API to list data tiers  known to DBS
+        API to list data tiers known to DBS.
 
-        :param datatier: When supplied, dbs will list details on this tier (Optional)
-        :type datatier: str
+        :param data_tier_name: List details on that data tier (Optional)
+        :type data_tier_name: str
         :returns: List of dictionaries containing the following keys (data_tier_id, data_tier_name, create_by, creation_date)
 
         """
@@ -437,6 +465,18 @@ class DBSReaderModel(RESTModel):
         :type origin_site_name: str
         :param run: run numbers (Optional)
         :type run: int, list of runs or list of run ranges
+        :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
+        :type min_cdate: int, str
+        :param max_cdate: Upper limit for the creation date (unixtime) (Optional)
+        :type max_cdate: int, str
+        :param min_ldate: Lower limit for the last modification date (unixtime) (Optional)
+        :type min_ldate: int, str
+        :param max_ldate: Upper limit for the last modification date (unixtime) (Optional)
+        :type max_ldate: int, str
+        :param cdate: creation date (unixtime) (Optional)
+        :type cdate: int, str
+        :param ldate: last modification date (unixtime) (Optional)
+        :type ldate: int, str
         :param detail: Get detailed information of a block (Optional)
         :type detail: bool
         :returns: List of dictionaries containing following keys (block_name). If option detail is used the dictionaries contain the following keys (block_id, create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, dataset_id and block_size)
@@ -491,13 +531,13 @@ class DBSReaderModel(RESTModel):
     @inputChecks(origin_site_name=str, dataset=str)
     def listBlockOrigin(self, origin_site_name="",  dataset=""):
         """
-        API to list blocks first generated in origin_site_name
+        API to list blocks first generated in origin_site_name.
 
         :param origin_site_name: Origin Site Name (Required, No wildcards)
         :type origin_site_name: str
         :param dataset: dataset (Required, No wildcards)
         :type dataset: str
-        :returns: List of dictionaries containg the following keys (create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, block_size)
+        :returns: List of dictionaries containing the following keys (create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, block_size)
         :rtype: list of dicts
 
         """
@@ -514,9 +554,9 @@ class DBSReaderModel(RESTModel):
     @inputChecks(block_name=str)
     def listBlockParents(self, block_name=""):
         """
-        API to list block parents
+        API to list block parents.
 
-        :param block_name: name of block whoes parents needs to be found (Required)
+        :param block_name: name of block who's parents needs to be found (Required)
         :type block_name: str
         :returns: List of dictionaries containing following keys (block_name)
         :rtype: list of dicts
@@ -534,12 +574,10 @@ class DBSReaderModel(RESTModel):
 
     def listBlocksParents(self):
         """
-        API to list block parents of multiple blocks
+        API to list block parents of multiple blocks. To be called by blockparents url with post call.
 
         :param block_names: list of block names [block_name1, block_name2, ...] (Required)
         :type block_names: list
-
-        To be called by blockparents url with post call
 
         """
         try :
@@ -564,9 +602,9 @@ class DBSReaderModel(RESTModel):
     @inputChecks(block_name=str)
     def listBlockChildren(self, block_name=""):
         """
-        API to list block children
+        API to list block children.
 
-        :param block_name: name of block whoes children needs to be found (Required)
+        :param block_name: name of block who's children needs to be found (Required)
         :type block_name: str
         :returns: List of dictionaries containing following keys (block_name)
         :rtype: list of dicts
@@ -586,13 +624,12 @@ class DBSReaderModel(RESTModel):
     def listBlockSummaries(self, block_name="", dataset=""):
         """
         API that returns summary information like total size and total number of events in a dataset or a list of blocks
-        created in a given time range. The time range must be specified and the maximal time range allowed is 32 days
 
-        :param block_name:
+        :param block_name: list block summaries for block_name(s)
         :type block_name: str, list
-        :param dataset:
+        :param dataset: list block summaries for all blocks in dataset
         :type dataset: str
-        :returns: list of dicts containing total BLOCK_SIZES, FILE_COUNTS and EVENT_COUNTS of dataset or blocks provided
+        :returns: list of dicts containing total block_sizes, file_counts and event_counts of dataset or blocks provided
 
         """
         if bool(dataset)+bool(block_name)!=1:
@@ -639,8 +676,13 @@ class DBSReaderModel(RESTModel):
         release_version="", pset_hash="", app_name="", output_module_label="",
         run=-1, origin_site_name="", lumi_list="", detail=False):
         """
-        API to list A file in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset or non-wildcarded block_name is required.
+        API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset or non-wildcarded block_name is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
+
+        * For lumi_list the following two json formats are supported:
+            - '[a1, a2, a3,]'
+            - '[[a,b], [c, d],]'
+        * If lumi_list is provided run only run=single-run-number is allowed
 
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
@@ -660,16 +702,12 @@ class DBSReaderModel(RESTModel):
         :type run: int, list, string
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
+        :param lumi_list: List containing luminosity sections
+        :type lumi_list: list
         :param detail: Get detailed information about a file
         :type detail: bool
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
-
-        * Run numbers must be passed as two parameters, minrun and maxrun.
-        * For lumi_list the following two json formats are supported:
-            - '[a1, a2, a3,]'
-            - '[[a,b], [c, d],]'
-        * If lumi_list is provided, run=single-run-number
 
         """
         logical_file_name = logical_file_name.replace("*", "%")
@@ -679,7 +717,7 @@ class DBSReaderModel(RESTModel):
         block_name = block_name.replace("*", "%")
         origin_site_name = origin_site_name.replace("*", "%")
         dataset = dataset.replace("*", "%")
-        
+
         if lumi_list:
             lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
 
@@ -700,15 +738,15 @@ class DBSReaderModel(RESTModel):
     @inputChecks(block_name=str, dataset=str, run=(long,int,str,list))
     def listFileSummaries(self, block_name='', dataset='', run=-1):
         """
-        API to list number of files, event counts and number of lumis in a given block or dataset.If the optional run
-        parameter is used, the summaries just for this run number. Either block_name or dataset name is required. No wild-cards are allowed
+        API to list number of files, event counts and number of lumis in a given block or dataset. If the optional run
+        parameter is used, the summary is just for this run number. Either block_name or dataset name is required. No wild-cards are allowed
 
         :param block_name: Block name
         :type block_name: str
         :param dataset: Dataset name
         :type dataset: str
         :param run: Run number (Optional)
-        :type run: int, str, list 
+        :type run: int, str, list
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
@@ -725,7 +763,7 @@ class DBSReaderModel(RESTModel):
     @inputChecks(dataset=str)
     def listDatasetParents(self, dataset=''):
         """
-        API to list A datasets parents in DBS
+        API to list A datasets parents in DBS.
 
         :param dataset: dataset (Required)
         :type dataset: str
@@ -745,7 +783,7 @@ class DBSReaderModel(RESTModel):
     @inputChecks(dataset=str)
     def listDatasetChildren(self, dataset):
         """
-        API to list A datasets children in DBS
+        API to list A datasets children in DBS.
 
         :param dataset: dataset (Required)
         :type dataset: str
@@ -768,7 +806,9 @@ class DBSReaderModel(RESTModel):
                           release_version="", pset_hash="", app_name="",
                           output_module_label="", block_id=0, global_tag=''):
         """
-        API to list OutputConfigs in DBS
+        API to list OutputConfigs in DBS.
+        * You can use any combination of these parameters in this API
+        * All parameters are optional, if you do not provide any parameter, all configs will be listed from DBS
 
         :param dataset: Full dataset (path) of the dataset
         :type dataset: str
@@ -788,9 +828,6 @@ class DBSReaderModel(RESTModel):
         :type global_tag: str
         :returns: List of dictionaries containing the following keys (app_name, output_module_label, create_by, pset_hash, creation_date, release_version, global_tag, pset_name)
         :rtype: list of dicts
-
-        * You can use ANY combination of these parameters in this API
-        * All parameters are optional, if you do not provide any parameter, All configs will be listed from DBS
 
         """
         release_version = release_version.replace("*", "%")
@@ -815,6 +852,10 @@ class DBSReaderModel(RESTModel):
 
         :param logical_file_name: logical_file_name of file (Required)
         :type logical_file_name: str
+        :param block_id: ID of the a block, whose files should be listed
+        :type block_id: int, str
+        :param block_name: Name of the block, whose files should be listed
+        :type block_name: int, str
         :returns: List of dictionaries containing the following keys (parent_logical_file_name, logical_file_name)
         :rtype: list of dicts
 
@@ -832,7 +873,7 @@ class DBSReaderModel(RESTModel):
     @inputChecks(logical_file_names=(str, list), block_name=(str), block_id=(str, int))
     def listFileChildren(self, logical_file_names='', block_name='', block_id=0):
         """
-        API to list file children. One of the parameters in mandatory
+        API to list file children. One of the parameters in mandatory.
 
         :param logical_file_name: logical_file_name of file (Required)
         :type logical_file_name: str, list
@@ -858,12 +899,12 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listFileChildren. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-    
+
     @transformInputType('run')
     @inputChecks(logical_file_name=str, block_name=str, run=(long,int,str,list))
     def listFileLumis(self, logical_file_name="", block_name="", run=-1):
         """
-        API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support on this API
+        API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support in this API
 
         :param block_name: Name of the block
         :type block_name: str
@@ -889,6 +930,7 @@ class DBSReaderModel(RESTModel):
     def listRuns(self, run=-1, logical_file_name="", block_name="", dataset=""):
         """
         API to list all runs in DBS. All parameters are optional.
+        * If you omit run, then all runs known to DBS will be listed
 
         :param logical_file_name: List all runs in the file
         :type logical_file_name: str
@@ -896,10 +938,8 @@ class DBSReaderModel(RESTModel):
         :type block_name: str
         :param dataset: List all runs in that dataset
         :type dataset: str
-        :param run: List all runs 
+        :param run: List all runs
         :type run: int, string or list
-
-        * If you omit run, then all runs known to DBS will be listed
 
         """
         try:
@@ -923,10 +963,12 @@ class DBSReaderModel(RESTModel):
     @inputChecks(datatype=str, dataset=str)
     def listDataTypes(self, datatype="", dataset=""):
         """
-        API to list data types known to dbs (when no parameter supplied)
+        API to list data types known to dbs (when no parameter supplied).
 
         :param dataset: Returns data type (of primary dataset) of the dataset (Optional)
         :type dataset: str
+        :param datatype: List specific data type
+        :type datatype: str
         :returns: List of dictionaries containing the following keys (primary_ds_type_id, data_type)
         :rtype: list of dicts
 
@@ -945,7 +987,7 @@ class DBSReaderModel(RESTModel):
         """
         API the list all information related with the block_name
 
-        :param block_name: Name of block whoes children needs to be found (Required)
+        :param block_name: Name of block to be dumped (Required)
         :type block_name: str
 
         """
@@ -961,7 +1003,7 @@ class DBSReaderModel(RESTModel):
     @inputChecks(acquisition_era_name=str)
     def listAcquisitionEras(self, acquisition_era_name=''):
         """
-        API to list ALL Acquisition Eras in DBS
+        API to list all Acquisition Eras in DBS.
 
         :param acquisition_era_name: Acquisition era name (Optional, wild cards allowed)
         :type acquisition_era_name: str
@@ -981,7 +1023,7 @@ class DBSReaderModel(RESTModel):
     @inputChecks(acquisition_era_name=str)
     def listAcquisitionEras_CI(self, acquisition_era_name=''):
         """
-        API to list ALL Acquisition Eras (case insensitive) in DBS
+        API to list ALL Acquisition Eras (case insensitive) in DBS.
 
         :param acquisition_era_name: Acquisition era name (Optional, wild cards allowed)
         :type acquisition_era_name: str
@@ -1002,11 +1044,11 @@ class DBSReaderModel(RESTModel):
     @inputChecks(processing_version=(str,int))
     def listProcessingEras(self, processing_version=0):
         """
-        API to list all Processing Eras in DBS
+        API to list all Processing Eras in DBS.
 
         :param processing_version: Processing Version (Optional). If provided just this processing_version will be listed
         :type processing_version: str
-        :returns: List of dictionaries containg the following keys (create_by, processing_version, description, creation_date)
+        :returns: List of dictionaries containing the following keys (create_by, processing_version, description, creation_date)
         :rtype: list of dicts
 
         """
@@ -1025,11 +1067,11 @@ class DBSReaderModel(RESTModel):
         """
         API to list all release versions in DBS
 
-        :param release_version: If provided, will list only that release version
+        :param release_version: List only that release version
         :type release_version: str
-        :param dataset: If provided, will list release version of the specified dataset
+        :param dataset: List release version of the specified dataset
         :type dataset: str
-        :param logical_file_name: logical file name of the file
+        :param logical_file_name: List release version of the logical file name
         :type logical_file_name: str
         :returns: List of dictionaries containing following keys (release_version)
         :rtype: list of dicts
@@ -1049,11 +1091,11 @@ class DBSReaderModel(RESTModel):
     @inputChecks(dataset_access_type=str)
     def listDatasetAccessTypes(self, dataset_access_type=''):
         """
-        API to list ALL dataset access types
+        API to list dataset access types.
 
-        :param dataset_access_type: If provided, list that dataset access type (Optional)
+        :param dataset_access_type: List that dataset access type (Optional)
         :type dataset_access_type: str
-        :returns: List of dictionary containg the following key (dataset_access_type).
+        :returns: List of dictionary containing the following key (dataset_access_type).
         :rtype: List of dicts
 
         """
@@ -1071,9 +1113,9 @@ class DBSReaderModel(RESTModel):
     @inputChecks(physics_group_name=str)
     def listPhysicsGroups(self, physics_group_name=''):
         """
-        API to list ALL physics groups
+        API to list all physics groups.
 
-        :param physics_group_name: If provided, list that specific physics group
+        :param physics_group_name: List that specific physics group (Optional)
         :type physics_group_name: str
         :returns: List of dictionaries containing the following key (physics_group_name)
         :rtype: list of dicts
@@ -1095,9 +1137,9 @@ class DBSReaderModel(RESTModel):
         """
         API to list run summaries, like the maximal lumisection in a run.
 
-        :param dataset: dataset name, optional paramater
+        :param dataset: dataset name (Optional)
         :type dataset: str
-        :param run: Run number, which is a mandatory parameter
+        :param run: Run number (Required)
         :type run: str, long, int
         :rtype: list containing a dictionary with key max_lumi
         """
@@ -1127,18 +1169,3 @@ class DBSReaderModel(RESTModel):
         finally:
             if conn:
                 conn.close()
-
-    def getServerInfo(self):
-        """
-        FIXME
-        Method that provides information about DBS Server to the clients
-        The information includes
-        * Server Version - SVN tag
-        * Schema Version - Version of Schema this DBS instance is working with
-        * ETC - TBD
-        """
-        ret = {}
-        ret["tagged_version"] = self.getServerVersion()
-        ret["schema"] = self.dbsStatus.getSchemaStatus()
-        ret["components"] = self.dbsStatus.getComponentStatus()
-        return ret

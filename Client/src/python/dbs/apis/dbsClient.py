@@ -216,7 +216,7 @@ class DbsApi(object):
         """
         API the list all information related with the block_name
 
-        :param block_name: Name of block whoes children needs to be found (Required)
+        :param block_name: Name of the block to be dumped (Required)
         :type block_name: str
 
         """
@@ -234,8 +234,10 @@ class DbsApi(object):
         API to get a list of supported REST APIs. In the case a particular API is specified,
         the docstring of that API is displayed.
 
-        :param call: RESTAPI call for which help is desired (Optional)
+        :param call: REST API call for which help is desired (Optional)
         :type call: str
+        :return: List of APIs or detailed information about a specific call (parameters and docstring)
+        :rtype: List of strings or a dictionary containing params and doc keys depending on the input parameter
 
         """
         validParameters = ['call']
@@ -392,12 +394,13 @@ class DbsApi(object):
 
     def listAcquisitionEras(self, **kwargs):
         """
-        API to list ALL Acquisition Eras in DBS
+        API to list all Acquisition Eras in DBS.
 
         :param acquisition_era_name: Acquisition era name (Optional, wild cards allowed)
         :type acquisition_era_name: str
         :returns: List of dictionaries containing following keys (description, end_date, acquisition_era_name, create_by, creation_date and start_date)
         :rtype: list of dicts
+
         """
         validParameters = ['acquisition_era_name']
 
@@ -408,7 +411,7 @@ class DbsApi(object):
 
     def listAcquisitionEras_ci(self, **kwargs):
         """
-        API to list ALL Acquisition Eras (case insensitive) in DBS
+        API to list all Acquisition Eras (case insensitive) in DBS.
 
         :param acquisition_era_name: Acquisition era name (Optional, wild cards allowed)
         :type acquisition_era_name: str
@@ -424,9 +427,9 @@ class DbsApi(object):
 
     def listBlockChildren(self, **kwargs):
         """
-        API to list block children
+        API to list block children.
 
-        :param block_name: name of block whoes children needs to be found (Required)
+        :param block_name: name of block who's children needs to be found (Required)
         :type block_name: str
         :returns: List of dictionaries containing following keys (block_name)
         :rtype: list of dicts
@@ -443,9 +446,9 @@ class DbsApi(object):
 
     def listBlockParents(self, **kwargs):
         """
-        API to list block parents
+        API to list block parents.
 
-        :param block_name: name of block whoes parents needs to be found (Required)
+        :param block_name: name of block who's parents needs to be found (Required)
         :type block_name: str
         :returns: List of dictionaries containing following keys (block_name)
         :rtype: list of dicts
@@ -462,20 +465,34 @@ class DbsApi(object):
 
     def listBlocks(self, **kwargs):
         """
-        API to list a block in DBS. At least one of the parameters block_name, dataset or logical_file_name are required.
+        API to list a block in DBS. At least one of the parameters block_name, dataset, data_tier_name or
+        logical_file_name are required. If data_tier_name is provided, min_cdate and max_cdate have to be specified and
+        the difference in time have to be less than 31 days.
 
         :param block_name: name of the block
         :type block_name: str
         :param dataset: dataset
         :type dataset: str
+        :param data_tier_name: data tier
+        :type data_tier_name: str
         :param logical_file_name: Logical File Name
         :type logical_file_name: str
-        :param data_tier_name: data_tier_name, when present min_cdate and max_cdate have to be specified
-        :type data_tier_name: str
         :param origin_site_name: Origin Site Name (Optional)
         :type origin_site_name: str
-        :param run: Run Number (Optional)
-        :type run: int,str,list
+        :param run: run numbers (Optional)
+        :type run: int, list of runs or list of run ranges
+        :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
+        :type min_cdate: int, str
+        :param max_cdate: Upper limit for the creation date (unixtime) (Optional)
+        :type max_cdate: int, str
+        :param min_ldate: Lower limit for the last modification date (unixtime) (Optional)
+        :type min_ldate: int, str
+        :param max_ldate: Upper limit for the last modification date (unixtime) (Optional)
+        :type max_ldate: int, str
+        :param cdate: creation date (unixtime) (Optional)
+        :type cdate: int, str
+        :param ldate: last modification date (unixtime) (Optional)
+        :type ldate: int, str
         :param detail: Get detailed information of a block (Optional)
         :type detail: bool
         :returns: List of dictionaries containing following keys (block_name). If option detail is used the dictionaries contain the following keys (block_id, create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, dataset_id and block_size)
@@ -500,9 +517,13 @@ class DbsApi(object):
 
     def listBlockSummaries(self, **kwargs):
         """
-        API to list summary information about blocks
-        :param :
-        :return:
+        API that returns summary information like total size and total number of events in a dataset or a list of blocks
+
+        :param block_name: list block summaries for block_name(s)
+        :type block_name: str, list
+        :param dataset: list block summaries for all blocks in dataset
+        :type dataset: str
+        :returns: list of dicts containing total block_sizes, file_counts and event_counts of dataset or blocks provided
 
         """
         validParameters = ['block_name', 'dataset']
@@ -516,13 +537,13 @@ class DbsApi(object):
 
     def listBlockOrigin(self, **kwargs):
         """
-        API to list blocks first generated in origin_site_name
+        API to list blocks first generated in origin_site_name.
 
         :param origin_site_name: Origin Site Name (Required, No wildcards)
         :type origin_site_name: str
-        :param dataset: dataset (Optional, No wildcards)
+        :param dataset: dataset (Required, No wildcards)
         :type dataset: str
-        :returns: List of dictionaries containg the following keys (create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, block_size)
+        :returns: List of dictionaries containing the following keys (create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, block_size)
         :rtype: list of dicts
 
         """
@@ -537,6 +558,8 @@ class DbsApi(object):
     def listDatasets(self, **kwargs):
         """
         API to list dataset(s) in DBS
+        * You can use ANY combination of these parameters in this API
+        * In absence of parameters, all valid datasets known to the DBS instance will be returned
 
         :param dataset:  Full dataset (path) of the dataset
         :type dataset: str
@@ -568,13 +591,22 @@ class DbsApi(object):
         :type create_by: str
         :param last_modified_by: Last modifier of the dataset
         :type last_modified_by: str
+        :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
+        :type min_cdate: int, str
+        :param max_cdate: Upper limit for the creation date (unixtime) (Optional)
+        :type max_cdate: int, str
+        :param min_ldate: Lower limit for the last modification date (unixtime) (Optional)
+        :type min_ldate: int, str
+        :param max_ldate: Upper limit for the last modification date (unixtime) (Optional)
+        :type max_ldate: int, str
+        :param cdate: creation date (unixtime) (Optional)
+        :type cdate: int, str
+        :param ldate: last modification date (unixtime) (Optional)
+        :type ldate: int, str
         :param detail: List all details of a dataset
         :type detail: bool
         :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contain the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
         :rtype: list of dicts
-
-        * You can use ANY combination of these parameters in this API
-        * In absence of parameters, all datasets known to the DBS instance will be returned
 
         """
         validParameters = ['dataset', 'parent_dataset', 'is_dataset_valid',
@@ -596,11 +628,11 @@ class DbsApi(object):
 
     def listDatasetAccessTypes(self, **kwargs):
         """
-        API to list ALL dataset access types
+        API to list dataset access types.
 
-        :param dataset_access_type: If provided, list that dataset access type (Optional)
+        :param dataset_access_type: List that dataset access type (Optional)
         :type dataset_access_type: str
-        :returns: List of dictionary containg the following key (dataset_access_type).
+        :returns: List of dictionary containing the following key (dataset_access_type).
         :rtype: List of dicts
 
         """
@@ -612,15 +644,15 @@ class DbsApi(object):
 
     def listDatasetArray(self, **kwargs):
         """
-        API to list datasets in DBS
+        API to list datasets in DBS.
 
         :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required)
         :type dataset: list
-        :param dataset_access_type: If provided list only datasets having that dataset access type (Optional)
+        :param dataset_access_type: List only datasets with that dataset access type (Optional)
         :type dataset_access_type: str
         :param detail: brief list or detailed list 1/0
         :type detail: bool
-        :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contain the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
+        :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contains the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
         :rtype: list of dicts
 
         """
@@ -638,7 +670,7 @@ class DbsApi(object):
 
     def listDatasetChildren(self, **kwargs):
         """
-        API to list A datasets children in DBS
+        API to list A datasets children in DBS.
 
         :param dataset: dataset (Required)
         :type dataset: str
@@ -656,7 +688,7 @@ class DbsApi(object):
 
     def listDatasetParents(self, **kwargs):
         """
-        API to list A datasets parents in DBS
+        API to list A datasets parents in DBS.
 
         :param dataset: dataset (Required)
         :type dataset: str
@@ -674,10 +706,10 @@ class DbsApi(object):
 
     def listDataTiers(self, **kwargs):
         """
-        API to list data tiers  known to DBS
+        API to list data tiers known to DBS.
 
-        :param datatier: When supplied, dbs will list details on this tier (Optional)
-        :type datatier: str
+        :param data_tier_name: List details on that data tier (Optional)
+        :type data_tier_name: str
         :returns: List of dictionaries containing the following keys (data_tier_id, data_tier_name, create_by, creation_date)
 
         """
@@ -689,10 +721,12 @@ class DbsApi(object):
 
     def listDataTypes(self, **kwargs):
         """
-        API to list data types known to dbs (when no parameter supplied)
+        API to list data types known to dbs (when no parameter supplied).
 
         :param dataset: Returns data type (of primary dataset) of the dataset (Optional)
         :type dataset: str
+        :param datatype: List specific data type
+        :type datatype: str
         :returns: List of dictionaries containing the following keys (primary_ds_type_id, data_type)
         :rtype: list of dicts
 
@@ -706,7 +740,7 @@ class DbsApi(object):
     @split_calls
     def listFileChildren(self, **kwargs):
         """
-        API to list file children. One of the parameters in mandatory
+        API to list file children. One of the parameters in mandatory.
 
         :param logical_file_name: logical_file_name of file
         :type logical_file_name: str, list
@@ -729,7 +763,7 @@ class DbsApi(object):
 
     def listFileLumis(self, **kwargs):
         """
-        API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support on this API
+        API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support in this API
 
         :param block_name: Name of the block
         :type block_name: str
@@ -756,6 +790,10 @@ class DbsApi(object):
 
         :param logical_file_name: logical_file_name of file (Required)
         :type logical_file_name: str
+        :param block_id: ID of the a block, whose files should be listed
+        :type block_id: int, str
+        :param block_name: Name of the block, whose files should be listed
+        :type block_name: int, str
         :returns: List of dictionaries containing the following keys (parent_logical_file_name, logical_file_name)
         :rtype: list of dicts
 
@@ -771,8 +809,13 @@ class DbsApi(object):
 
     def listFiles(self, **kwargs):
         """
-        API to list A file in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset or non-wildcarded block_name is required.
+        API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset or non-wildcarded block_name is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
+
+        * For lumi_list the following two json formats are supported:
+            - '[a1, a2, a3,]'
+            - '[[a,b], [c, d],]'
+        * If lumi_list is provided run only run=single-run-number is allowed
 
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
@@ -788,21 +831,16 @@ class DbsApi(object):
         :type app_name: str
         :param output_module_label: name of the used output module
         :type output_module_label: str
-        :param run: run number. Either a run number 123, a list of run numbers ['123','345'], a run range '123-345' or a list of both ['123','345-678']
-        :type run: int,str,list
+        :param run: run , run ranges, and run list
+        :type run: int, list, string
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
-        :param lumi_list: List of lumi sections.
+        :param lumi_list: List containing luminosity sections
         :type lumi_list: list
         :param detail: Get detailed information about a file
         :type detail: bool
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
-
-        * For lumi_list the following two json formats are supported:
-            - '[a1, a2, a3,]'
-            - '[[a,b], [c, d],]'
-        * If lumi_list is provided, one also needs to provide run parameter
 
         """
         validParameters = ['dataset', 'block_name', 'logical_file_name',
@@ -823,8 +861,8 @@ class DbsApi(object):
 
     def listFileSummaries(self, **kwargs):
         """
-        API to list number of files, event counts and number of lumis in a given block of dataset.If the optional run
-        parameter is used, the summaries just for this run number. Either block_name or dataset name is required. No wild-cards are allowed
+        API to list number of files, event counts and number of lumis in a given block or dataset. If the optional run
+        parameter is used, the summary is just for this run number. Either block_name or dataset name is required. No wild-cards are allowed
 
         :param block_name: Block name
         :type block_name: str
@@ -847,7 +885,9 @@ class DbsApi(object):
 
     def listOutputConfigs(self, **kwargs):
         """
-        API to list OutputConfigs in DBS
+        API to list OutputConfigs in DBS.
+        * You can use any combination of these parameters in this API
+        * All parameters are optional, if you do not provide any parameter, all configs will be listed from DBS
 
         :param dataset: Full dataset (path) of the dataset
         :type dataset: str
@@ -868,9 +908,6 @@ class DbsApi(object):
         :returns: List of dictionaries containing the following keys (app_name, output_module_label, create_by, pset_hash, creation_date, release_version, global_tag, pset_name)
         :rtype: list of dicts
 
-        * You can use ANY combination of these parameters in this API
-        * All parameters are optional, if you do not provide any parameter, All configs will be listed from DBS
-
         """
         validParameters = ['dataset', 'logical_file_name', 'release_version',
                            'pset_hash', 'app_name', 'output_module_label',
@@ -882,9 +919,9 @@ class DbsApi(object):
 
     def listPhysicsGroups(self, **kwargs):
         """
-        API to list ALL physics groups
+        API to list all physics groups.
 
-        :param physics_group_name: If provided, list that specific physics group
+        :param physics_group_name: List that specific physics group (Optional)
         :type physics_group_name: str
         :returns: List of dictionaries containing the following key (physics_group_name)
         :rtype: list of dicts
@@ -898,12 +935,14 @@ class DbsApi(object):
 
     def listPrimaryDatasets(self, **kwargs):
         """
-        API to list ALL primary datasets in DBS
+        API to list primary datasets
 
-        :param primary_ds_name: If provided, will list that primary dataset
+        :param primary_ds_type: List primary datasets with primary dataset type (Optional)
+        :type primary_ds_type: str
+        :param primary_ds_name: List that primary dataset (Optional)
         :type primary_ds_name: str
-        :param primary_ds_type:  If provided, will list all primary dataset having that type
-        :type primary_ds_name: str
+        :returns: List of dictionaries containing the following keys (primary_ds_type_id, data_type)
+        :rtype: list of dicts
         :returns: List of dictionaries containing the following keys (create_by, primary_ds_type, primary_ds_id, primary_ds_name, creation_date)
         :rtype: list of dicts
 
@@ -918,9 +957,9 @@ class DbsApi(object):
         """
         API to list primary dataset types
 
-        :param primary_ds_type: If provided, will list that primary dataset type
+        :param primary_ds_type: List that primary dataset type (Optional)
         :type primary_ds_type: str
-        :param dataset: List the primary dataset type for that dataset
+        :param dataset: List the primary dataset type for that dataset (Optional)
         :type dataset: str
         :returns: List of dictionaries containing the following keys (primary_ds_type_id, data_type)
         :rtype: list of dicts
@@ -934,7 +973,7 @@ class DbsApi(object):
 
     def listProcessingEras(self, **kwargs):
         """
-        API to list all Processing Eras in DBS
+        API to list all Processing Eras in DBS.
 
         :param processing_version: Processing Version (Optional). If provided just this processing_version will be listed
         :type processing_version: str
@@ -955,11 +994,11 @@ class DbsApi(object):
         """
         API to list all release versions in DBS
 
-        :param release_version: If provided, will list only that release version
+        :param release_version: List only that release version
         :type release_version: str
-        :param dataset: If provided, will list release version of the specified dataset
+        :param dataset: List release version of the specified dataset
         :type dataset: str
-        :param logical_file_name: logical file name of the file
+        :param logical_file_name: List release version of the logical file name
         :type logical_file_name: str
         :returns: List of dictionaries containing following keys (release_version)
         :rtype: list of dicts
@@ -974,6 +1013,7 @@ class DbsApi(object):
     def listRuns(self, **kwargs):
         """
         API to list all runs in DBS. All parameters are optional.
+        * If you omit run, then all runs known to DBS will be listed
 
         :param logical_file_name: List all runs in the file
         :type logical_file_name: str
@@ -981,10 +1021,8 @@ class DbsApi(object):
         :type block_name: str
         :param dataset: List all runs in that dataset
         :type dataset: str
-        :param run: run number. Either a run number 123, a list of run numbers ['123','345'], a run range '123-345' or a list of both ['123','345-678']
-        :type run: int,str,list
-
-        * If you omit run parameter, then all runs known to DBS will be listed
+        :param run: List all runs
+        :type run: int, string or list
 
         """
         validParameters = ['run', 'logical_file_name', 'block_name', 'dataset']
@@ -995,12 +1033,13 @@ class DbsApi(object):
 
     def listRunSummaries(self, **kwargs):
         """
-        API to list summary information like maximal lumi section number in a run.
-        :param dataset: Dataset name, optional, no wild card support
+        API to list run summaries, like the maximal lumisection in a run.
+
+        :param dataset: dataset name (Optional)
         :type dataset: str
-        :param run: Run number, mandatory option
-        :type run: str, int, long
-        :return: list containing a dict with keys (max_lumi)
+        :param run: Run number (Required)
+        :type run: str, long, int
+        :rtype: list containing a dictionary with key max_lumi
 
         """
         validParameters = ['dataset', 'run']
@@ -1062,8 +1101,11 @@ class DbsApi(object):
 
     def serverinfo(self):
         """
-        * API to retrieve DBS interface and status information
-        * can be used as PING
+        Method that provides information about DBS Server to the clients
+        The information includes
+
+        :return: Server Version - CVS Tag, Schema Version - Version of Schema this DBS instance is working with, ETC - TBD
+        :rtype: dictionary containing tagged_version, schema, and components keys
 
         """
         return self.__callServer("serverinfo")

@@ -1,0 +1,74 @@
+#from dbs.utils.docstring_parser import parse_docstring
+<html>
+  <head>
+    <title>$title RESTful API</title>
+     <link
+       rel="stylesheet"
+       type="text/css"
+       href="/controllers/css/reset/style"/>
+  </head>
+  <body>
+    <center>
+      <table width=700 cellspacing=12>
+        <tr>
+          <td>
+            <h1>$title RESTful API</h1>
+            <p>$model.__doc__</p>
+            <p class="small">This is an auto generated API doc page for $title</p>
+            <p class="small">For a detailed documentation of the API, please check out our
+              <a href="https://cms-http-group.web.cern.ch/cms-http-group/apidoc/dbs3-client/current/dbs.apis.html#module-dbs.apis.dbsClient">client</a>
+              documentation!</p>
+          </td>
+        </tr>
+      </table>
+      <table width=700 cellspacing=12>
+        <tr>
+          <td>
+            #set methods = $model.methods
+            #try
+            #for verb in $methods
+            #if len($methods[$verb])
+            <center>
+              <h2>Methods available for $verb</h2>
+            </center>
+            #for m in $methods[$verb]
+            <dl>
+              <dt>$m: </dt>
+              <dd>
+                <p class="small">
+                  #if 'args' in $methods[$verb][$m].keys and len($methods[$verb][$m]['args'])
+                  Takes the following arguments:
+                  #set i = 0
+                  #for a in $methods[$verb][$m]['args']
+                  #set i += 1
+                  #if $i == len($methods[$verb][$m]['args'])
+                  <b>$a</b>
+                  #else
+                  <b>$a</b>,
+                  #end if
+                  #end for
+                  #else
+                  Takes no arguments
+                  <br/>
+                  #end if
+                </p>
+                #try
+                $parse_docstring($methods[$verb][$m]['call'].__doc__)
+                #except
+                <p>Extraction of the docstring did not work correctly!</p>
+                #end try
+              </dd>
+            </dl>
+            <center><hr/></center>
+            #end for
+            #end if
+            #end for
+            #except
+            <p>No API calls available, make sure you update self.methods()
+              with your API calls. <b>TODO: More documentation here</b>.</p>
+            #end try
+          </td>
+        </tr>
+      </table>
+  </body>
+</html>

@@ -12,17 +12,20 @@ from WMCore.Lexicon import *
 import logging
 from WMCore.WebTools.Page import Page
 
+from functools import wraps
+
 def inputChecks(**_params_):
     """
     This is a function to check all the input for GET APIs.
     """
     def checkTypes(_func_, _params_ = _params_):
+        @wraps(_func_)
         def wrapped(*args, **kw):
             arg_names = _func_.func_code.co_varnames[:_func_.func_code.co_argcount]
             ka = {}
             ka.update(zip(arg_names, args))
             ka.update(kw)
-            #print ka  
+            #print ka
             for name, value in ka.iteritems():
                 #In fact the framework removes all the input variables that is not in the args list of _addMethod.
                 #So DBS list API will never see these variables. For example, if one has
@@ -50,7 +53,7 @@ def inputChecks(**_params_):
                                     else: primdataset(value)
                                 elif name =='processed_ds_name':
                                     if '*' in value: searchstr(value)
-                                    else:  procdataset(value) 
+                                    else:  procdataset(value)
                                 elif name=='logical_file_name':
                                     if '*' in value: searchstr(value)
                                     else: lfn(value)
@@ -141,7 +144,7 @@ validationFunctionWwildcard = {
     'block_name':searchblock,
     'dataset':searchdataset,
     }
-    
+
 
 def validateJSONInputNoCopy(input_key,input_data):
     if isinstance(input_data,dict):
@@ -196,6 +199,6 @@ def validateStringInput(input_key,input_data):
         print serverLog
         dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input Data: Not Match Required Format", None, serverLog)
     return input_data
-    
-        
-    
+
+
+

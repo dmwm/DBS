@@ -451,14 +451,14 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     def insertDataTier(self):
-	"""
+        """
         API to insert A Data Tier in DBS
 
         :param dataTierObj: Data Tier object
         :type dataTierObj: dict
         :key data_tier_name: Data Tier that needs to be inserted
 
-	"""
+        """
       	try:
             body = request.body.read()
             indata = cjson.decode(body)

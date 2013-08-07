@@ -5,10 +5,13 @@ re-transform them to a list
 """
 import ast
 from collections import namedtuple
+from functools import wraps
+
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 def transformInputType(*convert):
     def wrap_f(f):
+        @wraps(f)
         def wrapper(*args, **kwargs):
             for parameter in convert:
                 try:
