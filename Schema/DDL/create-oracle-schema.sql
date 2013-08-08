@@ -5,7 +5,7 @@
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2013-02-20 11:15                                */
+/* Created on:            2013-08-07 13:52                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -609,7 +609,7 @@ CREATE TABLE MIGRATION_BLOCKS (
     CONSTRAINT TUC_MB_1 UNIQUE (MIGRATION_BLOCK_NAME, MIGRATION_REQUEST_ID)
 );
 GRANT SELECT ON MIGRATION_BLOCKS TO CMS_DBS3_READ_ROLE;
-GRANT INSERT, UPDATE ON MIGRATION_BLOCKS TO CMS_DBS3_WRITE_ROLE;
+GRANT INSERT, UPDATE, DELETE ON MIGRATION_BLOCKS TO CMS_DBS3_WRITE_ROLE;
 GRANT DELETE ON MIGRATION_BLOCKS TO CMS_DBS3_ADMIN_ROLE;
 
 /* ---------------------------------------------------------------------- */
@@ -755,6 +755,8 @@ CREATE INDEX IDX_FL_5 ON FILES (FILE_SIZE);
 CREATE INDEX IDX_FL_6 ON FILES (CREATION_DATE);
 
 CREATE INDEX IDX_FL_7 ON FILES (CREATE_BY);
+
+CREATE INDEX IDX_FL_8 ON FILES (IS_FILE_VALID);
 
 ALTER TABLE FILES ADD CONSTRAINT CC_FL_IS_FILE_VALID 
     CHECK (IS_FILE_VALID in (1,0));

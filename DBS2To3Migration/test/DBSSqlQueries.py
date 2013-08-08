@@ -374,7 +374,10 @@ class DBSSqlQueries(object):
                         SELECT
                         FS2.ID file_id,
                         FS2.LOGICALFILENAME logical_file_name,
-                        FS2.VALIDATIONSTATUS is_file_valid,
+                        CASE
+                        WHEN FST.STATUS='VALID'
+                        THEN 1
+                        ELSE 0 END AS IS_FILE_VALID, 
                         FS2.DATASET dataset_id,
                         '/' || PD2.NAME || '/' || DS2.NAME || '/' || DT2.NAME dataset,
                         FS2.BLOCK block_id,
@@ -400,6 +403,7 @@ class DBSSqlQueries(object):
                         JOIN {ownerDBS2}.PERSON PS22 ON FS2.LASTMODIFIEDBY=PS22.ID
                         JOIN {ownerDBS2}.BLOCK BL2 ON FS2.BLOCK=BL2.ID
                         JOIN {ownerDBS2}.FILETYPE FT2 ON FT2.ID=FS2.FILETYPE
+                        JOIN {db_owner_dbs2}.FILESTATUS FST ON FST.ID=FS2.FILESTATUS
                         )
                         GROUP BY FILE_ID, LOGICAL_FILE_NAME, IS_FILE_VALID,
                         DATASET_ID, DATASET,
