@@ -73,13 +73,13 @@ class DBSMigrateModel(RESTModel):
         """
         body = request.body.read()
         indata = cjson.decode(body)
-        indata = validateJSONInputNoCopy("migration_rqst",indata)
-        indata.update({"creation_date": dbsUtils().getTime(),
+        try:
+            indata = validateJSONInputNoCopy("migration_rqst",indata)
+            indata.update({"creation_date": dbsUtils().getTime(),
                 "last_modification_date" : dbsUtils().getTime(),
                 "create_by" : dbsUtils().getCreateBy() ,
                 "last_modified_by" : dbsUtils().getCreateBy(),
                 "migration_status": 0})
-        try:
             return self.dbsMigrate.insertMigrationRequest(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
@@ -117,8 +117,8 @@ class DBSMigrateModel(RESTModel):
         """
         body = request.body.read()
         indata = cjson.decode(body)
-        indata = validateJSONInputNoCopy("migration_rqst",indata)
         try:
+            indata = validateJSONInputNoCopy("migration_rqst",indata)
             return self.dbsMigrate.removeMigrationRequest(indata['migration_rqst_id'])
         except dbsException, he:
             dbsExceptionHandler(he.eCode, he.message, self.logger.exception, he.message)

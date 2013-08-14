@@ -4,7 +4,8 @@ To use with _validate_input method of the RESTModel implementation
 """
 import cjson
 import urlparse
-from cherrypy import log
+#from cherrypy import log
+from WMCore.WebTools.Root import WTLogger 
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
@@ -19,6 +20,7 @@ def inputChecks(**_params_):
     This is a function to check all the input for GET APIs.
     """
     def checkTypes(_func_, _params_ = _params_):
+        log = WTLogger().error_log
         @wraps(_func_)
         def wrapped(*args, **kw):
             arg_names = _func_.func_code.co_varnames[:_func_.func_code.co_argcount]
@@ -37,7 +39,8 @@ def inputChecks(**_params_):
                     if not isinstance(value, types):
                         serverlog = "Expected '%s' to be %s; was %s." % (name, types, type(value))
                         #raise TypeError, "Expected '%s' to be %s; was %s." % (name, types, type(value))
-                        dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input DataType", logging.exception, serverlog)
+                        dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input DataType %s for %s..." %(type(value), name[:5]),\
+                                            logger=log.error, serverError=serverlog)
                     else:
                         try:
                             if type(value) == str:
@@ -79,8 +82,8 @@ def inputChecks(**_params_):
                         except AssertionError as ae:
                             serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(name, value)
                             #print ae
-                            dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input Data: Not Match Required Format",\
-                                        logging.exception, serverLog)
+                            dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input Data %s...: Not Match Required Format" %value[:5],\
+                                        serverError=serverLog, logger=log.error)
             return _func_(*args, **kw)
         return wrapped
     return checkTypes
@@ -150,8 +153,8 @@ def validateJSONInputNoCopy(input_key,input_data):
     if isinstance(input_data,dict):
         for key in input_data.keys():
             if key not in acceptedInputKeys[input_key]:
-                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", logging.exception, \
-                                    "%s is not a valid input key for %s"%(key, input_key))
+                dbsExceptionHandler('dbsException-invalid-input2', message="Invalid Input Key %s..." %key[:5]),\
+                                    serverError="%s is not a valid input key for %s"%(key, input_key))
             else:
                 input_data[key] = validateJSONInputNoCopy(key,input_data[key])
     elif isinstance(input_data,list):
@@ -172,7 +175,7 @@ def validateJSONInputNoCopy(input_key,input_data):
         pass
     else:
         #print  'invalid input: %s= %s'%(input_key, input_data)
-        dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", logging.exception, 'invalid input: %s= %s'%(input_key, input_data))
+        dbsExceptionHandler('dbsException-invalid-input2', message="Invalid Input Data %s..." %input_data[:5], serverError='invalid input: %s= %s'%(input_key, input_data))
     return input_data
 
 def validateStringInput(input_key,input_data):
@@ -184,20 +187,19 @@ def validateStringInput(input_key,input_data):
         func = validationFunctionWwildcard.get(input_key)
         if func is None:
             func = searchstr
+    elif input_key == 'migration_input' :
+        if input_data.find('#') != -1 : func = block
+        else : func = dataset
     else:
-        if input_key == 'migration_input' :
-            if input_key.find('#') != -1 : func = block
-            else : func = dataset
         func = validationFunction.get(input_key)
         if func is None:
             func = namestr
-
     try:
         func(input_data)
     except AssertionError as ae:
         serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(input_key, input_data)
-        print serverLog
-        dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input Data: Not Match Required Format", None, serverLog)
+        #print serverLog
+        dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input Data %s...:  Not Match Required Format" %input_data[:5], serverError=serverLog)
     return input_data
 
 

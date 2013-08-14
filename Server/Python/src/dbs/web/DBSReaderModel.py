@@ -330,7 +330,7 @@ class DBSReaderModel(RESTModel):
         #This is depended on how an user's account is set up.
         if create_by.find('*')!=-1 or create_by.find('%')!=-1 or last_modified_by.find('*')!=-1\
                 or last_modified_by.find('%')!=-1:
-            dbsExceptionHandler("dbsException-invalid-input", "Invalid Input for create_by or last_modified_by.\
+            dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input for create_by or last_modified_by.\
             No wildcard allowed.",  self.logger.exception, 'No wildcards allowed for create_by or last_modified_by')
         try:
             if isinstance(min_cdate,str) and ('*' in min_cdate or '%' in min_cdate):

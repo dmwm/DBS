@@ -27,5 +27,14 @@ class Insert(DBFormatter):
         """
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileParent/Insert. Expects db connection from upper layer.")
-
-        self.dbi.processData(self.sql, daoinput, conn, transaction)
+        binds = {} 
+        bindlist=[]
+        if isinstance(daoinput, dict):
+            self.dbi.processData(self.sql, daoinput, conn, transaction)
+        elif isinstance(daoinput,list):
+            for pf in daoinput:
+                binds = {"this_file_id":pf["this_file_id"], "parent_logical_file_name": pf["parent_logical_file_name"]}
+                bindlist.append(binds) 
+            self.dbi.processData(self.sql, bindlist, conn, transaction)
+        else:
+            dbsExceptionHandler('dbsException-invalid-input2', "file id and parent lfn are required for FileParent insert dao.") 
