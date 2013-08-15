@@ -44,14 +44,14 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 
     def execute(self, conn, dataset="", block_name="", logical_file_name="",
                 release_version="", pset_hash="", app_name="", output_module_label="",
-                run=-1, origin_site_name="", lumi_list=[], transaction=False):
+                run_num=-1, origin_site_name="", lumi_list=[], transaction=False):
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/List. Expects db connection from upper layer.")
         sql = self.sql_cond
         binds = {}
         sql_sel = self.sql_sel
 
-        if run != -1 :
+        if run_num != -1 :
             sql_sel = sql_sel.replace("SELECT", "SELECT DISTINCT") + " , FL.RUN_NUM  "
             sql += " JOIN %sFILE_LUMIS FL on  FL.FILE_ID=F.FILE_ID " %(self.owner)
         if release_version or pset_hash or app_name or output_module_label :
@@ -95,12 +95,12 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
             op = ("=","like")["%" in origin_site_name]
             sql += " AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op
             binds.update({"origin_site_name":origin_site_name})
-        if run != -1 :
+        if run_num != -1 :
             run_list=[]
             sql_run_list=''
             sql_run_range=''
 
-            for r in parseRunRange(run):
+            for r in parseRunRange(run_num):
                 if isinstance(r, str) or isinstance(r, int):
                     if not sql_run_list:
                         sql_run_list = " FL.RUN_NUM = :run_list "

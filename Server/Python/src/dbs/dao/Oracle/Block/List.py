@@ -31,7 +31,7 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
     """ % ((self.owner,)*2)
 
     def execute(self, conn, dataset="", block_name="", data_tier_name="", origin_site_name="", logical_file_name="",
-                run=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, 
+                run_num=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, 
                 ldate=0, transaction = False):
 	"""
 	dataset: /a/b/c
@@ -98,7 +98,7 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
             pass
 
         #one may provide a list of runs , so it has to be the last one in building the bind.
-        if run !=-1 :
+        if run_num !=-1 :
             basesql = basesql.replace("SELECT", "SELECT DISTINCT") + " , FLM.RUN_NUM  "
             if not logical_file_name:
                 joinsql +=  " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID " %(self.owner)

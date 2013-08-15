@@ -143,7 +143,9 @@ class MigrationTask(SequencialTaskBase):
             MgrLogger.error(str(ex))
             self.sourceUrl = None
             return   # don't need to go down.
-            
+
+        self.block_names = []
+        self.migration_block_ids = []
         #query migration_blocks table to get a list of block_names to be migrated
         # and migration_block_id list. Both lists are ordered by MIGRATION_ORDER
         try:
@@ -187,16 +189,12 @@ class MigrationTask(SequencialTaskBase):
                         self.DBSBlockInsert.putBlock(data, migration=True)
                         migration_status = 2
                     except dbsException, de:
-                        if "Block already exists" in de.message:
+                        if "Block %s already exists" % (bName) in de.message:
                             #the block maybe get into the destination by other means. 
                             #skip this block and continue.
                             migration_status = 2
                         else:
-                            #migration_status=3
                             raise 
-                    except Exception, ex:
-                        #migration_status=3
-                        raise
                     finally:
                         if  migration_status == 2:
                             self.dbsMigrate.updateMigrationBlockStatus(migration_status=2,

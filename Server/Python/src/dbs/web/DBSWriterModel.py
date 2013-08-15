@@ -72,7 +72,7 @@ class DBSWriterModel(DBSReaderModel):
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'files', self.insertFile, args=['qInserts'], secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
-        self._addMethod('PUT', 'files', self.updateFile, args=['logical_file_names', 'is_file_valid', 'lost'],
+        self._addMethod('PUT', 'files', self.updateFile, args=['logical_file_name', 'is_file_valid', 'lost'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('PUT', 'datasets', self.updateDataset, args=['dataset', 'dataset_access_type'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
@@ -366,9 +366,9 @@ class DBSWriterModel(DBSReaderModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @transformInputType('logical_file_names')
-    @inputChecks(logical_file_names=(str,list), is_file_valid=(int, str), lost=(int, str, bool ))
-    def updateFile(self, logical_file_names=[], is_file_valid=1, lost=0):
+    @transformInputType('logical_file_name')
+    @inputChecks(logical_file_name=(str,list), is_file_valid=(int, str), lost=(int, str, bool ))
+    def updateFile(self, logical_file_name=[], is_file_valid=1, lost=0):
         """
         API to update file status
 
@@ -388,13 +388,13 @@ class DBSWriterModel(DBSReaderModel):
         else: lost = 0
 
         try:
-            self.dbsFile.updateStatus(logical_file_names, is_file_valid, lost)
+            self.dbsFile.updateStatus(logical_file_name, is_file_valid, lost)
         except dbsException as de:
-            for f in logical_file_names:
+            for f in logical_file_name:
                 if '*' in f or '%' in f:
                     dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,"No \
                     wildcard allow in LFN" )
-            self.dbsFile.updateStatus(logical_file_names, is_file_valid, lost)
+            self.dbsFile.updateStatus(logical_file_name, is_file_valid, lost)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:

@@ -13,9 +13,9 @@ class SummaryList(DBFormatter):
         self.sql = """SELECT MAX(LUMI_SECTION_NUM) AS MAX_LUMI
         FROM {owner}FILE_LUMIS FL""".format(owner=self.owner)
 
-    def execute(self, conn, dataset="", run=-1, transaction=False):
-        binds = dict(run=run)
-        wheresql = "WHERE RUN_NUM=:run"
+    def execute(self, conn, dataset="", run_num=-1, transaction=False):
+        binds = dict(run_num=run_num)
+        wheresql = "WHERE RUN_NUM=:run_num"
 
         if dataset:
             joins = """JOIN {owner}FILES FS ON FS.FILE_ID=FL.FILE_ID

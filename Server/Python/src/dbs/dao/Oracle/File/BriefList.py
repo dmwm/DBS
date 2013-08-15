@@ -26,7 +26,7 @@ class BriefList(DBFormatter):
 
     def execute(self, conn, dataset="", block_name="", logical_file_name="",
             release_version="", pset_hash="", app_name="", output_module_label="",
-	    run=-1, origin_site_name="", lumi_list=[], transaction=False):
+	    run_num=-1, origin_site_name="", lumi_list=[], transaction=False):
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/BriefList. Expects db connection from upper layer.")
 
@@ -88,7 +88,7 @@ class BriefList(DBFormatter):
     	    wheresql += " AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
 	    binds.update({"origin_site_name":origin_site_name})
 
-        if run != -1 :
+        if run_num != -1 :
             basesql = basesql.replace("SELECT", "SELECT DISTINCT") + " , FL.RUN_NUM"
             joinsql += " JOIN %sFILE_LUMIS FL on  FL.FILE_ID=F.FILE_ID " %(self.owner)
             #
@@ -96,7 +96,7 @@ class BriefList(DBFormatter):
             wheresql_run_list = ''
             wheresql_run_range = ''
             #
-            for r in parseRunRange(run):
+            for r in parseRunRange(run_num):
                 if isinstance(r, str) or isinstance(r, int):
                     if not wheresql_run_list:
                         wheresql_run_list = " FL.RUN_NUM = :run_list "

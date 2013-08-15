@@ -136,6 +136,7 @@ class TestCommand(Command):
 
         if self.deployment:
             for instance in ('dev','int','prod'):
+            #for instance in ('dev',):
                 ###set environment
                 os.environ['DBS_READER_URL'] = ("%s/dbs/%s/global/DBSReader") % (self.host, instance)
                 os.environ['DBS_WRITER_URL'] = ("%s/dbs/%s/global/DBSWriter") % (self.host, instance)

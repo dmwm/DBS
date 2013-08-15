@@ -259,7 +259,7 @@ class DBSValitaion_t(unittest.TestCase):
         """update file status and validate that it got updated"""
         logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 0)
         #print "WARNING : DBS cannot list INVALID file, so for now this test is commented out"
-        self.api.updateFileStatus(logical_file_names=logical_file_name, is_file_valid=0)
+        self.api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
         #listfile
         filesInDBS=self.api.listFiles(logical_file_name=logical_file_name, detail=True)
         self.assertEqual(len(filesInDBS) ,1)

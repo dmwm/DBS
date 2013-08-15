@@ -72,7 +72,7 @@ def inputChecks(**_params_):
                                 else:
                                     searchstr(value)
                             elif type(value) == list:
-                                if name == 'logical_file_names':
+                                if name == 'logical_file_name':
                                     for f in value:
                                         if '*' in f: searchstr(f)
                                         else: lfn(f)
@@ -153,7 +153,7 @@ def validateJSONInputNoCopy(input_key,input_data):
     if isinstance(input_data,dict):
         for key in input_data.keys():
             if key not in acceptedInputKeys[input_key]:
-                dbsExceptionHandler('dbsException-invalid-input2', message="Invalid Input Key %s..." %key[:5]),\
+                dbsExceptionHandler('dbsException-invalid-input2', message="Invalid Input Key %s..." %key[:5],\
                                     serverError="%s is not a valid input key for %s"%(key, input_key))
             else:
                 input_data[key] = validateJSONInputNoCopy(key,input_data[key])

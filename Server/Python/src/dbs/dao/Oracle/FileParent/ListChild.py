@@ -29,7 +29,7 @@ class ListChild(DBFormatter):
         JOIN {owner}FILES F ON  F.FILE_ID = FP.PARENT_FILE_ID
         """.format(owner=self.owner)
 
-    def execute(self, conn, logical_file_names, block_name, block_id, transaction=False):
+    def execute(self, conn, logical_file_name, block_name, block_id, transaction=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
@@ -40,14 +40,14 @@ class ListChild(DBFormatter):
         binds = {}
         sql = ''
 
-        if logical_file_names:
-            if isinstance(logical_file_names, str):
-                wheresql = "WHERE F.LOGICAL_FILE_NAME = :logical_file_names"
-                binds = {"logical_file_names": logical_file_names}
+        if logical_file_name:
+            if isinstance(logical_file_name, str):
+                wheresql = "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
+                binds = {"logical_file_name": logical_file_name}
                 sql = "{sql} {wheresql}".format(sql=self.sql, wheresql=wheresql)
-            elif isinstance(logical_file_names, list):
+            elif isinstance(logical_file_name, list):
                 wheresql = "WHERE F.LOGICAL_FILE_NAME in (SELECT LOGICAL_FILE_NAME FROM LFN_GENERATOR)"
-                lfn_generator, binds = create_lfn_generator(logical_file_names)
+                lfn_generator, binds = create_lfn_generator(logical_file_name)
                 sql = "{lfn_generator} {sql} {wheresql}".format(lfn_generator=lfn_generator, sql=self.sql,
                                                                 wheresql=wheresql)
         elif block_name:

@@ -47,7 +47,7 @@ def update_file_status(dataset, new_status):
 
     for this_file in files:
         logging.debug('Update file status for file %s to status %s' % (this_file['logical_file_name'], file_status))
-        api.updateFileStatus(logical_file_names=this_file['logical_file_name'],
+        api.updateFileStatus(logical_file_name=this_file['logical_file_name'],
                              is_file_valid=file_status)
 
 if __name__ == "__main__":

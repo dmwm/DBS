@@ -51,7 +51,7 @@ class List(DBFormatter):
 
     def execute(self, conn, dataset="", is_dataset_valid=1, parent_dataset="",\
                 release_version="", pset_hash="", app_name="", output_module_label="",\
-                processing_version=0, acquisition_era="", run=-1,\
+                processing_version=0, acquisition_era="", run_num=-1,\
                 physics_group_name="", logical_file_name="", primary_ds_name="",\
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", prep_id="",\
                 create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,\
@@ -197,11 +197,11 @@ class List(DBFormatter):
                 binds.update(aera=acquisition_era)
     	
             # This should resolve to original cases that were in the business logic
-            if (not logical_file_name or  logical_file_name=="%") and (run==-1):
+            if (not logical_file_name or  logical_file_name=="%") and (run_num==-1):
     		# """JUST EXECUTE THE QUERY HERE"""
                 sql = "SELECT " + basesql + wheresql 
     	
-            elif (run==-1) and logical_file_name and logical_file_name !="%":
+            elif (run_num==-1) and logical_file_name and logical_file_name !="%":
                 # """DO execute 1 thingy"""
     		sql = "SELECT DISTINCT " + basesql
     		sql += " JOIN %sFILES FL on FL.DATASET_ID = D.DATASET_ID " % self.owner
@@ -209,7 +209,7 @@ class List(DBFormatter):
     		binds.update(logical_file_name = logical_file_name)
     		sql += wheresql
     
-            elif(run != -1 ):
+            elif(run_num != -1 ):
                 # """Do execute 2 thingy"""
     		sql += "SELECT DISTINCT " + basesql
     		if logical_file_name:
@@ -223,7 +223,7 @@ class List(DBFormatter):
     		run_list = []
                 wheresql_run_list=''
                 wheresql_run_range=''
-                for r in parseRunRange(run):
+                for r in parseRunRange(run_num):
                     if isinstance(r, str) or isinstance(r, int):
                         if not wheresql_run_list:
                             wheresql_run_list = " FLLU.RUN_NUM = :run_list "

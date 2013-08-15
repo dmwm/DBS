@@ -21,7 +21,7 @@ class BriefList(DBFormatter):
         self.fromsql = """  FROM %sBLOCKS B """ % self.owner
 
     def execute(self, conn, dataset="", block_name="", data_tier_name="", origin_site_name="", logical_file_name="",
-                run=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,
+                run_num=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,
                 ldate=0, transaction = False):
         """
         dataset: /a/b/c
@@ -94,7 +94,7 @@ class BriefList(DBFormatter):
             pass
 
         #one may provide a list of runs , so it has to be the last one in building the bind.
-        if run !=-1 :
+        if run_num !=-1 :
             basesql = basesql.replace("SELECT", "SELECT DISTINCT") + " , FLM.RUN_NUM  "
             if not logical_file_name:
                 joinsql +=  " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID " %(self.owner)
@@ -103,14 +103,14 @@ class BriefList(DBFormatter):
             wheresql_run_list=''
             wheresql_run_range=''
             #
-            for r in parseRunRange(run):
+            for r in parseRunRange(run_num):
                 if isinstance(r, str) or isinstance(r, int):
                     if not wheresql_run_list:
                         wheresql_run_list = " FLM.RUN_NUM = :run_list "
                     run_list.append(r)
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
-                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run_num range must be apart at least by 1.")
                     wheresql_run_range = " FLM.RUN_NUM between :minrun and :maxrun "
                     binds.update({"minrun":r[0]})
                     binds.update({"maxrun":r[1]})

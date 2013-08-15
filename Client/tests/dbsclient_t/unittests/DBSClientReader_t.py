@@ -293,36 +293,36 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test054(self):
         """test54 unittestDBSClientReader_t.listRuns : basic test"""
-        self.api.listRuns(run=self.testparams['runs'][1])
+        self.api.listRuns(run_num=self.testparams['runs'][1])
 
     def test055(self):
         """test55 unittestDBSClientReader_t.listRuns : basic test"""
-        self.api.listRuns(run=self.testparams['runs'][2])
+        self.api.listRuns(run_num=self.testparams['runs'][2])
 
     def test055(self):
         """test55 unittestDBSClientReader_t.listRuns : basic test"""
-        self.api.listRuns(run='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
+        self.api.listRuns(run_num='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
 
     def test056(self):
         """test56 unittestDBSClientReader_t.listRuns : basic test"""
         self.api.listRuns(dataset=self.testparams['dataset'],
-                          run=['%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2])])
+                          run_num=['%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2])])
 
     def test057(self):
         """test57 unittestDBSClientReader_t.listRuns : basic test"""
         self.api.listRuns(block_name=self.testparams['block'],
-                          run='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
+                          run_num='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
 
     def test058(self):
         """test58 unittestDBSClientReader_t.listRuns : basic test"""
         self.api.listRuns(logical_file_name=self.testparams['files'][0],
-                          run='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
+                          run_num='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
 
     def test059(self):
         """test59 unittestDBSClientReader_t.listRuns : basic test"""
         self.api.listRuns(dataset=self.testparams['dataset'], block_name=self.testparams['block'],
                           logical_file_name=self.testparams['files'][0],
-                          run=['%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2])])
+                          run_num=['%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2])])
 
     def test060(self):
         """test60 unittestDBSClientReader_t.listDatasetParents basic test"""
@@ -331,17 +331,17 @@ class DBSClientReader_t(unittest.TestCase):
     def test061(self):
         """test61 unittestDBSClientReader_t.listFiles: basic test"""
         self.api.listFiles(dataset=self.testparams['dataset'],
-                           run='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
+                           run_num='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
 
     def test062(self):
         """test62 unittestDBSClientReader_t.listFiles: basic test"""
         self.api.listFiles(block_name=self.testparams['block'],
-                           run=['%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2])])
+                           run_num=['%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2])])
 
     def test063(self):
         """test63 unittestDBSClientReader_t.listFiles: NOT YET SUPPORTED"""
         self.api.listFiles(logical_file_name=self.testparams['files'][0],
-                           run='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
+                           run_num='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
 
     def test064(self):
         """test64 unittestDBSClientReader_t.listDatasets: processing_version"""
@@ -397,17 +397,17 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test076(self):
         """test76 unittestDBSClientReader_t.listFileChildren with logical_file_name"""
-        self.api.listFileChildren(logical_file_names=self.testparams['parent_files'][0])
+        self.api.listFileChildren(logical_file_name=self.testparams['parent_files'][0])
 
     def test076a(self):
-        """test76a unittestDBSClientReader_t.listFileChildren with list of logical_file_names"""
+        """test76a unittestDBSClientReader_t.listFileChildren with list of logical_file_name"""
         file_list = [self.testparams['parent_files'][0] for i in xrange(200)]
-        self.api.listFileChildren(logical_file_names=file_list)
+        self.api.listFileChildren(logical_file_name=file_list)
 
     def test076b(self):
         """test76b unittestDBSClientReader_t.listFileChildren with non splitable parameter"""
         file_list = [self.testparams['parent_files'][0] for i in xrange(200)]
-        self.assertRaises(dbsClientException,self.api.listFileChildren, logical_file_name=file_list)
+        self.assertRaises(dbsClientException,self.api.listFileChildren, logical_file_names=file_list)
 
     def test076c(self):
         """test76c unittestDBSClientReader_t.listFileChildren with block_name"""
@@ -534,15 +534,15 @@ class DBSClientReader_t(unittest.TestCase):
     def test104(self):
         """test104: unittestDBSClientReader_t.listRunSummaries: input validation test"""
         self.assertRaises(HTTPError, self.api.listRunSummaries, dataset='/A/B*/C',
-                          run=self.testparams['runs'][0])
+                          run_num=self.testparams['runs'][0])
 
     def test105(self):
         """test105: unittestDBSClientReader_t.listRunSummaries: simple run example"""
-        self.api.listRunSummaries(run=self.testparams['runs'][0])
+        self.api.listRunSummaries(run_num=self.testparams['runs'][0])
 
     def test106(self):
         """test106: unittestDBSClientReader_t.listRunSummaries: simple run and dataset example"""
-        self.api.listRunSummaries(dataset=self.testparams['dataset'], run=self.testparams['runs'][0])
+        self.api.listRunSummaries(dataset=self.testparams['dataset'], run_num=self.testparams['runs'][0])
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)

@@ -19,6 +19,6 @@ export LD_LIBRARY_PATH=$PYTHON_HOME/lib:$DBS3_ROOT/External/curl/7.24.0-comp/lib
 #export SOCKS5_PROXY=socks5://localhost:5678
 #alias dbs="python $PWD/cmdline/dbs.py"
 
-export DBS_READER_URL=http://cms-xen39.fnal.gov:8787//dbs/int/global/DBSReader
-export DBS_WRITER_URL=http://cms-xen39.fnal.gov:8787//dbs/int/global/DBSWriter
+export DBS_READER_URL=http://cms-xen39.fnal.gov:8787/dbs/dev/global/DBSReader
+export DBS_WRITER_URL=http://cms-xen39.fnal.gov:8787/dbs/dev/global/DBSWriter
 echo $DBS3_CLIENT

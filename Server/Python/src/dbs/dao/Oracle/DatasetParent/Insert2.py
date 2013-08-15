@@ -2,7 +2,8 @@
 """ DAO Object for DatasetParents table
     The input dictionary must have following keys:
     this_dataset_id(int)
-    parent_logical_file_name(str)
+    parent_logical_file_name(str).
+    Dataset parentage is gotten from file parentage.
 """ 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -24,6 +25,17 @@ class Insert2(DBFormatter):
     def execute( self, conn, binds, transaction=False ):
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DatasetParent/Insert2. Expects db connection from upper layer.")
-            
-	result = self.dbi.processData(self.sql, binds, conn, transaction)
+        
+        bind = {}
+        bindlist=[]
+        if isinstance(binds, dict):
+            self.dbi.processData(self.sql, binds, conn, transaction)
+        elif isinstance(binds,list):
+            for pf in binds:
+                bind = {"this_dataset_id":pf["this_dataset_id"], "parent_logical_file_name": pf["parent_logical_file_name"]}
+                bindlist.append(bind)
+            self.dbi.processData(self.sql, bindlist, conn, transaction)
+        else:
+            dbsExceptionHandler('dbsException-invalid-input2', "Dataset id and parent lfn are required for DatasetParent insert dao.")
+
 

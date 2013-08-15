@@ -35,9 +35,17 @@ JOIN %sFILES F ON  F.FILE_ID = FP.THIS_FILE_ID
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileParent/List. Expects db connection from upper layer.")
         
         sql = self.sql
+        binds = {}
+        bindlist = []
 	if logical_file_name:
-	    sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
-	    binds = {"logical_file_name":logical_file_name}
+            sql += "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
+            if isinstance(logical_file_name, str):
+                binds = {"logical_file_name":logical_file_name}
+            elif isinstance(logical_file_name, list): 
+                for f in logical_file_name:
+                    binds = {"logical_file_name": f}
+                    bindlist.append(binds)
+            else: return{}
 	elif block_id != 0:
 	    sql += "WHERE F.BLOCK_ID = :block_id"
 	    binds ={'block_id':block_id}
@@ -47,6 +55,9 @@ JOIN %sFILES F ON  F.FILE_ID = FP.THIS_FILE_ID
 	else:
 	    return{}
         self.logger.debug(sql)
-	cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
+        if bindlist:
+            cursors = self.dbi.processData(sql, bindlist, conn, transaction=transaction, returnCursor=True)
+        else:
+            cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
 	result = self.formatCursor(cursors[0])
         return result

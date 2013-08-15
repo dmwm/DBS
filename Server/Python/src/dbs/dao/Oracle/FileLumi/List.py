@@ -27,7 +27,7 @@ class List(DBFormatter):
 SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 """
 
-    def execute(self, conn, logical_file_name='', block_name='', run=-1, migration=False):
+    def execute(self, conn, logical_file_name='', block_name='', run_num=-1, migration=False):
         """
         Lists lumi section numbers with in a file or a block.
         """
@@ -36,7 +36,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
         #sql = self.sql
                 
         
-        if run == -1:
+        if run_num == -1:
             if logical_file_name:
                 sql = self.sql + """ FROM %sFILE_LUMIS FL JOIN %sFILES F ON F.FILE_ID = FL.FILE_ID 
                 WHERE F.LOGICAL_FILE_NAME = :logical_file_name""" % ((self.owner,)*2)
@@ -66,7 +66,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
             run_list = []
             wheresql_run_list=''
             wheresql_run_range=''
-            for r in parseRunRange(run):
+            for r in parseRunRange(run_num):
                 if isinstance(r, str) or isinstance(r, int):
                     if not wheresql_run_list:
                         wheresql_run_list = " FL.RUN_NUM = :run_list "

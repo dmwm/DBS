@@ -42,7 +42,7 @@ def isFileValid(files=[], blocks=[], fstatus=0):
     return {'validfilelst':validfilelst, 'invalidfilelst':invalidfilelst}
 
 def listFileChildren(files=[]):
-    for cf in dbsApi.listFileChildren(logical_file_names=files):
+    for cf in dbsApi.listFileChildren(logical_file_name=files):
         logging.debug('Found children file %s' % (cf['child_logical_file_name']))
         yield cf['child_logical_file_name']
 
@@ -89,9 +89,9 @@ def updateFileStatus(status, recursive, files=[], blocks=[]):
 
     if flst['validfilelst']:
         logging.debug('updateFileStatus: lfn:%s, is_file_valid:%s, lost:%s' % (flst['validfilelst'], fstatus, lost))
-        dbsApi.updateFileStatus(logical_file_names=flst['validfilelst'], is_file_valid=fstatus, lost=lost)
+        dbsApi.updateFileStatus(logical_file_name=flst['validfilelst'], is_file_valid=fstatus, lost=lost)
         #for f in flst['validfilelst']:
-            #dbsApi.updateFileStatus(logical_file_names=f, is_file_valid=fstatus, lost=lost)
+            #dbsApi.updateFileStatus(logical_file_name=f, is_file_valid=fstatus, lost=lost)
     if flst['invalidfilelst']:
         logging.error("cannot %s some of files that are already %s. These files are %s" % (status, status,
                                                                                            flst['invalidfilelst']))

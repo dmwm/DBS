@@ -269,7 +269,7 @@ class DBSClientWriter_t(unittest.TestCase):
     def test19(self):
         """test19 web.DBSClientWriter.updateFileStatus: should be able to update file status"""
         logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 1)
-        self.api.updateFileStatus(logical_file_names=logical_file_name, is_file_valid=0)
+        self.api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
 
     def test21(self):
         """test21 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""

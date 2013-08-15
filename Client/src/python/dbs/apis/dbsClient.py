@@ -95,7 +95,7 @@ def split_calls(func):
             for key, value in kwargs.iteritems():
                 ###only one (first) list at a time is splitted,
                 ###currently only file lists are supported
-                if key in ('logical_file_names',) and isinstance(value, list):
+                if key in ('logical_file_name',) and isinstance(value, list):
                     ret_val = []
                     for splitted_param in list_parameter_splitting(data=dict(kwargs), #make a copy, since it is manipulated
                                                                    key=key,
@@ -479,8 +479,8 @@ class DbsApi(object):
         :type logical_file_name: str
         :param origin_site_name: Origin Site Name (Optional)
         :type origin_site_name: str
-        :param run: run numbers (Optional)
-        :type run: int, list of runs or list of run ranges
+        :param run_num: run numbers (Optional)
+        :type run_num: int, list of runs or list of run ranges
         :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
         :type min_cdate: int, str
         :param max_cdate: Upper limit for the creation date (unixtime) (Optional)
@@ -500,7 +500,7 @@ class DbsApi(object):
 
         """
         validParameters = ['dataset','block_name', 'data_tier_name', 'origin_site_name',
-                           'logical_file_name', 'run', 'min_cdate',
+                           'logical_file_name', 'run_num', 'min_cdate',
                            'max_cdate', 'min_ldate', 'max_ldate',
                            'cdate', 'ldate', 'detail']
 
@@ -612,7 +612,7 @@ class DbsApi(object):
         validParameters = ['dataset', 'parent_dataset', 'is_dataset_valid',
                            'release_version', 'pset_hash', 'app_name',
                            'output_module_label', 'processing_version', 'acquisition_era_name',
-                           'run', 'physics_group_name', 'logical_file_name',
+                           'run_num', 'physics_group_name', 'logical_file_name',
                            'primary_ds_name', 'primary_ds_type', 'data_tier_name',
                            'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                            'min_cdate','max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate',
@@ -752,7 +752,7 @@ class DbsApi(object):
         :rtype: List of dicts
 
         """
-        validParameters = ['logical_file_names', 'block_name', 'block_id']
+        validParameters = ['logical_file_name', 'block_name', 'block_id']
 
         requiredParameters = {'standalone': validParameters}
 
@@ -769,8 +769,8 @@ class DbsApi(object):
         :type block_name: str
         :param logical_file_name: logical_file_name of file
         :type logical_file_name: str
-        :param run: List lumi sections for a given run number (Optional)
-        :type run: int,str,list
+        :param run_num: List lumi sections for a given run number (Optional)
+        :type run_num: int,str,list
         :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run)
         :rtype: list of dicts
 
@@ -815,7 +815,7 @@ class DbsApi(object):
         * For lumi_list the following two json formats are supported:
             - '[a1, a2, a3,]'
             - '[[a,b], [c, d],]'
-        * If lumi_list is provided run only run=single-run-number is allowed
+        * If lumi_list is provided run only run_num=single-run-number is allowed
 
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
@@ -831,8 +831,8 @@ class DbsApi(object):
         :type app_name: str
         :param output_module_label: name of the used output module
         :type output_module_label: str
-        :param run: run , run ranges, and run list
-        :type run: int, list, string
+        :param run_num: run , run ranges, and run list
+        :type run_num: int, list, string
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
         :param lumi_list: List containing luminosity sections
@@ -845,7 +845,7 @@ class DbsApi(object):
         """
         validParameters = ['dataset', 'block_name', 'logical_file_name',
                           'release_version', 'pset_hash', 'app_name',
-                          'output_module_label', 'run',
+                          'output_module_label', 'run_num',
                           'origin_site_name', 'lumi_list', 'detail']
 
         requiredParameters = {'multiple': validParameters}
@@ -868,13 +868,13 @@ class DbsApi(object):
         :type block_name: str
         :param dataset: Dataset name
         :type dataset: str
-        :param run: Run number (Optional)
-        :type run: int, str, list
+        :param run_num: Run number (Optional)
+        :type run_num: int, str, list
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
         """
-        validParameters = ['block_name', 'dataset', 'run']
+        validParameters = ['block_name', 'dataset', 'run_num']
 
         requiredParameters = {'standalone': ['block_name', 'dataset']}
 
@@ -1021,11 +1021,11 @@ class DbsApi(object):
         :type block_name: str
         :param dataset: List all runs in that dataset
         :type dataset: str
-        :param run: List all runs
-        :type run: int, string or list
+        :param run_num: List all runs
+        :type run_num: int, string or list
 
         """
-        validParameters = ['run', 'logical_file_name', 'block_name', 'dataset']
+        validParameters = ['run_num', 'logical_file_name', 'block_name', 'dataset']
 
         checkInputParameter(method="listRuns", parameters=kwargs.keys(), validParameters=validParameters)
 
@@ -1037,14 +1037,14 @@ class DbsApi(object):
 
         :param dataset: dataset name (Optional)
         :type dataset: str
-        :param run: Run number (Required)
-        :type run: str, long, int
+        :param run_num: Run number (Required)
+        :type run_num: str, long, int
         :rtype: list containing a dictionary with key max_lumi
 
         """
-        validParameters = ['dataset', 'run']
+        validParameters = ['dataset', 'run_num']
 
-        requiredParameters = {'forced': ['run']}
+        requiredParameters = {'forced': ['run_num']}
 
         checkInputParameter(method="listRunSummaries", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
@@ -1079,11 +1079,8 @@ class DbsApi(object):
         """
         validParameters = ['migration_rqst_id', 'block_name', 'dataset', 'user']
 
-        requiredParameters = {'standalone': validParameters}
-
-        checkInputParameter(method='statusMigration', parameters=kwargs.keys(), validParameters=validParameters,
-                            requiredParameters=requiredParameters)
-
+        checkInputParameter(method='statusMigration', parameters=kwargs.keys(), validParameters=validParameters)
+        
         return self.__callServer("status", params=kwargs)
 
     def removeMigration(self, migrationObj):
@@ -1097,7 +1094,7 @@ class DbsApi(object):
         :key migration_rqst_id: The migration request id (required)
 
         """
-        return self.__callServer("remove", migrationObj, callmethod='POST')
+        return self.__callServer("remove", data=migrationObj, callmethod='POST')
 
     def serverinfo(self):
         """
@@ -1175,8 +1172,8 @@ class DbsApi(object):
         """
         API to update file status
 
-        :param logical_file_names: logical_file_name to update (Required)
-        :type logical_file_names: str or a list of str
+        :param logical_file_name: logical_file_name to update (Required)
+        :type logical_file_name: str or a list of str
         :param is_file_valid: valid=1, invalid=0 (Required)
         :type is_file_valid: bool
         :param lost: default lost=0 to indicate a file is not lost in transfer
@@ -1184,9 +1181,9 @@ class DbsApi(object):
 
         """
 
-        validParameters = ['logical_file_names', 'is_file_valid', 'lost']
+        validParameters = ['logical_file_name', 'is_file_valid', 'lost']
 
-        requiredParameters = {'forced': ['logical_file_names', 'is_file_valid']}
+        requiredParameters = {'forced': ['logical_file_name', 'is_file_valid']}
 
 
         checkInputParameter(method="updateFileStatus", parameters=kwargs.keys(), validParameters=validParameters,

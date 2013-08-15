@@ -25,7 +25,7 @@ class List(DBFormatter):
 	SELECT DISTINCT FL.RUN_NUM
 	FROM %sFILE_LUMIS FL"""% (self.owner)
 	
-    def execute(self, conn, run=-1, logical_file_name="", block_name="", dataset="", trans=False):
+    def execute(self, conn, run_num=-1, logical_file_name="", block_name="", dataset="", trans=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
@@ -51,20 +51,20 @@ class List(DBFormatter):
 	else:
 	    pass
         
-	if run != -1:
+	if run_num != -1:
             andorwhere = ("WHERE", "AND")["WHERE" in sql]
             run_list = []
             wheresql_run_list = ''
             wheresql_run_range = ''
             #
-            for r in parseRunRange(run):
+            for r in parseRunRange(run_num):
                 if isinstance(r, str) or isinstance(r, int):
                     if not wheresql_run_list:
                         wheresql_run_list = " FL.RUN_NUM = :run_list "
                     run_list.append(r)
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
-                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run_num range must be apart at least by 1.")
                     wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
                     binds.update({"minrun":r[0]})
                     binds.update({"maxrun":r[1]})

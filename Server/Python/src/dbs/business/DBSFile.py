@@ -45,10 +45,10 @@ class DBSFile:
         self.filelumilist = daofactory(classname="FileLumi.List")
         self.filebufin = daofactory(classname = "FileBuffer.Insert")
 
-    def listFileLumis(self, logical_file_name="", block_name="", run=-1):
+    def listFileLumis(self, logical_file_name="", block_name="", run_num=-1):
         """
         optional parameter: logical_file_name, block_name
-        returns: logical_file_name, file_lumi_id, run, lumi_section_num
+        returns: logical_file_name, file_lumi_id, run_num, lumi_section_num
         """
         if((logical_file_name=='' or '*'in logical_file_name or '%' in logical_file_name) \
             and (block_name=="" or '*' in block_name or '%' in block_name)):
@@ -56,15 +56,15 @@ class DBSFile:
                 "Fully specified logical_file_name or block_name is required. No wildcards are allowed." )
         conn = self.dbi.connection()
         try:
-            result = self.filelumilist.execute(conn, logical_file_name, block_name, run)
+            result = self.filelumilist.execute(conn, logical_file_name, block_name, run_num)
             return result
         finally:
             if conn:
                 conn.close()
 
-    def listFileSummary(self, block_name="", dataset="", run=-1):
+    def listFileSummary(self, block_name="", dataset="", run_num=-1):
         """
-        required parameter: full block_name or dataset name. No wildcards allowed. run is optional.
+        required parameter: full block_name or dataset name. No wildcards allowed. run_num is optional.
         """
         conn = self.dbi.connection()
         try:
@@ -74,7 +74,7 @@ class DBSFile:
             if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
                 msg = "No wildcard is allowed in block_name or dataset for filesummaries API"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
-            result = self.filesummarylist.execute(conn, block_name, dataset, run)
+            result = self.filesummarylist.execute(conn, block_name, dataset, run_num)
             if len(result)==1:
                 if result[0]['num_file']==0 and result[0]['num_block']==0 \
                         and result[0]['num_event']==0 and result[0]['file_size']==0:
@@ -114,17 +114,17 @@ class DBSFile:
             if conn:
                 conn.close()
 
-    def listFileChildren(self, logical_file_names='', block_name='', block_id=0):
+    def listFileChildren(self, logical_file_name='', block_name='', block_id=0):
         """
-        required parameter: logical_file_names or block_name or block_id
+        required parameter: logical_file_name or block_name or block_id
         returns: logical_file_name, child_logical_file_name, parent_file_id
         """
         conn = self.dbi.connection()
         try:
-            if not logical_file_names and not block_name and not block_id:
+            if not logical_file_name and not block_name and not block_id:
                 dbsExceptionHandler('dbsException-invalid-input',\
                         "Logical_file_name, block_id or block_name is required for listFileChildren api")
-            sqlresult = self.filechildlist.execute(conn, logical_file_names, block_name, block_id)
+            sqlresult = self.filechildlist.execute(conn, logical_file_name, block_name, block_id)
             d = {}
             result = []
             for i in range(len(sqlresult)):
@@ -142,7 +142,7 @@ class DBSFile:
             if conn:
                 conn.close()
 
-    def updateStatus(self, logical_file_names, is_file_valid, lost):
+    def updateStatus(self, logical_file_name, is_file_valid, lost):
         """
         Used to toggle the status of a file from is_file_valid=1 (valid) to is_file_valid=0 (invalid)
         """
@@ -150,7 +150,7 @@ class DBSFile:
         conn = self.dbi.connection()
         trans = conn.begin()
         try :
-            self.updatestatus.execute(conn, logical_file_names, is_file_valid, lost, trans)
+            self.updatestatus.execute(conn, logical_file_name, is_file_valid, lost, trans)
             trans.commit()
             trans = None
         except Exception, ex:
@@ -167,7 +167,7 @@ class DBSFile:
 
     def listFiles(self, dataset="", block_name="", logical_file_name="",
                   release_version="", pset_hash="", app_name="",
-                  output_module_label="",  run=-1,
+                  output_module_label="",  run_num=-1,
                   origin_site_name="", lumi_list=[], detail=False):
         """
         One of below parameter groups must be present:
@@ -184,32 +184,32 @@ class DBSFile:
                     non-pattern block , non-pattern dataset with lfn ,\
                     non-pattern block with lfn or no-pattern lfn. """)
         elif (lumi_list and len(lumi_list) != 0):
-            if run==-1:
+            if run_num==-1:
                 dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number, \
-                        use run=123")
-            elif isinstance(run, str):
+                        use run_num=123")
+            elif isinstance(run_num, str):
                 try:
-                    run = int(run)
+                    run_num = int(run_num)
                 except:
                     dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
-                        use run=123")
-            elif isinstance(run, list):
-                if len(run) == 1:
+                        use run_num=123")
+            elif isinstance(run_num, list):
+                if len(run_num) == 1:
                     try:
-                        run = int(run[0])
+                        run_num = int(run_num[0])
                     except:
                         dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
-                            use run=123")
+                            use run_num=123")
                 else:
                     dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
-                        use run=123")
+                        use run_num=123")
         else:
             pass
         conn = self.dbi.connection()
         try:
             dao = (self.filebrieflist, self.filelist)[detail]
             result = dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
-                            output_module_label, run, origin_site_name, lumi_list)
+                            output_module_label, run_num, origin_site_name, lumi_list)
             return result
         finally:
             if conn:

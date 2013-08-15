@@ -86,30 +86,30 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'])
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version',
-                                'acquisition_era_name', 'run','physics_group_name', 'logical_file_name',
+                                'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                                 'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'])
         self._addMethod('POST', 'datasetlist', self.listDatasetArray)
         self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'data_tier_name',
-                        'origin_site_name', 'logical_file_name', 'run', 'min_cdate', 'max_cdate', 'min_ldate',
+                        'origin_site_name', 'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate',
                         'max_ldate', 'cdate', 'ldate', 'detail'])
         self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset'])
         self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',
-                        'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run',
+                        'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num',
                         'origin_site_name', 'lumi_list', 'detail'])
         self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name', 'dataset',
-                        'run'])
+                        'run_num'])
         self._addMethod('GET', 'datasetparents', self.listDatasetParents, args=['dataset'])
         self._addMethod('GET', 'datasetchildren', self.listDatasetChildren, args=['dataset'])
         self._addMethod('GET', 'outputconfigs', self.listOutputConfigs, args=['dataset', 'logical_file_name',
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id', 'global_tag'])
         self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id',
                         'block_name'])
-        self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_names', 'block_name',
+        self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name', 'block_name',
                                                                             'block_id'])
-        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run'])
-        self._addMethod('GET', 'runs', self.listRuns, args=['run', 'logical_file_name',
+        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num'])
+        self._addMethod('GET', 'runs', self.listRuns, args=['run_num', 'logical_file_name',
                         'block_name', 'dataset'])
         self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'])
         self._addMethod('GET', 'datatiers',self.listDataTiers, args=['data_tier_name'])
@@ -125,7 +125,7 @@ class DBSReaderModel(RESTModel):
                                                                                   'logical_file_name'])
         self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'])
         self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'])
-        self._addMethod('GET', 'runsummaries', self.listRunSummaries, args=['dataset', 'run'])
+        self._addMethod('GET', 'runsummaries', self.listRunSummaries, args=['dataset', 'run_num'])
         self._addMethod('GET', 'help', self.getHelp, args=['call'])
 
         self.dbsDoNothing = DBSDoNothing(self.logger, self.dbi, dbowner)
@@ -243,16 +243,16 @@ class DBSReaderModel(RESTModel):
                 % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @transformInputType('run')
+    @transformInputType('run_num')
     @inputChecks( dataset=str, parent_dataset=str, release_version=str, pset_hash=str,
                  app_name=str, output_module_label=str,  processing_version=(int,str), acquisition_era_name=str,
-                 run=(long,int,str,list), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
+                 run_num=(long,int,str,list), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
                  primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str,
                  create_by=(str), last_modified_by=(str), min_cdate=(int,str), max_cdate=(int,str),
                  min_ldate=(int,str), max_ldate=(int, str), cdate=(int,str), ldate=(int,str), detail=(bool,str))
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="",
-        processing_version=0, acquisition_era_name="", run=-1,
+        processing_version=0, acquisition_era_name="", run_num=-1,
         physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="",
         processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='', create_by="", last_modified_by="",
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',
@@ -368,7 +368,7 @@ class DBSReaderModel(RESTModel):
         try:
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash,
                 app_name, output_module_label, processing_version, acquisition_era_name,
-                run, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
+                run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
                 data_tier_name, dataset_access_type, prep_id, create_by, last_modified_by,
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
         except dbsException as de:
@@ -441,12 +441,12 @@ class DBSReaderModel(RESTModel):
             if conn:
                 conn.close()
 
-    @transformInputType('run')
+    @transformInputType('run_num')
     @inputChecks(dataset=str, block_name=str, data_tier_name=str, origin_site_name=str, logical_file_name=str,
-                 run=(long,int,str,list), min_cdate=(int,str), max_cdate=(int, str), min_ldate=(int,str),
+                 run_num=(long,int,str,list), min_cdate=(int,str), max_cdate=(int, str), min_ldate=(int,str),
                  max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), detail=(str,bool))
     def listBlocks(self, dataset="", block_name="", data_tier_name="", origin_site_name="",
-                   logical_file_name="",run=-1, min_cdate='0', max_cdate='0',
+                   logical_file_name="",run_num=-1, min_cdate='0', max_cdate='0',
                    min_ldate='0', max_ldate='0', cdate='0',  ldate='0', detail=False):
         """
         API to list a block in DBS. At least one of the parameters block_name, dataset, data_tier_name or
@@ -463,8 +463,8 @@ class DBSReaderModel(RESTModel):
         :type logical_file_name: str
         :param origin_site_name: Origin Site Name (Optional)
         :type origin_site_name: str
-        :param run: run numbers (Optional)
-        :type run: int, list of runs or list of run ranges
+        :param run_num: run_num numbers (Optional)
+        :type run_num: int, list of runs or list of run ranges
         :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
         :type min_cdate: int, str
         :param max_cdate: Upper limit for the creation date (unixtime) (Optional)
@@ -519,7 +519,7 @@ class DBSReaderModel(RESTModel):
         detail = detail in (True, 1, "True", "1", 'true')
         try:
             return self.dbsBlock.listBlocks(dataset, block_name, data_tier_name, origin_site_name, logical_file_name,
-                                            run, min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
+                                            run_num, min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
 
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
@@ -669,12 +669,12 @@ class DBSReaderModel(RESTModel):
             if conn:
                 conn.close()
 
-    @transformInputType( 'run')
+    @transformInputType( 'run_num')
     @inputChecks(dataset =str, block_name=str, logical_file_name =(str), release_version=str, pset_hash=str, app_name=str,\
-                 output_module_label=str, run=(long, int, str, list), origin_site_name=str, lumi_list=(str,list), detail=(str,bool))
+                 output_module_label=str, run_num=(long, int, str, list), origin_site_name=str, lumi_list=(str,list), detail=(str,bool))
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "",
         release_version="", pset_hash="", app_name="", output_module_label="",
-        run=-1, origin_site_name="", lumi_list="", detail=False):
+        run_num=-1, origin_site_name="", lumi_list="", detail=False):
         """
         API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset or non-wildcarded block_name is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
@@ -682,7 +682,7 @@ class DBSReaderModel(RESTModel):
         * For lumi_list the following two json formats are supported:
             - '[a1, a2, a3,]'
             - '[[a,b], [c, d],]'
-        * If lumi_list is provided run only run=single-run-number is allowed
+        * If lumi_list is provided run only run_num=single-run-number is allowed
 
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
@@ -698,8 +698,8 @@ class DBSReaderModel(RESTModel):
         :type app_name: str
         :param output_module_label: name of the used output module
         :type output_module_label: str
-        :param run: run , run ranges, and run list
-        :type run: int, list, string
+        :param run_num: run , run ranges, and run list
+        :type run_num: int, list, string
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
         :param lumi_list: List containing luminosity sections
@@ -725,7 +725,7 @@ class DBSReaderModel(RESTModel):
         output_module_label = output_module_label.replace("*", "%")
         try:
             return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name,
-                                        output_module_label, run, origin_site_name, lumi_list, detail)
+                                        output_module_label, run_num, origin_site_name, lumi_list, detail)
 
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
@@ -734,25 +734,25 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
                     self.logger.exception, sError)
 
-    @transformInputType('run')
-    @inputChecks(block_name=str, dataset=str, run=(long,int,str,list))
-    def listFileSummaries(self, block_name='', dataset='', run=-1):
+    @transformInputType('run_num')
+    @inputChecks(block_name=str, dataset=str, run_num=(long,int,str,list))
+    def listFileSummaries(self, block_name='', dataset='', run_num=-1):
         """
-        API to list number of files, event counts and number of lumis in a given block or dataset. If the optional run
+        API to list number of files, event counts and number of lumis in a given block or dataset. If the optional run_num
         parameter is used, the summary is just for this run number. Either block_name or dataset name is required. No wild-cards are allowed
 
         :param block_name: Block name
         :type block_name: str
         :param dataset: Dataset name
         :type dataset: str
-        :param run: Run number (Optional)
-        :type run: int, str, list
+        :param run_num: Run number (Optional)
+        :type run_num: int, str, list
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
         """
         try:
-            return self.dbsFile.listFileSummary(block_name, dataset, run)
+            return self.dbsFile.listFileSummary(block_name, dataset, run_num)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
@@ -845,13 +845,14 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(logical_file_name=str, block_id=(int,str), block_name=str)
+    @transformInputType('logical_file_name')
+    @inputChecks(logical_file_name=(str, list), block_id=(int,str), block_name=str)
     def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
         """
         API to list file parents
 
         :param logical_file_name: logical_file_name of file (Required)
-        :type logical_file_name: str
+        :type logical_file_name: str, list
         :param block_id: ID of the a block, whose files should be listed
         :type block_id: int, str
         :param block_name: Name of the block, whose files should be listed
@@ -869,9 +870,9 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @transformInputType('logical_file_names')
-    @inputChecks(logical_file_names=(str, list), block_name=(str), block_id=(str, int))
-    def listFileChildren(self, logical_file_names='', block_name='', block_id=0):
+    @transformInputType('logical_file_name')
+    @inputChecks(logical_file_name=(str, list), block_name=(str), block_id=(str, int))
+    def listFileChildren(self, logical_file_name='', block_name='', block_id=0):
         """
         API to list file children. One of the parameters in mandatory.
 
@@ -885,14 +886,14 @@ class DBSReaderModel(RESTModel):
         :rtype: List of dicts
 
         """
-        if isinstance(logical_file_names, list):
-            for f in logical_file_names:
+        if isinstance(logical_file_name, list):
+            for f in logical_file_name:
                 if '*' in f or '%' in f:
                     dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,"No \
                                          wildcard allow in LFN list" )
 
         try:
-            return self.dbsFile.listFileChildren(logical_file_names, block_name, block_id)
+            return self.dbsFile.listFileChildren(logical_file_name, block_name, block_id)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
@@ -900,9 +901,9 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @transformInputType('run')
-    @inputChecks(logical_file_name=str, block_name=str, run=(long,int,str,list))
-    def listFileLumis(self, logical_file_name="", block_name="", run=-1):
+    @transformInputType('run_num')
+    @inputChecks(logical_file_name=str, block_name=str, run_num=(long,int,str,list))
+    def listFileLumis(self, logical_file_name="", block_name="", run_num=-1):
         """
         API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support in this API
 
@@ -910,14 +911,14 @@ class DBSReaderModel(RESTModel):
         :type block_name: str
         :param logical_file_name: logical_file_name of file
         :type logical_file_name: str
-        :param run: List lumi sections for a given run number (Optional)
-        :type run: int, str, or list
-        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run)
+        :param run_num: List lumi sections for a given run number (Optional)
+        :type run_num: int, str, or list
+        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
         :rtype: list of dicts
 
         """
         try:
-            return self.dbsFile.listFileLumis(logical_file_name, block_name, run )
+            return self.dbsFile.listFileLumis(logical_file_name, block_name, run_num )
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
@@ -925,12 +926,12 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @transformInputType('run')
-    @inputChecks(run=(long, int, str, list), logical_file_name=str, block_name=str, dataset=str)
-    def listRuns(self, run=-1, logical_file_name="", block_name="", dataset=""):
+    @transformInputType('run_num')
+    @inputChecks(run_num=(long, int, str, list), logical_file_name=str, block_name=str, dataset=str)
+    def listRuns(self, run_num=-1, logical_file_name="", block_name="", dataset=""):
         """
         API to list all runs in DBS. All parameters are optional.
-        * If you omit run, then all runs known to DBS will be listed
+        * If you omit run_num, then all runs known to DBS will be listed
 
         :param logical_file_name: List all runs in the file
         :type logical_file_name: str
@@ -938,8 +939,8 @@ class DBSReaderModel(RESTModel):
         :type block_name: str
         :param dataset: List all runs in that dataset
         :type dataset: str
-        :param run: List all runs
-        :type run: int, string or list
+        :param run_num: List all runs
+        :type run_num: int, string or list
 
         """
         try:
@@ -952,7 +953,7 @@ class DBSReaderModel(RESTModel):
             if(dataset):
                 dataset = dataset.replace("*", "%")
                 #print("ds=%s\n" %dataset)
-            return self.dbsRun.listRuns(run, logical_file_name, block_name, dataset)
+            return self.dbsRun.listRuns(run_num, logical_file_name, block_name, dataset)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
@@ -1132,22 +1133,22 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(dataset=str, run=(str, int, long))
-    def listRunSummaries(self, dataset="", run=-1):
+    @inputChecks(dataset=str, run_num=(str, int, long))
+    def listRunSummaries(self, dataset="", run_num=-1):
         """
         API to list run summaries, like the maximal lumisection in a run.
 
         :param dataset: dataset name (Optional)
         :type dataset: str
-        :param run: Run number (Required)
-        :type run: str, long, int
+        :param run_num: Run number (Required)
+        :type run_num: str, long, int
         :rtype: list containing a dictionary with key max_lumi
         """
-        if run==-1:
+        if run_num==-1:
             dbsExceptionHandler("dbsException-invalid-input2",
                                 dbsExceptionCode["dbsException-invalid-input2"],
                                 self.logger.exception,
-                                "The run parameter is mandatory")
+                                "The run_num parameter is mandatory")
 
         if re.search('[*,%]', dataset):
             dbsExceptionHandler("dbsException-invalid-input2",
@@ -1158,7 +1159,7 @@ class DBSReaderModel(RESTModel):
         conn = None
         try:
             conn = self.dbi.connection()
-            return self.dbsRunSummaryListDAO.execute(conn, dataset, run)
+            return self.dbsRunSummaryListDAO.execute(conn, dataset, run_num)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:

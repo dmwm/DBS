@@ -22,7 +22,7 @@ def dbsExceptionHandler(eCode='', message='', logger=None , serverError=''):
             logger(time.asctime(time.gmtime()) + " " + eCode + ": " +  serverError)
             raise HTTPError(413, message)
         elif eCode == "dbsException-invalid-input2":
-            logger( time.asctime(time.gmtime()) + " " + eCode + ": " +  serverError, severity=logging.ERROR)
+            logger( time.asctime(time.gmtime()) + " " + eCode + ": " +  serverError)
             raise HTTPError(400, message)
         elif eCode == "dbsException-conflict-data":
             logger( time.asctime(time.gmtime()) + " " + eCode + ": " +  serverError)
@@ -30,7 +30,7 @@ def dbsExceptionHandler(eCode='', message='', logger=None , serverError=''):
         else:
             #client gets httperror 500 for server internal error
             #print eCode + ": " +  serverError
-            logger( time.asctime(time.gmtime()) + " " + eCode + ": " +  serverError, severity=logging.ERROR)
+            logger( time.asctime(time.gmtime()) + " " + eCode + ": " +  serverError)
             raise HTTPError(500, message)
     else:
         #not in the web layer

@@ -38,8 +38,8 @@ class DBSDataProvider(object):
         ret_val = []
         for block_name in self.blocks:
             files = self.files(block_name)
-            logical_file_names = (this_file['logical_file_name'] for this_file in files)
-            file_conf_list = [self._generate_file_conf(lfn) for lfn in logical_file_names]
+            logical_file_name = (this_file['logical_file_name'] for this_file in files)
+            file_conf_list = [self._generate_file_conf(lfn) for lfn in logical_file_name]
             ret_val.append( \
                 {'dataset_conf_list': [{'release_version' : self.release_version,
                                         'pset_hash' : self.pset_hash,

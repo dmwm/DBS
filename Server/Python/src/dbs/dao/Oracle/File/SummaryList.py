@@ -21,7 +21,7 @@ class SummaryList(DBFormatter):
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 
-    def execute(self, conn, block_name="", dataset="",  run=-1, transaction=False):
+    def execute(self, conn, block_name="", dataset="",  run_num=-1, transaction=False):
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/SummaryList. Expects db connection from upper layer.")
 
@@ -30,9 +30,9 @@ class SummaryList(DBFormatter):
         run_list = []
         wheresql_run_list = ''
         wheresql_run_range = ''
-        if run != -1:
+        if run_num != -1:
             #
-            for r in parseRunRange(run):
+            for r in parseRunRange(run_num):
                 if isinstance(r, str) or isinstance(r, (long,int)):
                     if not wheresql_run_list:
                         wheresql_run_list = " fl.RUN_NUM = :run_list "
@@ -50,7 +50,7 @@ class SummaryList(DBFormatter):
             elif wheresql_run_range:
                 whererun = wheresql_run_range
         if block_name:
-            if run != -1:
+            if run_num != -1:
                 #
                 sql = """
                     select
@@ -113,7 +113,7 @@ class SummaryList(DBFormatter):
                 binds.update({"block_name":block_name})
 
         elif dataset:
-            if run != -1:
+            if run_num != -1:
                 sql = """
                     select
                     (select count(f.file_id)  from %sfiles f

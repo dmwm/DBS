@@ -60,7 +60,6 @@ class DBSPrimaryDataset:
         """
         conn = self.dbi.connection()
         tran = conn.begin()
-
         #checking for required fields
         if "primary_ds_name" not in businput:
             dbsExceptionHandler("dbsException-invalid-input",

@@ -2,7 +2,8 @@
 """ DAO Object for BlockParents table
     The input dictionary must have following keys:
     this_block_id(int)
-    parent_logical_file_name(str)
+    parent_logical_file_name(str). 
+    Block parentage is gotten from file parentage.
 """ 
 
 from WMCore.Database.DBFormatter import DBFormatter
@@ -24,6 +25,14 @@ class Insert2(DBFormatter):
     def execute( self, conn, binds, transaction=False ):
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/BlockParent/Insert2. Expects db connection from upper layer.")
-            
-	result = self.dbi.processData(self.sql, binds, conn, transaction)
-
+        bind = {}
+        bindlist=[]
+        if isinstance(binds, dict):
+            self.dbi.processData(self.sql, binds, conn, transaction)
+        elif isinstance(binds,list):
+            for pf in binds:
+                bind = {"this_block_id":pf["this_block_id"], "parent_logical_file_name": pf["parent_logical_file_name"]}
+                bindlist.append(bind)
+            self.dbi.processData(self.sql, bindlist, conn, transaction)
+        else:
+            dbsExceptionHandler('dbsException-invalid-input2', "Block id and parent lfn are required for BlockParent insert dao.")

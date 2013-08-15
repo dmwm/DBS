@@ -2,9 +2,6 @@
 """
 This module provides File.UpdateStatus data access object.
 """
-__revision__ = "$Id: UpdateStatus.py,v 1.5 2010/06/23 21:21:23 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsUtils import dbsUtils
@@ -26,7 +23,7 @@ class UpdateStatus(DBFormatter):
         IS_FILE_VALID = :is_file_valid
         """.format(owner=self.owner)
 
-    def execute(self, conn, logical_file_names, is_file_valid, lost, transaction=False):
+    def execute(self, conn, logical_file_name, is_file_valid, lost, transaction=False):
         """
         for a given file or a list of files
         """
@@ -38,8 +35,8 @@ class UpdateStatus(DBFormatter):
                      mydate=dbsUtils().getTime(),
                      is_file_valid=is_file_valid)
 
-        if isinstance(logical_file_names, list):
-            lfn_generator, lfn_binds = create_lfn_generator(logical_file_names)
+        if isinstance(logical_file_name, list):
+            lfn_generator, lfn_binds = create_lfn_generator(logical_file_name)
             ###with clause - subquery factory does only work with select statements, therefore lfn_generator
             ###has to be place in front of the SELECT statement in the WHERE clause
             ###http://asktom.oracle.com/pls/asktom/f?p=100:11:::::P11_QUESTION_ID:8120272301765
@@ -47,8 +44,8 @@ class UpdateStatus(DBFormatter):
             """.format(lfn_generator=lfn_generator)
             binds.update(lfn_binds)
         else:
-            wheresql = "where F.LOGICAL_FILE_NAME=:logical_file_names"
-            binds.update(logical_file_names=logical_file_names)
+            wheresql = "where F.LOGICAL_FILE_NAME=:logical_file_name"
+            binds.update(logical_file_name=logical_file_name)
 
         if lost:
             sql = "{sql}, file_size=0 {wheresql}".format(sql=self.sql,
