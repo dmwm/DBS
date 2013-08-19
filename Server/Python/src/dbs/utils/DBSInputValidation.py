@@ -3,7 +3,7 @@ Input Validation to prohibit SQLInjection, XSS, ...
 To use with _validate_input method of the RESTModel implementation
 """
 import cjson
-from cherrypy import log
+from cherrypy import log as clog
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
@@ -12,12 +12,13 @@ from WMCore.WebTools.Page import Page
 
 from functools import wraps
 
+
 def inputChecks(**_params_):
     """
     This is a function to check all the input for GET APIs.
     """
     def checkTypes(_func_, _params_ = _params_):
-        log = log.error_log
+        log = clog.error_log
         @wraps(_func_)
         def wrapped(*args, **kw):
             arg_names = _func_.func_code.co_varnames[:_func_.func_code.co_argcount]
