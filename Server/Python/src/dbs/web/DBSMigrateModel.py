@@ -119,7 +119,7 @@ class DBSMigrateModel(RESTModel):
         indata = cjson.decode(body)
         try:
             indata = validateJSONInputNoCopy("migration_rqst",indata)
-            return self.dbsMigrate.removeMigrationRequest(indata['migration_rqst_id'])
+            return self.dbsMigrate.removeMigrationRequest(indata)
         except dbsException, he:
             dbsExceptionHandler(he.eCode, he.message, self.logger.exception, he.message)
         except Exception, e:
