@@ -244,6 +244,16 @@ class DBSClientReader_t(unittest.TestCase):
         """test43 unittestDBSClientReader_t.listFileParents: basic test"""
         self.api.listFileParents(logical_file_name="/store/mc/does/not/EXIST/NotReally/0815/doesnotexist.root")
 
+    def test043a(self):
+        """test043a unittestDBSClientReader_t.listFileParents with list of logical_file_name"""
+        file_list = [self.testparams['files'][0] for i in xrange(200)]
+        self.api.listFileParents(logical_file_name=file_list)
+
+    def test043b(self):
+        """test043b unittestDBSClientReader_t.listFileParents with non splitable parameter"""
+        file_list = [self.testparams['files'][0] for i in xrange(200)]
+        self.assertRaises(dbsClientException,self.api.listFileParents, logical_file_names=file_list)
+
     def test044(self):
         """test44 unittestDBSClientReader_t.listFileLumis: basic test"""
         self.api.listFileLumis(logical_file_name=self.testparams['files'][0])

@@ -1,10 +1,11 @@
+import time
 import cherrypy
 import threading
 import logging
 from logging.handlers import HTTPHandler, RotatingFileHandler
 
-#MgrLogger = cherrypy.log.error_log
-MgrLogger = cherrypy.log
+MgrLogger = cherrypy.log.error_log
+#MgrLogger = cherrypy.log
 
 class MigrationWebMonitoring(object):
     """Exposed web-site for lemon monitoring (only exposed to localhost)"""
@@ -38,7 +39,7 @@ class DBSMigrationServer(threading.Thread):
         cherrypy.engine.subscribe('stop', self.stop, priority = 100)
         
     def stop(self):
-        MgrLogger.error("Stopping thread %s" %self.getName())   #YG
+        MgrLogger.error( time.asctime(time.gmtime()) + "Stopping thread %s" %self.getName())   #YG
         #shut down all the db connections before the stop.
         #cleanup everything. 
         #The condition lock should let the running job to finish all it need to be done.
@@ -82,7 +83,7 @@ class SequencialTaskBase(object):
             except Exception, ex:
                 #log the excpeiotn and break. 
                 #SequencialTasks are interconnected between functions  
-                MgrLogger.error(str(ex))  #YG
+                MgrLogger.error( time.asctime(time.gmtime()) + str(ex))  #YG
                 break
             
     def initialize(self, *args, **kwargs):
@@ -134,13 +135,13 @@ class MigrationTask(SequencialTaskBase):
                 request =req[0]
                 self.sourceUrl = request['migration_url']
                 self.migration_req_id = request['migration_request_id']
-                MgrLogger.error("-"*20+ 'Migration request ID: '+ str(self.migration_req_id))
+                MgrLogger.error("-"*20+ ' time.asctime(time.gmtime()) + sctime(time.gmtime()) + Migration request ID: '+ str(self.migration_req_id))
                 migration_status = 1
                 self.dbsMigrate.updateMigrationRequestStatus(migration_status, self.migration_req_id)
             except IndexError: 
                 return #No request found. Exit.
         except Exception, ex:
-            MgrLogger.error(str(ex))
+            MgrLogger.error( time.asctime(time.gmtime()) + str(ex) )
             self.sourceUrl = None
             return   # don't need to go down.
 
@@ -159,7 +160,7 @@ class MigrationTask(SequencialTaskBase):
                 #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
                 self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
                 self.sourceUrl = None
-                MgrLogger.error(logmessage)
+                MgrLogger.error( time.asctime(time.gmtime()) + logmessage )
             else:
                 #Update MIGRATION_STATUS for all the MIGRATION_BLOCK_IDs in the self.migration_block_id list
                 #in MIGRATION_BLOCKS table to 1 (in progress)
@@ -169,7 +170,7 @@ class MigrationTask(SequencialTaskBase):
                 self.dbsMigrate.updateMigrationBlockStatus(migration_status=1, migration_block=self.migration_block_ids)
         except Exception, ex:
             self.sourceUrl = None
-            MgrLogger.error(str(ex))
+            MgrLogger.error( time.asctime(time.gmtime()) + str(ex) )
             #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
             self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
     
@@ -184,7 +185,7 @@ class MigrationTask(SequencialTaskBase):
                     data = cjson.decode(data)
                     migration_status = 0
                     #idx = self.block_names.index(bName)
-                    MgrLogger.error("-"*20 +"Inserting block: %s for request id: %s" %(bName, self.migration_req_id))
+                    MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + "Inserting block: %s for request id: %s" %(bName, self.migration_req_id))
                     try:
                         self.DBSBlockInsert.putBlock(data, migration=True)
                         migration_status = 2
@@ -199,14 +200,14 @@ class MigrationTask(SequencialTaskBase):
                         if  migration_status == 2:
                             self.dbsMigrate.updateMigrationBlockStatus(migration_status=2,
                                 migration_block=self.migration_block_ids[idx])
-                    MgrLogger.error("-"*20 +"Done insert block: %s for request id: %s" %(bName,self.migration_req_id))
+                    MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + "Done insert block: %s for request id: %s" %(bName,self.migration_req_id))
                 self.dbsMigrate.updateMigrationRequestStatus(2, self.migration_req_id)
             except Exception, ex:
                 self.inserted = False
                 #handle dbsException
                 if type(ex) == dbsException:
-                    MgrLogger.error(ex.message + ex.serverError)
-                MgrLogger.error(str(ex))
+                    MgrLogger.error( time.asctime(time.gmtime()) + ex.message + ex.serverError )
+                MgrLogger.error(time.asctime(time.gmtime()) + str(ex))
                 self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
                 self.dbsMigrate.updateMigrationBlockStatus(migration_status=3, migration_request=self.migration_req_id)
                 return
@@ -218,4 +219,4 @@ class MigrationTask(SequencialTaskBase):
         self.migration_req_id = 0
         self.block_names = []
         self.migration_block_id = []
-        self.inserted = True 
+        self.inserted = True

@@ -784,6 +784,7 @@ class DbsApi(object):
 
         return self.__callServer("filelumis", params=kwargs)
 
+    @split_calls
     def listFileParents(self, **kwargs):
         """
         API to list file parents

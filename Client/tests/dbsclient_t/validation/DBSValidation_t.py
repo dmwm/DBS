@@ -238,6 +238,11 @@ class DBSValitaion_t(unittest.TestCase):
         flParentList=self.api.listFileParents(logical_file_name=logical_file_name)
         self.assertEqual(len(flParentList), 1)
         self.assertEqual(flParentList[0]['parent_logical_file_name'][0], "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" %(uid, 0))
+        logical_file_names = ["/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i) for i in xrange(10)]
+        flParentList=self.api.listFileParents(logical_file_name=logical_file_names)
+        self.assertEqual(len(flParentList), 10)
+        self.assertEqual(sorted((flParentList[i]['parent_logical_file_name'][0] for i in xrange(10))),
+                         sorted(("/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" % (uid, i)) for i in xrange(10)))
         # Get the dataset parent -- due to fact that files had parents, dataset parentage is also inserted
         dsParentList=self.api.listDatasetParents(dataset=dataset)
         self.assertEqual(len(dsParentList), 1)

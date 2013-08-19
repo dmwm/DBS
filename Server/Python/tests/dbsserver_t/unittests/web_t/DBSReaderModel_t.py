@@ -671,43 +671,47 @@ class DBSReaderModel_t(unittest.TestCase):
         """test010c: web.DBSReaderModel.listFileParents: must raise an exception if no parameter is passed """
         api.list('fileparents')
 
-    @checkException400
     def test010d(self):
-        """test010d: web.DBSReaderModel.listFileLumis: basic test """
-        api.list('filelumis', logical_file_name="*")
+        """test010d: web.DBSReaderModel.listFileParents: basic lfn list test"""
+        api.list('fileparents', logical_file_name=testparams['parent_files'])
 
+    @checkException400
     def test010e(self):
         """test010e: web.DBSReaderModel.listFileLumis: basic test """
+        api.list('filelumis', logical_file_name="*")
+
+    def test010f(self):
+        """test010f: web.DBSReaderModel.listFileLumis: basic test """
         #need to update LFN
         lfn=testparams['files'][1]
         api.list('filelumis', logical_file_name=lfn)
 
     @checkException400
-    def test010f(self):
-        """test010f: web.DBSReaderModel.listFileLumis: basic test """
-        api.list('filelumis', block_name="/*")
-
     def test010g(self):
         """test010g: web.DBSReaderModel.listFileLumis: basic test """
+        api.list('filelumis', block_name="/*")
+
+    def test010h(self):
+        """test010h: web.DBSReaderModel.listFileLumis: basic test """
         api.list('filelumis', block_name=testparams['block'])
 
     @checkException400
-    def test010h(self):
-        """test010h: web.DBSReaderModel.listFileLumis: basic test """
+    def test010i(self):
+        """test010i: web.DBSReaderModel.listFileLumis: basic test """
         api.list('filelumis', block_name=testparams['block']+'*')
 
     @checkException400
-    def test010i(self):
-        """test010i: web.DBSReaderModel.listFileLumis: must raise an exception if no parameter is passed """
-        api.list('filelumis')
-
     def test010j(self):
-        """test010j: web.DBSReaderModel.listFileLumis: basic test """
-        lfn = testparams['files'][1]
-        api.list('filelumis', logical_file_name=lfn)
+        """test010j: web.DBSReaderModel.listFileLumis: must raise an exception if no parameter is passed """
+        api.list('filelumis')
 
     def test010k(self):
         """test010k: web.DBSReaderModel.listFileLumis: basic test """
+        lfn = testparams['files'][1]
+        api.list('filelumis', logical_file_name=lfn)
+
+    def test010l(self):
+        """test010l: web.DBSReaderModel.listFileLumis: basic test """
         lfn = testparams['files'][1]
         api.list('filelumis', logical_file_name=lfn, run_num=testparams['run_num'])
 
