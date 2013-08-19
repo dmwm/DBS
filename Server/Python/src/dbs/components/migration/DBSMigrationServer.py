@@ -135,7 +135,7 @@ class MigrationTask(SequencialTaskBase):
                 request =req[0]
                 self.sourceUrl = request['migration_url']
                 self.migration_req_id = request['migration_request_id']
-                MgrLogger.error("-"*20+ ' time.asctime(time.gmtime()) + sctime(time.gmtime()) + Migration request ID: '+ str(self.migration_req_id))
+                MgrLogger.error("-"*20+  time.asctime(time.gmtime()) + 'Migration request ID: '+ str(self.migration_req_id))
                 migration_status = 1
                 self.dbsMigrate.updateMigrationRequestStatus(migration_status, self.migration_req_id)
             except IndexError: 
