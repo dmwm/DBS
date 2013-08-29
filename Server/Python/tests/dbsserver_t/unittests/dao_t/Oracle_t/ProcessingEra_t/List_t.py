@@ -38,7 +38,7 @@ class List_t(unittest.TestCase):
 
     def test03(self):
         """dao.Oracle.ProcessingEra.List: Basic"""
-        result = self.dao.execute(self.conn, -1)
+        result = self.dao.execute(self.conn, -10)
         self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
 

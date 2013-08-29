@@ -104,8 +104,12 @@ class DBSClientReader_t(unittest.TestCase):
         self.api.listDatasets(create_by='giffels')
 
     def test014b(self):
-        """test14a unittestDBSCLientReader_t.listDatasets: using last_modified_by"""
+        """test14b unittestDBSCLientReader_t.listDatasets: using last_modified_by"""
         self.api.listDatasets(last_modified_by='giffels')
+
+    def test014c(self):
+        """test14c unittestDBSCLientReader_t.listDatasets: using run and detail=True"""
+        self.api.listDatasets(dataset=self.testparams['dataset'], run_num=self.testparams['runs'], detail=True)
 
     def test015(self):
         """test15 unittestDBSClientReader_t.listOutputModules: basic test"""
