@@ -421,16 +421,21 @@ class DBSReaderModel_t(unittest.TestCase):
                  max_cdate=self._current_unixtime)
 
     def test006r(self):
-        """test006r: web.DBSReaderModel.listBlockOrigin: basic test """
-        api.list('blockorigin',  origin_site_name=testparams['site'])
+        """test006r: web.DBSReaderModel.listBlocks: dataset, runlist and details"""
+        api.list('blocks', run_num=[testparams['run_num'], testparams['run_num']], dataset=testparams['dataset'],
+                 detail=True)
 
     def test006s(self):
         """test006s: web.DBSReaderModel.listBlockOrigin: basic test """
-        api.list('blockorigin',  origin_site_name=testparams['site'], dataset=testparams['dataset'])
+        api.list('blockorigin', origin_site_name=testparams['site'])
+
+    def test006t(self):
+        """test006t: web.DBSReaderModel.listBlockOrigin: basic test """
+        api.list('blockorigin', origin_site_name=testparams['site'], dataset=testparams['dataset'])
 
     @checkException400
-    def test006t(self):
-        """test006t: web.DBSReaderModel.listBlockOrigin: Must raise an exception if no parameter is passed. """
+    def test006u(self):
+        """test006u: web.DBSReaderModel.listBlockOrigin: Must raise an exception if no parameter is passed. """
         api.list('blockorigin')
 
     @checkException400

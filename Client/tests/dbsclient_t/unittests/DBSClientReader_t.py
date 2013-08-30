@@ -173,8 +173,8 @@ class DBSClientReader_t(unittest.TestCase):
         """test28 unittestDBSClientReader_t.listBlocks: """
         self.api.listBlocks(dataset=self.testparams['dataset'], origin_site_name=self.testparams['site'])
 
-    def test029(self):
-        """test29 unittestDBSClientReader_t.listBlocks: """
+    def test029a(self):
+        """test29a unittestDBSClientReader_t.listBlocks: """
         self.api.listBlocks(dataset=self.testparams['dataset'], block_name=self.testparams['block'],
                             origin_site_name=self.testparams['site'])
         try:
@@ -183,6 +183,10 @@ class DBSClientReader_t(unittest.TestCase):
             pass
         else:
             self.fail("exception was excepted, was not raised")
+
+    def test029b(self):
+        """test29b unittestDBSClientReader_t.listBlocks: dataset, run_num, detail"""
+        self.api.listBlocks(dataset=self.testparams['dataset'], run_num=self.testparams['runs'], detail=True)
 
     def test030(self):
         """test30 unittestDBSClientReader_t.listDatasetParents basic test"""
