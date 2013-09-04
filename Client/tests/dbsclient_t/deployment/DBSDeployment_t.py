@@ -779,6 +779,8 @@ DEPLOYMENT_TEST-v4711/RAW",
     def test_wmcore_templates(self):
         api_doc = self.api.listApiDocumentation()
         self.assertNotEqual(api_doc.find("DBS Server RESTful API"), -1)
+        ### test for empty docstrings or errors during doc generation
+        self.assertEqual(api_doc.find("No documentation available. Empty docstring!"), -1)
 
 if __name__ == "__main__":
     import sys
