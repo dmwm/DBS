@@ -5,36 +5,53 @@ These tests write and then immediately reads back the data from DBS3 and validat
 import os
 import unittest
 from dbsclient_t.utils.DBSDataProvider import DBSDataProvider
+from dbsclient_t.utils.timeout import Timeout
+from dbs.exceptions.dbsClientException import dbsClientException
 from dbs.apis.dbsClient import *
 import uuid
+from random import choice
 
 uid = uuid.uuid4().time_mid
-print "****uid=%s******" %uid
-acquisition_era_name="acq_era_%s" %uid
-processing_version=(uid if (uid<9999) else uid%9999)
+print "****uid=%s******" % uid
+acquisition_era_name = "acq_era_%s" % uid
+processing_version = (uid if (uid < 9999) else uid % 9999)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
 procdataset_parent = "%s-unittest_web_dataset_parent-v%s" % (acquisition_era_name, processing_version)
 tier = 'GEN-SIM-RAW'
-dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
-app_name='cmsRun%s' %uid
-output_module_label='Merged'
-global_tag='dbs-client-validation-%s' %uid
-pset_hash='76e303993a1c2f842159dbfeeed9a0dd%s' %uid
-release_version='CMSSW_1_2_3%s' %uid
-site="cmssrm.fnal.gov"
-block="%s#%s" % (dataset, uid)
+dataset = "/%s/%s/%s" % (primary_ds_name, procdataset, tier)
+app_name = 'cmsRun%s' % uid
+output_module_label = 'Merged'
+global_tag = 'dbs-client-validation-%s' % uid
+pset_hash = '76e303993a1c2f842159dbfeeed9a0dd%s' % uid
+release_version = 'CMSSW_1_2_3%s' % uid
+site = "cmssrm.fnal.gov"
+block = "%s#%s" % (dataset, uid)
 
-flist=[]
+flist = []
 
-class DBSValitaion_t(unittest.TestCase):
+def remove_non_comparable_keys(values, non_comparable_keys):
+    for value in values:
+        if isinstance(value, dict):
+            keys = set(value.iterkeys())
+            intersection = keys.intersection(set(non_comparable_keys))
+            for entry in intersection:
+                del value[entry]
+        yield value
+
+class DBSValidation_t(unittest.TestCase):
     def __init__(self, methodName='runTest'):
-        super(DBSValitaion_t, self).__init__(methodName)
+        super(DBSValidation_t, self).__init__(methodName)
         if not hasattr(self, 'data_provider'):
             self.setUpClass()
-        url=os.environ['DBS_WRITER_URL']
-        proxy=os.environ.get('SOCKS5_PROXY')
+        url = os.environ['DBS_WRITER_URL']
+        proxy = os.environ.get('SOCKS5_PROXY')
         self.api = DbsApi(url=url, proxy=proxy)
+
+        migration_url = os.environ['DBS_MIGRATE_URL']
+        self.migration_api = DbsApi(url=migration_url, proxy=proxy)
+
+        self.cmsweb_api = DbsApi(url='https://cmsweb.cern.ch/dbs/prod/global/DBSReader', proxy=proxy)
 
     def setUp(self):
         """setup all necessary parameters"""
@@ -42,7 +59,8 @@ class DBSValitaion_t(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Class method to set-up the class"""
-        ### necessary since one instance per test case is created and pid and testparams need to be shared between instances
+        ### necessary since one instance per test case is created and pid and testparams
+        ### need to be shared between instances
         cls.data_provider = DBSDataProvider()
 
     def test01(self):
@@ -62,9 +80,9 @@ class DBSValitaion_t(unittest.TestCase):
         data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                 'output_module_label': output_module_label, 'global_tag':global_tag}
         self.api.insertOutputConfig(outputConfigObj=data)
-        confList=self.api.listOutputConfigs(release_version=release_version, pset_hash=pset_hash, \
-                                       app_name=app_name, output_module_label=output_module_label,\
-                                       global_tag=global_tag)
+        confList=self.api.listOutputConfigs(release_version=release_version, pset_hash=pset_hash,
+                                            app_name=app_name, output_module_label=output_module_label,
+                                            global_tag=global_tag)
         self.assertEqual(len(confList), 1)
         confInDBS=confList[0]
         self.assertEqual(confInDBS['release_version'], release_version)
@@ -163,13 +181,14 @@ class DBSValitaion_t(unittest.TestCase):
         dataset_parent = "/%s/%s/%s" % (primary_ds_name_parent,procdataset_parent,tier)
         data = {
             'physics_group_name': 'Tracker', 'dataset': dataset_parent,
-            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset_parent, 'primary_ds_name': primary_ds_name_parent,
+            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset_parent,
+            'primary_ds_name': primary_ds_name_parent,
             'output_configs': [
-                {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name, \
-                 'output_module_label': output_module_label, 'global_tag':global_tag},
+                {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                 'output_module_label': output_module_label, 'global_tag': global_tag},
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+            'creation_date' : 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
         self.api.insertDataset(datasetObj=data)
@@ -303,6 +322,104 @@ class DBSValitaion_t(unittest.TestCase):
 
         check(input_block_dump, block_dump)
 
+    def test12(self):
+        """test12 Migration of datasets"""
+        ###get a dataset to migrate from global dbs
+        dest_datasets = set((dataset['dataset'] for dataset in self.api.listDatasets()))
+        ###only dataset after last DBS2->3 because of the parentage issue in DBS 2 min_cdate=1368162000 =10May2013
+        src_datasets = set((dataset['dataset'] for dataset in self.cmsweb_api.listDatasets(min_cdate=1368162000)))
+        dataset_to_migrate = choice(list(src_datasets.difference(dest_datasets)))
+
+        ###submit migration request
+        toMigrate = {'migration_url': 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader',
+                     'migration_input': dataset_to_migrate}
+        migration_request = self.migration_api.submitMigration(toMigrate)
+        self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))
+        migration_request_id = migration_request['migration_details']['migration_request_id']
+
+        ###check migration status for max. 60s (should be enough time to migrate the dataset)
+        with Timeout(60):
+            while True:
+                request_status = self.migration_api.statusMigration(migration_rqst_id=migration_request_id)
+                if request_status[0]['migration_status'] == 2:
+                    break
+
+        ###validate dataset migration
+        def check(input, output):
+            non_comparable_keys = ('block_id', 'dataset_id', 'last_modification_date',
+                                   'parent_file_id', 'primary_ds_id')
+            if isinstance(input, dict):
+                for key, value in input.iteritems():
+                    if key in non_comparable_keys:
+                        continue ###do not compare id's
+                    self.assertTrue(output.has_key(key))
+                    check(value, output[key])
+            elif isinstance(input, list):
+                for element_in, element_out in zip(sorted(remove_non_comparable_keys(input, non_comparable_keys)),
+                                                   sorted(remove_non_comparable_keys(output, non_comparable_keys))):
+                    check(element_in, element_out)
+            else:
+                self.assertEqual(str(input), str(output))
+
+        for block_name in (block['block_name'] for block in self.cmsweb_api.listBlocks(dataset=dataset_to_migrate)):
+            block_dump_src = self.cmsweb_api.blockDump(block_name=block_name)
+            block_dump_dest = self.api.blockDump(block_name=block_name)
+            check(block_dump_src, block_dump_dest)
+
+        ###try to delete successfully executed migration request
+        toDelete = {'migration_rqst_id': migration_request_id}
+        self.assertRaises(dbsClientException, self.migration_api.removeMigration, toDelete)
+
+    def test13(self):
+        """test13 Migration of blocks"""
+        ###get a block to migrate from global dbs
+        dest_datasets = set((dataset['dataset'] for dataset in self.api.listDatasets()))
+        ###only dataset after last DBS2->3 because of the parentage issue in DBS 2 min_cdate=1368162000 =10May2013
+        src_datasets = set((dataset['dataset'] for dataset in self.cmsweb_api.listDatasets(min_cdate=1368162000)))
+        dataset_to_migrate = choice(list(src_datasets.difference(dest_datasets)))
+        block_to_migrate = choice([block['block_name']
+                                   for block in self.cmsweb_api.listBlocks(dataset=dataset_to_migrate)])
+
+        ###submit migration request
+        toMigrate = {'migration_url': 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader',
+                     'migration_input': block_to_migrate}
+        migration_request = self.migration_api.submitMigration(toMigrate)
+        self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))
+        migration_request_id = migration_request['migration_details']['migration_request_id']
+
+        ###check migration status for max. 60s (should be enough time to migrate the dataset)
+        with Timeout(60):
+            while True:
+                request_status = self.migration_api.statusMigration(migration_rqst_id=migration_request_id)
+                if request_status[0]['migration_status'] == 2:
+                    break
+
+        ###validate block    migration
+        def check(input, output):
+            non_comparable_keys = ('block_id', 'dataset_id', 'last_modification_date',
+                                   'parent_file_id', 'primary_ds_id')
+            if isinstance(input, dict):
+                for key, value in input.iteritems():
+                    if key in non_comparable_keys:
+                        continue ###do not compare id's
+                    self.assertTrue(output.has_key(key))
+                    check(value, output[key])
+            elif isinstance(input, list):
+                for element_in, element_out in zip(sorted(remove_non_comparable_keys(input, non_comparable_keys)),
+                                                   sorted(remove_non_comparable_keys(output, non_comparable_keys))):
+                    check(element_in, element_out)
+            else:
+                self.assertEqual(str(input), str(output))
+
+        block_dump_src = self.cmsweb_api.blockDump(block_name=block_to_migrate)
+        block_dump_dest = self.api.blockDump(block_name=block_to_migrate)
+        check(block_dump_src, block_dump_dest)
+
+        ###try to delete successfully executed migration request
+        toDelete = {'migration_rqst_id': migration_request_id}
+        self.assertRaises(dbsClientException, self.migration_api.removeMigration, toDelete)
+
+
 if __name__ == "__main__":
-    SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSValitaion_t)
+    SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSValidation_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)

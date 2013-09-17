@@ -117,6 +117,7 @@ class TestCommand(Command):
             ###set environment
             os.environ['DBS_READER_URL'] = ("%s/dbs/dev/global/DBSReader") % self.host
             os.environ['DBS_WRITER_URL'] = ("%s/dbs/dev/global/DBSWriter") % self.host
+            os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/dev/global/DBSMigrate") % self.host
 
             TestSuite.addTests(create_test_suite(unit_tests, 'DBS%s_t.py' % self.unit, base_dir))
 
@@ -124,6 +125,7 @@ class TestCommand(Command):
             ###set environment
             os.environ['DBS_READER_URL'] = ("%s/dbs/dev/global/DBSReader") % self.host
             os.environ['DBS_WRITER_URL'] = ("%s/dbs/dev/global/DBSWriter") % self.host
+            os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/dev/global/DBSMigrate") % self.host
            
             TestSuite.addTests(create_test_suite(unit_tests, 'DBSClient*_t.py', base_dir))
 
@@ -131,6 +133,7 @@ class TestCommand(Command):
             ###set environment
             os.environ['DBS_READER_URL'] = ("%s/dbs/dev/global/DBSReader") % self.host
             os.environ['DBS_WRITER_URL'] = ("%s/dbs/dev/global/DBSWriter") % self.host
+            os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/dev/global/DBSMigrate") % self.host
            
             TestSuite.addTests(create_test_suite(validation_tests, 'DBSValidation_t.py', base_dir))
 
@@ -140,6 +143,7 @@ class TestCommand(Command):
                 ###set environment
                 os.environ['DBS_READER_URL'] = ("%s/dbs/%s/global/DBSReader") % (self.host, instance)
                 os.environ['DBS_WRITER_URL'] = ("%s/dbs/%s/global/DBSWriter") % (self.host, instance)
+                os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/%s/global/DBSMigrate") % (self.host, instance)
                 
                 TestSuite.addTests(create_deployment_test_suite(self.insert))
 

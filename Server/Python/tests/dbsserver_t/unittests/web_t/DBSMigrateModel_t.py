@@ -29,9 +29,14 @@ class DBSMigrateModel_t(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._data_provider = DBSBlockDataProvider(num_of_blocks=1, num_of_files=10, num_of_runs=10, num_of_lumis=10)
+        ### According to https://svnweb.cern.ch/trac/CMSDMWM/ticket/4068, blocks and dataset migration should use
+        ### separate input data. _independent(_child)_data_provider will provide them.
+        cls._independent_data_provider = DBSBlockDataProvider(num_of_blocks=5, num_of_files=10, num_of_runs=10,
+                                                              num_of_lumis=10)
         cls._parent_data_provider = DBSBlockDataProvider(num_of_blocks=1, num_of_files=10,
                                                          num_of_runs=10, num_of_lumis=10)
         cls._child_data_provider = create_child_data_provider(cls._parent_data_provider)
+        cls._independent_child_data_provider = create_child_data_provider(cls._independent_data_provider)
         config = os.environ['DBS_TEST_CONFIG']
         service = os.environ.get("DBS_TEST_SERVICE","DBSMigrate")
         cls._migrate_api = DBSRestApi(config, service, migration_test=True)
@@ -54,7 +59,7 @@ class DBSMigrateModel_t(unittest.TestCase):
                 self.assertRaises(Exception, self._migrate_api.insert, 'remove', data)
     def test_02_migration_request(self):
         """test02: Negative test to request a migration between different DBS instances before injecting data"""
-        for block_name in (block['block']['block_name'] for block in self._data_provider.block_dump()):
+        for block_name in (block['block']['block_name'] for block in self._child_data_provider.block_dump()):
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : block_name}
             self.assertRaises(Exception, self._migrate_api.insert, 'submit', toMigrate)
@@ -62,15 +67,16 @@ class DBSMigrateModel_t(unittest.TestCase):
     def test_03_insert_data_to_migrate(self):
         """test03: Insert data to migrate into source DBS instance"""
         for block in chain(self._data_provider.block_dump(),
+                           self._independent_data_provider.block_dump(),
                            self._parent_data_provider.block_dump(),
-                           self._child_data_provider.block_dump()):
+                           self._child_data_provider.block_dump(),
+                           self._independent_child_data_provider.block_dump()):
 
             self._writer_api.insert('bulkblocks', block)
 
     def test_04_migration_request(self):
         """test04: Test to request a migration between different DBS instances by block"""
-        for block_name in (block['block']['block_name'] for block in chain(self._data_provider.block_dump(),
-                          self._child_data_provider.block_dump())):
+        for block_name in (block['block']['block_name'] for block in self._child_data_provider.block_dump()):
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : block_name}
             result = self._migrate_api.insert('submit', toMigrate)
@@ -79,8 +85,9 @@ class DBSMigrateModel_t(unittest.TestCase):
 
     def test_05_migration_request(self):
         """test05: Test to request a migration between different DBS instances by dataset"""
-        datasets = set((block['dataset']['dataset'] for block in chain(self._data_provider.block_dump(),
-                                                                       self._child_data_provider.block_dump())))
+        datasets = set((block['dataset']['dataset']
+                        for block in chain(self._child_data_provider.block_dump(),
+                                           self._independent_child_data_provider.block_dump())))
         for dataset in datasets:
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : dataset}
@@ -118,7 +125,9 @@ class DBSMigrateModel_t(unittest.TestCase):
     def test_99_save_data_to_disk(self):
         """test99: Save data to disk to re-use data for migration server unittests"""
         self._data_provider.save('migration_unittest_data.pkl')
+        self._independent_data_provider.save('migration_unittest_independent_data.pkl')
         self._parent_data_provider.save('migration_unittest_parent_data.pkl')
+        self._independent_child_data_provider.save('migration_unittest_independent_child_data.pkl')
         self._child_data_provider.save('migration_unittest_child_data.pkl')
 
 

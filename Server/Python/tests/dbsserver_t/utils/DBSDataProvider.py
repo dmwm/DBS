@@ -308,7 +308,9 @@ class DBSBlockDataProvider(object):
     def files(self, block_name):
         if not (hasattr(self, '_files') and self._files.has_key(block_name)):
             self._files[block_name] = []
-            for i in xrange(self._num_of_files):
+            num_of_created_blocks = len(self._files)
+            for i in xrange((num_of_created_blocks-1) * self._num_of_files,
+                            num_of_created_blocks * self._num_of_files):
                 logical_file_name = self._generate_file_name(i)
                 self._files[block_name].append({'check_sum' : self._generate_cksum(),
                                                 'file_size' : self._generate_file_size(),
@@ -335,7 +337,7 @@ class DBSBlockDataProvider(object):
 
     def _generate_adler32(self):
         "generates adler32 checksum"
-        return random.randint(1000,9999)
+        return random.randint(1000, 9999)
 
     def _generate_auto_cross_section(self):
         "generate auto cross section for a given file, if not already available"
