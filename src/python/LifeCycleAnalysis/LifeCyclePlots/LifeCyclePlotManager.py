@@ -227,28 +227,55 @@ class FailurePlots(object):
                         xnbins=len(self._list_of_errors), xmin=0, xmax=len(self._list_of_errors)+1,
                         fill_fkt=lambda histo, x: (x[histo._x_value_to_fill].split(':')[0], 1) if x[histo._x_value_to_fill].find('HTTP Error')!=-1 else (x[histo._x_value_to_fill], 1),
                         x_value_to_fill="Value",
-                        color={'fill':self._color},
+                        color={'fill': self._color},
                         stats=False,
                         draw_options="bar0",
-                        add_options={'SetBarWidth':(0.9,),
-                                     'SetBarOffset':(0.05,),
+                        add_options={'SetBarWidth': (0.9,),
+                                     'SetBarOffset': (0.05,),
                                      'GetXaxis.SetLabelSize': (0.042,),
-                                     'SetMinimum':(0.0,)})]
+                                     'SetMinimum': (0.0,)})]
+
+class MigrationPlots(object):
+    _plots_to_generate = ['_create_migration_timing']
+
+    def __init__(self, starttime, endtime, color):
+        self._starttime = starttime
+        self._endtime = endtime
+        self._color = color
+        self._plots =list()
+
+    def __iter__(self):
+        return iter(self._plots)
+
+    def create_plots(self):
+        for plot in self._plots_to_generate:
+            self._plots.extend(getattr(self, plot)())
+
+    def _create_migration_timing(self):
+        return [Histo1D(name="MigrationTiming", title="Timing of the Migration",
+                        xnbins=50, xmin=0, xmax=self._endtime-self._starttime,
+                        fill_fkt=lambda histo, x: (x[histo._x_value_to_fill]-x['StartTime'], 1),
+                        x_value_to_fill="EndTime",
+                        color={'fill': self._color, 'marker':self._color})]
 
 class LifeCyclePlotManager(object):
-    _supported_categories = ['reader_stats', 'writer_stats', 'failures']
+    _supported_categories = ['reader_stats', 'writer_stats', 'failures', 'migration_stats']
 
     def __init__(self, categories, list_of_apis, list_of_errors, starttime, endtime):
-        plot_creator = {'reader_stats' : StatisticPlots(filter(lambda x: x.startswith('list'), list_of_apis),
+        plot_creator = {'reader_stats': StatisticPlots(filter(lambda x: x.startswith('list') or x.startswith('status'),
+                                                              list_of_apis),
                                                         starttime=starttime,
                                                         endtime=endtime,
                                                         test_type='reader_stats'),
-                        'writer_stats' : StatisticPlots(filter(lambda x: x.startswith('insert') or x.startswith('update'), list_of_apis),
+                        'writer_stats': StatisticPlots(filter(lambda x: x.startswith('insert')
+                                                                        or x.startswith('update')
+                                                                        or x.startswith('submit'), list_of_apis),
                                                         starttime=starttime,
                                                         endtime=endtime,
                                                         test_type='writer_stats'),
-                        'failures' : FailurePlots(list_of_errors,
-                                                  color=2)}
+                        'failures': FailurePlots(list_of_errors,
+                                                  color=2),
+                        'migration_stats': MigrationPlots(starttime=starttime, endtime=endtime, color=2)}
 
         self._histo_managers = dict()
         for category in categories:
