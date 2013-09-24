@@ -253,9 +253,10 @@ class MigrationPlots(object):
 
     def _create_migration_timing(self):
         return [Histo1D(name="MigrationTiming", title="Timing of the Migration",
-                        xnbins=50, xmin=0, xmax=self._endtime-self._starttime,
+                        xnbins=50, xmin=0, xmax=600,
                         fill_fkt=lambda histo, x: (x[histo._x_value_to_fill]-x['StartTime'], 1),
                         x_value_to_fill="EndTime",
+                        label={'x': "Migration Time [s]", "y": "#"},
                         color={'fill': self._color, 'marker':self._color})]
 
 class LifeCyclePlotManager(object):
