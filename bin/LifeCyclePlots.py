@@ -2,6 +2,7 @@
 from ROOT import gROOT, TFile
 from LifeCycleAnalysis.LifeCyclePlots.LifeCyclePlotManager import LifeCyclePlotManager
 from LifeCycleAnalysis.LifeCyclePlots.SqliteDAO import SqliteDAO
+from LifeCycleAnalysis.LifeCyclePlots.SqliteDAO import sqlite
 from LifeCycleAnalysis.LifeCyclePlots.WebView import WebView
 
 from optparse import OptionParser
@@ -56,12 +57,14 @@ if __name__ == "__main__":
     ### fetch begin and end of the test
     starttime, endtime = sqlite_dao.get_column_min_max('Statistics', 'ServerTimeStamp')
 
-    ### get list of errors occured
+    ### get list of errors occurred
     list_of_errors = sqlite_dao.get_unique_column_list('Failures', 'Value')
 
     ### plot reader or/and writer tests
-    reader_tests = filter(lambda x: x.startswith('list'), list_of_apis)
-    writer_tests = filter(lambda x: x.startswith('insert') or x.startswith('update'), list_of_apis)
+    reader_tests = filter(lambda x: x.startswith('list') or x.startswith('status'), list_of_apis)
+    writer_tests = filter(lambda x: x.startswith('insert') or x.startswith('update') or x.startswith('submit'),
+                          list_of_apis)
+    migration_tests = sqlite_dao.table_exists(table='MigrationStatistics')
 
     statistic_categories = list()
 
@@ -69,6 +72,8 @@ if __name__ == "__main__":
         statistic_categories.append('reader_stats')
     if writer_tests:
         statistic_categories.append('writer_stats')
+    if migration_tests:
+        statistic_categories.append('migration_stats')
 
     categories = statistic_categories + ['failures']
 
@@ -87,6 +92,16 @@ if __name__ == "__main__":
 
     for row in sqlite_dao.get_rows('Failures'):
         plot_manager.update_histos(row, category='failures')
+
+    try:#old data does not contain that table
+        for row in sqlite_dao.get_rows('MigrationStatistics'):
+            plot_manager.update_histos(row, category='migration_stats')
+    except sqlite.OperationalError as ex:
+        if "no such table" not in ex:
+            raise ex
+
+    if reader_tests and writer_tests:
+        plot_manager.add_stacked_histos(categories=['reader_stats','writer_stats'])
 
     plot_manager.draw_histos()
 

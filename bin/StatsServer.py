@@ -3,7 +3,7 @@ from optparse import OptionParser, OptionGroup
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import cPickle
 import sqlite3 as sqlite
-import json, os, signal, sys
+import os, signal, sys
 
 def get_command_line_options(executable_name, arguments):
     parser = OptionParser(usage="%s options" % executable_name)
@@ -18,7 +18,7 @@ def get_command_line_options(executable_name, arguments):
     parser.add_option_group(xml_group)
 
     pipe_group = OptionGroup(parser, "Options for named pipe Server")
-    pipe_group.add_option("-i", "--input", type="string", dest="pipe_name", help="Filename of the named pipie")
+    pipe_group.add_option("-i", "--input", type="string", dest="pipe_name", help="Filename of the named pipe")
 
     parser.add_option_group(pipe_group)
     
@@ -50,12 +50,18 @@ class SqlStats(object):
             cur.execute("PRAGMA synchronous = 0")
             cur.execute("DROP TABLE IF EXISTS Statistics")
             cur.execute("DROP TABLE IF EXISTS Failures")
-            cur.execute("CREATE TABLE Statistics(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, ClientTiming DOUBLE, ServerTiming DOUBLE, ServerTimeStamp INT, ContentLength INT)")
-            cur.execute("CREATE TABLE Failures(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, Type TEXT, Value TEXT, Traceback TEXT)")
+            cur.execute("DROP TABLE IF EXISTS MigrationStatistics")
+            cur.execute("CREATE TABLE Statistics(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, ClientTiming DOUBLE,\
+                        ServerTiming DOUBLE, ServerTimeStamp INT, ContentLength INT)")
+            cur.execute("CREATE TABLE Failures(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, Type TEXT, Value TEXT,\
+                        Traceback TEXT)")
+            cur.execute("CREATE TABLE MigrationStatistics(Id INTEGER PRIMARY KEY, Data TEXT, StartTime DOUBLE, \
+                        EndTime DOUBLE, Status TEXT)")
    
     def add_data(self, data):
         stats = data.get("stats")
         failures = data.get("failures")
+        migration_stats = data.get("migration_stats")
 
         with self.conn:
             cur = self.conn.cursor()
@@ -69,7 +75,16 @@ class SqlStats(object):
 
                 cur.execute('INSERT INTO Failures(Query, ApiCall, Type, Value, Traceback) VALUES%s' % str(values))
 
-            else: #in case of failures do not insert stats
+            #in case of failures do not insert stats
+            elif migration_stats:
+                values = (str(migration_stats.get('data')),
+                          float(migration_stats.get('start_time')),
+                          float(migration_stats.get('end_time')),
+                          str(migration_stats.get('status')))
+
+                cur.execute('INSERT INTO MigrationStatistics(Data, StartTime, EndTime, Status) VALUES%s' % str(values))
+
+            else:
                 values = (str(stats.get('query')),
                           str(stats.get('api')),
                           float(stats.get("client_request_timing")),
@@ -77,7 +92,8 @@ class SqlStats(object):
                           float(stats.get("server_request_timestamp")),
                           int(stats.get("request_content_length")))
 
-                cur.execute('INSERT INTO Statistics(Query, ApiCall, ClientTiming, ServerTiming, ServerTimeStamp, ContentLength) VALUES%s' % str(values))
+                cur.execute('INSERT INTO Statistics(Query, ApiCall, ClientTiming, ServerTiming, ServerTimeStamp,\
+                            ContentLength) VALUES%s' % str(values))
 
         return 1
 

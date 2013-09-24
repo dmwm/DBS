@@ -7,7 +7,7 @@ from LifeCycleTests.LifeCycleTools.StatsClient import StatsPipeClient
 
 import os
 import sys
-import json
+
 from random import shuffle
 
 options = get_command_line_options(__name__, sys.argv)
@@ -32,7 +32,10 @@ print "Initial request string: %s" % (initial)
 timing = {'stats':{'api':'listDatasets', 'query':str(initial)}}
 
 with TimingStat(timing, stat_client) as timer:
-    datasets = api.listDatasets(dataset=initial)
+    if isinstance(initial, str):
+        datasets = api.listDatasets(dataset=initial)
+    else:
+        datasets = api.listDatasets(**initial)
     
 request_processing_time, request_time = api.requestTimingInfo
 timer.update_stats({'server_request_timing' : float(request_processing_time)/1000000.0,

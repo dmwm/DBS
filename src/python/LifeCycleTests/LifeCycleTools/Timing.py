@@ -1,26 +1,30 @@
 import time
 import json
 
+
 class TimingStat(object):
-    def __init__(self, stats={}, client=None):
+    def __init__(self, stats=None, client=None, stats_name="stats"):
         self._stats = stats
         self._client = client
+        self._stats_name = stats_name
 
     def __enter__(self):
         self.start = time.time()
+        self._stats.setdefault(self._stats_name, {}).update({'start_time': self.start})
         return self
 
     def __exit__(self, tb_type, tb_value, tb):
         end = time.time()
-        self._stats.setdefault('stats',{}).update({'client_request_timing' : end-self.start})
+        self._stats.setdefault(self._stats_name, {}).update({'client_request_timing': end-self.start})
+        self._stats.setdefault(self._stats_name, {}).update({'end_time': end})
 
         if tb_type and self._client:
             #replace "\'" in dbs client exception, since it leads to a crash, while injection in sqlite
             #needs to be fixed in client code
             tb_value = str(tb_value).replace("\'", " ")
-            self._stats.setdefault('failures',{}).update({'type':str(tb_type),
-                                                          'value':str(tb_value),
-                                                          'traceback':str(tb)})
+            self._stats.setdefault('failures', {}).update({'type': str(tb_type),
+                                                           'value': str(tb_value),
+                                                           'traceback': str(tb)})
             self.stat_to_server()
 
         return False
@@ -36,9 +40,9 @@ class TimingStat(object):
         self._client.send(self._stats)
 
     def update_stats(self, value):
-        self._stats.setdefault('stats',{}).update(value)
+        self._stats.setdefault(self._stats_name, {}).update(value)
 
-if __name__=="__main__":
+if __name__ == "__main__":
     test = {}
     with TimingStat(test):
         time.sleep(1)

@@ -31,9 +31,6 @@ block_dump = payload_handler.payload['workflow']['DBS']
 
 injection_repetition_rate = payload_handler.payload['workflow']['InjectionRepetitionRate']
 
-if injection_repetition_rate != -1:
-    time.sleep(injection_repetition_rate)
-
 ## insert block to DBS using bulk block insertion
 timing = {'stats':{'query' : 'insertBulkBlock', 'api' : 'insertBulkBlock'}}
 for block in block_dump:
@@ -48,6 +45,9 @@ for block in block_dump:
         timer.stat_to_server()
 
     print "Inserted block %s" % (block['block']['block_name'])
+
+    if injection_repetition_rate != -1:
+        time.sleep(injection_repetition_rate)
 
 p = payload_handler.clone_payload()
 payload_handler.append_payload(p)

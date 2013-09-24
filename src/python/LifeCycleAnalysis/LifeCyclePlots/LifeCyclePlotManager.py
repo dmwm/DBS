@@ -55,7 +55,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ClientRequestTiming%s%s' % (self._test_type, api), title='Client Request Timing (%s, %s)'  % (self._test_type, api),
+        return [Histo1D(name='ClientRequestTiming%s%s' % (api, self._test_type), title='Client Request Timing (%s, %s)'  % (api, self._test_type),
                         xnbins=1000, xmin=0., xmax=10.,
                         condition=condition,
                         x_value_to_fill="ClientTiming",
@@ -69,13 +69,13 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ServerRequestTiming%s%s'  % (self._test_type, api), title='Server Request Timing (%s, %s)'  % (self._test_type, api),
-                        xnbins=1000, xmin=0., xmax=10.,
+        return [Histo1D(name='ServerRequestTiming%s%s'  % (api, self._test_type), title='Server Request Timing (%s, %s)'  % (api, self._test_type),
+                        xnbins=1000, xmin=0., xmax=120.,
                         condition=condition,
                         x_value_to_fill="ServerTiming",
                         label={'x':"Time [s]",'y':"#"},
                         color={'line':self._color, 'fill':self._color},
-                        add_options={'GetXaxis.SetRangeUser':(0.0,10.0)})]
+                        add_options={'GetXaxis.SetRangeUser':(0.0,120.0)})]
 
     def _create_client_request_timing_hires(self, api='All'):
         if api=='All':
@@ -83,7 +83,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ClientRequestTimingHighRes%s%s'  % (self._test_type, api), title='Client Request Timing (%s, %s)'  % (self._test_type, api),
+        return [Histo1D(name='ClientRequestTimingHighRes%s%s'  % (api, self._test_type), title='Client Request Timing (%s, %s)'  % (api, self._test_type),
                         xnbins=100, xmin=0., xmax=0.5,
                         condition=condition,
                         x_value_to_fill="ClientTiming",
@@ -97,7 +97,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ServerRequestTimingHighRes%s%s'  % (self._test_type, api), title='Server Request Timing (%s, %s)'  % (self._test_type, api),
+        return [Histo1D(name='ServerRequestTimingHighRes%s%s'  % (api, self._test_type), title='Server Request Timing (%s, %s)'  % (api, self._test_type),
                         xnbins=100, xmin=0., xmax=0.5,
                         condition=condition,
                         x_value_to_fill="ServerTiming",
@@ -111,7 +111,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='ContentLength%s%s'  % (self._test_type, api), title='Content Length (%s, %s)'  % (self._test_type, api),
+        return [Histo1D(name='ContentLength%s%s'  % (api, self._test_type), title='Content Length (%s, %s)'  % (api, self._test_type),
                         xnbins=100, xmin=0, xmax=10000,
                         condition=condition,
                         x_value_to_fill="ContentLength",
@@ -125,7 +125,7 @@ class StatisticPlots(object):
         else:
             condition = lambda x, local_api=api: (x['ApiCall']==local_api)
 
-        return [Histo1D(name='AccessesPerSecond%s%s'  % (self._test_type, api), title='Accesses per Second (%s, %s)'  % (self._test_type, api),
+        return [Histo1D(name='AccessesPerSecond%s%s'  % (api, self._test_type), title='Accesses per Second (%s, %s)'  % (api, self._test_type),
                         xnbins=int(self._endtime-self._starttime), xmin=0, xmax=self._endtime-self._starttime,
                         condition=condition,
                         x_value_to_fill="ServerTimeStamp",
@@ -227,28 +227,56 @@ class FailurePlots(object):
                         xnbins=len(self._list_of_errors), xmin=0, xmax=len(self._list_of_errors)+1,
                         fill_fkt=lambda histo, x: (x[histo._x_value_to_fill].split(':')[0], 1) if x[histo._x_value_to_fill].find('HTTP Error')!=-1 else (x[histo._x_value_to_fill], 1),
                         x_value_to_fill="Value",
-                        color={'fill':self._color},
+                        color={'fill': self._color},
                         stats=False,
                         draw_options="bar0",
-                        add_options={'SetBarWidth':(0.9,),
-                                     'SetBarOffset':(0.05,),
+                        add_options={'SetBarWidth': (0.9,),
+                                     'SetBarOffset': (0.05,),
                                      'GetXaxis.SetLabelSize': (0.042,),
-                                     'SetMinimum':(0.0,)})]
+                                     'SetMinimum': (0.0,)})]
+
+class MigrationPlots(object):
+    _plots_to_generate = ['_create_migration_timing']
+
+    def __init__(self, starttime, endtime, color):
+        self._starttime = starttime
+        self._endtime = endtime
+        self._color = color
+        self._plots =list()
+
+    def __iter__(self):
+        return iter(self._plots)
+
+    def create_plots(self):
+        for plot in self._plots_to_generate:
+            self._plots.extend(getattr(self, plot)())
+
+    def _create_migration_timing(self):
+        return [Histo1D(name="MigrationTiming", title="Timing of the Migration",
+                        xnbins=50, xmin=0, xmax=600,
+                        fill_fkt=lambda histo, x: (x[histo._x_value_to_fill]-x['StartTime'], 1),
+                        x_value_to_fill="EndTime",
+                        label={'x': "Migration Time [s]", "y": "#"},
+                        color={'fill': self._color, 'marker':self._color})]
 
 class LifeCyclePlotManager(object):
-    _supported_categories = ['reader_stats', 'writer_stats', 'failures']
+    _supported_categories = ['reader_stats', 'writer_stats', 'failures', 'migration_stats']
 
     def __init__(self, categories, list_of_apis, list_of_errors, starttime, endtime):
-        plot_creator = {'reader_stats' : StatisticPlots(filter(lambda x: x.startswith('list'), list_of_apis),
+        plot_creator = {'reader_stats': StatisticPlots(filter(lambda x: x.startswith('list') or x.startswith('status'),
+                                                              list_of_apis),
                                                         starttime=starttime,
                                                         endtime=endtime,
                                                         test_type='reader_stats'),
-                        'writer_stats' : StatisticPlots(filter(lambda x: x.startswith('insert') or x.startswith('update'), list_of_apis),
+                        'writer_stats': StatisticPlots(filter(lambda x: x.startswith('insert')
+                                                                        or x.startswith('update')
+                                                                        or x.startswith('submit'), list_of_apis),
                                                         starttime=starttime,
                                                         endtime=endtime,
                                                         test_type='writer_stats'),
-                        'failures' : FailurePlots(list_of_errors,
-                                                  color=2)}
+                        'failures': FailurePlots(list_of_errors,
+                                                  color=2),
+                        'migration_stats': MigrationPlots(starttime=starttime, endtime=endtime, color=2)}
 
         self._histo_managers = dict()
         for category in categories:
@@ -296,13 +324,17 @@ class LifeCyclePlotManager(object):
 
     def add_stacked_histos(self, categories=['reader_stats', 'writer_stats']):
         #find overlap
-        unique_histo_names = None
+        duplicated_histo_names = None
         for category in categories:
             if category not in self._supported_categories:
                 raise NameError('Category %s is not supported by %s' % (category, self.__class__.__name__))
-            if unique_histo_names:
-                unique_histo_names.intersection(self._histo_managers[category].histo_names)
-            else:
-                unique_histo_names= set(self._histo_managers[category].histo_names)
 
-        self._histo_managers['stacked_histos'] = HistoManager()
+            stripped_histo_names = map(lambda x: x.replace(category, ''), self._histo_managers[category].histo_names)
+
+            if duplicated_histo_names:
+                duplicated_histo_names.intersection_update(stripped_histo_names)
+            else:
+                duplicated_histo_names = set(stripped_histo_names)
+
+        print duplicated_histo_names
+        #self._histo_managers['stacked_histos'] = HistoManager()

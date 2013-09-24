@@ -24,6 +24,7 @@ systems = \
             'bin/dbs3GetFileLumis.py',
             'bin/dbs3GetFileParents.py',
             'bin/dbs3GetFiles.py',
+            'bin/dbs3MigrationService.py',
             'bin/dbs3GetPrimaryDSType.py',
             'bin/dbs3WriterStressTest.py',
             'bin/getFakeData.py',
@@ -34,6 +35,7 @@ systems = \
     'pythonpkg': ['LifeCycleTests.LifeCycleTools'],
     'conf' : ['DBS3AnalysisLifecycle.conf',
               'DBS3BulkInsertLifecycle.conf',
+              'DBS3MigrationService.conf',
               'PhedexDBSDASLifecylce.conf'],
     'data' : ['dbs_queries_20120828.json']
   },
