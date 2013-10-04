@@ -37,7 +37,7 @@ def inputChecks(**_params_):
                     if not isinstance(value, types):
                         serverlog = "Expected '%s' to be %s; was %s." % (name, types, type(value))
                         #raise TypeError, "Expected '%s' to be %s; was %s." % (name, types, type(value))
-                        dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input DataType %s for %s..." %(type(value), name[:5]),\
+                        dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input DataType %s for %s..." %(type(value), name[:10]),\
                                             logger=log.error, serverError=serverlog)
                     else:
                         try:
@@ -81,14 +81,19 @@ def inputChecks(**_params_):
                                     for run_num in value:
                                         try: 
                                             int(run_num)
-                                        except Exception as e:
-                                            serverLog = str(e) + "\n run_num=%s is an invalid run number." %run_num 
-                                            dbsExceptionHandler("dbsException-invalid-input2", message="Invalid input data %s...: invalid run number." %run_num[:5],\
+                                        except Exception:
+                                            try:
+                                                min_run, max_run = run_num.split('-', 1)
+                                                int(min_run)
+                                                int(max_run)
+                                            except Exception as e:
+                                                serverLog = str(e) + "\n run_num=%s is an invalid run number." %run_num 
+                                                dbsExceptionHandler("dbsException-invalid-input2", message="Invalid input data %s...: invalid run number." %run_num[:10],\
                                                         serverError=serverLog, logger=log.error)
                         except AssertionError as ae:
                             serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(name, value)
                             #print ae
-                            dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input Data %s...: Not Match Required Format" %value[:5],\
+                            dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input Data %s...: Not Match Required Format" %value[:10],\
                                         serverError=serverLog, logger=log.error)
             return _func_(*args, **kw)
         return wrapped
@@ -96,8 +101,8 @@ def inputChecks(**_params_):
 
 acceptedInputDataTypes = {
     ################
-    str:set(['data_tier_name', 'release_version', 'pset_hash', 'lfn', 'app_name', 'output_module_label', 'global_tag', 
-         'file_parent_lfn', 'parent_logical_file_name', 'logical_file_name', 'processing_version', 'description', 
+    str:set(['data_tier_name', 'release_version', 'pset_hash', 'pset_name','lfn', 'app_name', 'output_module_label', 'global_tag', 
+         'scenario', 'file_parent_lfn', 'parent_logical_file_name', 'logical_file_name', 'processing_version', 'description', 
          'create_by', 'dataset', 'physics_group_name', 'processed_ds_name', 'dataset_access_type', 'data_tier_name',
          'primary_ds_name', 'primary_ds_type', 'acquisition_era_name', 'last_modified_by', 'detail', 
          'prep_id', 'block_name', 'origin_site_name','primary_ds_type', 'primary_ds_name', 'check_sum', 'adler32', 
@@ -111,7 +116,7 @@ acceptedInputDataTypes = {
     ################
     dict:[],
     ################
-    list:[],
+    list:['dataset', 'run_num', 'logical_file_name'],
     ################
     long:['lumi_section_num', 'run_num', 'xtcrosssection', 'auto_cross_section'],
     ################
@@ -183,7 +188,7 @@ def validateJSONInputNoCopy(input_key,input_data):
     if isinstance(input_data,dict):
         for key in input_data.keys():
             if key not in acceptedInputKeys[input_key]:
-                dbsExceptionHandler('dbsException-invalid-input2', message="Invalid Input Key %s..." %key[:5],\
+                dbsExceptionHandler('dbsException-invalid-input2', message="Invalid Input Key %s..." %key[:10],\
                                     serverError="%s is not a valid input key for %s"%(key, input_key))
             else:
                 input_data[key] = validateJSONInputNoCopy(key,input_data[key])
@@ -195,27 +200,27 @@ def validateJSONInputNoCopy(input_key,input_data):
     elif isinstance(input_data,str):
         if input_key not in acceptedInputDataTypes[str]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type str for key-value %s... %s..." \
-                %(input_key[:5], input_data[:5]),\
+                %(input_key[:10], input_data[:10]),\
                 serverError="Input data %s is not a valid input type str for key %s"%(input_data, input_key))
         validateStringInput(input_key,input_data)
         if '*' in input_data: input_data = input_data.replace('*', '%')
     elif isinstance(input_data,int):
         if input_key not in acceptedInputDataTypes[int]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type int for key-value %s..,  %s"\
-            %(input_key[:5], input_data),serverError="Input data %s is not a valid input type for key %s"%(input_data, input_key))
+            %(input_key[:10], input_data),serverError="Input data %s is not a valid input type for key %s"%(input_data, input_key))
     elif isinstance(input_data,long):
         if input_key not in acceptedInputDataTypes[long]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type long for key-value %s... %s" \
-            %(input_key[:5], input_data),serverError="Input data %s is not a valid date type for key %s"%(input_data, input_key))
+            %(input_key[:10], input_data),serverError="Input data %s is not a valid date type for key %s"%(input_data, input_key))
     elif isinstance(input_data,float):
         if input_key not in acceptedInputDataTypes[float]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type float for key-value %s..., %s"\
-            %(input_key[:5], input_data), serverError="Input data %s is not a valid data type for key %s"%(input_data, input_key))
+            %(input_key[:10], input_data), serverError="Input data %s is not a valid data type for key %s"%(input_data, input_key))
     elif not input_data:
         pass
     else:
         #print  'invalid input: %s= %s'%(input_key, input_data)
-        dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data for key  %s..." %input_key[:5], \
+        dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data for key  %s..." %input_key[:10], \
             serverError='invalid input: %s= %s'%(input_key, input_data))
     return input_data
 
@@ -240,7 +245,7 @@ def validateStringInput(input_key,input_data):
     except AssertionError as ae:
         serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(input_key, input_data)
         #print serverLog
-        dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input Data %s...:  Not Match Required Format" %input_data[:5], serverError=serverLog)
+        dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input Data %s...:  Not Match Required Format" %input_data[:10], serverError=serverLog)
     return input_data
 
 

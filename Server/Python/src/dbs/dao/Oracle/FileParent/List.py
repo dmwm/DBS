@@ -7,7 +7,7 @@ __version__ = "$Revision: 1.9 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
-
+from dbs.utils.DBSDaoTools import create_token_generator
 
 class List(DBFormatter):
     """
@@ -36,18 +36,17 @@ class List(DBFormatter):
         
         sql = ''
         binds = {}
-        bindlist = []
 
         if logical_file_name:
-            wheresql = "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
             if isinstance(logical_file_name, str):
+                wheresql = "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
                 binds = {"logical_file_name": logical_file_name}
+                sql = "{sql} {wheresql}".format(sql=self.sql, wheresql=wheresql)
             elif isinstance(logical_file_name, list): 
-                for f in logical_file_name:
-                    binds = {"logical_file_name": f}
-                    bindlist.append(binds)
-            else: return{}
-            sql = "{sql} {wheresql}".format(sql=self.sql, wheresql=wheresql)
+                wheresql = "WHERE F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+                lfn_generator, binds = create_token_generator(logical_file_name)
+                sql = "{lfn_generator} {sql} {wheresql}".format(lfn_generator=lfn_generator, sql=self.sql,
+                        wheresql=wheresql)
         elif block_id != 0:
             wheresql = "WHERE F.BLOCK_ID = :block_id"
             binds ={'block_id': block_id}
@@ -60,12 +59,6 @@ class List(DBFormatter):
         else:
             return{}
 
-        if bindlist:
-            cursors = self.dbi.processData(sql, bindlist, conn, transaction=transaction, returnCursor=True)
-        else:
-            cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
-
-        result=list()
-        for cursor in cursors:
-            result.extend(self.formatCursor(cursor))
+        cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
+        result = self.formatCursor(cursors[0])
         return result

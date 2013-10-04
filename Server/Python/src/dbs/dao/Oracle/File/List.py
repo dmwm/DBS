@@ -9,6 +9,7 @@ from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
 from dbs.utils.DBSTransformInputType import run_tuple
+from dbs.utils.DBSDaoTools import create_token_generator
 
 class List(DBFormatter):
     """
@@ -97,47 +98,46 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
             binds.update({"origin_site_name":origin_site_name})
         if run_num != -1 :
             run_list=[]
-            sql_run_list=''
-            sql_run_range=''
+            wheresql_run_list=''
+            wheresql_run_range=''
 
             for r in parseRunRange(run_num):
                 if isinstance(r, str) or isinstance(r, int):
-                    if not sql_run_list:
-                        sql_run_list = " FL.RUN_NUM = :run_list "
-                    run_list.append(r)
+                    #if not wheresql_run_list:
+                        #wheresql_run_list = " FL.RUN_NUM = :run_list "
+                    run_list.append(str(r))
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
                         dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
-                    sql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
-                    binds.update({"minrun":r[0]})
-                    binds.update({"maxrun":r[1]})
-            if sql_run_range and len(run_list) >= 1:
-                sql += " and (" + sql_run_range + " or " +  sql_run_list + " )"
-            elif sql_run_range and not run_list:
-                sql += " and " + sql_run_range
-            elif not sql_run_range and len(run_list) >= 1:
-                sql += " and "  + sql_run_list
-            # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
-            if len(run_list) == 1:
-                binds["run_list"] = run_list[0]
-            elif len(run_list) > 1:
-                newbinds = []
-                for r in run_list:
-                    b = {}
-                    b.update(binds)
-                    b["run_list"] = r
-                    newbinds.append(b)
-                binds = newbinds
+                    if not lumi_list:
+                        wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
+                        binds.update({"minrun":r[0]})
+                        binds.update({"maxrun":r[1]})
+                    else:
+                        dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")
+            #
+            if run_list and not lumi_list:
+                wheresql_run_list = " fl.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
+                run_generator, run_binds = create_token_generator(run_list)
+                sql =  "{run_generator}".format(run_generator=run_generator) + sql
+                binds.update(run_binds)
+            if wheresql_run_range and wheresql_run_list:
+                sql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
+            elif wheresql_run_range and not wheresql_run_list:
+                sql += " and " + wheresql_run_range
+            elif not wheresql_run_range and wheresql_run_list:
+                sql += " and "  + wheresql_run_list
         # Make sure when we have a lumi_list, there is only ONE run  -- YG 14/05/2013
         if (lumi_list and len(lumi_list) != 0):
-            sql += " AND FL.LUMI_SECTION_NUM = :lumi_list"
-            newbinds=[]
-            for alumi in lumi_list:
-                cpbinds={}
-                cpbinds.update(binds)
-                cpbinds["lumi_list"]=alumi
-                newbinds.append(cpbinds)
-            binds=newbinds
+            if len(run_list) != 1:
+                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")         
+            sql += " AND fl.RUN_NUM = :run_num  AND FL.LUMI_SECTION_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
+            #Do I need to convert lumi_list to be a str list? YG 10/03/13
+            lumi_generator, lumi_binds = create_token_generator(lumi_list)
+            sql_sel = "{lumi_generator}".format(lumi_generator=lumi_generator) + sql_sel
+            binds.update(lumi_binds)
+            binds["run_num"]=run_list[0]
+        #
         sql = sql_sel + sql
 
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)

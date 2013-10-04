@@ -9,6 +9,7 @@ from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
 from dbs.utils.DBSTransformInputType import run_tuple
+from dbs.utils.DBSDaoTools import create_token_generator
 
 class List(DBFormatter):
     """
@@ -59,9 +60,9 @@ class List(DBFormatter):
             #
             for r in parseRunRange(run_num):
                 if isinstance(r, str) or isinstance(r, int):
-                    if not wheresql_run_list:
-                        wheresql_run_list = " FL.RUN_NUM = :run_list "
-                    run_list.append(r)
+                    #if not wheresql_run_list:
+                        #wheresql_run_list = " FL.RUN_NUM = :run_list "
+                    run_list.append(str(r))
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
                         dbsExceptionHandler('dbsException-invalid-input', "DBS run_num range must be apart at least by 1.")
@@ -69,24 +70,19 @@ class List(DBFormatter):
                     binds.update({"minrun":r[0]})
                     binds.update({"maxrun":r[1]})
             # 
-            if wheresql_run_range and len(run_list) >= 1:
+            if run_list:
+                wheresql_run_list = " fl.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
+                run_generator, run_binds = create_token_generator(run_list)
+                sql =  "{run_generator}".format(run_generator=run_generator) + sql
+                binds.update(run_binds)
+
+            if wheresql_run_range and wheresql_run_list:
                 sql += " %s (" %andorwhere    + wheresql_run_range + " or " +  wheresql_run_list + " )"
-            elif wheresql_run_range and not run_list:
+            elif wheresql_run_range and not wheresql_run_list:
                 sql += " %s " %andorwhere  + wheresql_run_range
-            elif not wheresql_run_range and len(run_list) >= 1:
+            elif not wheresql_run_range and wheresql_run_list:
                 sql += " %s " %andorwhere  + wheresql_run_list
-            # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
-            if len(run_list) == 1:
-                binds["run_list"] = run_list[0]
-            elif len(run_list) > 1:
-                newbinds = []
-                for r in run_list:
-                    b = {}
-                    b.update(binds)
-                    b["run_list"] = r
-                    newbinds.append(b)
-                binds = newbinds
-        self.logger.debug(sql)
+        #self.logger.debug(sql)
 	cursors = self.dbi.processData(sql, binds, conn, transaction=trans, returnCursor=True)
         result=[]
         for i in range(len(cursors)):

@@ -7,7 +7,7 @@ __version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
-from dbs.utils.DBSDaoTools import create_lfn_generator
+from dbs.utils.DBSDaoTools import create_token_generator
 
 
 class ListChild(DBFormatter):
@@ -46,8 +46,8 @@ class ListChild(DBFormatter):
                 binds = {"logical_file_name": logical_file_name}
                 sql = "{sql} {wheresql}".format(sql=self.sql, wheresql=wheresql)
             elif isinstance(logical_file_name, list):
-                wheresql = "WHERE F.LOGICAL_FILE_NAME in (SELECT LOGICAL_FILE_NAME FROM LFN_GENERATOR)"
-                lfn_generator, binds = create_lfn_generator(logical_file_name)
+                wheresql = "WHERE F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+                lfn_generator, binds = create_token_generator(logical_file_name)
                 sql = "{lfn_generator} {sql} {wheresql}".format(lfn_generator=lfn_generator, sql=self.sql,
                                                                 wheresql=wheresql)
         elif block_name:

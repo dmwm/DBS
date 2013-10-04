@@ -5,7 +5,7 @@ This module provides File.UpdateStatus data access object.
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsUtils import dbsUtils
-from dbs.utils.DBSDaoTools import create_lfn_generator
+from dbs.utils.DBSDaoTools import create_token_generator
 
 class UpdateStatus(DBFormatter):
 
@@ -36,11 +36,11 @@ class UpdateStatus(DBFormatter):
                      is_file_valid=is_file_valid)
 
         if isinstance(logical_file_name, list):
-            lfn_generator, lfn_binds = create_lfn_generator(logical_file_name)
+            lfn_generator, lfn_binds = create_token_generator(logical_file_name)
             ###with clause - subquery factory does only work with select statements, therefore lfn_generator
             ###has to be place in front of the SELECT statement in the WHERE clause
             ###http://asktom.oracle.com/pls/asktom/f?p=100:11:::::P11_QUESTION_ID:8120272301765
-            wheresql = """WHERE F.LOGICAL_FILE_NAME in ({lfn_generator} SELECT LOGICAL_FILE_NAME FROM LFN_GENERATOR)
+            wheresql = """WHERE F.LOGICAL_FILE_NAME in ({lfn_generator} SELECT TOKEN FROM TOKEN_GENERATOR)
             """.format(lfn_generator=lfn_generator)
             binds.update(lfn_binds)
         else:
