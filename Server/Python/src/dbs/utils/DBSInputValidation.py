@@ -112,7 +112,7 @@ acceptedInputDataTypes = {
     ################
     int:set(['file_count', 'block_size', 'start_date', 'end_date', 'last_modification_date', 'creation_date', 'event_count', 
          'file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id' ,'open_for_writing', 'detail', 'processing_version',
-         'xtcrosssection', 'auto_cross_section']),
+         'xtcrosssection', 'auto_cross_section', 'check_sum', 'adler32']),
     ################
     dict:[],
     ################
