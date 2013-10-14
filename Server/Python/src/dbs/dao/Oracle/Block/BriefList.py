@@ -6,6 +6,7 @@ from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
 from dbs.utils.DBSTransformInputType import run_tuple
+from dbs.utils.DBSDaoTools import create_token_generator
 
 class BriefList(DBFormatter):
     """
@@ -32,6 +33,7 @@ class BriefList(DBFormatter):
         basesql = self.sql
         joinsql = ""
         wheresql = ""
+        generatedsql = ""
 
         if logical_file_name and logical_file_name != "%":
             joinsql +=  " JOIN %sFILES FL ON FL.BLOCK_ID = B.BLOCK_ID " %(self.owner)
@@ -105,8 +107,8 @@ class BriefList(DBFormatter):
             #
             for r in parseRunRange(run_num):
                 if isinstance(r, str) or isinstance(r, int):
-                    if not wheresql_run_list:
-                        wheresql_run_list = " FLM.RUN_NUM = :run_list "
+                    #if not wheresql_run_list:
+                        #wheresql_run_list = " FLM.RUN_NUM = :run_list "
                     run_list.append(r)
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
@@ -115,25 +117,19 @@ class BriefList(DBFormatter):
                     binds.update({"minrun":r[0]})
                     binds.update({"maxrun":r[1]})
             #
-            if wheresql_run_range and len(run_list) >= 1:
+            if run_list:
+                wheresql_run_list = " FLM.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
+                generatedsql, run_binds = create_token_generator(run_list)
+                binds.update(run_binds)
+            #  
+            if wheresql_run_range and wheresql_run_list:
                 wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
-            elif wheresql_run_range and not run_list:
+            elif wheresql_run_range and wheresql_run_list:
                 wheresql +=  " and " + wheresql_run_range
-            elif not wheresql_run_range and len(run_list) >= 1:
+            elif not wheresql_run_range and wheresql_run_list:
                 wheresql += " and "  + wheresql_run_list
-            # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
-            if len(run_list) == 1:
-                binds["run_list"] = run_list[0]
-            elif len(run_list) > 1:
-                newbinds = []
-                for r in run_list:
-                    b = {}
-                    b.update(binds)
-                    b["run_list"] = r
-                    newbinds.append(b)
-                binds = newbinds
-
-        sql = " ".join((basesql, self.fromsql, joinsql, wheresql))
+        #
+        sql = " ".join((generatedsql ,basesql, self.fromsql, joinsql, wheresql))
 
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result=[]

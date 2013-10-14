@@ -4,7 +4,7 @@ This module provides Block.SummaryList data access object
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
-
+from dbs.utils.DBSDaoTools import create_token_generator
 
 class SummaryList(DBFormatter):
     def __init__(self, logger, dbi, owner=""):
@@ -15,6 +15,7 @@ class SummaryList(DBFormatter):
 
     def execute(self, conn, block_name="", dataset="", transaction=False):
         binds = {}
+        generatedsql=''
 
         if dataset:
             where_clause = "WHERE DS.dataset=:dataset"
@@ -37,15 +38,23 @@ class SummaryList(DBFormatter):
         else:
             # Oracle IN only supports a maximum of 1,000 values
             # (ORA-01795: maximum number of expressions in a list is 1000)
+            if isinstance(block_name,str):
+                block_name=[block_name]
+            block_clause = "BS.BLOCK_NAME IN (SELECT TOKEN FROM TOKEN_GENERATOR) "
+            generatedsql, run_binds = create_token_generator(block_name)
+            binds.update(run_binds)
+            """
             block_clause = "BS.BLOCK_NAME IN ("
             for counter, this_block_name in enumerate(block_name):
                 block_label = 'block_%s' % counter
                 binds.update({block_label: this_block_name})
                 block_clause += ":%s, " % block_label
             block_clause = block_clause[:-2]+")"#remove last comma and space in the list above
+            """
             where_clause = "WHERE {block_clause}".format(block_clause=block_clause)
 
-            sql = """SELECT (
+            sql = generatedsql + \
+            """SELECT (
             SELECT SUM(BS.BLOCK_SIZE)
             FROM {owner}BLOCKS BS {where_clause}
             ) AS FILE_SIZE,

@@ -8,6 +8,7 @@ from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
 from dbs.utils.DBSTransformInputType import run_tuple
+from dbs.utils.DBSDaoTools import create_token_generator
 
 class List(DBFormatter):
     """
@@ -61,19 +62,23 @@ class List(DBFormatter):
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed", "%s Oracle/Dataset/List.  Expects db connection from upper layer.")
 	sql = ""
+        generatedsql = ''
 	basesql=self.basesql
         binds = {}
 	wheresql = "WHERE D.IS_DATASET_VALID = :is_dataset_valid " 
         if dataset and type(dataset) is list:  # for the POST method
-            wheresql += " AND D.DATASET=:dataset "
+            #wheresql += " AND D.DATASET=:dataset "
+            ds_generator, binds = create_token_generator(dataset)
+            wheresql += " AND D.DATASET in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+            generatedsql = "{ds_generator}".format(ds_generator=ds_generator)
             if dataset_access_type and dataset_access_type !="%":
                 op = ("=", "like")["%" in dataset_access_type]
                 wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op
-                binds = [{'dataset_access_type':dataset_access_type, 'is_dataset_valid':is_dataset_valid, 'dataset': x } for x in dataset]
-                #self.logger.debug(binds)
+                binds['dataset_access_type'] = dataset_access_type
+                binds['is_dataset_valid'] = is_dataset_valid
             else:
-                binds = [{'is_dataset_valid':is_dataset_valid, 'dataset': x } for x in dataset]
-            sql ='SELECT' + basesql + wheresql
+                binds['is_dataset_valid'] = is_dataset_valid
+            sql =generatedsql + 'SELECT' + basesql + wheresql
         else: #for the GET method
             binds.update(is_dataset_valid = is_dataset_valid)
             if cdate != 0:
@@ -225,39 +230,32 @@ class List(DBFormatter):
                 wheresql_run_range=''
                 for r in parseRunRange(run_num):
                     if isinstance(r, str) or isinstance(r, int):
-                        if not wheresql_run_list:
-                            wheresql_run_list = " FLLU.RUN_NUM = :run_list "
-                        run_list.append(r)
+                        #if not wheresql_run_list:
+                        #    wheresql_run_list = " FLLU.RUN_NUM = :run_list "
+                        run_list.append(str(r))
                     if isinstance(r, run_tuple):
                         if r[0] == r[1]:
                             dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
                         wheresql_run_range = " FLLU.RUN_NUM between :minrun and :maxrun "
                         binds.update({"minrun":r[0]})
                         binds.update({"maxrun":r[1]})
-                # 
-                if wheresql_run_range and len(run_list) >= 1:
-                    wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
-                elif wheresql_run_range and not run_list:
-                    wheresql += " and " + wheresql_run_range
-                elif not wheresql_run_range and len(run_list) >= 1:
+                #
+                if run_list:
+                    wheresql_run_list = " FLLU.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
+                    run_generator, run_binds = create_token_generator(run_list)
+                    sql =  "{run_generator}".format(run_generator=run_generator) + sql
+                    binds.update(run_binds)
+                if wheresql_run_range and wheresql_run_list:
+                    wheresql += " and ("   + wheresql_run_range + " or " +  wheresql_run_list + " )"
+                elif wheresql_run_range and not wheresql_run_list:
+                    wheresql += " and "  + wheresql_run_range
+                elif not wheresql_run_range and wheresql_run_list:
                     wheresql += " and " + wheresql_run_list
-                # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
-                if len(run_list) == 1:
-                    binds["run_list"] = run_list[0]
-                if len(run_list) > 1:
-                    newbinds = []
-                    for r in run_list:
-                        b = {}
-                        b.update(binds)
-                        b["run_list"] = r
-                        newbinds.append(b)
-                    binds = newbinds
+
     		sql += wheresql
             else:
                 dbsExceptionHandler("dbsException-invalid-input", "Oracle/Dataset/List. Proper parameters are not\
                     provided for listDatasets call.")
-        #import pdb
-        #pdb.set_trace()
         #self.logger.debug( sql)
         #self.logger.debug("binds=%s" %binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
