@@ -51,6 +51,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
         sql = self.sql_cond
         binds = {}
         sql_sel = self.sql_sel
+        run_generator = ''
 
         if run_num != -1 :
             sql_sel = sql_sel.replace("SELECT", "SELECT DISTINCT") + " , FL.RUN_NUM  "
@@ -119,7 +120,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
             if run_list and not lumi_list:
                 wheresql_run_list = " fl.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
                 run_generator, run_binds = create_token_generator(run_list)
-                sql =  "{run_generator}".format(run_generator=run_generator) + sql
+                #sql =  "{run_generator}".format(run_generator=run_generator) + sql
                 binds.update(run_binds)
             if wheresql_run_range and wheresql_run_list:
                 sql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
@@ -138,7 +139,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
             binds.update(lumi_binds)
             binds["run_num"]=run_list[0]
         #
-        sql = sql_sel + sql
+        sql = run_generator + sql_sel + sql
 
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []

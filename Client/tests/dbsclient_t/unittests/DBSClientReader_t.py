@@ -200,9 +200,13 @@ class DBSClientReader_t(unittest.TestCase):
         """test32 unittestDBSClientReader_t.listFiles: basic test"""
         self.api.listFiles(dataset=self.testparams['dataset'])
 
-    def test033(self):
+    def test033a(self):
         """test33 unittestDBSClientReader_t.listFiles: basic test"""
         self.api.listFiles(block_name=self.testparams['block'])
+
+    def test033b(self):
+        """test33 unittestDBSClientReader_t.listFiles: basic test"""
+        self.api.listFiles(block_name=self.testparams['block'], detail=True)
 
     def test034(self):
         """test34 unittestDBSClientReader_t.listFiles: basic test"""

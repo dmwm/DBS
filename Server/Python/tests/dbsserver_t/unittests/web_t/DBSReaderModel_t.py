@@ -539,6 +539,13 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('files',logical_file_name=lfn,output_module_label=testparams['output_module_label'],
                  app_name=testparams['app_name'],pset_hash=testparams['pset_hash'],
                  release_version=testparams['release_version'],detail=True)
+    def test007v(self):
+        """test007v: web.DBSReaderModel.listFiles: basic test """
+        api.list('files', block_name=testparams['block'], detail=True)
+
+    def test007w(self):
+        """test007w: web.DBSReaderModel.listFiles: with dataset, run_num and detail"""
+        api.list('files', dataset=testparams['dataset'], run_num=testparams['run_num'], detail=True)
 
     def test008a(self):
         """test008a: web.DBSReaderModel.listDatasetParents: basic test """
