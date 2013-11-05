@@ -103,9 +103,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
             wheresql_run_range=''
 
             for r in parseRunRange(run_num):
-                if isinstance(r, str) or isinstance(r, int):
-                    #if not wheresql_run_list:
-                        #wheresql_run_list = " FL.RUN_NUM = :run_list "
+                if isinstance(r, str) or isinstance(r, int) or isinstance(r, long):
                     run_list.append(str(r))
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
@@ -134,6 +132,8 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
                 dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")         
             sql += " AND fl.RUN_NUM = :run_num  AND FL.LUMI_SECTION_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
             #Do I need to convert lumi_list to be a str list? YG 10/03/13
+            #Yes, you do. YG
+            lumi_list = map(str, lumi_list)
             lumi_generator, lumi_binds = create_token_generator(lumi_list)
             sql_sel = "{lumi_generator}".format(lumi_generator=lumi_generator) + sql_sel
             binds.update(lumi_binds)

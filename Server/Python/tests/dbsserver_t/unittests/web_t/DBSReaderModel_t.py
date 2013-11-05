@@ -356,6 +356,10 @@ class DBSReaderModel_t(unittest.TestCase):
     def test006e(self):
         """test006e: web.DBSReaderModel.listBlocks: basic test"""
         api.list('blocks', run_num=testparams['run_num'], block_name=testparams['block'])
+    
+    def test006ed(self):
+        """test006ed: web.DBSReaderModel.listBlocks: basic test"""
+        api.list('blocks', run_num=testparams['run_num'], block_name=testparams['block'], detail=True)    
 
     @checkException400
     def test006f(self):
@@ -421,7 +425,11 @@ class DBSReaderModel_t(unittest.TestCase):
                  max_cdate=self._current_unixtime)
 
     def test006r(self):
-        """test006r: web.DBSReaderModel.listBlocks: dataset, runlist and details"""
+        """test006r: web.DBSReaderModel.listBlocks: dataset, runlist"""
+        api.list('blocks', run_num=[testparams['run_num'], testparams['run_num']], dataset=testparams['dataset'])
+
+    def test006rd(self):
+        """test006rd: web.DBSReaderModel.listBlocks: dataset, runlist and details"""
         api.list('blocks', run_num=[testparams['run_num'], testparams['run_num']], dataset=testparams['dataset'],
                  detail=True)
 
@@ -438,6 +446,14 @@ class DBSReaderModel_t(unittest.TestCase):
         """test006u: web.DBSReaderModel.listBlockOrigin: Must raise an exception if no parameter is passed. """
         api.list('blockorigin')
 
+    def test006v(self):
+        """test006v: web.DBSReaderModel.listBlocks: basic test"""
+        api.list('blocks', run_num=testparams['run_num'], block_name=testparams['block'])
+
+    def test006vd(self):
+        """test006vd: web.DBSReaderModel.listBlocks: basic test"""
+        api.list('blocks', run_num=testparams['run_num'], block_name=testparams['block'], detail=True)
+
     @checkException400
     def test007a(self):
         """test007a: web.DBSReaderModel.listFiles: basic negative test"""
@@ -447,6 +463,10 @@ class DBSReaderModel_t(unittest.TestCase):
         """test007b: web.DBSReaderModel.listFiles: basic test"""
         api.list('files', dataset=testparams['dataset'], run_num='1-%s' % (testparams['run_num']))
 
+    def test007bd(self):
+        """test007b: web.DBSReaderModel.listFiles: basic test"""
+        api.list('files', dataset=testparams['dataset'], run_num='1-%s' % (testparams['run_num']), detail=True)
+
     def test007c(self):
         """test007c: web.DBSReaderModel.listFiles: basic test"""
         api.list('files', dataset=testparams['dataset'])
@@ -455,10 +475,19 @@ class DBSReaderModel_t(unittest.TestCase):
         """test007d: web.DBSReaderModel.listFiles: with dataset, lumi list"""
         api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]",
                  run_num=testparams['run_num'])
+    
+    def test007dd(self):
+        """test007dd: web.DBSReaderModel.listFiles: with dataset, lumi list"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]",
+                 run_num=testparams['run_num'], detail=True)
 
     def test007e(self):
         """test007e: web.DBSReaderModel.listFiles: with dataset and lumi intervals"""
         api.list('files', dataset=testparams['dataset'], lumi_list=[[1, 100]], run_num=testparams['run_num'])
+
+    def test007ed(self):
+        """test007ed: web.DBSReaderModel.listFiles: with dataset and lumi intervals"""
+        api.list('files', dataset=testparams['dataset'], lumi_list=[[1, 100]], run_num=testparams['run_num'], detail=True)
 
     @checkException400
     def test007f(self):

@@ -115,8 +115,6 @@ class DBSRestApi:
         request.method = 'POST'
         request.body = FileLike(params)
         request.user = {'name' : getpass.getuser()}
-        #import pdb
-        #pdb.set_trace()
         #Forcing NO use of insert buffer during the unit tests
         if call=='files':
             ret=self.rest.default(*[call, False])

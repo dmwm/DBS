@@ -106,10 +106,8 @@ class BriefList(DBFormatter):
             wheresql_run_range=''
             #
             for r in parseRunRange(run_num):
-                if isinstance(r, str) or isinstance(r, int):
-                    #if not wheresql_run_list:
-                        #wheresql_run_list = " FLM.RUN_NUM = :run_list "
-                    run_list.append(r)
+                if isinstance(r, str) or isinstance(r, int) or isinstance(r, long):
+                    run_list.append(str(r))
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
                         dbsExceptionHandler('dbsException-invalid-input', "DBS run_num range must be apart at least by 1.")

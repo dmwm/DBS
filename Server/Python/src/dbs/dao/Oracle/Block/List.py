@@ -110,7 +110,7 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
             wheresql_run_range=''
             #
             for r in parseRunRange(run_num):
-                if isinstance(r, str) or isinstance(r, int):
+                if isinstance(r, str) or isinstance(r, int) or isinstance(r, long):
                     #if not wheresql_run_list:
                         #wheresql_run_list = " FLM.RUN_NUM = :run_list "
                     run_list.append(str(r))

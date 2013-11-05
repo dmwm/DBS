@@ -97,7 +97,7 @@ class BriefList(DBFormatter):
             wheresql_run_range = ''
             #
             for r in parseRunRange(run_num):
-                if isinstance(r, str) or isinstance(r, int):
+                if isinstance(r, str) or isinstance(r, int) or isinstance(r, long):
                     if not wheresql_run_list:
                         wheresql_run_list = " FL.RUN_NUM = :run_list "
                     run_list.append(r)

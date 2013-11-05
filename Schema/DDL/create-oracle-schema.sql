@@ -5,7 +5,7 @@
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2013-08-07 13:52                                */
+/* Created on:            2013-10-24 14:44                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -57,7 +57,7 @@ CREATE SEQUENCE SEQ_PG
     noorder;
 
 CREATE SEQUENCE SEQ_DT
-    START WITH 1
+    START WITH 100
     INCREMENT BY 1
     NOMINVALUE
     NOMAXVALUE
@@ -75,7 +75,7 @@ CREATE SEQUENCE SEQ_PDS
     noorder;
 
 CREATE SEQUENCE SEQ_PDT
-    START WITH 1
+    START WITH 100
     INCREMENT BY 1
     NOMINVALUE
     NOMAXVALUE
@@ -111,7 +111,7 @@ CREATE SEQUENCE SEQ_DP
     noorder;
 
 CREATE SEQUENCE SEQ_DTP
-    START WITH 1
+    START WITH 100
     INCREMENT BY 1
     NOMINVALUE
     NOMAXVALUE
@@ -237,7 +237,7 @@ CREATE SEQUENCE SEQ_FP
     noorder;
 
 CREATE SEQUENCE SEQ_FT
-    START WITH 1
+    START WITH 100
     INCREMENT BY 1
     NOMINVALUE
     NOMAXVALUE
@@ -273,7 +273,7 @@ CREATE SEQUENCE SEQ_FC
     noorder;
 
 CREATE SEQUENCE SEQ_DV
-    START WITH 1
+    START WITH 100
     INCREMENT BY 1
     NOMINVALUE
     NOMAXVALUE
@@ -889,6 +889,8 @@ GRANT INSERT, UPDATE ON FILE_LUMIS  TO CMS_DBS3_WRITE_ROLE;
 GRANT DELETE ON FILE_LUMIS  TO CMS_DBS3_ADMIN_ROLE;
 
 CREATE INDEX IDX_FLM_1 ON FILE_LUMIS (FILE_ID);
+
+CREATE INDEX ID_FLM_2 ON FILE_LUMIS (RUN_NUM,FILE_ID);
 
 /* ---------------------------------------------------------------------- */
 /* Foreign key constraints                                                */
