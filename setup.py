@@ -108,6 +108,48 @@ systems = \
     'srcdir': 'Server/Python/src',
     'pythonmods': [],
     'pythonpkg': ['dbs.utils']
+  },
+
+  'LifeCycleTests':
+  {
+    'srcdir': 'SystemTests/src/python',
+    'bin': ['SystemTests/bin/dbs3BulkInsert.py',
+            'SystemTests/bin/dbs3CrabWorkflow.py',
+            'SystemTests/bin/dbs3Crab3Workflow.py',
+            'SystemTests/bin/dbs3dasComparision.py',
+            'SystemTests/bin/das_logfile_analyser.py',
+            'SystemTests/bin/das_logfile_parser.py',
+            'SystemTests/bin/dbs3DASAccess.py',
+            'SystemTests/bin/dbs3DASGetQueries.py',
+            'SystemTests/bin/dbs3IntroduceFailures.py',
+            'SystemTests/bin/dbs3GetBlocks.py',
+            'SystemTests/bin/dbs3GetDatasets.py',
+            'SystemTests/bin/dbs3GetFileLumis.py',
+            'SystemTests/bin/dbs3GetFileParents.py',
+            'SystemTests/bin/dbs3GetFiles.py',
+            'SystemTests/bin/dbs3MigrationService.py',
+            'SystemTests/bin/dbs3GetPrimaryDSType.py',
+            'SystemTests/bin/dbs3WriterStressTest.py',
+            'SystemTests/bin/getFakeData.py',
+            'SystemTests/bin/StatsServer.py',
+            'SystemTests/bin/run_job_wn.sh',
+            'SystemTests/bin/submit_jobs.sh'],
+    'pythonmods': ['LifeCycleTests.__init__'],
+    'pythonpkg': ['LifeCycleTests.LifeCycleTools'],
+    'conf' : ['SystemTests/conf/DBS3AnalysisLifecycle.conf',
+              'SystemTests/conf/DBS3BulkInsertLifecycle.conf',
+              'SystemTests/conf/DBS3MigrationService.conf',
+              'SystemTests/conf/PhedexDBSDASLifecylce.conf'],
+    'data' : ['SystemTests/data/dbs_queries_20120828.json']
+  },
+
+  'LifeCycleAnalysis':
+  {
+    'srcdir': 'SystemTests/src/python',
+    'bin': ['SystemTests/bin/LifeCyclePlots.py',
+            'SystemTests/bin/MergeDB.sh'],
+    'pythonmods': ['LifeCycleAnalysis.__init__'],
+    'pythonpkg': ['LifeCycleAnalysis.LifeCyclePlots']
   }
 }
 
@@ -118,6 +160,8 @@ def process_dependencies(system):
   srcdir = system['srcdir']
   binaries = set(system.get('bin', set()))
   examples = set(system.get('examples', set()))
+  configs = set(system.get('conf', set()))
+  data = set(system.get('data', set()))
   statics = set(system.get('statics', set()))
   pythonmods = set(system.get('pythonmods', set()))
   pythonpkg = set(system.get('pythonpkg', set()))
@@ -133,6 +177,8 @@ def process_dependencies(system):
     dependants = process_dependencies(dependant_system)
     binaries.update(dependants.get('bin', set()))
     examples.update(dependants.get('examples', set()))
+    configs.update(dependants.get('conf', set()))
+    data.update(dependants.get('data', set()))
     statics.update(dependants.get('statics', set()))
     pythonmods.update(dependants.get('pythonmods', set()))
     pythonpkg.update(dependants.get('pythonpkg', set()))
@@ -140,6 +186,8 @@ def process_dependencies(system):
   return {'srcdir': srcdir,
           'bin': list(binaries),
           'examples': list(examples),
+          'conf': list(configs),
+          'data': list(data),
           'statics': list(statics),
           'pythonmods': list(pythonmods),
           'pythonpkg': list(pythonpkg)}
@@ -149,6 +197,8 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   docroot = "doc/build/html"
   system = process_dependencies(systems[system_name])
   exsrc = sum((glob("%s" % x) for x in system.get('examples', [])), [])
+  configs = sum((glob("%s" % x) for x in system.get('conf',[])), [])
+  data = sum((glob("%s" % x) for x in system.get('data',[])), [])
   statics = sum((glob("%s" % x) for x in system.get('statics', [])), [])
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
 
@@ -158,7 +208,8 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.py_modules = system.get('pythonmods', [])
   dist.packages = system.get('pythonpkg', [])
   dist.package_dir = { '': system.get('srcdir', []) }
-  dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc), ('statics', statics)]
+  dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc),
+                     ('conf', configs), ('data', data), ('statics', statics)]
 
   for directory in set(os.path.dirname(path.replace('Client/utils/','',1)) for path in exsrc):
       files = [x for x in exsrc if x.startswith('Client/utils/%s/' % directory)]
@@ -189,7 +240,8 @@ class BuildCommand(Command):
       print "System not specified, please use '-s dbs-web', '-s dbs-client', '-s pycurl-client' or '-s dbs-migration'"
       sys.exit(1)
     elif self.system not in systems:
-      print "System %s unrecognised, please use '-s dbs-web', '-s dbs-client', '-s pycurl-client' or '-s dbs-migration'" % self.system
+      print "System %s unrecognised, please use '-s dbs-web', '-s dbs-client', '-s pycurl-client' or \
+'-s dbs-migration'" % self.system
       sys.exit(1)
 
     # Expand various sources and maybe do the c++ build.
@@ -234,10 +286,12 @@ class InstallCommand(install):
   def finalize_options(self):
     # Check options.
     if self.system == None:
-      print "System not specified, please use '-s dbs-web', 'dbs-client', 'pycurl-client' or 'dbs-migration'"
+      print "System not specified, please use '-s dbs-web', 'dbs-client', 'pycurl-client', 'dbs-migration',\
+'LifeCycleTests' or 'LifeCycleAnalysis'"
       sys.exit(1)
     elif self.system not in systems:
-      print "System %s unrecognised, please use '-s dbs-web', 'dbs-client', 'pycurl-client' or 'dbs-migration'" % self.system
+      print "System %s unrecognised, please use '-s dbs-web', 'dbs-client', 'pycurl-client', 'dbs-migration',\
+'LifeCycleTests' or 'LifeCycleAnalysis'" % self.system
       sys.exit(1)
     if self.patch and not os.path.isdir("%s/xbin" % self.prefix):
       print "Patch destination %s does not look like a valid location." % self.prefix
