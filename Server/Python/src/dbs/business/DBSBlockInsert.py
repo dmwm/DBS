@@ -334,15 +334,17 @@ class DBSBlockInsert :
                 #global_tag is now required. YG 03/08/2011
                 try:
                     cfgid = 0
+		    if not migration:
+			m['create_by'] = dbsUtils().getCreateBy()
+			m['creation_date'] = dbsUtils().getTime()
                     configObj = {"release_version": m["release_version"],
                                  "pset_hash": m["pset_hash"], "pset_name":m.get('pset_name', None),
                                  "app_name": m["app_name"],
                                  'output_module_label' : m['output_module_label'],
                                  'global_tag' : m['global_tag'],
                                  'scenario' : m.get('scenario', None),
-                                 'creation_date' : m.get('creation_date', dbsUtils().getTime()),
-                                 'create_by':m.get('create_by', dbsUtils().getCreateBy())
-                                 #'create_by':dbsUtils().getCreateBy()
+                                 'creation_date' : m['creation_date'],
+                                 'create_by':m['create_by']
                                   }
                     self.otptModCfgin.execute(conn, configObj, tran)
                     tran.commit()
