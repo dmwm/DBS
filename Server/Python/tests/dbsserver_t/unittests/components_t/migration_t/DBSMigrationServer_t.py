@@ -123,7 +123,7 @@ class DBSMigrationServer_t(unittest.TestCase):
 
     def test_02_insert_migration_requests(self):
         """test02: Test to request a migration between different DBS instances by block"""
-        for block_data_provider in (self._child_data_provider,):
+        for block_data_provider in (self._data_provider,):
             block_data = block_data_provider.block_dump()[0]['block']['block_name']
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : block_data}
@@ -147,7 +147,7 @@ class DBSMigrationServer_t(unittest.TestCase):
                 self._migration_task.cleanup()
 
     def test_04_insert_migration_requests(self):
-        """negative test04: Test to request a migration between different DBS instances by dataset"""
+        """test04: Test to request a migration between different DBS instances by dataset"""
         datasets = set((block['dataset']['dataset']
                         for block in chain(self._child_data_provider.block_dump(),
                                            self._independent_child_data_provider.block_dump())))
