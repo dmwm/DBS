@@ -115,9 +115,10 @@ class DBSBlockInsert :
             block['block_id'] = self.sm.increment(conn, "SEQ_BK",)
             block['dataset_id'] =  datasetId
             block['creation_date'] = block.get('creation_date', dbsUtils().getTime())
-            block['create_by'] = dbsUtils().getCreateBy()
-            block['last_modification_date'] = dbsUtils().getTime()
-            block['last_modified_by'] = dbsUtils().getCreateBy()
+	    if not migration:
+		block['create_by'] = dbsUtils().getCreateBy()
+		block['last_modification_date'] = dbsUtils().getTime()
+		block['last_modified_by'] = dbsUtils().getCreateBy()
             self.blockin.execute(conn, block, tran)
             newBlock = True
         except exceptions.IntegrityError, ex:
@@ -333,15 +334,17 @@ class DBSBlockInsert :
                 #global_tag is now required. YG 03/08/2011
                 try:
                     cfgid = 0
+		    if not migration:
+			m['create_by'] = dbsUtils().getCreateBy()
+			m['creation_date'] = dbsUtils().getTime()
                     configObj = {"release_version": m["release_version"],
                                  "pset_hash": m["pset_hash"], "pset_name":m.get('pset_name', None),
                                  "app_name": m["app_name"],
                                  'output_module_label' : m['output_module_label'],
                                  'global_tag' : m['global_tag'],
                                  'scenario' : m.get('scenario', None),
-                                 'creation_date' : m.get('creation_date', dbsUtils().getTime()),
-                                 #'create_by':m.get('create_by', dbsUtils().getCreateBy())
-                                 'create_by':dbsUtils().getCreateBy()
+                                 'creation_date' : m['creation_date'],
+                                 'create_by':m['create_by']
                                   }
                     self.otptModCfgin.execute(conn, configObj, tran)
                     tran.commit()
@@ -409,7 +412,7 @@ class DBSBlockInsert :
                 self.insertDatasetWOannex(dataset = dataset,
                                         blockcontent = blockcontent,
                                         otptIdList = otptIdList, conn = conn,
-                                        insertDataset = False)
+                                        insertDataset = False, migration=migration)
             finally:
                 if conn:conn.close()
             return datasetID
@@ -430,7 +433,8 @@ class DBSBlockInsert :
                     primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS")
                     primds["creation_date"] = primds.get("creation_date", dbsUtils().getTime())
                     #primds["create_by"] = primds.get("create_by", dbsUtils().getCreateBy())
-                    primds["create_by"] = dbsUtils().getCreateBy()
+		    if not migration:	
+			primds["create_by"] = dbsUtils().getCreateBy()
                     self.primdsin.execute(conn, primds, tran)
                 except exceptions.IntegrityError, ex:
                     if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_PDS_PRIMARY_DS_NAME") != -1)\
@@ -618,7 +622,7 @@ class DBSBlockInsert :
             dataset['dataset_id'] = self.insertDatasetWOannex(dataset = dataset,
                                            blockcontent = blockcontent,
                                            otptIdList = otptIdList,
-                                           conn = conn)
+                                           conn = conn, insertDataset = True, migration=migration)
         finally:
             if tran:tran.rollback()
             if conn:conn.close()
@@ -628,7 +632,7 @@ class DBSBlockInsert :
 
 
     def insertDatasetWOannex(self, dataset, blockcontent, otptIdList, conn,
-                             insertDataset = True):
+                             insertDataset = True, migration = False):
         """
         _insertDatasetOnly_
 
@@ -648,12 +652,11 @@ class DBSBlockInsert :
                 if dataset['dataset_id'] <= 0:
                     dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
                     dataset['xtcrosssection'] = dataset.get('xtcrosssection', None)
-                    dataset['creation_date'] = dataset.get('creation_date', dbsUtils().getTime())
-                    #dataset['create_by'] = dataset.get('create_by', dbsUtils().getCreateBy())
-                    dataset['create_by'] = dbsUtils().getCreateBy()
-                    dataset['last_modification_date'] = dataset.get('last_modification_date', dbsUtils().getTime())
-                    #dataset['last_modified_by'] = dataset.get('last_modified_by', dbsUtils().getCreateBy())
-                    dataset['last_modified_by'] = dbsUtils().getCreateBy()
+		    if not migrtation:
+			dataset['last_modified_by'] = dbsUtils().getCreateBy()
+			dataset['create_by'] = dbsUtils().getCreateBy()
+			dataset['creation_date'] = dataset.get('creation_date', dbsUtils().getTime())
+			dataset['last_modification_date'] = dataset.get('last_modification_date', dbsUtils().getTime())
                     dataset['xtcrosssection'] = dataset.get('xtcrosssection', None)
                     dataset['prep_id'] = dataset.get('prep_id', None)
                     try:
