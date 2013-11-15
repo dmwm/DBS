@@ -652,7 +652,7 @@ class DBSBlockInsert :
                 if dataset['dataset_id'] <= 0:
                     dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
                     dataset['xtcrosssection'] = dataset.get('xtcrosssection', None)
-		    if not migrtation:
+		    if not migration:
 			dataset['last_modified_by'] = dbsUtils().getCreateBy()
 			dataset['create_by'] = dbsUtils().getCreateBy()
 			dataset['creation_date'] = dataset.get('creation_date', dbsUtils().getTime())
