@@ -93,7 +93,7 @@ class DBSBlockInsert :
             #1 insert configuration
             self.logger.debug("insert configuration")
             configList = self.insertOutputModuleConfig(
-                            blockcontent['dataset_conf_list'])
+                            blockcontent['dataset_conf_list'], migration)
             #2 insert dataset
             self.logger.debug("insert dataset")
             datasetId = self.insertDataset(blockcontent, configList, migration)
@@ -284,7 +284,7 @@ class DBSBlockInsert :
             if tran:tran.rollback()
             if conn:conn.close()
 
-    def insertOutputModuleConfig(self, remoteConfig):
+    def insertOutputModuleConfig(self, remoteConfig, migration=False):
         """
         Insert Release version, application, parameter set hashes and the map(output module config).
 
@@ -652,7 +652,7 @@ class DBSBlockInsert :
                 if dataset['dataset_id'] <= 0:
                     dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
                     dataset['xtcrosssection'] = dataset.get('xtcrosssection', None)
-		    if not migrtation:
+		    if not migration:
 			dataset['last_modified_by'] = dbsUtils().getCreateBy()
 			dataset['create_by'] = dbsUtils().getCreateBy()
 			dataset['creation_date'] = dataset.get('creation_date', dbsUtils().getTime())
