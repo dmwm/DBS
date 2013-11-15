@@ -337,8 +337,8 @@ class DBSValidation_t(unittest.TestCase):
         self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))
         migration_request_id = migration_request['migration_details']['migration_request_id']
 
-        ###check migration status for max. 60s (should be enough time to migrate the dataset)
-        with Timeout(60):
+        ###check migration status for max. 300s (should be enough time to migrate the dataset)
+        with Timeout(300):
             while True:
                 request_status = self.migration_api.statusMigration(migration_rqst_id=migration_request_id)
                 if request_status[0]['migration_status'] == 2:
@@ -387,8 +387,8 @@ class DBSValidation_t(unittest.TestCase):
         self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))
         migration_request_id = migration_request['migration_details']['migration_request_id']
 
-        ###check migration status for max. 60s (should be enough time to migrate the dataset)
-        with Timeout(60):
+        ###check migration status for max. 300s (should be enough time to migrate the dataset)
+        with Timeout(300):
             while True:
                 request_status = self.migration_api.statusMigration(migration_rqst_id=migration_request_id)
                 if request_status[0]['migration_status'] == 2:
