@@ -1,5 +1,6 @@
 #!/bin/bash
-export DBS3_ROOT=/uscms/home/yuyi/dbs3-test
+#export DBS3_ROOT=/uscms/home/yuyi/dbs3-test
+export DBS3_ROOT=$PWD/../..
 export PYTHON_HOME=$DBS3_ROOT/External/python/2.6.8-comp2
 export PATH=$PYTHON_HOME/bin:$PATH
 export DBS3_CLIENT=$DBS3_ROOT/DBS/Client

@@ -1,5 +1,6 @@
 if [ -z "$DBS3_ROOT" ]; then
-    export DBS3_ROOT=/uscms/home/yuyi/dbs3-test
+    #export DBS3_ROOT=/uscms/home/yuyi/dbs3-test
+    export DBS3_ROOT=$PWD/../../../..
     export WTBASE=$DBS3_ROOT/External/WMCORE/src
     export WMCORE_BIN=$DBS3_ROOT/External/WMCORE/bin
     export DBS3_SERVER_ROOT=$DBS3_ROOT/DBS/Server/Python
