@@ -503,6 +503,7 @@ acquisition era, but with different cases.")
                 insert_acquisition_era()
 
             elif migration and not has_acquisition_era_name:
+                #if no processing era is available, for example for old DBS 2 data, skip insertion
                 pass
 
             elif migration and not aq['start_date']:
@@ -515,15 +516,9 @@ acquisition era, but with different cases.")
                 dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Acquisition Era is required")
 
             #4 Deal with Processing era
-            pera = {}
-            if (blockcontent.has_key('processing_era')):
-                pera = blockcontent['processing_era']
-            else:
-                if tran:tran.rollback()
-                if conn:conn.close()
-                dbsExceptionHandler('dbsException-invalid-input2', 'BlockInsert:processing version is required')
-            #is there processing era?
-            if pera.has_key('processing_version'):
+            pera = blockcontent.get('processing_era', {})
+
+            if pera.has_key('processing_era') and pera.has_key('processing_version'):
                 try:
                     #insert processing era into db
                     pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE")
@@ -531,8 +526,9 @@ acquisition era, but with different cases.")
                     self.procsingin.execute(conn, pera, tran)
                     dataset['processing_era_id'] = pera['processing_era_id']
                 except exceptions.IntegrityError, ex:
-                    if (str(ex).find("ORA-00001: unique constraint") != -1 and str(ex).find("TUC_PE_PROCESSING_VERSION") != -1)\
-                        or str(ex).lower().find("duplicate") !=-1:
+                    if (str(ex).find("ORA-00001: unique constraint") != -1 and \
+                                str(ex).find("TUC_PE_PROCESSING_VERSION") != -1) or \
+                                str(ex).lower().find("duplicate") !=-1:
                         #ok, already in db
                         dataset['processing_era_id'] = self.procsingid.execute(conn, pera['processing_version'])
                     else:
@@ -540,21 +536,23 @@ acquisition era, but with different cases.")
                         if conn:conn.close()
                         raise
                 except Exception, ex:
-                    if tran:tran.rollback()
-                    if conn:conn.close()
+                    if tran: tran.rollback()
+                    if conn: conn.close()
                     raise
+            elif migration:
+                #if no processing era is available, for example for old DBS 2 data, skip insertion
+                pass
             else:
-                if tran:tran.rollback()
-                if conn:conn.close()
+                if tran: tran.rollback()
+                if conn: conn.close()
                 dbsExceptionHandler('dbsException-invalid-input2', 'BlockInsert:processing version is required')
+
             #Make sure processed_ds_name is right format.
             #processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
             #In order to accommodate DBS2 data for migration, we turn off this check in migration.
             #These will not cause any problem to none DBS2 data because when we migration, the none DBS2 data is
             #already checked when they were inserted into the source dbs.  YG 7/12/2012
-            if migration:
-                pass
-            else:
+            if not migration:
                 erals=dataset["processed_ds_name"].rsplit('-')
                 if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
                     if tran:tran.rollback()
@@ -671,13 +669,15 @@ acquisition era, but with different cases.")
                             if dataset['dataset_id'] <= 0:
                                 if tran:tran.rollback()
                                 if conn:conn.close()
-                                dbsExceptionHandler(message='InsertDataset Error', logger=self.logger, serverError="InsertDataset: " + str(ex))
+                                dbsExceptionHandler(message='InsertDataset Error',
+                                                    logger=self.logger,
+                                                    serverError="InsertDataset: " + str(ei))
                         else:
-                            if tran:tran.rollback()
-                            if conn:conn.close()
+                            if tran: tran.rollback()
+                            if conn: conn.close()
                             raise
                         #
-                    except Exception, ex:
+                    except Exception:
                         #should catch all above exception to rollback. YG Jan 17, 2013
                         if tran:tran.rollback()
                         if conn:conn.close()
