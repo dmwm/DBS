@@ -432,10 +432,9 @@ class DBSBlockInsert :
                 try:
                     primds["primary_ds_id"] = self.sm.increment(conn, "SEQ_PDS")
                     primds["creation_date"] = primds.get("creation_date", dbsUtils().getTime())
-                    #primds["create_by"] = primds.get("create_by", dbsUtils().getCreateBy())
-		    if not migration:	
-			primds["create_by"] = dbsUtils().getCreateBy()
-                    self.primdsin.execute(conn, primds, tran)
+                    if not migration:
+                        primds["create_by"] = dbsUtils().getCreateBy()
+                        self.primdsin.execute(conn, primds, tran)
                 except exceptions.IntegrityError, ex:
                     if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_PDS_PRIMARY_DS_NAME") != -1)\
                         or str(ex).lower().find("duplicate") !=-1:
@@ -452,7 +451,7 @@ class DBSBlockInsert :
                     raise
             dataset['primary_ds_id'] = primds["primary_ds_id"]
             #2 Deal with processed ds
-            #processed ds is handled inside of dataset insertion, However we need to make sure it is formated correctly.
+            #processed ds is handled inside of dataset insertion, However we need to make sure it is formatted correctly.
             #processed_ds_name is not required pre-exist in the db. will insert with the dataset if not in yet
             #
             #         processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
@@ -460,26 +459,18 @@ class DBSBlockInsert :
             #
             #althrough acquisition era and processing version is not required for a dataset
             #in the schema(the schema is build this way because
-            #we need to accomdate the DBS2 data), but we impose the requirement on the API.
+            #we need to accommodate the DBS2 data), but we impose the requirement on the API.
             #So both acquisition and processing eras are required.
-            #We do the format checking after we deal with acquision era and processing era.
+            #We do the format checking after we deal with acquisition era and processing era.
             #
             #YG 12/07/2011  TK-362
 
             #3 Deal with Acquisition era
-            #import pdb
-            #pdb.set_trace()
-            aq = {}
-            if blockcontent.has_key('acquisition_era'):
-                aq = blockcontent['acquisition_era']
-            else:
-                if conn:conn.close()
-                dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Acquisition Era is required")
-            #is there acquisition?
-            if aq.has_key('acquisition_era_name') and aq.has_key('start_date'):
-                #for migraction, some of the DBS2 Acquisition does not have start_date, so insert 0.
-                if(migration) and  not aq['start_date']:
-                    aq['start_date'] = 0
+            aq = blockcontent.get('acquisition_era', {})
+            has_acquisition_era_name = aq.has_key('acquisition_era_name')
+            has_start_date = aq.has_key('start_date')
+
+            def insert_acquisition_era():
                 try:
                     #insert acquisition era into db
                     aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
@@ -490,7 +481,9 @@ class DBSBlockInsert :
                     if "ORA-01400" in str(ei) :
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert:  acquisition_era_name and start_date are required. NULL was received from user input. Please correct your data.")
+                        dbsExceptionHandler("dbsException-invalid-input2",
+                                            "BlockInsert: acquisition_era_name and start_date are required. \
+                                            NULL was received from user input. Please correct your data.")
                     #ok, already in db?
                     if (str(ei).find("ORA-00001") != -1 and str(ei).find("TUC_AQE_ACQUISITION_ERA_NAME") != -1)\
                         or str(ei).lower().find("duplicate") !=-1:
@@ -498,12 +491,24 @@ class DBSBlockInsert :
                         if dataset['acquisition_era_id'] <= 0:
                             if tran:tran.rollback()
                             if conn:conn.close()
-                            dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Check the spelling of acquisition Era name.\
-                                            the db may already have the same acquisition era, but with different casees.")
-                except Exception, ex:
+                            dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: \
+Check the spelling of acquisition Era name. The db may already have the same \
+acquisition era, but with different cases.")
+                except Exception:
                     if tran:tran.rollback()
                     if conn:conn.close()
                     raise
+
+            if has_acquisition_era_name and has_start_date:
+                insert_acquisition_era()
+
+            elif migration and not has_acquisition_era_name:
+                pass
+
+            elif migration and not aq['start_date']:
+                aq['start_date'] = 0
+                insert_acquisition_era()
+
             else:
                 if tran:tran.rollback()
                 if conn:conn.close()
@@ -544,8 +549,8 @@ class DBSBlockInsert :
                 dbsExceptionHandler('dbsException-invalid-input2', 'BlockInsert:processing version is required')
             #Make sure processed_ds_name is right format.
             #processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version
-            #In order to accomdate DBS2 data for migration, we turn off this check in migration.
-            #These will not cause any problem to none DBS2 datat because when we migration, the none DBS2 data is
+            #In order to accommodate DBS2 data for migration, we turn off this check in migration.
+            #These will not cause any problem to none DBS2 data because when we migration, the none DBS2 data is
             #already checked when they were inserted into the source dbs.  YG 7/12/2012
             if migration:
                 pass
@@ -557,7 +562,7 @@ class DBSBlockInsert :
                     dbsExceptionHandler('dbsException-invalid-input2', "BlockInsert:\
                         processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified.")
 
-            #So far so good, let's committe first 4 db acativties before going on.
+            #So far so good, let's commit first 4 db activities before going on.
             tran.commit()
         except:
             if tran:tran.rollback()
@@ -565,8 +570,6 @@ class DBSBlockInsert :
             raise
 
         #Continue for the rest.
-        #import pdb
-        #pdb.set_trace()
         tran = conn.begin()
         try:
             #5 Deal with physics gruop
