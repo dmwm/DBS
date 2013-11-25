@@ -114,18 +114,18 @@ class DBSBlockInsert :
         try:
             block['block_id'] = self.sm.increment(conn, "SEQ_BK",)
             block['dataset_id'] =  datasetId
-            block['creation_date'] = block.get('creation_date', dbsUtils().getTime())
-	    if not migration:
-		block['create_by'] = dbsUtils().getCreateBy()
-		block['last_modification_date'] = dbsUtils().getTime()
-		block['last_modified_by'] = dbsUtils().getCreateBy()
+            if not migration:
+                block['creation_date'] = dbsUtils().getTime()
+                block['create_by'] = dbsUtils().getCreateBy()
+                block['last_modification_date'] = dbsUtils().getTime()
+                block['last_modified_by'] = dbsUtils().getCreateBy()
             self.blockin.execute(conn, block, tran)
             newBlock = True
         except exceptions.IntegrityError, ex:
             if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_BK_BLOCK_NAME") != -1) or str(ex).lower().find("duplicate") != -1:
-            #not sure what happends to WMAgent: Does it try to insert a
+            #not sure what happens to WMAgent: Does it try to insert a
             #block again? YG 10/05/2010
-            #Talked with Matt N: We should stop insertng this block now.
+            #Talked with Matt N: We should stop inserting this block now.
             #This means there is some trouble.
             #Throw exception to let the up layer know. YG 11/17/2010
                 if tran:tran.rollback()
@@ -135,7 +135,7 @@ class DBSBlockInsert :
                 if tran:tran.rollback()
                 if conn:conn.close()
                 raise
-        #All Praentage will be deduced from file parentage.
+        #All Parentage will be deduced from file parentage.
         blockId = block['block_id']
         fileLumiList = []
         fileConfObjs = []
@@ -334,9 +334,9 @@ class DBSBlockInsert :
                 #global_tag is now required. YG 03/08/2011
                 try:
                     cfgid = 0
-		    if not migration:
-			m['create_by'] = dbsUtils().getCreateBy()
-			m['creation_date'] = dbsUtils().getTime()
+                    if not migration:
+                        m['create_by'] = dbsUtils().getCreateBy()
+                        m['creation_date'] = dbsUtils().getTime()
                     configObj = {"release_version": m["release_version"],
                                  "pset_hash": m["pset_hash"], "pset_name":m.get('pset_name', None),
                                  "app_name": m["app_name"],
@@ -410,9 +410,9 @@ class DBSBlockInsert :
             # Skip to the END
             try:
                 self.insertDatasetWOannex(dataset = dataset,
-                                        blockcontent = blockcontent,
-                                        otptIdList = otptIdList, conn = conn,
-                                        insertDataset = False, migration=migration)
+                                          blockcontent = blockcontent,
+                                          otptIdList = otptIdList, conn = conn,
+                                          insertDataset = False, migration=migration)
             finally:
                 if conn:conn.close()
             return datasetID
@@ -434,7 +434,7 @@ class DBSBlockInsert :
                     primds["creation_date"] = primds.get("creation_date", dbsUtils().getTime())
                     if not migration:
                         primds["create_by"] = dbsUtils().getCreateBy()
-                        self.primdsin.execute(conn, primds, tran)
+                    self.primdsin.execute(conn, primds, tran)
                 except exceptions.IntegrityError, ex:
                     if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_PDS_PRIMARY_DS_NAME") != -1)\
                         or str(ex).lower().find("duplicate") !=-1:
@@ -518,7 +518,7 @@ acquisition era, but with different cases.")
             #4 Deal with Processing era
             pera = blockcontent.get('processing_era', {})
 
-            if pera.has_key('processing_era') and pera.has_key('processing_version'):
+            if pera.has_key('processing_version'):
                 try:
                     #insert processing era into db
                     pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE")
@@ -652,12 +652,11 @@ acquisition era, but with different cases.")
                                                 dataset['dataset'])
                 if dataset['dataset_id'] <= 0:
                     dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
-                    dataset['xtcrosssection'] = dataset.get('xtcrosssection', None)
-		    if not migration:
-			dataset['last_modified_by'] = dbsUtils().getCreateBy()
-			dataset['create_by'] = dbsUtils().getCreateBy()
-			dataset['creation_date'] = dataset.get('creation_date', dbsUtils().getTime())
-			dataset['last_modification_date'] = dataset.get('last_modification_date', dbsUtils().getTime())
+                    if not migration:
+                        dataset['last_modified_by'] = dbsUtils().getCreateBy()
+                        dataset['create_by'] = dbsUtils().getCreateBy()
+                        dataset['creation_date'] = dataset.get('creation_date', dbsUtils().getTime())
+                        dataset['last_modification_date'] = dataset.get('last_modification_date', dbsUtils().getTime())
                     dataset['xtcrosssection'] = dataset.get('xtcrosssection', None)
                     dataset['prep_id'] = dataset.get('prep_id', None)
                     try:
