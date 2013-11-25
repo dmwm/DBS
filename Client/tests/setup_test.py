@@ -64,7 +64,7 @@ class TestCommand(Command):
                    ('host=', None, 'Host to run unittests')]
 
     description = """Test DBS3 Client using provided unittests, possible options are\n
-                  --unit=ClientWriter, --unittest=ClientReader or --unittest=ClientBlockWriter to run client unittests\n
+                  --unit=ClientWriter, --unit=ClientReader or --unit=ClientBlockWriter to run client unittests\n
                   --unitall to run writer, reader and bulk client unittests\n
                   --validation to run client validation tests\n
                   --deployment to run client deployment tests\n
