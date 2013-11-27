@@ -168,10 +168,9 @@ class DBSBlockInsert :
                 fileList[i]['auto_cross_section'] = fileList[i].get('auto_cross_section', None)
                 #fileList[i]['creation_date'] = fileList[i].get('creation_date', None) #see ticket 965
                 #fileList[i]['create_by'] = fileList[i].get('create_by', None)
-                #fileList[i]['last_modification_date'] = fileList[i].get('last_modification_date', dbsUtils().getTime())
-                #fileList[i]['last_modified_by'] = fileList[i].get('last_modified_by', dbsUtils().getCreateBy())
-                fileList[i]['last_modification_date'] = dbsUtils().getTime()
-                fileList[i]['last_modified_by'] = dbsUtils().getCreateBy()
+                if not migration:
+                    fileList[i]['last_modification_date'] = dbsUtils().getTime()
+                    fileList[i]['last_modified_by'] = dbsUtils().getCreateBy()
 
                 #get lumi info
                 lumi = fileList[i]['file_lumi_list']
