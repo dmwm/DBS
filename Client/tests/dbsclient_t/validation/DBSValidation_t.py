@@ -6,7 +6,7 @@ import os
 import unittest
 from dbsclient_t.utils.DBSDataProvider import DBSDataProvider
 from dbsclient_t.utils.timeout import Timeout
-from dbs.exceptions.dbsClientException import dbsClientException
+from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from dbs.apis.dbsClient import *
 import uuid
 from random import choice
@@ -352,6 +352,13 @@ class DBSValidation_t(unittest.TestCase):
                 for key, value in input.iteritems():
                     if key in non_comparable_keys:
                         continue ###do not compare id's
+                    if key in ('processing_era',): ###do compare create_by, creation_date for re-used entries
+                        for key2remove in ('create_by', 'creation_date',):
+                            try:
+                                del input[key][key2remove]
+                                del output[key][key2remove]
+                            except KeyError:
+                                pass
                     self.assertTrue(output.has_key(key))
                     check(value, output[key])
             elif isinstance(input, list):
@@ -368,7 +375,7 @@ class DBSValidation_t(unittest.TestCase):
 
         ###try to delete successfully executed migration request
         toDelete = {'migration_rqst_id': migration_request_id}
-        self.assertRaises(dbsClientException, self.migration_api.removeMigration, toDelete)
+        self.assertRaises(HTTPError, self.migration_api.removeMigration, toDelete)
 
     def test13(self):
         """test13 Migration of blocks"""
@@ -402,6 +409,13 @@ class DBSValidation_t(unittest.TestCase):
                 for key, value in input.iteritems():
                     if key in non_comparable_keys:
                         continue ###do not compare id's
+                    if key in ('processing_era',): ###do compare create_by, creation_date for re-used entries
+                        for key2remove in ('create_by', 'creation_date',):
+                            try:
+                                del input[key][key2remove]
+                                del output[key][key2remove]
+                            except KeyError:
+                                pass
                     self.assertTrue(output.has_key(key))
                     check(value, output[key])
             elif isinstance(input, list):
@@ -417,7 +431,7 @@ class DBSValidation_t(unittest.TestCase):
 
         ###try to delete successfully executed migration request
         toDelete = {'migration_rqst_id': migration_request_id}
-        self.assertRaises(dbsClientException, self.migration_api.removeMigration, toDelete)
+        self.assertRaises(HTTPError, self.migration_api.removeMigration, toDelete)
 
 
 if __name__ == "__main__":
