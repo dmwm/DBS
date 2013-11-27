@@ -1,8 +1,15 @@
-import sys, os
 import fnmatch
-from glob import glob
+import os
+import re
+import sys
 import unittest
+
 from distutils.core import setup, Command
+
+from RestClient.ErrorHandling.RestClientExceptions import HTTPError
+from RestClient.RestApi import RestApi
+from RestClient.AuthHandling.X509Auth import X509Auth
+from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
 
 def get_relative_path():
     return os.path.dirname(os.path.abspath(os.path.join(os.getcwd(), sys.argv[0])))
@@ -22,6 +29,21 @@ def get_test_names(search_path,search_pattern,base_dir):
                 module_names.append('.'.join(module_name))
                 
     return module_names
+
+def get_db_instances(url):
+    proxy = os.environ.get('SOCKS5_PROXY')
+    rest_api = RestApi(auth=X509Auth(ssl_cert=None, ssl_key=None),
+                       proxy=Socks5Proxy(proxy_url=proxy) if proxy else None)
+    request_headers =  {"Content-Type": "text/html", "Accept": "text/html"}
+    http_response = rest_api.get(url=url+'/dbs', api='', request_headers=request_headers)
+    db_instance_re = re.compile(r'^<tr><td><p><a href="(?P<dbs_instance>\S+/\S+)/\S+".*')
+    db_instances = set()
+    for line in http_response.body.split('\n'):
+        match_obj = db_instance_re.match(line)
+        if match_obj:
+            db_instances.add(match_obj.groupdict().get('dbs_instance'))
+    for db_instance in db_instances:
+        yield db_instance
 
 def create_test_suite(search_path, search_pattern, base_dir, reverse_order=True):
     TestSuite = unittest.TestSuite()
@@ -69,7 +91,7 @@ class TestCommand(Command):
                   --validation to run client validation tests\n
                   --deployment to run client deployment tests\n
                   --insert data during client deployment tests\n
-                  --cmsweb-testbed to run standarized cmsweb-testbed validation tests\n
+                  --cmsweb-testbed to run standardized cmsweb-testbed validation tests\n
                   --host= to run unittests"""
 
     def initialize_options(self):
@@ -138,12 +160,11 @@ class TestCommand(Command):
             TestSuite.addTests(create_test_suite(validation_tests, 'DBSValidation_t.py', base_dir))
 
         if self.deployment:
-            for instance in ('dev','int','prod'):
-            #for instance in ('dev',):
+            for instance in get_db_instances(url=self.host):
                 ###set environment
-                os.environ['DBS_READER_URL'] = ("%s/dbs/%s/global/DBSReader") % (self.host, instance)
-                os.environ['DBS_WRITER_URL'] = ("%s/dbs/%s/global/DBSWriter") % (self.host, instance)
-                os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/%s/global/DBSMigrate") % (self.host, instance)
+                os.environ['DBS_READER_URL'] = ("%s/dbs/%s/DBSReader") % (self.host, instance)
+                os.environ['DBS_WRITER_URL'] = ("%s/dbs/%s/DBSWriter") % (self.host, instance)
+                os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/%s/DBSMigrate") % (self.host, instance)
                 
                 TestSuite.addTests(create_deployment_test_suite(self.insert))
 
