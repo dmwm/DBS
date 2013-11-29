@@ -775,9 +775,9 @@ class DbsApi(object):
         :rtype: list of dicts
 
         """
-        validParameters = ['logical_file_name', 'block_name']
+        validParameters = ['logical_file_name', 'block_name', 'run_num']
 
-        requiredParameters = {'standalone': validParameters}
+        requiredParameters = {'standalone': ['logical_file_name', 'block_name']}
 
         checkInputParameter(method="listFileLumis", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
