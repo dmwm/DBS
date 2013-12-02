@@ -286,7 +286,7 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test047(self):
         """test47 unittestDBSClientReader_t.listRuns : basic test"""
-        self.api.listRuns()
+        self.assertRaises(HTTPError, self.api.listRuns)
 
     def test048(self):
         """test48 unittestDBSClientReader_t.listRuns : basic test"""
@@ -429,7 +429,7 @@ class DBSClientReader_t(unittest.TestCase):
     def test076b(self):
         """test76b unittestDBSClientReader_t.listFileChildren with non splitable parameter"""
         file_list = [self.testparams['parent_files'][0] for i in xrange(200)]
-        self.assertRaises(dbsClientException,self.api.listFileChildren, logical_file_names=file_list)
+        self.assertRaises(dbsClientException, self.api.listFileChildren, logical_file_names=file_list)
 
     def test076c(self):
         """test76c unittestDBSClientReader_t.listFileChildren with block_name"""
