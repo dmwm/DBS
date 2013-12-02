@@ -930,8 +930,7 @@ class DBSReaderModel(RESTModel):
     @inputChecks(run_num=(long, int, str, list), logical_file_name=str, block_name=str, dataset=str)
     def listRuns(self, run_num=-1, logical_file_name="", block_name="", dataset=""):
         """
-        API to list all runs in DBS. All parameters are optional.
-        * If you omit run_num, then all runs known to DBS will be listed
+        API to list all runs in DBS. At least one parameter is mandatory.
 
         :param logical_file_name: List all runs in the file
         :type logical_file_name: str
@@ -943,16 +942,18 @@ class DBSReaderModel(RESTModel):
         :type run_num: int, string or list
 
         """
+        if run_num==-1 and not logical_file_name and not dataset and not block_name:
+                dbsExceptionHandler("dbsException-invalid-input2",
+                                    dbsExceptionCode["dbsException-invalid-input2"],
+                                    self.logger.exception,
+                                    "run_num, logical_file_name, block_name or dataset parameter is mandatory")
         try:
-            if(logical_file_name):
+            if logical_file_name:
                 logical_file_name = logical_file_name.replace("*", "%")
-                #print ("LFN=%s\n" %logical_file_name)
-            if(block_name):
+            if block_name:
                 block_name = block_name.replace("*", "%")
-                #print("Block=%s\n" %block_name)
-            if(dataset):
+            if dataset:
                 dataset = dataset.replace("*", "%")
-                #print("ds=%s\n" %dataset)
             return self.dbsRun.listRuns(run_num, logical_file_name, block_name, dataset)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
