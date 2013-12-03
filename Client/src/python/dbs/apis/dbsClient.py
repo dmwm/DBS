@@ -1110,25 +1110,6 @@ class DbsApi(object):
         """
         return self.__callServer("serverinfo")
 
-    def updateBlockStatus(self, **kwargs):
-        """
-        API to update block status
-
-        :param block_name: block name (Required)
-        :type block_name: str
-        :param open_for_writing: open_for_writing=0 (close), open_for_writing=1 (open) (Required)
-        :type open_for_writing: str
-
-        """
-        validParameters = ['block_name', 'open_for_writing']
-
-        requiredParameters = {'forced': validParameters}
-
-        checkInputParameter(method="updateBlockStatus", parameters=kwargs.keys(), validParameters=validParameters,
-                            requiredParameters=requiredParameters)
-
-        return self.__callServer("blocks", params=kwargs, callmethod='PUT')
-
     def updateAcqEraEndDate(self, **kwargs):
         """
         API to update the end_date of an acquisition era
@@ -1147,6 +1128,25 @@ class DbsApi(object):
                             requiredParameters=requiredParameters)
 
         return self.__callServer("acquisitioneras", params=kwargs, callmethod='PUT')
+
+    def updateBlockStatus(self, **kwargs):
+        """
+        API to update block status
+
+        :param block_name: block name (Required)
+        :type block_name: str
+        :param open_for_writing: open_for_writing=0 (close), open_for_writing=1 (open) (Required)
+        :type open_for_writing: str
+
+        """
+        validParameters = ['block_name', 'open_for_writing']
+
+        requiredParameters = {'forced': validParameters}
+
+        checkInputParameter(method="updateBlockStatus", parameters=kwargs.keys(), validParameters=validParameters,
+                            requiredParameters=requiredParameters)
+
+        return self.__callServer("blocks", params=kwargs, callmethod='PUT')
 
     def updateBlockSiteName(self, **kwargs):
         """

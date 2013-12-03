@@ -74,10 +74,10 @@ class checkException(object):
     def __call__(self,func,*args,**kwargs):
         def wrapper(*args,**kwargs):
             out = None
+            test_class = args[0]
             try:
                 out = func(*args,**kwargs)
             except Exception, ex:
-                test_class = args[0]
                 if self.msg not in ex.args[0]:
                     test_class.fail("Exception was expected and was not raised")
             else:
@@ -642,8 +642,8 @@ class DBSWriterModel_t(unittest.TestCase):
                         'xtcrosssection': 123, 'primary_ds_type': primary_ds_type, 'data_tier_name': tier,
                         'prep_id':prep_id}
 
-        block_dict = data = {'block_name': block,
-                             'origin_site_name': site}
+        block_dict = {'block_name': block,
+                      'origin_site_name': site}
 
         processing_dict = {'processing_version': processing_version,
                            'description':'this-is-a-test'}

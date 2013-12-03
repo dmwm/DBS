@@ -296,9 +296,9 @@ class DBSWriterModel(DBSReaderModel):
         :key origin_site_name: Origin Site Name (Required)
 
         """
-	try:
-	    body = request.body.read()
-	    indata = cjson.decode(body)
+        try:
+            body = request.body.read()
+            indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("block",indata)
             self.dbsBlock.insertBlock(indata)
         except dbsException as de:
@@ -333,10 +333,10 @@ class DBSWriterModel(DBSReaderModel):
         :key file_output_config_list: (optional, default = []) [{'app_name':..., 'release_version':..., 'pset_hash':...., output_module_label':...},{}.....]
 
         """
-	if qInserts in (False, 'False'): qInserts=False
-	try:
-	    body = request.body.read()
-	    indata = cjson.decode(body)["files"]
+        if qInserts in (False, 'False'): qInserts=False
+        try:
+            body = request.body.read()
+            indata = cjson.decode(body)["files"]
             if not isinstance(indata, (list,dict)):
                  dbsExceptionHandler("dbsException-invalid-input", "Invalid Input DataType", self.logger.exception, \
                                       "insertFile expects input as list or dirc")
@@ -465,7 +465,7 @@ class DBSWriterModel(DBSReaderModel):
         :key data_tier_name: Data Tier that needs to be inserted
 
         """
-      	try:
+        try:
             body = request.body.read()
             indata = cjson.decode(body)
 

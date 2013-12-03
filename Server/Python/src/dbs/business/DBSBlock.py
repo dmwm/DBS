@@ -140,7 +140,6 @@ class DBSBlock:
             if conn:conn.close()
             raise ex
         finally:
-            if trans:trans.rollback()
             if conn:conn.close()
 
     def updateSiteName(self, block_name, origin_site_name):
