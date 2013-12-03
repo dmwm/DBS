@@ -283,6 +283,13 @@ class DBSClientReader_t(unittest.TestCase):
         """test46 unittestDBSClientReader_t.listFileLumis: basic test"""
         self.api.listFileLumis(logical_file_name="/store/mc/does/not/EXIST/NotReally/0815/doesnotexist.root")
 
+    def test046a(self):
+        """test46a unittestDBSClientReader_t.listFileLumis: basic test"""
+        self.api.listFileLumis(logical_file_name=self.testparams['files'][0], run_num=self.testparams['runs'][0])
+
+    def test046b(self):
+        """test46b unittestDBSClientReader_t.listFileLumis: basic test"""
+        self.api.listFileLumis(block_name=self.testparams['block'], run_num=self.testparams['runs'][0])
 
     def test047(self):
         """test47 unittestDBSClientReader_t.listRuns : basic test"""
