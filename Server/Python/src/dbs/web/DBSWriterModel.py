@@ -76,7 +76,7 @@ class DBSWriterModel(DBSReaderModel):
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('PUT', 'datasets', self.updateDataset, args=['dataset', 'dataset_access_type'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
-        self._addMethod('PUT', 'blocks', self.updateBlock,args=['block_name', 'open_for_writing'],
+        self._addMethod('PUT', 'blocks', self.updateBlock,args=['block_name', 'open_for_writing', 'origin_site_name'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'datatiers', self.insertDataTier, secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
@@ -429,8 +429,8 @@ class DBSWriterModel(DBSReaderModel):
             sError = "DBSWriterModel\updateDataset. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(block_name=str, open_for_writing=(int,str))
-    def updateBlock(self, block_name="", open_for_writing=0):
+    @inputChecks(block_name=str, open_for_writing=(int,str), origin_site_name=str)
+    def updateBlock(self, block_name="", open_for_writing=-1, origin_site_name=""):
         """
         API to update block status
 
@@ -440,15 +440,21 @@ class DBSWriterModel(DBSReaderModel):
         :type open_for_writing: str
 
         """
+        if not block_name:
+            dbsExceptionHandler('dbsException-invalid-input', "DBSBlock/updateBlock. Invalid block_name", self.logger)
         try:
-            self.dbsBlock.updateStatus(block_name, open_for_writing)
+            if open_for_writing != -1:
+                self.dbsBlock.updateStatus(block_name, open_for_writing)
+            if origin_site_name:
+                self.dbsBlock.updateSiteName(block_name, origin_site_name)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
         except Exception, ex:
             sError = "DBSWriterModel\updateStatus. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
-            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'],
+                                self.logger.exception, sError)
 
     def insertDataTier(self):
         """
