@@ -1013,8 +1013,7 @@ class DbsApi(object):
 
     def listRuns(self, **kwargs):
         """
-        API to list all runs in DBS. All parameters are optional.
-        * If you omit run, then all runs known to DBS will be listed
+        API to list all runs in DBS. At least one parameter is mandatory.
 
         :param logical_file_name: List all runs in the file
         :type logical_file_name: str
@@ -1028,7 +1027,10 @@ class DbsApi(object):
         """
         validParameters = ['run_num', 'logical_file_name', 'block_name', 'dataset']
 
-        checkInputParameter(method="listRuns", parameters=kwargs.keys(), validParameters=validParameters)
+        requiredParameters = {'multiple': validParameters}
+
+        checkInputParameter(method="listRuns", parameters=kwargs.keys(), validParameters=validParameters,
+                            requiredParameters=requiredParameters)
 
         return self.__callServer("runs", params=kwargs)
 
