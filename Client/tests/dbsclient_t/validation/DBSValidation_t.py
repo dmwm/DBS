@@ -433,6 +433,18 @@ class DBSValidation_t(unittest.TestCase):
         toDelete = {'migration_rqst_id': migration_request_id}
         self.assertRaises(HTTPError, self.migration_api.removeMigration, toDelete)
 
+    def test14(self):
+        """test14: Test to update block information"""
+        block_in_dbs = self.api.listBlocks(block_name=block, detail=True)[0]
+        new_open_for_writing = int(not block_in_dbs['open_for_writing'])
+        new_site = "grid-srm.physik.rwth-aachen.de"
+        self.api.updateBlockStatus(block_name=block, open_for_writing=new_open_for_writing)
+        self.api.updateBlockSiteName(block_name=block, origin_site_name=new_site)
+
+        ###validate
+        block_in_dbs = self.api.listBlocks(block_name=block, detail=True)[0]
+        self.assertEqual(block_in_dbs['origin_site_name'], new_site)
+        self.assertEqual(block_in_dbs['open_for_writing'], new_open_for_writing)
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSValidation_t)
