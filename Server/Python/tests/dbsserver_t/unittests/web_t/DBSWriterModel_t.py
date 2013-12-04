@@ -625,6 +625,14 @@ class DBSWriterModel_t(unittest.TestCase):
         """test11b: web.DBSWriterModel.updateBlock: missing data should raise exception"""
         api.update('blocks')
 
+    def test11c(self):
+        """test11c: web.DBSWriterModel.updateBlock: origin_site_name test"""
+        api.update('blocks', block_name=block, origin_site_name=site)
+
+    def test11d(self):
+        """test11d: web.DBSWriterModel.updateBlock: origin_site_name and open_for_writing test"""
+        api.update('blocks', block_name=block, origin_site_name=site, open_for_writing=1)
+
     @checkException("already exists")
     def test12a(self):
         """test12a: web.DBSWriterModel.insertBulkBlock: existing block will raise an exception"""
