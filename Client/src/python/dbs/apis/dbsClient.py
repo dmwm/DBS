@@ -1127,9 +1127,6 @@ class DbsApi(object):
         checkInputParameter(method="updateBlockStatus", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
-        parts = kwargs['block_name'].split('#')
-        kwargs['block_name'] = parts[0]+urllib.quote_plus('#')+parts[1]
-
         return self.__callServer("blocks", params=kwargs, callmethod='PUT')
 
     def updateAcqEraEndDate(self, **kwargs):
@@ -1150,6 +1147,25 @@ class DbsApi(object):
                             requiredParameters=requiredParameters)
 
         return self.__callServer("acquisitioneras", params=kwargs, callmethod='PUT')
+
+    def updateBlockSiteName(self, **kwargs):
+        """
+        API to update origin_site_name of a block
+
+        :param block_name: block name (Required)
+        :type block_name: str
+        :param origin_site_name: New origin site name of the block (Required)
+        :type open_for_writing: str
+
+        """
+        validParameters = ['block_name', 'origin_site_name']
+
+        requiredParameters = {'forced': validParameters}
+
+        checkInputParameter(method="updateBlockSiteName", parameters=kwargs.keys(), validParameters=validParameters,
+                            requiredParameters=requiredParameters)
+
+        return self.__callServer("blocks", params=kwargs, callmethod='PUT')
 
     def updateDatasetType(self, **kwargs):
         """
