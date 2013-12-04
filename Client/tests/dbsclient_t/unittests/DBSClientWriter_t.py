@@ -271,9 +271,17 @@ class DBSClientWriter_t(unittest.TestCase):
         logical_file_name = "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, 1)
         self.api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
 
-    def test21(self):
-        """test21 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
+    def test20(self):
+        """test20 web.DBSClientWriter.updateDatasetType: should be able to update dataset type"""
         self.api.updateDatasetType(dataset=dataset, dataset_access_type="VALID")
+
+    def test21(self):
+        """test21 web.DBSClientWriter.updateBlockStatus: should be able to update block status"""
+        self.api.updateBlockStatus(block_name=block, open_for_writing=0)
+
+    def test22(self):
+        """test22 web.DBSClientWriter.updateBlockSiteName: should be able to update origin_site_name"""
+        self.api.updateBlockSiteName(block_name=block, origin_site_name=site)
 
     def test208(self):
         """test208 generating the output file for reader test"""
