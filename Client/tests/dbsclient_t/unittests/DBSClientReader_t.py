@@ -293,7 +293,7 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test047(self):
         """test47 unittestDBSClientReader_t.listRuns : basic test"""
-        self.assertRaises(HTTPError, self.api.listRuns)
+        self.assertRaises(dbsClientException, self.api.listRuns)
 
     def test048(self):
         """test48 unittestDBSClientReader_t.listRuns : basic test"""
