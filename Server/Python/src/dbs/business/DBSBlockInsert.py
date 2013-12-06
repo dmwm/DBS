@@ -503,7 +503,8 @@ acquisition era, but with different cases.")
 
             elif migration and not has_acquisition_era_name:
                 #if no processing era is available, for example for old DBS 2 data, skip insertion
-                pass
+                aq['acquisition_era_id'] = None
+                dataset['acquisition_era_id'] = None
 
             elif migration and not aq['start_date']:
                 aq['start_date'] = 0
@@ -540,7 +541,8 @@ acquisition era, but with different cases.")
                     raise
             elif migration:
                 #if no processing era is available, for example for old DBS 2 data, skip insertion
-                pass
+                pera['processing_era_id'] = None
+                dataset['processing_era_id'] = None
             else:
                 if tran: tran.rollback()
                 if conn: conn.close()
