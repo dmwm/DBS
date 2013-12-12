@@ -403,7 +403,7 @@ class DBSSqlQueries(object):
                         JOIN {ownerDBS2}.PERSON PS22 ON FS2.LASTMODIFIEDBY=PS22.ID
                         JOIN {ownerDBS2}.BLOCK BL2 ON FS2.BLOCK=BL2.ID
                         JOIN {ownerDBS2}.FILETYPE FT2 ON FT2.ID=FS2.FILETYPE
-                        JOIN {db_owner_dbs2}.FILESTATUS FST ON FST.ID=FS2.FILESTATUS
+                        JOIN {ownerDBS2}.FILESTATUS FST ON FST.ID=FS2.FILESTATUS
                         )
                         GROUP BY FILE_ID, LOGICAL_FILE_NAME, IS_FILE_VALID,
                         DATASET_ID, DATASET,
@@ -792,9 +792,19 @@ class DBSSqlQueries(object):
         if not binds:
             binds = {}
 
-        result = self.dbFormatter.formatCursor(cursors[0])
-
-        connection.close()
+        connection = self.dbi.connection()
+        try:
+            cursors = self.dbi.processData(self.sqlDict[query],
+                                           binds,
+                                           connection,
+                                           transaction=False,
+                                           returnCursor=True)
+        except:
+            raise
+        else:
+            result = self.dbFormatter.formatCursor(cursors[0])
+        finally:
+            connection.close()
 
         if sort:
             return sorted(result, key=lambda entry: entry[self.sqlPrimaryKey[query]])
