@@ -171,7 +171,7 @@ validationFunction = {
     'logical_file_name':lfn,
     'file_parent_lfn':lfn,
     'primary_ds_name':primdataset,
-    'processed_ds_name':procdataset,
+    'processed_ds_name': lambda proc_ds: procdataset(proc_ds) or userprocdataset(proc_ds),
     'processing_version':procversion,
     'acquisition_era_name':acqname,
     'global_tag':globalTag,
