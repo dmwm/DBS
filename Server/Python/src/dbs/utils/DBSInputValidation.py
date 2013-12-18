@@ -171,14 +171,14 @@ validationFunction = {
     'logical_file_name':lfn,
     'file_parent_lfn':lfn,
     'primary_ds_name':primdataset,
-    'processed_ds_name':procdataset,
+    'processed_ds_name': lambda proc_ds: procdataset(proc_ds) or userprocdataset(proc_ds),
     'processing_version':procversion,
     'acquisition_era_name':acqname,
     'global_tag':globalTag,
     'migration_url':validateUrl
     }
 
-validationFunctionWwildcard = {
+validationFunctionWildcard = {
     'block_name':searchblock,
     'dataset':searchdataset,
     }
@@ -230,7 +230,7 @@ def validateStringInput(input_key,input_data):
     """
     func = None
     if '*' in input_data or '%' in input_data:
-        func = validationFunctionWwildcard.get(input_key)
+        func = validationFunctionWildcard.get(input_key)
         if func is None:
             func = searchstr
     elif input_key == 'migration_input' :
