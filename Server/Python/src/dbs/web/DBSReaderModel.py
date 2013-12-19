@@ -29,7 +29,6 @@ from dbs.business.DBSOutputConfig import DBSOutputConfig
 from dbs.business.DBSProcessingEra import DBSProcessingEra
 from dbs.business.DBSRun import DBSRun
 from dbs.business.DBSDataType import DBSDataType
-from dbs.business.DBSStatus import DBSStatus
 from dbs.business.DBSBlockInsert import DBSBlockInsert
 from dbs.business.DBSReleaseVersion import DBSReleaseVersion
 from dbs.business.DBSDatasetAccessType import DBSDatasetAccessType
@@ -40,7 +39,6 @@ from dbs.utils.DBSInputValidation import *
 from dbs.utils.DBSTransformInputType import transformInputType, run_tuple
 from WMCore.DAOFactory import DAOFactory
 
-__server__version__ = "$Name:  $"
 
 #Necessary for sphinx documentation and server side unit tests.
 if not getattr(tools,"secmodv2",None):
@@ -72,7 +70,7 @@ class DBSReaderModel(RESTModel):
 
         RESTModel.__init__(self, config)
         self.dbsUtils2 = dbsUtils()
-        self.version = self.getServerVersion()
+        self.version = config.database.version
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 
         self.daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=dbowner)
@@ -139,24 +137,10 @@ class DBSReaderModel(RESTModel):
         self.dbsSite = DBSSite(self.logger, self.dbi, dbowner)
         self.dbsRun = DBSRun(self.logger, self.dbi, dbowner)
         self.dbsDataType = DBSDataType(self.logger, self.dbi, dbowner)
-        self.dbsStatus = DBSStatus(self.logger, self.dbi, dbowner)
         self.dbsBlockInsert = DBSBlockInsert(self.logger, self.dbi, dbowner)
         self.dbsReleaseVersion = DBSReleaseVersion(self.logger, self.dbi, dbowner)
         self.dbsDatasetAccessType = DBSDatasetAccessType(self.logger, self.dbi, dbowner)
         self.dbsPhysicsGroup = DBSPhysicsGroup(self.logger, self.dbi, dbowner)
-
-    def getServerVersion(self):
-        """
-        API reading the __version__ tag and determines the version of the DBS Server
-
-        :return: Return the version of the DBS Server
-        :rtype: str
-
-        """
-        version = __server__version__.replace("$Name: ", "")
-        version = version.replace("$", "")
-        version = version.strip()
-        return version
 
     def getHelp(self, call=""):
         """
@@ -181,15 +165,11 @@ class DBSReaderModel(RESTModel):
         Method that provides information about DBS Server to the clients
         The information includes
 
-        :return: Server Version - CVS Tag, Schema Version - Version of Schema this DBS instance is working with, ETC - TBD
-        :rtype: dictionary containing tagged_version, schema, and components keys
+        :return: Server Version
+        :rtype: dictionary containing dbs_version
 
         """
-        ret = {}
-        ret["tagged_version"] = self.getServerVersion()
-        ret["schema"] = self.dbsStatus.getSchemaStatus()
-        ret["components"] = self.dbsStatus.getComponentStatus()
-        return ret
+        return dict(dbs_version=self.version)
 
     @inputChecks(primary_ds_name=str, primary_ds_type=str)
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
