@@ -10,30 +10,30 @@ class DBSSqlQueries(object):
         dbFactory = DBFactory(logger, connectUrl, options={})
         self.dbi = dbFactory.connect()
 
-        self.dbFormatter = DBFormatter(logger,self.dbi)
+        self.dbFormatter = DBFormatter(logger, self.dbi)
 
-        self.sqlPrimaryKey = {'AcquisitionEras':'acquisition_era_name',
-                              'ApplicationExecutables':'app_exec_id',
-                              'Block':'block_id',
-                              'BlockParents':'this_block_id',
-                              'Dataset':'dataset_id',
-                              'DatasetAccessTypes':'dataset_access_type_id',
-                              'DatasetOutputModConfigs':'ds_output_mod_conf_id',
-                              'DatasetParents':'this_dataset_id',
-                              'DatasetRuns':'dataset_run_id',
-                              'DataTier':'data_tier_id',
-                              'Files':'file_id',
-                              'FileDataTypes':'file_type_id',
-                              'FileLumis':'file_lumi_id',
-                              'FileOutputModConfigs':'file_output_config_id',
-                              'FileParents':'this_file_id',
-                              'OutputModule':'output_mod_config_id',
-                              'ParametersetHashes':'parameter_set_hash_id',
-                              'PhysicsGroups':'physics_group_id',
-                              'PrimaryDS':'primary_ds_id',
-                              'PrimaryDSTypes':'primary_ds_type_id',
-                              'ProcessedDatasets':'processed_ds_name',
-                              'ReleaseVersions':'release_version_id'}
+        self.sqlPrimaryKey = {'AcquisitionEras': 'acquisition_era_name',
+                              'ApplicationExecutables': 'app_exec_id',
+                              'Block': 'block_id',
+                              'BlockParents': 'this_block_id',
+                              'Dataset': 'dataset_id',
+                              'DatasetAccessTypes': 'dataset_access_type_id',
+                              'DatasetOutputModConfigs': 'ds_output_mod_conf_id',
+                              'DatasetParents': 'this_dataset_id',
+                              'DatasetRuns': 'dataset_run_id',
+                              'DataTier': 'data_tier_id',
+                              'Files': 'file_id',
+                              'FileDataTypes': 'file_type_id',
+                              'FileLumis': 'file_lumi_id',
+                              'FileOutputModConfigs': 'file_output_config_id',
+                              'FileParents': 'this_file_id',
+                              'OutputModule': 'output_mod_config_id',
+                              'ParametersetHashes': 'parameter_set_hash_id',
+                              'PhysicsGroups': 'physics_group_id',
+                              'PrimaryDS': 'primary_ds_id',
+                              'PrimaryDSTypes': 'primary_ds_type_id',
+                              'ProcessedDatasets': 'processed_ds_name',
+                              'ReleaseVersions': 'release_version_id'}
 
         self.sqlDict = {'AcquisitionEras':
                         """SELECT ACQUISITION_ERA_NAME,
@@ -303,7 +303,7 @@ class DBSSqlQueries(object):
                         HAVING COUNT(*) <> 2
                         ORDER BY DATASET_ACCESS_TYPE_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
-                         ##############################################
+                        ##############################################
                         'DatasetOutputModConfigs':
                         """SELECT DS_OUTPUT_MOD_CONF_ID,
                         DATASET_ID,
@@ -403,7 +403,7 @@ class DBSSqlQueries(object):
                         JOIN {ownerDBS2}.PERSON PS22 ON FS2.LASTMODIFIEDBY=PS22.ID
                         JOIN {ownerDBS2}.BLOCK BL2 ON FS2.BLOCK=BL2.ID
                         JOIN {ownerDBS2}.FILETYPE FT2 ON FT2.ID=FS2.FILETYPE
-                        JOIN {db_owner_dbs2}.FILESTATUS FST ON FST.ID=FS2.FILESTATUS
+                        JOIN {ownerDBS2}.FILESTATUS FST ON FST.ID=FS2.FILESTATUS
                         )
                         GROUP BY FILE_ID, LOGICAL_FILE_NAME, IS_FILE_VALID,
                         DATASET_ID, DATASET,
@@ -697,42 +697,42 @@ class DBSSqlQueries(object):
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         }
 
-    def acquisitionEras(self,sort=True):
-        return self._queryDB('AcquisitionEras',sort=sort)   
+    def acquisitionEras(self, sort=True):
+        return self._queryDB('AcquisitionEras', sort=sort)
 
-    def applicationExecutables(self,sort=True):
-        return self._queryDB('ApplicationExecutables',sort=sort)
+    def applicationExecutables(self, sort=True):
+        return self._queryDB('ApplicationExecutables', sort=sort)
               
-    def block(self,sort=True):
-        return self._queryDB('Block',sort=sort)
+    def block(self, sort=True):
+        return self._queryDB('Block', sort=sort)
 
-    def blockParents(self,sort=True):
-        return self._queryDB('BlockParents',sort=sort)
+    def blockParents(self, sort=True):
+        return self._queryDB('BlockParents', sort=sort)
 
-    def dataTier(self,sort=True):
-        return self._queryDB('DataTier',sort=sort)
+    def dataTier(self, sort=True):
+        return self._queryDB('DataTier', sort=sort)
 
-    def dataset(self,sort=True):
-        return self._queryDB('Dataset',sort=sort)
+    def dataset(self, sort=True):
+        return self._queryDB('Dataset', sort=sort)
 
-    def datasetAccessTypes(self,sort=True):
-        return self._queryDB('DatasetAccessTypes',sort=sort)
+    def datasetAccessTypes(self, sort=True):
+        return self._queryDB('DatasetAccessTypes', sort=sort)
 
-    def datasetOutputModConfigs(self,sort=True):
-        return self._queryDB('DatasetOutputModConfigs',sort=sort)
+    def datasetOutputModConfigs(self, sort=True):
+        return self._queryDB('DatasetOutputModConfigs', sort=sort)
 
-    def datasetParents(self,sort=True):
-        return self._queryDB('DatasetParents',sort=sort)
+    def datasetParents(self, sort=True):
+        return self._queryDB('DatasetParents', sort=sort)
 
-    def file(self,sort=True):
-        return self._queryDB('File',sort=sort)
+    def file(self, sort=True):
+        return self._queryDB('File', sort=sort)
 
-    def fileDataTypes(self,sort=True):
-        return self._queryDB('FileDataTypes',sort=sort)     
+    def fileDataTypes(self, sort=True):
+        return self._queryDB('FileDataTypes', sort=sort)
 
-    def fileLumis(self,sort=True,split=None):
-        if isinstance(split,int):
-            result = self._queryDB('FileLumisMinMax',sort=False)
+    def fileLumis(self, sort=True, split=None):
+        if isinstance(split, int):
+            result = self._queryDB('FileLumisMinMax', sort=False)
 
             if not len(result):
                 return None
@@ -749,59 +749,64 @@ class DBSSqlQueries(object):
 
                 print "Progress: %i" % (int(float(i*stepwidth*100)/float(max_id-min_id))) 
 
-                if i!=(split-1):
-                    bind_dict = {"min_id":start, "max_id":start+stepwidth}
+                if i != (split-1):
+                    bind_dict = {"min_id": start, "max_id": start+stepwidth}
                     retval += (self._queryDB('FileLumisSplited', binds=bind_dict, sort=sort))
                 else:
-                    bind_dict = {"min_id":min_id+(i*stepwidth), "max_id":max_id}
-                    retval += (self._queryDB('FileLumisSplited',binds=bind_dict, sort=sort))
+                    bind_dict = {"min_id": min_id+(i*stepwidth), "max_id": max_id}
+                    retval += (self._queryDB('FileLumisSplited', binds=bind_dict, sort=sort))
 
             return retval
 
         else:
-            return self._queryDB('FileLumis',sort=sort)            
+            return self._queryDB('FileLumis', sort=sort)
 
-    def fileOutputModConfigs(self,sort=True):
-        return self._queryDB('FileOutputModConfigs',sort=sort)
+    def fileOutputModConfigs(self, sort=True):
+        return self._queryDB('FileOutputModConfigs', sort=sort)
 
-    def fileParents(self,sort=True):
-        return self._queryDB('FileParents',sort=sort)
+    def fileParents(self, sort=True):
+        return self._queryDB('FileParents', sort=sort)
 
-    def outputModuleConfig(self,sort=True):
-        return self._queryDB('OutputModule',sort=sort)
+    def outputModuleConfig(self, sort=True):
+        return self._queryDB('OutputModule', sort=sort)
 
-    def parametersetHashes(self,sort=True):
-        return self._queryDB('ParametersetHashes',sort=sort)
+    def parametersetHashes(self, sort=True):
+        return self._queryDB('ParametersetHashes', sort=sort)
 
-    def physicsGroups(self,sort=True):
-        return self._queryDB('PhysicsGroups',sort=sort)
+    def physicsGroups(self, sort=True):
+        return self._queryDB('PhysicsGroups', sort=sort)
 
-    def primaryDataset(self,sort=True):
-        return self._queryDB('PrimaryDS',sort=sort)
+    def primaryDataset(self, sort=True):
+        return self._queryDB('PrimaryDS', sort=sort)
 
-    def primaryDSTypes(self,sort=True):
-        return self._queryDB('PrimaryDSTypes')
+    def primaryDSTypes(self, sort=True):
+        return self._queryDB('PrimaryDSTypes', sort=sort)
 
-    def processedDatasets(self,sort=True):
-        return self._queryDB('ProcessedDatasets',sort=sort)
+    def processedDatasets(self, sort=True):
+        return self._queryDB('ProcessedDatasets', sort=sort)
 
-    def releaseVersions(self,sort=True):
-        return self._queryDB('ReleaseVersions',sort=sort)
+    def releaseVersions(self, sort=True):
+        return self._queryDB('ReleaseVersions', sort=sort)
     
-    def _queryDB(self,query,binds={},sort=True):
+    def _queryDB(self, query, binds=None, sort=True):
+        if not binds:
+            binds = {}
+
         connection = self.dbi.connection()
-
-        cursors = self.dbi.processData(self.sqlDict[query],
-                                       binds,
-                                       connection,
-                                       transaction=False,
-                                       returnCursor=True)
-
-        result = self.dbFormatter.formatCursor(cursors[0])
-
-        connection.close()
+        try:
+            cursors = self.dbi.processData(self.sqlDict[query],
+                                           binds,
+                                           connection,
+                                           transaction=False,
+                                           returnCursor=True)
+        except:
+            raise
+        else:
+            result = self.dbFormatter.formatCursor(cursors[0])
+        finally:
+            connection.close()
 
         if sort:
-            return sorted(result,key=lambda entry: entry[self.sqlPrimaryKey[query]])
+            return sorted(result, key=lambda entry: entry[self.sqlPrimaryKey[query]])
         else:
             return result
