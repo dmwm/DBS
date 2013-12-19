@@ -684,7 +684,7 @@ acquisition era, but with different cases.")
                         raise
 
             #9 Fill Dataset Parentage
-            #All parentage are deduced from file parenttage.
+            #All parentage are deduced from file parentage.
 
             #10 Before we commit, make dataset and output module configuration
             #mapping.  We have to try to fill the map even if dataset is
@@ -713,11 +713,28 @@ acquisition era, but with different cases.")
                     raise
             #Now commit everything.
             tran.commit()
-        except exceptions.IntegrityError:
+        except exceptions.IntegrityError as ei:
             # Then is it already in the database?
             # Not really. We have to check it again. YG Jan 17, 2013
-            #FIXME
-            pass
+            # we don't check the unique key here, since there are more than one unique key might
+            # be violated: such as data_tier, processed_dataset, dataset_access_types.
+            if str(ei).find("ORA-00001") != -1 or str(ei).lower().find("duplicate")!=-1:
+                # For now, we assume most cases are the same dataset was instered by different thread. If not,
+                # one has to call the insert dataset again. But we think this is a rare case and let the second
+                # DBSBlockInsert call fix it if it happens.
+                if conn.closed:
+                    conn = self.dbi.connection()
+                dataset_id = self.datasetid.execute(conn, dataset['dataset'])
+                if dataset_id <= 0:
+                    dbsExceptionHandler('dbsException-conflict-data',
+                                        'Dataset not yet inserted by concurrent insert',
+                                        self.logger.exception,
+                                        'Dataset not yet inserted by concurrent insert')
+
+                else:
+                    dataset['dataset_id'] = dataset_id
+            else:
+                raise
         except Exception, ex:
             if tran:tran.rollback()
             if conn:conn.close()
