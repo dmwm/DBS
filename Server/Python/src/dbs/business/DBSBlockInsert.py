@@ -66,8 +66,6 @@ class DBSBlockInsert :
         self.buffinddups    = daofactory(classname="FileBuffer.FindDuplicates")
         self.bufdeletedups  = daofactory(classname=
                                             "FileBuffer.DeleteDuplicates")
-        self.compstatusin   = daofactory(classname="ComponentStatus.Insert")
-        self.compstatusup   = daofactory(classname="ComponentStatus.Update")
         self.otptModCfgin   = daofactory(classname="OutputModuleConfig.Insert")
         self.releaseVin     = daofactory(classname="ReleaseVersion.Insert")
         self.psetHashin     = daofactory(classname="ParameterSetHashe.Insert")
