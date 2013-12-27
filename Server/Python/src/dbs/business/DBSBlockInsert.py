@@ -661,20 +661,19 @@ acquisition era, but with different cases.")
                     try:
                         self.datasetin.execute(conn, dataset, tran)
                     except exceptions.IntegrityError, ei:
-                        if (str(ei).find("ORA-00001") != -1 and str(ei).find("TUC_DS_DATASET") != -1) or\
-                            str(ei).lower().find("duplicate") !=-1:
+                        if str(ei).find("ORA-00001") != -1 or str(ei).lower().find("duplicate") !=-1:
                             dataset['dataset_id'] = self.datasetid.execute(conn,dataset['dataset'])
                             if dataset['dataset_id'] <= 0:
                                 if tran:tran.rollback()
                                 if conn:conn.close()
-                                dbsExceptionHandler(message='InsertDataset Error',
-                                                    logger=self.logger,
-                                                    serverError="InsertDataset: " + str(ei))
+                                dbsExceptionHandler('dbsException-conflict-data',
+                                                    'Dataset not yet inserted by concurrent insert. ',
+                                                    self.logger.exception,
+                                                    'Dataset not yet inserted by concurrent insert. '+ str(ei))
                         else:
                             if tran: tran.rollback()
                             if conn: conn.close()
                             raise
-                        #
                     except Exception:
                         #should catch all above exception to rollback. YG Jan 17, 2013
                         if tran:tran.rollback()
