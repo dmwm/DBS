@@ -69,7 +69,6 @@ systems = \
                   'dbs.dao.Oracle.BlockParent',
                   'dbs.dao.Oracle.BlockSite',
                   'dbs.dao.Oracle.BranchHashe',
-                  'dbs.dao.Oracle.ComponentStatus',
                   'dbs.dao.Oracle.Dataset',
                   'dbs.dao.Oracle.DatasetOutputMod_config',
                   'dbs.dao.Oracle.DatasetParent',
