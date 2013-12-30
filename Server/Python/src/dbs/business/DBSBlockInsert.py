@@ -129,10 +129,21 @@ class DBSBlockInsert :
                 if tran:tran.rollback()
                 if conn:conn.close()
                 dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertBlock. Block %s already exists." % (block['block_name']))
+            elif str(ex).find("ORA-01400") > -1:
+                if tran:tran.rollback()
+                if conn:conn.close()
+                dbsExceptionHandler('dbsException-missing-data',
+                    'Missing data when insert Blocks. ',
+                    self.logger.exception,
+                    'Missing data when insert Blocks. '+ str(ex))
             else:
                 if tran:tran.rollback()
                 if conn:conn.close()
-                raise
+                dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert Blocks. ',
+                            self.logger.exception,
+                            'Invalid data when insert Blocks. '+ str(ex))
+
         #All Parentage will be deduced from file parentage.
         blockId = block['block_id']
         fileLumiList = []
@@ -251,14 +262,21 @@ class DBSBlockInsert :
                     if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_BP"))\
                          or str(ex).lower().find("duplicate") != -1:
                         pass
-                    elif str(ex).find("ORA-01400") != -1:
+                    elif str(ex).find("ORA-01400") > -1:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        raise
+                        dbsExceptionHandler('dbsException-missing-data',
+                            'Missing data when insert Block_Parents. ',
+                            self.logger.exception,
+                            'Missing data when insert Block_Parents. '+ str(ex))
                     else:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        raise
+                        dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert Block_Parents. ',
+                            self.logger.exception,
+                            'Invalid data when insert Block_Parents. '+ str(ex))
+
             for k in range(dsk):
                 try:
                     self.dsparentin2.execute(conn, dsParentList[k], transaction=tran)
@@ -266,14 +284,17 @@ class DBSBlockInsert :
                     if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP"))\
                         or str(ex).lower().find("duplicate") != -1:
                         pass
-                    elif str(ex).find("ORA-01400") != -1:
+                    elif str(ex).find("ORA-01400") > -1:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        dbsExceptionHandler("dbsException-missing-data","Failed to insert file. IntegrityError in DB", self.log, str(ex))
+                        dbsExceptionHandler("dbsException-missing-data"," Missing data when inserting to dataset_parents. ", self.logger.exception, str(ex))
                     else:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        raise
+                        dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert Dataset_Parents. ',
+                            self.logger.exception,
+                            'Invalid data when insert Dataset_Parents. '+ str(ex))
             #finally, commit everything for file.
             if tran:tran.commit()
             if conn:conn.close()
@@ -360,10 +381,28 @@ class DBSBlockInsert :
                                 self.otptModCfgin.execute(conn, configObj, tran)
                                 tran.commit()
                                 tran = None
-                            except exceptions, ex2:
-                                if tran:tran.rollback()
-                                if conn:conn.close()
-                                raise ex2
+                            except exceptions.IntegrityError, ex:
+                                if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_OMC_1"))\
+                                        or str(ex).lower().find("duplicate") != -1:
+                                    pass
+                                else:
+                                    if tran:tran.rollback()
+                                    if conn:conn.close()
+                                    dbsExceptionHandler('dbsException-invalid-input2',
+                                        'Invalid data when insert Configure. ',
+                                        self.logger.exception,
+                                        'Invalid data when insert Configure. '+ str(ex))
+                    elif str(ex).find("ORA-01400") > -1:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        dbsExceptionHandler("dbsException-missing-data","Missing data when inserting Configure. ", self.logger.exception, str(ex))
+                    else:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert Configure. ',
+                            self.logger.exception,
+                            'Invalid data when insert Configure. '+ str(ex))
                 except exceptions, ex3:
                     if tran:tran.rollback()
                     if conn:conn.close()
@@ -438,10 +477,28 @@ class DBSBlockInsert :
                         primds["primary_ds_id"] = self.primdsid.execute(conn,
                                                 primds["primary_ds_name"],
                                                 transaction=tran)
+                        if primds["primary_ds_id"] <= 0:
+                            if tran:tran.rollback()
+                            if conn:conn.close()
+                            dbsExceptionHandler('dbsException-conflict-data',
+                                'Primary dataset not yet inserted by concurrent insert. ',
+                                self.logger.exception,
+                                'Primary dataset not yet inserted by concurrent insert. '+ str(ex))
+
+                    elif str(ex).find("ORA-01400") > -1:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        dbsExceptionHandler('dbsException-missing-data',
+                            'Missing data when insert primary_datasets. ',
+                            self.logger.exception,
+                            'Missing data when insert primary_datasets. '+ str(ex))
                     else:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        raise
+                        dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert primary_datasets. ',
+                            self.logger.exception,
+                            'Invalid data when insert primary_datasets. '+ str(ex))
                 except Exception, ex:
                     if tran:tran.rollback()
                     if conn:conn.close()
@@ -491,6 +548,14 @@ class DBSBlockInsert :
                             dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: \
 Check the spelling of acquisition Era name. The db may already have the same \
 acquisition era, but with different cases.")
+                    else:
+                        if tran:tran.rollback()
+                        if conn:conn.close()
+                        dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert acquisition_eras . ',
+                            self.logger.exception,
+                            'Invalid data when insert acquisition_eras. '+ str(ex))
+ 
                 except Exception:
                     if tran:tran.rollback()
                     if conn:conn.close()
@@ -529,10 +594,20 @@ acquisition era, but with different cases.")
                                 str(ex).lower().find("duplicate") !=-1:
                         #ok, already in db
                         dataset['processing_era_id'] = self.procsingid.execute(conn, pera['processing_version'])
-                    else:
+                    elif str(ex).find("ORA-01400") > -1:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        raise
+                        dbsExceptionHandler('dbsException-missing-data',
+                            'Missing data when insert processing_eras. ',
+                            self.logger.exception,
+                            'Missing data when insert Processing_eras. '+ str(ex))
+                    else:
+                        if tran: tran.rollback()
+                        if conn: conn.close()
+                        dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert Processing_ears. ',
+                            self.logger.exception,
+                            'Invalid data when insert Processing_eras. '+ str(ex))
                 except Exception, ex:
                     if tran: tran.rollback()
                     if conn: conn.close()
@@ -592,10 +667,20 @@ acquisition era, but with different cases.")
                                 if tran:tran.rollback()
                                 if conn:conn.close()
                                 dbsExceptionHandler(message='InsertPhysicsGroup Error ', logger=self.logger.exception, serverError="InsertPhysicsGroup: "+str(ex))
-                        else:
+                        elif str(ex).find("ORA-01400") > -1:
                             if tran:tran.rollback()
                             if conn:conn.close()
-                            raise
+                            dbsExceptionHandler('dbsException-missing-data',
+                                'Missing data when insert Physics_groups. ',
+                                self.logger.exception,
+                                'Missing data when insert Physics_groups. '+ str(ex))
+                        else:
+                            if tran: tran.rollback()
+                            if conn: conn.close()
+                            dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert Physics_groups. ',
+                            self.logger.exception,
+                            'Invalid data when insert Physics_groups. '+ str(ex))                        
                     except Exception, ex:
                         if tran:tran.rollback()
                         if conn:conn.close()
@@ -661,20 +746,32 @@ acquisition era, but with different cases.")
                     try:
                         self.datasetin.execute(conn, dataset, tran)
                     except exceptions.IntegrityError, ei:
-                        if (str(ei).find("ORA-00001") != -1 and str(ei).find("TUC_DS_DATASET") != -1) or\
-                            str(ei).lower().find("duplicate") !=-1:
+                        if str(ei).find("ORA-00001") != -1 or str(ei).lower().find("duplicate") !=-1:
+                            if conn.closed:
+                                conn = self.dbi.connection()
                             dataset['dataset_id'] = self.datasetid.execute(conn,dataset['dataset'])
                             if dataset['dataset_id'] <= 0:
                                 if tran:tran.rollback()
                                 if conn:conn.close()
-                                dbsExceptionHandler(message='InsertDataset Error',
-                                                    logger=self.logger,
-                                                    serverError="InsertDataset: " + str(ei))
+                                dbsExceptionHandler('dbsException-conflict-data',
+                                                    'Da taset not yet inserted by concurrent insert. ',
+                                                    self.logger.exception,
+                                                    'Dataset not yet inserted by concurrent insert. '+ str(ei))
+                        elif str(ex).find("ORA-01400") > -1:
+                            if tran:tran.rollback()
+                            if conn:conn.close()
+                            dbsExceptionHandler('dbsException-missing-data',
+                                'Missing data when insert Datasets. ',
+                                self.logger.exception,
+                                'Missing data when insert Datasets. '+ str(ex))
                         else:
                             if tran: tran.rollback()
                             if conn: conn.close()
-                            raise
-                        #
+                            dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert Datasets. ',
+                            self.logger.exception,
+                            'Invalid data when insert Datasets. '+ str(ex))
+
                     except Exception:
                         #should catch all above exception to rollback. YG Jan 17, 2013
                         if tran:tran.rollback()
@@ -704,7 +801,10 @@ acquisition era, but with different cases.")
                     else:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        raise
+                        dbsExceptionHandler('dbsException-invalid-input2',
+                            'Invalid data when insert dataset_configs. ',
+                            self.logger.exception,
+                            'Invalid data when insert dataset_configs. '+ str(ex))
                 except Exception, ex:
                     if tran:tran.rollback()
                     if conn:conn.close()
@@ -732,7 +832,12 @@ acquisition era, but with different cases.")
                 else:
                     dataset['dataset_id'] = dataset_id
             else:
-                raise
+                if tran:tran.rollback()
+                if conn:conn.close()
+                dbsExceptionHandler('dbsException-invalid-input2',
+                    'Invalid data when insert Datasets. ',
+                    self.logger.exception,
+                    'Invalid data when insert Datasets. '+ str(ex))
         except Exception, ex:
             if tran:tran.rollback()
             if conn:conn.close()
