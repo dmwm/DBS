@@ -626,7 +626,7 @@ acquisition era, but with different cases.")
             #In order to accommodate DBS2 data for migration, we turn off this check in migration.
             #These will not cause any problem to none DBS2 data because when we migration, the none DBS2 data is
             #already checked when they were inserted into the source dbs.  YG 7/12/2012
-            if not migration:
+            if not migration or aq["acquisition_era_name"]=="CRAB" :
                 erals=dataset["processed_ds_name"].rsplit('-')
                 if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
                     if tran:tran.rollback()
