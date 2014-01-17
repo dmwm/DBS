@@ -239,6 +239,7 @@ class DBSBlockInsert :
         try:
             #now we build everything to insert the files.
             #tran = conn.begin()
+            try:
             #insert files
             if fileList:
                 self.filein.execute(conn, fileList, tran)
@@ -251,6 +252,18 @@ class DBSBlockInsert :
             #insert file configration
             if fileConfObjs:
                 self.fconfigin.execute(conn, fileConfObjs, tran)
+        except exceptions.IntegrityError, ex:
+            if tran:tran.rollback()
+            if conn:conn.close()
+            if str(ex).find("ORA-01400") > -1:
+                dbsExceptionHandler('dbsException-missing-data',
+                    'Missing data when insert file parent. ', self.logger.exception,
+                    'Missing data when insert File_Parents. '+ str(ex))
+            else:
+                dbsExceptionHandler('dbsException-invalid-input2',
+                    'Invalid data when insert:file, fileparent, file lumi or file config.  ', self.logger.exception,
+                    'Invalid data when insert:file, fileparent, file lumi or file config. '+ str(ex))
+
             #insert bk and dataset parentage
             #we cannot do bulk insertion for the block and dataset parentage because they may be duplicated.
             lbk = len(bkParentList)
