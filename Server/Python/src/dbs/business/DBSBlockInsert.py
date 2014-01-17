@@ -239,18 +239,31 @@ class DBSBlockInsert :
         try:
             #now we build everything to insert the files.
             #tran = conn.begin()
-            #insert files
-            if fileList:
-                self.filein.execute(conn, fileList, tran)
-            #insert file parents
-            if fileParentList:
-                self.fparentin.execute(conn, fileParentList, tran)
-            #insert file lumi
-            if fileLumiList:
-                self.flumiin.execute(conn, fileLumiList, tran)
-            #insert file configration
-            if fileConfObjs:
-                self.fconfigin.execute(conn, fileConfObjs, tran)
+            try:
+                #insert files
+                if fileList:
+                    self.filein.execute(conn, fileList, tran)
+                #insert file parents
+                if fileParentList:
+                    self.fparentin.execute(conn, fileParentList, tran)
+                #insert file lumi
+                if fileLumiList:
+                    self.flumiin.execute(conn, fileLumiList, tran)
+                #insert file configration
+                if fileConfObjs:
+                    self.fconfigin.execute(conn, fileConfObjs, tran)
+            except exceptions.IntegrityError, ex:
+                if tran:tran.rollback()
+                if conn:conn.close()
+                if str(ex).find("ORA-01400") > -1:
+                    dbsExceptionHandler('dbsException-missing-data',
+                        'Missing data when insert file parent. ', self.logger.exception,
+                        'Missing data when insert File_Parents. '+ str(ex))
+                else:
+                    dbsExceptionHandler('dbsException-invalid-input2',
+                        'Invalid data when insert:file, fileparent, file lumi or file config.  ', self.logger.exception,
+                        'Invalid data when insert:file, fileparent, file lumi or file config. '+ str(ex))
+
             #insert bk and dataset parentage
             #we cannot do bulk insertion for the block and dataset parentage because they may be duplicated.
             lbk = len(bkParentList)
@@ -626,7 +639,7 @@ acquisition era, but with different cases.")
             #In order to accommodate DBS2 data for migration, we turn off this check in migration.
             #These will not cause any problem to none DBS2 data because when we migration, the none DBS2 data is
             #already checked when they were inserted into the source dbs.  YG 7/12/2012
-            if not migration:
+            if not migration or aq["acquisition_era_name"]=="CRAB" :
                 erals=dataset["processed_ds_name"].rsplit('-')
                 if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
                     if tran:tran.rollback()
