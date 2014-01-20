@@ -8,7 +8,6 @@ from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
 from WMCore.Lexicon import *
-from WMCore.WebTools.Page import Page
 
 from functools import wraps
 
