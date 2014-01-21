@@ -8,7 +8,6 @@ from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
 
 from WMCore.Lexicon import *
-from WMCore.WebTools.Page import Page
 
 from functools import wraps
 
@@ -99,6 +98,12 @@ def inputChecks(**_params_):
         return wrapped
     return checkTypes
 
+def check_proc_ds(proc_ds):
+    try:
+        return procdataset(proc_ds)
+    except AssertionError:
+        return userprocdataset(proc_ds)
+
 acceptedInputDataTypes = {
     ################
     str:set(['data_tier_name', 'release_version', 'pset_hash', 'pset_name','lfn', 'app_name', 'output_module_label', 'global_tag', 
@@ -171,7 +176,7 @@ validationFunction = {
     'logical_file_name':lfn,
     'file_parent_lfn':lfn,
     'primary_ds_name':primdataset,
-    'processed_ds_name': lambda proc_ds: procdataset(proc_ds) or userprocdataset(proc_ds),
+    'processed_ds_name': check_proc_ds,
     'processing_version':procversion,
     'acquisition_era_name':acqname,
     'global_tag':globalTag,
