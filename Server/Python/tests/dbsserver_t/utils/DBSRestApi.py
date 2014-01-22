@@ -71,6 +71,7 @@ class DBSRestApi:
             config.DBS.database.connectUrl = dbs3_dp2_i2['connectUrl']['writer']
             config.DBS.database.dbowner = dbs3_dp2_i2['databaseOwner']
             config.DBS.database.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }
+            config.DBS.database.version = getattr(dbsconfig.database.instances, dbinstance).version
 
             config.DBS.section_('security')
             config.DBS.security.params = {}
@@ -82,6 +83,7 @@ class DBSRestApi:
             config.DBS.database.connectUrl = dbconfig.connectUrl
             config.DBS.database.dbowner = dbconfig.dbowner
             config.DBS.database.engineParameters = dbconfig.engineParameters
+            config.DBS.database.version = dbconfig.version
 
             try:
                 secconfig = getattr(dbsconfig.security.instances, dbinstance)
