@@ -53,7 +53,7 @@ class DBSMigrateModel_t(unittest.TestCase):
         """test01: Clean-up old migration requests. Test to remove migration requests between different DBS instances"""
         for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
             data = {'migration_rqst_id': status['migration_request_id']}
-            if status['migration_status'] in (0, 3):
+            if status['migration_status'] in (0, 3) and status['create_by'] == os.getlogin():
                 self._migrate_api.insert('remove', data)
             else:
                 self.assertRaises(Exception, self._migrate_api.insert, 'remove', data)
