@@ -136,7 +136,7 @@ class DBSDataset:
             if dataset_access_type: dataset_access_type = dataset_access_type.upper()
             if data_tier_name: data_tier_name = data_tier_name.upper()
             #if  processing_version:  processing_version =  processing_version.upper()
-            if acquisition_era: acquisition_era = acquisition_era.upper()
+            #if acquisition_era: acquisition_era = acquisition_era.upper()
             result = dao.execute(conn, 
                                  dataset, is_dataset_valid,
                                  parent_dataset,
