@@ -43,13 +43,25 @@ from WMCore.DAOFactory import DAOFactory
 #Necessary for sphinx documentation and server side unit tests.
 if not getattr(tools,"secmodv2",None):
     class FakeAuthForDoc(object):
-        def __init__(self,*args,**kwargs):
+        def __init__(self, *args, **kwargs):
             pass
 
         def callable(self, role=[], group=[], site=[], authzfunc=None):
             pass
 
     tools.secmodv2 = FakeAuthForDoc()
+
+def authInsert(user, role, group, site):
+    """
+    Authorization function for general insert
+    """
+    if not role:
+        return True
+    for k, v in user['roles'].iteritems():
+        for g in v['group']:
+            if k in role.get(g, '').split(':'):
+                return True
+    return False
 
 class DBSReaderModel(RESTModel):
     """
@@ -71,6 +83,7 @@ class DBSReaderModel(RESTModel):
         RESTModel.__init__(self, config)
         self.dbsUtils2 = dbsUtils()
         self.version = config.database.version
+        self.security_params = config.security.params
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 
         self.daofactory = DAOFactory(package='dbs.dao', logger=self.logger, dbinterface=self.dbi, owner=dbowner)
@@ -79,52 +92,83 @@ class DBSReaderModel(RESTModel):
         self.dbsBlockSummaryListDAO = self.daofactory(classname="Block.SummaryList")
         self.dbsRunSummaryListDAO = self.daofactory(classname="Run.SummaryList")
 
-        self._addMethod('GET', 'serverinfo', self.getServerInfo)
-        self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'])
-        self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'])
+        self._addMethod('GET', 'serverinfo', self.getServerInfo, secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'],
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'],
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
                                 'pset_hash', 'app_name', 'output_module_label', 'processing_version',
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
-                                'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'])
-        self._addMethod('POST', 'datasetlist', self.listDatasetArray)
+                                'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'],
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('POST', 'datasetlist', self.listDatasetArray, secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'data_tier_name',
                         'origin_site_name', 'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate',
-                        'max_ldate', 'cdate', 'ldate', 'detail'])
-        self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset'])
+                        'max_ldate', 'cdate', 'ldate', 'detail'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num',
-                        'origin_site_name', 'lumi_list', 'detail'])
+                        'origin_site_name', 'lumi_list', 'detail'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name', 'dataset',
-                        'run_num'])
-        self._addMethod('GET', 'datasetparents', self.listDatasetParents, args=['dataset'])
-        self._addMethod('GET', 'datasetchildren', self.listDatasetChildren, args=['dataset'])
+                        'run_num'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'datasetparents', self.listDatasetParents, args=['dataset'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'datasetchildren', self.listDatasetChildren, args=['dataset'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'outputconfigs', self.listOutputConfigs, args=['dataset', 'logical_file_name',
-                        'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id', 'global_tag'])
+                        'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id', 'global_tag'],
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id',
-                        'block_name'])
+                        'block_name'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name', 'block_name',
-                                                                            'block_id'])
-        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num'])
+                                                                            'block_id'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num'],
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'runs', self.listRuns, args=['run_num', 'logical_file_name',
-                        'block_name', 'dataset'])
-        self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'])
-        self._addMethod('GET', 'datatiers',self.listDataTiers, args=['data_tier_name'])
-        self._addMethod('GET', 'blockparents', self.listBlockParents, args=['block_name'])
-        self._addMethod('POST', 'blockparents', self.listBlocksParents)
-        self._addMethod('GET', 'blockchildren', self.listBlockChildren, args=['block_name'])
-        self._addMethod('GET', 'blockdump', self.dumpBlock, args=['block_name'])
-        self._addMethod('GET', 'blocksummaries', self.listBlockSummaries, args=['block_name', 'dataset'])
-        self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=['acquisition_era_name'])
-        self._addMethod('GET', 'acquisitioneras_ci', self.listAcquisitionEras_CI, args=['acquisition_era_name'])
-        self._addMethod('GET', 'processingeras', self.listProcessingEras, args=['processing_version'])
+                        'block_name', 'dataset'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'datatiers',self.listDataTiers, args=['data_tier_name'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'blockparents', self.listBlockParents, args=['block_name'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('POST', 'blockparents', self.listBlocksParents, secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'blockchildren', self.listBlockChildren, args=['block_name'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'blockdump', self.dumpBlock, args=['block_name'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'blocksummaries', self.listBlockSummaries, args=['block_name', 'dataset'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=['acquisition_era_name'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'acquisitioneras_ci', self.listAcquisitionEras_CI, args=['acquisition_era_name'],
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'processingeras', self.listProcessingEras, args=['processing_version'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version', 'dataset',
-                                                                                  'logical_file_name'])
-        self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'])
-        self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'])
-        self._addMethod('GET', 'runsummaries', self.listRunSummaries, args=['dataset', 'run_num'])
-        self._addMethod('GET', 'help', self.getHelp, args=['call'])
+                                                                                  'logical_file_name'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'],
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'runsummaries', self.listRunSummaries, args=['dataset', 'run_num'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'help', self.getHelp, args=['call'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
 
         self.dbsDoNothing = DBSDoNothing(self.logger, self.dbi, dbowner)
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, dbowner)
