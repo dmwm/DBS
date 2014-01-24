@@ -57,10 +57,11 @@ class DBSMigrateModel(RESTModel):
         self.security_params = config.security.params
        
         self._addMethod('POST', 'submit', self.submit,  secured=True,
-            security_params={'role':self.security_params, 'authzfunc':authInsert})
+            security_params={'role':self.security_params, 'authzfunc': authInsert})
         self._addMethod('POST', 'remove', self.remove, secured=True,
-            security_params={'role':self.security_params, 'authzfunc':authInsert})
-        self._addMethod('GET', 'status', self.status, args=['migration_rqst_id','block_name','dataset', 'user'])
+            security_params={'role':self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'status', self.status, args=['migration_rqst_id', 'block_name', 'dataset', 'user'],
+                        secured=True, security_params={'role':self.security_params, 'authzfunc': authInsert})
         
         self.dbsMigrate = DBSMigrate(self.logger, self.dbi, dbowner)
     

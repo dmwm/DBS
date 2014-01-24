@@ -1,0 +1,15 @@
+{
+  "default": { "DBSReader":  ["dev/global", "dev/phys03"],
+               "DBSWriter":  ["dev/global", "dev/phys03"],
+               "DBSMigrate": ["dev/global", "dev/phys03"]},
+  "dev": { "DBSReader":  ["prod/global", "dev/global", "int/global", "dev/phys03"],
+           "DBSWriter" : ["prod/global", "dev/global", "int/global", "dev/phys03"],
+           "DBSMigrate": ["prod/global", "dev/global", "int/global", "dev/phys03"]},
+  "preprod": { "DBSReader":  ["prod/global", "dev/global",  "int/global", "int/phys03"],
+               "DBSWriter" : ["prod/global", "dev/global",  "int/global", "int/phys03"],
+               "DBSMigrate": ["prod/global", "dev/global", "int/global", "int/phys03"]},
+  "prod": { "DBSReader":  ["prod/global", "dev/global", "int/global", "prod/phys03", "prod/phys02", "prod/phys01"],
+            "DBSWriter" : ["prod/global", "dev/global", "int/global", "prod/phys03"],
+            "DBSMigrate": ["prod/global", "dev/global", "int/global", "prod/phys03"]}
+
+}

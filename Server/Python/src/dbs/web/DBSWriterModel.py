@@ -14,6 +14,7 @@ from cherrypy import request, tools, HTTPError
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.web.DBSReaderModel import DBSReaderModel
+from dbs.web.DBSReaderModel import authInsert
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSInputValidation import *
@@ -21,16 +22,6 @@ from dbs.utils.DBSTransformInputType import transformInputType
 
 import traceback
 
-def authInsert(user, role, group, site):
-    """
-    Authorization function for general insert
-    """
-    if not role: return True
-    for k, v in user['roles'].iteritems():
-        for g in v['group']:
-            if k in role.get(g, '').split(':'):
-                return True
-    return False
 
 class DBSWriterModel(DBSReaderModel):
     """
@@ -50,8 +41,6 @@ class DBSWriterModel(DBSReaderModel):
             config.database.connectUrl = urls['writer']
 
         DBSReaderModel.__init__(self, config)
-
-        self.security_params = config.security.params
 
         self.sequenceManagerDAO = self.daofactory(classname="SequenceManager")
         self.dbsDataTierInsertDAO = self.daofactory(classname="DataTier.Insert")
