@@ -243,12 +243,51 @@ class DBSBlockInsert :
                 #insert files
                 if fileList:
                     self.filein.execute(conn, fileList, tran)
+            except exceptions.IntegrityError, ex:
+                if tran:tran.rollback()
+                if conn:conn.close()
+                if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_FL_LOGICAL_FILE_NAME"))\
+                    or str(ex).lower().find("duplicate") != -1:
+                    dbsExceptionHandler('dbsException-invalid-input2', 'Duplicated lfn name when inserting\
+                    files. ', self.logger.exception, 'Duplicated lfn name when inserting files. '+str(ex))
+                else:
+                    dbsExceptionHandler('dbsException-invalid-input2',
+                        'Invalid data when insert files.  ',
+                        self.logger.exception,
+                        'Invalid data when insert file. '+ str(ex))
+            try:
                 #insert file parents
                 if fileParentList:
                     self.fparentin.execute(conn, fileParentList, tran)
+            except exceptions.IntegrityError, ex:
+                if tran:tran.rollback()
+                if conn:conn.close()
+                if str(ex).find("ORA-01400") > -1:
+                    dbsExceptionHandler('dbsException-missing-data',
+                        'Missing data when insert file parent. ', self.logger.exception,
+                        'Missing data when insert file parent. '+ str(ex))
+                else:
+                    dbsExceptionHandler('dbsException-invalid-input2',
+                        'Invalid data when insert file parent.  ', self.logger.exception,
+                        'Invalid data when insert file parent. '+ str(ex))
+
+            try:
                 #insert file lumi
                 if fileLumiList:
                     self.flumiin.execute(conn, fileLumiList, tran)
+            except exceptions.IntegrityError, ex:
+                if tran:tran.rollback()
+                if conn:conn.close()
+                if str(ex).find("ORA-01400") > -1:
+                    dbsExceptionHandler('dbsException-missing-data',
+                        'Missing data when insert file lumi. ', self.logger.exception,
+                        'Missing data when insert file lumi. '+ str(ex))
+                else:
+                    dbsExceptionHandler('dbsException-invalid-input2',
+                        'Invalid data when insert file lumi.  ', self.logger.exception,
+                        'Invalid data when insert file lumi. '+ str(ex))
+
+            try:
                 #insert file configration
                 if fileConfObjs:
                     self.fconfigin.execute(conn, fileConfObjs, tran)
@@ -257,12 +296,12 @@ class DBSBlockInsert :
                 if conn:conn.close()
                 if str(ex).find("ORA-01400") > -1:
                     dbsExceptionHandler('dbsException-missing-data',
-                        'Missing data when insert file parent. ', self.logger.exception,
-                        'Missing data when insert File_Parents. '+ str(ex))
+                        'Missing data when insert file configuration. ', self.logger.exception,
+                        'Missing data when insert file configuration. '+ str(ex))
                 else:
                     dbsExceptionHandler('dbsException-invalid-input2',
-                        'Invalid data when insert:file, fileparent, file lumi or file config.  ', self.logger.exception,
-                        'Invalid data when insert:file, fileparent, file lumi or file config. '+ str(ex))
+                        'Invalid data when insert file config.  ', self.logger.exception,
+                        'Invalid data when insert:file config. '+ str(ex))
 
             #insert bk and dataset parentage
             #we cannot do bulk insertion for the block and dataset parentage because they may be duplicated.

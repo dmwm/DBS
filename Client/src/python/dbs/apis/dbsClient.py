@@ -1060,15 +1060,15 @@ class DbsApi(object):
 
         :param migrationObj: migration request object
         :type migrationObj: dict
-        :key migration_url: The source DBS url for migration (required)
-        :key migraiton_input: The block or dataset names to be migrated (required)
+            :key migration_url: The source DBS url for migration (required)
+            :key migration_input: The block or dataset names to be migrated (required)
 
         """
         return self.__callServer("submit", data=migrationObj, callmethod='POST')
 
     def statusMigration(self, **kwargs):
         """
-        Check the status of migration request
+        Check the status of migration request: 0-request created; 1-migration in process; 2-migration successed; 3-migration failed.
 
         :param migration_rqst_id: Migration Request ID
         :type migration_rqst_id: str, int, long

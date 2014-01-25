@@ -1,25 +1,50 @@
 """
-DBS Server default configuration file
+DBS Server configuration file
 """
-import os,logging,sys
+import os, sys, json
 from WMCore.Configuration import Configuration
 
 ROOTDIR = os.path.normcase(os.path.abspath(__file__)).rsplit('/', 3)[0]
+TOPDIR = ROOTDIR.rsplit('/', 1)[0]
 DBSVERSION = os.getenv('DBS3_VERSION')
+VARIANT="default"
 
-sys.path.append(os.path.join(ROOTDIR,'auth/dbs'))
+# load secrets
+sys.path.append(os.path.join(ROOTDIR, 'auth/dbs'))
+from DBSSecrets import *
 
-from DBSSecrets import dbs3_ip02_i2
-from DBSSecrets import dbs3_p_i2
-from DBSSecrets import dbs3_l2_i2
+# get viewnames -> instance names list
+with open(os.path.join(TOPDIR, 'state/dbs/view_instances.json'), 'r') as f:
+  view_mapping = json.load(f)
+
+# instance name : connecturls, {reader needed roles, writer needed roles}
+if VARIANT == 'prod':
+  db_mapping = {'prod/global': [dbs3_pl1_r, {'reader':{},'writer':{'dbs': 'operator', 'dataops': 'production-operator'}}],
+                'dev/global':  [dbs3_dg_i2, {'reader':{},'writer':{}}],
+                'int/global':  [dbs3_ig_i2, {'reader':{},'writer':{}}],
+                'prod/phys03': [dbs3_pp3_r, {'reader':{},'writer':{}}],
+                'prod/phys02': [dbs3_pp2_r, {'reader':{},'writer':{}}],
+                'prod/phys01': [dbs3_pp1_r, {'reader':{},'writer':{}}]}
+elif VARIANT == 'preprod':
+  db_mapping = {'prod/global': [dbs3_pg_r,  {'reader':{},'writer':{'dbs': 'operator', 'dataops': 'production-operator'}}],
+                'dev/global':  [dbs3_l1_i2, {'reader':{},'writer':{}}],
+                'int/global':  [dbs3_l3_i2, {'reader':{},'writer':{}}],
+                'int/phys03':  [dbs3_ip1_i2,{'reader':{},'writer':{}}]}
+elif VARIANT == 'dev':
+  db_mapping = {'prod/global': [dbs3_p2_i2, {'reader':{},'writer':{'dbs': 'operator', 'dataops': 'production-operator'}}],
+                'dev/global':  [dbs3_l1_i2, {'reader':{},'writer':{}}],
+                'int/global':  [dbs3_l4_i2, {'reader':{},'writer':{}}],
+                'dev/phys03':  [dbs3_dp1_i2,{'reader':{},'writer':{}}]}
+else:
+  db_mapping = {'dev/global': [dbs3_l2_i2,{'reader':{},'writer':{}}],
+                'dev/phys03': [dbs3_p_i2, {'reader':{},'writer':{}}]}
 
 config = Configuration()
 config.component_('SecurityModule')
+#config.SecurityModule.key_file = os.path.join(ROOTDIR, 'auth/wmcore-auth/header-auth-key')
 config.SecurityModule.dangerously_insecure = True
-#config.SecurityModule.key_file = os.path.join(ROOTDIR,'auth/wmcore-auth/header-auth-key')
-
+        
 config.component_('Webtools')
-#config.Webtools.port = 8250
 config.Webtools.port = 8787
 config.Webtools.log_screen = True
 config.Webtools.proxy_base = 'True'
@@ -27,112 +52,38 @@ config.Webtools.application = 'dbs'
 #config.Webtools.environment = 'production'
 config.Webtools.environment = 'development'
 
-
 config.component_('dbs')
-config.dbs.templates = os.path.join(ROOTDIR,'apps/dbs/data/templates/WMCore/WebTools')
+config.dbs.templates = os.path.join(ROOTDIR, 'apps/dbs/statics')
 config.dbs.title = 'DBS Server'
 config.dbs.description = 'CMS DBS Service'
 config.dbs.section_('views')
 config.dbs.admin = 'cmsdbs'
 config.dbs.default_expires = 900
-config.dbs.instances = ['prod/global','dev/global','int/global']
+config.dbs.instances = list(set([i for r in view_mapping[VARIANT].values() for i in r]))
 
+### Create views for DBSReader, DBSWriter and DBSMigrate
 active = config.dbs.views.section_('active')
-active.section_('DBSMigrate')
-active.DBSMigrate.object = 'WMCore.WebTools.RESTApi'
-active.DBSMigrate.section_('model')
-active.DBSMigrate.model.object = 'dbs.web.DBSMigrateModel'
-active.DBSMigrate.section_('formatter')
-active.DBSMigrate.formatter.object = 'WMCore.WebTools.RESTFormatter'
-active.DBSMigrate.section_('database')
-instances = active.DBSMigrate.database.section_('instances')
-
-ProductionGlobal = instances.section_('prod/global')
-ProductionGlobal.dbowner = dbs3_p_i2['databaseOwner']
-ProductionGlobal.version = DBSVERSION
-ProductionGlobal.connectUrl = dbs3_p_i2['connectUrl']['writer']
-ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
-
-DevelopmentGlobal = instances.section_('dev/global')
-DevelopmentGlobal.dbowner = dbs3_l2_i2['databaseOwner']
-DevelopmentGlobal.version = DBSVERSION
-DevelopmentGlobal.connectUrl = dbs3_l2_i2['connectUrl']['writer']
-DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
-
-IntegrationGlobal = instances.section_('int/global')
-IntegrationGlobal.dbowner = dbs3_ip02_i2['databaseOwner']
-IntegrationGlobal.version = DBSVERSION
-IntegrationGlobal.connectUrl = dbs3_ip02_i2['connectUrl']['writer']
-IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
-
-active.DBSMigrate.section_('security')
-security_instances = active.DBSMigrate.security.section_('instances')
-security_production_global = security_instances.section_('prod/global')
-security_production_global.params = {'dbs' : 'dbsoperator', 'dataops' : 'production operator'}
-security_development_global = security_instances.section_('dev/global')
-security_development_global.params = {}
-security_integration_global = security_instances.section_('int/global')
-security_integration_global.params = {}
-
-active.section_('DBSReader')
-active.DBSReader.object = 'WMCore.WebTools.RESTApi'
-active.DBSReader.section_('model')
-active.DBSReader.model.object = 'dbs.web.DBSReaderModel'
-active.DBSReader.section_('formatter')
-active.DBSReader.formatter.object = 'WMCore.WebTools.RESTFormatter'
-active.DBSReader.section_('database')
-instances = active.DBSReader.database.section_('instances')
-
-ProductionGlobal = instances.section_('prod/global')
-ProductionGlobal.dbowner = dbs3_p_i2['databaseOwner']
-ProductionGlobal.version = DBSVERSION
-ProductionGlobal.connectUrl = dbs3_p_i2['connectUrl']['reader']
-ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
-
-DevelopmentGlobal = instances.section_('dev/global')
-DevelopmentGlobal.dbowner = dbs3_l2_i2['databaseOwner']
-DevelopmentGlobal.version = DBSVERSION
-DevelopmentGlobal.connectUrl = dbs3_l2_i2['connectUrl']['reader']
-DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
-
-IntegrationGlobal = instances.section_('int/global')
-IntegrationGlobal.dbowner = dbs3_ip02_i2['databaseOwner']
-IntegrationGlobal.version = DBSVERSION
-IntegrationGlobal.connectUrl = dbs3_ip02_i2['connectUrl']['reader']
-IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
-
-active.section_('DBSWriter')
-active.DBSWriter.object = 'WMCore.WebTools.RESTApi'
-active.DBSWriter.section_('model')
-active.DBSWriter.model.object = 'dbs.web.DBSWriterModel'
-active.DBSWriter.section_('formatter')
-active.DBSWriter.formatter.object = 'WMCore.WebTools.RESTFormatter'
-active.DBSWriter.section_('database')
-instances = active.DBSWriter.database.section_('instances')
-
-ProductionGlobal = instances.section_('prod/global')
-ProductionGlobal.dbowner = dbs3_p_i2['databaseOwner']
-ProductionGlobal.version = DBSVERSION
-ProductionGlobal.connectUrl = dbs3_p_i2['connectUrl']['writer']
-ProductionGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
-
-DevelopmentGlobal = instances.section_('dev/global')
-DevelopmentGlobal.dbowner = dbs3_l2_i2['databaseOwner']
-DevelopmentGlobal.version = DBSVERSION
-DevelopmentGlobal.connectUrl = dbs3_l2_i2['connectUrl']['writer']
-DevelopmentGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
-
-IntegrationGlobal = instances.section_('int/global')
-IntegrationGlobal.dbowner = dbs3_ip02_i2['databaseOwner']
-IntegrationGlobal.version = DBSVERSION
-IntegrationGlobal.connectUrl = dbs3_ip02_i2['connectUrl']['writer']
-IntegrationGlobal.engineParameters = { 'pool_size': 15, 'max_overflow': 10, 'pool_timeout' : 200 }
-
-active.DBSWriter.section_('security')
-security_instances = active.DBSWriter.security.section_('instances')
-security_production_global = security_instances.section_('prod/global')
-security_production_global.params = {'dbs' : 'dbsoperator', 'dataops' : 'production operator'}
-security_development_global = security_instances.section_('dev/global')
-security_development_global.params = {}
-security_integration_global = security_instances.section_('int/global')
-security_integration_global.params = {}
+for viewname, access in [('DBSReader','reader'),('DBSWriter','writer'),('DBSMigrate','writer')]:
+  if view_mapping[VARIANT][viewname]:
+    active.section_(viewname)
+    view = getattr(active, viewname)
+    view.object = 'WMCore.WebTools.RESTApi'
+    view.section_('model')
+    view.model.object = 'dbs.web.%sModel' % viewname
+    view.section_('formatter')
+    view.formatter.object = 'WMCore.WebTools.RESTFormatter'
+    view.section_('database')
+    view.section_('security')
+    dbinst=view.database.section_('instances')
+    secinst=view.security.section_('instances')
+    for instance_name in config.dbs.instances:
+      dbconf = dbinst.section_(instance_name)
+      dbconf.dbowner = db_mapping[instance_name][0]['databaseOwner']
+      dbconf.version = DBSVERSION
+      dbconf.connectUrl = db_mapping[instance_name][0]['connectUrl'][access]
+      dbconf.engineParameters = {'pool_size': 15, 'max_overflow': 10, 'pool_timeout': 200}
+      seconf = secinst.section_(instance_name)
+      if instance_name in view_mapping[VARIANT][viewname]:
+        seconf.params = db_mapping[instance_name][1][access]
+      else:
+        seconf.params = {'disabled': 'disabled'}
