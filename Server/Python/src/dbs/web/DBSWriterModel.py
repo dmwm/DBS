@@ -486,6 +486,7 @@ class DBSWriterModel(DBSReaderModel):
                 dbsExceptionHandler("dbsException-invalid-input", "DBSWriterModel/insertDataTier. \
                     data_tier_name is required.")
             self.dbsDataTierInsertDAO.execute(conn, indata, tran)
+            if tran: tran.commit()
         except cjson.DecodeError as dc:
             dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert DataTier input",  self.logger.exception, str(dc))
         except dbsException as de:
@@ -502,6 +503,6 @@ class DBSWriterModel(DBSReaderModel):
                 sError = " DBSWriterModel\insertDataTier. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
                 dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
         finally:
-            if tran: tran.commit()
+            if tran: tran.rollback()
             if conn: conn.close()
 
