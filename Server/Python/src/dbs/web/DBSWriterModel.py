@@ -88,6 +88,8 @@ class DBSWriterModel(DBSReaderModel):
             indata = validateJSONInputNoCopy("primds",indata)
             indata.update({"creation_date": dbsUtils().getTime(), "create_by": dbsUtils().getCreateBy() })
             self.dbsPrimaryDataset.insertPrimaryDataset(indata)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert PrimaryDataset input",  self.logger.exception, str(dc))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
@@ -119,6 +121,8 @@ class DBSWriterModel(DBSReaderModel):
             indata.update({"creation_date": dbsUtils().getTime(),
                            "create_by" : dbsUtils().getCreateBy()})
             self.dbsOutputConfig.insertOutputConfig(indata)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert OutputConfig input",  self.logger.exception, str(dc))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
@@ -169,6 +173,8 @@ class DBSWriterModel(DBSReaderModel):
                            "creation_date": indata.get("creation_date", dbsUtils().getTime()), \
                            "create_by" : dbsUtils().getCreateBy() })
             self.dbsAcqEra.insertAcquisitionEra(indata)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert AcquisitionEra input",  self.logger.exception, str(dc))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except HTTPError as he:
@@ -195,6 +201,8 @@ class DBSWriterModel(DBSReaderModel):
             indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
                            "create_by" : dbsUtils().getCreateBy() })
             self.dbsProcEra.insertProcessingEra(indata)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert ProcessingEra input",  self.logger.exception, str(dc))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
@@ -234,6 +242,8 @@ class DBSWriterModel(DBSReaderModel):
 
             # need proper validation
             self.dbsDataset.insertDataset(indata)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert dataset input",  self.logger.exception, str(dc)) 
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
@@ -254,11 +264,10 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            #indata = validateJSONInput("insertBlock",indata)
-            #import pdb
-            #pdb.set_trace()
             indata = validateJSONInputNoCopy("blockBulk",indata)
             self.dbsBlockInsert.putBlock(indata)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert BulkBlock input",  self.logger.exception, str(dc))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
@@ -290,6 +299,8 @@ class DBSWriterModel(DBSReaderModel):
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("block",indata)
             self.dbsBlock.insertBlock(indata)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert Block input",  self.logger.exception, str(dc))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except Exception, ex:
@@ -346,6 +357,8 @@ class DBSWriterModel(DBSReaderModel):
                      "file_output_config_list":f.get("file_output_config_list",[])})
                 businput.append(f)
             self.dbsFile.insertFile(businput, qInserts)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert File input",  self.logger.exception, str(dc))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
@@ -455,6 +468,9 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
+            conn = self.dbi.connection()
+            tran = conn.begin()
+
             body = request.body.read()
             indata = cjson.decode(body)
 
@@ -463,20 +479,15 @@ class DBSWriterModel(DBSReaderModel):
             indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
                            "create_by" : dbsUtils().getCreateBy()})
 
-            conn = self.dbi.connection()
-            tran = conn.begin()
-
-            if not indata.has_key("data_tier_name"):
-                dbsExceptionHandler("dbsException-invalid-input", "DBSWriterModel/insertDataTier. data_tier_name is required.")
-
             indata['data_tier_id'] = self.sequenceManagerDAO.increment(conn, "SEQ_DT", tran)
 
             indata['data_tier_name'] = indata['data_tier_name'].upper()
 
             self.dbsDataTierInsertDAO.execute(conn, indata, tran)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert DataTier input",  self.logger.exception, str(dc))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
-
         except HTTPError as he:
             raise he
         except Exception as ex:
@@ -489,7 +500,6 @@ class DBSWriterModel(DBSReaderModel):
                 sError = " DBSWriterModel\insertDataTier. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
                 dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
         finally:
-            tran.commit()
-            if conn:
-                conn.close()
+            if tran: tran.commit()
+            if conn: conn.close()
 
