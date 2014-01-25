@@ -480,9 +480,11 @@ class DBSWriterModel(DBSReaderModel):
                            "create_by" : dbsUtils().getCreateBy()})
 
             indata['data_tier_id'] = self.sequenceManagerDAO.increment(conn, "SEQ_DT", tran)
-
-            indata['data_tier_name'] = indata['data_tier_name'].upper()
-
+            try:
+                indata['data_tier_name'] = indata['data_tier_name'].upper()
+            except KeyError as ke:
+                dbsExceptionHandler("dbsException-invalid-input", "DBSWriterModel/insertDataTier. \
+                    data_tier_name is required.")
             self.dbsDataTierInsertDAO.execute(conn, indata, tran)
         except cjson.DecodeError as dc:
             dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert DataTier input",  self.logger.exception, str(dc))
