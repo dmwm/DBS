@@ -7,6 +7,7 @@ from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
 import cjson
 import os
 import socket
+import sys
 import urllib
 
 def checkInputParameter(method, parameters, validParameters, requiredParameters=None):
@@ -167,7 +168,12 @@ class DbsApi(object):
         if content != "application/json":
             return self.http_response.body
 
-        json_ret=cjson.decode(self.http_response.body)
+        try:
+            json_ret=cjson.decode(self.http_response.body)
+        except cjson.DecodeError:
+            print >> sys.stderr,\
+                "The server output is not a valid json, most probably you have a typo in the url.\n%s.\n" % self.url
+            return self.http_response.body
 
         return json_ret
 
