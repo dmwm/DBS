@@ -132,31 +132,25 @@ class TestCommand(Command):
 
         TestSuite = unittest.TestSuite()
 
+        db_instances = {'https://cmsweb-testbed.cern.ch': 'int/global',
+                        'https://cmsweb.cern.ch': 'prod/test'}
+
+        ###set environment
+        os.environ['DBS_READER_URL'] = ("%s/dbs/%s/DBSReader") % (self.host, db_instances.get(self.host, 'dev/global'))
+        os.environ['DBS_WRITER_URL'] = ("%s/dbs/%s/DBSWriter") % (self.host, db_instances.get(self.host, 'dev/global'))
+        os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/%s/DBSMigrate") % (self.host,
+                                                                    db_instances.get(self.host, 'dev/global'))
+
         if self.cmsweb_testbed:
             self.unitall, self.validation, self.deployment = (True, True, True)
 
         if self.unit in ('ClientWriter','ClientReader','ClientBlockWriter'):
-            ###set environment
-            os.environ['DBS_READER_URL'] = ("%s/dbs/dev/global/DBSReader") % self.host
-            os.environ['DBS_WRITER_URL'] = ("%s/dbs/dev/global/DBSWriter") % self.host
-            os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/dev/global/DBSMigrate") % self.host
-
             TestSuite.addTests(create_test_suite(unit_tests, 'DBS%s_t.py' % self.unit, base_dir))
 
         if self.unitall:
-            ###set environment
-            os.environ['DBS_READER_URL'] = ("%s/dbs/dev/global/DBSReader") % self.host
-            os.environ['DBS_WRITER_URL'] = ("%s/dbs/dev/global/DBSWriter") % self.host
-            os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/dev/global/DBSMigrate") % self.host
-           
             TestSuite.addTests(create_test_suite(unit_tests, 'DBSClient*_t.py', base_dir))
 
         if self.validation:
-            ###set environment
-            os.environ['DBS_READER_URL'] = ("%s/dbs/dev/global/DBSReader") % self.host
-            os.environ['DBS_WRITER_URL'] = ("%s/dbs/dev/global/DBSWriter") % self.host
-            os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/dev/global/DBSMigrate") % self.host
-           
             TestSuite.addTests(create_test_suite(validation_tests, 'DBSValidation_t.py', base_dir))
 
         if self.deployment:
