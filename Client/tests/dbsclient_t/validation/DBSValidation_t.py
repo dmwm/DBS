@@ -2,14 +2,16 @@
 DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
+from random import choice
 import os
+import re
 import unittest
+import uuid
+
 from dbsclient_t.utils.DBSDataProvider import DBSDataProvider
 from dbsclient_t.utils.timeout import Timeout
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from dbs.apis.dbsClient import *
-import uuid
-from random import choice
 
 uid = uuid.uuid4().time_mid
 print "****uid=%s******" % uid
@@ -445,6 +447,13 @@ class DBSValidation_t(unittest.TestCase):
         block_in_dbs = self.api.listBlocks(block_name=block, detail=True)[0]
         self.assertEqual(block_in_dbs['origin_site_name'], new_site)
         self.assertEqual(block_in_dbs['open_for_writing'], new_open_for_writing)
+
+    def test15(self):
+        """test15: Test to get server information"""
+        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[a-z]*$)'
+        version = self.api.serverinfo()
+        self.assertTrue(version.has_key('dbs_version'))
+        self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSValidation_t)

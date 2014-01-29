@@ -1,7 +1,10 @@
 """
 web unittests
 """
-import os, sys, imp
+import imp
+import os
+import re
+import sys
 import unittest
 import time
 from functools import wraps
@@ -1097,6 +1100,13 @@ class DBSReaderModel_t(unittest.TestCase):
     def test027e(self):
         """test027e: web.DBSReaderModel.listRunSummaries: simple run dataset example"""
         api.list('runsummaries', dataset=testparams['dataset'], run_num=testparams['run_num'])
+
+    def test028a(self):
+        """test028a: web.DBSReaderModel.getServerInfo: check that version is returned"""
+        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[a-z]*$)'
+        version = api.list('serverinfo')
+        self.assertTrue(version.has_key('dbs_version'))
+        self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSReaderModel_t)

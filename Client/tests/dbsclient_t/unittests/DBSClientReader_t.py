@@ -1,9 +1,11 @@
 """
 web unittests
 """
+import imp
 import os
+import re
+import sys
 import unittest
-import sys,imp
 
 from dbs.apis.dbsClient import *
 from dbs.exceptions.dbsClientException import dbsClientException
@@ -572,6 +574,13 @@ class DBSClientReader_t(unittest.TestCase):
     def test106(self):
         """test106: unittestDBSClientReader_t.listRunSummaries: simple run and dataset example"""
         self.api.listRunSummaries(dataset=self.testparams['dataset'], run_num=self.testparams['runs'][0])
+
+    def test107(self):
+        """test107: unittestDBSClientReader_t.serverinfo: get server info"""
+        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[a-z]*$)'
+        version = self.api.serverinfo()
+        self.assertTrue(version.has_key('dbs_version'))
+        self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
