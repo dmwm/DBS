@@ -3,6 +3,7 @@ DBS 3 Post-Deployment Tests for Operators of CMSWEB (These tests are read only!)
 """
 import json
 import os
+import re
 import unittest
 from dbs.apis.dbsClient import *
 from dbs.exceptions.dbsClientException import dbsClientException
@@ -781,6 +782,12 @@ DEPLOYMENT_TEST-v4711/RAW",
         self.assertNotEqual(api_doc.find("DBS Server RESTful API"), -1)
         ### test for empty docstrings or errors during doc generation
         self.assertEqual(api_doc.find("No documentation available. Empty docstring!"), -1)
+
+    def test_server_version(self):
+        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[a-z]*$)'
+        version = self.api.serverinfo()
+        self.assertTrue(version.has_key('dbs_version'))
+        self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
 
 if __name__ == "__main__":
     import sys
