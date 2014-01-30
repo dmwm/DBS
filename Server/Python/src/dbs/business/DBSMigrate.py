@@ -10,11 +10,14 @@ __version__ = "$Revision: 1.17 $"
 from WMCore.DAOFactory import DAOFactory
 
 #temporary thing
-import os, sys, socket
-import json, cjson
-import urllib, urllib2
+import cjson
+import json
+import os
+import pycurl
+import socket
+import urllib2
 import urlparse
-import httplib
+
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
@@ -447,7 +450,9 @@ class DBSMigrate:
 
             myproxy=os.environ.get('SOCKS5_PROXY', None)
 
-            restapi = RestApi(auth=X509Auth(), proxy=Socks5Proxy(proxy_url=myproxy) if myproxy else None)
+            restapi = RestApi(auth=X509Auth(), proxy=Socks5Proxy(proxy_url=myproxy) if myproxy else None,
+                              additional_curl_options={pycurl.NOSIGNAL: 1})
+            ### see http://linux.die.net/man/3/libcurl-tutorial for thread safety
             content = "application/json"
             UserID = os.environ['USER']+'@'+socket.gethostname()
             request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID }
