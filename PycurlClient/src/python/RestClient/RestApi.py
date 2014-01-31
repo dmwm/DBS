@@ -6,6 +6,13 @@ class RestApi(object):
     def __init__(self, auth=None, proxy=None, additional_curl_options=None):
         self._curl = pycurl.Curl()
 
+        ###use shared Cookie, DNS and SSL Session ID caches when operating multi-threaded
+        shared_curl = pycurl.CurlShare()
+        shared_curl.setopt(pycurl.SH_SHARE, pycurl.LOCK_DATA_COOKIE)
+        shared_curl.setopt(pycurl.SH_SHARE, pycurl.LOCK_DATA_DNS)
+        shared_curl.setopt(pycurl.SH_SHARE, pycurl.LOCK_DATA_SSL_SESSION)
+        self._curl.setopt(pycurl.SHARE, shared_curl)
+
         if additional_curl_options:
             self._additional_curl_options = additional_curl_options
         else:
