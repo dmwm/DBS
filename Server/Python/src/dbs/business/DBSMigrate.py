@@ -13,7 +13,6 @@ from WMCore.DAOFactory import DAOFactory
 import cjson
 import json
 import os
-import pycurl
 import socket
 import urllib2
 import urlparse
@@ -21,11 +20,10 @@ import urlparse
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
-#from dbs.utils.dbsHTTPSAuthHandler import HTTPSAuthHandler
+from dbs.utils.RestClientPool import RestClientPool
+
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
-from RestClient.RestApi import RestApi
-from RestClient.AuthHandling.X509Auth import X509Auth
-from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
+
 from sqlalchemy import exceptions
 
 def pprint(a):
@@ -40,6 +38,9 @@ class DBSMigrate:
                                 dbinterface=dbi, owner=owner)
         self.logger = logger
         self.dbi = dbi
+
+        myproxy = os.environ.get('SOCKS5_PROXY', None)
+        self.rest_client_pool = RestClientPool(proxy=myproxy)
 
         self.sm = daofactory(classname="SequenceManager")
         self.primdslist     = daofactory(classname="PrimaryDataset.List")
@@ -60,7 +61,6 @@ class DBSMigrate:
         self.dsparentlist   = daofactory(classname="DatasetParent.List")
         self.outputCoflist  = daofactory(classname="OutputModuleConfig.List")
         self.mgrremove      = daofactory(classname="MigrationRequests.Remove")
-
 
     def prepareDatasetMigrationList(self, conn, request):
         """
@@ -448,16 +448,12 @@ class DBSMigrate:
             if callType != 'http' and callType != 'https':
                 raise ValueError, "unknown URL type: %s" % callType
 
-            myproxy=os.environ.get('SOCKS5_PROXY', None)
-
-            restapi = RestApi(auth=X509Auth(), proxy=Socks5Proxy(proxy_url=myproxy) if myproxy else None,
-                              additional_curl_options={pycurl.NOSIGNAL: 1})
-            ### see http://linux.die.net/man/3/libcurl-tutorial for thread safety
             content = "application/json"
             UserID = os.environ['USER']+'@'+socket.gethostname()
             request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID }
             #params = {'block_name':blockname}
             data = cjson.encode(data)
+            restapi = self.rest_client_pool.get_rest_client()
             httpresponse = restapi.get(resturl, method, params, data, request_headers)
             return httpresponse.body
         except urllib2.HTTPError, httperror:
