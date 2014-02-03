@@ -12,19 +12,19 @@ from WMCore.Lexicon import *
 from functools import wraps
 
 def reading_procds_check(candidate):
-    regexp = r'(^[a-zA-Z0-9\*]+[a-zA-Z0-9_\-\*]*)$'
+    regexp = r'(^[a-zA-Z0-9]+[a-zA-Z0-9_\-]*)$'
     return check(regexp, candidate)
 
 def reading_dataset_check(candidate):
-    regexp = r'^/([a-zA-Z0-9\*]+[a-zA-Z0-9\-_\*]*)/([a-zA-Z\*]+[a-zA-Z0-9_\-\*]*)/([A-Z_\*\-]+)$'
+    regexp = r'^/([a-zA-Z0-9]+[a-zA-Z0-9\-_]*)/([a-zA-Z]+[a-zA-Z0-9_\-]*)/([A-Z_\-]+)$'
     return check(regexp, candidate)
 
 def reading_block_check(candidate):
-    regexp = r'^/([a-zA-Z0-9\*]+[a-zA-Z0-9\-_\*]*)/([a-zA-Z\*]+[a-zA-Z0-9_\-\*]*)/([A-Z_\*\-]+)#([a-fA-F0-9\-\*]+)$'
+    regexp = r'^/([a-zA-Z0-9]+[a-zA-Z0-9\-_]*)/([a-zA-Z]+[a-zA-Z0-9_\-]*)/([A-Z_\-]+)#([a-fA-F0-9\-]+)$'
     return check(regexp, candidate)
 
 def reading_lfn_check(candidate):
-    regexp = r'^/store/([A-Za-z0-9_\-\*/])+/([A-Za-z0-9_\-\*])+.root$'
+    regexp = r'^/store/([A-Za-z0-9_\-/])+/([A-Za-z0-9_\-])+.root$'
     return check(regexp, candidate)
 
 
@@ -58,17 +58,29 @@ def inputChecks(**_params_):
                         try:
                             if type(value) == str:
                                 if name == 'dataset':
-                                    reading_dataset_check(value)
+                                    if '*' in value:
+                                        searchdataset(value)
+                                    else:
+                                        reading_dataset_check(value)
                                 elif name =='lumi_list': value = cjson.decode(value)
                                 elif name =='block_name':
-                                    reading_block_check(value)
+                                    if '*' in value:
+                                        searchblock(value)
+                                    else:
+                                        reading_block_check(value)
                                 elif name =='primary_ds_name':
                                     if '*' in value: searchstr(value)
                                     else: primdataset(value)
                                 elif name =='processed_ds_name':
-                                    reading_procds_check(value)
+                                    if '*' in value:
+                                        searchstr(value)
+                                    else:
+                                        reading_procds_check(value)
                                 elif name=='logical_file_name':
-                                    reading_lfn_check(value)
+                                    if '*' in value:
+                                        searchstr(value)
+                                    else:
+                                        reading_lfn_check(value)
                                 elif name=='processing_version':
                                     procversion(value)
                                 elif name=='global_tag':
@@ -83,7 +95,10 @@ def inputChecks(**_params_):
                             elif type(value) == list:
                                 if name == 'logical_file_name':
                                     for f in value:
-                                        reading_lfn_check(f)
+                                        if '*' in f:
+                                            searchstr(f)
+                                        else:
+                                            reading_lfn_check(f)
                                 elif name == 'block_names':
                                     for block_name in value:
                                         reading_block_check(block_name)
