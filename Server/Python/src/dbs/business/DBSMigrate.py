@@ -10,19 +10,20 @@ __version__ = "$Revision: 1.17 $"
 from WMCore.DAOFactory import DAOFactory
 
 #temporary thing
-import os, sys, socket
-import json, cjson
-import urllib, urllib2
+import cjson
+import json
+import os
+import socket
+import urllib2
 import urlparse
-import httplib
+
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
-#from dbs.utils.dbsHTTPSAuthHandler import HTTPSAuthHandler
+from dbs.utils.RestClientPool import RestClientPool
+
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
-from RestClient.RestApi import RestApi
-from RestClient.AuthHandling.X509Auth import X509Auth
-from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
+
 from sqlalchemy import exceptions
 
 def pprint(a):
@@ -37,6 +38,9 @@ class DBSMigrate:
                                 dbinterface=dbi, owner=owner)
         self.logger = logger
         self.dbi = dbi
+
+        myproxy = os.environ.get('SOCKS5_PROXY', None)
+        self.rest_client_pool = RestClientPool(proxy=myproxy)
 
         self.sm = daofactory(classname="SequenceManager")
         self.primdslist     = daofactory(classname="PrimaryDataset.List")
@@ -57,7 +61,6 @@ class DBSMigrate:
         self.dsparentlist   = daofactory(classname="DatasetParent.List")
         self.outputCoflist  = daofactory(classname="OutputModuleConfig.List")
         self.mgrremove      = daofactory(classname="MigrationRequests.Remove")
-
 
     def prepareDatasetMigrationList(self, conn, request):
         """
@@ -250,15 +253,19 @@ class DBSMigrate:
         #We will consider it as a submitted request. YG 05-18-2012
         try:
             alreadyqueued = self.mgrlist.execute(conn,
-                    migration_input=request["migration_input"])
+                                                 migration_input=request["migration_input"])
+            is_already_queued = len(alreadyqueued) > 0
+            # close connection before returning json object
+            if is_already_queued and conn:
+                conn.close()
             #if the queued is not failed, then we don't need to do it again.
-            if len(alreadyqueued) > 0 and alreadyqueued[0]['migration_status'] != 3:
+            if is_already_queued and alreadyqueued[0]['migration_status'] != 3:
                 return {"migration_report" : "REQUEST ALREADY QUEUED",
                         "migration_details" : alreadyqueued[0] }
-            elif len(alreadyqueued) > 0 and alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] < 3:
+            elif is_already_queued and alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] < 3:
                 return {"migration_report" : "REQUEST ALREADY QUEUED and will try the migration again ",
                         "migration_details" : alreadyqueued[0] }
-            elif len(alreadyqueued) > 0 and (alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] == 3):
+            elif is_already_queued and (alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] == 3):
                 return {"migration_report" : "REQUEST ALREADY QUEUED and failed in three tries again ",
                          "migration_details" : alreadyqueued[0] }
             else:
@@ -445,14 +452,12 @@ class DBSMigrate:
             if callType != 'http' and callType != 'https':
                 raise ValueError, "unknown URL type: %s" % callType
 
-            myproxy=os.environ.get('SOCKS5_PROXY', None)
-
-            restapi = RestApi(auth=X509Auth(), proxy=Socks5Proxy(proxy_url=myproxy) if myproxy else None)
             content = "application/json"
             UserID = os.environ['USER']+'@'+socket.gethostname()
             request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID }
             #params = {'block_name':blockname}
             data = cjson.encode(data)
+            restapi = self.rest_client_pool.get_rest_client()
             httpresponse = restapi.get(resturl, method, params, data, request_headers)
             return httpresponse.body
         except urllib2.HTTPError, httperror:
