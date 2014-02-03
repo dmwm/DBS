@@ -196,7 +196,7 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test031(self):
         """test31 unittestDBSClientReader_t.listDatasetParents basic test"""
-        self.api.listDatasetParents(dataset='/does/not/exists')
+        self.api.listDatasetParents(dataset='/does/not/EXISTS')
 
     def test032(self):
         """test32 unittestDBSClientReader_t.listFiles: basic test"""
@@ -231,11 +231,11 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test038(self):
         """test38 unittestDBSClientReader_t.listFiles: basic test"""
-        self.api.listFiles(dataset="/does/not/exist")
+        self.api.listFiles(dataset="/does/not/EXISTS")
 
     def test039(self):
         """test39 unittestDBSClientReader_t.listFiles: basic test"""
-        self.api.listFiles(block_name="/does/not/exist#123")
+        self.api.listFiles(block_name="/does/not/EXISTS#123")
 
     def test040(self):
         """test40 unittestDBSClientReader_t.listFiles: basic test"""
@@ -357,7 +357,7 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test060(self):
         """test60 unittestDBSClientReader_t.listDatasetParents basic test"""
-        self.api.listDatasetParents(dataset='/does/not/exists')
+        self.api.listDatasetParents(dataset='/does/not/EXISTS')
 
     def test061(self):
         """test61 unittestDBSClientReader_t.listFiles: basic test"""
