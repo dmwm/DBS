@@ -253,15 +253,19 @@ class DBSMigrate:
         #We will consider it as a submitted request. YG 05-18-2012
         try:
             alreadyqueued = self.mgrlist.execute(conn,
-                    migration_input=request["migration_input"])
+                                                 migration_input=request["migration_input"])
+            is_already_queued = len(alreadyqueued) > 0
+            # close connection before returning json object
+            if is_already_queued and conn:
+                conn.close()
             #if the queued is not failed, then we don't need to do it again.
-            if len(alreadyqueued) > 0 and alreadyqueued[0]['migration_status'] != 3:
+            if is_already_queued and alreadyqueued[0]['migration_status'] != 3:
                 return {"migration_report" : "REQUEST ALREADY QUEUED",
                         "migration_details" : alreadyqueued[0] }
-            elif len(alreadyqueued) > 0 and alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] < 3:
+            elif is_already_queued and alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] < 3:
                 return {"migration_report" : "REQUEST ALREADY QUEUED and will try the migration again ",
                         "migration_details" : alreadyqueued[0] }
-            elif len(alreadyqueued) > 0 and (alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] == 3):
+            elif is_already_queued and (alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] == 3):
                 return {"migration_report" : "REQUEST ALREADY QUEUED and failed in three tries again ",
                          "migration_details" : alreadyqueued[0] }
             else:
