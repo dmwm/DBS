@@ -18,7 +18,8 @@ class RestClientPool(object):
             return self._rest_client_pool[thread_id]
         except KeyError:
             self._rest_client_pool[thread_id] = RestApi(auth=self._auth_func(), proxy=self._proxy,
-                                                        additional_curl_options={pycurl.NOSIGNAL: 1})
+                                                        additional_curl_options={pycurl.NOSIGNAL: 1},
+                                                        use_shared_handle=True)
             ### see http://linux.die.net/man/3/libcurl-tutorial for thread safety
             return self._rest_client_pool[thread_id]
 
