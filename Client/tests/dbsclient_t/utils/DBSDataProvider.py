@@ -149,7 +149,7 @@ class DBSDataProvider(object):
     def acquisition_era_name(self):
         "return acquisition era name"
         if not hasattr(self, '_acquisition_era_name'):
-            self._acquisition_era_name = "acq_era_%s" % self._uid
+            self._acquisition_era_name = "Acq_Era_%s" % self._uid
         return self._acquisition_era_name
 
     @property

@@ -15,7 +15,7 @@ from dbs.apis.dbsClient import *
 
 uid = uuid.uuid4().time_mid
 print "****uid=%s******" % uid
-acquisition_era_name = "acq_era_%s" % uid
+acquisition_era_name = "Acq_Era_%s" % uid
 processing_version = (uid if (uid < 9999) else uid % 9999)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
