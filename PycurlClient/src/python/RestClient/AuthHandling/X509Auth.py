@@ -58,8 +58,8 @@ class X509Auth(object):
 
         # TODO: only in linux, unix case, add other os case
         # look for proxy at default location /tmp/x509up_u$uid
-        elif os.path.exists(os.path.join('/tmp/x509up_u', str(os.getuid()))):
-            self._ssl_cert = os.path.join('/tmp/x509up_u', str(os.getuid()))
+        elif os.path.exists('/tmp/x509up_u%s' % str(os.getuid())):
+            self._ssl_cert = '/tmp/x509up_u%s' % str(os.getuid())
             self._ssl_key = self._ssl_cert
 
         elif sys.stdin.isatty():
