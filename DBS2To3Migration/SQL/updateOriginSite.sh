@@ -11,5 +11,5 @@
 #
 #
 
-sqlplus cms_dbs3_prod_phys0_owner@cms_dbs/dbs3_prod_pd @updateOriginSite.sql
+sqlplus acct@cms_dbs/pd @updateOriginSite.sql
 exit
