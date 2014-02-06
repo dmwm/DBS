@@ -269,5 +269,6 @@ ALTER TABLE FILE_OUTPUT_MOD_CONFIGS ADD (
 select 'Done recreate  FILE_OUTPUT_MOD_CONFIGS constraint' as job from dual;
 select sysdate from dual;
 
+select sysdate from dual;
 spool off
 EXIT;
