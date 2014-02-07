@@ -26,7 +26,7 @@ BEGIN
    END LOOP;
    CLOSE OMCursor;    
 END;  
-
+/
 
 --query to verify the result
 --Following two queries should give the same number of global tags inserted into the db.
