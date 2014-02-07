@@ -5,7 +5,7 @@
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2014-01-30 08:05                                */
+/* Created on:            2014-02-07 13:26                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -670,7 +670,7 @@ CREATE TABLE BLOCKS (
     BLOCK_NAME VARCHAR2(500) CONSTRAINT NN_BK_BLOCK_NAME NOT NULL,
     DATASET_ID INTEGER CONSTRAINT NN_BK_DATASET_ID NOT NULL,
     OPEN_FOR_WRITING INTEGER DEFAULT 1 CONSTRAINT NN_BK_OPEN_FOR_WRITING NOT NULL,
-    ORIGIN_SITE_NAME VARCHAR2(100) CONSTRAINT NN_BK_ORIGIN_SITE_NAME NOT NULL,
+    ORIGIN_SITE_NAME VARCHAR2(200) CONSTRAINT NN_BK_ORIGIN_SITE_NAME NOT NULL,
     BLOCK_SIZE INTEGER,
     FILE_COUNT INTEGER,
     CREATION_DATE INTEGER,
