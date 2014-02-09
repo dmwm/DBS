@@ -449,6 +449,18 @@ class DBSReaderModel_t(unittest.TestCase):
         """test006u: web.DBSReaderModel.listBlockOrigin: Must raise an exception if no parameter is passed. """
         api.list('blockorigin')
 
+    def test006ua(self):
+        """test006ua: web.DBSReaderModel.listBlockOrigin: basic test """
+        api.list('blockorigin', origin_site_name=testparams['site'], block_name=testparams['block'])
+
+    def test006ub(self):
+        """test006ub: web.DBSReaderModel.listBlockOrigin: basic test """
+        api.list('blockorigin', block_name=testparams['block'])
+
+    def test006uc(self):
+        """test006uc: web.DBSReaderModel.listBlockOrigin: basic test """
+        api.list('blockorigin', dataset=testparams['dataset'])
+
     def test006v(self):
         """test006v: web.DBSReaderModel.listBlocks: basic test"""
         api.list('blocks', run_num=testparams['run_num'], block_name=testparams['block'])
