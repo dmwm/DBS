@@ -545,17 +545,19 @@ class DbsApi(object):
         """
         API to list blocks first generated in origin_site_name.
 
-        :param origin_site_name: Origin Site Name (Required, No wildcards)
+        :param origin_site_name: Origin Site Name (Optional No wildcards)
         :type origin_site_name: str
-        :param dataset: dataset (Required, No wildcards)
+        :param dataset: dataset (Either dataset or block_name is required, No wildcards)
         :type dataset: str
+        :param block_name: block (Either dataset or block_name is required, No wildcards)
+        :type block_name: str
         :returns: List of dictionaries containing the following keys (create_by, creation_date, open_for_writing, last_modified_by, dataset, block_name, file_count, origin_site_name, last_modification_date, block_size)
         :rtype: list of dicts
 
         """
-        validParameters = ['origin_site_name', 'dataset']
+        validParameters = ['origin_site_name', 'dataset', 'block_name']
 
-        requiredParameters = {'multiple': validParameters}
+        requiredParameters = {'multiple': ['dataset', 'block_name']}
 
         checkInputParameter(method="listBlockOrigin", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)

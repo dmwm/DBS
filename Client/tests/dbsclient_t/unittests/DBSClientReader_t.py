@@ -521,6 +521,18 @@ class DBSClientReader_t(unittest.TestCase):
         """test93 unittestDBSClientReader_t.listBlockOrigin: """
         self.api.listBlockOrigin(origin_site_name=self.testparams['site'], dataset=self.testparams['dataset'])
 
+    def test093b(self):
+        """test93b unittestDBSClientReader_t.listBlockOrigin: """
+        self.api.listBlockOrigin(dataset=self.testparams['dataset'])
+
+    def test093c(self):
+        """test93c unittestDBSClientReader_t.listBlockOrigin: """
+        self.api.listBlockOrigin(block_name=self.testparams['block'])
+
+    def test093d(self):
+        """test93d unittestDBSClientReader_t.listBlockOrigin: """
+        self.api.listBlockOrigin(origin_site_name=self.testparams['site'], block_name=self.testparams['block'])
+
     def test094(self):
         """test94 unittestDBSClientReader_t.listBlockOrigin: """
         self.api.listBlockOrigin(origin_site_name=self.testparams['site'])

@@ -553,11 +553,11 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(origin_site_name=str, dataset=str)
-    def listBlockOrigin(self, origin_site_name="",  dataset=""):
+    def listBlockOrigin(self, origin_site_name="",  dataset="", block_name=""):
         """
         API to list blocks first generated in origin_site_name.
 
-        :param origin_site_name: Origin Site Name (Required, No wildcards)
+        :param origin_site_name: Origin Site Name (Optional, No wildcards)
         :type origin_site_name: str
         :param dataset: dataset (Required, No wildcards)
         :type dataset: str
@@ -566,13 +566,14 @@ class DBSReaderModel(RESTModel):
 
         """
         try:
-            return self.dbsBlock.listBlocksOrigin(origin_site_name, dataset)
+            return self.dbsBlock.listBlocksOrigin(origin_site_name, dataset, block_name)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
             sError = "DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
-            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
+                                self.logger.exception, sError)
 
 
     @inputChecks(block_name=str)
