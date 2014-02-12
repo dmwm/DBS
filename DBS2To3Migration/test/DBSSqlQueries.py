@@ -27,6 +27,7 @@ class DBSSqlQueries(object):
                               'FileLumis': 'file_lumi_id',
                               'FileOutputModConfigs': 'file_output_config_id',
                               'FileParents': 'this_file_id',
+                              'OriginSiteName': 'block_id',
                               'OutputModule': 'output_mod_config_id',
                               'ParametersetHashes': 'parameter_set_hash_id',
                               'PhysicsGroups': 'physics_group_id',
@@ -498,6 +499,26 @@ class DBSSqlQueries(object):
                         ORDER BY THIS_FILE_ID,PARENT_FILE_ID
                         """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
                         ##############################################
+                        'OriginSiteName':
+                        """SELECT BLOCK_ID, ORIGIN_SITE_NAME FROM
+                        (SELECT DISTINCT B3.BLOCK_ID, B3.ORIGIN_SITE_NAME FROM {ownerDBS3}.BLOCKS B3
+                        WHERE B3.ORIGIN_SITE_NAME!='UNKNOWN'
+                        UNION ALL
+                        SELECT DISTINCT B1.ID AS BLOCK_ID,
+                        SE1.SENAME AS ORIGIN_SITE_NAME
+                        FROM {ownerDBS2}.BLOCK B1
+                        JOIN {ownerDBS2}.SEBLOCK SEB1 ON B1.ID=SEB1.BLOCKID
+                        JOIN {ownerDBS2}.STORAGEELEMENT SE1 ON SEB1.SEID=SE1.ID
+                        WHERE B1.ID IN (SELECT B2.ID FROM {ownerDBS2}.BLOCK B2
+                        JOIN {ownerDBS2}.SEBLOCK SEB2 ON B2.ID=SEB2.BLOCKID
+                        JOIN {ownerDBS2}.STORAGEELEMENT SE2 ON SEB2.SEID=SE2.ID
+                        WHERE B2.ID=B1.ID GROUP BY B2.ID HAVING COUNT(B2.ID)=1)
+                        )
+                        GROUP BY BLOCK_ID, ORIGIN_SITE_NAME
+                        HAVING COUNT(*)<>2
+                        ORDER BY BLOCK_ID
+                        """.format(ownerDBS3=ownerDBS3, ownerDBS2=ownerDBS2),
+                        ##############################################
                         'OutputModule':
                         """SELECT OUTPUT_MOD_CONFIG_ID,
                         APP_NAME,
@@ -766,6 +787,9 @@ class DBSSqlQueries(object):
 
     def fileParents(self, sort=True):
         return self._queryDB('FileParents', sort=sort)
+
+    def originSiteName(self, sort=True):
+        return self._queryDB('OriginSiteName', sort=sort)
 
     def outputModuleConfig(self, sort=True):
         return self._queryDB('OutputModule', sort=sort)
