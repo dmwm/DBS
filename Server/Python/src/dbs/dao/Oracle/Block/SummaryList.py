@@ -20,15 +20,15 @@ class SummaryList(DBFormatter):
         if dataset:
             where_clause = "WHERE DS.dataset=:dataset"
             sql = """SELECT (
-            SELECT SUM(BS.BLOCK_SIZE)
+            SELECT NVL(SUM(BS.BLOCK_SIZE), 0)
             FROM {owner}BLOCKS BS {dataset_join} {where_clause}
             ) AS FILE_SIZE,
             (
-            SELECT SUM(BS.FILE_COUNT)
+            SELECT NVL(SUM(BS.FILE_COUNT),0)
             FROM {owner} BLOCKS BS {dataset_join} {where_clause}
             ) AS NUM_FILE,
             (
-            SELECT SUM(FS.EVENT_COUNT)
+            SELECT NVL(SUM(FS.EVENT_COUNT),0)
             FROM {owner}FILES FS {block_join} {dataset_join} {where_clause}
             ) AS NUM_EVENT
             FROM DUAL""".format(owner=self.owner, where_clause=where_clause, dataset_join=self.dataset_join,
@@ -55,15 +55,15 @@ class SummaryList(DBFormatter):
 
             sql = generatedsql + \
             """SELECT (
-            SELECT SUM(BS.BLOCK_SIZE)
+            SELECT NVL(SUM(BS.BLOCK_SIZE),0)
             FROM {owner}BLOCKS BS {where_clause}
             ) AS FILE_SIZE,
             (
-            SELECT SUM(BS.FILE_COUNT)
+            SELECT NVL(SUM(BS.FILE_COUNT),0)
             FROM {owner} BLOCKS BS {where_clause}
             ) AS NUM_FILE,
             (
-            SELECT SUM(FS.EVENT_COUNT)
+            SELECT NVL(SUM(FS.EVENT_COUNT),0)
             FROM {owner}FILES FS {block_join} {where_clause}
             ) AS NUM_EVENT
             FROM DUAL""".format(owner=self.owner, where_clause=where_clause, block_join=self.block_join)
@@ -71,6 +71,8 @@ class SummaryList(DBFormatter):
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 
         result = []
+        #self.logger.debug(sql)
+        #self.logger.debug(binds)
         for cursor in cursors:
             result.extend(self.formatCursor(cursor))
         return result

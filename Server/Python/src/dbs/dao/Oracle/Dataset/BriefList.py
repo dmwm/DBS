@@ -80,7 +80,7 @@ class BriefList(DBFormatter):
             elif min_ldate != 0 and max_ldate == 0:
                 wheresql += "AND D.LAST_MODIFICATION_DATE > :min_ldate "
                 binds.update(min_ldate = min_ldate)
-            elif min_cdate ==0 and max_cdate != 0:
+            elif min_ldate ==0 and max_ldate != 0:
                 wheresql += "AND D.LAST_MODIFICATION_DATE < :max_ldate "
                 binds.update(max_ldate = max_ldate)
             else:
