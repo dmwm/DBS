@@ -29,6 +29,17 @@ from sqlalchemy import exceptions
 def pprint(a):
     print json.dumps(a, sort_keys=True, indent=4)
 
+def remove_duplicated_items(ordered_dict):
+    unique_block_list = set()
+
+    for key, value in reversed(ordered_dict.items()):
+        for entry in value:
+            if entry not in unique_block_list:
+                unique_block_list.add(entry)
+            else:
+                value.remove(entry)
+    return ordered_dict
+
 class DBSMigrate:
     """ Migration business object class. """
 
@@ -85,16 +96,16 @@ class DBSMigrate:
                 m = 'Requested dataset %s is already in destination' %srcdataset
                 dbsExceptionHandler('dbsException-invalid-input2', message=m, serverError=m)
             # Now process the parent datasets
-            parent_ordered_dict = self.getParentDatastesOrderedList(url, conn,
+            parent_ordered_dict = self.getParentDatasetsOrderedList(url, conn,
                                                 srcdataset, order_counter+1)
             if parent_ordered_dict != {}:
                 ordered_dict.update(parent_ordered_dict)
-            return ordered_dict
+            return remove_duplicated_items(ordered_dict)
         except dbsException:
             raise
         except Exception, ex:
             if 'urlopen error' in str(ex):
-                message='Connection to source DBS server refued. Check your source url.'
+                message='Connection to source DBS server refused. Check your source url.'
             elif 'Bad Request' in str(ex):
                 message='cannot get data from the source DBS server. Check your migration input.'
             else:
@@ -109,7 +120,6 @@ class DBSMigrate:
         and returns an ordered list of blocks not already at dst for migration
         """
         ordered_dict = {}
-        srcblks ={}
         srcblks = self.getSrcBlocks(url, dataset=inputdataset)
         if len(srcblks) < 0:
             e = "DBSMigration: No blocks in the required dataset %s found at source %s."%(inputdataset, url)
@@ -121,10 +131,12 @@ class DBSMigrate:
         for ablk in blocksInSrcNames:
             if not ablk in blocksInDstNames:
                 ordered_dict[order_counter].append(ablk)
-        if ordered_dict[order_counter] != []: return ordered_dict
-        else: return {}
+        if ordered_dict[order_counter] != []:
+            return ordered_dict
+        else:
+            return {}
 
-    def getParentDatastesOrderedList(self, url, conn, dataset, order_counter):
+    def getParentDatasetsOrderedList(self, url, conn, dataset, order_counter):
         """
         check if input dataset has parents,
         check if any of the blocks are already at dst,
@@ -144,7 +156,7 @@ class DBSMigrate:
                 if parent_ordered_dict != {}:
                     ordered_dict.update(parent_ordered_dict)
                 # parents of parent
-                pparent_ordered_dict = self.getParentDatastesOrderedList(url,
+                pparent_ordered_dict = self.getParentDatasetsOrderedList(url,
                                     conn, aparentDataset, order_counter+1)
                 if pparent_ordered_dict != {}:
                     ordered_dict.update(pparent_ordered_dict)
@@ -184,7 +196,9 @@ class DBSMigrate:
             if parent_ordered_dict != {}:
                 ordered_dict.update(parent_ordered_dict)
             #6.
-            return ordered_dict
+            #check for duplicates
+
+            return remove_duplicated_items(ordered_dict)
         except Exception, ex:
             raise ex
 
