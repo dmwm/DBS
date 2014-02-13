@@ -29,6 +29,17 @@ from sqlalchemy import exceptions
 def pprint(a):
     print json.dumps(a, sort_keys=True, indent=4)
 
+def remove_duplicated_items(ordered_dict):
+    unique_block_list = set()
+
+    for key, value in reversed(ordered_dict.items()):
+        for entry in value:
+            if entry not in unique_block_list:
+                unique_block_list.add(entry)
+            else:
+                value.remove(entry)
+    return ordered_dict
+
 class DBSMigrate:
     """ Migration business object class. """
 
@@ -89,7 +100,7 @@ class DBSMigrate:
                                                 srcdataset, order_counter+1)
             if parent_ordered_dict != {}:
                 ordered_dict.update(parent_ordered_dict)
-            return ordered_dict
+            return remove_duplicated_items(ordered_dict)
         except dbsException:
             raise
         except Exception, ex:
@@ -120,8 +131,10 @@ class DBSMigrate:
         for ablk in blocksInSrcNames:
             if not ablk in blocksInDstNames:
                 ordered_dict[order_counter].append(ablk)
-        if ordered_dict[order_counter] != []: return ordered_dict
-        else: return {}
+        if ordered_dict[order_counter] != []:
+            return ordered_dict
+        else:
+            return {}
 
     def getParentDatasetsOrderedList(self, url, conn, dataset, order_counter):
         """
@@ -183,7 +196,9 @@ class DBSMigrate:
             if parent_ordered_dict != {}:
                 ordered_dict.update(parent_ordered_dict)
             #6.
-            return ordered_dict
+            #check for duplicates
+
+            return remove_duplicated_items(ordered_dict)
         except Exception, ex:
             raise ex
 
