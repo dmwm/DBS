@@ -30,7 +30,7 @@ FROM %sPROCESSING_ERAS PE
 
         sql = self.sql
 	binds={}
-	if processingV:
+	if processingV is not None:
             #op = ("=", "like")["%" in  processingV]
             op = "="
 	    sql += "WHERE PE.PROCESSING_VERSION %s :processingV" %op 
