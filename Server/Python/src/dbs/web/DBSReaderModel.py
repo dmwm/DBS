@@ -111,8 +111,8 @@ class DBSReaderModel(RESTModel):
                         'origin_site_name', 'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate',
                         'max_ldate', 'cdate', 'ldate', 'detail'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
-        self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset', 'block_name'],
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num',
                         'origin_site_name', 'lumi_list', 'detail'], secured=True,
