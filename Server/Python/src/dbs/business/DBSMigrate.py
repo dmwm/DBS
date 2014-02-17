@@ -33,7 +33,7 @@ def remove_duplicated_items(ordered_dict):
     unique_block_list = set()
 
     for key, value in reversed(ordered_dict.items()):
-        for entry in value:
+        for entry in list(value):#copy the list since value is modified during iteration
             if entry not in unique_block_list:
                 unique_block_list.add(entry)
             else:
