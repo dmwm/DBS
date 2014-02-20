@@ -161,15 +161,15 @@ acceptedInputKeys = {
     'blockBulk':['file_conf_list', 'dataset_conf_list', 'block_parent_list', 'physics_group_name', 'processing_era', 'dataset', 'block', \
                     'acquisition_era', 'primds', 'ds_parent_list', 'files', 'file_parent_list'],
     ################
-    'file_conf_list':['release_version', 'pset_hash', 'lfn', 'app_name', 'output_module_label', 'global_tag'],
+    'file_conf_list':['release_version', 'pset_hash', 'pset_name', 'lfn', 'app_name', 'output_module_label', 'global_tag'],
     ################
-    'file_output_config_list':['release_version', 'pset_hash', 'lfn', 'app_name', 'output_module_label', 'global_tag'],
+    'file_output_config_list':['release_version', 'pset_hash', 'pset_name', 'lfn', 'app_name', 'output_module_label', 'global_tag'],
     ################
     'file_parent_list':['file_parent_lfn', 'parent_logical_file_name', 'logical_file_name'],
     ################
     'dataset_conf_list':['release_version', 'pset_hash', 'pset_name', 'app_name', 'output_module_label', 'global_tag'],
     ################
-    'output_configs':['release_version', 'pset_hash', 'app_name', 'output_module_label', 'global_tag'],
+    'output_configs':['release_version', 'pset_hash', 'pset_name', 'app_name', 'output_module_label', 'global_tag'],
     ################
     'physics_group_name':[],
     ################
