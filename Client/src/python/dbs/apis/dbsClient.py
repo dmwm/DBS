@@ -991,13 +991,10 @@ class DbsApi(object):
 
         """
         validParameters = ['processing_version']
-
-        requiredParameters = {'forced': validParameters}
-
-        checkInputParameter(method="listProcessingEras", parameters=kwargs.keys(), validParameters=validParameters,
-                            requiredParameters=requiredParameters)
-
-        return self.__callServer("processingeras", params=kwargs)
+        
+	checkInputParameter(method="listProcessingEras", parameters=kwargs.keys(), validParameters=validParameters)
+        
+	return self.__callServer("processingeras", params=kwargs)
 
     def listReleaseVersions(self, **kwargs):
         """
