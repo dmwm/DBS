@@ -529,12 +529,14 @@ class DbsApi(object):
         :type block_name: str, list
         :param dataset: list block summaries for all blocks in dataset
         :type dataset: str
+        :param detail: list block summary by block names if detail=True, default=False
+        :type detail: str, bool
         :returns: list of dicts containing total block_sizes, file_counts and event_counts of dataset or blocks provided
 
         """
-        validParameters = ['block_name', 'dataset']
+        validParameters = ['block_name', 'dataset', 'detail']
 
-        requiredParameters = {'standalone': validParameters}
+        requiredParameters = {'standalone': 'block_name', 'dataset'}
 
         checkInputParameter(method="listBlockSummaries", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
