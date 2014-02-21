@@ -552,7 +552,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(origin_site_name=str, dataset=str, block_nmae=str)
+    @inputChecks(origin_site_name=str, dataset=str, block_name=str)
     def listBlockOrigin(self, origin_site_name="",  dataset="", block_name=""):
         """
         API to list blocks first generated in origin_site_name.
