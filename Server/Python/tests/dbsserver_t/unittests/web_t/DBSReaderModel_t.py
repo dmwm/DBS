@@ -1090,6 +1090,18 @@ class DBSReaderModel_t(unittest.TestCase):
         """test026g: web.DBSReaderModel.listBlockSummaries: simple block_list example"""
         api.list('blocksummaries', block_name=[testparams['block'], testparams['block']])
 
+    def test026e1(self):
+        """test026e1: web.DBSReaderModel.listBlockSummaries: simple block with detail example"""
+        api.list('blocksummaries', block_name=testparams['block'], detail=True)
+
+    def test026f1(self):
+        """test026f1: web.DBSReaderModel.listBlockSummaries: simple dataset with detail example"""
+        api.list('blocksummaries', dataset=testparams['dataset'], detail=True)
+
+    def test026g1(self):
+        """test026g1: web.DBSReaderModel.listBlockSummaries: simple block_list with detail example"""
+        api.list('blocksummaries', block_name=[testparams['block'], testparams['block']], detail=True)
+
     @checkException400
     def test027a(self):
         """test027a: web.DBSReaderModel.listRunSummaries: input validation test"""

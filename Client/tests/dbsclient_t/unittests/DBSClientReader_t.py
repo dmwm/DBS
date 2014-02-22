@@ -565,6 +565,18 @@ class DBSClientReader_t(unittest.TestCase):
     def test101(self):
         """test101: unittestDBSClientReader_t.listBlockSummaries: simple block_list example"""
         self.api.listBlockSummaries(block_name=[self.testparams['block'], self.testparams['block']])
+    
+    def test099a(self):
+        """test099a: unittestDBSClientReader_t.listBlockSummaries: simple block with detail example"""
+        self.api.listBlockSummaries(block_name=self.testparams['block'], detail=True)
+
+    def test100a(self):
+        """test100: unittestDBSClientReader_t.listBlockSummaries: simple dataset with detail example"""
+        self.api.listBlockSummaries(dataset=self.testparams['dataset'], detail=True)
+
+    def test101a(self):
+        """test101: unittestDBSClientReader_t.listBlockSummaries: simple block_list with detail example"""
+        self.api.listBlockSummaries(block_name=[self.testparams['block'], self.testparams['block']], detail=True)
 
     def test102(self):
         """test102: unittestDBSClientReader_t.listRunSummaries: input validation test"""
