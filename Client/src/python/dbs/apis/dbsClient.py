@@ -536,7 +536,7 @@ class DbsApi(object):
         """
         validParameters = ['block_name', 'dataset', 'detail']
 
-        requiredParameters = {'standalone': 'block_name', 'dataset'}
+        requiredParameters = {'standalone': ['block_name', 'dataset']}
 
         checkInputParameter(method="listBlockSummaries", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)

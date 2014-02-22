@@ -535,7 +535,11 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test094(self):
         """test94 unittestDBSClientReader_t.listBlockOrigin: """
-        self.api.listBlockOrigin(origin_site_name=self.testparams['site'])
+        try:
+                self.api.listBlockOrigin(origin_site_name=self.testparams['site'])
+        except dbsClientException as e:
+                if "Invalid input:" in str(e):
+                        pass
 
     def test095(self):
         """test095: unittestDBSClientReader_t.listBlockSummaries: input validation test"""

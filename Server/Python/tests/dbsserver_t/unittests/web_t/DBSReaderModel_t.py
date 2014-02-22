@@ -436,6 +436,7 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('blocks', run_num=[testparams['run_num'], testparams['run_num']], dataset=testparams['dataset'],
                  detail=True)
 
+    @checkException400
     def test006s(self):
         """test006s: web.DBSReaderModel.listBlockOrigin: basic test """
         api.list('blockorigin', origin_site_name=testparams['site'])
