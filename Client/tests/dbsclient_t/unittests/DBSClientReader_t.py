@@ -571,11 +571,11 @@ class DBSClientReader_t(unittest.TestCase):
         self.api.listBlockSummaries(block_name=self.testparams['block'], detail=True)
 
     def test100a(self):
-        """test100: unittestDBSClientReader_t.listBlockSummaries: simple dataset with detail example"""
+        """test100a: unittestDBSClientReader_t.listBlockSummaries: simple dataset with detail example"""
         self.api.listBlockSummaries(dataset=self.testparams['dataset'], detail=True)
 
     def test101a(self):
-        """test101: unittestDBSClientReader_t.listBlockSummaries: simple block_list with detail example"""
+        """test101a: unittestDBSClientReader_t.listBlockSummaries: simple block_list with detail example"""
         self.api.listBlockSummaries(block_name=[self.testparams['block'], self.testparams['block']], detail=True)
 
     def test102(self):
