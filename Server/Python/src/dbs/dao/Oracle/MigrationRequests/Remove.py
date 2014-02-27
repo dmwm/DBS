@@ -19,7 +19,7 @@ class Remove(DBFormatter):
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """Delete from %sMIGRATION_REQUESTS  
-WHERE MIGRATION_REQUEST_ID=:migration_rqst_id and create_by=:create_by and (migration_status=0 or migration_status=3)""" %  self.owner 
+WHERE MIGRATION_REQUEST_ID=:migration_rqst_id and create_by=:create_by and (migration_status=0 or migration_status=3 or migration_status=9)""" %  self.owner 
         
     def execute(self, conn, daoinput, transaction = False):
         """

@@ -158,6 +158,7 @@ class MigrationTask(SequencialTaskBase):
                 logmessage="No migration blocks found under the migration request id %s." %(self.migration_req_id )+ \
                            "DBS Operator please check it."
                 #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
+                #if try_count==3, the sql will actually set the migration_status=9 (terminally failed) instead of 3
                 self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
                 self.sourceUrl = None
                 MgrLogger.error( time.asctime(time.gmtime()) + logmessage )
@@ -208,6 +209,7 @@ class MigrationTask(SequencialTaskBase):
                 if type(ex) == dbsException:
                     MgrLogger.error( time.asctime(time.gmtime()) + ex.message + ex.serverError )
                 MgrLogger.error(time.asctime(time.gmtime()) + str(ex))
+                #if try_count==3, the sql will actually set the status=9 (terminally failed) instead of 3
                 self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
                 self.dbsMigrate.updateMigrationBlockStatus(migration_status=3, migration_request=self.migration_req_id)
                 return

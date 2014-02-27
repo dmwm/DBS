@@ -273,15 +273,13 @@ class DBSMigrate:
             if is_already_queued and conn:
                 conn.close()
             #if the queued is not failed, then we don't need to do it again.
-            if is_already_queued and alreadyqueued[0]['migration_status'] != 3:
-                return {"migration_report" : "REQUEST ALREADY QUEUED",
+            #add a new migration_status=9 (terminal failure)
+            if is_already_queued and alreadyqueued[0]['migration_status'] != 9:
+                return {"migration_report" : "REQUEST ALREADY QUEUED. Migration in progress",
                         "migration_details" : alreadyqueued[0] }
-            elif is_already_queued and alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] < 3:
-                return {"migration_report" : "REQUEST ALREADY QUEUED and will try the migration again ",
+            elif is_already_queued and alreadyqueued[0]['migration_status'] == 9:
+                return {"migration_report" : "REQUEST ALREADY QUEUED. Migration terminally failed. ",
                         "migration_details" : alreadyqueued[0] }
-            elif is_already_queued and (alreadyqueued[0]['migration_status'] == 3 and alreadyqueued[0]['retry_count'] == 3):
-                return {"migration_report" : "REQUEST ALREADY QUEUED and failed in three tries again ",
-                         "migration_details" : alreadyqueued[0] }
             else:
                 # not already queued
                 #Determine if its a dataset or block migration
@@ -393,11 +391,13 @@ class DBSMigrate:
         0=PENDING
         1=IN PROGRESS
         2=COMPLETED
-        3=FAILED
+        3=FAILED (will be retried)
+        9=Terminally FAILED 
         status change:
         0 -> 1
         1 -> 2
         1 -> 3
+        1 -> 9
         are only allowed changes for working through migration.
         3 -> 1 is allowed for retrying and retry count +1.
 
@@ -429,13 +429,15 @@ class DBSMigrate:
         0=PENDING
         1=IN PROGRESS
         2=COMPLETED
-        3=FAILED
+        3=FAILED (will be retried)
+        9=Terminally FAILED
         status change:
         0 -> 1
         1 -> 2
         1 -> 3
+        1 -> 9
         are only allowed changes for working through migration.
-        3 -> 0 allowed for retrying.
+        3 -> 1 allowed for retrying.
 
         """
 

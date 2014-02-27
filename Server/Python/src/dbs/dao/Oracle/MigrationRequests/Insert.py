@@ -1,9 +1,6 @@
 """ DAO Object for MigrationRequests table """ 
 """ DAO Object for MigrationRequests table """ 
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: Insert.py,v 1.4 2010/06/28 16:09:04 afaq Exp $ "
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

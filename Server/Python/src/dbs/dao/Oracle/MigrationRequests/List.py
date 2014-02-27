@@ -2,9 +2,6 @@
 """
 This module provides MigrationRequests.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.4 2010/06/28 16:09:04 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsUtils import dbsUtils

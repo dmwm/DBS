@@ -12,13 +12,15 @@ class Update(DBFormatter):
         0=PENDING
         1=IN PROGRESS
         2=COMPLETED
-        3=FAILED
+        3=FAILED (will be retried)
+        9=Terminally FAILED
         status change: 
         0 -> 1
         1 -> 2
         1 -> 3
+        1 -> 9
         are only allowed changes for working through.
-        3 ->) allowed for retrying when retry_count <3.
+        3 -> 1 allowed for retrying when retry_count <3.
     """
     def __init__(self, logger, dbi, owner):
         """
@@ -27,24 +29,26 @@ class Update(DBFormatter):
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
-"""UPDATE %sMIGRATION_BLOCKS
-SET MIGRATION_STATUS=:migration_status , LAST_MODIFICATION_DATE=:last_modification_date 
-WHERE """ %  self.owner 
+                        """UPDATE %sMIGRATION_BLOCKS
+                           SET 
+                                MIGRATION_STATUS=:migration_status , 
+                                LAST_MODIFICATION_DATE=:last_modification_date 
+                           WHERE """ %  self.owner 
         
     def execute(self, conn, daoinput, transaction = False):
         """
 	    daoinput keys:
-	    migration_status, migration_block_id
+	    migration_status, migration_block_id, migration_request_id
         """
         #print daoinput['migration_block_id']
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationBlock/Update. Expects db connection from upper layer.")
         if daoinput['migration_status'] == 1:
            sql = self.sql + "  (MIGRATION_STATUS = 0  or MIGRATION_STATUS = 3)" 
-        elif daoinput['migration_status'] == 2 or daoinput['migration_status'] == 3:
+        elif daoinput['migration_status'] == 2 or daoinput['migration_status'] == 3 or daoinput['migration_status'] == 9:
             sql = self.sql + " MIGRATION_STATUS = 1 "
         else: 
-            dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationBlock/Update. Expected migration status to be 1, 2 or 3") 
+            dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationBlock/Update. Expected migration status to be 1, 2, 3, 0r 9") 
         #print sql
         if 'migration_request_id' in daoinput:
             sql3 = sql + "and MIGRATION_REQUEST_ID =:migration_request_id"
