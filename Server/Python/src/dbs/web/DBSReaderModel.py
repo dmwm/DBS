@@ -302,10 +302,18 @@ class DBSReaderModel(RESTModel):
         :type processing_version: str
         :param acquisition_era_name: Acquisition Era
         :type acquisition_era_name: str
+        :param run_num: Specify a specific run number or range
+        :type run_num: int,list,str
+        :param physics_group_name: List only dataset having physics_group_name attribute
+        :type physics_group_name: str
+        :param logical_file_name: List dataset containing the logical_file_name
+        :type logical_file_name: str
         :param primary_ds_name: Primary Dataset Name
         :type primary_ds_name: str
         :param primary_ds_type: Primary Dataset Type (Type of data, MC/DATA)
         :type primary_ds_type: str
+        :param processed_ds_name: List datasets having this processed dataset name
+        :type processed_ds_name: str
         :param data_tier_name: Data Tier
         :type data_tier_name: str
         :param dataset_access_type: Dataset Access Type ( PRODUCTION, DEPRECATED etc.)
