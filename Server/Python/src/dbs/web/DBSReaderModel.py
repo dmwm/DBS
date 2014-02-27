@@ -83,6 +83,7 @@ class DBSReaderModel(RESTModel):
         RESTModel.__init__(self, config)
         self.dbsUtils2 = dbsUtils()
         self.version = config.database.version
+        self.instance = config.instance
         self.security_params = config.security.params
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
 
@@ -213,7 +214,7 @@ class DBSReaderModel(RESTModel):
         :rtype: dictionary containing dbs_version
 
         """
-        return dict(dbs_version=self.version)
+        return dict(dbs_version=self.version, dbs_instance=self.instance)
 
     @inputChecks(primary_ds_name=str, primary_ds_type=str)
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
