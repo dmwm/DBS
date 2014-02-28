@@ -2,8 +2,6 @@
 """
 This module provides MigrationRequests.ListOldest data access object.
 """
-__revision__ = "$Id: ListOldest.py,v 1.2 2010/06/29 19:23:39 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler

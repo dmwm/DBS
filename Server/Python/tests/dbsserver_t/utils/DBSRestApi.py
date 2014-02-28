@@ -36,6 +36,7 @@ class DBSRestApi:
         self.migration_test = migration_test
         config = self.configure(configfile, service, dbinstance)
         config = config.section_("DBS")
+	config.instance = dbinstance
         self.rest = RESTApi(config)
         self.config = config
 
@@ -85,6 +86,7 @@ class DBSRestApi:
             config.DBS.database.dbowner = dbconfig.dbowner
             config.DBS.database.engineParameters = dbconfig.engineParameters
             config.DBS.database.version = dbconfig.version if dbconfig.version else '3.99.98'
+	    #config.DBS.database.instance = dbconfig.instance	
 
             try:
                 secconfig = getattr(dbsconfig.security.instances, dbinstance)
