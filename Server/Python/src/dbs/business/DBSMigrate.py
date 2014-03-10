@@ -216,8 +216,16 @@ class DBSMigrate:
             # and then just check the ones we are interested in.
             # This assumes that all parent blocks are from a same dataset. Is this true? YG 6/12/2012
             # Confirmed by S. Foulkes, all parent's blocks belongs to a same dataset.
-            parent_dataset = parentBlocksInSrcNames[0].split('#')[0]
-            parentBlocksInDst = self.blocklist.execute(conn, parent_dataset)
+            # 3/6/2014 YG: Seems it is not the case that all parents are from the same dataset regarding to crab data
+	    parent_ds_lst = []	
+	    for ps in parentBlocksInSrcNames:	
+		parent_dataset = ps.split('#')[0]
+		if parent_dataset not in parent_ds_lst:
+			parent_ds_lst.append(parent_dataset)
+	    parentBlocksInDst = []
+ 	    for rpds in parent_ds_lst:
+		lpds =  self.blocklist.execute(conn, rpds)
+		parentBlocksInDst.extend(lpds)
             #YG 7/24/2012
             parentBlocksInDstNames = [y['block_name']
                                             for y in parentBlocksInDst]
@@ -274,7 +282,10 @@ class DBSMigrate:
                 conn.close()
             #if the queued is not failed, then we don't need to do it again.
             #add a new migration_status=9 (terminal failure)
-            if is_already_queued and alreadyqueued[0]['migration_status'] != 9:
+	    if is_already_queued and alreadyqueued[0]['migration_status'] == 2:
+                return {"migration_report" : "REQUEST ALREADY QUEUED. Migration is finished",
+                        "migration_details" : alreadyqueued[0] }
+            elif is_already_queued and alreadyqueued[0]['migration_status'] != 9:
                 return {"migration_report" : "REQUEST ALREADY QUEUED. Migration in progress",
                         "migration_details" : alreadyqueued[0] }
             elif is_already_queued and alreadyqueued[0]['migration_status'] == 9:

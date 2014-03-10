@@ -130,7 +130,9 @@ class MigrationTask(SequencialTaskBase):
         try:
             #set  MIGRATION_STATUS = 1(in progess) and commit it imeditaly to avoid other threads to touch it.
             req = self.dbsMigrate.listMigrationRequests(oldest=True)
-            
+	    if len(req) == 0:
+		self.sourceUrl = None
+		return   # don't need to go down.			
             try:
                 request =req[0]
                 self.sourceUrl = request['migration_url']
@@ -166,13 +168,13 @@ class MigrationTask(SequencialTaskBase):
                 #Update MIGRATION_STATUS for all the MIGRATION_BLOCK_IDs in the self.migration_block_id list
                 #in MIGRATION_BLOCKS table to 1 (in progress)
                 #set MIGRATION_STATUS = 1 and commit it immediately
-                #MgrLogger.info("-"*20+ 'Regester ID: %s '%self.migration_req_id + 'Migration Block Names: ')
-                #MgrLogger.info("block_name: %s" %self.block_names)
+                #MgrLogger.error("-"*20+ 'Regester ID: %s '%self.migration_req_id + 'Migration Block Names: ')
+                #MgrLogger.error("block_name: %s. Set all block status=1 " %self.block_names)
                 self.dbsMigrate.updateMigrationBlockStatus(migration_status=1, migration_block=self.migration_block_ids)
         except Exception, ex:
             self.sourceUrl = None
-            MgrLogger.error( time.asctime(time.gmtime()) + str(ex) )
-            #set MIGRATION_STATUS = 3(failed) for MIGRATION_REQUESTS
+            #MgrLogger.error( time.asctime(time.gmtime()) + str(ex) )
+            #print "set MIGRATION_STATUS = 3(failed) for blocks of MIGRATION_REQUESTS_ID=%s" %self.migration_req_id
             self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
     
     def insertBlock(self):
@@ -186,7 +188,7 @@ class MigrationTask(SequencialTaskBase):
                     data = cjson.decode(data)
                     migration_status = 0
                     #idx = self.block_names.index(bName)
-                    MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + "Inserting block: %s for request id: %s" %(bName, self.migration_req_id))
+                    MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + " Inserting block: %s for request id: %s" %(bName, self.migration_req_id))
                     try:
                         self.DBSBlockInsert.putBlock(data, migration=True)
                         migration_status = 2
@@ -201,7 +203,7 @@ class MigrationTask(SequencialTaskBase):
                         if  migration_status == 2:
                             self.dbsMigrate.updateMigrationBlockStatus(migration_status=2,
                                 migration_block=self.migration_block_ids[idx])
-                    MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + "Done insert block: %s for request id: %s" %(bName,self.migration_req_id))
+                    MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + " Done insert block: %s for request id: %s" %(bName,self.migration_req_id))
                 self.dbsMigrate.updateMigrationRequestStatus(2, self.migration_req_id)
             except Exception, ex:
                 self.inserted = False
@@ -210,6 +212,7 @@ class MigrationTask(SequencialTaskBase):
                     MgrLogger.error( time.asctime(time.gmtime()) + ex.message + ex.serverError )
                 MgrLogger.error(time.asctime(time.gmtime()) + str(ex))
                 #if try_count==3, the sql will actually set the status=9 (terminally failed) instead of 3
+		#print "set migration_status=3 or 9 for request and blocks ofmigration_request_id=%s" %self.migration_req_id
                 self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
                 self.dbsMigrate.updateMigrationBlockStatus(migration_status=3, migration_request=self.migration_req_id)
                 return

@@ -219,6 +219,7 @@ class DBSBlockInsert :
 
             #deal with file config
             for fc in fileConfigList:
+		
                 key = (fc['app_name'] + ':' + fc['release_version'] + ':' +
                        fc['pset_hash'] + ':' +
                        fc['output_module_label'] + ':' + fc['global_tag'])
@@ -226,7 +227,7 @@ class DBSBlockInsert :
                     #we expect the config is inserted when the dataset is in.
                     if tran:tran.rollback()
                     if conn:conn.close()
-                    dbsExceptionHandler('dbsException-missing-data', 'Required Configuration application name, release version,\
+                    dbsExceptionHandler('dbsException-missing-data', ' Required Configuration application name, release version,\
                         pset hash and global tag: %s, %s\
                         ,%s,%s not found in DB' %(fc['app_name'], fc['release_version'], fc['pset_hash'], fc['global_tag']))
                 fcObj = {'file_id' : logicalFileName[fc['lfn']],

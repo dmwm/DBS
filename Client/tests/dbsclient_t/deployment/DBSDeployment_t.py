@@ -52,7 +52,6 @@ class PrepareDeploymentsTests(unittest.TestCase):
         data = json.load(fp)
 
         fp.close()
-
         self.api.insertOutputConfig(data)
 
     def test_03_insert_acquisition_era(self):
