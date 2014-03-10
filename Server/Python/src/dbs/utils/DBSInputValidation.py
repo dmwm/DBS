@@ -16,11 +16,11 @@ def reading_procds_check(candidate):
     return check(regexp, candidate)
 
 def reading_dataset_check(candidate):
-    regexp = r'^/([a-zA-Z0-9]+[a-zA-Z0-9\-_]*)/([a-zA-Z]+[a-zA-Z0-9_\-]*)/([A-Z_\-]+)$'
+    regexp = r'^/([a-zA-Z0-9]+[a-zA-Z0-9\-\._]*)/([a-zA-Z]+[a-zA-Z0-9_\-\.]*)/([A-Z_\-\.]+)$'
     return check(regexp, candidate)
 
 def reading_block_check(candidate):
-    regexp = r'^/([a-zA-Z0-9]+[a-zA-Z0-9\-_]*)/([a-zA-Z]+[a-zA-Z0-9_\-]*)/([A-Z_\-]+)#([a-fA-F0-9\-]+)$'
+    regexp = r'^/([a-zA-Z0-9]+[a-zA-Z0-9\-\._]*)/([a-zA-Z]+[a-zA-Z0-9_\-\.]*)/([A-Z_\-\.]+)#([a-fA-F0-9\-\.]+)$'
     return check(regexp, candidate)
 
 def reading_lfn_check(candidate):

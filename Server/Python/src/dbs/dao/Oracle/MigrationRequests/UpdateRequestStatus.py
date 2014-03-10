@@ -54,10 +54,12 @@ class UpdateRequestStatus(DBFormatter):
                         SET
                             LAST_MODIFICATION_DATE=:last_modification_date,
                             MIGRATION_STATUS = ( select (CASE retry_count
-                                                            when >=3 then 9  
-                                                            else 3 
+                                                            when 3 then 9
+							    when 4 then 9  	
+                                                            else :migration_status 
                                                         END)migration_status 
                                                  from %smigration_requests  
+						 where migration_request_id=:migration_request_id
                                                ) 
                        WHERE MIGRATION_REQUEST_ID=:migration_request_id""" %((self.owner,)*2)     
 
