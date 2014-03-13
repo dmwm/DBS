@@ -53,7 +53,7 @@ outDict={
 "parent_block" : parent_block,
 "files" : [],
 "parent_files" : [],
-"runs" : [1,2,3],
+"runs" : [97,98,99],
 "acquisition_era" : acquisition_era_name,
 "processing_version" : processing_version,
 }
@@ -194,13 +194,13 @@ class DBSClientWriter_t(unittest.TestCase):
                 'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'1'},
-                    {'lumi_section_num': u'29838', 'run_num': u'1'}
+                    {'lumi_section_num': u'27414', 'run_num': u'97'},
+                    {'lumi_section_num': u'26422', 'run_num': u'97'},
+                    {'lumi_section_num': u'29838', 'run_num': u'97'}
                     ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/p%s/%i.root" %(uid, i),
                 'block_name': parent_block
                 #'is_file_valid': 1
                 }
@@ -223,11 +223,11 @@ class DBSClientWriter_t(unittest.TestCase):
                 'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'2'},
-                    {'lumi_section_num': u'29838', 'run_num': u'3'}
+                    {'lumi_section_num': u'27414', 'run_num': u'97'},
+                    {'lumi_section_num': u'26422', 'run_num': u'98'},
+                    {'lumi_section_num': u'29838', 'run_num': u'99'}
                     ],
-                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i)} ],
+                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/p%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
@@ -252,11 +252,11 @@ class DBSClientWriter_t(unittest.TestCase):
                 'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'2'},
-                    {'lumi_section_num': u'29838', 'run_num': u'3'}
+                    {'lumi_section_num': u'27414', 'run_num': u'97'},
+                    {'lumi_section_num': u'26422', 'run_num': u'98'},
+                    {'lumi_section_num': u'29838', 'run_num': u'99'}
                     ],
-                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i)} ],
+                'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/p%s/%i.root" %(uid, i)} ],
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
