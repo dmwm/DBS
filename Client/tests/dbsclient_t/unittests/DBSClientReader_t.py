@@ -326,12 +326,12 @@ class DBSClientReader_t(unittest.TestCase):
         """test54 unittestDBSClientReader_t.listRuns : basic test"""
         self.api.listRuns(run_num=self.testparams['runs'][1])
 
-    def test055(self):
-        """test55 unittestDBSClientReader_t.listRuns : basic test"""
+    def test055a(self):
+        """test55a unittestDBSClientReader_t.listRuns : basic test"""
         self.api.listRuns(run_num=self.testparams['runs'][2])
 
-    def test055(self):
-        """test55 unittestDBSClientReader_t.listRuns : basic test"""
+    def test055b(self):
+        """test55b unittestDBSClientReader_t.listRuns : basic test"""
         self.api.listRuns(run_num='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]))
 
     def test056(self):
