@@ -200,7 +200,15 @@ class DBSMigrate:
 
             return remove_duplicated_items(ordered_dict)
         except Exception, ex:
-            raise ex
+	    if 'urlopen error' in str(ex):
+                message='Connection to source DBS server refused. Check your source url.'
+            elif 'Bad Request' in str(ex):
+                message='cannot get data from the source DBS server. Check your migration input.'
+            else:
+                message='Failed to make a block migration list.'
+            dbsExceptionHandler('dbsException-invalid-input2', \
+                serverError="""DBSMigrate/prepareBlockMigrationList failed
+                to prepare ordered block list: %s""" %str(ex), message=message)
 
     def getParentBlocksOrderedList(self, url, conn, block_name, order_counter):
         ordered_dict = {}

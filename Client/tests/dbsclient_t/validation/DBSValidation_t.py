@@ -157,7 +157,6 @@ class DBSValidation_t(unittest.TestCase):
         """test06 web.DBSClientWriter.Block: validation test"""
         data = {'block_name': block,
                 'origin_site_name': site }
-
         self.api.insertBlock(blockObj=data)
         blkList = self.api.listBlocks(block_name=block, detail=True)
         self.assertEqual(len(blkList), 1)

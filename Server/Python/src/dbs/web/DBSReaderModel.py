@@ -477,7 +477,7 @@ class DBSReaderModel(RESTModel):
     @transformInputType('run_num')
     @inputChecks(dataset=str, block_name=str, data_tier_name=str, origin_site_name=str, logical_file_name=str,
                  run_num=(long,int,str,list), min_cdate=(int,str), max_cdate=(int, str), min_ldate=(int,str),
-                 max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), detail=(str,bool))
+                 max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), open_for_writting=(int,str), detail=(str,bool))
     def listBlocks(self, dataset="", block_name="", data_tier_name="", origin_site_name="",
                    logical_file_name="",run_num=-1, min_cdate='0', max_cdate='0',
                    min_ldate='0', max_ldate='0', cdate='0',  ldate='0', open_for_writting=-1, detail=False):
@@ -555,7 +555,7 @@ class DBSReaderModel(RESTModel):
         detail = detail in (True, 1, "True", "1", 'true')
         try:
             return self.dbsBlock.listBlocks(dataset, block_name, data_tier_name, origin_site_name, logical_file_name,
-                                            run_num, min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
+                                  run_num, min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, open_for_writting,detail)
 
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)

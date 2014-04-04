@@ -167,7 +167,7 @@ class DBSMigrationServer_t(unittest.TestCase):
             if status['migration_status']==0:
                 self._migration_task.getResource()
                 ###wait 5 seconds to ensure that status is changed
-                time.sleep(5)
+                #time.sleep(5)
                 new_status = self._migrate_api.list('status', status['migration_request_id'])[0]
                 self.assertEqual(new_status['migration_status'], 1)#1 means requests is processed
                 self._migration_task.insertBlock()
