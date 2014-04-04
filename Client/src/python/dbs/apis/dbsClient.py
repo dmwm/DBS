@@ -1028,7 +1028,8 @@ class DbsApi(object):
 
     def listRuns(self, **kwargs):
         """
-        API to list all runs in DBS. At least one parameter is mandatory.
+        API to list all run dictionary, for example: [{'run_num': [160578, 160498, 160447, 160379]}]. 
+        At least one parameter is mandatory.
 
         :param logical_file_name: List all runs in the file
         :type logical_file_name: str
@@ -1083,7 +1084,8 @@ class DbsApi(object):
 
     def statusMigration(self, **kwargs):
         """
-        Check the status of migration request: 0-request created; 1-migration in process; 2-migration successed; 3-migration failed.
+        Check the status of migration request: 0-request created; 1-migration in process; 2-migration successed; 3-migration
+        failed, but has three chances to try; 9-migration Permanently failed.
 
         :param migration_rqst_id: Migration Request ID
         :type migration_rqst_id: str, int, long
@@ -1103,7 +1105,7 @@ class DbsApi(object):
 
     def removeMigration(self, migrationObj):
         """
-        Remove a migration request from the queue. Only FAILED (status 3) and
+        Remove a migration request from the queue. Only Permanently FAILED (status 9) and
         PENDING (status 0) requests can be removed. Running and succeeded
         requests cannot be removed.
 

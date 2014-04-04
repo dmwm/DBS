@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-DBS  block insertion for WMAgent
+DBS  block insertion for WMAgent & Crab publishering
 """
 
 from sqlalchemy import exceptions
@@ -98,17 +98,31 @@ class DBSBlockInsert :
             #3 insert block & files
             self.logger.debug("insert block & files.")
             self.insertBlockFile(blockcontent, datasetId, migration)
+        except KeyError, ex:
+            dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/putBlock: \
+                KeyError exception: %s. " %ex.args[0] )
         except Exception, ex:
             raise
 
     def insertBlockFile(self, blockcontent, datasetId, migration=False):
-
-        block = blockcontent['block']
-        newBlock = False
-        #Insert the block
-        conn = self.dbi.connection()
-        tran = conn.begin()
-        self.logger.info("Inserted block name: %s" %block['block_name'])
+        tran = None
+        conn = None
+        try:
+            block = blockcontent['block']
+            newBlock = False
+            #Insert the block
+            conn = self.dbi.connection()
+            tran = conn.begin()
+            self.logger.info("Inserted block name: %s" %block['block_name'])
+        except KeyError, ex:
+            if tran:tran.rollback()
+            if conn:conn.close()
+            dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/insetBlockFile: \
+                KeyError exception: %s. " %ex.args[0] )
+        except Exception, ex:
+            if tran:tran.rollback()
+            if conn:conn.close()
+            raise
         try:
             block['block_id'] = self.sm.increment(conn, "SEQ_BK",)
             block['dataset_id'] =  datasetId
@@ -149,14 +163,24 @@ class DBSBlockInsert :
         fileLumiList = []
         fileConfObjs = []
         logicalFileName = {}
-        fileList = blockcontent['files']
-        fileConfigList = blockcontent['file_conf_list']
-        if blockcontent.has_key('file_parent_list'):
-            fileParentList = blockcontent['file_parent_list']
-        else:
-            fileParentList = []
-        if not fileList:
-            return
+        try:
+            fileList = blockcontent['files']
+            fileConfigList = blockcontent['file_conf_list']
+            if blockcontent.has_key('file_parent_list'):
+                fileParentList = blockcontent['file_parent_list']
+            else:
+                fileParentList = []
+            if not fileList:
+                return
+        except KeyError, ex:
+            if tran:tran.rollback()
+            if conn:conn.close()
+            dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/insetFile: \
+                KeyError exception: %s. " %ex.args[0] )
+        except Exception, ex:
+            if tran:tran.rollback()
+            if conn:conn.close()
+            raise 
         intval = 40
         try:
             for i in range(len(fileList)):
@@ -190,6 +214,11 @@ class DBSBlockInsert :
                 #remove the lumi list from the file
                 del fileList[i]['file_lumi_list']
                 id += 1
+        except KeyError, ex:
+            if tran:tran.rollback()
+            if conn:conn.close() 
+            dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/FileProperty: \
+                KeyError exception: %s. " %ex.args[0] )
         except Exception, ex:
             if tran:tran.rollback()
             if conn:conn.close()
@@ -233,6 +262,11 @@ class DBSBlockInsert :
                 fcObj = {'file_id' : logicalFileName[fc['lfn']],
                          'output_mod_config_id': self.datasetCache['conf'][key]}
                 fileConfObjs.append(fcObj)
+        except KeyError, ex:
+            if tran:tran.rollback()
+            if conn:conn.close()
+            dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/FileParents: \
+                KeyError exception: %s. " %ex.args[0] )
         except Exception, ex:
             if tran:tran.rollback()
             if conn: conn.close()
@@ -379,6 +413,10 @@ class DBSBlockInsert :
                     self.datasetCache['conf'][key] = cfgid
                     otptIdList.append(cfgid)
                     #print "About to set cfgid: %s" % str(cfgid)
+        except KeyError, ex:
+            if conn:conn.close()
+            dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/insertOutputModuleConfig: \
+                KeyError exception: %s. " %ex.args[0] )
         except Exception, ex:
             if conn:conn.close()
             raise
@@ -420,6 +458,11 @@ class DBSBlockInsert :
                     self.otptModCfgin.execute(conn, configObj, tran)
                     tran.commit()
                     tran = None
+                except KeyError, ex:
+                    if tran:tran.rollback()
+                    if conn:conn.close()
+                    dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertOutputModuleConfig: \
+                                         KeyError exception: %s. " %ex.args[0] )
                 except exceptions.IntegrityError, ex:
                     #Another job inserted it just 1/100000 second earlier than
                     #you!!  YG 11/17/2010
@@ -679,7 +722,7 @@ acquisition era, but with different cases.")
             #In order to accommodate DBS2 data for migration, we turn off this check in migration.
             #These will not cause any problem to none DBS2 data because when we migration, the none DBS2 data is
             #already checked when they were inserted into the source dbs.  YG 7/12/2012
-            if not migration and aq["acquisition_era_name"] != "CRAB":
+            if not migration and aq["acquisition_era_name"] != "CRAB" and aq["acquisition_era_name"] != "LHE":
                 erals=dataset["processed_ds_name"].rsplit('-')
                 if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
                     if tran:tran.rollback()
@@ -689,7 +732,13 @@ acquisition era, but with different cases.")
 
             #So far so good, let's commit first 4 db activities before going on.
             tran.commit()
+        except KeyError, ex:
+            if tran:tran.rollback()
+            if conn:conn.close()
+            dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertOutputModuleConfig: \
+                                         KeyError exception: %s. " %ex.args[0] )            
         except:
+        
             if tran:tran.rollback()
             if conn:conn.close()
             raise

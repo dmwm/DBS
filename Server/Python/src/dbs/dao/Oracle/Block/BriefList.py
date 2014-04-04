@@ -23,7 +23,7 @@ class BriefList(DBFormatter):
 
     def execute(self, conn, dataset="", block_name="", data_tier_name="", origin_site_name="", logical_file_name="",
                 run_num=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,
-                ldate=0, transaction = False):
+                ldate=0, open_for_writting=-1, transaction = False):
         """
         dataset: /a/b/c
         block: /a/b/c#d
@@ -63,6 +63,9 @@ class BriefList(DBFormatter):
             op = ("=", "like")["%" in origin_site_name]
             wheresql += " AND B.ORIGIN_SITE_NAME %s :origin_site_name " % op
             binds.update(origin_site_name = origin_site_name)
+
+        if open_for_writting == 0 or open_for_writting == 1:
+            wheresql += " AND B.OPEN_FOR_WRITTING = :open_for_writting "
 
         if cdate != 0:
             wheresql += "AND B.CREATION_DATE = :cdate "

@@ -125,7 +125,7 @@ def main():
     (opts, args) = parser.parse_args()
     if not (opts.url and opts.status and opts.recursive and (opts.files or opts.blocks)):
         parser.print_help()
-        parser.error('Mandatory options are --block or --file, --status, --url and --recursive')
+        parser.error('Mandatory options are --block or --files, --status, --url and --recursive')
 
     log_level = logging.DEBUG if opts.verbose else logging.INFO
     logging.basicConfig(format='%(message)s', level=log_level)

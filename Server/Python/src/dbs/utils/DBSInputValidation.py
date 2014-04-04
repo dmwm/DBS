@@ -24,7 +24,7 @@ def reading_block_check(candidate):
     return check(regexp, candidate)
 
 def reading_lfn_check(candidate):
-    regexp = r'^/store/([A-Za-z0-9_\-/])+/([A-Za-z0-9_\-])+.root$'
+    regexp = r'^/store/([A-Za-z0-9_\-/])+/([A-Za-z0-9_\-])+(.root|.lhe(.xz){0,1})$'
     return check(regexp, candidate)
 
 

@@ -110,7 +110,7 @@ class DBSReaderModel(RESTModel):
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'data_tier_name',
                         'origin_site_name', 'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate',
-                        'max_ldate', 'cdate', 'ldate', 'detail'], secured=True,
+                        'max_ldate', 'cdate', 'ldate', 'open_for_writting', 'detail'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset', 'block_name'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -480,7 +480,8 @@ class DBSReaderModel(RESTModel):
                  max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), detail=(str,bool))
     def listBlocks(self, dataset="", block_name="", data_tier_name="", origin_site_name="",
                    logical_file_name="",run_num=-1, min_cdate='0', max_cdate='0',
-                   min_ldate='0', max_ldate='0', cdate='0',  ldate='0', detail=False):
+                   min_ldate='0', max_ldate='0', cdate='0',  ldate='0', open_for_writting=-1, detail=False):
+
         """
         API to list a block in DBS. At least one of the parameters block_name, dataset, data_tier_name or
         logical_file_name are required. If data_tier_name is provided, min_cdate and max_cdate have to be specified and
@@ -496,6 +497,8 @@ class DBSReaderModel(RESTModel):
         :type logical_file_name: str
         :param origin_site_name: Origin Site Name (Optional)
         :type origin_site_name: str
+        :param open_for_writting: Open for Writting (Optional)
+        :type open_for_writting: int (0 or 1)
         :param run_num: run_num numbers (Optional)
         :type run_num: int, list of runs or list of run ranges
         :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
