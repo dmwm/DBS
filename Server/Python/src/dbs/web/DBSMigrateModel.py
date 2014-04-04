@@ -112,7 +112,7 @@ class DBSMigrateModel(RESTModel):
     def remove(self):
         """
         Interface to remove a migration request from the queue.
-        Only FAILED/3 and PENDING/0 requests can be removed
+        Only Permanent FAILED/9 and PENDING/0 requests can be removed
         (running and sucessed requests cannot be removed)
 
         """

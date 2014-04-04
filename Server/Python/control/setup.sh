@@ -1,18 +1,19 @@
 if [ -z "$DBS3_ROOT" ]; then
     #export DBS3_ROOT=/uscms/home/yuyi/dbs3-test
-    export DBS3_ROOT=$PWD/../../../..
-    export WTBASE=$DBS3_ROOT/External/WMCORE/src
+    export DBS3_ROOT=/uscms/home/yuyi/dev
+    export WTBASE=$DBS3_ROOT/External/WMCORE-Github/WMCore/src
     export WMCORE_BIN=$DBS3_ROOT/External/WMCORE/bin
     export DBS3_SERVER_ROOT=$DBS3_ROOT/DBS/Server/Python
     export ORACLE_HOME=$DBS3_ROOT/External/Oracle/instantclient_11_1
     export PYTHON_HOME=$DBS3_ROOT/External/python/2.6.8-comp2
     export LD_LIBRARY_PATH=$ORACLE_HOME:$PYTHON_HOME/lib:$DBS3_ROOT/External/zeromq/2.1.7/lib\
-:$DBS3_ROOT/External/curl/7.24.0-comp/lib
+:$DBS3_ROOT/External/pycurl-7.19.3/lib/python2.6/site-packages
     export PATH=$ORACLE_HOME:$PYTHON_HOME/bin:$PATH
     export PYTHONPATH=$DBS3_ROOT/DBS/PycurlClient/src/python\
 :$DBS3_ROOT/DBS/Server/Python/control\
 :$DBS3_ROOT/DBS/Server/Python/src\
 :$WTBASE/python\
+:$DBS3_ROOT/External/pycurl-7.19.3/lib/python2.6/site-packages\
 :$DBS3_ROOT/External/py2-zmq/2.1.7-comp/lib/python2.6/site-packages\
 :$DBS3_ROOT/External/zeromq/2.1.7/lib\
 :$DBS3_ROOT/External/CherryPy-3.1.2\
