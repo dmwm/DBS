@@ -522,6 +522,10 @@ class DBSReaderModel_t(unittest.TestCase):
     def test007i(self):
         """test007i: web.DBSReaderModel.listFiles: basic test """
         api.list('files', block_name=testparams['block'])
+    
+    def test007ia(self):
+        """test007ia: web.DBSReaderModel.listFiles: detail test """
+        api.list('files', block_name=testparams['block'], detail=True)
 
     @checkException400
     def test007j(self):
@@ -532,6 +536,11 @@ class DBSReaderModel_t(unittest.TestCase):
         """test007k: web.DBSReaderModel.listFiles: basic test """
         lfn= testparams['files'][1]
         api.list('files', logical_file_name=lfn)
+
+    def test007ka(self):
+        """test007ka: web.DBSReaderModel.listFiles: detail test """
+        lfn= testparams['files'][1]
+        api.list('files', logical_file_name=lfn, detail=True)
 
     @checkException400
     def test007l(self):

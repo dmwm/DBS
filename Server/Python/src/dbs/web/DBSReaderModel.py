@@ -779,8 +779,15 @@ class DBSReaderModel(RESTModel):
     @inputChecks(block_name=str, dataset=str, run_num=(long,int,str,list))
     def listFileSummaries(self, block_name='', dataset='', run_num=-1):
         """
-        API to list number of files, event counts and number of lumis in a given block or dataset. If the optional run_num
-        parameter is used, the summary is just for this run number. Either block_name or dataset name is required. No wild-cards are allowed
+        API to list number of files, event counts and number of lumis in a given block or dataset. 
+        If the optional run_num, output are:
+                The number of files which have data (lumis) for that run number;
+                The total number of events in those files;
+                The total number of lumis for that run_number. Note that in general this is different from the total 
+                number of lumis in those files, since lumis are filtered by the run_number they belong to, while events 
+                are only counted as total per file;
+                The total num blocks that have the run_num;
+        Either block_name or dataset name is required. No wild-cards are allowed
 
         :param block_name: Block name
         :type block_name: str
