@@ -173,7 +173,7 @@ class DbsApi(object):
         except cjson.DecodeError:
             print >> sys.stderr,\
                 "The server output is not a valid json, most probably you have a typo in the url.\n%s.\n" % self.url
-            return self.http_response.body
+            raise dbsClientException("Invalid url", "Possible urls are %s" %self.http_response.body)
 
         return json_ret
 
@@ -881,7 +881,15 @@ class DbsApi(object):
     def listFileSummaries(self, **kwargs):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. If the optional run
-        parameter is used, the summary is just for this run number. Either block_name or dataset name is required. No wild-cards are allowed
+        parameter is used, output are:
+                The number of files which have data (lumis) for that run number;
+                The total number of events in those files;
+                The total number of lumis for that run_number. Note that in general this is different from the total 
+                number of lumis in those files, since lumis are filtered by the run_number they belong to, while events 
+                are only counted as total per file;
+                The total num blocks that have the run_num;
+ 
+        Either block_name or dataset name is required. No wild-cards are allowed
 
         :param block_name: Block name
         :type block_name: str

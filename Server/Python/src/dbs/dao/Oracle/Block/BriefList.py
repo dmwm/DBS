@@ -125,7 +125,7 @@ class BriefList(DBFormatter):
             #  
             if wheresql_run_range and wheresql_run_list:
                 wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
-            elif wheresql_run_range and wheresql_run_list:
+            elif wheresql_run_range and not wheresql_run_list:
                 wheresql +=  " and " + wheresql_run_range
             elif not wheresql_run_range and wheresql_run_list:
                 wheresql += " and "  + wheresql_run_list
