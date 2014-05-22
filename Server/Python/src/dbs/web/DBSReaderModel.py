@@ -781,12 +781,13 @@ class DBSReaderModel(RESTModel):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. 
         If the optional run_num, output are:
-                The number of files which have data (lumis) for that run number;
-                The total number of events in those files;
-                The total number of lumis for that run_number. Note that in general this is different from the total 
+
+                * The number of files which have data (lumis) for that run number;
+                * The total number of events in those files;
+                * The total number of lumis for that run_number. Note that in general this is different from the total 
                 number of lumis in those files, since lumis are filtered by the run_number they belong to, while events 
                 are only counted as total per file;
-                The total num blocks that have the run_num;
+                * The total num blocks that have the run_num;
         Either block_name or dataset name is required. No wild-cards are allowed
 
         :param block_name: Block name
@@ -855,6 +856,7 @@ class DBSReaderModel(RESTModel):
                           output_module_label="", block_id=0, global_tag=''):
         """
         API to list OutputConfigs in DBS.
+
         * You can use any combination of these parameters in this API
         * All parameters are optional, if you do not provide any parameter, all configs will be listed from DBS
 
