@@ -96,7 +96,7 @@ def split_calls(func):
             for key, value in kwargs.iteritems():
                 ###only one (first) list at a time is splitted,
                 ###currently only file lists are supported
-                if key in ('logical_file_name',) and isinstance(value, list):
+                if key in ('logical_file_name','block_name') and isinstance(value, list):
                     ret_val = []
                     for splitted_param in list_parameter_splitting(data=dict(kwargs), #make a copy, since it is manipulated
                                                                    key=key,
@@ -114,7 +114,7 @@ def split_calls(func):
     return wrapper
 
 class DbsApi(object):
-    def __init__(self, url="", proxy=None, key=None, cert=None, debug=0):
+    def __init__(self, url="", proxy=None, key=None, cert=None, verifypeer=True, debug=0):
         """
         DbsApi Constructor
 
@@ -136,7 +136,7 @@ class DbsApi(object):
         self.key = key
         self.cert = cert
 
-        self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key),
+        self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key, ssl_verifypeer=verifypeer),
                                 proxy=Socks5Proxy(proxy_url=self.proxy) if self.proxy else None)
 
     def __callServer(self, method="", params={}, data={}, callmethod='GET', content='application/json'):

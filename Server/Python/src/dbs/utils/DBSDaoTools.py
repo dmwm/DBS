@@ -55,11 +55,16 @@ def create_token_generator(input_list):
         index = 0
         while True:
             begin, end = index, index+oracle_limit
-            index = input_str.rfind(',', begin, end)
-            if index == -1:
+	    if end > len(input_str):
+                end = len(input_str)
+                grp_list.append(input_str[begin:end])
                 break
-            grp_list.append(input_str[begin:index])
-            index += 1 #to remove the leading comma
+	    else: 	
+		index = input_str.rfind(',', begin, end)
+		if index == -1:
+			break
+		grp_list.append(input_str[begin:index])
+		index += 1 #to remove the leading comma
     else:
         grp_list.append(input_str)
 
