@@ -47,7 +47,7 @@ def listFileChildren(files=[]):
         yield cf['child_logical_file_name']
 
 def listBlockChildren(blocks=[]):
-    for cb in dbsApi.listBlockChildren(block_name=block):
+    for cb in dbsApi.listBlockChildren(block_name=blocks):
         logging.debug('Found children block %s' % (cb['block_name']))
         yield cb['block_name']
 
@@ -62,7 +62,7 @@ def isChildrenValid(files=[], blocks=[], pstatus=0):
     while childb :
         b = childb.pop()
         allblocks.append(b)
-        childb.extend(listBlockchildren(b))
+        childb.extend(listBlockChildren(b))
 
     return isFileValid(files=allfiles, blocks=allblocks, fstatus=pstatus)
 
