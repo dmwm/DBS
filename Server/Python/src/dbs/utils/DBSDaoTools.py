@@ -16,6 +16,7 @@ def create_lfn_generator(logical_file_name):
             begin, end = index, index+oracle_limit
             index = lfns.rfind(',', begin, end)
             if index == -1:
+                #should we add the last one to lfn_list
                 break
             lfn_list.append(lfns[begin:index])
             index += 1 #to remove the leading comma

@@ -63,6 +63,7 @@ def inputChecks(**_params_):
                                     else:
                                         reading_dataset_check(value)
                                 elif name =='lumi_list': value = cjson.decode(value)
+                                elif name =='validFileOnly': int(value)
                                 elif name =='block_name':
                                     if '*' in value:
                                         searchblock(value)

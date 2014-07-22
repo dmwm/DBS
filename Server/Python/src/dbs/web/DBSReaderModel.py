@@ -119,7 +119,7 @@ class DBSReaderModel(RESTModel):
                         'origin_site_name', 'lumi_list', 'detail'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name', 'dataset',
-                        'run_num'], secured=True,
+                        'run_num', 'validFileOnly'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'datasetparents', self.listDatasetParents, args=['dataset'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -776,8 +776,8 @@ class DBSReaderModel(RESTModel):
                     self.logger.exception, sError)
 
     @transformInputType('run_num')
-    @inputChecks(block_name=str, dataset=str, run_num=(long,int,str,list))
-    def listFileSummaries(self, block_name='', dataset='', run_num=-1):
+    @inputChecks(block_name=str, dataset=str, run_num=(long,int,str,list), validFileOnly=(int, str))
+    def listFileSummaries(self, block_name='', dataset='', run_num=-1, validFileOnly=0):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. 
         If the optional run_num, output are:
@@ -801,7 +801,7 @@ class DBSReaderModel(RESTModel):
 
         """
         try:
-            return self.dbsFile.listFileSummary(block_name, dataset, run_num)
+            return self.dbsFile.listFileSummary(block_name, dataset, run_num, validFileOnly=validFileOnly)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:

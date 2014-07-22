@@ -104,7 +104,7 @@ def split_calls(func):
                         try:
                             ret_val.extend(func(*args, **splitted_param))
                         except (TypeError, AttributeError):#update function call do not return lists
-                            ret_val= None
+                            ret_val= []
                     return ret_val
             raise dbsClientException("Invalid input",
                                      "The lenght of the urlencoded parameters to API %s \
@@ -898,11 +898,13 @@ class DbsApi(object):
         :type dataset: str
         :param run_num: Run number (Optional)
         :type run_num: int, str, list
+        :param validFileOnly: default=0 all files included. if 1, only valid file counted.
+        :type validFileOnly: int ( 0 or 1)
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
         """
-        validParameters = ['block_name', 'dataset', 'run_num']
+        validParameters = ['block_name', 'dataset', 'run_num', 'validFileOnly']
 
         requiredParameters = {'standalone': ['block_name', 'dataset']}
 
