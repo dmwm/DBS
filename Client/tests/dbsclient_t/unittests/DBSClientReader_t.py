@@ -293,6 +293,30 @@ class DBSClientReader_t(unittest.TestCase):
         """test46b unittestDBSClientReader_t.listFileLumis: basic test"""
         self.api.listFileLumis(block_name=self.testparams['block'], run_num=self.testparams['runs'][0])
 
+    def test046c(self):
+        """test46c unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileLumis(dataset=self.testparams['dataset'])
+
+    def test046d(self):
+        """test46d unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileLumis(dataset=self.testparams['dataset'], validFileOnly=1 )
+
+    def test046e(self):
+        """test46e unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileLumis(dataset=self.testparams['dataset'], run_num=self.testparams['runs'][0], validFileOnly=1)
+
+    def test046f(self):
+        """test46f unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileLumis(block_name=self.testparams['block'])
+
+    def test046g(self):
+        """test46g unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileLumis(block_name=self.testparams['block'], validFileOnly=1 )
+
+    def test046h(self):
+        """test46h unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileLumis(block_name=self.testparams['block'], run_num=self.testparams['runs'][0], validFileOnly=1)
+
     def test047(self):
         """test47 unittestDBSClientReader_t.listRuns : basic test"""
         self.assertRaises(dbsClientException, self.api.listRuns)
