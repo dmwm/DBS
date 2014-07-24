@@ -2,9 +2,6 @@
 """
 This module provides PhysicsGroup.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/08/02 21:50:01 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

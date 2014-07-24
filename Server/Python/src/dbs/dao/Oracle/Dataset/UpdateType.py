@@ -2,9 +2,6 @@
 """
 This module provides Dataset.UpdateType data access object.
 """
-__revision__ = "$Id: UpdateType.py,v 1.4 2010/07/09 19:38:10 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsUtils import dbsUtils

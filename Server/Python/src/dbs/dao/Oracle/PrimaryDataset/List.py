@@ -2,10 +2,6 @@
 """
 This module provides PrimaryDataset.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.15 2010/08/02 20:41:16 afaq Exp $"
-__version__ = "$Revision: 1.15 $"
-
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler

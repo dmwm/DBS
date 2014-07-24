@@ -2,9 +2,6 @@
 """
 This module provides Block.UpdateStatus data access object.
 """
-__revision__ = "$Id: UpdateStatus.py,v 1.2 2010/06/23 21:21:18 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsUtils import dbsUtils

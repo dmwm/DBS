@@ -4,9 +4,6 @@
 This module provides business layer for the file buffer 
 """
 
-__revision__ = "$Id: DBSFileBuffer.py,v 1.2 2010/07/09 19:38:10 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
-
 from WMCore.DAOFactory import DAOFactory
 from sqlalchemy import exceptions
 

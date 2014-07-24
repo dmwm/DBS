@@ -2,9 +2,6 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: BriefList.py,v 1.4 2010/08/30 16:21:44 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange

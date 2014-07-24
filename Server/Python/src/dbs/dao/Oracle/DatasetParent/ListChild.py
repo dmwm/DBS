@@ -2,9 +2,6 @@
 """
 This module provides DatasetParent.ListChild data access object.
 """
-__revision__ = "$Id: ListChild.py,v 1.4 2010/06/23 21:21:22 afaq Exp $"
-__version__ = "$Revision: 1.4 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 
 class ListChild(DBFormatter):

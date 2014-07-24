@@ -2,9 +2,6 @@
 """
 This module provides PrimaryDSType.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.6 2010/06/23 21:21:26 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 """ DAO Object for FileOutputMod_configs table """ 
-
-__revision__ = "$Revision: 1.9 $"
-__version__  = "$Id: Insert.py,v 1.9 2010/08/25 21:41:52 afaq Exp $ "
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

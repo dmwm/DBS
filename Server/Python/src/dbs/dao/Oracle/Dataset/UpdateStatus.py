@@ -2,9 +2,6 @@
 """
 This module provides Dataset.UpdateStatus data access object.
 """
-__revision__ = "$Id: UpdateStatus.py,v 1.5 2010/06/23 21:21:21 afaq Exp $"
-__version__ = "$Revision: 1.5 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsUtils import dbsUtils

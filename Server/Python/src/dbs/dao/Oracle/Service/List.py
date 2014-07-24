@@ -2,9 +2,6 @@
 """
 This module provides Services.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.1 2010/08/02 20:41:18 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

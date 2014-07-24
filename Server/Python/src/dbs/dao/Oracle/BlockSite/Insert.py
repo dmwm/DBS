@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 """ DAO Object for BlockSites table """ 
 
-__revision__ = "$Revision: 1.3 $"
-__version__  = "$Id: Insert.py,v 1.3 2010/06/23 21:21:19 afaq Exp $ "
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

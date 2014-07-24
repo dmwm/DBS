@@ -3,9 +3,6 @@
 This module provides Block.GetID data access object.
 Light dao object to get the id for a give /primds/procds/tier#block
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/08/02 20:41:15 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
     """
