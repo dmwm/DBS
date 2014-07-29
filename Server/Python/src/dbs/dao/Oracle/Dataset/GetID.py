@@ -3,9 +3,6 @@
 This module provides Dataset.GetID data access object.
 Light dao object to get the id for a give /primds/procds/tier
 """
-__revision__ = "$Id: GetID.py,v 1.11 2010/08/02 21:49:50 afaq Exp $"
-__version__ = "$Revision: 1.11 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 class GetID(DBFormatter):
     """

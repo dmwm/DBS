@@ -3,10 +3,6 @@
 """
 This module provides business object class to interact with Site table
 """
-
-__revision__ = "$Id: DBSSite.py,v 1.6 2010/04/21 19:50:01 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
-
 from WMCore.DAOFactory import DAOFactory
 
 class DBSSite:

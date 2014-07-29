@@ -3,9 +3,6 @@
 This module provides FileType.GetID data access object.
 Light dao object to get the id for a given FileType
 """
-__revision__ = "$Id: GetID.py,v 1.7 2010/08/02 21:49:55 afaq Exp $"
-__version__ = "$Revision: 1.7 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

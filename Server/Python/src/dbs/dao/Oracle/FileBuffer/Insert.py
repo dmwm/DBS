@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 """ DAO Object for FileBuffer table """ 
 
-__revision__ = "$Revision: 1.4 $"
-__version__  = "$Id: Insert.py,v 1.4 2010/07/23 19:14:52 afaq Exp $ "
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

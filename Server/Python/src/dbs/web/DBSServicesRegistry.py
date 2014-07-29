@@ -2,10 +2,6 @@
 """
 DBS Service Registry Rest Model module
 """
-
-__revision__ = "$Id: DBSServicesRegistry.py,v 1.1 2010/08/02 20:49:37 afaq Exp $"
-__version__ = "$Revision: 1.1 $"
-
 import traceback
 from cherrypy import request
 from WMCore.WebTools.RESTModel import RESTModel

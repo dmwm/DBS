@@ -3,10 +3,6 @@
 """
 DBS Rest Model module
 """
-
-__revision__ = "$Id: DBSWriterModel.py,v 1.46 2010/08/12 19:00:01 afaq Exp $"
-__version__ = "$Revision: 1.46 $"
-
 import re
 import cjson
 

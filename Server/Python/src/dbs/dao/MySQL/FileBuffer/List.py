@@ -2,9 +2,6 @@
 """
 This module provides File.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2010/07/23 19:12:43 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 
 

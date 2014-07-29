@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 """ DAO Object for Blocks table """ 
-
-__revision__ = "$Revision: 1.11 $"
-__version__  = "$Id: Insert.py,v 1.11 2010/06/23 21:21:18 afaq Exp $ "
-
 from WMCore.Database.DBFormatter import DBFormatter
 from sqlalchemy import exceptions
 from dbs.dao.Oracle.InsertTable.Insert import InsertSingle

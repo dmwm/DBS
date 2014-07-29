@@ -2,9 +2,6 @@
 """
 This module provides FileParent.ListChild data access object.
 """
-__revision__ = "$Id: ListChild.py,v 1.2 2010/06/23 21:21:24 afaq Exp $"
-__version__ = "$Revision: 1.2 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSDaoTools import create_token_generator

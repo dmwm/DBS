@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 """ DAO Object for DatasetRuns table """ 
 
-__revision__ = "$Revision: 1.7 $"
-__version__  = "$Id: Insert.py,v 1.7 2010/06/23 21:21:22 afaq Exp $ "
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

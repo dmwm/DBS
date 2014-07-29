@@ -3,9 +3,6 @@
 This module provides Block.ListStats data access object.
 Block parameters based on current conditions at DBS, are listed by this DAO
 """
-__revision__ = "$Id: ListStats.py,v 1.6 2010/06/23 21:21:18 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

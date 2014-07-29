@@ -2,9 +2,6 @@
 """
 This module provides DataTier.GetID data access object.
 """
-__revision__ = "$Id: GetID.py,v 1.6 2010/08/02 21:49:48 afaq Exp $"
-__version__ = "$Revision: 1.6 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 
 class GetID(DBFormatter):

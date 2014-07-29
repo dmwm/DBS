@@ -2,9 +2,6 @@
 """
 This module provides DataTier.List data access object.
 """
-__revision__ = "$Id: List.py,v 1.3 2010/08/12 19:46:02 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

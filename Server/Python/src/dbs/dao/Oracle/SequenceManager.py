@@ -2,10 +2,6 @@
 """
 This module manages sequences.
 """
-
-__revision__ = "$Id: SequenceManager.py,v 1.8 2010/06/29 19:28:46 afaq Exp $"
-__version__ = "$Revision: 1.8 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

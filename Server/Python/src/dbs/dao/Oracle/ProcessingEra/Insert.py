@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 """ DAO Object for ProcessingEras table """ 
 
-__revision__ = "$Revision: 1.6 $"
-__version__  = "$Id: Insert.py,v 1.6 2010/06/23 21:21:26 afaq Exp $ "
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler

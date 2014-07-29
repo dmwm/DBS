@@ -3,9 +3,6 @@
 This module provides business object class to interact with DBSAcqusitionEra. 
 """
 
-__revision__ = "$Id: DBSAcquisitionEra.py,v 1.6 2010/08/12 19:52:24 afaq Exp $"
-__version__ = "$Revision $"
-
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

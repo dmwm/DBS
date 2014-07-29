@@ -2,9 +2,6 @@
 """
 This module provides Site.ListBlockSite data access object.
 """
-__revision__ = "$Id: ListBlockSite.py,v 1.3 2010/06/23 21:21:26 afaq Exp $"
-__version__ = "$Revision: 1.3 $"
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
