@@ -106,6 +106,9 @@ class DBSDataset:
             self.updatetype.execute(conn, dataset, dataset_access_type.upper(), trans)
             trans.commit()
             trans = None
+        except exceptions.DatabaseError, ex:
+            if str(ex).find("ORA-01407") != -1:
+                dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input", None, "DBSDataset/updateType. A Valid dataset_access_type is required.")
         finally:
             if trans:
                 trans.rollback()
@@ -114,7 +117,7 @@ class DBSDataset:
    
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
                      release_version="", pset_hash="", app_name="",
-                     output_module_label="", processing_version=0,
+                     output_module_label="", processing_version=0, global_tag="", 
                      acquisition_era="", run_num=-1, physics_group_name="",
                      logical_file_name="", primary_ds_name="",
                      primary_ds_type="", processed_ds_name="", data_tier_name="",
@@ -125,8 +128,6 @@ class DBSDataset:
         The parameter can include % character. 
         all other parameters are not wild card ones.
         """
-        #import pdb
-        #pdb.set_trace()
         if(logical_file_name and logical_file_name.find("%")!=-1):
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasets API requires \
                 fullly qualified logical_file_name. NO wildcard is allowed in logical_file_name.')
@@ -144,6 +145,7 @@ class DBSDataset:
                                  pset_hash,
                                  app_name,
                                  output_module_label,
+                                 global_tag,
                                  processing_version,
                                  acquisition_era, 
                                  run_num, physics_group_name,

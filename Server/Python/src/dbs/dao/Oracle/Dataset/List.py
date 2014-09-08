@@ -162,7 +162,7 @@ class List(DBFormatter):
     
             if release_version or pset_hash or app_name or output_module_label:
                 basesql = """
-    			 OMC.OUTPUT_MODULE_LABEL,
+    			 OMC.OUTPUT_MODULE_LABEL, OMC.GLOBAL_TAG, 
     			 RV.RELEASE_VERSION,
     			 PSH.PSET_HASH,
     			 AEX.APP_NAME, """ + basesql
@@ -191,6 +191,10 @@ class List(DBFormatter):
                 op = ("=", "like")["%" in output_module_label]
                 wheresql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label " % op
                 binds.update(output_module_label=output_module_label)
+            if global_tag:
+                op = ("=", "like")["%" in global_tag]
+                wheresql += " AND OMC.GLOBAL_TAG  %s :global_tag " % op
+                binds.update(global_tag=global_tag)
             if processing_version != 0:
                 #op = ("=", "like")["%" in processing_version]
                 op = "="

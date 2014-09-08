@@ -209,7 +209,7 @@ class DBSBlock:
 
     def listBlocks(self, dataset="", block_name="", data_tier_name="", origin_site_name="",
                    logical_file_name="", run_num=-1, min_cdate=0, max_cdate=0,
-                   min_ldate=0, max_ldate=0, cdate=0,  ldate=0, open_for_writting=-1, detail=False):
+                   min_ldate=0, max_ldate=0, cdate=0,  ldate=0, open_for_writing=-1, detail=False):
         """
         dataset, block_name, data_tier_name or logical_file_name must be passed.
         """

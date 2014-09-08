@@ -100,7 +100,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
-                                'pset_hash', 'app_name', 'output_module_label', 'processing_version',
+                                'pset_hash', 'app_name', 'output_module_label', 'processing_version', 'global_tag',
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
@@ -110,7 +110,7 @@ class DBSReaderModel(RESTModel):
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'data_tier_name',
                         'origin_site_name', 'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate',
-                        'max_ldate', 'cdate', 'ldate', 'open_for_writting', 'detail'], secured=True,
+                        'max_ldate', 'cdate', 'ldate', 'open_for_writing', 'detail'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset', 'block_name'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -270,13 +270,13 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('run_num')
     @inputChecks( dataset=str, parent_dataset=str, release_version=str, pset_hash=str,
-                 app_name=str, output_module_label=str,  processing_version=(int,str), acquisition_era_name=str,
+                 app_name=str, output_module_label=str,  processing_version=(int,str), global_tag=str, acquisition_era_name=str,
                  run_num=(long,int,str,list), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
                  primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str,
                  create_by=(str), last_modified_by=(str), min_cdate=(int,str), max_cdate=(int,str),
                  min_ldate=(int,str), max_ldate=(int, str), cdate=(int,str), ldate=(int,str), detail=(bool,str))
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
-        release_version="", pset_hash="", app_name="", output_module_label="",
+        release_version="", pset_hash="", app_name="", output_module_label="", global_tag="",
         processing_version=0, acquisition_era_name="", run_num=-1,
         physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="",
         processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='', create_by="", last_modified_by="",
@@ -299,6 +299,8 @@ class DBSReaderModel(RESTModel):
         :type app_name: str
         :param output_module_label: output_module_label
         :type output_module_label: str
+        :param global_tag: global_tag
+        :type global_tag: str
         :param processing_version: Processing Version
         :type processing_version: str
         :param acquisition_era_name: Acquisition Era
@@ -349,6 +351,7 @@ class DBSReaderModel(RESTModel):
         pset_hash = pset_hash.replace("*", "%")
         app_name = app_name.replace("*", "%")
         output_module_label = output_module_label.replace("*", "%")
+        global_tag = global_tag.replace("*", "%")
         logical_file_name = logical_file_name.replace("*", "%")
         physics_group_name = physics_group_name.replace("*", "%")
         primary_ds_name = primary_ds_name.replace("*", "%")
@@ -400,7 +403,7 @@ class DBSReaderModel(RESTModel):
         detail = detail in (True, 1, "True", "1", 'true')
         try:
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash,
-                app_name, output_module_label, processing_version, acquisition_era_name,
+                app_name, output_module_label, processing_version, acquisition_era_name, global_tag, 
                 run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
                 data_tier_name, dataset_access_type, prep_id, create_by, last_modified_by,
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
@@ -477,10 +480,10 @@ class DBSReaderModel(RESTModel):
     @transformInputType('run_num')
     @inputChecks(dataset=str, block_name=str, data_tier_name=str, origin_site_name=str, logical_file_name=str,
                  run_num=(long,int,str,list), min_cdate=(int,str), max_cdate=(int, str), min_ldate=(int,str),
-                 max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), open_for_writting=(int,str), detail=(str,bool))
+                 max_ldate=(int,str), cdate=(int,str),  ldate=(int,str), open_for_writing=(int,str), detail=(str,bool))
     def listBlocks(self, dataset="", block_name="", data_tier_name="", origin_site_name="",
                    logical_file_name="",run_num=-1, min_cdate='0', max_cdate='0',
-                   min_ldate='0', max_ldate='0', cdate='0',  ldate='0', open_for_writting=-1, detail=False):
+                   min_ldate='0', max_ldate='0', cdate='0',  ldate='0', open_for_writing=-1, detail=False):
 
         """
         API to list a block in DBS. At least one of the parameters block_name, dataset, data_tier_name or
@@ -497,8 +500,8 @@ class DBSReaderModel(RESTModel):
         :type logical_file_name: str
         :param origin_site_name: Origin Site Name (Optional)
         :type origin_site_name: str
-        :param open_for_writting: Open for Writting (Optional)
-        :type open_for_writting: int (0 or 1)
+        :param open_for_writing: Open for Writting (Optional)
+        :type open_for_writing: int (0 or 1)
         :param run_num: run_num numbers (Optional)
         :type run_num: int, list of runs or list of run ranges
         :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
@@ -555,7 +558,7 @@ class DBSReaderModel(RESTModel):
         detail = detail in (True, 1, "True", "1", 'true')
         try:
             return self.dbsBlock.listBlocks(dataset, block_name, data_tier_name, origin_site_name, logical_file_name,
-                                  run_num, min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, open_for_writting,detail)
+                                  run_num, min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, open_for_writing,detail)
 
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)

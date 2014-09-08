@@ -783,7 +783,7 @@ DEPLOYMENT_TEST-v4711/RAW",
         self.assertEqual(api_doc.find("No documentation available. Empty docstring!"), -1)
 
     def test_server_version(self):
-        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[a-z]*$)'
+        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[\-a-z0-9]*$)'
         version = self.api.serverinfo()
         self.assertTrue(version.has_key('dbs_version'))
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)

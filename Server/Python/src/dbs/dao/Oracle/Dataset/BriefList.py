@@ -26,7 +26,7 @@ class BriefList(DBFormatter):
 	self.basesql = " D.DATASET FROM %sDATASETS D " %  self.owner
 
     def execute(self, conn, dataset="", is_dataset_valid=1, parent_dataset="",
-                release_version="", pset_hash="", app_name="", output_module_label="",
+                release_version="", pset_hash="", app_name="", output_module_label="", global_tag="",
                 processing_version=0, acquisition_era="", run_num=-1,
                 physics_group_name="", logical_file_name="", primary_ds_name="",
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", 
@@ -143,7 +143,7 @@ class BriefList(DBFormatter):
                 wheresql += " AND PDS.DATASET = :parent_dataset "
                 binds.update(parent_dataset = parent_dataset)
 
-            if release_version or pset_hash or app_name or output_module_label:
+            if release_version or pset_hash or app_name or output_module_label or global_tag:
                 joinsql += """
                     LEFT OUTER JOIN %sDATASET_OUTPUT_MOD_CONFIGS DOMC ON DOMC.DATASET_ID = D.DATASET_ID 
                     LEFT OUTER JOIN %sOUTPUT_MODULE_CONFIGS OMC ON OMC.OUTPUT_MOD_CONFIG_ID = DOMC.OUTPUT_MOD_CONFIG_ID  
@@ -171,6 +171,11 @@ class BriefList(DBFormatter):
                 op = ("=", "like")["%" in output_module_label]
                 wheresql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label " % op
                 binds.update(output_module_label=output_module_label)
+
+            if global_tag:
+                op = ("=", "like")["%" in global_tag]
+                wheresql += " AND OMC.GLOBAL_TAG  %s :global_tag " % op
+                binds.update(global_tag=global_tag)
 
             if processing_version != 0:
                 joinsql += " LEFT OUTER JOIN %sPROCESSING_ERAS PE ON PE.PROCESSING_ERA_ID = D.PROCESSING_ERA_ID " % (self.owner)

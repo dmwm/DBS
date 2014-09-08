@@ -189,6 +189,15 @@ class DBSReaderModel_t(unittest.TestCase):
         """test003v: web.DBSReaderModel.listDatasets: basic test"""
         api.list('datasets', output_module_label=testparams['output_module_label'])
 
+    def test003ua(self):
+        """test003u: web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', global_tag='*')
+
+    def test003va(self):
+        """test003v: web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', global_tag=testparams['global_tag'])
+
+
     def test003w(self):
         """test003w: web.DBSReaderModel.listDatasets: basic test"""
         api.list('datasets', prep_id=testparams['prep_id'])
@@ -218,22 +227,24 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('datasets', max_ldate=int(time.time()))
 
     def test003zd(self):
-        """test003zd: web.DBSReaderModel.listDatasets: dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label"""
-        api.list('datasets', dataset=testparams['dataset'],
-                 parent_dataset='*',
-                 release_version=testparams['release_version'],
-                 pset_hash=testparams['pset_hash'],
-                 app_name=testparams['app_name'],
-                 output_module_label=testparams['output_module_label'])
-
-    def test003ze(self):
-        """test003ze: web.DBSReaderModel.listDatasets: dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, detail"""
+        """test003zd: web.DBSReaderModel.listDatasets: dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, global_tag"""
         api.list('datasets', dataset=testparams['dataset'],
                  parent_dataset='*',
                  release_version=testparams['release_version'],
                  pset_hash=testparams['pset_hash'],
                  app_name=testparams['app_name'],
                  output_module_label=testparams['output_module_label'],
+                 global_tag=testparams['global_tag'])
+
+    def test003ze(self):
+        """test003ze: web.DBSReaderModel.listDatasets: dataset, parent_dataset, release_version, pset_hash, app_name, output_module_label, global_tag, detail"""
+        api.list('datasets', dataset=testparams['dataset'],
+                 parent_dataset='*',
+                 release_version=testparams['release_version'],
+                 pset_hash=testparams['pset_hash'],
+                 app_name=testparams['app_name'],
+                 output_module_label=testparams['output_module_label'],
+                 global_tag=testparams['global_tag']
                  detail=True)
 
     def test003zf(self):
@@ -277,6 +288,25 @@ class DBSReaderModel_t(unittest.TestCase):
                  app_name=testparams['app_name'],
                  output_module_label=testparams['output_module_label'],
                  detail = True)
+
+    def test003zj2(self):
+        """test003zj: web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', app_name=testparams['app_name'],
+                 global_tag=testparams['global_tag'])
+
+    def test003zk2(self):
+        """test003zk: web.DBSReaderModel.listDatasets: basic test"""
+        api.list('datasets', dataset=testparams['dataset'],
+                 app_name=testparams['app_name'],
+                 global_tag=testparams['global_tag'])
+
+    def test003zl2(self):
+        """test003zl: web.DBSReaderModel.listDatasets: dataset, app_name, global_tag, detail"""
+        api.list('datasets', dataset=testparams['dataset'],
+                 app_name=testparams['app_name'],
+                 global_tag=testparams['global_tag'],
+                 detail = True)
+
 
     def test003zm(self):
         """test003zm: web.DBSReaderModel.listDatasets: basic test"""
@@ -1137,7 +1167,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test028a(self):
         """test028a: web.DBSReaderModel.getServerInfo: check that version is returned"""
-        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[a-z]*$)'
+        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[\-a-z0-9]*$)'
         version = api.list('serverinfo')
         self.assertTrue(version.has_key('dbs_version'))
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
