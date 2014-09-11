@@ -167,7 +167,7 @@ class DBSMigrate:
         Prepare the ordered lists of blocks based on input BLOCK
             1. see if block already exists at dst (no need to migrate),
                raise "ALREADY EXISTS"
-            2. see if block exists at src & make sure the block's open_for_writting=0
+            2. see if block exists at src & make sure the block's open_for_writing=0
             3. see if block has parents
             4. see if parent blocks are already at dst
             5. add 'order' to parent and then this block (ascending)
@@ -528,9 +528,9 @@ class DBSMigrate:
         Client type call...
         """
         if block:
-            params={'block_name':block, 'open_for_writting':0}
+            params={'block_name':block, 'open_for_writing':0}
         elif dataset:
-            params={'dataset':dataset, 'open_for_writting':0}
+            params={'dataset':dataset, 'open_for_writing':0}
         else:
             m = 'DBSMigration: Invalid input.  Either block or dataset name has to be provided'
             e = 'DBSMigrate/getSrcBlocks: Invalid input.  Either block or dataset name has to be provided'

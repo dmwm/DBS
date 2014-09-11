@@ -1,4 +1,3 @@
-. /opt/vdt/setup.sh
 if [ -z "$DBS3_ROOT" ]; then
     #export DBS3_ROOT=/uscms/home/yuyi/dbs3-test
     export DBS3_ROOT=/uscms/home/yuyi/dev

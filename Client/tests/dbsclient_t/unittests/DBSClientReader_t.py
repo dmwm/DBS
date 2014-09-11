@@ -629,7 +629,7 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test107(self):
         """test107: unittestDBSClientReader_t.serverinfo: get server info"""
-        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[a-z]*$)'
+        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[\.\-a-z0-9]*$)'
         version = self.api.serverinfo()
         self.assertTrue(version.has_key('dbs_version'))
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)

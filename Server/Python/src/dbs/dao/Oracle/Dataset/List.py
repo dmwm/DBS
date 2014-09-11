@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 """
 This module provides Dataset.List data access object.
@@ -52,7 +51,7 @@ class List(DBFormatter):
 
     def execute(self, conn, dataset="", is_dataset_valid=1, parent_dataset="",\
                 release_version="", pset_hash="", app_name="", output_module_label="",\
-                processing_version=0, acquisition_era="", run_num=-1,\
+                global_tag="", processing_version=0, acquisition_era="", run_num=-1,\
                 physics_group_name="", logical_file_name="", primary_ds_name="",\
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", prep_id="",\
                 create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,\
@@ -162,7 +161,7 @@ class List(DBFormatter):
     
             if release_version or pset_hash or app_name or output_module_label:
                 basesql = """
-    			 OMC.OUTPUT_MODULE_LABEL,
+    			 OMC.OUTPUT_MODULE_LABEL, OMC.GLOBAL_TAG, 
     			 RV.RELEASE_VERSION,
     			 PSH.PSET_HASH,
     			 AEX.APP_NAME, """ + basesql
@@ -191,6 +190,10 @@ class List(DBFormatter):
                 op = ("=", "like")["%" in output_module_label]
                 wheresql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label " % op
                 binds.update(output_module_label=output_module_label)
+            if global_tag:
+                op = ("=", "like")["%" in global_tag]
+                wheresql += " AND OMC.GLOBAL_TAG  %s :global_tag " % op
+                binds.update(global_tag=global_tag)
             if processing_version != 0:
                 #op = ("=", "like")["%" in processing_version]
                 op = "="

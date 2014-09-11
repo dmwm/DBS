@@ -70,7 +70,7 @@ def main():
 		for b in blockSum:
 			cdate= blockCdate[b["block_name"]]
 			day = int((now-cdate)/sdays)
-			f[day] = f[day] + b["num_evernt"] 
+			f[day] = f[day] + b["num_event"] 
 	for i in range(lenth):
 		#print (lenth-1)-i, ":  ", f[i], "  ", sum(item['all'] for item in f[i:lenth]) 
 		print i, ": ", f[(lenth-1)-i], " ", sum(item for item in f[(lenth-1)-i:lenth])

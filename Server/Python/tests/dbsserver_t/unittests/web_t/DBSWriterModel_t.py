@@ -585,13 +585,16 @@ class DBSWriterModel_t(unittest.TestCase):
     @checkException("dataset_access_type")
     def test09b(self):
         """test22a web.DBSWriterModel.updateDatasetType: Basic test """
-
         api.update('datasets')
+    
+    @checkException("Invalid Input")
+    def test09b1(self):
+        """test22a web.DBSWriterModel.updateDatasetType with a wrong type: Basic test """
+        api.update('datasets', dataset=dataset, dataset_access_type="DEPRECAT")
 
     @checkException("dataset")
     def test09c(self):
         """test09c: web.DBSWriterModel.updateDatasetType: Basic test """
-
         api.update('datasets',dataset_access_type="DEPRECATED")
 
     def test10a(self):
