@@ -51,8 +51,8 @@ class List(DBFormatter):
 
     def execute(self, conn, dataset="", is_dataset_valid=1, parent_dataset="",\
                 release_version="", pset_hash="", app_name="", output_module_label="",\
-                processing_version=0, acquisition_era="", run_num=-1,\
-                global_tag="", physics_group_name="", logical_file_name="", primary_ds_name="",\
+                global_tag="", processing_version=0, acquisition_era="", run_num=-1,\
+                physics_group_name="", logical_file_name="", primary_ds_name="",\
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", prep_id="",\
                 create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,\
                 ldate=0, transaction=False):
