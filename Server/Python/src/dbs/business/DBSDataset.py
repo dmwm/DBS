@@ -117,7 +117,7 @@ class DBSDataset:
    
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
                      release_version="", pset_hash="", app_name="",
-                     output_module_label="", processing_version=0, global_tag="", 
+                     output_module_label="", global_tag="", processing_version=0, 
                      acquisition_era="", run_num=-1, physics_group_name="",
                      logical_file_name="", primary_ds_name="",
                      primary_ds_type="", processed_ds_name="", data_tier_name="",

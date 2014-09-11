@@ -100,7 +100,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
-                                'pset_hash', 'app_name', 'output_module_label', 'processing_version', 'global_tag',
+                                'pset_hash', 'app_name', 'output_module_label', 'global_tag', 'processing_version',
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
@@ -270,7 +270,7 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('run_num')
     @inputChecks( dataset=str, parent_dataset=str, release_version=str, pset_hash=str,
-                 app_name=str, output_module_label=str,  processing_version=(int,str), global_tag=str, acquisition_era_name=str,
+                 app_name=str, output_module_label=str, global_tag=str, processing_version=(int,str), acquisition_era_name=str,
                  run_num=(long,int,str,list), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
                  primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str,
                  create_by=(str), last_modified_by=(str), min_cdate=(int,str), max_cdate=(int,str),
@@ -403,7 +403,7 @@ class DBSReaderModel(RESTModel):
         detail = detail in (True, 1, "True", "1", 'true')
         try:
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash,
-                app_name, output_module_label, processing_version, acquisition_era_name, global_tag, 
+                app_name, output_module_label, global_tag, processing_version, acquisition_era_name, 
                 run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
                 data_tier_name, dataset_access_type, prep_id, create_by, last_modified_by,
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
