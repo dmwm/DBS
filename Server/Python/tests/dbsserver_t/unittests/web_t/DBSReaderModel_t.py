@@ -244,7 +244,7 @@ class DBSReaderModel_t(unittest.TestCase):
                  pset_hash=testparams['pset_hash'],
                  app_name=testparams['app_name'],
                  output_module_label=testparams['output_module_label'],
-                 global_tag=testparams['global_tag']
+                 global_tag=testparams['global_tag'],
                  detail=True)
 
     def test003zf(self):
@@ -1167,7 +1167,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test028a(self):
         """test028a: web.DBSReaderModel.getServerInfo: check that version is returned"""
-        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[\-a-z0-9]*$)'
+        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[\-\.a-z0-9]*$)'
         version = api.list('serverinfo')
         self.assertTrue(version.has_key('dbs_version'))
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)

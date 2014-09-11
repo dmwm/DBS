@@ -587,7 +587,7 @@ class DBSWriterModel_t(unittest.TestCase):
         """test22a web.DBSWriterModel.updateDatasetType: Basic test """
         api.update('datasets')
     
-    @checkException("ORA-01407")
+    @checkException("Invalid Input")
     def test09b1(self):
         """test22a web.DBSWriterModel.updateDatasetType with a wrong type: Basic test """
         api.update('datasets', dataset=dataset, dataset_access_type="DEPRECAT")

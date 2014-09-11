@@ -449,7 +449,7 @@ class DBSValidation_t(unittest.TestCase):
 
     def test15(self):
         """test15: Test to get server information"""
-        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[/-a-z0-9]*$)'
+        reg_ex = r'^(3+\.[0-9]+\.[0-9]+[\.\-a-z0-9]*$)'
         version = self.api.serverinfo()
         self.assertTrue(version.has_key('dbs_version'))
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
