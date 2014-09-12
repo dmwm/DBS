@@ -506,7 +506,7 @@ class DbsApi(object):
 
         """
         validParameters = ['dataset','block_name', 'data_tier_name', 'origin_site_name',
-                           'logical_file_name', 'run_num', 'min_cdate',
+                           'logical_file_name', 'run_num', 'open_for_writing', 'min_cdate',
                            'max_cdate', 'min_ldate', 'max_ldate',
                            'cdate', 'ldate', 'detail']
 
