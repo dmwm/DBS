@@ -3,7 +3,6 @@
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionDef import DBSEXCEPTIONS
-from sqlalchemy import exceptions
 from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
 
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler

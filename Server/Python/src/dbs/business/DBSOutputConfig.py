@@ -8,7 +8,7 @@ __revision__ = "$Id: DBSOutputConfig.py,v 1.15 2010/08/19 15:22:18 yuyi Exp $"
 __version__ = "$Revision: 1.15 $"
 
 from WMCore.DAOFactory import DAOFactory
-from sqlalchemy import exceptions
+from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 
@@ -77,7 +77,7 @@ class DBSOutputConfig:
             self.outmodin.execute(conn, businput, tran)
             tran.commit()
             tran = None
-        except exceptions.IntegrityError, ex:
+        except SQLAlchemyIntegrityError, ex:
             if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                 #if the validation is due to a unique constrain break in OUTPUT_MODULE_CONFIGS
                 if str(ex).find("TUC_OMC_1") != -1: pass
@@ -87,7 +87,7 @@ class DBSOutputConfig:
                         self.outmodin.execute(conn, businput, tran)
                         tran.commit()
                         tran =  None
-                    except exceptions.IntegrityError, ex1:
+                    except SQLAlchemyIntegrityError, ex1:
                         if str(ex1).find("unique constraint") != -1 and str(ex1).find("TUC_OMC_1") != -1: pass
                     except Exception, e1:
                         if tran:

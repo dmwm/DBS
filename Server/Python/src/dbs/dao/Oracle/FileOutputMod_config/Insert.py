@@ -3,8 +3,6 @@
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
-from sqlalchemy import exceptions
-
 class Insert(DBFormatter):
 
     def __init__(self, logger, dbi, owner):

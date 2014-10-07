@@ -4,7 +4,8 @@
 This module provides business object class to interact with Dataset. 
 """
 import cjson
-from sqlalchemy import exceptions
+from sqlalchemy.exc import DatabaseError as SQLAlchemyDatabaseError
+from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsUtils import dbsUtils
@@ -106,7 +107,7 @@ class DBSDataset:
             self.updatetype.execute(conn, dataset, dataset_access_type.upper(), trans)
             trans.commit()
             trans = None
-        except exceptions.DatabaseError, ex:
+        except SQLAlchemyDatabaseError, ex:
             if str(ex).find("ORA-01407") != -1:
                 dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input", None, "DBSDataset/updateType. A Valid dataset_access_type is required.")
         finally:
@@ -272,7 +273,7 @@ class DBSDataset:
             try:
                 # insert the dataset
                 self.datasetin.execute(conn, dsdaoinput, tran)
-            except exceptions.IntegrityError, ex:
+            except SQLAlchemyIntegrityError, ex:
                 if (str(ex).lower().find("unique constraint") != -1 or
                     str(ex).lower().find("duplicate") != -1):
                     # dataset already exists, lets fetch the ID

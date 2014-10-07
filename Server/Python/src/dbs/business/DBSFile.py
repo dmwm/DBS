@@ -5,7 +5,7 @@ This module provides business object class to interact with File.
 """
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
-from sqlalchemy import exceptions
+from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
 from dbs.utils.dbsUtils import dbsUtils
 
 class DBSFile:
@@ -348,7 +348,7 @@ class DBSFile:
                         fileInserted = True
                     else:
                         file_clob['file'] = filein
-                except exceptions.IntegrityError, ex:
+                except SQLAlchemyIntegrityError, ex:
                     if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                         # Lets move on to NEXT file, we do not want to continue processing this file
 
@@ -426,7 +426,7 @@ class DBSFile:
                     try:
                         self.logger.warning(file_clob)
                         self.filebufin.execute(conn, filein['logical_file_name'], block_id, file_clob, transaction=tran)
-                    except exceptions.IntegrityError, ex:
+                    except SQLAlchemyIntegrityError, ex:
                         if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                             pass
                         else:
@@ -441,7 +441,7 @@ class DBSFile:
                             self.blkparentin.execute(conn, bkParentage2insert, transaction=tran)
                             dsParentage2insert={'this_dataset_id': filein["dataset_id"], 'parent_logical_file_name' : fp['parent_logical_file_name']}
                             self.dsparentin.execute(conn, dsParentage2insert, transaction=tran)
-                        except exceptions.IntegrityError, ex:
+                        except SQLAlchemyIntegrityError, ex:
                             #ORA-00001
                             if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP") != -1) or str(ex).find("PK_BP") != -1 or str(ex).lower().find("duplicate") != -1:
                                 pass

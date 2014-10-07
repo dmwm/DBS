@@ -5,7 +5,7 @@ This module provides business layer for the file buffer
 """
 
 from WMCore.DAOFactory import DAOFactory
-from sqlalchemy import exceptions
+from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
 
 class DBSFileBuffer:
     """
@@ -142,7 +142,7 @@ class DBSFileBuffer:
                         try:
                             self.blkparentin.execute(conn, abp,
                                                 transaction=tran)
-                        except exceptions.IntegrityError, ex:
+                        except SQLAlchemyIntegrityError, ex:
                             if (str(ex).find("unique constraint") != -1 or
                                 str(ex).lower().find("duplicate") != -1):
                                 pass
@@ -170,7 +170,7 @@ class DBSFileBuffer:
                         try:
                             self.dsparentin.execute(conn, adsp,
                                                     transaction=tran)
-                        except exceptions.IntegrityError, ex:
+                        except SQLAlchemyIntegrityError, ex:
                             if (str(ex).find("unique constraint") != -1 or
                                 str(ex).lower().find("duplicate") != -1):
                                 pass

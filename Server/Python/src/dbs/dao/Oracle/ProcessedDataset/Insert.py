@@ -7,8 +7,6 @@ __version__  = "$Id: Insert.py,v 1.10 2010/08/20 15:55:57 yuyi Exp $ "
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
-from sqlalchemy import exceptions
-
 class Insert(DBFormatter):
     """ProcessedDataset Insert DAO class"""
 

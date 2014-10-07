@@ -2,8 +2,7 @@
 """
 DBS  block insertion for WMAgent & Crab publishering
 """
-
-from sqlalchemy import exceptions
+from sqlalchemy import exc as exceptions
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.dbsUtils import dbsUtils

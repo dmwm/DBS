@@ -2,7 +2,6 @@
 """ DAO Object for PrimaryDatasets table """ 
 
 from WMCore.Database.DBFormatter import DBFormatter
-from sqlalchemy import exceptions
 from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
