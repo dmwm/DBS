@@ -4,8 +4,6 @@
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
-from sqlalchemy import exceptions
-
 class Insert2(DBFormatter):
     """File Insert DAO Class."""
     #This dao is not how the other daos in DBS3 written. We'd rather leave the details to be deal by business layer

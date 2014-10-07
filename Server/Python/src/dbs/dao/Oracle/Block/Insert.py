@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ DAO Object for Blocks table """ 
 from WMCore.Database.DBFormatter import DBFormatter
-from sqlalchemy import exceptions
 from dbs.dao.Oracle.InsertTable.Insert import InsertSingle
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

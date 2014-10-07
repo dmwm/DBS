@@ -23,8 +23,7 @@ from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.RestClientPool import RestClientPool
 
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
-
-from sqlalchemy import exceptions
+from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
 
 def pprint(a):
     print json.dumps(a, sort_keys=True, indent=4)
@@ -345,7 +344,7 @@ class DBSMigrate:
             return {
                 "migration_report" : "REQUEST QUEUED with total %d blocks to be migrated" %totalQueued,
                 "migration_details" : request }
-        except exceptions.IntegrityError, ex:
+        except SQLAlchemyIntegrityError, ex:
             tran.rollback()
             if conn: conn.close()
             if (str(ex).find("unique constraint") != -1 or
