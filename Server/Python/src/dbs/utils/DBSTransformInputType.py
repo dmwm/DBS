@@ -33,7 +33,7 @@ def parseRunRange(run_range):
         for item in run_range:
             for new_item in parseRunRange(item):
                 yield new_item
-    elif isinstance(run_range, str):
+    elif isinstance(run_range, basestring):
         try:
             min_run, max_run = run_range.split('-', 1)
         except ValueError:

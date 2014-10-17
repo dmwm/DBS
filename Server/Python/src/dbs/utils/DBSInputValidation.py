@@ -56,7 +56,11 @@ def inputChecks(**_params_):
                                             logger=log.error, serverError=serverlog)
                     else:
                         try:
-                            if type(value) == str:
+                            if isinstance(value, basestring):
+                                try:
+                                    value = str(value)
+                                except:
+                                    dbsExceptionHandler("dbsException-invalid-input", "invalid value for %s" %name)
                                 if name == 'dataset':
                                     if '*' in value:
                                         searchdataset(value)
@@ -232,7 +236,7 @@ def validateJSONInputNoCopy(input_key,input_data):
         for x in input_data:
             l.append(validateJSONInputNoCopy(input_key,x))
         input_data = l
-    elif isinstance(input_data,str):
+    elif isinstance(input_data, basestring):
         if input_key not in acceptedInputDataTypes[str]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type str for key-value %s... %s..." \
                 %(input_key[:10], input_data[:10]), logger=log.error,\

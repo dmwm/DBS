@@ -40,7 +40,7 @@ class dbsUtils:
 
 	errmessage = "lumi intervals must be of one of the two following formats: '[[a,b], [c,d], ...],' or [a1, a2, a3 ...] "
 
-        if isinstance(lumi_list,str):
+        if isinstance(lumi_list,basestring):
             try:
                 lumi_list = cjson.decode(lumi_list)
             except:

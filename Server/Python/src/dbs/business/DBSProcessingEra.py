@@ -26,10 +26,6 @@ class DBSProcessingEra:
         """
         Returns all processing eras in dbs
         """
-        #if type(processing_version) is not str:
-        #    dbsExceptionHandler('dbsException-invalid-input',
-        #                        'processing version given is not valid : %s' %
-        #                        processing_version)
         conn = self.dbi.connection()
         try:
             result = self.pelst.execute(conn, processing_version)

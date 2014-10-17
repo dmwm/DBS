@@ -40,7 +40,7 @@ class SummaryList(DBFormatter):
         if run_num != -1:
             #
             for r in parseRunRange(run_num):
-                if isinstance(r, str) or isinstance(r, (long,int)):
+                if isinstance(r, basestring) or isinstance(r, (long,int)):
                     #if not wheresql_run_list:
                     #    wheresql_run_list = " fl.RUN_NUM = :run_list "
                     run_list.append(str(r))
