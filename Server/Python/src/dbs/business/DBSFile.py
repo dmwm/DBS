@@ -187,7 +187,7 @@ class DBSFile:
             if run_num==-1:
                 dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number, \
                         use run_num=123")
-            elif isinstance(run_num, str):
+            elif isinstance(run_num, basestring):
                 try:
                     run_num = int(run_num)
                 except:

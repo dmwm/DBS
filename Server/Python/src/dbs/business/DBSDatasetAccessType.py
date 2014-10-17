@@ -25,7 +25,12 @@ class DBSDatasetAccessType:
         """
         List dataset access types
         """
-        if type(dataset_access_type) is not str:
+        if isinstance(dataset_access_type, basestring):
+            try:
+                dataset_access_type = str(dataset_access_type)
+            except:    
+                dbsExceptionHandler('dbsException-invalid-input', 'dataset_access_type given is not valid : %s' %dataset_access_type)
+        else:
             dbsExceptionHandler('dbsException-invalid-input', 'dataset_access_type given is not valid : %s' %dataset_access_type)
         conn = self.dbi.connection()
         try:

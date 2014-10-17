@@ -369,30 +369,53 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input for create_by or last_modified_by.\
             No wildcard allowed.",  self.logger.exception, 'No wildcards allowed for create_by or last_modified_by')
         try:
-            if isinstance(min_cdate,str) and ('*' in min_cdate or '%' in min_cdate):
+            if isinstance(min_cdate,basestring) and ('*' in min_cdate or '%' in min_cdate):
                 min_cdate = 0
             else:
-                min_cdate = int(min_cdate)
-            if isinstance(max_cdate,str) and ('*' in max_cdate or '%' in max_cdate):
+                try:
+                    min_cdate = int(min_cdate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for min_cdate")
+            
+            if isinstance(max_cdate,basestring) and ('*' in max_cdate or '%' in max_cdate):
                 max_cdate = 0
             else:
-                max_cdate = int(max_cdate)
-            if isinstance(min_ldate,str) and ('*' in min_ldate or '%' in min_ldate):
+                try:
+                    max_cdate = int(max_cdate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_cdate")
+            
+            if isinstance(min_ldate,basestring) and ('*' in min_ldate or '%' in min_ldate):
                 min_ldate = 0
             else:
-                min_ldate = int(min_ldate)
-            if isinstance(max_ldate,str) and ('*' in max_ldate or '%' in max_ldate):
+                try:
+                    min_ldate = int(min_ldate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for min_ldate")
+            
+            if isinstance(max_ldate,basestring) and ('*' in max_ldate or '%' in max_ldate):
                 max_ldate = 0
             else:
-                max_ldate = int(max_ldate)
-            if isinstance(cdate,str) and ('*' in cdate or '%' in cdate):
+                try:
+                    max_ldate = int(max_ldate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_ldate")
+            
+            if isinstance(cdate,basestring) and ('*' in cdate or '%' in cdate):
                 cdate = 0
             else:
-                cdate = int(cdate)
-            if isinstance(ldate,str) and ('*' in ldate or '%' in ldate):
+                try:
+                    cdate = int(cdate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for cdate")
+            
+            if isinstance(ldate,basestring) and ('*' in ldate or '%' in ldate):
                 ldate = 0
             else:
-                ldate = int(ldate)
+                try:
+                    ldate = int(ldate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for ldate")
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
@@ -464,11 +487,11 @@ class DBSReaderModel(RESTModel):
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except ValueError as ve:
-            dbsExceptionHandler("dbsException-invalid-input", "Invalid Input Data",  self.logger.exception, ve.message)
+            dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input Data",  self.logger.exception, ve.message)
         except TypeError as te:
-            dbsExceptionHandler("dbsException-invalid-input", "Invalid Input DataType",  self.logger.exception, te.message)
+            dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input DataType",  self.logger.exception, te.message)
         except NameError as ne:
-            dbsExceptionHandler("dbsException-invalid-input", "Invalid Input Searching Key",  self.logger.exception, ne.message)
+            dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input Searching Key",  self.logger.exception, ne.message)
         except Exception, ex:
             sError = "DBSReaderModel/listDataTiers. %s\n. Exception trace: \n %s" \
                     % ( ex, traceback.format_exc())
@@ -527,30 +550,54 @@ class DBSReaderModel(RESTModel):
         logical_file_name = logical_file_name.replace("*","%")
         origin_site_name = origin_site_name.replace("*","%")
         try:
-            if isinstance(min_cdate,str) and ('*' in min_cdate or '%' in min_cdate):
+            if isinstance(min_cdate,basestring) and ('*' in min_cdate or '%' in min_cdate):
                 min_cdate = 0
             else:
-                min_cdate = int(min_cdate)
-            if isinstance(max_cdate,str) and ('*' in max_cdate or '%' in max_cdate):
+                try:
+                    min_cdate = int(min_cdate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for min_cdate")
+
+            if isinstance(max_cdate,basestring) and ('*' in max_cdate or '%' in max_cdate):
                 max_cdate = 0
             else:
-                max_cdate = int(max_cdate)
-            if isinstance(min_ldate,str) and ('*' in min_ldate or '%' in min_ldate):
+                try:
+                    max_cdate = int(max_cdate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_cdate")
+
+            
+            if isinstance(min_ldate,basestring) and ('*' in min_ldate or '%' in min_ldate):
                 min_ldate = 0
             else:
-                min_ldate = int(min_ldate)
-            if isinstance(max_ldate,str) and ('*' in max_ldate or '%' in max_ldate):
+                try:
+                    min_ldate = int(min_ldate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_cdate")
+            
+            if isinstance(max_ldate, basestring) and ('*' in max_ldate or '%' in max_ldate):
                 max_ldate = 0
             else:
-                max_ldate = int(max_ldate)
-            if isinstance(cdate,str) and ('*' in cdate or '%' in cdate):
+                try:
+                    max_ldate = int(max_ldate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_ldate")
+            
+            if isinstance(cdate, basestring) and ('*' in cdate or '%' in cdate):
                 cdate = 0
             else:
-                cdate = int(cdate)
-            if isinstance(cdate,str) and ('*' in ldate or '%' in ldate):
+                try:
+                    cdate = int(cdate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for cdate")
+            
+            if isinstance(cdate,basestring) and ('*' in ldate or '%' in ldate):
                 ldate = 0
             else:
-                ldate = int(ldate)
+                try:
+                    ldate = int(ldate)
+                except:
+                    dbsExceptionHandler("dbsException-invalid-input", "invalid input for ldate")
         except Exception, ex:
             sError = "DBSReaderModel/listBlocks.\n. %s \n Exception trace: \n %s" \
                                 % (ex, traceback.format_exc())
@@ -682,8 +729,11 @@ class DBSReaderModel(RESTModel):
                                 self.logger.exception,
                                 "Dataset or block_names must be specified at a time.")
 
-        if block_name and isinstance(block_name, str):
-            block_name = [block_name]
+        if block_name and isinstance(block_name, basestring):
+            try:
+                block_name = [str(block_name)]
+            except:
+                dbsExceptionHandler("dbsException-invalid-input", "Invalid block_name for listBlockSummaries. ")
 
         for this_block_name in block_name:
             if re.search("[*, %]", this_block_name):
