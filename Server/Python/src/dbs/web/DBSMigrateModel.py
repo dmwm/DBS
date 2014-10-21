@@ -90,7 +90,7 @@ class DBSMigrateModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'],
             self.logger.exception, sError)
     
-    @inputChecks(migration_rqst_id=(long,int,str), block_name=str, dataset=str, user=str)
+    @inputChecks(migration_rqst_id=(long,int,basestring), block_name=basestring, dataset=basestring, user=basestring)
     def status(self, migration_rqst_id="", block_name="", dataset="", user=""):
         """
         Interface to query status of a migration request

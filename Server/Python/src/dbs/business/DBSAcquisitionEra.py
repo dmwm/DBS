@@ -28,7 +28,9 @@ class DBSAcquisitionEra:
         """
         Returns all acquistion eras in dbs
         """
-        if type(acq) is not str:
+        try:
+            acq = str(acq)
+        except:
             dbsExceptionHandler('dbsException-invalid-input', 'acquistion_era_name given is not valid : %s' %acq)
         conn = self.dbi.connection()
         try:
@@ -41,7 +43,9 @@ class DBSAcquisitionEra:
         """
         Returns all acquistion eras in dbs
         """
-        if type(acq) is not str:
+        try:
+            acq = str(acq)
+        except:
             dbsExceptionHandler('dbsException-invalid-input', 'aquistion_era_name given is not valid : %s'%acq)
         conn = self.dbi.connection()
         try:

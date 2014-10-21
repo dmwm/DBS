@@ -32,7 +32,7 @@ class List(DBFormatter):
 
         sql = self.sql
         
-	if type(block_name) is str:
+	if isinstance(block_name, basestring):
 	    binds = {'block_name' :block_name}
         elif type(block_name) is list:
             binds = [{'block_name':x} for x in block_name]
