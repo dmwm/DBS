@@ -820,6 +820,27 @@ class DBSReaderModel_t(unittest.TestCase):
         lfn = testparams['files'][1]
         api.list('filelumis', logical_file_name=lfn, run_num=testparams['run_num'])
 
+    def test010m(self):
+        """test010lm: web.DBSReaderModel.listFileLumis: basic test """
+        lfn = testparams['files'][1]
+        api.list('filelumis', logical_file_name=lfn, run_num=testparams['run_num'], validFileOnly=1)
+
+    def test010n(self):
+        """test010n: web.DBSReaderModel.listFileLumis: basic test """
+        api.list('filelumis', block_name=testparams['block'], validFileOnly=1)
+
+
+    def test010o(self):
+        """test010lo: web.DBSReaderModel.listFileLumis: basic test """
+        lfn = testparams['files'][1]
+        api.list('filelumis', logical_file_name=lfn, validFileOnly=1)
+
+   def test010p(self):
+        """test010lp: web.DBSReaderModel.listFileLumis: basic test """
+        lfn = testparams['files'][1]
+        api.list('filelumis',  block_name=testparams['block'], run_num=testparams['run_num'], validFileOnly=1)
+
+
     def test011a(self):
         """test011a: web.DBSReaderModel.listFile with maxrun, minrun: basic """
         api.list('files', run_num='%s-%s' % (testparams['run_num'], testparams['run_num']-1000),

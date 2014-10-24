@@ -28,22 +28,33 @@ class List(DBFormatter):
 SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 """
 
-    def execute(self, conn, logical_file_name='', block_name='', run_num=-1, migration=False):
+    def execute(self, conn, logical_file_name='', block_name='', run_num=-1, validFileOnly=0, migration=False):
         """
         Lists lumi section numbers with in a file or a block.
         """
 	if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/List. Expects db connection from upper layer.")            
         if logical_file_name:
-            sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
-            WHERE F.LOGICAL_FILE_NAME = :logical_file_name""".format(owner=self.owner)
             binds = {'logical_file_name': logical_file_name}
+            if validFileOnly == 0:
+                sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
+                WHERE F.LOGICAL_FILE_NAME = :logical_file_name""".format(owner=self.owner)
+            else:
+                sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
+                WHERE F.IS_FILE_VALID = 1 and F.LOGICAL_FILE_NAME = :logical_file_name""".format(owner=self.owner)
+
         elif block_name:
-            sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME   
+            binds = {'block_name': block_name}
+            if validFileOnly == 0:
+                sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME   
                       FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID  
                       JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID  
                       WHERE B.BLOCK_NAME = :block_name""".format(owner=self.owner)
-            binds = {'block_name': block_name}
+            else:
+                sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME
+                      FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
+                      JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
+                      F.IS_FILE_VALID = 1 and WHERE B.BLOCK_NAME = :block_name""".format(owner=self.owner)
         else:
                 dbsExceptionHandler('dbsException-invalid-input', "FileLumi/List: Either logocal_file_name or block_name must be provided.")
           #
