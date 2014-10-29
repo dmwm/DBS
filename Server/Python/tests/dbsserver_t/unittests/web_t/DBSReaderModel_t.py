@@ -835,10 +835,26 @@ class DBSReaderModel_t(unittest.TestCase):
         lfn = testparams['files'][1]
         api.list('filelumis', logical_file_name=lfn, validFileOnly=1)
 
-   def test010p(self):
+    def test010p(self):
         """test010lp: web.DBSReaderModel.listFileLumis: basic test """
         lfn = testparams['files'][1]
         api.list('filelumis',  block_name=testparams['block'], run_num=testparams['run_num'], validFileOnly=1)
+
+    def test010q(self):
+        """test010q: web.DBSReaderModel.listFileLumis: basic test """
+        api.list('filelumis', block_name=testparams['block'], validFileOnly=2)
+
+
+    def test010r(self):
+        """test010lr: web.DBSReaderModel.listFileLumis: basic test """
+        lfn = testparams['files'][1]
+        api.list('filelumis', logical_file_name=lfn, validFileOnly="2")
+
+    @checkException400
+    def test010s(self):
+        """test010s: web.DBSReaderModel.listFileLumis: basic test """
+        lfn = testparams['files'][1]
+        api.list('filelumis',  block_name=testparams['block'], run_num=testparams['run_num'], validFileOnly="*")
 
 
     def test011a(self):
@@ -1043,6 +1059,22 @@ class DBSReaderModel_t(unittest.TestCase):
         """test020f: web.DBSReaderModel.listFileSummaries: basic test"""
         api.list('filesummaries', dataset=testparams['dataset'], block_name=testparams['block'],
                  run_num=testparams['run_num'])
+
+    def test020g(self):
+        """test020g: web.DBSReaderModel.listFileSummaries: basic test"""
+        print testparams['dataset']
+        api.list('filesummaries',dataset=testparams['dataset'], validFileOnly="2")
+
+    def test020h(self):
+        """test020h: web.DBSReaderModel.listFileSummaries: basic test"""
+        print testparams['dataset']
+        api.list('filesummaries',dataset=testparams['dataset'], validFileOnly=2)
+
+    @checkException400
+    def test020i(self):
+        """test020i: web.DBSReaderModel.listFileSummaries: basic test"""
+        print testparams['dataset']
+        api.list('filesummaries',dataset=testparams['dataset'], validFileOnly="*")
 
     def test021a(self):
         """test021a: web.DBSReaderModel.dumpBlock : basic """

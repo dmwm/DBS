@@ -27,8 +27,7 @@ class Remove(DBFormatter):
 
         self.sql = """
 	Delete from %sMIGRATION_REQUESTS  
-	WHERE MIGRATION_REQUEST_ID=:migration_rqst_id and create_by=:create_by 
-	      and (migration_status=0 or migration_status=3 or migration_status=9)
+	WHERE MIGRATION_REQUEST_ID=:migration_rqst_id  
 	""" %  self.owner 
         
     def execute(self, conn, daoinput, transaction = False):
