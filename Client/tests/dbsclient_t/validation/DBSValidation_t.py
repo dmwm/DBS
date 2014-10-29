@@ -52,8 +52,8 @@ class DBSValidation_t(unittest.TestCase):
 
         migration_url = os.environ['DBS_MIGRATE_URL']
         self.migration_api = DbsApi(url=migration_url, proxy=proxy)
-
-        self.cmsweb_api = DbsApi(url='https://cmsweb.cern.ch/dbs/prod/global/DBSReader', proxy=proxy)
+	self.source_url='https://cmsweb.cern.ch/dbs/prod/global/DBSReader'
+        self.cmsweb_api = DbsApi(url=self.source_url, proxy=proxy)
 
     def setUp(self):
         """setup all necessary parameters"""
@@ -332,7 +332,7 @@ class DBSValidation_t(unittest.TestCase):
         dataset_to_migrate = choice(list(src_datasets.difference(dest_datasets)))
 
         ###submit migration request
-        toMigrate = {'migration_url': 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader',
+        toMigrate = {'migration_url': self.source_url,
                      'migration_input': dataset_to_migrate}
         migration_request = self.migration_api.submitMigration(toMigrate)
         self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))
@@ -389,7 +389,7 @@ class DBSValidation_t(unittest.TestCase):
                                    for block in self.cmsweb_api.listBlocks(dataset=dataset_to_migrate)])
 
         ###submit migration request
-        toMigrate = {'migration_url': 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader',
+        toMigrate = {'migration_url': self.source_url,
                      'migration_input': block_to_migrate}
         migration_request = self.migration_api.submitMigration(toMigrate)
         self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))

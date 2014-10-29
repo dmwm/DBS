@@ -294,27 +294,43 @@ class DBSClientReader_t(unittest.TestCase):
         self.api.listFileLumis(block_name=self.testparams['block'], run_num=self.testparams['runs'][0])
 
     def test046c(self):
-        """test46c unittestDBSClientReader_t.listFileSummaries: basic test"""
-        self.api.listFileSummaries(dataset=self.testparams['dataset'])
+        """test46c unittestDBSClientReader_t.listFileLumis: basic test"""
+        self.api.listFileLumis(logical_file_name="/store/mc/does/not/EXIST/NotReally/0815/doesnotexist.root", validFileOnly=1)
 
     def test046d(self):
-        """test46d unittestDBSClientReader_t.listFileSummaries: basic test"""
-        self.api.listFileSummaries(dataset=self.testparams['dataset'], validFileOnly=1 )
+        """test46d unittestDBSClientReader_t.listFileLumis: basic test"""
+        self.api.listFileLumis(logical_file_name=self.testparams['files'][0], run_num=self.testparams['runs'][0], validFileOnly=1)
 
     def test046e(self):
-        """test46e unittestDBSClientReader_t.listFileSummaries: basic test"""
-        self.api.listFileSummaries(dataset=self.testparams['dataset'], run_num=self.testparams['runs'][0], validFileOnly=1)
+        """test46e unittestDBSClientReader_t.listFileLumis: basic test"""
+        self.api.listFileLumis(block_name=self.testparams['block'], run_num=self.testparams['runs'][0], validFileOnly=1)
 
     def test046f(self):
-        """test46f unittestDBSClientReader_t.listFileSummaries: basic test"""
-        self.api.listFileSummaries(block_name=self.testparams['block'])
+        """test46f unittestDBSClientReader_t.listFileLumis: basic test"""
+        self.api.listFileLumis(block_name=self.testparams['block'], validFileOnly=1)
 
     def test046g(self):
         """test46g unittestDBSClientReader_t.listFileSummaries: basic test"""
-        self.api.listFileSummaries(block_name=self.testparams['block'], validFileOnly=1 )
+        self.api.listFileSummaries(dataset=self.testparams['dataset'])
 
     def test046h(self):
         """test46h unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileSummaries(dataset=self.testparams['dataset'], validFileOnly=1 )
+
+    def test046i(self):
+        """test46i unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileSummaries(dataset=self.testparams['dataset'], run_num=self.testparams['runs'][0], validFileOnly=1)
+
+    def test046j(self):
+        """test46j unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileSummaries(block_name=self.testparams['block'])
+
+    def test046k(self):
+        """test46k unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileSummaries(block_name=self.testparams['block'], validFileOnly=1 )
+
+    def test046l(self):
+        """test46l unittestDBSClientReader_t.listFileSummaries: basic test"""
         self.api.listFileSummaries(block_name=self.testparams['block'], run_num=self.testparams['runs'][0], validFileOnly=1)
 
     def test047(self):

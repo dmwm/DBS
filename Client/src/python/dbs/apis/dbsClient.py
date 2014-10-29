@@ -790,11 +790,13 @@ class DbsApi(object):
         :type logical_file_name: str
         :param run_num: List lumi sections for a given run number (Optional)
         :type run_num: int,str,list
+	:param validFileOnly: default value is 0 (optional), when set to 1, only valid files counted.
+	:type int, str
         :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run)
         :rtype: list of dicts
 
         """
-        validParameters = ['logical_file_name', 'block_name', 'run_num']
+        validParameters = ['logical_file_name', 'block_name', 'run_num', 'validFileOnly']
 
         requiredParameters = {'standalone': ['logical_file_name', 'block_name']}
 

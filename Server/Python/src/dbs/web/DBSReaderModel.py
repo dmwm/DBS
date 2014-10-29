@@ -134,7 +134,7 @@ class DBSReaderModel(RESTModel):
         self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name', 'block_name',
                                                                             'block_id'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
-        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num'],
+        self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num', 'validFileOnly'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'runs', self.listRuns, args=['run_num', 'logical_file_name',
                         'block_name', 'dataset'], secured=True,
@@ -1005,8 +1005,8 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('run_num')
-    @inputChecks(logical_file_name=basestring, block_name=basestring, run_num=(long,int,basestring,list))
-    def listFileLumis(self, logical_file_name="", block_name="", run_num=-1):
+    @inputChecks(logical_file_name=basestring, block_name=basestring, run_num=(long,int,basestring,list), validFileOnly=(int,basestring))
+    def listFileLumis(self, logical_file_name="", block_name="", run_num=-1, validFileOnly=0):
         """
         API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support in this API
 
@@ -1018,10 +1018,12 @@ class DBSReaderModel(RESTModel):
         :type run_num: int, str, or list
         :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
         :rtype: list of dicts
+        :param validFileOnly: optional valid file flag. Default = 0 (include all files)
+        :type: validFileOnly: int, or str
 
         """
         try:
-            return self.dbsFile.listFileLumis(logical_file_name, block_name, run_num )
+            return self.dbsFile.listFileLumis(logical_file_name, block_name, run_num, validFileOnly )
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:

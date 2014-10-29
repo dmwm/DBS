@@ -45,9 +45,9 @@ class DBSFile:
         self.filelumilist = daofactory(classname="FileLumi.List")
         self.filebufin = daofactory(classname = "FileBuffer.Insert")
 
-    def listFileLumis(self, logical_file_name="", block_name="", run_num=-1):
+    def listFileLumis(self, logical_file_name="", block_name="", run_num=-1, validFileOnly=0):
         """
-        optional parameter: logical_file_name, block_name
+        optional parameter: logical_file_name, block_name, validFileOnly
         returns: logical_file_name, file_lumi_id, run_num, lumi_section_num
         """
         if((logical_file_name=='' or '*'in logical_file_name or '%' in logical_file_name) \

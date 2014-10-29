@@ -17,9 +17,18 @@ class Remove(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-        self.sql = \
-"""Delete from %sMIGRATION_REQUESTS  
-WHERE MIGRATION_REQUEST_ID=:migration_rqst_id and create_by=:create_by and (migration_status=0 or migration_status=3 or migration_status=9)""" %  self.owner 
+
+	#check before delete since rowcount is not supported in wmcore 
+	self.select = """
+	select count(*) as count from {owner}MIGRATION_REQUESTS 
+	WHERE MIGRATION_REQUEST_ID=:migration_rqst_id and create_by=:create_by 
+	      and (migration_status=0 or migration_status=3 or migration_status=9)
+        """.format(owner=self.owner)
+
+        self.sql = """
+	Delete from %sMIGRATION_REQUESTS  
+	WHERE MIGRATION_REQUEST_ID=:migration_rqst_id  
+	""" %  self.owner 
         
     def execute(self, conn, daoinput, transaction = False):
         """
@@ -29,7 +38,13 @@ WHERE MIGRATION_REQUEST_ID=:migration_rqst_id and create_by=:create_by and (migr
         if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/Remove. Expects db connection from upper layer.")
         daoinput['create_by'] = dbsUtils().getCreateBy()
-        result = self.dbi.processData(self.sql, daoinput, conn, transaction)
-        if result[0].rowcount == 0:
-            dbsExceptionHandler('dbsException-invalid-input2',"DBSMigration: Invalid request. Sucessfully processed or processing requests cannot \
-                                be removed, or the requested migration did not exist, or the requestor for removing and creating has to be the same user. ")
+	try:
+            msg = "DBSMigration: Invalid request. Sucessfully processed or processing requests cannot be removed,\
+                    or the requested migration did not exist, or the requestor for removing and creating has to be the same user. "
+            checkit = self.dbi.processData(self.select, daoinput, conn, transaction)
+            if self.formatDict(checkit)[0]["count"] >= 1:
+	        result = self.dbi.processData(self.sql, daoinput, conn, transaction)
+            else:
+                dbsExceptionHandler('dbsException-invalid-input', msg)
+	except:
+            raise
