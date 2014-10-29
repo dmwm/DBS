@@ -43,7 +43,8 @@ class Remove(DBFormatter):
                     or the requested migration did not exist, or the requestor for removing and creating has to be the same user. "
             checkit = self.dbi.processData(self.select, daoinput, conn, transaction)
             if self.formatDict(checkit)[0]["count"] >= 1:
-	        result = self.dbi.processData(self.sql, daoinput, conn, transaction)
+		reqID = {'migration_rqst_id':daoinput['migration_rqst_id']}
+	        result = self.dbi.processData(self.sql, reqID, conn, transaction)
             else:
                 dbsExceptionHandler('dbsException-invalid-input', msg)
 	except:
