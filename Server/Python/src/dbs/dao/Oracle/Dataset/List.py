@@ -55,7 +55,7 @@ class List(DBFormatter):
                 physics_group_name="", logical_file_name="", primary_ds_name="",\
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", prep_id="",\
                 create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,\
-                ldate=0, transaction=False):
+                ldate=0, dataset_id=-1, transaction=False):
         #import pdb
         #pdb.set_trace()
         if not conn:
@@ -66,13 +66,24 @@ class List(DBFormatter):
         binds = {}
 	wheresql = "WHERE D.IS_DATASET_VALID = :is_dataset_valid " 
         if dataset and type(dataset) is list:  # for the POST method
-            #wheresql += " AND D.DATASET=:dataset "
             ds_generator, binds = create_token_generator(dataset)
             wheresql += " AND D.DATASET in (SELECT TOKEN FROM TOKEN_GENERATOR)"
             generatedsql = "{ds_generator}".format(ds_generator=ds_generator)
             if dataset_access_type and dataset_access_type !="%":
                 op = ("=", "like")["%" in dataset_access_type]
                 wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op
+                binds['dataset_access_type'] = dataset_access_type
+                binds['is_dataset_valid'] = is_dataset_valid
+            else:
+                binds['is_dataset_valid'] = is_dataset_valid
+            sql =generatedsql + 'SELECT' + basesql + wheresql
+        elif type(dataset_id) is list:  #for the POST method
+            ds_generator, binds = create_token_generator(dataset_id)
+            wheresql += " AND D.DATASET_ID in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+            generatedsql = "{ds_generator}".format(ds_generator=ds_generator)
+            if dataset_access_type and dataset_access_type !="%":
+                op = ("=", "like")["%" in dataset_access_type]
+                wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op 
                 binds['dataset_access_type'] = dataset_access_type
                 binds['is_dataset_valid'] = is_dataset_valid
             else:
@@ -123,6 +134,9 @@ class List(DBFormatter):
                op = ("=", "like")["%" in dataset]
                wheresql += " AND D.DATASET %s :dataset " % op
                binds.update(dataset = dataset)
+            if dataset_id != -1:
+                wheresql += " AND D.DATASET_ID = :dataset_id "
+                binds.update(dataset_id = dataset_id)
             if primary_ds_name and primary_ds_name != "%":
                op = ("=", "like")["%" in primary_ds_name ]
                wheresql += " AND P.PRIMARY_DS_NAME %s :primary_ds_name " % op

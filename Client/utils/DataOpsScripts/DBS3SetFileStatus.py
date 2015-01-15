@@ -71,11 +71,11 @@ def updateFileStatus(status, recursive, files=[], blocks=[]):
     #pdb.set_trace()
     flst={}
     lost = 0
-    if status == "invalid":
+    if status == "invalid" or status == "INVALID":
         fstatus = 0
-    elif status == "valid":
+    elif status == "valid" or status == "VALID":
         fstatus = 1
-    elif status == "lost":
+    elif status == "lost" or status == "LOST":
         fstatus = 0
         lost = 1
     else:

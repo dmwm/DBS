@@ -34,7 +34,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
         """
 	if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/List. Expects db connection from upper layer.")            
-        if logical_file_name:
+        if logical_file_name and not isinstance(logical_file_name,list):
             binds = {'logical_file_name': logical_file_name}
             if validFileOnly == 0:
                 sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
@@ -42,7 +42,13 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
             else:
                 sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
                 WHERE F.IS_FILE_VALID = 1 and F.LOGICAL_FILE_NAME = :logical_file_name""".format(owner=self.owner)
-
+        elif isinstance(logical_file_name,list):
+            lfn_generator, binds = create_token_generator(logical_file_name)
+            if validFileOnly == 0:
+                wheresql = "WHERE F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+            else:   
+                wheresql = "WHERE F.IS_FILE_VALID = 1 and F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+            sql = "{lfn_generator} {sql} {wheresql}".format(lfn_generator=lfn_generator, sql=self.sql, wheresql=wheresql)
         elif block_name:
             binds = {'block_name': block_name}
             if validFileOnly == 0:
@@ -54,7 +60,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
                 sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME
                       FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
                       JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
-                      F.IS_FILE_VALID = 1 and WHERE B.BLOCK_NAME = :block_name""".format(owner=self.owner)
+                      WHERE F.IS_FILE_VALID = 1 and B.BLOCK_NAME = :block_name""".format(owner=self.owner)
         else:
                 dbsExceptionHandler('dbsException-invalid-input', "FileLumi/List: Either logocal_file_name or block_name must be provided.")
           #
@@ -63,7 +69,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
             wheresql_run_list=''
             wheresql_run_range=''
             for r in parseRunRange(run_num):
-                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):
+                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long) or isinstance(r, str):
                     run_list.append(str(r))
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
