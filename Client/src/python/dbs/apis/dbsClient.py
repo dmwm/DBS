@@ -114,7 +114,8 @@ def split_calls(func):
     return wrapper
 
 class DbsApi(object):
-    def __init__(self, url="", proxy=None, key=None, cert=None, verifypeer=True, debug=0):
+    #added CAINFO and userAgent (see github issue #431 & #432)
+    def __init__(self, url="", proxy=None, key=None, cert=None, verifypeer=True, debug=0, ca_info=None, userAgent=""):
         """
         DbsApi Constructor
 
@@ -135,8 +136,9 @@ class DbsApi(object):
         self.proxy = proxy
         self.key = key
         self.cert = cert
+        self.userAgent = userAgent
 
-        self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key, ssl_verifypeer=verifypeer),
+        self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key, ssl_verifypeer=verifypeer, ca_info),
                                 proxy=Socks5Proxy(proxy_url=self.proxy) if self.proxy else None)
 
     def __callServer(self, method="", params={}, data={}, callmethod='GET', content='application/json'):
@@ -154,7 +156,11 @@ class DbsApi(object):
 
         """
         UserID = os.environ['USER']+'@'+socket.gethostname()
-        request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID }
+        try:
+            User-Agent = "DBSClient/"+os.environ['DBS3_CLIENT_VERSION']+"/"+ self.userAgent
+        except:
+            User-Agent = "DBSClient/Unknown"+"/"+ self.userAgent
+        request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID, "User-Agent":User-Agent }
 
         method_func = getattr(self.rest_api, callmethod.lower())
 
@@ -788,7 +794,8 @@ class DbsApi(object):
         :type block_name: str
         :param logical_file_name: logical_file_name of file
         :type logical_file_name: str
-        :param run_num: List lumi sections for a given run number (Optional)
+        :param run_num: List lumi sections for a given run number (Optional). run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
+                        cause an input error.
         :type run_num: int,str,list
 	:param validFileOnly: default value is 0 (optional), when set to 1, only valid files counted.
 	:type int, str
@@ -898,7 +905,8 @@ class DbsApi(object):
         :type block_name: str
         :param dataset: Dataset name
         :type dataset: str
-        :param run_num: Run number (Optional)
+        :param run_num: Run number (Optional). run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
+                        cause an input error.
         :type run_num: int, str, list
         :param validFileOnly: default=0 all files included. if 1, only valid file counted.
         :type validFileOnly: int ( 0 or 1)

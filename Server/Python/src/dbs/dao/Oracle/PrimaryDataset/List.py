@@ -56,7 +56,13 @@ JOIN %sPRIMARY_DS_TYPES PT ON PT.PRIMARY_DS_TYPE_ID = P.PRIMARY_DS_TYPE_ID
         else:
             pass
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	if len(cursors) == 0 :
+	"""
+        if len(cursors) == 0 :
             return []
 	else:	
             return self.formatCursor(cursors[0])
+        """
+        result = []
+        for c in cursors:
+            result.extend(self.formatCursor(c))
+        return result

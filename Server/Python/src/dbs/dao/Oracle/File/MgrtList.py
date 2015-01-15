@@ -69,6 +69,8 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-
-	result = self.formatCursor(cursors[0])
+        result = []
+        for c in cursors:
+            result.extend(self.formatCursor(c))
+        return result
 	return result

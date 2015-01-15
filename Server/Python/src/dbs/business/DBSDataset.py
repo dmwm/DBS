@@ -123,7 +123,7 @@ class DBSDataset:
                      logical_file_name="", primary_ds_name="",
                      primary_ds_type="", processed_ds_name="", data_tier_name="",
                      dataset_access_type="VALID", prep_id="", create_by='', last_modified_by='', min_cdate=0, max_cdate=0,
-                     min_ldate=0, max_ldate=0, cdate=0, ldate=0, detail=False):
+                     min_ldate=0, max_ldate=0, cdate=0, ldate=0, detail=False, dataset_id=-1):
         """
         lists all datasets if dataset parameter is not given.
         The parameter can include % character. 
@@ -155,7 +155,7 @@ class DBSDataset:
                                  processed_ds_name, data_tier_name,
                                  dataset_access_type, prep_id, create_by, last_modified_by, 
                                  min_cdate, max_cdate, min_ldate, max_ldate,
-                                 cdate, ldate)    
+                                 cdate, ldate, dataset_id)    
             return result
         finally:
             if conn:
@@ -164,20 +164,29 @@ class DBSDataset:
     def listDatasetArray(self, inputdata=None):
         if not inputdata:
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasetArray API requires \
-                at least a list of dataset.')
+                at least a list of dataset or dataset_id.')
         else:
             conn = self.dbi.connection()
+            dataset = None
+            dataset_id = None
             try:
-                dataset = inputdata["dataset"]
+                if "dataset" in inputdata:
+                    dataset = inputdata["dataset"]
+                elif "dataset_id" in inputdata:
+                    dataset_id = inputdata["dataset_id"]
+                else:
+                    dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, "business/listDatasetArray requires at least a
+                    list of dataset or dataset_id")
+                dataset_id = inputdata["dataset_id"]
                 is_dataset_valid = inputdata.get("is_dataset_valid", 1)
                 dataset_access_type = inputdata.get("dataset_access_type", None)
                 detail = inputdata.get("detail", False)
                 dao = (self.datasetbrieflist, self.datasetlist)[detail]   
                 result = dao.execute(conn, dataset=dataset, is_dataset_valid=is_dataset_valid,
-                    dataset_access_type=dataset_access_type, transaction=False)
+                    dataset_access_type=dataset_access_type, dataset_id=dataset_id, transaction=False)
                 return result                        
             except cjson.DecodeError, de:
-                msg = "business/listDatasetArray requires at least a list of dataset. %s" % de
+                msg = "business/listDatasetArray requires at least a list of dataset or dataset_id. %s" % de
                 dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, msg)
             finally:
                 if conn:

@@ -39,5 +39,7 @@ class ListChild(DBFormatter):
             dbsExceptionHandler("dbsException-invalid-input", "Oracle/BlockParent/ListChild. block_name must be provided.")
 
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        result = self.formatCursor(cursors[0])
+        result = []
+        for c in cursors:
+            result.extend(self.formatCursor(c))
         return result

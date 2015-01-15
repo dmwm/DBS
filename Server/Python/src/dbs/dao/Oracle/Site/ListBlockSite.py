@@ -32,7 +32,9 @@ class ListBlockSite(DBFormatter):
 
 	binds={ "block_name" : block_name }
 	cursors = self.dbi.processData(sql, binds, conn, transaction=trans, returnCursor=True)
-	result = self.formatCursor(cursors[0])
+	result = []
+        for c in cursors:
+            result.extend(self.formatCursor(c))
 	return result
 
 

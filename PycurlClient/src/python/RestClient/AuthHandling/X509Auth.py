@@ -4,11 +4,12 @@ from RestClient.ErrorHandling.RestClientExceptions import ClientAuthException
 import os, sys
 
 class X509Auth(object):
-    def __init__(self, ca_path=None, ssl_cert=None, ssl_key=None, ssl_verifypeer=True):
+    def __init__(self, ca_path=None, ssl_cert=None, ssl_key=None, ssl_verifypeer=True, ca_info=None):
         self._ca_path = ca_path
         self._ssl_cert = ssl_cert
         self._ssl_key = ssl_key
         self._ssl_verifypeer = ssl_verifypeer
+        self._ca_info = ca_info
         if not (self._ssl_cert and self._ssl_key):
             self.__search_cert_key()
 
@@ -86,6 +87,7 @@ class X509Auth(object):
         curl_object.setopt(curl_object.CAPATH, self._ca_path)
         curl_object.setopt(curl_object.SSLCERT, self._ssl_cert)
         curl_object.setopt(curl_object.SSLKEY, self._ssl_key)
+        curl_object.setopt(curl_object.CAINFO, self._ca_info)
 
         if self.ssl_key_pass:
             curl_object.setopt(curl_object.SSLKEYPASSWD, self.ssl_key_pass)

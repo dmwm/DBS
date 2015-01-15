@@ -112,7 +112,8 @@ class List(DBFormatter):
 		  +  "  WHERE FS.BLOCK_ID = :block_id "
 	    binds["block_id"]=block_id
 	cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
-	assert len(cursors) == 1, "output module config does not exist"
-        result = self.formatCursor(cursors[0])
+	#assert len(cursors) == 1, "output module config does not exist"
+        for c in cursors:
+            result.extend(self.formatCursor(c))
         return result
 	    
