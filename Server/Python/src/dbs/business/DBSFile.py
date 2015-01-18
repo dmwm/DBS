@@ -63,7 +63,7 @@ class DBSFile:
             except cjson.DecodeError, de:
                 msg = "business/listFileLumis requires at least a list of logical_file_name. %s" % de
                 dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, msg)
-        else: 
+        elif input_body != -1 and (logical_file_name is not None or block_name is not None): 
             dbsExceptionHandler('dbsException-invalid-input', "listFileLumis may have input in the command or in the payload, not mixed.")
 
         conn = self.dbi.connection()

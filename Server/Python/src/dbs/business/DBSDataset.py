@@ -175,9 +175,7 @@ class DBSDataset:
                 elif "dataset_id" in inputdata:
                     dataset_id = inputdata["dataset_id"]
                 else:
-                    dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, "business/listDatasetArray requires at least a
-                    list of dataset or dataset_id")
-                dataset_id = inputdata["dataset_id"]
+                    dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, "business/listDatasetArray requires at least a list of dataset or dataset_id")
                 is_dataset_valid = inputdata.get("is_dataset_valid", 1)
                 dataset_access_type = inputdata.get("dataset_access_type", None)
                 detail = inputdata.get("detail", False)

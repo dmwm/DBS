@@ -58,8 +58,7 @@ class BriefList(DBFormatter):
             wheresql += " AND D.DATASET_ID in (SELECT TOKEN FROM TOKEN_GENERATOR)"
             generatedsql = "{ds_generator}".format(ds_generator=ds_generator)
             if dataset_access_type and (dataset_access_type !="%" or dataset_access_type != '*'):
-                joinsql += " JOIN %sDATASET_ACCESS_TYPES DP on DP.DATASET_ACCESS_TYPE_ID= D.DATASET_ACCESS_TYPE_ID " %
-(self.owner)
+                joinsql += " JOIN %sDATASET_ACCESS_TYPES DP on DP.DATASET_ACCESS_TYPE_ID= D.DATASET_ACCESS_TYPE_ID " %(self.owner)
                 op = ("=", "like")["%" in dataset_access_type or "*" in dataset_access_type]
                 wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op
                 binds['dataset_access_type'] = dataset_access_type

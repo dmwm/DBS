@@ -1046,35 +1046,35 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
    
     def listFileLumiArray(self):
-    """
-    API to list FileLumis for a given list of LFN. It is used with the POST method of fileLumis call.
-    :param logical_file_name: 
-    :type logical_file_name: list of str
-    :param run_num
-    :type list, str or int 
-    :param validFileOnly
-    :type str or int
-    :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
-    :rtype: list of dicts
-    """
-    try :
-        body = request.body.read()
-        if body:
-            data = cjson.decode(body)
-            data = validateJSONInputNoCopy("files", data)
-        else:
-            data=''
-        return self.dbsFile.listFileLumis(input_body=data)
-    except cjson.DecodeError as De:
-        dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
-    except dbsException as de:
-        dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-    except HTTPError as he:
-        raise he
-    except Exception, ex:
-        sError = "DBSReaderModel/listDatasetArray. %s \n Exception trace: \n %s" \
+        """
+	API to list FileLumis for a given list of LFN. It is used with the POST method of fileLumis call.
+	:param logical_file_name: 
+	:type logical_file_name: list of str
+       	:param run_num
+	:type list, str or int 
+	:param validFileOnly
+	:type str or int
+	:returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
+	:rtype: list of dicts
+	"""
+	try :
+	    body = request.body.read()
+	    if body:
+		data = cjson.decode(body)
+		data = validateJSONInputNoCopy("files", data)
+	    else:
+		data=''
+	    return self.dbsFile.listFileLumis(input_body=data)
+	except cjson.DecodeError as De:
+	    dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+	except HTTPError as he:
+	    raise he
+	except Exception, ex:
+	    sError = "DBSReaderModel/listDatasetArray. %s \n Exception trace: \n %s" \
             % (ex, traceback.format_exc())
-        dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
 
     @transformInputType('run_num')

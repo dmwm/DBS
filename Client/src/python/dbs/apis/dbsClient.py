@@ -138,7 +138,7 @@ class DbsApi(object):
         self.cert = cert
         self.userAgent = userAgent
 
-        self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key, ssl_verifypeer=verifypeer, ca_info),
+        self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key, ssl_verifypeer=verifypeer, ca_info=ca_info),
                                 proxy=Socks5Proxy(proxy_url=self.proxy) if self.proxy else None)
 
     def __callServer(self, method="", params={}, data={}, callmethod='GET', content='application/json'):
@@ -157,10 +157,10 @@ class DbsApi(object):
         """
         UserID = os.environ['USER']+'@'+socket.gethostname()
         try:
-            User-Agent = "DBSClient/"+os.environ['DBS3_CLIENT_VERSION']+"/"+ self.userAgent
+            UserAgent = "DBSClient/"+os.environ['DBS3_CLIENT_VERSION']+"/"+ self.userAgent
         except:
-            User-Agent = "DBSClient/Unknown"+"/"+ self.userAgent
-        request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID, "User-Agent":User-Agent }
+            UserAgent = "DBSClient/Unknown"+"/"+ self.userAgent
+        request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID, "User-Agent":UserAgent }
 
         method_func = getattr(self.rest_api, callmethod.lower())
 

@@ -77,7 +77,7 @@ class List(DBFormatter):
             else:
                 binds['is_dataset_valid'] = is_dataset_valid
             sql =generatedsql + 'SELECT' + basesql + wheresql
-        elif type(datset_id) is list:  #for the POST method
+        elif type(dataset_id) is list:  #for the POST method
             ds_generator, binds = create_token_generator(dataset_id)
             wheresql += " AND D.DATASET_ID in (SELECT TOKEN FROM TOKEN_GENERATOR)"
             generatedsql = "{ds_generator}".format(ds_generator=ds_generator)

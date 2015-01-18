@@ -34,7 +34,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
         """
 	if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/List. Expects db connection from upper layer.")            
-        if logical_file_name & not isinstance(logical_file_name,list):
+        if logical_file_name and not isinstance(logical_file_name,list):
             binds = {'logical_file_name': logical_file_name}
             if validFileOnly == 0:
                 sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
@@ -60,7 +60,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
                 sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME
                       FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
                       JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
-                      F.IS_FILE_VALID = 1 and WHERE B.BLOCK_NAME = :block_name""".format(owner=self.owner)
+                      WHERE F.IS_FILE_VALID = 1 and B.BLOCK_NAME = :block_name""".format(owner=self.owner)
         else:
                 dbsExceptionHandler('dbsException-invalid-input', "FileLumi/List: Either logocal_file_name or block_name must be provided.")
           #
