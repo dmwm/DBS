@@ -30,7 +30,8 @@ class BriefList(DBFormatter):
                 processing_version=0, acquisition_era="", run_num=-1,
                 physics_group_name="", logical_file_name="", primary_ds_name="",
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", 
-                prep_id="", create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0, ldate=0,
+                prep_id="", create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,
+                ldate=0, dataset_id=-1,
                 transaction=False):
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/BriefList.  Expects db connection from upper layer.")
@@ -46,6 +47,18 @@ class BriefList(DBFormatter):
             generatedsql = "{ds_generator}".format(ds_generator=ds_generator)
             if dataset_access_type and (dataset_access_type !="%" or dataset_access_type != '*'):
                 joinsql += " JOIN %sDATASET_ACCESS_TYPES DP on DP.DATASET_ACCESS_TYPE_ID= D.DATASET_ACCESS_TYPE_ID " % (self.owner)
+                op = ("=", "like")["%" in dataset_access_type or "*" in dataset_access_type]
+                wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op
+                binds['dataset_access_type'] = dataset_access_type
+                binds['is_dataset_valid'] = is_dataset_valid
+            else:
+                binds['is_dataset_valid'] = is_dataset_valid
+        elif type(dataset_id) is list:  # for the POST method
+            ds_generator, binds = create_token_generator(dataset_id)
+            wheresql += " AND D.DATASET_ID in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+            generatedsql = "{ds_generator}".format(ds_generator=ds_generator)
+            if dataset_access_type and (dataset_access_type !="%" or dataset_access_type != '*'):
+                joinsql += " JOIN %sDATASET_ACCESS_TYPES DP on DP.DATASET_ACCESS_TYPE_ID= D.DATASET_ACCESS_TYPE_ID " %(self.owner)
                 op = ("=", "like")["%" in dataset_access_type or "*" in dataset_access_type]
                 wheresql += " AND DP.DATASET_ACCESS_TYPE %s :dataset_access_type " %op
                 binds['dataset_access_type'] = dataset_access_type

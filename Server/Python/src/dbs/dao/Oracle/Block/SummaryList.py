@@ -35,7 +35,7 @@ class SummaryList(DBFormatter):
                         b.block_name as block_name, 
                         b.file_count as num_file, 
                         b.block_size as file_size,
-                        t1.num_event as num_evernt, 
+                        t1.num_event as num_event, 
                         b.open_for_writing as open_for_writing
                    from     
                         {owner}blocks b, t1
@@ -76,7 +76,7 @@ class SummaryList(DBFormatter):
                         b.block_name as block_name, 
                         b.file_count as num_file, 
                         b.block_size as file_size,
-                        t1.num_event as num_evernt, 
+                        t1.num_event as num_event, 
                         b.open_for_writing as open_for_writing
                     from 
                         {owner}blocks b, 

@@ -37,7 +37,10 @@ JOIN %sDATASETS D ON  D.DATASET_ID = DP.THIS_DATASET_ID
         sql += "WHERE D.DATASET = :dataset"
         binds = {"dataset":dataset}
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	assert len(cursors) == 1, "Dataset parent does not exist"
-        result = self.formatCursor(cursors[0])
+	#assert len(cursors) == 1, "Dataset parent does not exist"
+        result = []
+        for c in cursors:
+            result.extend(self.formatCursor(c))
+        return result    
         #conn.close()
         return result

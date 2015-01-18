@@ -71,5 +71,7 @@ FROM %sMIGRATION_REQUESTS MR
 		sql += " MR.CREATE_BY=:create_by" %create_by
 		binds['create_by']=create_by
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        result = self.formatCursor(cursors[0])
+        result = []
+        for c in cursors:
+            result.extend(self.formatCursor(c))
         return result

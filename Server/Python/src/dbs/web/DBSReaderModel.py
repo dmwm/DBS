@@ -104,7 +104,7 @@ class DBSReaderModel(RESTModel):
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
-                                'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail'],
+                                'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail', 'dataset_list'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('POST', 'datasetlist', self.listDatasetArray, secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -136,6 +136,7 @@ class DBSReaderModel(RESTModel):
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num', 'validFileOnly'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('POST', 'filelumis', self.listFileLumiArray, secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'runs', self.listRuns, args=['run_num', 'logical_file_name',
                         'block_name', 'dataset'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -274,14 +275,15 @@ class DBSReaderModel(RESTModel):
                  run_num=(long,int,basestring,list), physics_group_name=basestring, logical_file_name=basestring, primary_ds_name=basestring,
                  primary_ds_type=basestring, processed_ds_name=basestring, data_tier_name=basestring, dataset_access_type=basestring, prep_id=basestring,
                  create_by=(basestring), last_modified_by=(basestring), min_cdate=(int,basestring), max_cdate=(int,basestring),
-                 min_ldate=(int,basestring), max_ldate=(int, basestring), cdate=(int,basestring), ldate=(int,basestring), detail=(bool,basestring))
+                 min_ldate=(int,basestring), max_ldate=(int, basestring), cdate=(int,basestring), ldate=(int,basestring), detail=(bool,basestring),
+                 dataset_id=(int, long, basestring))
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="", global_tag="",
         processing_version=0, acquisition_era_name="", run_num=-1,
         physics_group_name="", logical_file_name="", primary_ds_name="", primary_ds_type="",
         processed_ds_name='', data_tier_name="", dataset_access_type="VALID", prep_id='', create_by="", last_modified_by="",
         min_cdate='0', max_cdate='0', min_ldate='0', max_ldate='0', cdate='0',
-        ldate='0', detail=False):
+        ldate='0', detail=False, dataset_id=-1):
         """
         API to list dataset(s) in DBS
         * You can use ANY combination of these parameters in this API
@@ -341,6 +343,8 @@ class DBSReaderModel(RESTModel):
         :type ldate: int, str
         :param detail: List all details of a dataset
         :type detail: bool
+        :param dataset_id: dataset table primary key used by CMS Computing Analytics.
+        :type dataset_id: int, long, str
         :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contain the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
         :rtype: list of dicts
 
@@ -364,6 +368,11 @@ class DBSReaderModel(RESTModel):
         #create_by and last_modified_by have be full spelled, no wildcard will allowed.
         #We got them from request head so they can be either HN account name or DN.
         #This is depended on how an user's account is set up.
+        try:
+            dataset_id = int(dataset_id)
+        except:
+            dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input for dataset_id that has to be an int." ,
+                                self.logger.exception, 'dataset_id has to be an int.')
         if create_by.find('*')!=-1 or create_by.find('%')!=-1 or last_modified_by.find('*')!=-1\
                 or last_modified_by.find('%')!=-1:
             dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input for create_by or last_modified_by.\
@@ -429,7 +438,7 @@ class DBSReaderModel(RESTModel):
                 app_name, output_module_label, global_tag, processing_version, acquisition_era_name, 
                 run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
                 data_tier_name, dataset_access_type, prep_id, create_by, last_modified_by,
-                min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail)
+                min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail, dataset_id)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception, ex:
@@ -847,12 +856,14 @@ class DBSReaderModel(RESTModel):
         :type block_name: str
         :param dataset: Dataset name
         :type dataset: str
-        :param run_num: Run number (Optional)
+        :param run_num: Run number (Optional). run_num=1 is for MC data and caused almost full table scan. So run_num=1 will cause an input error.  
         :type run_num: int, str, list
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
         """
+        if run_num == 1 or run_num =="1":
+            dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ")
         try:
             return self.dbsFile.listFileSummary(block_name, dataset, run_num, validFileOnly=validFileOnly)
         except dbsException as de:
@@ -1005,7 +1016,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('run_num')
-    @inputChecks(logical_file_name=basestring, block_name=basestring, run_num=(long,int,basestring,list), validFileOnly=(int,basestring))
+    @inputChecks(logical_file_name=(basestring, list), block_name=basestring, run_num=(long,int,basestring,list), validFileOnly=(int,basestring))
     def listFileLumis(self, logical_file_name="", block_name="", run_num=-1, validFileOnly=0):
         """
         API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support in this API
@@ -1013,8 +1024,9 @@ class DBSReaderModel(RESTModel):
         :param block_name: Name of the block
         :type block_name: str
         :param logical_file_name: logical_file_name of file
-        :type logical_file_name: str
-        :param run_num: List lumi sections for a given run number (Optional)
+        :type logical_file_name: str, list
+        :param run_num: List lumi sections for a given run number (Optional). run_num=1 is for MC data and caused almost full table scan. So run_num=1
+                        will cause an input error.
         :type run_num: int, str, or list
         :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
         :rtype: list of dicts
@@ -1022,6 +1034,8 @@ class DBSReaderModel(RESTModel):
         :type: validFileOnly: int, or str
 
         """
+        if run_num == 1 or run_num =="1":
+            dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ")
         try:
             return self.dbsFile.listFileLumis(logical_file_name, block_name, run_num, validFileOnly )
         except dbsException as de:
@@ -1030,6 +1044,38 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listFileLumis. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+   
+    def listFileLumiArray(self):
+        """
+	API to list FileLumis for a given list of LFN. It is used with the POST method of fileLumis call.
+	:param logical_file_name: 
+	:type logical_file_name: list of str
+       	:param run_num
+	:type list, str or int 
+	:param validFileOnly
+	:type str or int
+	:returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
+	:rtype: list of dicts
+	"""
+	try :
+	    body = request.body.read()
+	    if body:
+		data = cjson.decode(body)
+		data = validateJSONInputNoCopy("files", data)
+	    else:
+		data=''
+	    return self.dbsFile.listFileLumis(input_body=data)
+	except cjson.DecodeError as De:
+	    dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+	except HTTPError as he:
+	    raise he
+	except Exception, ex:
+	    sError = "DBSReaderModel/listDatasetArray. %s \n Exception trace: \n %s" \
+            % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
 
     @transformInputType('run_num')
     @inputChecks(run_num=(long, int, basestring, list), logical_file_name=basestring, block_name=basestring, dataset=basestring)
