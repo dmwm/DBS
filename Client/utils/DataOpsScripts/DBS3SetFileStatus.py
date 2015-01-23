@@ -57,18 +57,20 @@ def isChildrenValid(files=[], blocks=[], pstatus=0):
     while child:
         c = child.pop()
         allfiles.append(c)
-        child.extend(listFileChildren(files=c))
+	fc = listFileChildren(files=c)
+	for cc in fc:
+	    child.extend(cc)
 
     while childb :
         b = childb.pop()
         allblocks.append(b)
-        childb.extend(listBlockChildren(b))
+	bc = listBlockChildren(b)
+	for bb in bc:
+	    childb.extend(bb)
 
     return isFileValid(files=allfiles, blocks=allblocks, fstatus=pstatus)
 
 def updateFileStatus(status, recursive, files=[], blocks=[]):
-    #import pdb
-    #pdb.set_trace()
     flst={}
     lost = 0
     if status == "invalid" or status == "INVALID":
@@ -146,7 +148,7 @@ def main():
 
     elif opts.blocks:
         blocks = opts.blocks.split(",")
-    updateFileStatus(opts.status, opts.recursive, files=files, blocks=blocks)
+    updateFileStatus(opts.status.upper(), opts.recursive, files=files, blocks=blocks)
 
     logging.info("All done")
 

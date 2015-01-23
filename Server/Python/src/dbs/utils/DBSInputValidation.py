@@ -124,6 +124,19 @@ def inputChecks(**_params_):
                                                 serverLog = str(e) + "\n run_num=%s is an invalid run number." %run_num 
                                                 dbsExceptionHandler("dbsException-invalid-input2", message="Invalid input data %s...: invalid run number." %run_num[:10],\
                                                         serverError=serverLog, logger=log.error)
+				elif name == 'dataset_id':
+				    for id in value:
+					try:
+					    int(id)
+					except Exception :
+					    try: 
+						min_id, max_id = id.split('-', 1)
+						int(min_id)
+						int(max_id)
+					    except Exception as e :		
+						serverLog = str(e) + "\n dataset_id=%s is an invalid oracle id." %dataset_id
+						dbsExceptionHandler("dbsException-invalid-input2", message="Invalid input data %s...: invalid dataset_id." %id[:10], \
+							serverError=serverLog, logger=log.error)		
                         except AssertionError as ae:
                             serverLog = str(ae) + " key-value pair (%s, %s) cannot pass input checking" %(name, value)
                             #print ae
@@ -151,17 +164,17 @@ acceptedInputDataTypes = {
          'prep_id', 'block_name', 'origin_site_name','primary_ds_type', 'primary_ds_name', 'check_sum', 'adler32', 
          'file_type', 'md5', 'file_size', 'migration_url', 'migration_input', 'file_count', 'block_size', 'start_date', 'end_date',
          'last_modification_date', 'creation_date', 'event_count','file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id',
-         'open_for_writing', 'detail', 'processing_version', 'xtcrosssection', 'auto_cross_section', 'validFileOnly']),
+         'open_for_writing', 'detail', 'processing_version', 'xtcrosssection', 'auto_cross_section', 'validFileOnly', 'dataset_id']),
     ################
     int:set(['file_count', 'block_size', 'start_date', 'end_date', 'last_modification_date', 'creation_date', 'event_count', 
          'file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id' ,'open_for_writing', 'detail', 'processing_version',
-         'xtcrosssection', 'auto_cross_section', 'check_sum', 'adler32', 'validFileOnly']),
+         'xtcrosssection', 'auto_cross_section', 'check_sum', 'adler32', 'validFileOnly','dataset_id']),
     ################
     dict:[],
     ################
-    list:['dataset', 'run_num', 'logical_file_name'],
+    list:['dataset', 'run_num', 'logical_file_name', 'dataset_id'],
     ################
-    long:['lumi_section_num', 'run_num', 'xtcrosssection', 'auto_cross_section'],
+    long:['lumi_section_num', 'run_num', 'xtcrosssection', 'auto_cross_section', 'dataset_id'],
     ################
     float:['xtcrosssection', 'auto_cross_section']
 }
