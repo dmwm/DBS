@@ -18,7 +18,7 @@ def get_command_line_options():
     parser.add_option("-u", "--url", dest="url", help="DBS Instance url", metavar="DBS_Instance_URL")
     parser.add_option("-r", "--recursive", dest="recursive", help="Invalidate all children datasets,too?", metavar="True/False")
     parser.add_option("-d", "--dataset", dest="dataset", help="Dataset to change status", metavar="/specify/dataset/path")
-    parser.add_option("-s", "--status", dest="new_status", help="New status of the dataset", metavar="newStatus")
+    parser.add_option("-s", "--status", dest="new_status", help="New status of the dataset: VALID/INVALID/DELETED/DEPRECATED or valid/invalid/deleted/deprecated", metavar="newStatus")
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="Increase verbosity")
     parser.add_option("-p", "--proxy", dest="proxy", help="Use Socks5 proxy to connect to server", metavar="socks5://127.0.0.1:1234")
     (options, args) = parser.parse_args()

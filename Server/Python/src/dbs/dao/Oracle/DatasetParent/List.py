@@ -36,6 +36,8 @@ JOIN %sDATASETS D ON  D.DATASET_ID = DP.THIS_DATASET_ID
         sql = self.sql
         sql += "WHERE D.DATASET = :dataset"
         binds = {"dataset":dataset}
+	#self.logger.error( sql)
+        #self.logger.error("binds=%s" %binds)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	#assert len(cursors) == 1, "Dataset parent does not exist"
         result = []
