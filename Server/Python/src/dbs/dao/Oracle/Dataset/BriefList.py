@@ -42,7 +42,8 @@ class BriefList(DBFormatter):
 	wheresql = 'WHERE D.IS_DATASET_VALID=:is_dataset_valid '
         if dataset and type(dataset) is list:  # for the POST method
             #wheresql += " AND D.DATASET=:dataset "
-            ds_generator, binds = create_token_generator(dataset)
+            ds_generator, binds2 = create_token_generator(dataset)
+	    binds.update(binds2)
             wheresql += " AND D.DATASET in (SELECT TOKEN FROM TOKEN_GENERATOR)"
             generatedsql = "{ds_generator}".format(ds_generator=ds_generator)
             if dataset_access_type and (dataset_access_type !="%" or dataset_access_type != '*'):
@@ -53,10 +54,29 @@ class BriefList(DBFormatter):
                 binds['is_dataset_valid'] = is_dataset_valid
             else:
                 binds['is_dataset_valid'] = is_dataset_valid
-        elif type(dataset_id) is list:  # for the POST method
-            ds_generator, binds = create_token_generator(dataset_id)
-            wheresql += " AND D.DATASET_ID in (SELECT TOKEN FROM TOKEN_GENERATOR)"
-            generatedsql = "{ds_generator}".format(ds_generator=ds_generator)
+        elif type(dataset_id) is not int:  # for the POST method
+	    #we treat the datset_id is the same way as run_num. It can be id1-id2, id or [id1,2,3 ...]
+	    dataset_id_list = []
+	    wheresql_dataset_id_list=''
+            wheresql_dataset_id_range=''
+	    for id in parseRunRange(dataset_id):
+		if isinstance(id, basestring) or isinstance(id, int) or isinstance(id, long):
+		    dataset_id_list.append(str(id))
+                if isinstance(id, run_tuple):
+                    if id[0] == id[1]:
+		        dbsExceptionHandler('dbsException-invalid-input', "DBS dataset_id range must be apart at least by 1.")
+		    wheresql_dataset_id_range = " D.DATASET_ID between :minid and :maxid " 
+		    self.logger.error( "minid & maxid ")
+		    self.logger.error( binds)	
+                    binds.update({"minid":id[0]})
+                    binds.update({"maxid":id[1]})
+		    self.logger.error( "minid2 & maxid2 ")
+                    self.logger.error( binds) 			
+	    if dataset_id_list:
+		ds_generator, binds2 = create_token_generator(dataset_id_list)
+		binds.update(binds2)
+		wheresql_dataset_id_list = " D.DATASET_ID in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+		generatedsql = "{ds_generator}".format(ds_generator=ds_generator)
             if dataset_access_type and (dataset_access_type !="%" or dataset_access_type != '*'):
                 joinsql += " JOIN %sDATASET_ACCESS_TYPES DP on DP.DATASET_ACCESS_TYPE_ID= D.DATASET_ACCESS_TYPE_ID " %(self.owner)
                 op = ("=", "like")["%" in dataset_access_type or "*" in dataset_access_type]
@@ -65,6 +85,12 @@ class BriefList(DBFormatter):
                 binds['is_dataset_valid'] = is_dataset_valid
             else:
                 binds['is_dataset_valid'] = is_dataset_valid
+	    if wheresql_dataset_id_list and wheresql_dataset_id_range:
+		wheresql += " and  (" + wheresql_dataset_id_list + " or " + wheresql_dataset_id_range + " )" 
+	    elif wheresql_dataset_id_list and not wheresql_dataset_id_range:
+		wheresql += " and " + wheresql_dataset_id_list
+	    elif not wheresql_dataset_id_list and wheresql_dataset_id_range:	
+		wheresql += " and " + wheresql_dataset_id_range	
         else: #for the GET method
             binds.update(is_dataset_valid=is_dataset_valid)
             if cdate != 0:
@@ -111,6 +137,9 @@ class BriefList(DBFormatter):
                 op = ("=", "like")["%" in dataset]
                 wheresql += " AND D.DATASET %s :dataset " % op
                 binds.update(dataset = dataset)
+	    if dataset_id != -1:
+                wheresql += " AND D.DATASET_ID = :dataset_id "
+                binds.update(dataset_id = dataset_id) 	
             if primary_ds_name and primary_ds_name != "%":
                 joinsql += " JOIN %sPRIMARY_DATASETS P ON P.PRIMARY_DS_ID = D.PRIMARY_DS_ID " % (self.owner)
                 op = ("=", "like")["%" in primary_ds_name ]
