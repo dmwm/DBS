@@ -104,7 +104,7 @@ class DBSReaderModel(RESTModel):
                                 'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
-                                'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail', 'dataset_list'],
+                                'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail', 'dataset_id'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('POST', 'datasetlist', self.listDatasetArray, secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -449,7 +449,9 @@ class DBSReaderModel(RESTModel):
         """
         API to list datasets in DBS. To be called by datasetlist url with post call.
 
-        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required)
+        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (must have either a list of dataset or dataset_id)
+        :type dataset: list
+	:param dataset: list of dataset ids [dataset_id1,dataset_id2,..,dataset_idn, "dsid_min-dsid_max"] ((must have either a list of dataset or dataset_id)
         :type dataset: list
         :param dataset_access_type: List only datasets with that dataset access type (Optional)
         :type dataset_access_type: str

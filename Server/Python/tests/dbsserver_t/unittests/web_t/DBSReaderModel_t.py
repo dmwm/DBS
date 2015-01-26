@@ -351,11 +351,41 @@ class DBSReaderModel_t(unittest.TestCase):
         """test003zv: web.DBSReaderModel.listDatasets: run and detail true"""
         api.list('datasets', dataset=testparams['dataset'], run_num=str(testparams['run_num']), detail=True)
 
+    def test003zw(self):
+        """test003zw: web.DBSReaderModel.listDatasets: dataset_id"""
+	res=api.list('datasets', dataset=testparams['dataset'], detail=True)
+        api.list('datasets', dataset_id=res[0]["dataset_id"])
+
+    def test003zx(self):
+        """test003zx: web.DBSReaderModel.listDatasets: dataset_id,detail"""
+        res=api.list('datasets', dataset=testparams['dataset'], detail=True)
+        api.list('datasets', dataset_id=res[0]["dataset_id"], detail=True)
+
     def test004a(self):
         """test004a: web.DBSReaderModel.listDatasetArray: basic test"""
         data = {'dataset':[testparams['dataset'],testparams['child_dataset']]}
         api.insert('datasetlist',data) ## it is a post request, therefore insert is used
 
+    def test004b(self):
+        """test004b: web.DBSReaderModel.listDatasetArray: basic test"""
+	res1 = api.list('datasets', dataset=testparams['dataset'], detail=True)
+        res2 = api.list('datasets', dataset=testparams['child_dataset'], detail=True)
+        data = {'dataset_id':[res1[0]['dataset_id'],res2[0]['dataset_id']]}
+        api.insert('datasetlist',data) ## it is a post request, therefore insert is used
+
+    def test004c(self):
+        """test004c: web.DBSReaderModel.listDatasetArray: basic test"""
+        data = {'dataset':[testparams['dataset'],testparams['child_dataset']], detail=True}
+        api.insert('datasetlist',data) ## it is a post request, therefore insert is used
+    
+    def test004d(self):
+        """test004d: web.DBSReaderModel.listDatasetArray: basic test"""
+        res1 = api.list('datasets', dataset=testparams['dataset'], detail=True)
+        res2 = api.list('datasets', dataset=testparams['child_dataset'], detail=True)
+        data = {'dataset_id':[res1[0]['dataset_id'],res2[0]['dataset_id']], detail=True}
+        api.insert('datasetlist',data) ## it is a post request, therefore insert is used
+
+    
     def test005a(self):
         """test005a: web.DBSReaderModel.listDataTiers: basic test"""
         api.list('datatiers')
