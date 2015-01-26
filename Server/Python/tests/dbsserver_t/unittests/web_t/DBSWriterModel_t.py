@@ -194,7 +194,7 @@ class DBSWriterModel_t(unittest.TestCase):
         """test05a: web.DBSWriterModel.insertDataset(Dataset is construct by DBSDatset.): basic test"""
         data = {
             'physics_group_name': 'Tracker', 'dataset': dataset,
-            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+            'dataset_access_type': 'VALID', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
             'output_configs': [
                 {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                  'output_module_label': output_module_label, 'global_tag': global_tag},
@@ -207,7 +207,7 @@ class DBSWriterModel_t(unittest.TestCase):
         api.insert('datasets', data)
         childdata = {
             'physics_group_name': 'Tracker', 'dataset': child_dataset,
-            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': childprocdataset, 'primary_ds_name': primary_ds_name,
+            'dataset_access_type': 'VALID', 'processed_ds_name': childprocdataset, 'primary_ds_name': primary_ds_name,
             'output_configs': [
                 {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                  'output_module_label': output_module_label, 'global_tag': global_tag},
@@ -222,7 +222,7 @@ class DBSWriterModel_t(unittest.TestCase):
         """test05b: web.DBSWriterModel.insertDataset: duplicate insert should be ignored"""
         data = {
             'physics_group_name': 'Tracker', 'dataset': dataset,
-            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+            'dataset_access_type': 'VALID', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
             'output_configs': [
                 {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                  'output_module_label': output_module_label, 'global_tag': global_tag},
@@ -239,7 +239,7 @@ class DBSWriterModel_t(unittest.TestCase):
         """test05c: web.DBSWriterModel.insertDataset: missing primary_ds_name must raise an error"""
         data = {
             'physics_group_name': 'Tracker', 'dataset': dataset,
-            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
+            'dataset_access_type': 'VALID', 'processed_ds_name': procdataset,
             'output_configs': [
                 {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                  'output_module_label': output_module_label, 'global_tag': global_tag},
@@ -273,7 +273,7 @@ class DBSWriterModel_t(unittest.TestCase):
         """test05e: web.DBSWriterModel.insertDataset: missing parameter must raise an error"""
         data = {
             'physics_group_name': 'Tracker',
-            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+            'dataset_access_type': 'VALID', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
             'output_configs': [
                 {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                  'output_module_label': output_module_label, 'global_tag': global_tag},
@@ -290,7 +290,7 @@ class DBSWriterModel_t(unittest.TestCase):
         """test05f: web.DBSWriterModel.insertDataset: missing parameter must raise an error"""
         data = {
             'physics_group_name': 'Tracker', 'dataset': dataset,
-            'dataset_access_type': 'PRODUCTION', 'primary_ds_name': primary_ds_name,
+            'dataset_access_type': 'VALID', 'primary_ds_name': primary_ds_name,
             'output_configs': [
                 {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                  'output_module_label': output_module_label, 'global_tag': global_tag},
@@ -307,7 +307,7 @@ class DBSWriterModel_t(unittest.TestCase):
         """test05g: web.DBSWriterModel.insertDataset: missing parameter must raise an error"""
         data = {
             'physics_group_name': 'Tracker', 'dataset': dataset,
-            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+            'dataset_access_type': 'VALID', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
             'output_configs': [
                 {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                  'output_module_label': output_module_label, 'global_tag': global_tag},
@@ -325,7 +325,7 @@ class DBSWriterModel_t(unittest.TestCase):
         data = {
             'dataset': dataset,
             'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
-            'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
+            'dataset_access_type': 'VALID', 'processed_ds_name': procdataset,
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
             'prep_id':prep_id
             }
@@ -641,7 +641,7 @@ class DBSWriterModel_t(unittest.TestCase):
         """test12a: web.DBSWriterModel.insertBulkBlock: existing block will raise an exception"""
         dataset_dict = {'dataset': dataset,
                         'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
-                        'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
+                        'dataset_access_type': 'VALID', 'processed_ds_name': procdataset,
                         'xtcrosssection': 123, 'primary_ds_type': primary_ds_type, 'data_tier_name': tier,
                         'prep_id':prep_id}
 
@@ -709,7 +709,7 @@ class DBSWriterModel_t(unittest.TestCase):
 
         dataset_dict = {u'dataset': bulk_dataset,
                         u'physics_group_name': 'Tracker',
-                        u'dataset_access_type': 'PRODUCTION', u'processed_ds_name': bulk_procdataset,
+                        u'dataset_access_type': 'VALID', u'processed_ds_name': bulk_procdataset,
                         u'xtcrosssection': 123, u'data_tier_name': tier,
                         u'prep_id':prep_id}
 

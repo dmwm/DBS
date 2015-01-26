@@ -119,7 +119,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test003e(self):
         """test003e: web.DBSReaderModel.listDatasets: basic test"""
-        api.list('datasets', dataset=testparams['dataset'])
+        api.list('datasets', dataset=testparams['dataset'], dataset_access_type='*')
 
     def test003f(self):
         """test003f: web.DBSReaderModel.listDatasets: basic test"""
@@ -353,13 +353,13 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test003zw(self):
         """test003zw: web.DBSReaderModel.listDatasets: dataset_id"""
-	res=api.list('datasets', dataset=testparams['dataset'], detail=True)
+	res=api.list('datasets', dataset=testparams['child_dataset'], detail=True)
         api.list('datasets', dataset_id=res[0]["dataset_id"])
 
     def test003zx(self):
         """test003zx: web.DBSReaderModel.listDatasets: dataset_id,detail"""
-        res=api.list('datasets', dataset=testparams['dataset'], detail=True)
-        api.list('datasets', dataset_id=res[0]["dataset_id"], detail=True)
+        res=api.list('datasets', dataset=testparams['dataset'], detail=True, dataset_access_type='*')
+        api.list('datasets', dataset_id=res[0]["dataset_id"], detail=True, dataset_access_type='*')
 
     def test004a(self):
         """test004a: web.DBSReaderModel.listDatasetArray: basic test"""
@@ -368,21 +368,21 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test004b(self):
         """test004b: web.DBSReaderModel.listDatasetArray: basic test"""
-	res1 = api.list('datasets', dataset=testparams['dataset'], detail=True)
+	res1 = api.list('datasets', dataset=testparams['dataset'], detail=True, dataset_access_type='*')
         res2 = api.list('datasets', dataset=testparams['child_dataset'], detail=True)
         data = {'dataset_id':[res1[0]['dataset_id'],res2[0]['dataset_id']]}
         api.insert('datasetlist',data) ## it is a post request, therefore insert is used
 
     def test004c(self):
         """test004c: web.DBSReaderModel.listDatasetArray: basic test"""
-        data = {'dataset':[testparams['dataset'],testparams['child_dataset']], detail=True}
+        data = {'dataset':[testparams['dataset'],testparams['child_dataset']], 'detail':True}
         api.insert('datasetlist',data) ## it is a post request, therefore insert is used
     
     def test004d(self):
         """test004d: web.DBSReaderModel.listDatasetArray: basic test"""
-        res1 = api.list('datasets', dataset=testparams['dataset'], detail=True)
+        res1 = api.list('datasets', dataset=testparams['dataset'], detail=True, dataset_access_type='*')
         res2 = api.list('datasets', dataset=testparams['child_dataset'], detail=True)
-        data = {'dataset_id':[res1[0]['dataset_id'],res2[0]['dataset_id']], detail=True}
+        data = {'dataset_id':[res1[0]['dataset_id'],res2[0]['dataset_id']], 'detail':True}
         api.insert('datasetlist',data) ## it is a post request, therefore insert is used
 
     
@@ -1092,18 +1092,15 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test020g(self):
         """test020g: web.DBSReaderModel.listFileSummaries: basic test"""
-        print testparams['dataset']
         api.list('filesummaries',dataset=testparams['dataset'], validFileOnly="2")
 
     def test020h(self):
         """test020h: web.DBSReaderModel.listFileSummaries: basic test"""
-        print testparams['dataset']
         api.list('filesummaries',dataset=testparams['dataset'], validFileOnly=2)
 
     @checkException400
     def test020i(self):
         """test020i: web.DBSReaderModel.listFileSummaries: basic test"""
-        print testparams['dataset']
         api.list('filesummaries',dataset=testparams['dataset'], validFileOnly="*")
 
     def test021a(self):
