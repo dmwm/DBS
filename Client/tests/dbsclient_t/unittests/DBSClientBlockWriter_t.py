@@ -54,9 +54,9 @@ class DBSClientBlockWriter_t(unittest.TestCase):
 
         self.testparams['primds']['primary_ds_name'] ='%s_%s' %(self.testparams['primds']['primary_ds_name'], self.uid)
 
-        self.testparams['dataset']['dataset'] = '%s_%s' %(self.testparams['dataset']['dataset'],self.uid)
+        self.testparams['dataset']['dataset'] = (self.testparams['dataset']['dataset']).replace("14144", str(self.uid))
 
-        self.testparams['block']['block_name'] = '%s_%s' %(self.testparams['block']['block_name'],self.uid)
+        self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace("14144", str(self.uid))
 
         #We hard coded the parent_logical_fil_name in the dict file for testing on lum db. It may not
         #fit to ask dbs. One have to change it before run the test for other dbs.
@@ -73,9 +73,10 @@ class DBSClientBlockWriter_t(unittest.TestCase):
             self.testparams['file_parent_list'].append({'logical_file_name': self.testparams['files'][k]['logical_file_name'].replace('.root','_child.root'),
                                              'parent_logical_file_name': self.testparams['files'][k]['logical_file_name']})
             self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root','_child.root')
-        self.testparams['dataset']['dataset'] = '%s_%s' %(self.testparams['dataset']['dataset'],'chd')
-        self.testparams['block']['block_name'] = '%s_%s' %(self.testparams['block']['block_name'],'chd')
-
+        self.testparams['dataset']['dataset'] = '%s-%s' %(self.testparams['dataset']['dataset'],'CHD')
+	#print self.testparams['dataset']['dataset']
+        self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace("#","#00")
+	#print self.testparams['block']['block_name']
         for i in range(len(self.testparams['file_conf_list'])):
             self.testparams['file_conf_list'][i]['lfn'] =  self.testparams['file_conf_list'][i]['lfn'].replace('.root','_child.root')
 
