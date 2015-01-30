@@ -23,31 +23,53 @@ class BriefList(DBFormatter):
 
     def execute(self, conn, dataset="", block_name="", logical_file_name="",
             release_version="", pset_hash="", app_name="", output_module_label="",
-	    run_num=-1, origin_site_name="", lumi_list=[], transaction=False):
+	    run_num=-1, origin_site_name="", lumi_list=[], validFileOnly=0, transaction=False):
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/BriefList. Expects db connection from upper layer.")
 
         binds = {}
 	basesql = self.sql
 	joinsql = ""
-        # for the time being lests list all files
-	wheresql = "WHERE F.IS_FILE_VALID <> -1"
+        # Check if file is valid. YG 1/29/2015
+        if validFileOnly == 0:
+            wheresql = "WHERE F.IS_FILE_VALID <> -1"
+        else:
+            wheresql = "WHERE F.IS_FILE_VALID = 1"
 
         if logical_file_name:
-	    op = ("=", "like")["%" in logical_file_name] 
-            wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name" % op
+            op = ("=", "like")["%" in logical_file_name] 
             binds.update({"logical_file_name":logical_file_name})
+            if dataset:
+                wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name" % op
+            elif:
+                if validFileOnly == 1:
+                    joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
+                                  JOIN %sDATASET_ACCESS_TYPES DT ON DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID """ % ((self.owner,)*2)
+                    wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') " % (op)
+                else:
+                    pass
+
 
         if block_name:
-	    joinsql += " JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID" % (self.owner)
-            wheresql += " AND B.BLOCK_NAME = :block_name"
+            joinsql += " JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID " % (self.owner)
+            wheresql += " AND B.BLOCK_NAME = :block_name "
             binds.update({"block_name":block_name})
+            if not dataset and validFileOnly == 1:
+                joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
+                               JOIN %sDATASET_ACCESS_TYPES DT ON DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID """ % ((self.owner,)*2)
+                               wheresql += " AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') "
+            else:
+                pass
 
         if dataset: 
-	    joinsql += " JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID " % (self.owner)
-            wheresql += " AND D.DATASET = :dataset"
+	    joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID """ % (self.owner)
+            wheresql += " AND D.DATASET = :dataset "
             binds.update({"dataset":dataset})
-
+            if validFileOnly == 1:
+                joinsql += " JOIN %sDATASET_ACCESS_TYPES DT ON DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID " % (self.owner)  
+                wheresql += " AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') "
+            else:
+                pass
 
 	if release_version or pset_hash or app_name or output_module_label:
 	    joinsql += """

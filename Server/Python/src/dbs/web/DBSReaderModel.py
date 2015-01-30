@@ -116,7 +116,7 @@ class DBSReaderModel(RESTModel):
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num',
-                        'origin_site_name', 'lumi_list', 'detail'], secured=True,
+                        'origin_site_name', 'lumi_list', 'detail', 'validFileOnly'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name', 'dataset',
                         'run_num', 'validFileOnly'], secured=True,
@@ -776,10 +776,11 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType( 'run_num')
     @inputChecks(dataset =basestring, block_name=basestring, logical_file_name =(basestring), release_version=basestring, pset_hash=basestring, app_name=basestring,\
-                 output_module_label=basestring, run_num=(long, int, basestring, list), origin_site_name=basestring, lumi_list=(basestring,list), detail=(basestring,bool))
+                 output_module_label=basestring, run_num=(long, int, basestring, list), origin_site_name=basestring,
+                 lumi_list=(basestring,list), detail=(basestring,bool), validFileOnly=(basestring, int))
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "",
         release_version="", pset_hash="", app_name="", output_module_label="",
-        run_num=-1, origin_site_name="", lumi_list="", detail=False):
+        run_num=-1, origin_site_name="", lumi_list="", detail=False, validFileOnly=0):
         """
         API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset or non-wildcarded block_name is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
@@ -811,6 +812,8 @@ class DBSReaderModel(RESTModel):
         :type lumi_list: list
         :param detail: Get detailed information about a file
         :type detail: bool
+        :param validFileOnly: default=0 return all the files. when =1, only return files with is_file_valid=1 or dataset_access_type=PRODUCTION or VALID
+        :type validFileOnly: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
 
@@ -830,7 +833,7 @@ class DBSReaderModel(RESTModel):
         output_module_label = output_module_label.replace("*", "%")
         try:
             return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name,
-                                        output_module_label, run_num, origin_site_name, lumi_list, detail)
+                                        output_module_label, run_num, origin_site_name, lumi_list, detail, validFileOnly)
 
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)

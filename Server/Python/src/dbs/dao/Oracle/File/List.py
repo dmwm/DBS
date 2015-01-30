@@ -37,12 +37,13 @@ FROM %sFILES F
 JOIN %sFILE_DATA_TYPES FT ON  FT.FILE_TYPE_ID = F.FILE_TYPE_ID
 JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
 JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
-""" % ((self.owner,)*4)
+JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID
+""" % ((self.owner,)*5)
 
 
     def execute(self, conn, dataset="", block_name="", logical_file_name="",
                 release_version="", pset_hash="", app_name="", output_module_label="",
-                run_num=-1, origin_site_name="", lumi_list=[], transaction=False):
+                run_num=-1, origin_site_name="", lumi_list=[], validFileOnly=0, transaction=False):
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/List. Expects db connection from upper layer.")
         sql = self.sql_cond
@@ -63,7 +64,12 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	      #FIXME : the status check should only be done with normal/super user
         #sql += """WHERE F.IS_FILE_VALID = 1"""
         # for the time being lests list all files
-        sql += """WHERE F.IS_FILE_VALID <> -1 """
+        #WMAgent requires validaFileOnly. YG 1/30/2015
+        if validFileOnly == 0:
+            sql += """ WHERE F.IS_FILE_VALID <> -1 """
+        else:
+            sql += """ WHERE F.IS_FILE_VALID = 1 
+                       AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') """
         if block_name:
             sql += " AND B.BLOCK_NAME = :block_name"
             binds.update({"block_name":block_name})

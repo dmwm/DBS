@@ -180,7 +180,7 @@ class DBSFile:
     def listFiles(self, dataset="", block_name="", logical_file_name="",
                   release_version="", pset_hash="", app_name="",
                   output_module_label="",  run_num=-1,
-                  origin_site_name="", lumi_list=[], detail=False):
+                  origin_site_name="", lumi_list=[], detail=False, validFileOnly=0):
         """
         One of below parameter groups must be present:
         non-patterned dataset, non-patterned block, non-patterned dataset with lfn,  non-patterned block with lfn,
@@ -221,7 +221,7 @@ class DBSFile:
         try:
             dao = (self.filebrieflist, self.filelist)[detail]
             result = dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
-                            output_module_label, run_num, origin_site_name, lumi_list)
+                            output_module_label, run_num, origin_site_name, lumi_list, validFileOnly)
             return result
         finally:
             if conn:

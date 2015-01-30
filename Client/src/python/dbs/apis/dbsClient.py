@@ -868,6 +868,8 @@ class DbsApi(object):
         :type lumi_list: list
         :param detail: Get detailed information about a file
         :type detail: bool
+        :param validFileOnly : int(0, or 1).  default=0. Return only valid files if set to 1. 
+        :type validFileOnly: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
 
@@ -875,7 +877,7 @@ class DbsApi(object):
         validParameters = ['dataset', 'block_name', 'logical_file_name',
                           'release_version', 'pset_hash', 'app_name',
                           'output_module_label', 'run_num',
-                          'origin_site_name', 'lumi_list', 'detail']
+                          'origin_site_name', 'lumi_list', 'detail', 'validFileOnly']
 
         requiredParameters = {'multiple': validParameters}
 
