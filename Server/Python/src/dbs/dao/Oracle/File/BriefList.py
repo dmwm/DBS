@@ -41,7 +41,7 @@ class BriefList(DBFormatter):
             binds.update({"logical_file_name":logical_file_name})
             if dataset:
                 wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name" % op
-            elif:
+            else:
                 if validFileOnly == 1:
                     joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
                                   JOIN %sDATASET_ACCESS_TYPES DT ON DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID """ % ((self.owner,)*2)
@@ -57,7 +57,7 @@ class BriefList(DBFormatter):
             if not dataset and validFileOnly == 1:
                 joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
                                JOIN %sDATASET_ACCESS_TYPES DT ON DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID """ % ((self.owner,)*2)
-                               wheresql += " AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') "
+                wheresql += " AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') "
             else:
                 pass
 
