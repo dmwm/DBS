@@ -65,11 +65,14 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
         #sql += """WHERE F.IS_FILE_VALID = 1"""
         # for the time being lests list all files
         #WMAgent requires validaFileOnly. YG 1/30/2015
-        if validFileOnly == 0:
+        if int(validFileOnly) == 0:
             sql += """ WHERE F.IS_FILE_VALID <> -1 """
-        else:
+        elif int(validFileOnly) == 1 :
             sql += """ WHERE F.IS_FILE_VALID = 1 
                        AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') """
+	else:
+	    dbsExceptionHandler("dbsException-invalid-input", "invalid value for validFileOnly.")
+		
         if block_name:
             sql += " AND B.BLOCK_NAME = :block_name"
             binds.update({"block_name":block_name})

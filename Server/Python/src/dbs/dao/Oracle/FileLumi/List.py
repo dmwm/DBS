@@ -32,6 +32,8 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
         """
         Lists lumi section numbers with in a file or a block.
         """
+	sql = ""
+	wheresql = ""
 	if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/List. Expects db connection from upper layer.")            
         if logical_file_name and not isinstance(logical_file_name,list):
@@ -43,12 +45,13 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
                 sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
                 WHERE F.IS_FILE_VALID = 1 and F.LOGICAL_FILE_NAME = :logical_file_name""".format(owner=self.owner)
         elif isinstance(logical_file_name,list):
+	    sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID """.format(owner=self.owner)	
             lfn_generator, binds = create_token_generator(logical_file_name)
             if validFileOnly == 0:
                 wheresql = "WHERE F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
             else:   
                 wheresql = "WHERE F.IS_FILE_VALID = 1 and F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
-            sql = "{lfn_generator} {sql} {wheresql}".format(lfn_generator=lfn_generator, sql=self.sql, wheresql=wheresql)
+            sql = "{lfn_generator} {sql} {wheresql}".format(lfn_generator=lfn_generator, sql=sql, wheresql=wheresql)
         elif block_name:
             binds = {'block_name': block_name}
             if validFileOnly == 0:

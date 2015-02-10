@@ -168,7 +168,9 @@ class DBSDataset:
         else:
             conn = self.dbi.connection()
             dataset = None
-            dataset_id = None
+            dataset_id = -1
+	    #self.logger.error("******input data ******")
+	    #self.logger.error( inputdata)	
             try:
                 if "dataset" in inputdata:
                     dataset = inputdata["dataset"]

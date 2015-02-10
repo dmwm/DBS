@@ -451,8 +451,8 @@ class DBSReaderModel(RESTModel):
 
         :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (must have either a list of dataset or dataset_id)
         :type dataset: list
-	:param dataset: list of dataset ids [dataset_id1,dataset_id2,..,dataset_idn, "dsid_min-dsid_max"] ((must have either a list of dataset or dataset_id)
-        :type dataset: list
+	:param dataset_id: list of dataset ids [dataset_id1,dataset_id2,..,dataset_idn, "dsid_min-dsid_max"] ((must have either a list of dataset or dataset_id)
+        :type dataset_id: list
         :param dataset_access_type: List only datasets with that dataset access type (Optional)
         :type dataset_access_type: str
         :param detail: brief list or detailed list 1/0

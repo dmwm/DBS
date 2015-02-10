@@ -20,6 +20,7 @@ class BriefList(DBFormatter):
 	#all listFile APIs should return the same data structure defined by self.sql
         self.sql = " SELECT F.LOGICAL_FILE_NAME "
         self.fromsql = "  FROM %sFILES F  " % self.owner
+	self.logger = logger
 
     def execute(self, conn, dataset="", block_name="", logical_file_name="",
             release_version="", pset_hash="", app_name="", output_module_label="",
@@ -31,30 +32,29 @@ class BriefList(DBFormatter):
 	basesql = self.sql
 	joinsql = ""
         # Check if file is valid. YG 1/29/2015
-        if validFileOnly == 0:
+        if int(validFileOnly) == 0:
             wheresql = "WHERE F.IS_FILE_VALID <> -1"
-        else:
+        elif int(validFileOnly) == 1:
             wheresql = "WHERE F.IS_FILE_VALID = 1"
+	else:
+	    dbsExceptionHandler("dbsException-invalid-input", "invalid value for validFileOnly.")	
 
         if logical_file_name:
             op = ("=", "like")["%" in logical_file_name] 
+	    wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name " %op
             binds.update({"logical_file_name":logical_file_name})
-            if dataset:
-                wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name" % op
-            else:
-                if validFileOnly == 1:
+            if not dataset:
+		if int(validFileOnly) == 1:
                     joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
                                   JOIN %sDATASET_ACCESS_TYPES DT ON DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID """ % ((self.owner,)*2)
-                    wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') " % (op)
+                    wheresql += " AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') " 
                 else:
-                    pass
-
-
+		    pass
         if block_name:
             joinsql += " JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID " % (self.owner)
             wheresql += " AND B.BLOCK_NAME = :block_name "
             binds.update({"block_name":block_name})
-            if not dataset and validFileOnly == 1:
+            if not dataset and int(validFileOnly) == 1:
                 joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
                                JOIN %sDATASET_ACCESS_TYPES DT ON DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID """ % ((self.owner,)*2)
                 wheresql += " AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') "
@@ -65,7 +65,7 @@ class BriefList(DBFormatter):
 	    joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID """ % (self.owner)
             wheresql += " AND D.DATASET = :dataset "
             binds.update({"dataset":dataset})
-            if validFileOnly == 1:
+            if int(validFileOnly) == 1:
                 joinsql += " JOIN %sDATASET_ACCESS_TYPES DT ON DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID " % (self.owner)  
                 wheresql += " AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') "
             else:
@@ -159,8 +159,8 @@ class BriefList(DBFormatter):
 	    wheresql += ")"
 
 	sql = " ".join((basesql, self.fromsql, joinsql, wheresql))
-	#print "sql=%s" %sql
-	#print "binds=%s" %binds
+	#self.logger.error( "sql=%s" %sql)
+	#self.logger.error( "binds=%s" %binds)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result=[]
         for i in range(len(cursors)):
