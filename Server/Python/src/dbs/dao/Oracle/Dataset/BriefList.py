@@ -54,7 +54,7 @@ class BriefList(DBFormatter):
                 binds['is_dataset_valid'] = is_dataset_valid
             else:
                 binds['is_dataset_valid'] = is_dataset_valid
-        elif type(dataset_id) is not int:  # for the POST method
+        elif dataset_id is not None and type(dataset_id) is not int:  # for the POST method
 	    #we treat the datset_id is the same way as run_num. It can be id1-id2, id or [id1,2,3 ...]
 	    dataset_id_list = []
 	    wheresql_dataset_id_list=''
@@ -66,12 +66,8 @@ class BriefList(DBFormatter):
                     if id[0] == id[1]:
 		        dbsExceptionHandler('dbsException-invalid-input', "DBS dataset_id range must be apart at least by 1.")
 		    wheresql_dataset_id_range = " D.DATASET_ID between :minid and :maxid " 
-		    self.logger.error( "minid & maxid ")
-		    self.logger.error( binds)	
                     binds.update({"minid":id[0]})
                     binds.update({"maxid":id[1]})
-		    self.logger.error( "minid2 & maxid2 ")
-                    self.logger.error( binds) 			
 	    if dataset_id_list:
 		ds_generator, binds2 = create_token_generator(dataset_id_list)
 		binds.update(binds2)
@@ -269,8 +265,8 @@ class BriefList(DBFormatter):
                     wheresql += " and " + wheresql_run_list
 
 	sql = "".join((generatedsql, selectsql, self.basesql, joinsql, wheresql)) 
-	#self.logger.debug( sql)
-        #self.logger.debug( binds)
+	#self.logger.error( sql)
+        #self.logger.error( binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []
         for i in cursors:

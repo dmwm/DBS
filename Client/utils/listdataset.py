@@ -1,19 +1,23 @@
 #DBS-3 imports
 from dbs.apis.dbsClient import *
-#url="http://cmssrv48.fnal.gov:8989/DBSServlet"
-#url="https://dbs3-dev01.cern.ch/dbs/DBSReader"
-url="https://localhost:1443/dbs/int/global/DBSReader"
+#url="https://cmsweb.cern.ch/dbs/prod/global/DBSReader/"
+url="https://dbs3-test1.cern.ch/dbs/dev/global/DBSReader/"
 # API Object    
-#dbs3api = DbsApi(url=url, cert="usercert.pem", key="userkey.pem")
 dbs3api = DbsApi(url=url)
-# Is service Alive
-#print dbs3api.ping()
 # All datasets, NOT implemented yet in server
-print dbs3api.listDatasets(dataset_access_type="PRODUCTION")
-
-#print dbs3api.listDataset("/ZeeJet_Pt230to300/Summer09-MC_31X_V3_7TeV-v1/GEN-SIM-RAW")
-#print dbs3api.listDataset("/Wmunu_Wplus-powheg/Summer09-MC_31X_V3_7TeV_MCDB-v1/USER")
+#print dbs3api.listDatasets(dataset_access_type="PRODUCTION")
 print "\n"
+
+datasetlst = ['/StreamExpressCosmics/Tier0_Test_SUPERBUNNIES_vocms001-SiStripPCLHistos-Express-v5/ALCARECO', '/Commissioning/Tier0_Test_SUPERBUNNIES_vocms001-HcalCalIsoTrk-PromptReco-v5/ALCARECO']
+#
+#print dbs3api.listDatasetArray(detail=0,dataset=datasetlst)
+print "\n"
+#print dbs3api.listDatasetArray(detail=1,dataset=datasetlst)
+print "\n"
+print dbs3api.listDatasetArray(detail=0, dataset='/unittest_web_primary_ds_name_34661/Acq_Era_34661-unittest_web_dataset-v4664/GEN-SIM-RAW')
+print "\n"
+print dbs3api.listDatasetArray(detail=1, dataset='/unittest_web_primary_ds_name_34661/Acq_Era_34661-unittest_web_dataset-v4664/GEN-SIM-RAW')
+print "\n"
+print "\n"
+#print dbs3api.listDatasetArray(dataset_id=9542504)
 print "All Done"
-#print dbs3api.listDataset("/TTbar/Summer09-MC_31X_V3-v1/GEN-SIM-RAW")
-#print dbs3api.listDataset("/TkCosmics38T/Summer09-STARTUP31X_V3_SuperPointing-v1/RAW-RECO'")

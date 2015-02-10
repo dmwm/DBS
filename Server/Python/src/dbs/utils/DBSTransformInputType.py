@@ -46,5 +46,5 @@ def parseRunRange(run_range):
     elif isinstance(run_range, (int, long)):
         yield run_range
     else:
-        dbsExceptionHandler('dbsException-invalid-input2', "Invalid input: run/run_range.",
-        serverError="invalid run/run_range: %s" %run_range)
+        dbsExceptionHandler('dbsException-invalid-input2', "Invalid input: run/run_range or dataset_id.",
+        serverError="invalid run/run_range or dataset id : %s" %run_range)

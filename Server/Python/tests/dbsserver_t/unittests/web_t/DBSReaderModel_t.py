@@ -543,14 +543,32 @@ class DBSReaderModel_t(unittest.TestCase):
         """test007b: web.DBSReaderModel.listFiles: basic test"""
         api.list('files', dataset=testparams['dataset'], run_num='1-%s' % (testparams['run_num']), detail=True)
 
-    def test007c(self):
-        """test007c: web.DBSReaderModel.listFiles: basic test"""
+    def test007c1(self):
+        """test007c1: web.DBSReaderModel.listFiles: basic test"""
         api.list('files', dataset=testparams['dataset'])
 
-    def test007d(self):
-        """test007d: web.DBSReaderModel.listFiles: with dataset, lumi list"""
+    def test007c2(self):
+        """test007c2: web.DBSReaderModel.listFiles: basic test"""
+        api.list('files', dataset=testparams['dataset'], validFileOnly=1)
+
+    def test007c3(self):
+        """test007c3: web.DBSReaderModel.listFiles: basic test"""
+        api.list('files', dataset=testparams['dataset'], validFileOnly=0)
+
+    def test007d1(self):
+        """test007d1: web.DBSReaderModel.listFiles: with dataset, lumi list"""
         api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]",
                  run_num=testparams['run_num'])
+
+    def test007d2(self):
+        """test007d2: web.DBSReaderModel.listFiles: with dataset, lumi list, validFileOnly"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]",
+                 run_num=testparams['run_num'], validFileOnly=1)
+
+    def test007d3(self):
+        """test007d3: web.DBSReaderModel.listFiles: with dataset, lumi list, validFileOnly"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]",
+                 run_num=testparams['run_num'], validFileOnly=0)
     
     def test007dd(self):
         """test007dd: web.DBSReaderModel.listFiles: with dataset, lumi list"""
@@ -579,28 +597,64 @@ class DBSReaderModel_t(unittest.TestCase):
         """test007h: web.DBSReaderModel.listFiles: basic negative test """
         api.list('files', block_name='/*')
 
-    def test007i(self):
-        """test007i: web.DBSReaderModel.listFiles: basic test """
+    def test007i1(self):
+        """test007i1: web.DBSReaderModel.listFiles: basic test """
         api.list('files', block_name=testparams['block'])
+
+    def test007i2(self):
+        """test007i2: web.DBSReaderModel.listFiles: basic test """
+        api.list('files', block_name=testparams['block'], validFileOnly=1)
+
+    def test007i3(self):
+        """test007i3: web.DBSReaderModel.listFiles: basic test """
+        api.list('files', block_name=testparams['block'], validFileOnly=0)
     
-    def test007ia(self):
-        """test007ia: web.DBSReaderModel.listFiles: detail test """
+    def test007ia1(self):
+        """test007ia1: web.DBSReaderModel.listFiles: detail test """
         api.list('files', block_name=testparams['block'], detail=True)
+
+    def test007ia2(self):
+        """test007ia2: web.DBSReaderModel.listFiles: detail test """
+        api.list('files', block_name=testparams['block'], detail=True, validFileOnly=1)
+
+    def test007ia3(self):
+        """test007ia3: web.DBSReaderModel.listFiles: detail test """
+        api.list('files', block_name=testparams['block'], detail=True, validFileOnly=0)
 
     @checkException400
     def test007j(self):
         """test007j: web.DBSReaderModel.listFiles: basic negative test """
         api.list('files', logical_file_name='/*')
 
-    def test007k(self):
-        """test007k: web.DBSReaderModel.listFiles: basic test """
+    def test007k1(self):
+        """test007k1: web.DBSReaderModel.listFiles: basic test """
         lfn= testparams['files'][1]
         api.list('files', logical_file_name=lfn)
 
-    def test007ka(self):
-        """test007ka: web.DBSReaderModel.listFiles: detail test """
+    def test007k2(self):
+        """test007k2: web.DBSReaderModel.listFiles: basic test """
+        lfn= testparams['files'][1]
+        api.list('files', logical_file_name=lfn, validFileOnly=1)
+
+    def test007k3(self):
+        """test007k3: web.DBSReaderModel.listFiles: basic test """
+        lfn= testparams['files'][1]
+        api.list('files', logical_file_name=lfn, validFileOnly=0)
+
+    def test007ka1(self):
+        """test007ka1: web.DBSReaderModel.listFiles: detail test """
+        lfn= testparams['files'][1]
+        api.list('files', logical_file_name=lfn, detail=True, validFileOnly=1)
+
+    def test007ka2(self):
+        """test007ka2: web.DBSReaderModel.listFiles: detail test """
         lfn= testparams['files'][1]
         api.list('files', logical_file_name=lfn, detail=True)
+
+    def test007ka3(self):
+        """test007ka3: web.DBSReaderModel.listFiles: detail test """
+        lfn= testparams['files'][1]
+        api.list('files', logical_file_name=lfn, detail=True, validFileOnly=0)
 
     @checkException400
     def test007l(self):
@@ -653,13 +707,52 @@ class DBSReaderModel_t(unittest.TestCase):
         api.list('files',logical_file_name=lfn,output_module_label=testparams['output_module_label'],
                  app_name=testparams['app_name'],pset_hash=testparams['pset_hash'],
                  release_version=testparams['release_version'],detail=True)
-    def test007v(self):
-        """test007v: web.DBSReaderModel.listFiles: basic test """
+    def test007v1(self):
+        """test007v1: web.DBSReaderModel.listFiles: basic test """
         api.list('files', block_name=testparams['block'], detail=True)
 
-    def test007w(self):
-        """test007w: web.DBSReaderModel.listFiles: with dataset, run_num and detail"""
+    def test007v2(self):
+        """test007v2: web.DBSReaderModel.listFiles: basic test """
+        api.list('files', block_name=testparams['block'], detail=True, validFileOnly=1)
+
+    def test007v3(self):
+        """test007v3: web.DBSReaderModel.listFiles: basic test """
+	lfn = testparams['files'][1]
+        api.list('files', block_name=testparams['block'], detail=True, validFileOnly=1, logical_file_name=lfn)
+
+    def test007v4(self):
+        """test007v4: web.DBSReaderModel.listFiles: basic test """
+        lfn = testparams['files'][1]+"*"
+        api.list('files', block_name=testparams['block'], detail=True, validFileOnly=1, logical_file_name=lfn)
+
+    def test007v5(self):
+        """test007v5: web.DBSReaderModel.listFiles: basic test """
+        lfn = testparams['files'][1]
+        api.list('files', block_name=testparams['block'], validFileOnly=1, logical_file_name=lfn)
+
+    def test007v6(self):
+        """test007v6: web.DBSReaderModel.listFiles: basic test """
+        lfn = testparams['files'][1]+"*"
+        api.list('files', block_name=testparams['block'], validFileOnly=1, logical_file_name=lfn)
+
+    def test007w1(self):
+        """test007w1: web.DBSReaderModel.listFiles: with dataset, run_num and detail"""
         api.list('files', dataset=testparams['dataset'], run_num=testparams['run_num'], detail=True)
+
+    def test007w2(self):
+        """test007w2: web.DBSReaderModel.listFiles: with dataset, run_num and detail"""
+        api.list('files', dataset=testparams['dataset'], run_num=testparams['run_num'], detail=True, validFileOnly=1)
+
+    def test007w3(self):
+        """test007w3: web.DBSReaderModel.listFiles: with dataset, run_num and detail"""
+	lfn = testparams['files'][1]+"*"
+        api.list('files', dataset=testparams['dataset'], logical_file_name=lfn, validFileOnly=1)
+
+    def test007w4(self):
+        """test007w4: web.DBSReaderModel.listFiles: with dataset, run_num and detail"""
+	lfn = testparams['files'][1]+"*"
+        api.list('files', dataset=testparams['dataset'], logical_file_name=lfn, detail=True, validFileOnly=1)
+
 
     def test008a(self):
         """test008a: web.DBSReaderModel.listDatasetParents: basic test """
@@ -872,13 +965,13 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test010q(self):
         """test010q: web.DBSReaderModel.listFileLumis: basic test """
-        api.list('filelumis', block_name=testparams['block'], validFileOnly=2)
+        api.list('filelumis', block_name=testparams['block'], validFileOnly=1)
 
 
     def test010r(self):
         """test010lr: web.DBSReaderModel.listFileLumis: basic test """
         lfn = testparams['files'][1]
-        api.list('filelumis', logical_file_name=lfn, validFileOnly="2")
+        api.list('filelumis', logical_file_name=lfn, validFileOnly="1")
 
     @checkException400
     def test010s(self):
@@ -886,6 +979,43 @@ class DBSReaderModel_t(unittest.TestCase):
         lfn = testparams['files'][1]
         api.list('filelumis',  block_name=testparams['block'], run_num=testparams['run_num'], validFileOnly="*")
 
+    def test010t(self):
+        """test010lt: web.DBSReaderModel.listFileLumiArray: basic test """
+        lfn1 = testparams['files'][1]
+	lfn2 = testparams['files'][2]
+	data = {"logical_file_name":[lfn1, lfn2], "validFileOnly":1}
+        api.insert('filelumis', data)
+
+    def test010u(self):
+        """test010lu: web.DBSReaderModel.listFileLumiArray: basic test """
+        lfn1 = testparams['files'][1]
+	lfn2 = testparams['files'][2]
+	data = {"logical_file_name": [lfn1, lfn2], "validFileOnly": 0}
+        api.insert('filelumis', data)
+
+    def test010x(self):
+        """test010lx: web.DBSReaderModel.listFileLumiArray: basic test """
+        lfn1 = testparams['files'][1]
+	data={"logical_file_name": lfn1, "run_num":testparams['run_num'], "validFileOnly" :1}
+        api.insert('filelumis', data)
+
+    def test010y(self):
+        """test010ly: web.DBSReaderModel.listFileLumiArray: basic test """
+        lfn1 = testparams['files'][1]
+	data={"logical_file_name": lfn1, "run_num": testparams['run_num'], "validFileOnly" :0}
+        api.insert('filelumis', data)
+
+    def test010z(self):
+        """test010lz: web.DBSReaderModel.listFileLumiArray: basic test """
+        lfn1 = testparams['files'][1]
+	data={"logical_file_name": lfn1, "run_num": testparams['run_num'], "validFileOnly" :1}
+        api.insert('filelumis', data)
+
+    def test010z0(self):
+        """test010lz0: web.DBSReaderModel.listFileLumiArray: basic test """
+        lfn1 = testparams['files'][1]
+	data={"logical_file_name": lfn1, "run_num": testparams['run_num'], "validFileOnly" :0}
+        api.insert('filelumis', data)
 
     def test011a(self):
         """test011a: web.DBSReaderModel.listFile with maxrun, minrun: basic """

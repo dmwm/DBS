@@ -630,6 +630,8 @@ class DbsApi(object):
         :type ldate: int, str
         :param detail: List all details of a dataset
         :type detail: bool
+	:param dataset_id: DB primary key of datasets table.
+        :type dataset_id: int, str	
         :returns: List of dictionaries containing the following keys (dataset). If the detail option is used. The dictionary contain the following keys (primary_ds_name, physics_group_name, acquisition_era_name, create_by, dataset_access_type, data_tier_name, last_modified_by, creation_date, processing_version, processed_ds_name, xtcrosssection, last_modification_date, dataset_id, dataset, prep_id, primary_ds_type)
         :rtype: list of dicts
 
@@ -641,7 +643,7 @@ class DbsApi(object):
                            'primary_ds_name', 'primary_ds_type', 'data_tier_name',
                            'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                            'min_cdate','max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate',
-                           'detail']
+                           'detail', 'dataset_id']
 
         #set defaults
         if 'detail' not in kwargs.keys():
@@ -671,7 +673,9 @@ class DbsApi(object):
         """
         API to list datasets in DBS.
 
-        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required)
+        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required if dataset_id is not presented)
+        :type dataset: list
+        :param dataset_id: list of dataset_ids that are the primary keys of datasets table: [dataset_id1,dataset_id2,..,dataset_idn] (Required if dataset is not presented)
         :type dataset: list
         :param dataset_access_type: List only datasets with that dataset access type (Optional)
         :type dataset_access_type: str
@@ -681,8 +685,8 @@ class DbsApi(object):
         :rtype: list of dicts
 
         """
-        validParameters = ['dataset', 'dataset_access_type', 'detail']
-        requiredParameters = {'forced': ['dataset']}
+        validParameters = ['dataset', 'dataset_access_type', 'detail', 'dataset_id']
+	requiredParameters = {'multiple': ['dataset', 'dataset_id']}
 
         checkInputParameter(method="listDatasetArray", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
@@ -812,6 +816,30 @@ class DbsApi(object):
 
         return self.__callServer("filelumis", params=kwargs)
 
+    def listFileLumiArray(self, **kwargs):
+        """
+        API to list Lumiis for a list of files. A list of logical_file_names is required. No wild card support in this API
+
+        :param logical_file_name: logical_file_name of file
+        :type logical_file_name: str
+        :param run_num: List lumi sections for a given run number (Optional). run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
+                        cause an input error.
+        :type run_num: int,str,list
+        :param validFileOnly: default value is 0 (optional), when set to 1, only valid files counted.
+        :type int, str
+        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run)
+        :rtype: list of dicts
+
+        """
+        validParameters = ['logical_file_name', 'run_num', 'validFileOnly']
+	requiredParameters = {'forced': ['logical_file_name']}
+
+        checkInputParameter(method="listFileLumiArray", parameters=kwargs.keys(), validParameters=validParameters,
+                            requiredParameters=requiredParameters)
+
+        return self.__callServer("filelumis", data=kwargs, callmethod="POST")
+
+
     @split_calls
     def listFileParents(self, **kwargs):
         """
@@ -838,7 +866,7 @@ class DbsApi(object):
 
     def listFiles(self, **kwargs):
         """
-        API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset or non-wildcarded block_name is required.
+        API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset, non-wildcarded block_name is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
 
         * For lumi_list the following two json formats are supported:
@@ -868,6 +896,8 @@ class DbsApi(object):
         :type lumi_list: list
         :param detail: Get detailed information about a file
         :type detail: bool
+        :param validFileOnly : int(0, or 1).  default=0. Return only valid files if set to 1. 
+        :type validFileOnly: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
 
@@ -875,7 +905,7 @@ class DbsApi(object):
         validParameters = ['dataset', 'block_name', 'logical_file_name',
                           'release_version', 'pset_hash', 'app_name',
                           'output_module_label', 'run_num',
-                          'origin_site_name', 'lumi_list', 'detail']
+                          'origin_site_name', 'lumi_list', 'detail', 'validFileOnly']
 
         requiredParameters = {'multiple': validParameters}
 
