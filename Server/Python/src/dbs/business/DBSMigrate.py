@@ -345,6 +345,14 @@ class DBSMigrate:
                 "migration_report" : "REQUEST QUEUED with total %d blocks to be migrated" %totalQueued,
                 "migration_details" : request }
         except SQLAlchemyIntegrityError, ex:
+            self.logger.error("************ ex.statement1 *********")
+            self.logger.error(ex.statement)
+            self.logger.error("********** ex.params1 ***********")
+            self.logger.error(ex.params)
+            self.logger.error("********** ex.orig1 ***********")
+            self.logger.error(ex.orig)
+            import traceback
+            self.logger.error(traceback.format_exc())
             tran.rollback()
             if conn: conn.close()
             if (str(ex).find("unique constraint") != -1 or
@@ -356,11 +364,21 @@ class DBSMigrate:
                     "migration_report" : "REQUEST ALREADY QUEUED",
                     "migration_details" : request }
             else:
+                self.logger.error("************ex.statement *********")
+                self.logger.error(ex.statement)
+                self.logger.error("**********ex. params***********")
+                self.logger.error(ex.params)
+                self.logger.error("**********ex.orig***********")
+                self.logger.error(ex.orig)
+                import traceback
+                self.logger.error(traceback.format_exc())
                 if conn: conn.close()
-                m = "DBSMigration:  ENQUEUEING_FAILED."
-                e = "DBSMigration:  ENQUEUEING_FAILED; reason may be (%s)" %str(ex)
+                m = "DBSMigration:  ENQUEUEING_FAILED1."
+                e = "DBSMigration:  ENQUEUEING_FAILED1; reason may be (%s)" %( ex.statement + "; " + str(ex.params) + "; " + str(ex.orig) )
                 dbsExceptionHandler('dbsException-invalid-input2', message=m, serverError=e)
         except Exception, ex:
+            import traceback
+            self.logger.error(traceback.format_exc())
             if tran: tran.rollback()
             if conn: conn.close()
             m = "DBSMigration:  ENQUEUEING_FAILED."
