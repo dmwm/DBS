@@ -25,12 +25,12 @@ class List(DBFormatter):
         self.logger = logger
         self.sql = \
 """
-SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME 
+SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM 
 """
 
     def execute(self, conn, logical_file_name='', block_name='', run_num=-1, validFileOnly=0, migration=False):
         """
-        Lists lumi section numbers with in a file or a block.
+        Lists lumi section numbers with in a file, a list of files or a block.
         """
 	sql = ""
 	wheresql = ""
@@ -39,20 +39,26 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, 
         if logical_file_name and not isinstance(logical_file_name,list):
             binds = {'logical_file_name': logical_file_name}
             if int(validFileOnly) == 0:
-                sql = self.sql + """ FROM {owner}FILE_LUMIS FL 
+		if migration:   #migration always call with single file and include all files no matter valid or not.
+		    sql = self.sql + """ FROM {owner}FILE_LUMIS FL 
 				     JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
 				     WHERE F.LOGICAL_FILE_NAME = :logical_file_name 
 				  """.format(owner=self.owner)
+		else:
+		    sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME FROM {owner}FILE_LUMIS FL
+				    JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
+                                     WHERE F.LOGICAL_FILE_NAME = :logical_file_name 
+                                  """.format(owner=self.owner)
             else:
-                sql = self.sql + """ FROM {owner}FILE_LUMIS FL 
+                sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME FROM {owner}FILE_LUMIS FL 
 				     JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
 				     JOIN {owner}DATASETS D ON  D.DATASET_ID = F.DATASET_ID
 				     JOIN {owner}DATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID		
 				     WHERE F.IS_FILE_VALID = 1 AND F.LOGICAL_FILE_NAME = :logical_file_name 
 				     AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') 
 				 """.format(owner=self.owner)
-        elif isinstance(logical_file_name,list):
-	    sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID """.format(owner=self.owner)	
+        elif logical_file_name and isinstance(logical_file_name,list):
+	    sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID """.format(owner=self.owner)	
             lfn_generator, binds = create_token_generator(logical_file_name)
             if validFileOnly == 0:
                 wheresql = "WHERE F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
@@ -67,11 +73,11 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, 
         elif block_name:
             binds = {'block_name': block_name}
             if validFileOnly == 0:
-                sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID  
+                sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID  
 				     JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID  
 				     WHERE B.BLOCK_NAME = :block_name""".format(owner=self.owner)
             else:
-                sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
+                sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
 				     JOIN {owner}DATASETS D ON  D.DATASET_ID = F.DATASET_ID 
 				     JOIN {owner}DATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID 
 				     JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
@@ -107,8 +113,8 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, 
                 sql += " and " + wheresql_run_range
             elif not wheresql_run_range and wheresql_run_list:
                 sql += " and " + wheresql_run_list
-        #self.logger.debug(sql) 
-	#self.logger.debug(binds)
+        self.logger.debug(sql) 
+	self.logger.debug(binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
         result=[]
         for i in range(len(cursors)):
@@ -117,26 +123,14 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, 
         if migration:
             return result
         condensed_res=[]
-	if 0:
-        #if logical_file_name:
-            run_lumi={}
-            for i in result:
-                r = i['run_num']
-                if r in run_lumi:
-                    run_lumi[r].append(i['lumi_section_num'])
-                else:
-                    run_lumi[r]=[i['lumi_section_num']]
-            for k, v in run_lumi.iteritems():
-                condensed_res.append({'logical_file_name':logical_file_name, 'run_num':k, 'lumi_section_num':v})
-        else:
-            file_run_lumi={}
-            for i in result:
-                r = i['run_num']
-                f = i['logical_file_name']
-                if (f, r) in file_run_lumi:
-                    file_run_lumi[f,r].append(i['lumi_section_num'])
-                else:
-                    file_run_lumi[f,r] = [i['lumi_section_num']]
-            for k, v in file_run_lumi.iteritems():
-                condensed_res.append({'logical_file_name':k[0], 'run_num':k[1], 'lumi_section_num':v})
+	file_run_lumi={}
+	for i in result:
+	    r = i['run_num']
+            f = i['logical_file_name']
+            if (f, r) in file_run_lumi:
+		file_run_lumi[f,r].append(i['lumi_section_num'])
+	    else:
+		file_run_lumi[f,r] = [i['lumi_section_num']]
+	for k, v in file_run_lumi.iteritems():
+            condensed_res.append({'logical_file_name':k[0], 'run_num':k[1], 'lumi_section_num':v})
         return condensed_res
