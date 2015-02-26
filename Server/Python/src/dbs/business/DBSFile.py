@@ -202,7 +202,7 @@ class DBSFile:
 		origin_site_name = input_body.get("origin_site_name", "")
 		lumi_list = input_body.get("lumi_list", [])	
             except cjson.DecodeError as de:
-                msg = "business/listFilss POST call requires at least a list of logical_file_name. %s" % de
+                msg = "business/listFilss POST call requires at least dataset, block_name, or a list of logical_file_name %s" % de
                 dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, msg)
 
         if ('%' in block_name):

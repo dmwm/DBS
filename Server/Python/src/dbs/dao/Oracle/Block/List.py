@@ -17,6 +17,7 @@ class List(DBFormatter):
 	Add schema owner and sql.
 	"""
 	DBFormatter.__init__(self, logger, dbi)
+	self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
     """
@@ -134,9 +135,9 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
         
 	sql = " ".join((generatedsql, basesql, self.fromsql, joinsql, wheresql))  
 	
-	#print "***********BLOCK LIST SQL**************"	
-	#print "sql=%s" %sql
-	#print "binds=%s" %binds
+	self.logger.debug ("***********BLOCK LIST SQL**************")	
+	self.logger.debug ( "sql=%s" %sql )
+	self.logger.debug ( "binds=%s" %binds )
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
 	result=[]
         for i in range(len(cursors)):
