@@ -180,21 +180,41 @@ class DBSFile:
     def listFiles(self, dataset="", block_name="", logical_file_name="",
                   release_version="", pset_hash="", app_name="",
                   output_module_label="",  run_num=-1,
-                  origin_site_name="", lumi_list=[], detail=False, validFileOnly=0):
+                  origin_site_name="", lumi_list=[], detail=False, validFileOnly=0, input_body=-1):
         """
         One of below parameter groups must be present:
         non-patterned dataset, non-patterned block, non-patterned dataset with lfn,  non-patterned block with lfn,
         non-patterned lfn
+	non-patterned lfn list
         """
+        if input_body != -1 :
+	    try:
+                logical_file_name = input_body.get("logical_file_name", "")
+                run_num = input_body.get("run_num", -1)
+                validFileOnly = input_body.get("validFileOnly", 0)
+		detail = input_body.get("detail", False)
+                block_name = input_body.get("block_name", "")
+		dataset = input_body.get("dataset", "") 
+		release_version = input_body.get("release_version", "")
+		pset_hash = input_body.get("pset_hash", "")
+	        app_name = input_body.get("app_name", "")
+		output_module_label = input_body.get("output_module_label", "")
+		origin_site_name = input_body.get("origin_site_name", "")
+		lumi_list = input_body.get("lumi_list", [])	
+            except cjson.DecodeError as de:
+                msg = "business/listFilss POST call requires at least a list of logical_file_name. %s" % de
+                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, msg)
+
         if ('%' in block_name):
             dbsExceptionHandler('dbsException-invalid-input', "You must specify exact block name not a pattern")
         elif ('%' in dataset):
             dbsExceptionHandler('dbsException-invalid-input', " You must specify exact dataset name not a pattern")
-        elif (not dataset  and not block_name and (not logical_file_name or '%'in logical_file_name)):
+        elif (not dataset  and not block_name and (not logical_file_name or '%'in logical_file_name) ):
             dbsExceptionHandler('dbsException-invalid-input', """You must specify one of the parameter groups:  \
                     non-pattern dataset, \
                     non-pattern block , non-pattern dataset with lfn ,\
-                    non-pattern block with lfn or no-pattern lfn. """)
+                    non-pattern block with lfn or no-pattern lfn, \
+		    non-patterned lfn list .""")
         elif (lumi_list and len(lumi_list) != 0):
             if run_num==-1:
                 dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number, \
@@ -215,8 +235,9 @@ class DBSFile:
                 else:
                     dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
                         use run_num=123")
-        else:
+	else:
             pass
+
         conn = self.dbi.connection()
         try:
             dao = (self.filebrieflist, self.filelist)[detail]

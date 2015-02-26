@@ -118,6 +118,8 @@ class DBSReaderModel(RESTModel):
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num',
                         'origin_site_name', 'lumi_list', 'detail', 'validFileOnly'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
+        self._addMethod('POST', 'fileArray', self.listFileArray,secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name', 'dataset',
                         'run_num', 'validFileOnly'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -842,6 +844,65 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
                     self.logger.exception, sError)
 
+    def listFileArray(self):
+        """
+        API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset, 
+	non-wildcarded block_name or non-wildcarded lfn list is required.
+        The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
+
+        * For lumi_list the following two json formats are supported:
+            - '[a1, a2, a3,]'
+            - '[[a,b], [c, d],]'
+        * If lumi_list is provided run only run_num=single-run-number is allowed
+	* When lfn list is present, no run or lumi list is allowed.
+
+        :param logical_file_name: logical_file_name of the file
+        :type logical_file_name: str
+        :param dataset: dataset
+        :type dataset: str
+        :param block_name: block name
+        :type block_name: str
+        :param release_version: release version
+        :type release_version: str
+        :param pset_hash: parameter set hash
+        :type pset_hash: str
+        :param app_name: Name of the application
+        :type app_name: str
+        :param output_module_label: name of the used output module
+        :type output_module_label: str
+        :param run_num: run , run ranges, and run list
+        :type run_num: int, list, string
+        :param origin_site_name: site where the file was created
+        :type origin_site_name: str
+        :param lumi_list: List containing luminosity sections
+        :type lumi_list: list
+        :param detail: Get detailed information about a file
+        :type detail: bool
+        :param validFileOnly: default=0 return all the files. when =1, only return files with is_file_valid=1 or dataset_access_type=PRODUCTION or VALID
+        :type validFileOnly: int
+        :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
+        :rtype: list of dicts
+
+        """
+        try :
+            body = request.body.read()
+            if body:
+                data = cjson.decode(body)
+                data = validateJSONInputNoCopy("files", data)
+            else:
+                data=''
+            return self.dbsFile.listFiles(input_body=data)
+        except cjson.DecodeError as De:
+            dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+        except HTTPError as he:
+            raise he
+        except Exception, ex:
+            sError = "DBSReaderModel/listFileArray. %s \n Exception trace: \n %s" \
+            % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
     @transformInputType('run_num')
     @inputChecks(block_name=basestring, dataset=basestring, run_num=(long,int,basestring,list), validFileOnly=(int, basestring))
     def listFileSummaries(self, block_name='', dataset='', run_num=-1, validFileOnly=0):
@@ -1053,7 +1114,8 @@ class DBSReaderModel(RESTModel):
     def listFileLumiArray(self):
         """
 	API to list FileLumis for a given list of LFN. It is used with the POST method of fileLumis call.
-	:param logical_file_name: 
+	
+	:param logical_file_name  
 	:type logical_file_name: list of str
        	:param run_num
 	:type list, str or int 
@@ -1061,6 +1123,7 @@ class DBSReaderModel(RESTModel):
 	:type str or int
 	:returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
 	:rtype: list of dicts
+	
 	"""
 	try :
 	    body = request.body.read()

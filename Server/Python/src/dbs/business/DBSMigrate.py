@@ -90,6 +90,8 @@ class DBSMigrate:
                                             srcdataset, order_counter)
             if tmp_ordered_dict != {}:
                 ordered_dict.update(tmp_ordered_dict)
+		self.logger.debug("ordered_dict length at level %s" %order_counter)
+		self.logger.debug(len(ordered_dict))
             else:
                 #return {}
                 m = 'Requested dataset %s is already in destination' %srcdataset
@@ -99,6 +101,8 @@ class DBSMigrate:
                                                 srcdataset, order_counter+1)
             if parent_ordered_dict != {}:
                 ordered_dict.update(parent_ordered_dict)
+		self.logger.debug("***** parent ordered_dict length at level %s ******" %(order_counter+1))
+		self.logger.debug(len(ordered_dict))
             return remove_duplicated_items(ordered_dict)
         except dbsException:
             raise
@@ -124,6 +128,8 @@ class DBSMigrate:
             e = "DBSMigration: No blocks in the required dataset %s found at source %s."%(inputdataset, url)
             dbsExceptionHandler('dbsException-invalid-input2', message=e, serverError=e)
         dstblks = self.blocklist.execute(conn, dataset=inputdataset)
+	self.logger.debug("******* dstblks for dataset %s ***********" %inputdataset)
+	self.logger.debug(dstblks)
         blocksInSrcNames = [ y['block_name'] for y in srcblks]
         blocksInDstNames = [ x['block_name'] for x in dstblks]
         ordered_dict[order_counter] = []
@@ -131,6 +137,8 @@ class DBSMigrate:
             if not ablk in blocksInDstNames:
                 ordered_dict[order_counter].append(ablk)
         if ordered_dict[order_counter] != []:
+	    self.logger.debug("**** ordered_dict dict length ****")
+	    self.logger.debug(len(ordered_dict)) 	
             return ordered_dict
         else:
             return {}
@@ -152,13 +160,21 @@ class DBSMigrate:
             for aparentDataset in parentSrcDatasetNames:
                 parent_ordered_dict = self.processDatasetBlocks(url, conn,
                                             aparentDataset, order_counter)
+		self.logger.debug("************ dict length of parent blocks for the parent dataset %s at level %s" %(aparentDataset, order_counter))
+		self.logger.debug(len(parent_ordered_dict))
                 if parent_ordered_dict != {}:
                     ordered_dict.update(parent_ordered_dict)
+		    self.logger.debug("**** ordered_dict length ****")
+		    self.logger.debug(len(ordered_dict))	
                 # parents of parent
                 pparent_ordered_dict = self.getParentDatasetsOrderedList(url,
                                     conn, aparentDataset, order_counter+1)
+		self.logger.debug("************dict length parent parent blocks for the parent dataset %s at level %s" %(aparentDataset, order_counter+1))
+		self.logger.debug(len(pparent_ordered_dict))
                 if pparent_ordered_dict != {}:
                     ordered_dict.update(pparent_ordered_dict)
+	            self.logger.debug("**** ordered_dict length ****")
+		    self.logger.debug(len(ordered_dict))	
         return ordered_dict
 
     def prepareBlockMigrationList(self, conn, request):
@@ -319,7 +335,15 @@ class DBSMigrate:
             self.mgrin.execute(conn, request, tran)
             # INSERT the ordered_list
             totalQueued = 0
-            for iter in reversed(range(len(ordered_list))):
+	    k = ordered_list.keys()
+	    k.sort()
+	    k.reverse()	
+	    self.logger.debug("****************** ordered_list keys **********")
+            self.logger.debug(k)
+            #for iter in reversed(range(len(ordered_list))):
+	    for iter in k:	
+		self.logger.debug("length for Key: %s" %iter)
+	        self.logger.debug(len(ordered_list[iter]))	
                 if len(ordered_list[iter]) > 0:
                     daoinput = [{
                         "migration_block_id" :
@@ -344,7 +368,12 @@ class DBSMigrate:
             return {
                 "migration_report" : "REQUEST QUEUED with total %d blocks to be migrated" %totalQueued,
                 "migration_details" : request }
-        except SQLAlchemyIntegrityError, ex:
+        except SQLAlchemyIntegrityError as ex:
+	    e = "DBSMigration:  ENQUEUEING_FAILED1 from SQLAichemy Integrity Error. Reason may be (%s)" %(ex.statement + "; " + str(ex.params) + "; " + str(ex.orig))
+	    self.logger.debug(e)		
+	    import traceback
+            tk = traceback.format_exc() 		
+	    self.logger.debug(tk) 	
             tran.rollback()
             if conn: conn.close()
             if (str(ex).find("unique constraint") != -1 or
@@ -357,14 +386,16 @@ class DBSMigrate:
                     "migration_details" : request }
             else:
                 if conn: conn.close()
-                m = "DBSMigration:  ENQUEUEING_FAILED."
-                e = "DBSMigration:  ENQUEUEING_FAILED; reason may be (%s)" %str(ex)
+		self.logger.error(tk)
+                m = "DBSMigration:  ENQUEUEING_FAILED1."
                 dbsExceptionHandler('dbsException-invalid-input2', message=m, serverError=e)
         except Exception, ex:
+	    import traceback
+            self.logger.error(traceback.format_exc())	
             if tran: tran.rollback()
             if conn: conn.close()
             m = "DBSMigration:  ENQUEUEING_FAILED."
-            e = "DBSMigration:  ENQUEUEING_FAILED; reason may be (%s)" %str(ex)
+            e = "DBSMigration:  ENQUEUEING_FAILED. General exception caught: Reason may be (%s)" %str(ex)
             dbsExceptionHandler('dbsException-invalid-input2',message=m, serverError=e)
         finally:
             if conn: conn.close()

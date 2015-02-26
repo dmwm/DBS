@@ -25,7 +25,7 @@ class List(DBFormatter):
         self.logger = logger
         self.sql = \
 """
-SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
+SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME 
 """
 
     def execute(self, conn, logical_file_name='', block_name='', run_num=-1, validFileOnly=0, migration=False):
@@ -38,32 +38,46 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/List. Expects db connection from upper layer.")            
         if logical_file_name and not isinstance(logical_file_name,list):
             binds = {'logical_file_name': logical_file_name}
-            if validFileOnly == 0:
-                sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
-                WHERE F.LOGICAL_FILE_NAME = :logical_file_name""".format(owner=self.owner)
+            if int(validFileOnly) == 0:
+                sql = self.sql + """ FROM {owner}FILE_LUMIS FL 
+				     JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
+				     WHERE F.LOGICAL_FILE_NAME = :logical_file_name 
+				  """.format(owner=self.owner)
             else:
-                sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
-                WHERE F.IS_FILE_VALID = 1 and F.LOGICAL_FILE_NAME = :logical_file_name""".format(owner=self.owner)
+                sql = self.sql + """ FROM {owner}FILE_LUMIS FL 
+				     JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
+				     JOIN {owner}DATASETS D ON  D.DATASET_ID = F.DATASET_ID
+				     JOIN {owner}DATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID		
+				     WHERE F.IS_FILE_VALID = 1 AND F.LOGICAL_FILE_NAME = :logical_file_name 
+				     AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') 
+				 """.format(owner=self.owner)
         elif isinstance(logical_file_name,list):
 	    sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID """.format(owner=self.owner)	
             lfn_generator, binds = create_token_generator(logical_file_name)
             if validFileOnly == 0:
                 wheresql = "WHERE F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
-            else:   
-                wheresql = "WHERE F.IS_FILE_VALID = 1 and F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+            else:
+		sql = sql + """ JOIN {owner}DATASETS D ON  D.DATASET_ID = F.DATASET_ID 
+				JOIN {owner}DATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID
+		            """.format(owner=self.owner)			
+                wheresql = """ WHERE F.IS_FILE_VALID = 1 AND F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR) 
+			       AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION')
+			   """
             sql = "{lfn_generator} {sql} {wheresql}".format(lfn_generator=lfn_generator, sql=sql, wheresql=wheresql)
         elif block_name:
             binds = {'block_name': block_name}
             if validFileOnly == 0:
-                sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME   
-                      FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID  
-                      JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID  
-                      WHERE B.BLOCK_NAME = :block_name""".format(owner=self.owner)
+                sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID  
+				     JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID  
+				     WHERE B.BLOCK_NAME = :block_name""".format(owner=self.owner)
             else:
-                sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME
-                      FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID
-                      JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
-                      WHERE F.IS_FILE_VALID = 1 and B.BLOCK_NAME = :block_name""".format(owner=self.owner)
+                sql = self.sql + """ FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID 
+				     JOIN {owner}DATASETS D ON  D.DATASET_ID = F.DATASET_ID 
+				     JOIN {owner}DATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID 
+				     JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
+				     WHERE F.IS_FILE_VALID = 1 AND B.BLOCK_NAME = :block_name 
+				     AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION')	
+				""".format(owner=self.owner)
         else:
                 dbsExceptionHandler('dbsException-invalid-input', "FileLumi/List: Either logocal_file_name or block_name must be provided.")
           #
@@ -103,7 +117,8 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
         if migration:
             return result
         condensed_res=[]
-        if logical_file_name:
+	if 0:
+        #if logical_file_name:
             run_lumi={}
             for i in result:
                 r = i['run_num']

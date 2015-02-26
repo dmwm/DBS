@@ -32,10 +32,17 @@ class SummaryList(DBFormatter):
         wheresql_run_list = ''
         wheresql_run_range = ''
         wheresql_isFileValid = ''
+	join_valid_ds1 = ''
+	join_valid_ds2 = ''
         sql = ''
         #
-        if validFileOnly != 0:
-            wheresql_isFileValid =' and f.is_file_valid = 1 '
+	if int(validFileOnly) == 1 :
+            wheresql_isFileValid =""" and f.is_file_valid = 1 and DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') """
+            join_valid_ds1 = """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
+                                JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID      
+                             """% ((self.owner,)*2)  
+            join_valid_ds2 = """ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID      
+                             """% ((self.owner,)*1)
         #
         if run_num != -1:
             #
@@ -69,48 +76,48 @@ class SummaryList(DBFormatter):
                    """
                     select
                    (select count(f.file_id)  from {owner}files f
-                     join {owner}blocks b on b.BLOCK_ID = f.block_id
+                     join {owner}blocks b on b.BLOCK_ID = f.block_id {join_valid_ds1}
                      where b.BLOCK_NAME=:block_name {wheresql_isFileValid}
                      and f.FILE_ID in (select fl.file_id from {owner}file_lumis fl where {whererun} )
                     ) as num_file,
                     nvl((select sum(f.event_count) event_count from {owner}files f
-                     join {owner}blocks b on b.BLOCK_ID = f.block_id
+                     join {owner}blocks b on b.BLOCK_ID = f.block_id {join_valid_ds1}
                      where b.BLOCK_NAME=:block_name {wheresql_isFileValid} and
                      f.FILE_ID in (select fl.file_id from {owner}file_lumis fl where {whererun})
                     ),0) as num_event,
                     (select nvl(sum(f.file_size),0) file_size from {owner}files f
-                     join {owner}blocks b on b.BLOCK_ID = f.block_id
+                     join {owner}blocks b on b.BLOCK_ID = f.block_id {join_valid_ds1}
                      where b.BLOCK_NAME=:block_name {wheresql_isFileValid} and
                      f.FILE_ID in (select fl.file_id from {owner}file_lumis fl where {whererun})
                     ) as file_size,
                    (select count(distinct b.block_id) from {owner}blocks b
-                   join {owner}files f on f.block_id=b.block_id
+                   join {owner}files f on f.block_id=b.block_id {join_valid_ds1}
                    where b.block_name=:block_name {wheresql_isFileValid} and
                    f.FILE_ID in (select fl.file_id from {owner}file_lumis fl where {whererun})
                    )as num_block,
                    (select count(*) from (select distinct fl.lumi_section_num, fl.run_num from {owner}files f
                     join {owner}file_lumis fl on fl.file_id=f.file_id
-                    join {owner}blocks b on b.BLOCK_ID = f.block_id
+                    join {owner}blocks b on b.BLOCK_ID = f.block_id {join_valid_ds1}
                     where b.BLOCK_NAME=:block_name {wheresql_isFileValid} and {whererun} )
                    ) as num_lumi
                    from dual
-                    """.format(owner=self.owner, whererun=whererun, wheresql_isFileValid=wheresql_isFileValid)
+                    """.format(owner=self.owner, whererun=whererun, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds1=join_valid_ds1)
                 binds.update({"block_name":block_name})
             else:
                 sql = """
                     select
                    (select count(f.file_id)  from {owner}files f
-                     join {owner}blocks b on b.BLOCK_ID = f.block_id
+                     join {owner}blocks b on b.BLOCK_ID = f.block_id {join_valid_ds1}
                      where b.BLOCK_NAME=:block_name {wheresql_isFileValid}
                     ) as num_file,
 
                     nvl((select sum(f.event_count) event_count from {owner}files f
-                     join {owner}blocks b on b.BLOCK_ID = f.block_id
+                     join {owner}blocks b on b.BLOCK_ID = f.block_id {join_valid_ds1}
                      where b.BLOCK_NAME=:block_name {wheresql_isFileValid}
                     ),0) as num_event,
 
                     (select nvl(sum(f.file_size),0) file_size from {owner}files f
-                     join {owner}blocks b on b.BLOCK_ID = f.block_id
+                     join {owner}blocks b on b.BLOCK_ID = f.block_id {join_valid_ds1}
                      where b.BLOCK_NAME=:block_name {wheresql_isFileValid}
                     ) as file_size,
 
@@ -119,11 +126,11 @@ class SummaryList(DBFormatter):
 
                    (select count(*) from (select distinct l.lumi_section_num, l.run_num from {owner}files f
                     join {owner}file_lumis l on l.file_id=f.file_id
-                    join {owner}blocks b on b.BLOCK_ID = f.block_id
+                    join {owner}blocks b on b.BLOCK_ID = f.block_id {join_valid_ds1}
                     where b.BLOCK_NAME=:block_name {wheresql_isFileValid})
                    ) as num_lumi
                    from dual
-                    """ .format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid)
+                    """ .format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds1=join_valid_ds1 )
                 binds.update({"block_name":block_name})
 
         elif dataset:
@@ -132,25 +139,25 @@ class SummaryList(DBFormatter):
                     """
                     select
                     (select count(f.file_id)  from {owner}files f
-                     join {owner}datasets d on d.DATASET_ID = f.dataset_id
+                     join {owner}datasets d on d.DATASET_ID = f.dataset_id {join_valid_ds2}
                      where d.dataset=:dataset {wheresql_isFileValid} and
                      f.FILE_ID in (select fl.file_id from {owner}file_lumis fl where {whererun})
                     ) as num_file,
 
                     nvl((select sum(f.event_count) event_count from {owner}files f
-                     join {owner}datasets d on d.DATASET_ID = f.dataset_id
+                     join {owner}datasets d on d.DATASET_ID = f.dataset_id  {join_valid_ds2}
                      where d.dataset=:dataset {wheresql_isFileValid} and
                      f.FILE_ID in (select fl.file_id from {owner}file_lumis fl where {whererun})
                     ),0) as num_event,
 
                     (select nvl(sum(f.file_size),0) file_size from {owner}files f
-                     join {owner}datasets d on d.DATASET_ID = f.dataset_id
+                     join {owner}datasets d on d.DATASET_ID = f.dataset_id {join_valid_ds2}
                      where d.dataset=:dataset {wheresql_isFileValid} and
                      f.FILE_ID in (select fl.file_id from {owner}file_lumis fl where {whererun})
                     ) as file_size,
 
                     (select count(distinct b.block_id) from {owner}blocks b
-                     join {owner}datasets d on d.dataset_id = b.dataset_id
+                     join {owner}datasets d on d.dataset_id = b.dataset_id {join_valid_ds2}
                      join {owner}files f on f.block_id = b.block_id
                      where d.dataset=:dataset {wheresql_isFileValid} and
                      f.FILE_ID in (select fl.file_id from {owner}file_lumis fl where {whererun})
@@ -158,42 +165,42 @@ class SummaryList(DBFormatter):
 
                    (select count(*) from (select distinct fl.lumi_section_num, fl.run_num from {owner}files f
                     join {owner}file_lumis fl on fl.file_id=f.file_id
-                    join {owner}datasets d on d.DATASET_ID = f.dataset_id
+                    join {owner}datasets d on d.DATASET_ID = f.dataset_id {join_valid_ds2}
                     where d.dataset=:dataset {wheresql_isFileValid} and {whererun} )
                    ) as num_lumi
                     from dual
-                    """.format(owner=self.owner, whererun=whererun, wheresql_isFileValid=wheresql_isFileValid)
+                    """.format(owner=self.owner, whererun=whererun, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds2=join_valid_ds2)
                 binds.update({"dataset":dataset})
             else:
                 sql = """ \
                     select
                    (select count(f.file_id)  from {owner}files f
-                     join {owner}datasets d on d.DATASET_ID = f.dataset_id
+                     join {owner}datasets d on d.DATASET_ID = f.dataset_id {join_valid_ds2}
                      where d.dataset=:dataset {wheresql_isFileValid}
                     ) as num_file,
 
                     nvl((select sum(f.event_count) event_count from {owner}files f
-                     join {owner}datasets d on d.DATASET_ID = f.dataset_id
+                     join {owner}datasets d on d.DATASET_ID = f.dataset_id {join_valid_ds2}
                      where d.dataset=:dataset {wheresql_isFileValid}
                     ),0) as num_event,
 
                     (select nvl(sum(f.file_size),0) file_size from {owner}files f
-                     join {owner}datasets d on d.DATASET_ID = f.dataset_id
+                     join {owner}datasets d on d.DATASET_ID = f.dataset_id {join_valid_ds2}
                      where d.dataset=:dataset {wheresql_isFileValid}
                     ) as file_size,
 
                     (select count(b.block_id) from {owner}blocks b
-                     join {owner}datasets d on d.dataset_id = b.dataset_id
+                     join {owner}datasets d on d.dataset_id = b.dataset_id {join_valid_ds2}
                      where d.dataset=:dataset
                     ) as num_block,
 
                    (select count(*) from (select distinct l.lumi_section_num, l.run_num from {owner}files f
                     join {owner}file_lumis l on l.file_id=f.file_id
-                    join {owner}datasets d on d.DATASET_ID = f.dataset_id
+                    join {owner}datasets d on d.DATASET_ID = f.dataset_id {join_valid_ds2}
                     where d.dataset=:dataset {wheresql_isFileValid})
                    ) as num_lumi
                     from dual
-                    """.format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid)
+                    """.format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds2=join_valid_ds2)
                 binds.update({"dataset":dataset})
         else:
             return []

@@ -1,10 +1,6 @@
 """
 client writer unittests
 """
-
-__revision__ = "$Id: DBSClientWriter_t.py,v 1.21 2010/08/20 15:00:50 afaq Exp $"
-__version__ = "$Revision: 1.21 $"
-
 import os
 import sys
 import time

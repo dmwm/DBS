@@ -33,6 +33,11 @@ class DBSClientReader_t(unittest.TestCase):
         infofile = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "info.dict"), "r")
         self.testparams = importCode(infofile, "testparams", 0).info
 
+    def test0001(self):
+        """test0001 unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
+                               self.testparams['files'][2],self.testparams['files'][3]],validFileOnly=0)
+
     def test000a(self):
         """test00 unittestDBSClientReader_t.requestTimingInfo"""
         self.api.requestTimingInfo
@@ -256,6 +261,24 @@ class DBSClientReader_t(unittest.TestCase):
         """test34c unittestDBSClientReader_t.listFiles: basic test"""
         self.api.listFiles(logical_file_name=self.testparams['files'][0], validFileOnly=0)
 
+    def test034d(self):
+        """test34d unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
+			       self.testparams['files'][2],self.testparams['files'][3]],validFileOnly=0)
+    def test034e(self):
+        """test34e unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
+                               self.testparams['files'][2],self.testparams['files'][3]],validFileOnly=1)
+    def test034f(self):
+        """test34f unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
+                               self.testparams['files'][2],self.testparams['files'][3]],validFileOnly=1, detail=1)
+
+    def test034g(self):
+        """test34g unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
+                               self.testparams['files'][2],self.testparams['files'][3]],detail=1)   
+ 
     def test035a(self):
         """test35a unittestDBSClientReader_t.listFiles: basic test"""
         self.api.listFiles(dataset=self.testparams['dataset'], release_version=self.testparams['release_version'])

@@ -6,6 +6,7 @@ from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
 from dbs.utils.DBSTransformInputType import run_tuple
+from dbs.utils.DBSDaoTools import create_token_generator
 
 class BriefList(DBFormatter):
     """
@@ -29,8 +30,9 @@ class BriefList(DBFormatter):
             dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/BriefList. Expects db connection from upper layer.")
 
         binds = {}
+	generatedsql = ''
 	basesql = self.sql
-	joinsql = ""
+	joinsql = ''
         # Check if file is valid. YG 1/29/2015
         if int(validFileOnly) == 0:
             wheresql = "WHERE F.IS_FILE_VALID <> -1"
@@ -38,11 +40,16 @@ class BriefList(DBFormatter):
             wheresql = "WHERE F.IS_FILE_VALID = 1"
 	else:
 	    dbsExceptionHandler("dbsException-invalid-input", "invalid value for validFileOnly.")	
-
         if logical_file_name:
-            op = ("=", "like")["%" in logical_file_name] 
-	    wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name " %op
-            binds.update({"logical_file_name":logical_file_name})
+	    if type(logical_file_name) is not list: #for GET call
+		op = ("=", "like")["%" in logical_file_name] 
+		wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name " %op
+		binds.update({"logical_file_name":logical_file_name})
+	    elif type(logical_file_name) is list:  #for POST call
+		ds_generator, binds2 = create_token_generator(logical_file_name)
+		binds.update(binds2)
+		wheresql += " AND F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+		generatedsql = "{ds_generator}".format(ds_generator=ds_generator)		
             if not dataset:
 		if int(validFileOnly) == 1:
                     joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
@@ -158,7 +165,7 @@ class BriefList(DBFormatter):
 		counter+=1
 	    wheresql += ")"
 
-	sql = " ".join((basesql, self.fromsql, joinsql, wheresql))
+	sql = " ".join((generatedsql, basesql, self.fromsql, joinsql, wheresql))
 	#self.logger.error( "sql=%s" %sql)
 	#self.logger.error( "binds=%s" %binds)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)

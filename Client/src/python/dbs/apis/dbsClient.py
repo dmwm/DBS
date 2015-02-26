@@ -918,6 +918,63 @@ class DbsApi(object):
 
         return self.__callServer("files", params=kwargs)
 
+
+    def listFileArray(self, **kwargs):
+        """
+        API to list files in DBS. Non-wildcarded logical_file_name, non-wildcarded dataset, non-wildcarded block_name or non-wildcarded lfn list is required.
+        The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
+	
+
+	* If lfn list is used, lumi or run_num list cannot be used in the same API call.
+        * For lumi_list the following two json formats are supported:
+            - '[a1, a2, a3,]'
+            - '[[a,b], [c, d],]'
+        * If lumi_list is provided run only run_num=single-run-number is allowed
+
+        :param logical_file_name: logical_file_name of the file
+        :type logical_file_name: str, list
+        :param dataset: dataset
+        :type dataset: str
+        :param block_name: block name
+        :type block_name: str
+        :param release_version: release version
+        :type release_version: str
+        :param pset_hash: parameter set hash
+        :type pset_hash: str
+        :param app_name: Name of the application
+        :type app_name: str
+        :param output_module_label: name of the used output module
+        :type output_module_label: str
+        :param run_num: run , run ranges, and run list
+        :type run_num: int, list, string
+        :param origin_site_name: site where the file was created
+        :type origin_site_name: str
+        :param lumi_list: List containing luminosity sections
+        :type lumi_list: list
+        :param detail: Get detailed information about a file
+        :type detail: bool
+        :param validFileOnly : int(0, or 1).  default=0. Return only valid files if set to 1. 
+        :type validFileOnly: int
+        :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
+        :rtype: list of dicts
+
+        """
+        validParameters = ['dataset', 'block_name', 'logical_file_name',
+                          'release_version', 'pset_hash', 'app_name',
+                          'output_module_label', 'run_num',
+                          'origin_site_name', 'lumi_list', 'detail', 'validFileOnly']
+
+        requiredParameters = {'multiple': ['dataset', 'block_name', 'logical_file_name']}
+
+        #set defaults
+        if 'detail' not in kwargs.keys():
+            kwargs['detail'] = False
+
+        checkInputParameter(method="listFileArray", parameters=kwargs.keys(), validParameters=validParameters,
+                            requiredParameters=requiredParameters)
+
+        return self.__callServer("fileArray", data=kwargs, callmethod="POST")
+
     def listFileSummaries(self, **kwargs):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. If the optional run
