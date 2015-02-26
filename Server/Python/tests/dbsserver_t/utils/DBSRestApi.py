@@ -2,10 +2,6 @@
 This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
-
-__revision__ = "$Id: DBSRestApi.py,v 1.17 2010/08/27 21:57:13 afaq Exp $"
-__version__ = "$Revision: 1.17 $"
-
 import json
 import os, logging
 import getpass

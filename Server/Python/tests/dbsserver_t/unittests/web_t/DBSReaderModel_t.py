@@ -53,6 +53,13 @@ class DBSReaderModel_t(unittest.TestCase):
 
         self._current_unixtime = int(time.time())
 
+
+    def test0001(self):
+        """test007k8: web.DBSReaderModel.listFileArray: basic test """
+        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
+        data ={"logical_file_name":lfn, "detail": 0, "validFileOnly":1, "run_num":testparams['run_num'] }
+        api.insert('fileArray', data)
+
     def test001a(self):
         """test001a: web.DBSReaderModel.listPrimaryDatasets: basic test"""
         api.list('primarydatasets')
@@ -640,6 +647,58 @@ class DBSReaderModel_t(unittest.TestCase):
         """test007k3: web.DBSReaderModel.listFiles: basic test """
         lfn= testparams['files'][1]
         api.list('files', logical_file_name=lfn, validFileOnly=0)
+
+    def test007k4(self):
+        """test007k4: web.DBSReaderModel.listFileArray: basic test """
+        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
+	data ={"logical_file_name":lfn}
+        api.insert('fileArray', data)
+
+    def test007k5(self):
+        """test007k5: web.DBSReaderModel.listFileArray: basic test """
+        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
+        data ={"logical_file_name":lfn, "detail": 1}
+	#import pdb
+	#pdb.set_trace()
+        api.insert('fileArray', data)
+
+    def test007k6(self):
+        """test007k6: web.DBSReaderModel.listFileArray: basic test """
+        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
+        data ={"logical_file_name":lfn, "detail": 1, "validFileOnly":1}
+        api.insert('fileArray', data)
+
+    def test007k7(self):
+        """test007k7: web.DBSReaderModel.listFileArray: basic test """
+        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
+        data ={"logical_file_name":lfn, "detail": 0, "validFileOnly":1}
+        api.insert('fileArray', data)
+
+    def test007k8(self):
+        """test007k8: web.DBSReaderModel.listFileArray: basic test """
+        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
+        data ={"logical_file_name":lfn, "detail": 0, "validFileOnly":1, "run_num":testparams['run_num'] }
+        api.insert('fileArray', data)
+
+    def test007k9(self):
+        """test007k9: web.DBSReaderModel.listArray: basic test """
+        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
+        data ={"logical_file_name":lfn, "detail": 1, "validFileOnly":1, "run_num":testparams['run_num'] }
+        api.insert('fileArray', data)
+
+    @checkException400	
+    def test007k10(self):
+        """test007k10: web.DBSReaderModel.listFiles: basic test """
+        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
+        data ={"logical_file_name":lfn, "detail": 1, "validFileOnly":1, "run_num":[testparams['run_num'], testparams['run_num']] }
+        api.insert('fileArray', data)
+
+    def test007k11(self):
+        """test007k11: web.DBSReaderModel.listFiles: basic test """
+        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
+        data ={"logical_file_name":lfn, "detail": 1, "validFileOnly":1, "run_num":testparams['run_num'] , 
+	       "output_module_label":testparams['output_module_label'], "release_version":testparams['release_version']	}
+	api.insert('fileArray', data)
 
     def test007ka1(self):
         """test007ka1: web.DBSReaderModel.listFiles: detail test """

@@ -211,9 +211,12 @@ acceptedInputKeys = {
     ################
     'primds':['primary_ds_type', 'primary_ds_name', 'creation_date', 'create_by'],
     ################
-    'files':['check_sum', 'file_lumi_list', 'event_count', 'file_type', 'logical_file_name', 'file_size', 'file_output_config_list',\
-             'file_parent_list','last_modified_by', 'last_modification_date', 'create_by', 'creation_date', 'auto_cross_section',\
-              'adler32', 'dataset', 'block_name', 'md5', 'run_num','validFileOnly'],
+    'files':['check_sum', 'file_lumi_list', 'event_count', 'file_type', 'logical_file_name', 'file_size',\
+	     'file_output_config_list', 'file_parent_list','last_modified_by', 'last_modification_date',\
+             'create_by', 'creation_date', 'auto_cross_section',\
+             'adler32', 'dataset', 'block_name', 'md5', 'run_num','validFileOnly', \
+             'detail', 'run_num', 'release_version', 'pset_hash', 'app_name', 'output_module_label',\
+             'origin_site_name'],
     ################
     'file_lumi_list':['lumi_section_num', 'run_num'],
     ################

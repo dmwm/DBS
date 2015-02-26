@@ -133,7 +133,8 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
                 wheresql += " and "  + wheresql_run_list
         
 	sql = " ".join((generatedsql, basesql, self.fromsql, joinsql, wheresql))  
-		
+	
+	#print "***********BLOCK LIST SQL**************"	
 	#print "sql=%s" %sql
 	#print "binds=%s" %binds
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
