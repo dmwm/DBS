@@ -52,6 +52,7 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
         sql_sel = self.sql_sel
         run_generator = ''
 	lfn_generator = ''
+	lumi_generator = ''
 	#import pdb
 	#pdb.set_trace()
         if run_num != -1 :
@@ -116,23 +117,45 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
             run_list=[]
             wheresql_run_list=''
             wheresql_run_range=''
+	    wheresql_run_range_ct = 0
 	    try:
 		run_num = long(run_num)
 		sql += " and FL.RUN_NUM = :run_num "
 		binds.update({"run_num":run_num})
 	    except:
-		if type(run_num) is list and len(run_num)==1:
+		if isinstance(run_num, basestring):
+                    for r in parseRunRange(run_num):
+                        if isinstance(r, run_tuple):
+                            if r[0] == r[1]:
+                                dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                            if not lumi_list:
+                                if wheresql_run_range_ct >0 :
+                                    wheresql_run_range += " or "
+                                wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
+                                binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
+                                binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+                                wheresql_run_range_ct += 1
+                            else:
+                                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")
+                        else:
+                            dbsExceptionHandler('dbsException-invalid-input', "Invalid run_num. if run_num input as a string, it has to be converted into a int/long or in format of 'run_min-run_max'. ")
+		elif type(run_num) is list and len(run_num)==1:
 		    try:
 			run_num = long(run_num[0])
+			sql += " and FL.RUN_NUM = :run_num "
+                        binds.update({"run_num":run_num})	
 		    except:
 			for r in parseRunRange(run_num):
 			    if isinstance(r, run_tuple):
 				if r[0] == r[1]:
 				    dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
 				if not lumi_list:
-				    wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
-                                    binds.update({"minrun":r[0]})
-                                    binds.update({"maxrun":r[1]})
+				    if wheresql_run_range_ct >0 :
+                                        wheresql_run_range += " or "
+				    wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
+                                    binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
+                                    binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+                                    wheresql_run_range_ct += 1	
                                 else:
                                     dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")
 			    else:
@@ -145,9 +168,12 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
 			    if r[0] == r[1]:
 				dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
 			    if not lumi_list:
-                                wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
-                                binds.update({"minrun":r[0]})
-                                binds.update({"maxrun":r[1]})
+				if wheresql_run_range_ct >0 :
+				    wheresql_run_range += " or "
+                                wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
+				binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
+				binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+				wheresql_run_range_ct += 1
 			    else:
                                 dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")
             #
@@ -171,17 +197,19 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
             #Yes, you do. YG
             lumi_list = map(str, lumi_list)
             lumi_generator, lumi_binds = create_token_generator(lumi_list)
-            sql_sel = "{lumi_generator}".format(lumi_generator=lumi_generator) + sql_sel
+            #sql_sel = "{lumi_generator}".format(lumi_generator=lumi_generator) + sql_sel
             binds.update(lumi_binds)
             #binds["run_num"]=run_list[0]
         #
-	if run_generator and lfn_generator:
-	    dbsExceptionHandler('dbsException-invalid-input2', message="cannot supply both lfn and run_num as lists", 
-				 serverError="dao/File/list cannot have two lists (lfn and run_num) as input pareamters")	
+	if (run_generator and lfn_generator) or (lumi_generator and lfn_generator):
+	    dbsExceptionHandler('dbsException-invalid-input2', message="cannot supply more than one list (lfn, run_num or lumi) at one query", 
+				 serverError="dao/File/list cannot have more than one list (lfn, run_num, lumi) as input pareamters")	
 	    # only one with and generators should be named differently for run and lfn.	
-	    #sql = run_generator + lfn_generator + sql_sel + sql
+	    #sql = run_generator + lfn_generator + lumi_generator  + sql_sel + sql
 	else:
-	    sql = run_generator + lfn_generator + sql_sel + sql
+	    sql = run_generator + lfn_generator + lumi_generator  + sql_sel + sql
+	self.logger.debug("SQL: " + sql)    	
+	self.logger.debug(" binds: %s " %binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []
         for i in range(len(cursors)):

@@ -491,7 +491,7 @@ class DbsApi(object):
         :type logical_file_name: str
         :param origin_site_name: Origin Site Name (Optional)
         :type origin_site_name: str
-        :param run_num: run numbers (Optional)
+        :param run_num: run numbers (Optional). Possible format: run_num, "run_min-run_max", or ["run_min-run_max", run1, run2, ...]
         :type run_num: int, list of runs or list of run ranges
         :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
         :type min_cdate: int, str
@@ -594,7 +594,7 @@ class DbsApi(object):
         :type processing_version: str
         :param acquisition_era_name: Acquisition Era
         :type acquisition_era_name: str
-        :param run_num: Specify a specific run number or range
+        :param run_num: Specify a specific run number or range: Possible format: run_num, "run_min-run_max", or ["run_min-run_max", run1, run2, ...]
         :type run_num: int,list,str
         :param physics_group_name: List only dataset having physics_group_name attribute
         :type physics_group_name: str
@@ -798,7 +798,7 @@ class DbsApi(object):
         :type block_name: str
         :param logical_file_name: logical_file_name of file
         :type logical_file_name: str
-        :param run_num: List lumi sections for a given run number (Optional). run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
+        :param run_num: List lumi sections for a given run number (Optional). Possible format: run_num, "run_min-run_max", or ["run_min-run_max", run1, run2, ...] . run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
                         cause an input error.
         :type run_num: int,str,list
 	:param validFileOnly: default value is 0 (optional), when set to 1, only valid files counted.
@@ -822,7 +822,7 @@ class DbsApi(object):
 
         :param logical_file_name: logical_file_name of file
         :type logical_file_name: str
-        :param run_num: List lumi sections for a given run number (Optional). run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
+        :param run_num: List lumi sections for a given run number (Optional). Possible format: run_num, "run_min-run_max", or ["run_min-run_max", run1, run2, ...] . run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
                         cause an input error.
         :type run_num: int,str,list
         :param validFileOnly: default value is 0 (optional), when set to 1, only valid files counted.
@@ -870,9 +870,11 @@ class DbsApi(object):
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
 
         * For lumi_list the following two json formats are supported:
-            - '[a1, a2, a3,]'
-            - '[[a,b], [c, d],]'
+            - [a1, a2, a3,]
+            - [[a,b], [c, d],]
+	* lumi_list can be either a list of lumi section numbers as [a1, a2, a3,] or a list of lumi section range as [[a,b], [c, d],]. Thay cannot be mixed.
         * If lumi_list is provided run only run_num=single-run-number is allowed
+        * When lfn list is present, no run or lumi list is allowed.
 
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
@@ -888,7 +890,7 @@ class DbsApi(object):
         :type app_name: str
         :param output_module_label: name of the used output module
         :type output_module_label: str
-        :param run_num: run , run ranges, and run list
+        :param run_num: run , run ranges, and run list.  Possible format: run_num, "run_min-run_max", or ["run_min-run_max", run1, run2, ...].
         :type run_num: int, list, string
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
@@ -925,11 +927,12 @@ class DbsApi(object):
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
 	
 
-	* If lfn list is used, lumi or run_num list cannot be used in the same API call.
         * For lumi_list the following two json formats are supported:
-            - '[a1, a2, a3,]'
-            - '[[a,b], [c, d],]'
+            - [a1, a2, a3,]
+            - [[a,b], [c, d],]
+	* lumi_list can be either a list of lumi section numbers as [a1, a2, a3,] or a list of lumi section range as [[a,b], [c, d],]. They cannot be mixed.
         * If lumi_list is provided run only run_num=single-run-number is allowed
+        * When lfn list is present, no run or lumi list is allowed.
 
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str, list
@@ -992,7 +995,7 @@ class DbsApi(object):
         :type block_name: str
         :param dataset: Dataset name
         :type dataset: str
-        :param run_num: Run number (Optional). run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
+        :param run_num: Run number (Optional). Possible format: run_num, "run_min-run_max", or ["run_min-run_max", run1, run2, ...]. run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
                         cause an input error.
         :type run_num: int, str, list
         :param validFileOnly: default=0 all files included. if 1, only valid file counted.

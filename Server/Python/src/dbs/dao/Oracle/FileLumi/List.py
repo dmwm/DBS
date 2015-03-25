@@ -34,6 +34,8 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
         """
 	sql = ""
 	wheresql = ""
+	lfn_generator = ""
+	run_generator = ""
 	if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/List. Expects db connection from upper layer.")            
         if logical_file_name and not isinstance(logical_file_name,list):
@@ -102,10 +104,15 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
                     binds.update({"maxrun":r[1]})
             #
             if run_list:
-                wheresql_run_list = " fl.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
-                run_generator, run_binds = create_token_generator(run_list)
-                sql =  "{run_generator}".format(run_generator=run_generator) + sql
-                binds.update(run_binds)
+		if len(run_list) == 1:
+		    wheresql_run_list = " fl.RUN_NUM = :single_run "
+		    binds.update({"single_run": long(run_list[0])})
+
+		else:
+		    wheresql_run_list = " fl.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
+                    run_generator, run_binds = create_token_generator(run_list)
+                    sql =  "{run_generator}".format(run_generator=run_generator) + sql
+                    binds.update(run_binds)
 
             if wheresql_run_range and wheresql_run_list:
                 sql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
@@ -115,6 +122,8 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
                 sql += " and " + wheresql_run_list
         self.logger.debug(sql) 
 	self.logger.debug(binds)
+	if run_generator and lfn_generator:
+		dbsExceptionHandler('dbsException-invalid-input', "listFileLumiArray support single list of lfn or run_num. ")
         cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
         result=[]
         for i in range(len(cursors)):
