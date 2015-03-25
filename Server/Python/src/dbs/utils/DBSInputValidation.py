@@ -164,17 +164,17 @@ acceptedInputDataTypes = {
          'prep_id', 'block_name', 'origin_site_name','primary_ds_type', 'primary_ds_name', 'check_sum', 'adler32', 
          'file_type', 'md5', 'file_size', 'migration_url', 'migration_input', 'file_count', 'block_size', 'start_date', 'end_date',
          'last_modification_date', 'creation_date', 'event_count','file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id',
-         'open_for_writing', 'detail', 'processing_version', 'xtcrosssection', 'auto_cross_section', 'validFileOnly', 'dataset_id']),
+         'open_for_writing', 'detail', 'processing_version', 'xtcrosssection', 'auto_cross_section', 'validFileOnly', 'dataset_id', 'lumi_list']),
     ################
     int:set(['file_count', 'block_size', 'start_date', 'end_date', 'last_modification_date', 'creation_date', 'event_count', 
          'file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id' ,'open_for_writing', 'detail', 'processing_version',
-         'xtcrosssection', 'auto_cross_section', 'check_sum', 'adler32', 'validFileOnly','dataset_id']),
+         'xtcrosssection', 'auto_cross_section', 'check_sum', 'adler32', 'validFileOnly','dataset_id', 'lumi_list']),
     ################
     dict:[],
     ################
-    list:['dataset', 'run_num', 'logical_file_name', 'dataset_id'],
+    list:['dataset', 'run_num', 'logical_file_name', 'dataset_id', 'lumi_list'],
     ################
-    long:['lumi_section_num', 'run_num', 'xtcrosssection', 'auto_cross_section', 'dataset_id'],
+    long:['lumi_section_num', 'run_num', 'xtcrosssection', 'auto_cross_section', 'dataset_id', 'lumi_list'],
     ################
     float:['xtcrosssection', 'auto_cross_section']
 }
@@ -216,7 +216,7 @@ acceptedInputKeys = {
              'create_by', 'creation_date', 'auto_cross_section',\
              'adler32', 'dataset', 'block_name', 'md5', 'run_num','validFileOnly', \
              'detail', 'run_num', 'release_version', 'pset_hash', 'app_name', 'output_module_label',\
-             'origin_site_name'],
+             'origin_site_name', 'lumi_list'],
     ################
     'file_lumi_list':['lumi_section_num', 'run_num'],
     ################

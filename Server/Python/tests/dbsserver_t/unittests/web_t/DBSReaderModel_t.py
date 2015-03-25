@@ -50,15 +50,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
         if len(testparams) == 0:
             testparams = outDict
-
         self._current_unixtime = int(time.time())
-
-
-    def test0001(self):
-        """test007k8: web.DBSReaderModel.listFileArray: basic test """
-        lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
-        data ={"logical_file_name":lfn, "detail": 0, "validFileOnly":1, "run_num":testparams['run_num'] }
-        api.insert('fileArray', data)
 
     def test001a(self):
         """test001a: web.DBSReaderModel.listPrimaryDatasets: basic test"""
@@ -546,9 +538,17 @@ class DBSReaderModel_t(unittest.TestCase):
         """test007b: web.DBSReaderModel.listFiles: basic test"""
         api.list('files', dataset=testparams['dataset'], run_num='1-%s' % (testparams['run_num']))
 
-    def test007bd(self):
-        """test007b: web.DBSReaderModel.listFiles: basic test"""
+    def test007b1(self):
+        """test007b1: web.DBSReaderModel.listFiles: basic test"""
         api.list('files', dataset=testparams['dataset'], run_num='1-%s' % (testparams['run_num']), detail=True)
+
+    def test007b2(self):
+        """test007b2: web.DBSReaderModel.listFiles: basic test"""
+        api.list('files', dataset=testparams['dataset'], run_num=['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] )
+
+    def test007b3(self):
+        """test007b3: web.DBSReaderModel.listFiles: basic test"""
+        api.list('files', dataset=testparams['dataset'], run_num=['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'], detail=True)
 
     def test007c1(self):
         """test007c1: web.DBSReaderModel.listFiles: basic test"""
@@ -581,6 +581,61 @@ class DBSReaderModel_t(unittest.TestCase):
         """test007dd: web.DBSReaderModel.listFiles: with dataset, lumi list"""
         api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]",
                  run_num=testparams['run_num'], detail=True)
+
+    def test007d4(self):
+        """test007d4: web.DBSReaderModel.listFiles: with dataset, lumi list"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]",
+                 run_num=testparams['run_num'])
+
+    def test007d4a(self):
+        """test007d4a: web.DBSReaderModel.listFiles: with dataset, lumi list"""
+        api.list('files', dataset=testparams['dataset'], lumi_list=[27414, 26422, 29838],
+                 run_num=testparams['run_num'])	
+
+    def test007d5(self):
+        """test007d5: web.DBSReaderModel.listFiles: with dataset, lumi list, validFileOnly"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]",
+                 run_num=testparams['run_num'], validFileOnly=1)
+
+    def test007d6(self):
+        """test007d6: web.DBSReaderModel.listFiles: with dataset, lumi list, validFileOnly"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[27414, 26422, 29838]",
+                 run_num=testparams['run_num'], validFileOnly=0)
+
+    def test007d7(self):
+        """test007d7: web.DBSReaderModel.listFiles: with dataset, lumi list"""
+        api.list('files', dataset=testparams['dataset'], lumi_list=[27414, 26422, 29838],
+			run_num=testparams['run_num'], detail=True)
+
+    def test007d8(self):
+        """test007d8: web.DBSReaderModel.listFiles: with dataset, lumi list"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[[27414, 26422], [29838,30000]]",
+                 run_num=testparams['run_num'], detail=True)
+
+    def test007d9(self):
+        """test007d9: web.DBSReaderModel.listFiles: with dataset, lumi list"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[[27414, 26422], [29838,30000]]",
+                 run_num=testparams['run_num'])
+
+    def test007d10(self):
+        """test007d10: web.DBSReaderModel.listFiles: with dataset, lumi list"""
+        api.list('files', dataset=testparams['dataset'], lumi_list=[[27414, 26422], [29838, 30000]],
+                 run_num=testparams['run_num']) 
+
+    def test007d11(self):
+        """test007d12: web.DBSReaderModel.listFiles: with dataset, lumi list, validFileOnly"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[[27414, 26422], [29838, 30000]]",
+                 run_num=testparams['run_num'], validFileOnly=1)
+
+    def test007d12(self):
+        """test007d12: web.DBSReaderModel.listFiles: with dataset, lumi list, validFileOnly"""
+        api.list('files', dataset=testparams['dataset'], lumi_list="[[27414, 26422], [29838,30000]]",
+                 run_num=testparams['run_num'], validFileOnly=0)
+
+    def test007d13(self):
+        """test007d13: web.DBSReaderModel.listFiles: with dataset, lumi list"""
+        api.list('files', dataset=testparams['dataset'], lumi_list=[[27414, 26422], [29838,30000]],
+                        run_num=testparams['run_num'], detail=True)
 
     def test007e(self):
         """test007e: web.DBSReaderModel.listFiles: with dataset and lumi intervals"""
@@ -681,23 +736,81 @@ class DBSReaderModel_t(unittest.TestCase):
         api.insert('fileArray', data)
 
     def test007k9(self):
-        """test007k9: web.DBSReaderModel.listArray: basic test """
+        """test007k9: web.DBSReaderModel.listFileArray: basic test """
         lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
         data ={"logical_file_name":lfn, "detail": 1, "validFileOnly":1, "run_num":testparams['run_num'] }
         api.insert('fileArray', data)
 
     @checkException400	
     def test007k10(self):
-        """test007k10: web.DBSReaderModel.listFiles: basic test """
+        """test007k10: web.DBSReaderModel.listFileArray: basic test """
         lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
         data ={"logical_file_name":lfn, "detail": 1, "validFileOnly":1, "run_num":[testparams['run_num'], testparams['run_num']] }
         api.insert('fileArray', data)
 
     def test007k11(self):
-        """test007k11: web.DBSReaderModel.listFiles: basic test """
+        """test007k11: web.DBSReaderModel.listFileArray: basic test """
         lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
         data ={"logical_file_name":lfn, "detail": 1, "validFileOnly":1, "run_num":testparams['run_num'] , 
 	       "output_module_label":testparams['output_module_label'], "release_version":testparams['release_version']	}
+	api.insert('fileArray', data)
+
+    def test007K12(self):
+        """test007k12: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
+        data = {'dataset':testparams['dataset'], 'lumi_list': [27414, 26422, 29838 ],
+                 'run_num':testparams['run_num']}
+	api.insert('fileArray', data)
+
+    def test007k13(self):
+        """test007k13: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
+        data = {'dataset' : testparams['dataset'], 'lumi_list': [27414, 26422, 29838],
+                 'run_num': testparams['run_num'], 'validFileOnly':1}
+	api.insert('fileArray', data)
+
+    def test007k14(self):
+        """test007k14: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
+        data = {'dataset': testparams['dataset'], 'lumi_list': [27414, 26422, 29838],
+                 'run_num' : testparams['run_num'], 'validFileOnly':0}
+	api.insert('fileArray', data)	
+
+    def test007k15(self):
+        """test007k15: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
+        data = { 'dataset':testparams['dataset'], 'lumi_list': [27414, 26422, 29838],
+		'run_num' : testparams['run_num'], 'detail':1}
+	api.insert('fileArray', data)
+
+    def test007K16(self):
+        """test007k16: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
+        data = {'dataset':testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,40000] ],
+                 'run_num':testparams['run_num']}
+        api.insert('fileArray', data)
+
+    def test007k17(self):
+        """test007k17: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
+        data = {'dataset' : testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,30000]],
+                 'run_num': testparams['run_num'], 'validFileOnly':1}
+        api.insert('fileArray', data)
+
+    def test007k18(self):
+        """test007k18: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
+        data = {'dataset': testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,30000]],
+                 'run_num' : testparams['run_num'], 'validFileOnly':0}
+        api.insert('fileArray', data)   
+
+    def test007k19(sel):
+        """test007k19: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
+        data = { 'dataset':testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,30000]],
+                'run_num' : testparams['run_num'], 'detail':1}
+        api.insert('fileArray', data)
+
+    def test007k16(self):
+        """test007k16: web.DBSReaderModel.listFileArray: basic test"""
+        data = {'dataset':testparams['dataset'], 'run_num': ['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] }
+	api.insert('fileArray', data)
+
+    def test007k17(self):
+        """test007k17: web.DBSReaderModel.listFileArray: basic test"""
+        data = {'dataset':testparams['dataset'], 'run_num' : ['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] , 'detail':True}
 	api.insert('fileArray', data)
 
     def test007ka1(self):

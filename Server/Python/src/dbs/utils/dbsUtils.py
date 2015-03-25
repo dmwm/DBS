@@ -37,7 +37,6 @@ class dbsUtils:
 	"""lumi_list must be of one of the two following formats: 
 	   '[[a,b], [c,d],' or 
 	   [a1, a2, a3] """
-
 	errmessage = "lumi intervals must be of one of the two following formats: '[[a,b], [c,d], ...],' or [a1, a2, a3 ...] "
 
         if isinstance(lumi_list,basestring):

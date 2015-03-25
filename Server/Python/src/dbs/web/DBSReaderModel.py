@@ -309,7 +309,7 @@ class DBSReaderModel(RESTModel):
         :type processing_version: str
         :param acquisition_era_name: Acquisition Era
         :type acquisition_era_name: str
-        :param run_num: Specify a specific run number or range
+        :param run_num: Specify a specific run number or range. Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...].
         :type run_num: int,list,str
         :param physics_group_name: List only dataset having physics_group_name attribute
         :type physics_group_name: str
@@ -538,7 +538,7 @@ class DBSReaderModel(RESTModel):
         :type origin_site_name: str
         :param open_for_writing: Open for Writting (Optional)
         :type open_for_writing: int (0 or 1)
-        :param run_num: run_num numbers (Optional)
+        :param run_num: run_num numbers (Optional). Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...].
         :type run_num: int, list of runs or list of run ranges
         :param min_cdate: Lower limit for the creation date (unixtime) (Optional)
         :type min_cdate: int, str
@@ -788,9 +788,11 @@ class DBSReaderModel(RESTModel):
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
 
         * For lumi_list the following two json formats are supported:
-            - '[a1, a2, a3,]'
-            - '[[a,b], [c, d],]'
+            - [a1, a2, a3,]
+            - [[a,b], [c, d],]
+	* lumi_list can be either a list of lumi section numbers as [a1, a2, a3,] or a list of lumi section range as [[a,b], [c, d],]. Thay cannot be mixed.
         * If lumi_list is provided run only run_num=single-run-number is allowed
+	* When lfn list is present, no run or lumi list is allowed.
 
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
@@ -806,7 +808,7 @@ class DBSReaderModel(RESTModel):
         :type app_name: str
         :param output_module_label: name of the used output module
         :type output_module_label: str
-        :param run_num: run , run ranges, and run list
+        :param run_num: run , run ranges, and run list. Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...].
         :type run_num: int, list, string
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
@@ -827,9 +829,15 @@ class DBSReaderModel(RESTModel):
         block_name = block_name.replace("*", "%")
         origin_site_name = origin_site_name.replace("*", "%")
         dataset = dataset.replace("*", "%")
-
-        if lumi_list:
-            lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
+        if lumi_list and (run_num ==-1 or not run_num ):
+	    dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.")	
+        elif lumi_list :   
+	    try:    	
+		lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
+	    except Exception as de:
+		dbsExceptionHandler("dbsException-invalid-input", "Invalid lumi_list input: "+ str(de)) 	
+	else:
+	    pass 	
 
         detail = detail in (True, 1, "True", "1", 'true')
         output_module_label = output_module_label.replace("*", "%")
@@ -839,7 +847,7 @@ class DBSReaderModel(RESTModel):
 
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listFiles. %s \n Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
                     self.logger.exception, sError)
@@ -851,8 +859,9 @@ class DBSReaderModel(RESTModel):
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
 
         * For lumi_list the following two json formats are supported:
-            - '[a1, a2, a3,]'
-            - '[[a,b], [c, d],]'
+            - [a1, a2, a3,]
+            - [[a,b], [c, d],]
+	* lumi_list can be either a list of lumi section numbers as [a1, a2, a3,] or a list of lumi section range as [[a,b], [c, d],]. Thay cannot be mixed.
         * If lumi_list is provided run only run_num=single-run-number is allowed
 	* When lfn list is present, no run or lumi list is allowed.
 
@@ -870,7 +879,7 @@ class DBSReaderModel(RESTModel):
         :type app_name: str
         :param output_module_label: name of the used output module
         :type output_module_label: str
-        :param run_num: run , run ranges, and run list
+        :param run_num: run , run ranges, and run list. Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...].
         :type run_num: int, list, string
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
@@ -891,6 +900,10 @@ class DBSReaderModel(RESTModel):
                 data = validateJSONInputNoCopy("files", data)
             else:
                 data=''
+	    if 'lumi_list' in data:
+		data['lumi_list'] = self.dbsUtils2.decodeLumiIntervals(data['lumi_list'])	
+		if 'run_num' not in data  or data['run_num'] ==-1 or not data['run_num'] :
+		    dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.")
             return self.dbsFile.listFiles(input_body=data)
         except cjson.DecodeError as De:
             dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
@@ -922,13 +935,14 @@ class DBSReaderModel(RESTModel):
         :type block_name: str
         :param dataset: Dataset name
         :type dataset: str
-        :param run_num: Run number (Optional). run_num=1 is for MC data and caused almost full table scan. So run_num=1 will cause an input error.  
+        :param run_num: Run number (Optional). Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...]. run_num=1 is for MC data and caused almost full table scan. So run_num=1 will cause an input error.  
         :type run_num: int, str, list
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
         """
         if run_num == 1 or run_num =="1":
+            dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ")
             dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ")
         try:
             return self.dbsFile.listFileSummary(block_name, dataset, run_num, validFileOnly=validFileOnly)
@@ -1091,7 +1105,7 @@ class DBSReaderModel(RESTModel):
         :type block_name: str
         :param logical_file_name: logical_file_name of file
         :type logical_file_name: str, list
-        :param run_num: List lumi sections for a given run number (Optional). run_num=1 is for MC data and caused almost full table scan. So run_num=1
+        :param run_num: List lumi sections for a given run number (Optional). Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...]. run_num=1 is for MC data and caused almost full table scan. So run_num=1
                         will cause an input error.
         :type run_num: int, str, or list
         :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
@@ -1117,7 +1131,7 @@ class DBSReaderModel(RESTModel):
 	
 	:param logical_file_name  
 	:type logical_file_name: list of str
-       	:param run_num
+       	:param run_num  Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...].
 	:type list, str or int 
 	:param validFileOnly
 	:type str or int

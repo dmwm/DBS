@@ -28,16 +28,20 @@ class BriefList(DBFormatter):
 	    run_num=-1, origin_site_name="", lumi_list=[], validFileOnly=0, transaction=False):
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/BriefList. Expects db connection from upper layer.")
-
+	#import pdb
+	#pdb.set_trace()
         binds = {}
+	run_generator = ''
+	lfn_generator = ''
+	lumi_generator = ''
 	generatedsql = ''
 	basesql = self.sql
 	joinsql = ''
         # Check if file is valid. YG 1/29/2015
         if int(validFileOnly) == 0:
-            wheresql = "WHERE F.IS_FILE_VALID <> -1"
+            wheresql = " WHERE F.IS_FILE_VALID <> -1 "
         elif int(validFileOnly) == 1:
-            wheresql = "WHERE F.IS_FILE_VALID = 1"
+            wheresql = " WHERE F.IS_FILE_VALID = 1 "
 	else:
 	    dbsExceptionHandler("dbsException-invalid-input", "invalid value for validFileOnly.")	
         if logical_file_name:
@@ -46,10 +50,10 @@ class BriefList(DBFormatter):
 		wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name " %op
 		binds.update({"logical_file_name":logical_file_name})
 	    elif type(logical_file_name) is list:  #for POST call
-		ds_generator, binds2 = create_token_generator(logical_file_name)
+		lfn_generator, binds2 = create_token_generator(logical_file_name)
 		binds.update(binds2)
 		wheresql += " AND F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
-		generatedsql = "{ds_generator}".format(ds_generator=ds_generator)		
+		#generatedsql = "{lfn_generator}".format(lfn_generator=lfn_generator)		
             if not dataset:
 		if int(validFileOnly) == 1:
                     joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
@@ -113,61 +117,107 @@ class BriefList(DBFormatter):
 	    op = ("=","like")["%" in origin_site_name]
     	    wheresql += " AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
 	    binds.update({"origin_site_name":origin_site_name})
-
-        if run_num != -1 :
-            basesql = basesql.replace("SELECT", "SELECT DISTINCT") + " , FL.RUN_NUM"
-            joinsql += " JOIN %sFILE_LUMIS FL on  FL.FILE_ID=F.FILE_ID " %(self.owner)
-            #
-            run_list = []
-            wheresql_run_list = ''
-            wheresql_run_range = ''
-            #
-            for r in parseRunRange(run_num):
-                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):
-                    if not wheresql_run_list:
-                        wheresql_run_list = " FL.RUN_NUM = :run_list "
-                    run_list.append(r)
-                if isinstance(r, run_tuple):
-                    if r[0] == r[1]:
-                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
-                    wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
-                    binds.update({"minrun":r[0]})
-                    binds.update({"maxrun":r[1]})
-            # 
-            if wheresql_run_range and len(run_list) >= 1:
-                wheresql += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
-            elif wheresql_run_range and not run_list:
-                wheresql += " and " + wheresql_run_range
-            elif not wheresql_run_range and len(run_list) >= 1:
+	
+	if run_num != -1 and run_num : # elimnate empty list run_num=[]
+	    basesql = basesql.replace("SELECT", "SELECT DISTINCT")	
+	    joinsql += " JOIN %sFILE_LUMIS FL on  FL.FILE_ID=F.FILE_ID " %(self.owner)	
+            run_list=[]
+            wheresql_run_list=''
+            wheresql_run_range=''
+	    wheresql_run_range_ct = 0	
+            try:
+                run_num = long(run_num)
+                wheresql += " and FL.RUN_NUM = :run_num "
+                binds.update({"run_num":run_num})
+            except:
+		if isinstance(run_num, basestring):
+		    for r in parseRunRange(run_num):
+			if isinstance(r, run_tuple):
+			    if r[0] == r[1]:
+				dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+			    if not lumi_list:
+				if wheresql_run_range_ct >0 :
+				    wheresql_run_range += " or "
+				wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
+				binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
+				binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+				wheresql_run_range_ct += 1  
+			    else:
+                                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")		
+			else:
+			    dbsExceptionHandler('dbsException-invalid-input', "Invalid run_num. if run_num input as a string, it has to be converted into a int/long or in format of 'run_min-run_max'. ")
+                elif type(run_num) is list and len(run_num)==1:
+                    try:
+                        run_num = long(run_num[0])
+			wheresql += " and FL.RUN_NUM = :run_num "
+			binds.update({"run_num":run_num})
+                    except:
+                        for r in parseRunRange(run_num):
+                            if isinstance(r, run_tuple):
+                                if r[0] == r[1]:
+                                    dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                                if not lumi_list:
+				    if wheresql_run_range_ct >0 :
+					wheresql_run_range += " or "
+				    wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
+				    binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
+				    binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+				    wheresql_run_range_ct += 1 
+                                else:
+                                    dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")
+                            else:
+                                dbsExceptionHandler('dbsException-invalid-input', "run_num as a list must be a number or a range str, such as ['10'], [10] or ['1-10']")
+                else:
+                    for r in parseRunRange(run_num):
+                        if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):
+                            run_list.append(str(r))
+                        if isinstance(r, run_tuple):
+                            if r[0] == r[1]:
+                                dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                            if not lumi_list:
+				if wheresql_run_range_ct >0 :
+					wheresql_run_range += " or "
+                                wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2) 
+                                binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
+                                binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+				wheresql_run_range_ct += 1
+                            else:
+                                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")	
+	    if run_list and not lumi_list:
+                wheresql_run_list = " fl.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
+                run_generator, run_binds = create_token_generator(run_list)
+                binds.update(run_binds)
+            if wheresql_run_range and wheresql_run_list:
+                wheresql  += " and (" + wheresql_run_range + " or " +  wheresql_run_list + " )"
+            elif wheresql_run_range and not wheresql_run_list:
+                wheresql += " and ( " + wheresql_run_range  + " ) "
+            elif not wheresql_run_range and wheresql_run_list:
                 wheresql += " and "  + wheresql_run_list
-            # Any List binding, such as "in :run_list"  or "in :lumi_list" must be the last binding. YG. 22/05/2013
-            if len(run_list) == 1:
-                binds["run_list"] = run_list[0]
-            elif len(run_list) > 1:
-                newbinds = []
-                for r in run_list:
-                    b = {}
-                    b.update(binds)
-                    b["run_list"] = r
-                    newbinds.append(b)
-                binds = newbinds
-        # Make sure when we have a lumi_list, there is only ONE run  -- YG 14/05/2013
 
-        # KEEP lumi_list as the LAST CHECK in this DAO, this is a MUST ---  ANZAR 08/23/2010
+	# Make sure when we have a lumi_list, there is only ONE run  -- YG 14/05/2013
         if (lumi_list and len(lumi_list) != 0):
-            wheresql += " AND FL.LUMI_SECTION_NUM in ( "
-	    counter=0
-            for alumi in lumi_list:
-		if counter>0:
-		    wheresql += ","
-		wheresql += ":lumi_b%s" %counter
-		binds.update({"lumi_b%s" %counter : alumi})
-		counter+=1
-	    wheresql += ")"
-
-	sql = " ".join((generatedsql, basesql, self.fromsql, joinsql, wheresql))
-	#self.logger.error( "sql=%s" %sql)
-	#self.logger.error( "binds=%s" %binds)
+            if len(run_list) > 1:
+                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")
+            wheresql += " AND FL.LUMI_SECTION_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
+            #Do I need to convert lumi_list to be a str list? YG 10/03/13
+            #Yes, you do. YG
+            lumi_list = map(str, lumi_list)
+            lumi_generator, lumi_binds = create_token_generator(lumi_list)
+            binds.update(lumi_binds)
+            #binds["run_num"]=run_list[0]
+        #
+        if (run_generator and lfn_generator )  or (lumi_generator and lfn_generator ):
+	    self.logger.error( "run_generator : %s" %run_generator)
+	    self.logger.error( "lfn_generator:  %s" %lfn_generator)
+	    self.logger.error( "lumi_generator: %s " %lumi_generator)		
+            dbsExceptionHandler('dbsException-invalid-input2', message="cannot supply more than one list (lfn, run_num or lumi) at one query.  ",
+                                 serverError="dao/File/list cannot have more than one list (lfn, run_num or lumi) as input pareamters")
+            # only one with and generators should be named differently for run and lfn. 
+            #sql = run_generator + lfn_generator + sql_sel + sql
+        else:
+            sql = run_generator + lfn_generator + lumi_generator + basesql +  self.fromsql + joinsql + wheresql
+	self.logger.debug( "sql=%s" %sql)
+	self.logger.debug( "binds=%s" %binds)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result=[]
         for i in range(len(cursors)):
