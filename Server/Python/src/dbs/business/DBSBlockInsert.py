@@ -175,7 +175,7 @@ class DBSBlockInsert :
             if tran:tran.rollback()
             if conn:conn.close()
             dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/insetFile: \
-                KeyError exception: %s. " %ex.args[0] )
+                KeyError exception: %s. " %ex.args[0],  self.logger.exception, "KeyError exception: %s." %ex.args[0] )
         except Exception, ex:
             if tran:tran.rollback()
             if conn:conn.close()
@@ -198,6 +198,14 @@ class DBSBlockInsert :
                 fileList[i]['adler32'] = fileList[i].get('adler32', None)
                 fileList[i]['md5'] = fileList[i].get('md5', None)
                 fileList[i]['auto_cross_section'] = fileList[i].get('auto_cross_section', None)
+                #We removed schema constraint that requires NOT NULL on check_sum. Now user can choose 
+                #which one to use among check_sum, adler32 or md5. But at least one of them has to be there.
+                # YG 5/11/2015. See github issues #468 for detail.
+                if fileList[i]['check_sum'] is None and fileList[i]['adler32'] is None and fileList[i]['md5'] is None:
+                    dbsExceptionHandler('dbsException-invalid-input2',
+                       'Invalid checksum when insert File. One of these checksums needed: check_sum, adler32 or md5',
+                       self.logger.exception, 'Invalid checksum when insert File. One of these checksums needed: check_sum,
+                       adler32 or md5')
                 #fileList[i]['creation_date'] = fileList[i].get('creation_date', None) #see ticket 965
                 #fileList[i]['create_by'] = fileList[i].get('create_by', None)
                 if not migration:
@@ -794,7 +802,14 @@ acquisition era, but with different cases.")
             del dataset['physics_group_name']
             #6 Deal with Data tier. A dataset must has a data tier
             dataset['data_tier_name'] = dataset['data_tier_name'].upper()
-            #handle Tier inside dataset insert.
+            #We no longer handle Tier inside dataset insert. If a data tier is no in DBS before the dataset 
+            # is inserted. We will report error back to the user as missing data. See github issue #466.
+            # This is to prevent users to insert random data tiers into phys* DB. YG May-15-2015
+            dtId = 0
+            dtId = self.tierid.execute(conn, dataset['data_tier_name'])   
+            if dtId == 0:
+                dbsExceptionHandler('dbsException-missing-data', 'Required data tier not found in DBS when insert dataset. ',
+                         self.logger.exception, 'Required data tier not found in DBS when insert dataset. ')
             #7 Deal with dataset access type. A dataset must have a data type
             dataset['dataset_access_type'] = dataset['dataset_access_type'].upper()
             #handle dataset access type inside dataset insertion with Inser2.

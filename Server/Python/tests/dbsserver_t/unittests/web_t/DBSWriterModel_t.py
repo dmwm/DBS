@@ -550,8 +550,9 @@ class DBSWriterModel_t(unittest.TestCase):
 
         api.insert('files', data)
 
+    @checkException("check_sum")
     def test07g(self):
-        """test07g: web.DBSWriterModel.insertFiles: minimal set of parameter  should not raise an exception"""
+        """test07g: web.DBSWriterModel.insertFiles: missing check_sum, adler32 or MD5 parameter  should raise an exception"""
         data={}
         flist=[]
         for i in range(10):
@@ -565,6 +566,76 @@ class DBSWriterModel_t(unittest.TestCase):
         data={"files":flist}
 
         api.insert('files', data)
+
+    def test07h(self):
+        """test07h: web.DBSWriterModel.insertFiles: minimal parameters"""
+        data={}
+        flist=[]
+        for i in range(10):
+            f={
+                'dataset': dataset,
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'block_name': block,
+                'check_sum' : "1234"
+                'adler32':  "abc123"
+                #'is_file_valid': 1
+                }
+            flist.append(f)
+        data={"files":flist}
+
+        api.insert('files', data)
+
+    def test07i(self):
+        """test07i: web.DBSWriterModel.insertFiles: minimal parameters"""
+        data={}
+        flist=[]
+        for i in range(10):
+            f={
+                'dataset': dataset,
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'block_name': block,
+                'check_sum' : "1234"
+                #'is_file_valid': 1
+                }
+            flist.append(f)
+        data={"files":flist}
+
+        api.insert('files', data)
+
+    def test07j(self):
+        """test07j: web.DBSWriterModel.insertFiles: minimal parameters"""
+        data={}
+        flist=[]
+        for i in range(10):
+            f={
+                'dataset': dataset,
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'block_name': block,
+                'adler32':  "abc123"
+                #'is_file_valid': 1
+                }
+            flist.append(f)
+        data={"files":flist}
+
+        api.insert('files', data)
+
+    def test07k(self):
+        """test07k: web.DBSWriterModel.insertFiles: minimal parameters"""
+        data={}
+        flist=[]
+        for i in range(10):
+            f={
+                'dataset': dataset,
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'block_name': block,
+                'md5':  "abc"
+                #'is_file_valid': 1
+                }
+            flist.append(f)
+        data={"files":flist}
+
+        api.insert('files', data)
+
 
     def test08a(self):
         """test08a: testweb.DBSWriterModel.insertDataTier: Basic test"""
@@ -733,9 +804,106 @@ class DBSWriterModel_t(unittest.TestCase):
 
         for i in range(10):
             f={
-                u'adler32': 'NOTSET', u'file_type': 'EDM',
+                u'md5': 'abc', u'file_type': 'EDM',
                 u'file_size': '2012211901', u'auto_cross_section': 0.0,
                 u'check_sum': '1504266448',
+                u'file_lumi_list': [
+                    {u'lumi_section_num': '27414', u'run_num': '1'},
+                    {u'lumi_section_num': '26422', u'run_num': '1'},
+                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                    ],
+                u'event_count': u'1619',
+                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                }
+            fileList.append(f)
+
+        for i in range(2):
+            f={
+                u'file_type': 'EDM',
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
+                u'adler32': 'abc123',
+                u'file_lumi_list': [
+                    {u'lumi_section_num': '27414', u'run_num': '1'},
+                    {u'lumi_section_num': '26422', u'run_num': '1'},
+                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                    ],
+                u'event_count': u'1619',
+                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                }
+            fileList.append(f)
+        for i in range(2):
+            f={
+                u'adler32': 'abc1234', u'file_type': 'EDM',
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
+                u'check_sum': '1504266448',
+                u'file_lumi_list': [
+                    {u'lumi_section_num': '27414', u'run_num': '1'},
+                    {u'lumi_section_num': '26422', u'run_num': '1'},
+                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                    ],
+                u'event_count': u'1619',
+                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                }
+            fileList.append(f)
+
+            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
+                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            fileConfigList.append(file_output_dict)
+
+        data = {'file_conf_list' : fileConfigList,
+                'dataset_conf_list' : [output_module_dict],
+                'processing_era' : processing_dict,
+                'files' : fileList,
+                'dataset' : dataset_dict,
+                'primds' : primary_dict,
+                'acquisition_era' : acquisition_dict,
+                'block' : block_dict,
+                }
+
+        api.insert('bulkblocks', data)
+
+
+    checkException("check_sum")
+    def test12c(self):
+        """test12c: web.DBSWriterModel.insertBulkBlock: negtive test with missing check_sum, adler32 or md5"""
+        uniq_id = int(time.time())
+
+        bulk_primary_ds_name = 'unittest_web_primary_ds_name_%s' % (uniq_id)
+        bulk_procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
+
+        bulk_dataset = '/%s/%s/%s' % (bulk_primary_ds_name,
+                                      bulk_procdataset,
+                                      tier)
+        bulk_block="%s#%s" % (dataset, uniq_id)
+
+        dataset_dict = {u'dataset': bulk_dataset,
+                        u'physics_group_name': 'Tracker',
+                        u'dataset_access_type': 'VALID', u'processed_ds_name': bulk_procdataset,
+                        u'xtcrosssection': 123, u'data_tier_name': tier,
+                        u'prep_id':prep_id}
+
+        block_dict = data = {u'block_name': bulk_block,
+                             u'origin_site_name': site}
+
+        processing_dict = {u'processing_version': processing_version,
+                           u'description':'this-is-a-test'}
+
+        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+
+        primary_dict = {u'primary_ds_name':bulk_primary_ds_name,
+                        u'primary_ds_type':primary_ds_type}
+
+        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
+                              u'app_name': app_name, u'output_module_label': output_module_label,
+                              u'global_tag':global_tag}
+
+        fileList = []
+        fileConfigList = []
+
+        for i in range(2):
+            f={
+                u'file_type': 'EDM',
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
                 u'file_lumi_list': [
                     {u'lumi_section_num': '27414', u'run_num': '1'},
                     {u'lumi_section_num': '26422', u'run_num': '1'},

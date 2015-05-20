@@ -831,6 +831,11 @@ class DBSReaderModel(RESTModel):
         dataset = dataset.replace("*", "%")
         if lumi_list and (run_num ==-1 or not run_num ):
 	    dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.")	
+        elif not lumi_list:
+            if (isinstance(run_num, int) and run_num=1) or (isinstance(run_num, long) and run_num=1):
+                dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.")
+            if isinstance(run_num, list) and (1 in run_num or '1' in run_num):
+                dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.")
         elif lumi_list :   
 	    try:    	
 		lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
@@ -901,9 +906,35 @@ class DBSReaderModel(RESTModel):
             else:
                 data=''
 	    if 'lumi_list' in data:
-		data['lumi_list'] = self.dbsUtils2.decodeLumiIntervals(data['lumi_list'])	
-		if 'run_num' not in data  or data['run_num'] ==-1 or not data['run_num'] :
+                data['lumi_list'] = self.dbsUtils2.decodeLumiIntervals(data['lumi_list'])	
+		if data['run_num'] not in data  or data['run_num'] ==-1 or not data['run_num'] :
 		    dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.")
+                elif not data['lumi_list']:
+                    if 'run_num' in data:
+                        if (isinstance(data['run_num'], int) and data['run_num']=1) or (isinstance(data[run_num], long) and
+data['run_num']=1):
+                            dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no
+lumi.")
+                        elif isinstance(data['run_num'], list) and (1 in data['run_num'] or '1' in data['run_num']):
+                            dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no
+lumi.")    
+            else:
+                if 'run_num' in data:
+                    if (isinstance(data['run_num'], int) and data['run_num']=1) or (isinstance(data[run_num], long) and
+data['run_num']=1):
+                        dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.")
+                    elif isinstance(data['run_num'], list) and (1 in data['run_num'] or '1' in data['run_num']):
+                        dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.")
+
+            #Because CMSWEB has a 300 seconds responding time. We have to limit the array siz to make sure that
+            #the API can be finished in 300 second. See github issues #465 for tests' results.
+            # YG May-20-2015
+            max_array_size =1000
+            if (isinstance(run_num, list) and len(run_num)>1000)\
+               or (isinstance(lumi_list, list) and len(lumi_list)>1000)\
+               or (isinstance(logical_file_name, list) and len(logical_file_name)>1000):
+                dbsExceptionHandler("dbsException-invalid-input", "The Max list length supported in listFileArray is 1000.")
+            #    
             return self.dbsFile.listFiles(input_body=data)
         except cjson.DecodeError as De:
             dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
@@ -1131,6 +1162,8 @@ class DBSReaderModel(RESTModel):
 	
 	:param logical_file_name  
 	:type logical_file_name: list of str
+        :param block_name
+        :type block_name: str
        	:param run_num  Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...].
 	:type list, str or int 
 	:param validFileOnly
@@ -1146,6 +1179,10 @@ class DBSReaderModel(RESTModel):
 		data = validateJSONInputNoCopy("files", data)
 	    else:
 		data=''
+            if not isinstance(data['run_num'], list) and (data['run_num']=1 or data['run_num']="1"):
+                dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.')
+            if isinstance(data['run_num'], list) and (1 in data['run_num'] or "1" in data['run_num']):
+                dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.')
 	    return self.dbsFile.listFileLumis(input_body=data)
 	except cjson.DecodeError as De:
 	    dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
