@@ -261,11 +261,11 @@ class DBSFile:
         :param block, required: /a/b/c#d
         :param dataset, required: /a/b/c
         :param file_type (optional, default = EDM): one of the predefined types,
-        :param check_sum (optional, default = '-1'): string
+        :param check_sum (optional): string
         :param event_count (optional, default = -1): int
         :param file_size (optional, default = -1.): float
-        :param adler32 (optional, default = ''): string
-        :param md5 (optional, default = ''): string
+        :param adler32 (optional): string
+        :param md5 (optional): string
         :param auto_cross_section (optional, default = -1.): float
         :param file_lumi_list (optional, default = []): [{'run_num': 123, 'lumi_section_num': 12},{}....]
         :param file_parent_list(optional, default = []) :[{'file_parent_lfn': 'mylfn'},{}....]
@@ -351,11 +351,11 @@ class DBSFile:
                 filein = {
                     "logical_file_name" : f["logical_file_name"],
                     "is_file_valid" : f.get("is_file_valid", 1),
-                    "check_sum" : f.get("check_sum", -1),
+                    "check_sum" : f.get("check_sum", None),
                     "event_count" : f.get("event_count", -1),
                     "file_size" : f.get("file_size", -1),
-                    "adler32" : f.get("adler32", ""),
-                    "md5" : f.get("md5", ""),
+                    "adler32" : f.get("adler32", None),
+                    "md5" : f.get("md5", None),
                     "auto_cross_section" : f.get("auto_cross_section", -1),
                     #"creation_date" : f.get("creation_date", None),  See Ticket #965 YG.
                     #"create_by": f.get("create_by", None),
@@ -363,6 +363,8 @@ class DBSFile:
                     #"last_modified_by" : f.get("last_modified_by", None)
                     "last_modified_by" : dbsUtils().getCreateBy()
                 }
+                if filein["md5"] is None  and filein["check_sum"] is None and filein["adler32"] is None:
+                    dbsExceptionHandler('dbsException-invalid-input', "Missing check_sum or adler32, or md5")
                 if iFile == fileIncrement:
                     fID = self.sm.increment(conn, "SEQ_FL", incCount=fileIncrement)
                     iFile = 0

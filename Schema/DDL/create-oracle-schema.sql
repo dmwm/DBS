@@ -5,7 +5,7 @@
 /* Project name:          DBS3                                            */
 /* Author:                Yuyi Guo for DBS Group                          */
 /* Script type:           Database creation script                        */
-/* Created on:            2014-02-07 13:26                                */
+/* Created on:            2015-05-04 16:40                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -724,12 +724,12 @@ CREATE TABLE FILES (
     DATASET_ID INTEGER CONSTRAINT NN_FL_DATASET_ID NOT NULL,
     BLOCK_ID INTEGER CONSTRAINT NN_FL_BLOCK_ID NOT NULL,
     FILE_TYPE_ID INTEGER CONSTRAINT NN_FL_FILE_TYPE_ID NOT NULL,
-    CHECK_SUM VARCHAR2(100) CONSTRAINT NN_FL_CHECK_SUM NOT NULL,
     EVENT_COUNT INTEGER CONSTRAINT NN_FL_EVENT_COUNT NOT NULL,
     FILE_SIZE INTEGER CONSTRAINT NN_FL_FILE_SIZE NOT NULL,
     BRANCH_HASH_ID INTEGER,
-    ADLER32 VARCHAR2(100) DEFAULT 'NOTSET',
-    MD5 VARCHAR2(100) DEFAULT 'NOTSET',
+    ADLER32 VARCHAR2(100),
+    MD5 VARCHAR2(100),
+    CHECK_SUM VARCHAR2(100),
     AUTO_CROSS_SECTION FLOAT(126),
     CREATION_DATE INTEGER,
     CREATE_BY VARCHAR2(500),

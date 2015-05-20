@@ -42,6 +42,17 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         """setup all necessary parameters"""
         pass
 
+    def test100(self):
+        """test100 Negitive test: insert block with missing check_sum, adler32 or md5. """
+        self.assertRaises(HTTPError, self.api.insertBulkBlock, blockDump=self.testparams)
+
+    def test101(self):
+        """test101 Negitive test: insert block with data tier not in DBS. """
+        self.testparams['dataset']['data_tier_name'] =  'YUYI_TEST' 
+        self.assertRaises(HTTPError, self.api.insertBulkBlock, blockDump=self.testparams)
+
+
+
     def test1000(self):
         """test1000 web.DBSClientWriter.insertBlockBulk: basic test"""
         self.testparams['dataset_conf_list'][0]['app_name'] = "%s_%s"%(self.testparams['dataset_conf_list'][0]['app_name'], self.uid)
@@ -51,6 +62,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
 
         for k in range(len(self.testparams['files'])):
              self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (self.uid))
+             self.testparams['files'][k]['adler32' = '123abc'
 
         self.testparams['primds']['primary_ds_name'] ='%s_%s' %(self.testparams['primds']['primary_ds_name'], self.uid)
 

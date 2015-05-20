@@ -17,12 +17,9 @@ class Insert2(DBFormatter):
         """insert all
            when not exists (select * from %sprocessed_datasets where processed_ds_name=processed_n) then
                 into %sprocessed_datasets(processed_ds_id, processed_ds_name) values (%sseq_psds.nextval, processed_n)
-           when not exists (select * from %sdata_tiers where data_tier_name=tier) then
-                into %sdata_tiers(data_tier_id, data_tier_name, creation_date, create_by) values (%sseq_dt.nextval, 
-                                  tier, cdate, cby) 
            when not exists (select * from %sdataset_access_types where dataset_access_type=access_t) then
                 into %sdataset_access_types(dataset_access_type_id, dataset_access_type) values (%sseq_dtp.nextval, access_t)
-           when 1 = 1 then  
+           when exists (select data_tier_id from %sdata_tiers where data_tier_name=tier) then  
            into %sdatasets ( dataset_id, dataset, primary_ds_id, processed_ds_id, data_tier_id,
                            dataset_access_type_id, acquisition_era_id,  processing_era_id,
                            physics_group_id,  xtcrosssection, prep_id, creation_date, create_by,
@@ -31,7 +28,7 @@ class Insert2(DBFormatter):
                   values ( :dataset_id, :dataset, :primary_ds_id,
                            nvl((select processed_ds_id  from %sprocessed_datasets where processed_ds_name=processed_n),
                                 %sseq_psds.nextval),
-                           nvl((select data_tier_id from %sdata_tiers where data_tier_name=tier), %sseq_dt.nextval), 
+                           (select data_tier_id from %sdata_tiers where data_tier_name=tier),
                           nvl((select dataset_access_type_id from %sdataset_access_types where dataset_access_type=access_t), %sseq_dtp.nextval), 
                            :acquisition_era_id, :processing_era_id, :physics_group_id,
                            :xtcrosssection, :prep_id, cdate, cby,

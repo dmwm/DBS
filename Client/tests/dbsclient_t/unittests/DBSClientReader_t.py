@@ -986,9 +986,14 @@ class DBSClientReader_t(unittest.TestCase):
         """test72 unittestDBSClientReader_t.listDatasetChildren with dataset"""
         self.api.listDatasetChildren(dataset=self.testparams['parent_dataset'])
 
-    def test073(self):
-        """test73 unittestDBSClientReader_t.listBlockParents with block"""
+    def test073a(self):
+        """test73a unittestDBSClientReader_t.listBlockParents with block"""
         self.api.listBlockParents(block_name=self.testparams['block'])
+
+    def test073b(self):
+        """test73b unittestDBSClientReader_t.listBlockParents with block list"""
+        self.api.listBlockParents(block_name=[self.testparams['block']])
+
 
     def test074(self):
         """test74 unittestDBSClientReader_t.listBlockChildren with block_name"""

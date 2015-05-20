@@ -10,6 +10,22 @@ import socket
 import sys
 import urllib
 
+def slicedIterator(sourceList, sliceSize):
+    """
+    :param: sourceList: list which need to be sliced
+    :type: list
+    :param: sliceSize: size of the slice
+    :type: int
+    :return: iterator of the sliced list
+    """
+    start = 0
+    end = 0
+
+    while len(sourceList) > end:
+        end = start + sliceSize
+        yield sourceList[start: end]
+        start = end
+
 def checkInputParameter(method, parameters, validParameters, requiredParameters=None):
     """
     Helper function to check input by using before sending to the server
@@ -57,10 +73,12 @@ def checkInputParameter(method, parameters, validParameters, requiredParameters=
                                          "API %s does requires only *one* of the parameters %s." \
                                          % (method, requiredParameters['standalone']))
 
-def list_parameter_splitting(data, key, size_limit=8000):
+def list_parameter_splitting(data, key, size_limit=8000, method='GET'):
     """
     Helper function split list used as input parameter for requests,
     since Apache has a limitation to 8190 Bytes for the lenght of an URI.
+    We extended it to also split lfn and dataset list length for POST calls to avoid
+    DB abuse even if there is no limit on hoe long the list can be. YG 2015-5-13
     :param data: url parameters
     :type data: dict
     :param key: key of parameter dictionary to split by lenght
@@ -74,7 +92,10 @@ def list_parameter_splitting(data, key, size_limit=8000):
 
     for element in values:
         data[key].append(element)
-        size = len(urllib.urlencode(data))
+        if method =='GET':
+            size = len(urllib.urlencode(data))
+        else:
+            size = len(data)
         if size > size_limit:
             last_element = data[key].pop()
             yield data
@@ -96,7 +117,7 @@ def split_calls(func):
             for key, value in kwargs.iteritems():
                 ###only one (first) list at a time is splitted,
                 ###currently only file lists are supported
-                if key in ('logical_file_name','block_name') and isinstance(value, list):
+                if key in ('logical_file_name','block_name', 'lumi_list', 'run_num') and isinstance(value, list):
                     ret_val = []
                     for splitted_param in list_parameter_splitting(data=dict(kwargs), #make a copy, since it is manipulated
                                                                    key=key,
@@ -469,11 +490,12 @@ class DbsApi(object):
         validParameters = ['block_name']
 
         requiredParameters = {'forced': validParameters}
-
         checkInputParameter(method="listBlockParents", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
-
-        return self.__callServer("blockparents", params=kwargs)
+        if isinstance(kwargs["block_name"], list):
+            return self.__callServer("blocksparents", params=kwargs, callmethod='POST')
+        else:
+            return self.__callServer("blockparents", params=kwargs)
 
     def listBlocks(self, **kwargs):
         """
@@ -740,6 +762,7 @@ class DbsApi(object):
         :param data_tier_name: List details on that data tier (Optional)
         :type data_tier_name: str
         :returns: List of dictionaries containing the following keys (data_tier_id, data_tier_name, create_by, creation_date)
+        :rtype: list of dicts
 
         """
         validParameters = ['data_tier_name']
@@ -802,7 +825,7 @@ class DbsApi(object):
                         cause an input error.
         :type run_num: int,str,list
 	:param validFileOnly: default value is 0 (optional), when set to 1, only valid files counted.
-	:type int, str
+	:type validFileOnly: int, str
         :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run)
         :rtype: list of dicts
 
@@ -826,7 +849,7 @@ class DbsApi(object):
                         cause an input error.
         :type run_num: int,str,list
         :param validFileOnly: default value is 0 (optional), when set to 1, only valid files counted.
-        :type int, str
+        :type validFileOnly: int, str
         :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run)
         :rtype: list of dicts
 
@@ -864,6 +887,7 @@ class DbsApi(object):
 
         return self.__callServer("fileparents", params=kwargs)
 
+    @split_calls    
     def listFiles(self, **kwargs):
         """
         API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset, non-wildcarded block_name is required.
@@ -898,7 +922,7 @@ class DbsApi(object):
         :type lumi_list: list
         :param detail: Get detailed information about a file
         :type detail: bool
-        :param validFileOnly : int(0, or 1).  default=0. Return only valid files if set to 1. 
+        :param validFileOnly: 0 or 1.  default=0. Return only valid files if set to 1. 
         :type validFileOnly: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
@@ -956,7 +980,7 @@ class DbsApi(object):
         :type lumi_list: list
         :param detail: Get detailed information about a file
         :type detail: bool
-        :param validFileOnly : int(0, or 1).  default=0. Return only valid files if set to 1. 
+        :param validFileOnly: 0 or 1.  default=0. Return only valid files if set to 1. 
         :type validFileOnly: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
@@ -975,9 +999,26 @@ class DbsApi(object):
 
         checkInputParameter(method="listFileArray", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
-
-        return self.__callServer("fileArray", data=kwargs, callmethod="POST")
-
+        # In order to protect DB and make sure the query can be return in 300 seconds, we limit the length of 
+        # logical file names, lumi and run num to 1000. These number may be adjusted later if 
+        # needed. YG   May-20-2015.
+        results = []
+        mykey = None
+        max_list_len = 1000 #this number is defined in DBS server
+        for key, value in kwargs.iteritems():
+            if key in ('logical_file_name','lumi_list','run_num') and isinstance(value, list) and len(value)>1000:
+                mykey =key
+        if mykey:  
+            sourcelist = []
+            #create a new list to slice
+            sourcelist = kwargs[mykey][:]
+            for slice in Lexicon.slicedIterator(sourcelist, max_list_len):
+                kwargs[key] = slice
+                results.extend(self.__callServer("fileArray", data=kwargs, callmethod="POST"))
+            #make sure only only dictionary per lfn    
+            return {v['logical_file_name']:v for v in results}.values()
+        else:
+            return self.__callServer("fileArray", data=kwargs, callmethod="POST")
     def listFileSummaries(self, **kwargs):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. If the optional run
@@ -999,7 +1040,7 @@ class DbsApi(object):
                         cause an input error.
         :type run_num: int, str, list
         :param validFileOnly: default=0 all files included. if 1, only valid file counted.
-        :type validFileOnly: int ( 0 or 1)
+        :type validFileOnly: int 
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
@@ -1071,8 +1112,6 @@ class DbsApi(object):
         :type primary_ds_type: str
         :param primary_ds_name: List that primary dataset (Optional)
         :type primary_ds_name: str
-        :returns: List of dictionaries containing the following keys (primary_ds_type_id, data_type)
-        :rtype: list of dicts
         :returns: List of dictionaries containing the following keys (create_by, primary_ds_type, primary_ds_id, primary_ds_name, creation_date)
         :rtype: list of dicts
 
@@ -1169,7 +1208,8 @@ class DbsApi(object):
         :type dataset: str
         :param run_num: Run number (Required)
         :type run_num: str, long, int
-        :rtype: list containing a dictionary with key max_lumi
+        :returns: list containing a dictionary with key max_lumi
+        :rtype: list of dicts
 
         """
         validParameters = ['dataset', 'run_num']
