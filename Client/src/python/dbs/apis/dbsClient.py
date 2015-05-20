@@ -1013,7 +1013,7 @@ class DbsApi(object):
             #create a new list to slice
             sourcelist = kwargs[mykey][:]
             for slice in Lexicon.slicedIterator(sourcelist, max_list_len):
-                kwargs[key] = slice
+                kwargs[mykey] = slice
                 results.extend(self.__callServer("fileArray", data=kwargs, callmethod="POST"))
             #make sure only only dictionary per lfn    
             return {v['logical_file_name']:v for v in results}.values()
