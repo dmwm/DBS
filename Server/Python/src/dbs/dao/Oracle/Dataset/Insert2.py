@@ -37,7 +37,7 @@ class Insert2(DBFormatter):
                 select  :processed_ds_name processed_n,
                         :data_tier_name tier,  :dataset_access_type access_t,  
                         :creation_date cdate, :create_by cby
-                from dual""" %((self.owner,)*16)
+                from dual""" %((self.owner,)*13)
 
     def execute(self, conn, daoinput, transaction = False):
 

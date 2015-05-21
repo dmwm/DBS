@@ -926,9 +926,9 @@ class DBSReaderModel(RESTModel):
                 #the API can be finished in 300 second. See github issues #465 for tests' results.
                 # YG May-20-2015
                 max_array_size = 1000
-                if (isinstance(data['run_num'], list) and len(data['run_num'])>1000)\
-                    or (isinstance(data['lumi_list'], list) and len(data['lumi_list'])>1000)\
-                    or (isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>1000):
+                if ( 'run_num' in data.keys() and isinstance(data['run_num'], list) and len(data['run_num'])>1000)\
+                    or ('lumi_list' in data.keys() and isinstance(data['lumi_list'], list) and len(data['lumi_list'])>1000)\
+                    or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>1000):
                     dbsExceptionHandler("dbsException-invalid-input", 
                                         "The Max list length supported in listFileArray is 1000.")
             #    
@@ -1176,9 +1176,9 @@ class DBSReaderModel(RESTModel):
 		data = validateJSONInputNoCopy("files", data)
 	    else:
 		data=''
-            if not isinstance(data['run_num'], list) and (data['run_num']=1 or data['run_num']="1"):
+            if 'run_num' in data.keys() and not isinstance(data['run_num'], list) and (data['run_num']==1 or data['run_num']=="1"):
                 dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.')
-            if isinstance(data['run_num'], list) and (1 in data['run_num'] or "1" in data['run_num']):
+            if 'run_num' in data.keys() and isinstance(data['run_num'], list) and (1 in data['run_num'] or "1" in data['run_num']):
                 dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.')
 	    return self.dbsFile.listFileLumis(input_body=data)
 	except cjson.DecodeError as De:

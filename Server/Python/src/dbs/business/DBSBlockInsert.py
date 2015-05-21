@@ -204,8 +204,7 @@ class DBSBlockInsert :
                 if fileList[i]['check_sum'] is None and fileList[i]['adler32'] is None and fileList[i]['md5'] is None:
                     dbsExceptionHandler('dbsException-invalid-input2',
                        'Invalid checksum when insert File. One of these checksums needed: check_sum, adler32 or md5',
-                       self.logger.exception, 'Invalid checksum when insert File. One of these checksums needed: check_sum,
-                       adler32 or md5')
+                       self.logger.exception, 'Invalid checksum when insert File. One of these checksums needed: check_sum,adler32 or md5')
                 #fileList[i]['creation_date'] = fileList[i].get('creation_date', None) #see ticket 965
                 #fileList[i]['create_by'] = fileList[i].get('create_by', None)
                 if not migration:
