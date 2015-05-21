@@ -908,7 +908,7 @@ class DBSReaderModel(RESTModel):
                 data = validateJSONInputNoCopy("files", data)
                 if 'lumi_list' in data and data['lumi_list']:
                     data['lumi_list'] = self.dbsUtils2.decodeLumiIntervals(data['lumi_list'])	
-                    if data['run_num'] not in data or not data['run_num'] or data['run_num'] ==-1 :
+                    if 'run_num' not in data.keys() or not data['run_num'] or data['run_num'] ==-1 :
                         dbsExceptionHandler("dbsException-invalid-input", 
                                             "When lumi_list is given, require a single run_num.")
                 else:

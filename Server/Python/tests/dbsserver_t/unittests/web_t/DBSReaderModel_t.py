@@ -741,7 +741,7 @@ class DBSReaderModel_t(unittest.TestCase):
         data ={"logical_file_name":lfn, "detail": 1, "validFileOnly":1, "run_num":testparams['run_num'] }
         api.insert('fileArray', data)
 
-    @checkException(400)	
+    @checkException400	
     def test007k10(self):
         """test007k10: web.DBSReaderModel.listFileArray: basic test """
         lfn= [testparams['files'][1], testparams['files'][2], testparams['files'][3]]
@@ -758,53 +758,53 @@ class DBSReaderModel_t(unittest.TestCase):
     def test007K12(self):
         """test007k12: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
         data = {'dataset':testparams['dataset'], 'lumi_list': [27414, 26422, 29838 ],
-                 'run_num':testparams['run_num'][0]}
+                 'run_num':testparams['run_num']}
 	api.insert('fileArray', data)
 
     def test007k13(self):
         """test007k13: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
         data = {'dataset' : testparams['dataset'], 'lumi_list': [27414, 26422, 29838],
-                 'run_num': testparams['run_num'][0], 'validFileOnly':1}
+                 'run_num': testparams['run_num'], 'validFileOnly':1}
 	api.insert('fileArray', data)
 
     def test007k14(self):
         """test007k14: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
         data = {'dataset': testparams['dataset'], 'lumi_list': [27414, 26422, 29838],
-                 'run_num' : testparams['run_num'][0], 'validFileOnly':0}
+                 'run_num' : testparams['run_num'], 'validFileOnly':0}
 	api.insert('fileArray', data)	
 
     def test007k15(self):
         """test007k15: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
         data = { 'dataset':testparams['dataset'], 'lumi_list': [27414, 26422, 29838],
-		'run_num' : testparams['run_num'][0], 'detail':1}
+		'run_num' : testparams['run_num'], 'detail':1}
 	api.insert('fileArray', data)
 
     def test007K16(self):
         """test007k16: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
-        data = {'dataset':testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,40000] ],
-                 'run_num':testparams['run_num'][0]}
+        data = {'dataset':testparams['dataset'], 'lumi_list': [[27414, 27422], [39999,40000] ],
+                 'run_num':testparams['run_num']}
         api.insert('fileArray', data)
 
     def test007k17(self):
         """test007k17: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
         data = {'dataset' : testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,30000]],
-                 'run_num': testparams['run_num'][0], 'validFileOnly':1}
+                 'run_num': testparams['run_num'], 'validFileOnly':1}
         api.insert('fileArray', data)
 
     def test007k18(self):
         """test007k18: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
         data = {'dataset': testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,30000]],
-                 'run_num' : testparams['run_num'][0], 'validFileOnly':0}
+                 'run_num' : testparams['run_num'], 'validFileOnly':0}
         api.insert('fileArray', data)   
 
     def test007k19(sel):
         """test007k19: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
         data = { 'dataset':testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,30000]],
-                'run_num' : testparams['run_num'][0], 'detail':1}
+                'run_num' : testparams['run_num'], 'detail':1}
         api.insert('fileArray', data)
 
-    def test007k16(self):
-        """test007k16: web.DBSReaderModel.listFileArray: basic test"""
+    def test007k20(self):
+        """test007k20: web.DBSReaderModel.listFileArray: basic test"""
         data = {'dataset':testparams['dataset'], 'run_num': ['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] }
 	api.insert('fileArray', data)
 

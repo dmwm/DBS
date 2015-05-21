@@ -869,7 +869,7 @@ class DBSWriterModel_t(unittest.TestCase):
     @checkException("check_sum")
     def test12c(self):
         """test12c: web.DBSWriterModel.insertBulkBlock: negtive test with missing check_sum, adler32 or md5"""
-        uniq_id = int(time.time())
+        uniq_id = int(time.time())*1000
 
         bulk_primary_ds_name = 'unittest_web_primary_ds_name_%s' % (uniq_id)
         bulk_procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
