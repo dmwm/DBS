@@ -781,7 +781,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test007K16(self):
         """test007k16: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
-        data = {'dataset':testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,40000] ],
+        data = {'dataset':testparams['dataset'], 'lumi_list': [[27414, 27422], [39999,40000] ],
                  'run_num':testparams['run_num']}
         api.insert('fileArray', data)
 
@@ -803,8 +803,8 @@ class DBSReaderModel_t(unittest.TestCase):
                 'run_num' : testparams['run_num'], 'detail':1}
         api.insert('fileArray', data)
 
-    def test007k16(self):
-        """test007k16: web.DBSReaderModel.listFileArray: basic test"""
+    def test007k20(self):
+        """test007k20: web.DBSReaderModel.listFileArray: basic test"""
         data = {'dataset':testparams['dataset'], 'run_num': ['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] }
 	api.insert('fileArray', data)
 

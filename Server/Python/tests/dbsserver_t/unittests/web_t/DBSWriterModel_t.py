@@ -576,7 +576,7 @@ class DBSWriterModel_t(unittest.TestCase):
                 'dataset': dataset,
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
                 'block_name': block,
-                'check_sum' : "1234"
+                'check_sum' : "1234",
                 'adler32':  "abc123"
                 #'is_file_valid': 1
                 }
@@ -803,6 +803,7 @@ class DBSWriterModel_t(unittest.TestCase):
         fileConfigList = []
 
         for i in range(10):
+	    uniq_id = int(time.time())*1000
             f={
                 u'md5': 'abc', u'file_type': 'EDM',
                 u'file_size': '2012211901', u'auto_cross_section': 0.0,
@@ -813,11 +814,12 @@ class DBSWriterModel_t(unittest.TestCase):
                     {u'lumi_section_num': '29838', u'run_num': '1'}
                     ],
                 u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                u'logical_file_name': "/store/mc/Fall09/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
                 }
             fileList.append(f)
 
         for i in range(2):
+	    uniq_id = int(time.time())*1000	
             f={
                 u'file_type': 'EDM',
                 u'file_size': '2012211901', u'auto_cross_section': 0.0,
@@ -828,10 +830,11 @@ class DBSWriterModel_t(unittest.TestCase):
                     {u'lumi_section_num': '29838', u'run_num': '1'}
                     ],
                 u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                u'logical_file_name': "/store/mc/Fall/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
                 }
             fileList.append(f)
         for i in range(2):
+	    uniq_id = int(time.time())*1000	
             f={
                 u'adler32': 'abc1234', u'file_type': 'EDM',
                 u'file_size': '2012211901', u'auto_cross_section': 0.0,
@@ -842,7 +845,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     {u'lumi_section_num': '29838', u'run_num': '1'}
                     ],
                 u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                u'logical_file_name': "/store/mc/Fall15/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
                 }
             fileList.append(f)
 
@@ -863,10 +866,10 @@ class DBSWriterModel_t(unittest.TestCase):
         api.insert('bulkblocks', data)
 
 
-    checkException("check_sum")
+    @checkException("check_sum")
     def test12c(self):
         """test12c: web.DBSWriterModel.insertBulkBlock: negtive test with missing check_sum, adler32 or md5"""
-        uniq_id = int(time.time())
+        uniq_id = int(time.time())*1000
 
         bulk_primary_ds_name = 'unittest_web_primary_ds_name_%s' % (uniq_id)
         bulk_procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
