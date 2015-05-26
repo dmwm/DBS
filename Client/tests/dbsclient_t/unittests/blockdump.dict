@@ -63,7 +63,7 @@ u'logical_file_name': '/store/data/a/b/A/a/1/abcd2.root', u'file_size': 20122119
 u'last_modification_date': 1279912089, u'auto_cross_section':
 0.0}, 
 {'file_lumi_list':
-[{u'run_num': 1}, {u'lumi_section_num': 26422,
+[{u'run_num': 1, u'lumi_section_num': 26}, {u'lumi_section_num': 26422,
 u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Yuyi', u'logical_file_name': '/store/data/a/b/A/a/1/abcd3.root', u'file_size': 2012211901,u'last_modification_date': 1279912089, u'auto_cross_section':
 0.0}, 
 {'file_lumi_list':[{u'lumi_section_num': 27414, u'run_num': 1}, {u'lumi_section_num': 26422,u'run_num': 2}, {u'lumi_section_num': 29838, u'run_num': 3}], u'event_count': 1619, u'file_type': 'EDM',u'last_modified_by': 'Yuyi',

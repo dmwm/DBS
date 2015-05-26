@@ -493,7 +493,7 @@ class DbsApi(object):
         checkInputParameter(method="listBlockParents", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
         if isinstance(kwargs["block_name"], list):
-            return self.__callServer("blocksparents", params=kwargs, callmethod='POST')
+            return self.__callServer("blockparents", data=kwargs, callmethod='POST')
         else:
             return self.__callServer("blockparents", params=kwargs)
 
@@ -1015,8 +1015,11 @@ class DbsApi(object):
             for slice in Lexicon.slicedIterator(sourcelist, max_list_len):
                 kwargs[mykey] = slice
                 results.extend(self.__callServer("fileArray", data=kwargs, callmethod="POST"))
-            #make sure only only dictionary per lfn    
-            return {v['logical_file_name']:v for v in results}.values()
+            #make sure only one dictionary per lfn.
+	    #Make sure this changes when we move to 2.7 or 3.0
+	    #http://stackoverflow.com/questions/11092511/python-list-of-unique-dictionaries
+            # YG May-26-2015	
+            return dict((v['logical_file_name'],v) for v in results).values()
         else:
             return self.__callServer("fileArray", data=kwargs, callmethod="POST")
     def listFileSummaries(self, **kwargs):
