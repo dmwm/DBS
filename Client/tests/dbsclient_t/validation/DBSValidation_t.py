@@ -309,7 +309,7 @@ class DBSValidation_t(unittest.TestCase):
         input_block_dump = self.data_provider.block_dump()[0]
         self.api.insertBulkBlock(input_block_dump)
         block_dump = self.api.blockDump(block_name=input_block_dump['block']['block_name'])
-
+ 
         def check(input, output):
             if isinstance(input, dict):
                 for key, value in input.iteritems():

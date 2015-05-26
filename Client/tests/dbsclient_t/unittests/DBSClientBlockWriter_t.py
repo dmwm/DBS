@@ -62,7 +62,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
 
         for k in range(len(self.testparams['files'])):
              self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (self.uid))
-             self.testparams['files'][k]['adler32' = '123abc'
+             self.testparams['files'][k]['adler32'] = '123abc'
 
         self.testparams['primds']['primary_ds_name'] ='%s_%s' %(self.testparams['primds']['primary_ds_name'], self.uid)
 
@@ -74,7 +74,6 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         #fit to ask dbs. One have to change it before run the test for other dbs.
         #for  k in range(len(self.testparams['file_parent_list'])):
         #    self.testparams['file_parent_list'][k]['logical_file_name'] = "%s_%s" %(self.testparams['file_parent_list'][k]['logical_file_name'],self.uid)
-
         self.api.insertBulkBlock(blockDump=self.testparams)
         print "Done inserting parent files"
 
