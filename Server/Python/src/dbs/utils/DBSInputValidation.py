@@ -245,7 +245,7 @@ validationFunctionWildcard = {
     }
 
 
-def validateJSONInputNoCopy(input_key,input_data):
+def validateJSONInputNoCopy(input_key,input_data, read=False):
     log = clog.error_log
     if isinstance(input_data,dict):
         for key in input_data.keys():
@@ -264,7 +264,7 @@ def validateJSONInputNoCopy(input_key,input_data):
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type str for key-value %s... %s..." \
                 %(input_key[:10], input_data[:10]), logger=log.error,\
                 serverError="Input data %s is not a valid input type str for key %s"%(input_data, input_key))
-        validateStringInput(input_key,input_data)
+        validateStringInput(input_key,input_data, read=read)
         if '*' in input_data: input_data = input_data.replace('*', '%')
     elif isinstance(input_data,int):
         if input_key not in acceptedInputDataTypes[int]:
@@ -286,7 +286,7 @@ def validateJSONInputNoCopy(input_key,input_data):
              logger=log.error, serverError='invalid input: %s= %s'%(input_key, input_data))
     return input_data
 
-def validateStringInput(input_key,input_data):
+def validateStringInput(input_key,input_data, read=False):
     """
     To check if a string has the required format. This is only used for POST APIs.
     """
@@ -300,9 +300,19 @@ def validateStringInput(input_key,input_data):
         if input_data.find('#') != -1 : func = block
         else : func = dataset
     else:
-        func = validationFunction.get(input_key)
-        if func is None:
-            func = namestr
+        if not read:
+            func = validationFunction.get(input_key)
+            if func is None:
+                func = namestr
+        else:
+            if input_key == 'dataset':
+                func = reading_dataset_check
+            elif input_key == 'block_name':
+                func = reading_block_check
+            elif input_key == 'logical_file_name':
+                func = reading_lfn_check
+            else:
+                func = namestr
     try:
         func(input_data)
     except AssertionError as ae:
