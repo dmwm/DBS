@@ -467,7 +467,7 @@ class DBSReaderModel(RESTModel):
             body = request.body.read()
             if body:
                 data = cjson.decode(body)
-                data = validateJSONInputNoCopy("dataset",data)
+                data = validateJSONInputNoCopy("dataset", data, read=True)
             else:
                 data=''
             return self.dbsDataset.listDatasetArray(data)
@@ -685,7 +685,7 @@ class DBSReaderModel(RESTModel):
         try :
             body = request.body.read()
             data = cjson.decode(body)
-            data = validateJSONInputNoCopy("block", data)
+            data = validateJSONInputNoCopy("block", data, read=True)
             return self.dbsBlock.listBlockParents(data["block_name"])
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
@@ -905,7 +905,7 @@ class DBSReaderModel(RESTModel):
                 return []
             else:
                 data = cjson.decode(body)
-                data = validateJSONInputNoCopy("files", data)
+                data = validateJSONInputNoCopy("files", data, True)
                 if 'lumi_list' in data and data['lumi_list']:
                     data['lumi_list'] = self.dbsUtils2.decodeLumiIntervals(data['lumi_list'])	
                     if 'run_num' not in data.keys() or not data['run_num'] or data['run_num'] ==-1 :
@@ -1173,7 +1173,7 @@ class DBSReaderModel(RESTModel):
 	    body = request.body.read()
 	    if body:
 		data = cjson.decode(body)
-		data = validateJSONInputNoCopy("files", data)
+		data = validateJSONInputNoCopy("files", data, read=True)
 	    else:
 		data=''
             if 'run_num' in data.keys() and not isinstance(data['run_num'], list) and (data['run_num']==1 or data['run_num']=="1"):
