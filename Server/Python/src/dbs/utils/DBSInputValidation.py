@@ -24,7 +24,7 @@ def reading_block_check(candidate):
     return check(regexp, candidate)
 
 def reading_lfn_check(candidate):
-    regexp = r'^/store/([A-Za-z0-9_\-/])+/([A-Za-z0-9_\-])+(.root|.lhe(.xz){0,1})$'
+    regexp = r'^/store/([A-Za-z0-9._\-/])+/([A-Za-z0-9._\-])+(.root|.lhe(.xz){0,1})$'
     return check(regexp, candidate)
 
 
@@ -253,11 +253,11 @@ def validateJSONInputNoCopy(input_key,input_data, read=False):
                 dbsExceptionHandler('dbsException-invalid-input2', message="Invalid Input Key %s..." %key[:10],\
                                     logger=log.error, serverError="%s is not a valid input key for %s"%(key, input_key))
             else:
-                input_data[key] = validateJSONInputNoCopy(key,input_data[key])
+                input_data[key] = validateJSONInputNoCopy(key,input_data[key], read=read)
     elif isinstance(input_data,list):
         l = []
         for x in input_data:
-            l.append(validateJSONInputNoCopy(input_key,x))
+            l.append(validateJSONInputNoCopy(input_key, x, read=read))
         input_data = l
     elif isinstance(input_data, basestring):
         if input_key not in acceptedInputDataTypes[str]:
