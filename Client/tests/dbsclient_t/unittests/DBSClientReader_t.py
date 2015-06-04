@@ -739,7 +739,20 @@ class DBSClientReader_t(unittest.TestCase):
         """test34g unittestDBSClientReader_t.listFileArray: basic test"""
         self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
                                self.testparams['files'][2],self.testparams['files'][3]],detail=1)   
- 
+
+    def test034h(self):	
+	"""test34h unittestDBSClientReader_t.listFileArray: test split a call into more than one listFileArray  calls"""
+        lfn=[]
+        ds = self.api.listDatasets()
+	for d in ds:
+	    files = self.api.listFiles(dataset=d['dataset'])
+	    for f in files:
+		lfn.append(f['logical_file_name'])
+		if len(lfn) > 1200: break
+	    if len(lfn) > 1200: break
+	total= self.api.listFileArray(logical_file_name=lfn)
+	self.assertTrue(len(total)==len(lfn))
+	
     def test041(self):
         """test41 unittestDBSClientReader_t.listFileParents: basic test"""
         self.api.listFileParents(logical_file_name=self.testparams['files'][0])
