@@ -298,7 +298,8 @@ class DBSDataProvider(object):
     def processing_version(self):
         "return processing version"
         if not hasattr(self, '_processing_version'):
-            self._processing_version = random.randint(1, 100)
+	    #avoid the same number as in the block dump file.	
+            self._processing_version = random.randint(100, 1000)
         return self._processing_version
 
     @property
