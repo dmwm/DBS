@@ -132,14 +132,15 @@ class DBSDataset:
         if(logical_file_name and logical_file_name.find("%")!=-1):
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasets API requires \
                 fullly qualified logical_file_name. NO wildcard is allowed in logical_file_name.')
-        conn = self.dbi.connection()
-        try:
+        #conn = self.dbi.connection()
+        #try:
+	with self.dbi.connection() as conn:
             dao = (self.datasetbrieflist, self.datasetlist)[detail]
             if dataset_access_type: dataset_access_type = dataset_access_type.upper()
             if data_tier_name: data_tier_name = data_tier_name.upper()
             #if  processing_version:  processing_version =  processing_version.upper()
             #if acquisition_era: acquisition_era = acquisition_era.upper()
-            result = dao.execute(conn, 
+            for item in dao.execute(conn, 
                                  dataset, is_dataset_valid,
                                  parent_dataset,
                                  release_version,
@@ -155,11 +156,12 @@ class DBSDataset:
                                  processed_ds_name, data_tier_name,
                                  dataset_access_type, prep_id, create_by, last_modified_by, 
                                  min_cdate, max_cdate, min_ldate, max_ldate,
-                                 cdate, ldate, dataset_id)    
-            return result
-        finally:
-            if conn:
-                conn.close()
+                                 cdate, ldate, dataset_id):
+	        yield item	
+            #return result
+        #finally:
+            #if conn:
+                #conn.close()
 
     def listDatasetArray(self, inputdata=None):
         if not inputdata:

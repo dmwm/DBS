@@ -268,9 +268,10 @@ class BriefList(DBFormatter):
 	#self.logger.error( sql)
         #self.logger.error( binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        result = []
+        #result = []
         for i in cursors:
             d = self.formatCursor(i)
             if d:
-                result += d
-        return result
+                #result += d
+		yield d
+        #return result

@@ -16,7 +16,7 @@ from cherrypy import request, tools, HTTPError
 
 
 from WMCore.WebTools.RESTModel import RESTModel
-
+from dbs.utils.dbsUtils import jsonstreamer
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.business.DBSDoNothing import DBSDoNothing
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
@@ -279,6 +279,7 @@ class DBSReaderModel(RESTModel):
                  create_by=(basestring), last_modified_by=(basestring), min_cdate=(int,basestring), max_cdate=(int,basestring),
                  min_ldate=(int,basestring), max_ldate=(int, basestring), cdate=(int,basestring), ldate=(int,basestring), detail=(bool,basestring),
                  dataset_id=(int, long, basestring))
+    @jsonstreamer
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="", global_tag="",
         processing_version=0, acquisition_era_name="", run_num=-1,
