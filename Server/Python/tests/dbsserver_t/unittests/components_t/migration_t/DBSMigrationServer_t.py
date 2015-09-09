@@ -116,6 +116,7 @@ class DBSMigrationServer_t(unittest.TestCase):
         """test01: Clean-up old migration requests. Test to remove migration requests between different DBS instances"""
         for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
             data = {'migration_rqst_id': status['migration_request_id']}
+	    print data	
             if status['migration_status'] in (0, 3) and status['create_by'] == os.getlogin():
                 self._migrate_api.insert('remove', data)
             else:
@@ -128,27 +129,31 @@ class DBSMigrationServer_t(unittest.TestCase):
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : block_data}
             ###schedule only the first block for migration
+	    print toMigrate	
             self._migrate_api.insert('submit', toMigrate)
 
     def test_03_handle_migration_requests(self):
         """test03: Test to handle migration requests between different DBS instances by block"""
         for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
             if status['migration_status']==0:
+		print "--YG test03 getResource ---"
                 self._migration_task.getResource()
                 ###wait 5 seconds to ensure that status is changed
                 time.sleep(5)
                 new_status = self._migrate_api.list('status', status['migration_request_id'])[0]
                 self.assertEqual(new_status['migration_status'], 1)#1 means requests is processed
+		print "--YG InsertBlock --"
                 self._migration_task.insertBlock()
                 ###wait 5 seconds to ensure that status is changed
                 time.sleep(5)
                 new_status = self._migrate_api.list('status', status['migration_request_id'])[0]
                 self.assertEqual(new_status['migration_status'], 2)#2 means requests is successfully done
                 self._migration_task.cleanup()
-
-    def test_04_insert_migration_requests(self):
+    
+    #def test_04_insert_migration_requests(self):
         """test04: Test to request a migration between different DBS instances by dataset"""
-        datasets = set((block['dataset']['dataset']
+        """
+     	datasets = set((block['dataset']['dataset']
                         for block in chain(self._child_data_provider.block_dump(),
                                            self._independent_child_data_provider.block_dump())))
         for dataset in datasets:
@@ -160,10 +165,11 @@ class DBSMigrationServer_t(unittest.TestCase):
             except Exception as ex:
                 if "already in destination" in str(ex):
                     pass
-
-    def test_05_handle_migration_requests(self):
+	"""
+    #def test_05_handle_migration_requests(self):
         """test05: Test to handle migration requests between different DBS instances by dataset"""
-        for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
+	"""
+	for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
             if status['migration_status']==0:
                 self._migration_task.getResource()
                 ###wait 5 seconds to ensure that status is changed
@@ -176,10 +182,11 @@ class DBSMigrationServer_t(unittest.TestCase):
                 new_status = self._migrate_api.list('status', status['migration_request_id'])[0]
                 self.assertEqual(new_status['migration_status'], 2)#2 means requests is successfully done
                 self._migration_task.cleanup()
-
-    def test_06_block_migration_validation(self):
+	"""
+    #def test_06_block_migration_validation(self):
         """test06: Try to validate the migrated data by comparing block dumps from source and destination DB"""
-        def check(input, output):
+        """
+	def check(input, output):
             non_comparable_keys = ('block_id', 'dataset_id', 'last_modification_date',
                                    'parent_file_id', 'primary_ds_id')
             if isinstance(input, dict):
@@ -209,7 +216,7 @@ class DBSMigrationServer_t(unittest.TestCase):
             block_dump_dest = self._migration_reader_api.list('blockdump', block_name=block_name)
             check(block_dump_src, block_dump_dest)
             n = n+1
-
+    """	
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSMigrationServer_t)

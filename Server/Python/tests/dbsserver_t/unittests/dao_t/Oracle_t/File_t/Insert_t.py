@@ -46,7 +46,8 @@ class Insert_t(unittest.TestCase):
 
             #insert needs an id not the name, whereas list will return the name
             block_info = self.block_list.execute(self.conn, block_name=data["block_name"], transaction=tran)
-            data["block_id"] = block_info[0]["block_id"]
+	    for b in block_info:	
+		data["block_id"] = b["block_id"]
             del data["block_name"]
             
             #insert needs an id not the name, whereas list will return the name

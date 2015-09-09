@@ -191,8 +191,9 @@ class DBSClientReader_t(unittest.TestCase):
                             origin_site_name=self.testparams['site'])
         try:
             self.api.listBlocks(origin_site_name=self.testparams['site'])
-        except:
-            pass
+        except Exception as e:
+            #pass
+	    print e
         else:
             self.fail("exception was excepted, was not raised")
 
@@ -745,11 +746,14 @@ class DBSClientReader_t(unittest.TestCase):
         lfn=[]
         ds = self.api.listDatasets()
 	for d in ds:
-	    files = self.api.listFiles(dataset=d['dataset'])
-	    for f in files:
-		lfn.append(f['logical_file_name'])
-		if len(lfn) > 1200: break
-	    if len(lfn) > 1200: break
+	    try: 	
+		files = self.api.listFiles(dataset=d['dataset'])
+		for f in files:
+		    lfn.append(f['logical_file_name'])
+		    if len(lfn) > 1200: break
+	        if len(lfn) > 1200: break
+	    except Exception:
+		pass
 	total= self.api.listFileArray(logical_file_name=lfn)
 	self.assertTrue(len(total)==len(lfn))
 	

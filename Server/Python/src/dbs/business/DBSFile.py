@@ -53,7 +53,8 @@ class DBSFile:
         if((logical_file_name=='' or '*'in logical_file_name or '%' in logical_file_name) \
             and (block_name=='' or '*' in block_name or '%' in block_name) and input_body==-1 ):
             dbsExceptionHandler('dbsException-invalid-input', \
-                "Fully specified logical_file_name or block_name is required if GET is called. No wildcards are allowed." )
+                "Fully specified logical_file_name or block_name is required if GET is called. No wildcards are allowed." ,
+		 self.logger.exception, "Fully specified logical_file_name or block_name is required if GET is called. No wildcards are allowed.")
         elif input_body != -1 :
             try:
                 logical_file_name = input_body["logical_file_name"]
@@ -62,69 +63,53 @@ class DBSFile:
                 block_name = ""
             except cjson.DecodeError, de:
                 msg = "business/listFileLumis requires at least a list of logical_file_name. %s" % de
-                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, msg)
+                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, msg)
         elif input_body != -1 and (logical_file_name is not None or block_name is not None): 
-            dbsExceptionHandler('dbsException-invalid-input', "listFileLumis may have input in the command or in the payload, not mixed.")
+            dbsExceptionHandler('dbsException-invalid-input', "listFileLumis may have input in the command or in the payload, not mixed.", self.logger.exception, "listFileLumis may have input in the command or in the payload, not mixed.")
 
-        conn = self.dbi.connection()
-        try:
-            result = self.filelumilist.execute(conn, logical_file_name, block_name, run_num, validFileOnly=validFileOnly)
-            return result
-        finally:
-            if conn:
-                conn.close()
+        with self.dbi.connection() as conn:
+            for item in  self.filelumilist.execute(conn, logical_file_name, block_name, run_num, validFileOnly=validFileOnly):
+                yield item
 
     def listFileSummary(self, block_name="", dataset="", run_num=-1, validFileOnly=0):
         """
         required parameter: full block_name or dataset name. No wildcards allowed. run_num is optional.
         """
-        conn = self.dbi.connection()
-        try:
-            if not block_name and not dataset:
-                msg =  "Block_name or dataset is required for listFileSummary API"
-                dbsExceptionHandler('dbsException-invalid-input', msg)
-            if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
-                msg = "No wildcard is allowed in block_name or dataset for filesummaries API"
-                dbsExceptionHandler('dbsException-invalid-input', msg)
-            result = self.filesummarylist.execute(conn, block_name, dataset, run_num, validFileOnly=validFileOnly)
-            if len(result)==1:
-                if result[0]['num_file']==0 and result[0]['num_block']==0 \
-                        and result[0]['num_event']==0 and result[0]['file_size']==0:
-                    result=[]
-            return result
-        finally:
-            if conn:
-                conn.close()
-
+        if not block_name and not dataset:
+            msg =  "Block_name or dataset is required for listFileSummary API"
+            dbsExceptionHandler('dbsException-invalid-input', msg, self.logger.exception)
+        if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
+            msg = "No wildcard is allowed in block_name or dataset for filesummaries API"
+            dbsExceptionHandler('dbsException-invalid-input', msg, self.logger.exception)
+        #
+        with self.dbi.connection() as conn:
+            for item in self.filesummarylist.execute(conn, block_name, dataset, run_num,
+                validFileOnly=validFileOnly):
+                if item['num_file']==0 and item['num_block']==0 \
+                        and item['num_event']==0 and item['file_size']==0:
+                    yield    
+                else:
+                    yield item
     def listFileParents(self, logical_file_name="", block_id=0, block_name=""):
         """
         required parameter: logical_file_name or block_name
         returns: this_logical_file_name, parent_logical_file_name, parent_file_id
         """
-        conn = self.dbi.connection()
-        try:
-            #self.logger.debug("lfn %s, block_name %s, block_id :%s" % (logical_file_name, block_name, block_id))
-            if not logical_file_name and not block_name and not block_id:
-                dbsExceptionHandler('dbsException-invalid-input', \
-                        "Logical_file_name, block_id or block_name is required for fileparents api" )
+        #self.logger.debug("lfn %s, block_name %s, block_id :%s" % (logical_file_name, block_name, block_id))
+        if not logical_file_name and not block_name and not block_id:
+            dbsExceptionHandler('dbsException-invalid-input', \
+                "Logical_file_name, block_id or block_name is required for fileparents api", self.logger.exception )
+        with self.dbi.connection() as conn:
             sqlresult = self.fileparentlist.execute(conn, logical_file_name, block_id, block_name)
-            result = []
             d = {}
             #self.logger.debug(sqlresult)
-            for i in range(len(sqlresult)):
-                k = sqlresult[i]['this_logical_file_name']
-                v = sqlresult[i]['parent_logical_file_name']
-                if k in d:
-                    d[k].append(v)
-                else:
-                    d[k] = [v]
+            for i in sqlresult:
+                k = i['this_logical_file_name']
+                v = i['parent_logical_file_name']
+                d.setdefault(k, []).append(v)
             for k, v in d.iteritems():
-                r = {'logical_file_name':k, 'parent_logical_file_name': v}
-                result.append(r)
-            return result
-        finally:
-            if conn:
-                conn.close()
+                yield {'logical_file_name':k, 'parent_logical_file_name': v}
+            del d    
 
     def listFileChildren(self, logical_file_name='', block_name='', block_id=0):
         """
@@ -203,51 +188,48 @@ class DBSFile:
 		lumi_list = input_body.get("lumi_list", [])	
             except cjson.DecodeError as de:
                 msg = "business/listFilss POST call requires at least dataset, block_name, or a list of logical_file_name %s" % de
-                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, msg)
+                dbsExceptionHandler('dbsException-invalid-input', "Invalid input", self.logger.exception, msg)
 
         if ('%' in block_name):
-            dbsExceptionHandler('dbsException-invalid-input', "You must specify exact block name not a pattern")
+            dbsExceptionHandler('dbsException-invalid-input', "You must specify exact block name not a pattern", self.logger.exception)
         elif ('%' in dataset):
-            dbsExceptionHandler('dbsException-invalid-input', " You must specify exact dataset name not a pattern")
+	    print "***** in dataset name"
+            dbsExceptionHandler('dbsException-invalid-input', " You must specify exact dataset name not a pattern", self.logger.exception)
         elif (not dataset  and not block_name and (not logical_file_name or '%'in logical_file_name) ):
             dbsExceptionHandler('dbsException-invalid-input', """You must specify one of the parameter groups:  \
                     non-pattern dataset, \
                     non-pattern block , non-pattern dataset with lfn ,\
                     non-pattern block with lfn or no-pattern lfn, \
-		    non-patterned lfn list .""")
+		    non-patterned lfn list .""", self.logger.exception)
         elif (lumi_list and len(lumi_list) != 0):
             if run_num==-1:
                 dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number, \
-                        use run_num=123")
+                        use run_num=123", self.logger.exception)
             elif isinstance(run_num, basestring):
                 try:
                     run_num = int(run_num)
                 except:
                     dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
-                        use run_num=123")
+                        use run_num=123", self.logger.exception)
             elif isinstance(run_num, list):
                 if len(run_num) == 1:
                     try:
                         run_num = int(run_num[0])
                     except:
                         dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
-                            use run_num=123")
+                            use run_num=123", self.logger.exception)
                 else:
                     dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
-                        use run_num=123")
+                        use run_num=123", self.logger.exception)
 	else:
             pass
 
-        conn = self.dbi.connection()
-        try:
+        with self.dbi.connection() as conn:
             dao = (self.filebrieflist, self.filelist)[detail]
-            result = dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
-                            output_module_label, run_num, origin_site_name, lumi_list, validFileOnly)
-            return result
-        finally:
-            if conn:
-                conn.close()
+            for item in dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
+                            output_module_label, run_num, origin_site_name, lumi_list, validFileOnly):
 
+                yield item      # we need to yield while connection is open
     def insertFile(self, businput, qInserts=False):
         """
         This method supports bulk insert of files
@@ -318,15 +300,18 @@ class DBSFile:
                 fileconfigs = [] # this will hold file configs that we will list in the insert file logic below
                 if block_name != f["block_name"]:
                     block_info = self.blocklist.execute(conn, block_name=f["block_name"])
-                    if len(block_info) != 1 : dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,
+		    for b in block_info:
+			if not b  : 
+			    dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,
                                                           "Cannot found required block %s in DB" %f["block_name"])
-                    block_info = block_info[0]
-                    if  block_info["open_for_writing"] != 1 : dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,
-                                                                           "Block %s is not open for writting" %f["block_name"])
-                    if block_info.has_key("block_id"):
-                        block_id = block_info["block_id"]
-                    else:
-                        dbsExceptionHandler("dbsException-missing-data", "Block not found", None,
+			else:	
+			    if  b["open_for_writing"] != 1 : 
+				dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,
+				    "Block %s is not open for writting" %f["block_name"])
+			    if b.has_key("block_id"):
+				block_id = b["block_id"]
+			    else:
+				dbsExceptionHandler("dbsException-missing-data", "Block not found", None,
                                           "Cannot found required block %s in DB" %f["block_name"])
                 else: dbsExceptionHandler('dbsException-missing-data', "Required block name Not Found in input.",
                                             None, "Required block Not Found in input.")

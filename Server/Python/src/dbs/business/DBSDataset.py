@@ -3,7 +3,7 @@
 """
 This module provides business object class to interact with Dataset. 
 """
-import cjson
+#import cjson
 from sqlalchemy.exc import DatabaseError as SQLAlchemyDatabaseError
 from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
 from WMCore.DAOFactory import DAOFactory
@@ -132,14 +132,13 @@ class DBSDataset:
         if(logical_file_name and logical_file_name.find("%")!=-1):
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasets API requires \
                 fullly qualified logical_file_name. NO wildcard is allowed in logical_file_name.')
-        conn = self.dbi.connection()
-        try:
+	with self.dbi.connection() as conn:
             dao = (self.datasetbrieflist, self.datasetlist)[detail]
             if dataset_access_type: dataset_access_type = dataset_access_type.upper()
             if data_tier_name: data_tier_name = data_tier_name.upper()
             #if  processing_version:  processing_version =  processing_version.upper()
             #if acquisition_era: acquisition_era = acquisition_era.upper()
-            result = dao.execute(conn, 
+            for item in dao.execute(conn, 
                                  dataset, is_dataset_valid,
                                  parent_dataset,
                                  release_version,
@@ -155,42 +154,34 @@ class DBSDataset:
                                  processed_ds_name, data_tier_name,
                                  dataset_access_type, prep_id, create_by, last_modified_by, 
                                  min_cdate, max_cdate, min_ldate, max_ldate,
-                                 cdate, ldate, dataset_id)    
-            return result
-        finally:
-            if conn:
-                conn.close()
+                                 cdate, ldate, dataset_id):
+	        yield item	# we need to yield while connection is open
 
     def listDatasetArray(self, inputdata=None):
         if not inputdata:
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasetArray API requires \
                 at least a list of dataset or dataset_id.')
         else:
-            conn = self.dbi.connection()
             dataset = None
             dataset_id = -1
 	    #self.logger.error("******input data ******")
 	    #self.logger.error( inputdata)	
-            try:
-                if "dataset" in inputdata:
-                    dataset = inputdata["dataset"]
-                elif "dataset_id" in inputdata:
-                    dataset_id = inputdata["dataset_id"]
-                else:
-                    dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, "business/listDatasetArray requires at least a list of dataset or dataset_id")
-                is_dataset_valid = inputdata.get("is_dataset_valid", 1)
-                dataset_access_type = inputdata.get("dataset_access_type", None)
-                detail = inputdata.get("detail", False)
-                dao = (self.datasetbrieflist, self.datasetlist)[detail]   
+	    if "dataset" in inputdata:
+		dataset = inputdata["dataset"]
+	    elif "dataset_id" in inputdata:
+		dataset_id = inputdata["dataset_id"]
+	    else:
+		dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, "business/listDatasetArray requires at least a list of dataset or dataset_id")
+	    is_dataset_valid = inputdata.get("is_dataset_valid", 1)
+	    dataset_access_type = inputdata.get("dataset_access_type", None)
+            detail = inputdata.get("detail", False)
+            dao = (self.datasetbrieflist, self.datasetlist)[detail] 	
+	
+            with self.dbi.connection() as conn:
                 result = dao.execute(conn, dataset=dataset, is_dataset_valid=is_dataset_valid,
                     dataset_access_type=dataset_access_type, dataset_id=dataset_id, transaction=False)
-                return result                        
-            except cjson.DecodeError, de:
-                msg = "business/listDatasetArray requires at least a list of dataset or dataset_id. %s" % de
-                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, msg)
-            finally:
-                if conn:
-                    conn.close()
+                for r in result:
+		    yield r 	
     
     def insertDataset(self, businput):
         """
