@@ -235,15 +235,11 @@ class DBSBlock:
                 msg = "DBSBlock/listBlock. Detail parameter not allowed togther with data_tier_name"
                 dbsExceptionHandler('dbsException-invalid-input', msg)
 
-        try:
-            conn = self.dbi.connection()
+        with self.dbi.connection() as conn:
             dao = (self.blockbrieflist, self.blocklist)[detail]
-            result = dao.execute(conn, dataset, block_name, data_tier_name, origin_site_name, logical_file_name, run_num,
-                                 min_cdate, max_cdate, min_ldate, max_ldate, cdate,  ldate)
-            return result
-        finally:
-            if conn:
-                conn.close()
+            for item in dao.execute(conn, dataset, block_name, data_tier_name, origin_site_name, logical_file_name, run_num,
+                                 min_cdate, max_cdate, min_ldate, max_ldate, cdate,  ldate):
+                yield item
     
     def listBlocksOrigin(self, origin_site_name="", dataset="", block_name=""):
         """

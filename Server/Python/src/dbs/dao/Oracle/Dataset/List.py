@@ -3,6 +3,7 @@
 This module provides Dataset.List data access object.
 Lists dataset_parent and output configuration parameters too.
 """
+from types import GeneratorType
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
@@ -296,9 +297,11 @@ class List(DBFormatter):
         #self.logger.error( sql)
         #self.logger.error("binds=%s" %binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        result = []
         for i in cursors:
             d = self.formatCursor(i)
-            if d:
-                result += d
-        return result
+            if isinstance(d, list) or isinstance(d, GeneratorType):
+                for elem in d:
+                    yield elem
+            elif d:
+                yield d
+

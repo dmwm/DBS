@@ -66,65 +66,49 @@ class DBSFile:
         elif input_body != -1 and (logical_file_name is not None or block_name is not None): 
             dbsExceptionHandler('dbsException-invalid-input', "listFileLumis may have input in the command or in the payload, not mixed.")
 
-        conn = self.dbi.connection()
-        try:
-            result = self.filelumilist.execute(conn, logical_file_name, block_name, run_num, validFileOnly=validFileOnly)
-            return result
-        finally:
-            if conn:
-                conn.close()
+        with self.dbi.connection() as conn:
+            for item in  self.filelumilist.execute(conn, logical_file_name, block_name, run_num, validFileOnly=validFileOnly):
+                yield item
 
     def listFileSummary(self, block_name="", dataset="", run_num=-1, validFileOnly=0):
         """
         required parameter: full block_name or dataset name. No wildcards allowed. run_num is optional.
         """
-        conn = self.dbi.connection()
-        try:
-            if not block_name and not dataset:
-                msg =  "Block_name or dataset is required for listFileSummary API"
-                dbsExceptionHandler('dbsException-invalid-input', msg)
-            if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
-                msg = "No wildcard is allowed in block_name or dataset for filesummaries API"
-                dbsExceptionHandler('dbsException-invalid-input', msg)
-            result = self.filesummarylist.execute(conn, block_name, dataset, run_num, validFileOnly=validFileOnly)
-            if len(result)==1:
-                if result[0]['num_file']==0 and result[0]['num_block']==0 \
-                        and result[0]['num_event']==0 and result[0]['file_size']==0:
-                    result=[]
-            return result
-        finally:
-            if conn:
-                conn.close()
-
+        if not block_name and not dataset:
+            msg =  "Block_name or dataset is required for listFileSummary API"
+            dbsExceptionHandler('dbsException-invalid-input', msg)
+        if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
+            msg = "No wildcard is allowed in block_name or dataset for filesummaries API"
+            dbsExceptionHandler('dbsException-invalid-input', msg)
+        #
+        with self.dbi.connection() as conn:
+            for item in self.filesummarylist.execute(conn, block_name, dataset, run_num,
+                validFileOnly=validFileOnly):
+                if item['num_file']==0 and item['num_block']==0 \
+                        and item['num_event']==0 and item['file_size']==0:
+                    yield    
+                else:
+                    yield item
     def listFileParents(self, logical_file_name="", block_id=0, block_name=""):
         """
         required parameter: logical_file_name or block_name
         returns: this_logical_file_name, parent_logical_file_name, parent_file_id
         """
-        conn = self.dbi.connection()
-        try:
-            #self.logger.debug("lfn %s, block_name %s, block_id :%s" % (logical_file_name, block_name, block_id))
-            if not logical_file_name and not block_name and not block_id:
-                dbsExceptionHandler('dbsException-invalid-input', \
-                        "Logical_file_name, block_id or block_name is required for fileparents api" )
+        #self.logger.debug("lfn %s, block_name %s, block_id :%s" % (logical_file_name, block_name, block_id))
+        if not logical_file_name and not block_name and not block_id:
+            dbsExceptionHandler('dbsException-invalid-input', \
+                "Logical_file_name, block_id or block_name is required for fileparents api" )
+        with self.dbi.connection() as conn:
             sqlresult = self.fileparentlist.execute(conn, logical_file_name, block_id, block_name)
-            result = []
             d = {}
             #self.logger.debug(sqlresult)
-            for i in range(len(sqlresult)):
-                k = sqlresult[i]['this_logical_file_name']
-                v = sqlresult[i]['parent_logical_file_name']
-                if k in d:
-                    d[k].append(v)
-                else:
-                    d[k] = [v]
+            for i in sqlresult:
+                k = i['this_logical_file_name']
+                v = i['parent_logical_file_name']
+                d.setdefault(k, []).append(v)
             for k, v in d.iteritems():
-                r = {'logical_file_name':k, 'parent_logical_file_name': v}
-                result.append(r)
-            return result
-        finally:
-            if conn:
-                conn.close()
+                yield {'logical_file_name':k, 'parent_logical_file_name': v}
+            del d    
 
     def listFileChildren(self, logical_file_name='', block_name='', block_id=0):
         """
@@ -238,16 +222,12 @@ class DBSFile:
 	else:
             pass
 
-        conn = self.dbi.connection()
-        try:
+        with self.dbi.connection() as conn:
             dao = (self.filebrieflist, self.filelist)[detail]
-            result = dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
-                            output_module_label, run_num, origin_site_name, lumi_list, validFileOnly)
-            return result
-        finally:
-            if conn:
-                conn.close()
+            for item in dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
+                            output_module_label, run_num, origin_site_name, lumi_list, validFileOnly):
 
+                yield item      # we need to yield while connection is open
     def insertFile(self, businput, qInserts=False):
         """
         This method supports bulk insert of files

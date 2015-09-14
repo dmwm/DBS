@@ -5,6 +5,7 @@ This module provides FileParent.List data access object.
 __revision__ = "$Id: List.py,v 1.9 2010/08/13 14:04:22 yuyi Exp $"
 __version__ = "$Revision: 1.9 $"
 
+from types import GeneratorType
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSDaoTools import create_token_generator
@@ -60,5 +61,10 @@ class List(DBFormatter):
             return{}
 
         cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
-        result = self.formatCursor(cursors[0])
-        return result
+        for i in cursors:
+            d = self.formatCursor(i)
+            if isinstance(d, list) or isinstance(d, GeneratorType):
+                for elem in d:
+                    yield elem
+            elif d: 
+                yield d

@@ -2,6 +2,7 @@
 """
 This module provides Block.List data access object.
 """
+from types import GeneratorType
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
@@ -139,7 +140,10 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 	self.logger.debug ( "sql=%s" %sql )
 	self.logger.debug ( "binds=%s" %binds )
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-	result=[]
-        for i in range(len(cursors)):
-            result.extend(self.formatCursor(cursors[i]))
-        return result
+        for i in cursors:
+            d = self.formatCursor(i)
+            if isinstance(d, list) or isinstance(d, GeneratorType):
+                for elem in d:
+                    yield elem
+            elif d:
+                yield d

@@ -5,7 +5,6 @@ This module provides FileLumi.List data access object.
 __revision__ = "$Id: List.py,v 1.7 2010/08/05 16:08:24 yuyi Exp $"
 __version__ = "$Revision: 1.7 $"
 
-
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
@@ -126,20 +125,18 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 		dbsExceptionHandler('dbsException-invalid-input', "listFileLumiArray support single list of lfn or run_num. ")
         cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
         result=[]
-        for i in range(len(cursors)):
-            result.extend(self.formatCursor(cursors[i]))
+        for i in cursors:
+            result.extend(self.formatCursor(i))
         #for migration, we need flat format to load the data into another DB.
         if migration:
-            return result
-        condensed_res=[]
+            return result  # have to return it because migration server needs it. 
+            #TODO: will need to change the migration code later, then yield here. 
 	file_run_lumi={}
 	for i in result:
 	    r = i['run_num']
             f = i['logical_file_name']
-            if (f, r) in file_run_lumi:
-		file_run_lumi[f,r].append(i['lumi_section_num'])
-	    else:
-		file_run_lumi[f,r] = [i['lumi_section_num']]
+            file_run_lumi.setdefault((f,r), []).append(i['lumi_section_num'])
 	for k, v in file_run_lumi.iteritems():
-            condensed_res.append({'logical_file_name':k[0], 'run_num':k[1], 'lumi_section_num':v})
-        return condensed_res
+            yield {'logical_file_name':k[0], 'run_num':k[1], 'lumi_section_num':v}
+        del file_run_lumi
+        del result

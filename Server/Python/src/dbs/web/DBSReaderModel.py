@@ -13,7 +13,7 @@ import traceback
 
 from cherrypy.lib import profiler
 from cherrypy import request, tools, HTTPError
-
+from __future__ import with_statement
 
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsUtils import jsonstreamer
@@ -95,7 +95,7 @@ class DBSReaderModel(RESTModel):
 
         self._addMethod('GET', 'serverinfo', self.getServerInfo, secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
-        self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'],
+        self._addMethod('GET', 'primar asdatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -279,7 +279,6 @@ class DBSReaderModel(RESTModel):
                  create_by=(basestring), last_modified_by=(basestring), min_cdate=(int,basestring), max_cdate=(int,basestring),
                  min_ldate=(int,basestring), max_ldate=(int, basestring), cdate=(int,basestring), ldate=(int,basestring), detail=(bool,basestring),
                  dataset_id=(int, long, basestring))
-    @jsonstreamer
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="", global_tag="",
         processing_version=0, acquisition_era_name="", run_num=-1,
@@ -436,7 +435,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
         detail = detail in (True, 1, "True", "1", 'true')
-        try:
+        try: 
             return self.dbsDataset.listDatasets(dataset, parent_dataset, is_dataset_valid, release_version, pset_hash,
                 app_name, output_module_label, global_tag, processing_version, acquisition_era_name, 
                 run_num, physics_group_name, logical_file_name, primary_ds_name, primary_ds_type, processed_ds_name,
@@ -444,7 +443,7 @@ class DBSReaderModel(RESTModel):
                 min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, detail, dataset_id)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listdatasets. %s.\n Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
@@ -464,24 +463,25 @@ class DBSReaderModel(RESTModel):
         :rtype: list of dicts
 
         """
+        ret = []
         try :
             body = request.body.read()
             if body:
                 data = cjson.decode(body)
                 data = validateJSONInputNoCopy("dataset", data, read=True)
-            else:
-                data=''
-            return self.dbsDataset.listDatasetArray(data)
+                ret = self.dbsDataset.listDatasetArray(data)
         except cjson.DecodeError as De:
             dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listDatasetArray. %s \n Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+        for item in ret:
+                    yield item
 
     @inputChecks(data_tier_name=basestring)
     def listDataTiers(self, data_tier_name=""):
@@ -612,7 +612,7 @@ class DBSReaderModel(RESTModel):
                     ldate = int(ldate)
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for ldate")
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listBlocks.\n. %s \n Exception trace: \n %s" \
                                 % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-invalid-input2',  str(ex), self.logger.exception, sError )
@@ -623,7 +623,7 @@ class DBSReaderModel(RESTModel):
 
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listBlocks. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -761,21 +761,20 @@ class DBSReaderModel(RESTModel):
                                 dbsExceptionCode["dbsException-invalid-input2"],
                                 self.logger.exception,
                                 "No wildcards are allowed in dataset")
-        conn = None
-        try:
-            conn = self.dbi.connection()
-            return self.dbsBlockSummaryListDAO.execute(conn, block_name, dataset, detail)
+        data = []  
+        try
+            with self.dbi.connection() as conn:
+                data = self.dbsBlockSummaryListDAO.execute(conn, block_name, dataset, detail)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listBlockSummaries. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',
                                 dbsExceptionCode['dbsException-server-error'],
                                 self.logger.exception,
                                 sError)
-        finally:
-            if conn:
-                conn.close()
+        for item in data:
+                    yield item
 
     @transformInputType( 'run_num')
     @inputChecks(dataset =basestring, block_name=basestring, logical_file_name =(basestring), release_version=basestring, pset_hash=basestring, app_name=basestring,\
@@ -900,11 +899,10 @@ class DBSReaderModel(RESTModel):
         :rtype: list of dicts
 
         """
+        ret = []
         try :
             body = request.body.read()
-            if not body:
-                return []
-            else:
+            if body:
                 data = cjson.decode(body)
                 data = validateJSONInputNoCopy("files", data, True)
                 if 'lumi_list' in data and data['lumi_list']:
@@ -933,17 +931,19 @@ class DBSReaderModel(RESTModel):
                     dbsExceptionHandler("dbsException-invalid-input", 
                                         "The Max list length supported in listFileArray is 1000.")
             #    
-                return self.dbsFile.listFiles(input_body=data)
+                ret =  self.dbsFile.listFiles(input_body=data)
         except cjson.DecodeError as De:
             dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listFileArray. %s \n Exception trace: \n %s" \
             % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+        for item in ret:
+            yield item
 
     @transformInputType('run_num')
     @inputChecks(block_name=basestring, dataset=basestring, run_num=(long,int,basestring,list), validFileOnly=(int, basestring))
@@ -977,7 +977,7 @@ class DBSReaderModel(RESTModel):
             return self.dbsFile.listFileSummary(block_name, dataset, run_num, validFileOnly=validFileOnly)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listFileSummaries. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -1088,7 +1088,7 @@ class DBSReaderModel(RESTModel):
             return self.dbsFile.listFileParents(logical_file_name, block_id, block_name)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listFileParents. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -1149,11 +1149,11 @@ class DBSReaderModel(RESTModel):
             return self.dbsFile.listFileLumis(logical_file_name, block_name, run_num, validFileOnly )
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/listFileLumis. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
-   
+
     def listFileLumiArray(self):
         """
 	API to list FileLumis for a given list of LFN. It is used with the POST method of fileLumis call.
@@ -1188,8 +1188,8 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
 	except HTTPError as he:
 	    raise he
-	except Exception, ex:
-	    sError = "DBSReaderModel/listDatasetArray. %s \n Exception trace: \n %s" \
+	except Exception as ex:
+	    sError = "DBSReaderModel/listFileLumiArray. %s \n Exception trace: \n %s" \
             % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
