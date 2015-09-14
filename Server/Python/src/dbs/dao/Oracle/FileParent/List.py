@@ -58,7 +58,7 @@ class List(DBFormatter):
             binds ={'block_name': block_name}
             sql = "{sql} {joins} {wheresql}".format(sql=self.sql, joins=joins, wheresql=wheresql)
         else:
-            return{}
+            return
 
         cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
         for i in cursors:

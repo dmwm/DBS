@@ -204,7 +204,7 @@ class SummaryList(DBFormatter):
                     """.format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds2=join_valid_ds2)
                 binds.update({"dataset":dataset})
         else:
-            return []
+            return 
 
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         for i in cursors:

@@ -212,7 +212,7 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
 	self.logger.debug("SQL: " + sql)    	
 	self.logger.debug(" binds: %s " %binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        for i cursors:
+        for i in cursors:
             d = self.formatCursor(i)
             if isinstance(d, list) or isinstance(d, GeneratorType):
                 for elem in d:

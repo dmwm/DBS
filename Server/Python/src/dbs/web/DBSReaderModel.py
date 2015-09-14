@@ -1,3 +1,4 @@
+from __future__ import with_statement
 #!/usr/bin/env python
 #pylint: disable=C0103
 """
@@ -13,7 +14,6 @@ import traceback
 
 from cherrypy.lib import profiler
 from cherrypy import request, tools, HTTPError
-from __future__ import with_statement
 
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsUtils import jsonstreamer
@@ -761,8 +761,8 @@ class DBSReaderModel(RESTModel):
                                 dbsExceptionCode["dbsException-invalid-input2"],
                                 self.logger.exception,
                                 "No wildcards are allowed in dataset")
-        data = []  
-        try
+        data = [] 
+        try:
             with self.dbi.connection() as conn:
                 data = self.dbsBlockSummaryListDAO.execute(conn, block_name, dataset, detail)
         except dbsException as de:
