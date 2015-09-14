@@ -95,7 +95,7 @@ class DBSReaderModel(RESTModel):
 
         self._addMethod('GET', 'serverinfo', self.getServerInfo, secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
-        self._addMethod('GET', 'primar asdatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'],
+        self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})

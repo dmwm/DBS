@@ -298,15 +298,19 @@ class DBSFile:
                 fileconfigs = [] # this will hold file configs that we will list in the insert file logic below
                 if block_name != f["block_name"]:
                     block_info = self.blocklist.execute(conn, block_name=f["block_name"])
-                    if len(block_info) != 1 : dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,
+		    for b in block_info:	
+			if not b  : 
+			    dbsExceptionHandler( "dbsException-missing-data", "Required block not found", None,
                                                           "Cannot found required block %s in DB" %f["block_name"])
-                    block_info = block_info[0]
-                    if  block_info["open_for_writing"] != 1 : dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,
-                                                                           "Block %s is not open for writting" %f["block_name"])
-                    if block_info.has_key("block_id"):
-                        block_id = block_info["block_id"]
-                    else:
-                        dbsExceptionHandler("dbsException-missing-data", "Block not found", None,
+			else:	
+			    if  b["open_for_writing"] != 1 : 
+				dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,
+				    "Block %s is not open for writting" %f["block_name"])
+			    if b.has_key("block_id"):
+				block_id = b["block_id"]
+				block_name = f["block_name"]
+			    else:
+				dbsExceptionHandler("dbsException-missing-data", "Block not found", None,
                                           "Cannot found required block %s in DB" %f["block_name"])
                 else: dbsExceptionHandler('dbsException-missing-data', "Required block name Not Found in input.",
                                             None, "Required block Not Found in input.")
