@@ -55,19 +55,24 @@ class DBSBlock:
         try :
             #block name is unique
             block1 = self.blocklist.execute(conn, block_name=block_name)
-            if not block1:
-                return {}
-            block = block1[0]
+            block = []
+            for b1 in block1:
+		if not b1:
+		    return {}
+		else:
+		    block = b1
             #a block only has one dataset and one primary dataset
             #in order to reduce the number of dao objects, we will not write
             #a special migration one. However, we will have to remove the
             #extras
             dataset1 = self.datasetlist.execute(conn,
-                                               dataset=block["dataset"], dataset_access_type="")
-            if dataset1:
-                dataset = dataset1[0]
-                dconfig_list = self.outputCoflist.execute(conn,dataset=dataset['dataset'])
-            else: return {}
+                      dataset=block["dataset"], dataset_access_type="")
+	    dataset = []
+            for d in dataset1:
+		if d:
+		    dataset = d
+		    dconfig_list = self.outputCoflist.execute(conn,dataset=dataset['dataset'])
+                else: return {}
             #get block parentage
             bparent = self.blockparentlist.execute(conn, block['block_name'])
             #get dataset parentage
@@ -83,6 +88,10 @@ class DBSBlock:
 
             fparent_list = self.fplist.execute(conn,
                                                block_id=block['block_id'])
+	    fparent_list2 = [] 	
+	    for fp in fparent_list:
+		fparent_list2.extend(fp)	
+
             fconfig_list = self.outputCoflist.execute(conn,
                                                 block_id=block['block_id'])
             acqEra = {}
@@ -101,15 +110,18 @@ class DBSBlock:
                 #There are a trade off between json sorting and db query.
                 #We keep lumi sec in a file, but the file parentage seperate
                 #from file
-                f.update(file_lumi_list = self.fllist.execute(conn,
-                            logical_file_name=f['logical_file_name'], migration=True))
+		file_lumi_list = []
+                for item in self.fllist.execute(conn, logical_file_name=f['logical_file_name'], migration=True):
+		    file_lumi_list.extend(item)	
+		f.update(file_lumi_list = file_lumi_list)
+		del file_lumi_list #YG 09/2015
                 del f['branch_hash_id']
             del dataset["acquisition_era_name"], dataset["processing_version"]
             del block["dataset"]
             result = dict(block=block, dataset=dataset, primds=primds,
                           files=files, block_parent_list=bparent,
                           ds_parent_list=dsparent, file_conf_list=fconfig_list,
-                          file_parent_list=fparent_list, dataset_conf_list=dconfig_list)
+                          file_parent_list=fparent_list2, dataset_conf_list=dconfig_list)
             if acqEra:
                 result["acquisition_era"] = acqEra
             if prsEra:
@@ -223,17 +235,17 @@ class DBSBlock:
                 if (not logical_file_name) or re.search("['%','*']", logical_file_name):
                     if not data_tier_name or re.search("['%','*']", data_tier_name):
                         msg = "DBSBlock/listBlock. You must specify at least one parameter(dataset, block_name,\
-                         data_tier_name, logical_file_name) with listBlocks api"
-                        dbsExceptionHandler('dbsException-invalid-input', msg)
+			       	data_tier_name, logical_file_name) with listBlocks api"
+                        dbsExceptionHandler('dbsException-invalid-input2', msg,self.logger.exception, msg)
 
         if data_tier_name:
             if not (min_cdate and max_cdate) or (max_cdate-min_cdate)>32*24*3600:
                 msg = "min_cdate and max_cdate are mandatory parameters. If data_tier_name parameter is used \
                        the maximal time range allowed is 31 days"
-                dbsExceptionHandler('dbsException-invalid-input', msg)
+                dbsExceptionHandler('dbsException-invalid-input2', msg, self.logger.exception, msg)
             if detail:
                 msg = "DBSBlock/listBlock. Detail parameter not allowed togther with data_tier_name"
-                dbsExceptionHandler('dbsException-invalid-input', msg)
+                dbsExceptionHandler('dbsException-invalid-input2', msg, self.logger.exception, msg)
 
         with self.dbi.connection() as conn:
             dao = (self.blockbrieflist, self.blocklist)[detail]

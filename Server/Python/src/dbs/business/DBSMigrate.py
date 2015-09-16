@@ -56,7 +56,7 @@ class DBSMigrate:
         self.primdslist     = daofactory(classname="PrimaryDataset.List")
         self.datasetlist    = daofactory(classname="Dataset.List")
         self.filelist       = daofactory(classname="File.MgrtList")
-        self.fllist         = daofactory(classname="FileLumi.List")
+        #self.fllist         = daofactory(classname="FileLumi.List")
         self.fplist         = daofactory(classname="FileParent.List")
         self.aelist         = daofactory(classname="AcquisitionEra.List")
         self.pelist         = daofactory(classname="ProcessingEra.List")
