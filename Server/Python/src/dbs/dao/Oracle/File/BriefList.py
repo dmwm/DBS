@@ -44,7 +44,7 @@ class BriefList(DBFormatter):
         elif int(validFileOnly) == 1:
             wheresql = " WHERE F.IS_FILE_VALID = 1 "
 	else:
-	    dbsExceptionHandler("dbsException-invalid-input", "invalid value for validFileOnly.")	
+	    dbsExceptionHandler("dbsException-invalid-input", "invalid value for validFileOnly.", self.logger.exception)	
         if logical_file_name:
 	    if type(logical_file_name) is not list: #for GET call
 		op = ("=", "like")["%" in logical_file_name] 
@@ -165,16 +165,16 @@ class BriefList(DBFormatter):
 				    binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
 				    wheresql_run_range_ct += 1 
                                 else:
-                                    dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")
+                                    dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.", self.logger.exception)
                             else:
-                                dbsExceptionHandler('dbsException-invalid-input', "run_num as a list must be a number or a range str, such as ['10'], [10] or ['1-10']")
+                                dbsExceptionHandler('dbsException-invalid-input', "run_num as a list must be a number or a range str, such as ['10'], [10] or ['1-10']", self.logger.exception)
                 else:
                     for r in parseRunRange(run_num):
                         if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):
                             run_list.append(str(r))
                         if isinstance(r, run_tuple):
                             if r[0] == r[1]:
-                                dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                                dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.", self.logger.exception)
                             if not lumi_list:
 				if wheresql_run_range_ct >0 :
 					wheresql_run_range += " or "
@@ -183,7 +183,7 @@ class BriefList(DBFormatter):
                                 binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
 				wheresql_run_range_ct += 1
                             else:
-                                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")	
+                                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.", self.logger.exception)	
 	    if run_list and not lumi_list:
                 wheresql_run_list = " fl.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
                 run_generator, run_binds = create_token_generator(run_list)
@@ -198,7 +198,7 @@ class BriefList(DBFormatter):
 	# Make sure when we have a lumi_list, there is only ONE run  -- YG 14/05/2013
         if (lumi_list and len(lumi_list) != 0):
             if len(run_list) > 1:
-                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")
+                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.", self.logger.exception)
             wheresql += " AND FL.LUMI_SECTION_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
             #Do I need to convert lumi_list to be a str list? YG 10/03/13
             #Yes, you do. YG

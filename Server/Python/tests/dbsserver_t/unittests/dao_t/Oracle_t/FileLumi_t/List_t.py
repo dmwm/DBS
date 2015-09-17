@@ -1,10 +1,6 @@
 """
 dao unittests
 """
-
-__revision__ = "$Id: List_t.py,v 1.2 2010/03/23 16:25:35 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
-
 import os
 import unittest
 import logging
@@ -13,6 +9,7 @@ import copy
 from dbsserver_t.utils.DaoConfig import DaoConfig
 from dbsserver_t.utils.DBSDataProvider import create_dbs_data_provider, strip_volatile_fields
 from dbs.dao.Oracle.FileLumi.List import List as FileLumiList
+from types import GeneratorType
 
 class List_t(unittest.TestCase):
     @DaoConfig("DBSReader")
@@ -43,14 +40,20 @@ class List_t(unittest.TestCase):
         """dao.Oracle.FileLumi.List: Basic"""
         result = self.dao.execute(self.conn, logical_file_name=self.lumi_data[0]['logical_file_name'])
 
-        self.assertTrue(type(result) == list)
-        self.assertEqual(strip_volatile_fields(result), self.lumi_data)
+        self.assertTrue(type(result) == GeneratorType)
+	l = []
+	for i in result:
+	    l.append(i)
+        self.assertEqual(strip_volatile_fields(l), self.lumi_data)
 
     def test02(self):
         """dao.Oracle.FileLumi.List: Basic"""
         result = self.dao.execute(self.conn, block_name=self.block_data[0]['block_name'])
-        self.assertTrue(type(result) == list)
-        self.assertEqual(strip_volatile_fields(result), self.lumi_data)
+        self.assertTrue(type(result) == GeneratorType)
+	l =[]
+	for i in result:
+	    l.append(i)
+        self.assertEqual(strip_volatile_fields(l), self.lumi_data)
         
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(List_t)

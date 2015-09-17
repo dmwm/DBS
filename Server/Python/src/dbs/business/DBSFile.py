@@ -77,10 +77,10 @@ class DBSFile:
         """
         if not block_name and not dataset:
             msg =  "Block_name or dataset is required for listFileSummary API"
-            dbsExceptionHandler('dbsException-invalid-input', msg)
+            dbsExceptionHandler('dbsException-invalid-input', msg, self.logger.exception)
         if '%' in block_name or '*' in block_name or '%' in dataset or '*' in dataset:
             msg = "No wildcard is allowed in block_name or dataset for filesummaries API"
-            dbsExceptionHandler('dbsException-invalid-input', msg)
+            dbsExceptionHandler('dbsException-invalid-input', msg, self.logger.exception)
         #
         with self.dbi.connection() as conn:
             for item in self.filesummarylist.execute(conn, block_name, dataset, run_num,
@@ -98,7 +98,7 @@ class DBSFile:
         #self.logger.debug("lfn %s, block_name %s, block_id :%s" % (logical_file_name, block_name, block_id))
         if not logical_file_name and not block_name and not block_id:
             dbsExceptionHandler('dbsException-invalid-input', \
-                "Logical_file_name, block_id or block_name is required for fileparents api" )
+                "Logical_file_name, block_id or block_name is required for fileparents api", self.logger.exception )
         with self.dbi.connection() as conn:
             sqlresult = self.fileparentlist.execute(conn, logical_file_name, block_id, block_name)
             d = {}
@@ -188,38 +188,39 @@ class DBSFile:
 		lumi_list = input_body.get("lumi_list", [])	
             except cjson.DecodeError as de:
                 msg = "business/listFilss POST call requires at least dataset, block_name, or a list of logical_file_name %s" % de
-                dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", None, msg)
+                dbsExceptionHandler('dbsException-invalid-input', "Invalid input", self.logger.exception, msg)
 
         if ('%' in block_name):
-            dbsExceptionHandler('dbsException-invalid-input', "You must specify exact block name not a pattern")
+            dbsExceptionHandler('dbsException-invalid-input', "You must specify exact block name not a pattern", self.logger.exception)
         elif ('%' in dataset):
-            dbsExceptionHandler('dbsException-invalid-input', " You must specify exact dataset name not a pattern")
+	    print "***** in dataset name"
+            dbsExceptionHandler('dbsException-invalid-input', " You must specify exact dataset name not a pattern", self.logger.exception)
         elif (not dataset  and not block_name and (not logical_file_name or '%'in logical_file_name) ):
             dbsExceptionHandler('dbsException-invalid-input', """You must specify one of the parameter groups:  \
                     non-pattern dataset, \
                     non-pattern block , non-pattern dataset with lfn ,\
                     non-pattern block with lfn or no-pattern lfn, \
-		    non-patterned lfn list .""")
+		    non-patterned lfn list .""", self.logger.exception)
         elif (lumi_list and len(lumi_list) != 0):
             if run_num==-1:
                 dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number, \
-                        use run_num=123")
+                        use run_num=123", self.logger.exception)
             elif isinstance(run_num, basestring):
                 try:
                     run_num = int(run_num)
                 except:
                     dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
-                        use run_num=123")
+                        use run_num=123", self.logger.exception)
             elif isinstance(run_num, list):
                 if len(run_num) == 1:
                     try:
                         run_num = int(run_num[0])
                     except:
                         dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
-                            use run_num=123")
+                            use run_num=123", self.logger.exception)
                 else:
                     dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number,\
-                        use run_num=123")
+                        use run_num=123", self.logger.exception)
 	else:
             pass
 

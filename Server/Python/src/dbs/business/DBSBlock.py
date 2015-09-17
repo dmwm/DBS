@@ -49,7 +49,7 @@ class DBSBlock:
             Try to return in a format to be ready for insert calls"""
         if '%' in block_name or '*' in block_name:
             msg = "No wildcard is allowed in block_name for dumpBlock API"
-            dbsExceptionHandler('dbsException-invalid-input', msg)
+            dbsExceptionHandler('dbsException-invalid-input', msg, self.logger.exception)
 
         conn = self.dbi.connection()
         try :
@@ -91,7 +91,8 @@ class DBSBlock:
 	    fparent_list2 = [] 	
 	    for fp in fparent_list:
 		fparent_list2.extend(fp)	
-
+	    print "---YG file Parent List--"
+	    print fparent_list2	
             fconfig_list = self.outputCoflist.execute(conn,
                                                 block_id=block['block_id'])
             acqEra = {}
@@ -112,7 +113,8 @@ class DBSBlock:
                 #from file
 		file_lumi_list = []
                 for item in self.fllist.execute(conn, logical_file_name=f['logical_file_name'], migration=True):
-		    file_lumi_list.extend(item)	
+		    file_lumi_list.extend(item)
+		print "---YG file lumi list---"	
 		f.update(file_lumi_list = file_lumi_list)
 		del file_lumi_list #YG 09/2015
                 del f['branch_hash_id']

@@ -14,7 +14,6 @@ import traceback
 
 from cherrypy.lib import profiler
 from cherrypy import request, tools, HTTPError
-#from dbs.utils.dbsException import dbsException,dbsExceptionCode
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsUtils import jsonstreamer
 from dbs.utils.dbsUtils import dbsUtils
@@ -831,31 +830,34 @@ class DBSReaderModel(RESTModel):
         dataset = dataset.replace("*", "%")
         if lumi_list:
             if run_num ==-1 or not run_num :
-                dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.")
+                dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.",self.logger.exception)
             else:
                 try:
                     lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
                 except Exception as de:
-                    dbsExceptionHandler("dbsException-invalid-input", "Invalid lumi_list input: "+ str(de))
+                    dbsExceptionHandler("dbsException-invalid-input", "Invalid lumi_list input: "+ str(de), self.logger.exception)
         else:
             if not isinstance(run_num, list):
                 if run_num ==1 or run_num == '1':
-                    dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.")
+                    dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
             else:
                 if 1 in run_num or '1' in run_num :
-                 dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.")
+                 dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
 
         detail = detail in (True, 1, "True", "1", 'true')
         output_module_label = output_module_label.replace("*", "%")
         try:
-            return self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name,
+            result =  self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name,
                                         output_module_label, run_num, origin_site_name, lumi_list, detail, validFileOnly)
-
+    	    for item in result:
+		yield item	
+	except HTTPError as he:
+	    raise he
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception as ex:
             sError = "DBSReaderModel/listFiles. %s \n Exception trace: \n %s" % (ex, traceback.format_exc())
-            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
+            dbsExceptionHandler('dbsException-server-error', ex.message,
                     self.logger.exception, sError)
 
     def listFileArray(self):
@@ -909,17 +911,17 @@ class DBSReaderModel(RESTModel):
                     data['lumi_list'] = self.dbsUtils2.decodeLumiIntervals(data['lumi_list'])	
                     if 'run_num' not in data.keys() or not data['run_num'] or data['run_num'] ==-1 :
                         dbsExceptionHandler("dbsException-invalid-input", 
-                                            "When lumi_list is given, require a single run_num.")
+                                            "When lumi_list is given, require a single run_num.", self.logger.exception)
                 else:
                     if 'run_num' in data:
                         if isinstance(data['run_num'], list):
                             if 1 in data['run_num'] or '1' in data['run_num']:
                                 dbsExceptionHandler("dbsException-invalid-input", 
-                                                    "files API does not supprt run_num=1 when no lumi.")
+                                                    "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
                         else:
                             if data['run_num']==1 or data['run_num']=='1':
                                 dbsExceptionHandler("dbsException-invalid-input", 
-                                                    "files API does not supprt run_num=1 when no lumi.")
+                                                    "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
 
                 #Because CMSWEB has a 300 seconds responding time. We have to limit the array siz to make sure that
                 #the API can be finished in 300 second. See github issues #465 for tests' results.
@@ -929,7 +931,7 @@ class DBSReaderModel(RESTModel):
                     or ('lumi_list' in data.keys() and isinstance(data['lumi_list'], list) and len(data['lumi_list'])>1000)\
                     or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>1000):
                     dbsExceptionHandler("dbsException-invalid-input", 
-                                        "The Max list length supported in listFileArray is 1000.")
+                                        "The Max list length supported in listFileArray is 1000.", self.logger.exception)
             #    
                 ret =  self.dbsFile.listFiles(input_body=data)
         except cjson.DecodeError as De:
@@ -941,7 +943,7 @@ class DBSReaderModel(RESTModel):
         except Exception as ex:
             sError = "DBSReaderModel/listFileArray. %s \n Exception trace: \n %s" \
             % (ex, traceback.format_exc())
-            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+            dbsExceptionHandler('dbsException-server-error', ex.message, self.logger.exception, sError)
         for item in ret:
             yield item
 
@@ -971,16 +973,21 @@ class DBSReaderModel(RESTModel):
 
         """
         if run_num == 1 or run_num =="1":
-            dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ")
-            dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ")
+            dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ", self.logger.exception)
         try:
-            return self.dbsFile.listFileSummary(block_name, dataset, run_num, validFileOnly=validFileOnly)
+            r = self.dbsFile.listFileSummary(block_name, dataset, run_num, validFileOnly=validFileOnly)
+	    for item in r:
+		yield item	
+	except HTTPError as he:
+	    raise he
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+	except HTTPerror as he:
+	    raise he
         except Exception as ex:
             sError = "DBSReaderModel/listFileSummaries. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
-            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+            dbsExceptionHandler('dbsException-server-error', ex.message, self.logger.exception, sError)
 
     @inputChecks(dataset=basestring)
     def listDatasetParents(self, dataset=''):
@@ -1085,13 +1092,17 @@ class DBSReaderModel(RESTModel):
 
         """
         try:
-            return self.dbsFile.listFileParents(logical_file_name, block_id, block_name)
+            r = self.dbsFile.listFileParents(logical_file_name, block_id, block_name)
+	    for item in r:
+		yield item	
+        except HTTPError as he:
+	    raise he
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception as ex:
             sError = "DBSReaderModel/listFileParents. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
-            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+            dbsExceptionHandler('dbsException-server-error', ex.message,  self.logger.exception, sError)
 
     @transformInputType('logical_file_name')
     @inputChecks(logical_file_name=(basestring, list), block_name=(basestring), block_id=(basestring, int))
@@ -1269,10 +1280,10 @@ class DBSReaderModel(RESTModel):
             return self.dbsBlock.dumpBlock(block_name)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSReaderModel/dumpBlock. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
-            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+            dbsExceptionHandler('dbsException-server-error', ex.message, self.logger.exception, sError)
 
     @inputChecks(acquisition_era_name=basestring)
     def listAcquisitionEras(self, acquisition_era_name=''):

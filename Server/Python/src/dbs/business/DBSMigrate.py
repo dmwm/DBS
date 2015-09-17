@@ -126,12 +126,14 @@ class DBSMigrate:
         srcblks = self.getSrcBlocks(url, dataset=inputdataset)
         if len(srcblks) < 0:
             e = "DBSMigration: No blocks in the required dataset %s found at source %s."%(inputdataset, url)
-            dbsExceptionHandler('dbsException-invalid-input2', message=e, serverError=e)
+            dbsExceptionHandler('dbsException-invalid-input2', e, self.logger.exception, e)
         dstblks = self.blocklist.execute(conn, dataset=inputdataset)
 	self.logger.debug("******* dstblks for dataset %s ***********" %inputdataset)
 	self.logger.debug(dstblks)
         blocksInSrcNames = [ y['block_name'] for y in srcblks]
-        blocksInDstNames = [ x['block_name'] for x in dstblks]
+	blocksInDstNames = []
+	for item in dstblks:
+	    blocksInDstNames.append(item['block_name'])
         ordered_dict[order_counter] = []
         for ablk in blocksInSrcNames:
             if not ablk in blocksInDstNames:
@@ -195,14 +197,15 @@ class DBSMigrate:
         try:
             #1.
             dstblock = self.blocklist.execute(conn, block_name=block_name)
-            if len(dstblock) > 0:
-                dbsExceptionHandler('dbsException-invalid-input', 'ALREADY EXISTS: \
-                    Required block (%s) migration is already at destination' %block_name)
+	    for item in dstblock:
+		if item:
+		    dbsExceptionHandler('dbsException-invalid-input', 'ALREADY EXISTS: \
+			Required block (%s) migration is already at destination' %block_name, self.logger.exception)
             #2.
             srcblock = self.getSrcBlocks(url, block=block_name)
             if len(srcblock) < 1:
-                e = 'DBSMigration: Invalid input. Required Block %s not found at source %s.' %(srcblock, url)
-                dbsExceptionHandler('dbsException-invalid-input2', message=e, serverError=e)
+                e = 'DBSMigration: Invalid input. Required Block %s not found at source %s.' %(block_name, url)
+                dbsExceptionHandler('dbsException-invalid-input2', e, self.logger.exception, e)
             ##This block has to be migrated
             ordered_dict[order_counter] = []
             ordered_dict[order_counter].append(block_name)
@@ -222,8 +225,8 @@ class DBSMigrate:
             else:
                 message='Failed to make a block migration list.'
             dbsExceptionHandler('dbsException-invalid-input2', \
-                serverError="""DBSMigrate/prepareBlockMigrationList failed
-                to prepare ordered block list: %s""" %str(ex), message=message)
+                """DBSMigrate/prepareBlockMigrationList failed
+                to prepare ordered block list: %s""" %str(ex), self.logger.exception, message)
 
     def getParentBlocksOrderedList(self, url, conn, block_name, order_counter):
         ordered_dict = {}
@@ -388,15 +391,17 @@ class DBSMigrate:
                 if conn: conn.close()
 		self.logger.error(tk)
                 m = "DBSMigration:  ENQUEUEING_FAILED1."
-                dbsExceptionHandler('dbsException-invalid-input2', message=m, serverError=e)
-        except Exception, ex:
+                dbsExceptionHandler('dbsException-invalid-input2', m, self.logger.exception, e)
+	except HTTPError as he:
+	    raise he	
+        except Exception as ex:
 	    import traceback
             self.logger.error(traceback.format_exc())	
             if tran: tran.rollback()
             if conn: conn.close()
             m = "DBSMigration:  ENQUEUEING_FAILED."
             e = "DBSMigration:  ENQUEUEING_FAILED. General exception caught: Reason may be (%s)" %str(ex)
-            dbsExceptionHandler('dbsException-invalid-input2',message=m, serverError=e)
+            dbsExceptionHandler('dbsException-invalid-input2', m, self.logger.exception, e)
         finally:
             if conn: conn.close()
 
@@ -564,6 +569,6 @@ class DBSMigrate:
         else:
             m = 'DBSMigration: Invalid input.  Either block or dataset name has to be provided'
             e = 'DBSMigrate/getSrcBlocks: Invalid input.  Either block or dataset name has to be provided'
-            dbsExceptionHandler('dbsException-invalid-input2', message=m, serverError=e )
+            dbsExceptionHandler('dbsException-invalid-input2', m, self.logger.exception, e )
 
         return cjson.decode(self.callDBSService(url, 'blocks', params, {}))
