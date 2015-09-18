@@ -90,9 +90,9 @@ class DBSBlock:
                                                block_id=block['block_id'])
 	    fparent_list2 = [] 	
 	    for fp in fparent_list:
-		fparent_list2.extend(fp)	
-	    print "---YG file Parent List--"
-	    print fparent_list2	
+		fparent_list2.append(fp)	
+	    #print "---YG file Parent List--"
+	    #print fparent_list2	
             fconfig_list = self.outputCoflist.execute(conn,
                                                 block_id=block['block_id'])
             acqEra = {}
@@ -113,8 +113,8 @@ class DBSBlock:
                 #from file
 		file_lumi_list = []
                 for item in self.fllist.execute(conn, logical_file_name=f['logical_file_name'], migration=True):
-		    file_lumi_list.extend(item)
-		print "---YG file lumi list---"	
+		    file_lumi_list.append(item)
+		#print "---YG file lumi list---"	
 		f.update(file_lumi_list = file_lumi_list)
 		del file_lumi_list #YG 09/2015
                 del f['branch_hash_id']

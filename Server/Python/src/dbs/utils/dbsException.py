@@ -16,7 +16,8 @@ dbsExceptionCode = {
     'dbsException-invalid-input' : 'dbsException due to invalid client input: ',
     'dbsException-invalid-input2' : 'dbsException due to invalid client input: ',
     'dbsException-missing-data' : 'dbsException required pre-existing data NOT in DBS: ',
-    'dbsException-conflict-data' : 'dbsException due to data conflict between existing and input: '
+    'dbsException-conflict-data' : 'dbsException due to data conflict between existing and input: ',
+    'dbsException-failed-connect2host': 'dbsException Failed to connec to host or proxy: '
 }
 
 class dbsException(exceptions.Exception):

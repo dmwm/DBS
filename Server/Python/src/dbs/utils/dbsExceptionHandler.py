@@ -27,6 +27,9 @@ def dbsExceptionHandler(eCode='', message='', logger=None , serverError=''):
         elif eCode == "dbsException-conflict-data":
             logger( time.asctime(time.gmtime()) + " " + eCode + ": " +  serverError)
             raise HTTPError(409, message)
+	elif eCode == "dbsException-failed-connect2host":
+	    logger( time.asctime(time.gmtime()) + " " + eCode + ": " +  serverError)
+	    raise HTTPError(443, message)	
         else:
             #client gets httperror 500 for server internal error
             #print eCode + ": " +  serverError

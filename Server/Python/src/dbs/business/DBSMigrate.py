@@ -10,6 +10,7 @@ __version__ = "$Revision: 1.17 $"
 from WMCore.DAOFactory import DAOFactory
 
 #temporary thing
+import pycurl
 import cjson
 import json
 import os
@@ -217,7 +218,16 @@ class DBSMigrate:
             #check for duplicates
 
             return remove_duplicated_items(ordered_dict)
-        except Exception, ex:
+        except Exception as ex:
+	    import pdb
+	    pdb.set_trace()
+	    if '500 Internal Server Error' in str(ex):	
+		#"Server Error" is the default in dbsExceptionHandler
+	        dbsExceptionHandler('Server Error', str(ex), self.logger.exception, "DBSMigrate/prepareBlockMigrationList: "+str(ex))
+	    if isinstance(ex, pycurl.error):
+		if ex.args[0] == 7:
+		    message = ex.args[1]
+		    dbsExceptionHandler('dbsException-failed-connect2host', message, self.logger.exception, message)	
 	    if 'urlopen error' in str(ex):
                 message='Connection to source DBS server refused. Check your source url.'
             elif 'Bad Request' in str(ex):
@@ -529,6 +539,8 @@ class DBSMigrate:
             data = cjson.encode(data)
             restapi = self.rest_client_pool.get_rest_client()
             httpresponse = restapi.get(resturl, method, params, data, request_headers)
+	    import pdb
+	    pdb.set_trace()	
             return httpresponse.body
         except urllib2.HTTPError, httperror:
             raise httperror
