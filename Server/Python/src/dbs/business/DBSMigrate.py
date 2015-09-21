@@ -219,8 +219,6 @@ class DBSMigrate:
 
             return remove_duplicated_items(ordered_dict)
         except Exception as ex:
-	    import pdb
-	    pdb.set_trace()
 	    if '500 Internal Server Error' in str(ex):	
 		#"Server Error" is the default in dbsExceptionHandler
 	        dbsExceptionHandler('Server Error', str(ex), self.logger.exception, "DBSMigrate/prepareBlockMigrationList: "+str(ex))
@@ -539,8 +537,6 @@ class DBSMigrate:
             data = cjson.encode(data)
             restapi = self.rest_client_pool.get_rest_client()
             httpresponse = restapi.get(resturl, method, params, data, request_headers)
-	    import pdb
-	    pdb.set_trace()	
             return httpresponse.body
         except urllib2.HTTPError, httperror:
             raise httperror

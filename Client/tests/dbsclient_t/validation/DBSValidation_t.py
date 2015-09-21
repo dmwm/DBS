@@ -309,11 +309,28 @@ class DBSValidation_t(unittest.TestCase):
         input_block_dump = self.data_provider.block_dump()[0]
         self.api.insertBulkBlock(input_block_dump)
         block_dump = self.api.blockDump(block_name=input_block_dump['block']['block_name'])
- 
         def check(input, output):
             if isinstance(input, dict):
                 for key, value in input.iteritems():
+                    if key == "processing_era":
+                        print "------input value----"
+                        print value
+                    if key== "processing_version":
+                        print "---input processing_version--"
+                        print value
+                    if key == "description":
+                        print "----input description---"
+                        print value
                     self.assertTrue(output.has_key(key))
+                    if key == "processing_era":
+                        print "---------output value -----------"
+                        print output[key]
+                    if key== "processing_version":
+                        print "----output processing_version-----"
+                        print output[key]
+                    if key == "description":
+                        print "--------output description--------"
+                        print output[key]
                     check(value, output[key])
             elif isinstance(input, list):
                 for element_in, element_out in zip(sorted(input), sorted(output)):
@@ -337,6 +354,10 @@ class DBSValidation_t(unittest.TestCase):
         migration_request = self.migration_api.submitMigration(toMigrate)
         self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))
         migration_request_id = migration_request['migration_details']['migration_request_id']
+        print "____toMigrate___"
+        print toMigrate
+        print "----------migration_request -----------"
+        print migration_request
 
         ###check migration status for max. 300s (should be enough time to migrate the dataset)
         with Timeout(300):
@@ -394,6 +415,10 @@ class DBSValidation_t(unittest.TestCase):
         migration_request = self.migration_api.submitMigration(toMigrate)
         self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))
         migration_request_id = migration_request['migration_details']['migration_request_id']
+        print "____toMigrate___"
+        print toMigrate
+        print "----------migration_request -----------"
+        print migration_request 
 
         ###check migration status for max. 300s (should be enough time to migrate the dataset)
         with Timeout(300):
