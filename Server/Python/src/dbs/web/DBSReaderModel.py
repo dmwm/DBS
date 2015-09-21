@@ -1278,6 +1278,8 @@ class DBSReaderModel(RESTModel):
         """
         try:
             return self.dbsBlock.dumpBlock(block_name)
+        except HTTPError as he:
+            raise he
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except Exception as ex:
