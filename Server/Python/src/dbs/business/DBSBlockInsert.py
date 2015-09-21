@@ -18,17 +18,17 @@ class DBSBlockInsert :
         self.logger = logger
         self.dbi = dbi
         # Setup the DAO objects
-        self.primdslist     = daofactory(classname="PrimaryDataset.List")
+        #self.primdslist     = daofactory(classname="PrimaryDataset.List")
         self.primdsid       = daofactory(classname="PrimaryDataset.GetID")
-        self.datasetlist    = daofactory(classname="Dataset.List")
+        #self.datasetlist    = daofactory(classname="Dataset.List")
         self.datasetid      = daofactory(classname="Dataset.GetID")
-        self.blocklist      = daofactory(classname="Block.List")
+        #self.blocklist      = daofactory(classname="Block.List")
         self.blockid        = daofactory(classname="Block.GetID")
-        self.filelist       = daofactory(classname="File.List")
+        #self.filelist       = daofactory(classname="File.List")
         self.fileid         = daofactory(classname="File.GetID")
         self.filetypeid     = daofactory(classname="FileType.GetID")
-        self.fplist         = daofactory(classname="FileParent.List")
-        self.fllist         = daofactory(classname="FileLumi.List")
+        #self.fplist         = daofactory(classname="FileParent.List")
+        #self.fllist         = daofactory(classname="FileLumi.List")
         self.primdstpid     = daofactory(classname="PrimaryDSType.GetID")
         self.tierid         = daofactory(classname="DataTier.GetID")
         self.datatypeid     = daofactory(classname="DatasetType.GetID")
@@ -99,7 +99,8 @@ class DBSBlockInsert :
             self.insertBlockFile(blockcontent, datasetId, migration)
         except KeyError, ex:
             dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/putBlock: \
-                KeyError exception: %s. " %ex.args[0] )
+                KeyError exception: %s. " %ex.args[0], self.logger.exception, 
+	        "DBSBlockInsert/putBlock: KeyError exception: %s. " %ex.args[0]	)
         except Exception, ex:
             raise
 
@@ -117,7 +118,8 @@ class DBSBlockInsert :
             if tran:tran.rollback()
             if conn:conn.close()
             dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/insetBlockFile: \
-                KeyError exception: %s. " %ex.args[0] )
+                KeyError exception: %s. " %ex.args[0], self.logger.exception, 
+		"DBSBlockInsert/insetBlockFile:KeyError exception: %s. " %ex.args[0])
         except Exception, ex:
             if tran:tran.rollback()
             if conn:conn.close()
@@ -141,7 +143,7 @@ class DBSBlockInsert :
             #Throw exception to let the up layer know. YG 11/17/2010
                 if tran:tran.rollback()
                 if conn:conn.close()
-                dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertBlock. Block %s already exists." % (block['block_name']))
+                dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertBlock. Block %s already exists." % (block['block_name']), self.logger.exception, "DBSBlockInsert/insertBlock. Block %s already exists." % (block['block_name']))
             elif str(ex).find("ORA-01400") > -1:
                 if tran:tran.rollback()
                 if conn:conn.close()
@@ -272,7 +274,8 @@ class DBSBlockInsert :
             if tran:tran.rollback()
             if conn:conn.close()
             dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/FileParents: \
-                KeyError exception: %s. " %ex.args[0] )
+                KeyError exception: %s. " %ex.args[0] , self.logger.exception, "DBSBlockInsert/FileParents:\
+		KeyError exception: %s. " %ex.args[0])
         except Exception, ex:
             if tran:tran.rollback()
             if conn: conn.close()
@@ -422,7 +425,8 @@ class DBSBlockInsert :
         except KeyError, ex:
             if conn:conn.close()
             dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/insertOutputModuleConfig: \
-                KeyError exception: %s. " %ex.args[0] )
+                KeyError exception: %s. " %ex.args[0], self.logger.exception,
+	        "DBSBlockInsert/insertOutputModuleConfig: KeyError exception: %s. " %ex.args[0]	)
         except Exception, ex:
             if conn:conn.close()
             raise
@@ -468,7 +472,9 @@ class DBSBlockInsert :
                     if tran:tran.rollback()
                     if conn:conn.close()
                     dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertOutputModuleConfig: \
-                                         KeyError exception: %s. " %ex.args[0] )
+                                         KeyError exception: %s. " %ex.args[0],
+					 self.logger.exception, 
+					"DBSBlockInsert/insertOutputModuleConfig: KeyError exception: %s. " %ex.args[0])
                 except exceptions.IntegrityError, ex:
                     #Another job inserted it just 1/100000 second earlier than
                     #you!!  YG 11/17/2010
@@ -497,7 +503,8 @@ class DBSBlockInsert :
                     elif str(ex).find("ORA-01400") > -1:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        dbsExceptionHandler("dbsException-missing-data","Missing data when inserting Configure. ", self.logger.exception, str(ex))
+                        dbsExceptionHandler("dbsException-missing-data","Missing data when inserting Configure. ", 
+				self.logger.exception, str(ex))
                     else:
                         if tran:tran.rollback()
                         if conn:conn.close()
@@ -539,8 +546,10 @@ class DBSBlockInsert :
         except KeyError, ex:
             if conn:conn.close()
             dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/InsertDataset: Dataset is required.\
-                Exception: %s.  troubled dataset are: %s" %(ex.args[0], dataset) )
-        except exceptions, ex1:
+                Exception: %s.  troubled dataset are: %s" %(ex.args[0], dataset),
+	        self.logger.exception, "DBSBlockInsert/InsertDataset: Dataset is required.\
+                Exception: %s.  troubled dataset are: %s" %(ex.args[0], dataset	))
+        except Exception as ex1:
             if conn:conn.close()
             raise ex1
         if datasetID > 0:
@@ -649,6 +658,8 @@ class DBSBlockInsert :
                             if conn:conn.close()
                             dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: \
 Check the spelling of acquisition Era name. The db may already have the same \
+acquisition era, but with different cases.", self.logger.exception, "BlockInsert: \
+Check the spelling of acquisition Era name. The db may already have the same \
 acquisition era, but with different cases.")
                     else:
                         if tran:tran.rollback()
@@ -678,7 +689,8 @@ acquisition era, but with different cases.")
             else:
                 if tran:tran.rollback()
                 if conn:conn.close()
-                dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Acquisition Era is required")
+                dbsExceptionHandler("dbsException-invalid-input2", "BlockInsert: Acquisition Era is required", 
+			self.logger.exception, "BlockInsert: Acquisition Era is required")
 
             #4 Deal with Processing era
             pera = blockcontent.get('processing_era', {})
@@ -734,7 +746,9 @@ acquisition era, but with different cases.")
                     if tran:tran.rollback()
                     if conn:conn.close()
                     dbsExceptionHandler('dbsException-invalid-input2', "BlockInsert:\
-                        processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified.")
+                   processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified.",
+		   self.logger.exception, 
+		   "BlockInsert: processed_ds_name=acquisition_era_name[-filter_name][-processing_str]-vprocessing_version must be satisified."	)
 
             #So far so good, let's commit first 4 db activities before going on.
             tran.commit()
@@ -742,7 +756,8 @@ acquisition era, but with different cases.")
             if tran:tran.rollback()
             if conn:conn.close()
             dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertOutputModuleConfig: \
-                                         KeyError exception: %s. " %ex.args[0] )            
+                                         KeyError exception: %s. " %ex.args[0], self.logger.exception,
+				         "DBSBlockInsert/insertOutputModuleConfig: KeyError exception: %s." %ex.args[0]	)            
         except:
         
             if tran:tran.rollback()

@@ -84,11 +84,13 @@ class DBSMigrateModel(RESTModel):
             return self.dbsMigrate.insertMigrationRequest(indata)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSMigrateModle/submit. %s\n Exception trace: \n %s." \
                      % (ex, traceback.format_exc() )
-            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'],
-            self.logger.exception, sError)
+            if hasattr(ex, 'status') and ex.status == 400:
+		dbsExceptionHandler('dbsException-invalid-input2', str(ex), self.logger.exception, sError)
+	    else:	
+		dbsExceptionHandler('dbsException-server-error',  str(ex), self.logger.exception, sError)
     
     @inputChecks(migration_rqst_id=(long,int,basestring), block_name=basestring, dataset=basestring, user=basestring)
     def status(self, migration_rqst_id="", block_name="", dataset="", user=""):
@@ -103,11 +105,13 @@ class DBSMigrateModel(RESTModel):
                 block_name, dataset, user)
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSMigrateModle/status. %s\n Exception trace: \n %s." \
                      % (ex, traceback.format_exc() )
-            dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'],
-            self.logger.exception, sError)
+	    if hasattr(ex, 'status') and ex.status == 400:
+		dbsExceptionHandler('dbsException-invalid-input2', str(ex), self.logger.exception, sError)	
+            else:
+		dbsExceptionHandler('dbsException-server-error',  str(ex), self.logger.exception, sError)
     
     def remove(self):
         """

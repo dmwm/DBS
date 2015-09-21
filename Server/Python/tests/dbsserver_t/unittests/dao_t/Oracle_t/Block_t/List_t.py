@@ -1,13 +1,10 @@
 """
 dao unittests
 """
-
-__revision__ = "$Id: List_t.py,v 1.2 2010/03/23 16:25:19 akhukhun Exp $"
-__version__ = "$Revision: 1.2 $"
-
 import os
 import unittest
 
+from types import GeneratorType
 from dbsserver_t.utils.DaoConfig import DaoConfig
 from dbsserver_t.utils.DBSDataProvider import create_dbs_data_provider, strip_volatile_fields
 from dbs.dao.Oracle.Block.List import List as BlockList
@@ -33,18 +30,27 @@ class List_t(unittest.TestCase):
         """dao.Oracle.Block.List: Basic"""
         block_name = self.data[0]['block_name']
         dataset_name = block_name.split("#")[0]
-        result = self.dao.execute(self.conn, dataset=dataset_name)
+        r = self.dao.execute(self.conn, dataset=dataset_name)
+	result = []
+	for item in r:
+	    result.append(item)
         self.assertEqual(strip_volatile_fields(result), self.data)
 
     def test02(self):
         """dao.Oracle.Block.List: Basic"""
-        result = self.dao.execute(self.conn, block_name=self.data[0]['block_name'])
-        self.assertEqual(strip_volatile_fields(result), self.data)
+        r = self.dao.execute(self.conn, block_name=self.data[0]['block_name'])
+        result = []
+	for item in r:
+	    result.append(item)
+	self.assertEqual(strip_volatile_fields(result), self.data)
 
     def test03(self):
         """dao.Oracle.Block.List: Basic"""
-        result = self.dao.execute(self.conn, origin_site_name=self.data[0]['origin_site_name'])
-        self.assertTrue(type(result) == list)
+        r = self.dao.execute(self.conn, origin_site_name=self.data[0]['origin_site_name'])
+        result = []
+	for item in r:
+	    result.append(item)
+        self.assertTrue(type(r) == GeneratorType)
         self.assertNotEqual(len(result), 0)
 
 

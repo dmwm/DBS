@@ -114,6 +114,7 @@ class MigrationTask(SequencialTaskBase):
         self.inserted = True
         dbowner = self.db_config.get('dbowner')
         connectUrl = self.db_config.get('connectUrl')
+	print connectUrl
         dbFactory = DBFactory(MgrLogger, connectUrl, options={})
         self.dbi = dbFactory.connect()
         self.dbFormatter = DBFormatter(MgrLogger,self.dbi)
@@ -137,7 +138,7 @@ class MigrationTask(SequencialTaskBase):
                 request =req[0]
                 self.sourceUrl = request['migration_url']
                 self.migration_req_id = request['migration_request_id']
-                MgrLogger.error("-"*20+  time.asctime(time.gmtime()) + ' Migration request ID: '+ str(self.migration_req_id))
+                MgrLogger.error("-"*20+ "getResource--  "+  time.asctime(time.gmtime()) + ' Migration request ID: '+ str(self.migration_req_id))
                 migration_status = 1
                 self.dbsMigrate.updateMigrationRequestStatus(migration_status, self.migration_req_id)
             except IndexError: 
@@ -178,7 +179,7 @@ class MigrationTask(SequencialTaskBase):
             self.dbsMigrate.updateMigrationRequestStatus(3, self.migration_req_id)
     
     def insertBlock(self):
-        #MgrLogger.info("_"*20+"insertBlock")
+        MgrLogger.info("_"*20+"insertBlock")
         self.inserted = True
         if self.sourceUrl:
             try:
@@ -186,13 +187,17 @@ class MigrationTask(SequencialTaskBase):
                     params={'block_name':bName}
                     data = self.dbsMigrate.callDBSService(self.sourceUrl, 'blockdump', params)
                     data = cjson.decode(data)
+		    #MgrLogger.error( "--YG migration server blockdump--")
+		    #MgrLogger.error( data)	
                     migration_status = 0
                     #idx = self.block_names.index(bName)
                     MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + " Inserting block: %s for request id: %s" %(bName, self.migration_req_id))
                     try:
                         self.DBSBlockInsert.putBlock(data, migration=True)
                         migration_status = 2
-                    except dbsException, de:
+		    except HTTPError as he:
+		        raise	
+                    except dbsException as de:
                         if "Block %s already exists" % (bName) in de.message:
                             #the block maybe get into the destination by other means. 
                             #skip this block and continue.
@@ -205,7 +210,7 @@ class MigrationTask(SequencialTaskBase):
                                 migration_block=self.migration_block_ids[idx])
                     MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + " Done insert block: %s for request id: %s" %(bName,self.migration_req_id))
                 self.dbsMigrate.updateMigrationRequestStatus(2, self.migration_req_id)
-            except Exception, ex:
+            except Exception as ex:
                 self.inserted = False
                 #handle dbsException
                 if type(ex) == dbsException:

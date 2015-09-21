@@ -11,6 +11,7 @@ import unittest
 from dbsserver_t.utils.DaoConfig import DaoConfig
 from dbsserver_t.utils.DBSDataProvider import create_dbs_data_provider, strip_volatile_fields
 from dbs.dao.Oracle.Dataset.List import List as DatasetList
+from types import  GeneratorType
 
 class List_t(unittest.TestCase):
     @DaoConfig("DBSReader")
@@ -32,18 +33,24 @@ class List_t(unittest.TestCase):
     def test01(self):
         """dao.Oracle.Dataset.List: Basic"""
         result = self.dao.execute(self.conn)
-        self.assertTrue(type(result) == list)
+        self.assertTrue(type(result) == GeneratorType)
                 
     def test02(self):
         """dao.Oracle.Dataset.List: Basic"""
-        result = self.dao.execute(self.conn, dataset=self.data[0]['dataset'])
+        r = self.dao.execute(self.conn, dataset=self.data[0]['dataset'])
+	result = []
+        for item in r:
+	    result.append(item)	
         self.assertEqual(strip_volatile_fields(result), self.data)
         
     def test03(self):
         """dao.Oracle.Dataset.List: Basic"""
         result = self.dao.execute(self.conn, "ThisDoesNotExist")
-        self.assertTrue(type(result) == list)
-        self.assertEqual(len(result), 0)
+        self.assertTrue(type(result) == GeneratorType)
+	l = []
+        for item in result:
+            l = append(item)  	
+        self.assertEqual(len(l), 0)
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(List_t)

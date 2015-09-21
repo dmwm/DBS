@@ -5,6 +5,7 @@ for a given Block or Dataset. Full Block and dataset names are expected. Block n
 dataset name. 
 """
 
+from types import GeneratorType
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
@@ -53,7 +54,8 @@ class SummaryList(DBFormatter):
                     run_list.append(str(r))
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
-                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.",
+				self.logger.exception)
                     wheresql_run_range = " fl.RUN_NUM between :minrun and :maxrun "
                     binds.update({"minrun":r[0]})
                     binds.update({"maxrun":r[1]})
@@ -203,10 +205,13 @@ class SummaryList(DBFormatter):
                     """.format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds2=join_valid_ds2)
                 binds.update({"dataset":dataset})
         else:
-            return []
+            return 
 
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        result=[]
-        for i in range(len(cursors)):
-            result.extend(self.formatCursor(cursors[i]))
-	return result
+        for i in cursors:
+            d = self.formatCursor(i)
+            if isinstance(d, list) or isinstance(d, GeneratorType):
+                for elem in d:
+                    yield elem
+            elif d:
+                yield d

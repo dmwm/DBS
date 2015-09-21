@@ -7,6 +7,7 @@ Lists dataset_parent and output configuration parameters too.
 __revision__ = "$Id: BriefList.py,v 1.2 2010/08/03 13:35:43 akhukhun Exp $"
 __version__ = "$Revision: 1.2 $"
 
+from types import GeneratorType
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSTransformInputType import parseRunRange
@@ -268,9 +269,10 @@ class BriefList(DBFormatter):
 	#self.logger.error( sql)
         #self.logger.error( binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        result = []
         for i in cursors:
             d = self.formatCursor(i)
-            if d:
-                result += d
-        return result
+            if isinstance(d, list) or isinstance(d, GeneratorType):
+                for elem in d:
+                    yield elem
+            elif d:
+                yield d

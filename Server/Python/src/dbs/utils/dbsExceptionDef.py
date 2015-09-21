@@ -11,6 +11,7 @@ DBSEXCEPTIONS = {
     'dbsException-5' : 'dbsException in Migration: ', 
     'dbsException-6' : 'dbsException in FileBuffer: ',
     'dbsException-7' : 'dbsException due to invalid client input: ',
-    'dbsException-8' : 'dbsException required pre-existing data NOT in DBS: '
+    'dbsException-8' : 'dbsException required pre-existing data NOT in DBS: ',
+    'dbsException-9' : 'dbsException Failed to connec to host or proxy: '	
 }
 

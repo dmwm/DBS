@@ -31,18 +31,27 @@ class List_t(unittest.TestCase):
 
     def test01(self):
         """dao.Oracle.File.List: Basic"""
-        result = self.dao.execute(self.conn, dataset=self.data[0]["dataset"])
-        self.assertEqual(strip_volatile_fields(result), self.data)
+        result = []
+	r = self.dao.execute(self.conn, dataset=self.data[0]["dataset"])
+        for item in r:
+            result.append(item)
+	self.assertEqual(strip_volatile_fields(result), self.data)
 
     def test02(self):
         """dao.Oracle.File.List: Basic"""
-        result = self.dao.execute(self.conn, block_name=self.data[0]["block_name"])
-        self.assertEqual(strip_volatile_fields(result), self.data)
+        result = [] 
+        r = self.dao.execute(self.conn, block_name=self.data[0]["block_name"])
+        for item in r:
+	    result.append(item)
+	self.assertEqual(strip_volatile_fields(result), self.data)
 
     def test03(self):
         """dao.Oracle.File.List: Basic"""
-        result = self.dao.execute(self.conn, logical_file_name=self.data[0]["logical_file_name"])
-        self.assertEqual(strip_volatile_fields(result), self.data)
+        result = []
+	r = self.dao.execute(self.conn, logical_file_name=self.data[0]["logical_file_name"])
+        for item in r:
+	    result.append(item)	
+	self.assertEqual(strip_volatile_fields(result), self.data)
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(List_t)
