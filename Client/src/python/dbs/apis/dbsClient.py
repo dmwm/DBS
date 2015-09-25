@@ -1002,12 +1002,54 @@ class DbsApi(object):
         # In order to protect DB and make sure the query can be return in 300 seconds, we limit the length of 
         # logical file names, lumi and run num to 1000. These number may be adjusted later if 
         # needed. YG   May-20-2015.
+        if 'logical_file_name' in kwargs.keys() and isinstance(kwargs['logical_file_name'], list)\
+            and len(kwargs['logical_file_name']) > 1:
+            if 'run_num' in kwargs.keys() and kwargs['run_num'] and len(kwargs['run_num']) > 1 :
+                raise dbsClientException('Invalid input', 'files API does not supprt two lists: run_num and lfn. ')
+            elif 'lumi_list' in kwargs.keys() and kwargs['lumi_list'] and len(kwargs['lumi_list']) > 1 :
+                raise dbsClientException('Invalid input', 'files API does not supprt two lists: lumi_lis and lfn. ')
+                
+        elif 'lumi_list' in kwargs.keys() and kwargs['lumi_list']:
+            if 'run_num' not in kwargs.keys() or not kwargs['run_num'] or kwargs['run_num'] ==-1 :
+                raise dbsClientException('Invalid input', 'When Lumi section is present, a single run is required. ')
+        else:
+            if 'run_num' in kwargs.keys():
+                if isinstance(kwargs['run_num'], list):
+                    if 1 in kwargs['run_num'] or '1' in kwargs['run_num']:
+                        raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 when no lumi.')
+                else:
+                    if kwargs['run_num']==1 or kwargs['run_num']=='1':
+                        raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 when no lumi.')
         results = []
         mykey = None
+        total_lumi_len = 0
+        split_lumi_list = []
         max_list_len = 1000 #this number is defined in DBS server
         for key, value in kwargs.iteritems():
-            if key in ('logical_file_name','lumi_list','run_num') and isinstance(value, list) and len(value)>1000:
+            if key == 'lumi_list' and isinstance(kwargs['lumi_list'], list)\ 
+                and kwargs['lumi_list'] and isinstance(kwargs['lumi_list'][0], list):
+                lapp = 0
+                l = 0
+                sm = []
+                for i in kwargs['lumi_list']:
+                    while i[0]+max_list_len < i[1]:
+                        split_lumi_list.append([[i[0], i[0]+max_list_len-1]])
+                        i[0] = i[0] + max_list_len
+                    else:
+                        l += (i[1]-i[0]+1)
+                        if l <=  max_list_len:
+                            sm.append([i[0], i[1]])
+                            lapp = l  #number lumis in sm
+                        else:
+                            split_lumi_list.append(sm)
+                            sm=[]
+                            sm.append([i[0], i[1]])
+                            lapp = i[1]-i[0]+1
+                if sm:
+                    split_lumi_list.append(sm)
+            elif key in ('logical_file_name','run_num', 'lumi_list') and isinstance(value, list) and len(value)>max_list_len:
                 mykey =key
+#
         if mykey:  
             sourcelist = []
             #create a new list to slice
@@ -1015,13 +1057,19 @@ class DbsApi(object):
             for slice in slicedIterator(sourcelist, max_list_len):
                 kwargs[mykey] = slice
                 results.extend(self.__callServer("fileArray", data=kwargs, callmethod="POST"))
-            #make sure only one dictionary per lfn.
-	    #Make sure this changes when we move to 2.7 or 3.0
-	    #http://stackoverflow.com/questions/11092511/python-list-of-unique-dictionaries
-            # YG May-26-2015	
-            return dict((v['logical_file_name'],v) for v in results).values()
+        elif split_lumi_list:
+            for item in split_lumi_list:
+                kwargs['lumi_list'] = item
+                results.extend(self.__callServer("fileArray", data=kwargs, callmethod="POST"))
         else:
             return self.__callServer("fileArray", data=kwargs, callmethod="POST")
+        
+        #make sure only one dictionary per lfn.
+        #Make sure this changes when we move to 2.7 or 3.0
+        #http://stackoverflow.com/questions/11092511/python-list-of-unique-dictionaries
+        # YG May-26-2015
+        return dict((v['logical_file_name'],v) for v in results).values()
+
     def listFileSummaries(self, **kwargs):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. If the optional run
