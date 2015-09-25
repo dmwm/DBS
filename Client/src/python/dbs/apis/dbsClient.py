@@ -1026,7 +1026,7 @@ class DbsApi(object):
         split_lumi_list = []
         max_list_len = 1000 #this number is defined in DBS server
         for key, value in kwargs.iteritems():
-            if key == 'lumi_list' and isinstance(kwargs['lumi_list'], list)\ 
+            if key == 'lumi_list' and isinstance(kwargs['lumi_list'], list)\
                 and kwargs['lumi_list'] and isinstance(kwargs['lumi_list'][0], list):
                 lapp = 0
                 l = 0
