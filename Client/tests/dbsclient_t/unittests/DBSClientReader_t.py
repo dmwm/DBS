@@ -6,11 +6,25 @@ import os
 import re
 import sys
 import unittest
+from functools import wraps
 
 from dbs.apis.dbsClient import *
 from dbs.exceptions.dbsClientException import dbsClientException
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 
+def checkException400(f):
+    @wraps(f)
+    def wrapper(self, *args, **kwargs):
+        out = None
+        try:
+            out = f(self, *args, **kwargs)
+        except Exception, ex:
+            if 'HTTPError 400' not in ex.args[0]:
+                self.fail("Exception was expected and was not raised.")
+        else:
+            self.fail("Exception was expected and was not raised.")
+        return out
+    return wrapper
 
 def importCode(code, name, add_to_sys_modules=0):
     module = imp.new_module(name)
@@ -189,13 +203,11 @@ class DBSClientReader_t(unittest.TestCase):
         """test29a unittestDBSClientReader_t.listBlocks: """
         self.api.listBlocks(dataset=self.testparams['dataset'], block_name=self.testparams['block'],
                             origin_site_name=self.testparams['site'])
-        try:
-            self.api.listBlocks(origin_site_name=self.testparams['site'])
-        except Exception as e:
-            #pass
-	    print e
-        else:
-            self.fail("exception was excepted, was not raised")
+
+    @checkException400
+    def test029a1(self):
+        """test29a1 Negitive unittestDBSClientReader_t.listBlocks: """
+        self.api.listBlocks(origin_site_name=self.testparams['site'])
 
     def test029b(self):
         """test29b unittestDBSClientReader_t.listBlocks: dataset, run_num, detail"""
@@ -671,6 +683,30 @@ class DBSClientReader_t(unittest.TestCase):
         """test04000i unittestDBSClientReader_t.listFileArray: dataset, lumi_list and run_num"""
         self.api.listFileArray(dataset=self.testparams['dataset'], run_num=[self.testparams['runs'][0]], lumi_list=[1,2,3,4,5,6])
 
+    def test04000j(self):
+        """test04000j unittestDBSClientReader_t.listFileArray: dataset, lumi_list(>1000) and run_num"""
+        self.api.listFileArray(dataset=self.testparams['dataset'], run_num=[self.testparams['runs'][0]],\
+        lumi_list=[[248, 494], [534, 546], [638, 650], [794, 1313], [1327, 1339], [1353, 1482], [1496, 1573], \
+        [1652, 1664], [1743, 1755], [1860, 1872]])
+
+    def test04000k(self):
+        """test04000k unittestDBSClientReader_t.listFileArray: dataset, lumi_list(>1000) and run_num"""
+        self.api.listFileArray(dataset=self.testparams['dataset'], run_num=[self.testparams['runs'][0]],\
+        lumi_list=[[248, 494], [534, 546], [638, 650], [794, 1313], [1327, 1339], [1353, 1482], [1496, 1573], \
+        [1652, 1664], [1743, 1755], [1860, 1872]], detail=1)
+
+    def test04000l(self):
+        """test04000l unittestDBSClientReader_t.listFileArray: dataset, lumi_list(>1000) and run_num"""
+        self.api.listFileArray(dataset=self.testparams['dataset'], run_num=[self.testparams['runs'][0]],\
+        lumi_list=[[248, 494], [534, 546], [638, 650], [794, 1313], [1327, 1339], [1353, 1482], [1496, 1573], \
+        [1652, 1664], [1743, 1755], [1860, 1872]], validFileOnly=1)
+
+    def test04000m(self):
+        """test04000m unittestDBSClientReader_t.listFileArray: dataset, lumi_list(>1000) and run_num"""
+        self.api.listFileArray(dataset=self.testparams['dataset'], run_num=[self.testparams['runs'][0]],\
+        lumi_list=[[248, 494], [534, 546], [638, 650], [794, 1313], [1327, 1339], [1353, 1482], [1496, 1573], \
+        [1652, 1664], [1743, 1755], [1860, 1872]], validFileOnly=1, detail=1)
+
     def test06100a(self):
         """test6100a unittestDBSClientReader_t.listFileArray: basic test"""
         self.api.listFileArray(dataset=self.testparams['dataset'],
@@ -760,15 +796,11 @@ class DBSClientReader_t(unittest.TestCase):
     def test041(self):
         """test41 unittestDBSClientReader_t.listFileParents: basic test"""
         self.api.listFileParents(logical_file_name=self.testparams['files'][0])
-
+    
+    @checkException400
     def test042(self):
         """test42 unittestDBSClientReader_t.listFileParents: basic test"""
-        try:
-            print self.api.listFileParents()
-        except:
-            pass
-        else:
-            self.fail("exception was excepted, was not raised")
+        print self.api.listFileParents()
 
     def test043(self):
         """test43 unittestDBSClientReader_t.listFileParents: basic test"""
@@ -788,14 +820,10 @@ class DBSClientReader_t(unittest.TestCase):
         """test44 unittestDBSClientReader_t.listFileLumis: basic test"""
         self.api.listFileLumis(logical_file_name=self.testparams['files'][0])
 
+    @checkException400
     def test045(self):
         """test45 unittestDBSClientReader_t.listFileLumis: basic test"""
-        try:
-            print self.api.listFileLumis()
-        except:
-            pass
-        else:
-            self.fail("exception was excepted, was not raised")
+        self.api.listFileLumis()
 
     def test046(self):
         """test46 unittestDBSClientReader_t.listFileLumis: basic test"""
@@ -1074,14 +1102,10 @@ class DBSClientReader_t(unittest.TestCase):
         """test84: unittestDBSClientReader_t.listDatasetAccessType with dataset_access_type"""
         self.api.listDatasetAccessTypes(dataset_access_type="PRODUCTION")
 
+    @checkException400
     def test085(self):
         """test85: unittestDBSClientReader_t.blockDump"""
-        try:
-            self.api.blockDump()
-        except:
-            pass
-        else:
-            self.fail("exception was excepted, was not raised")
+        self.api.blockDump()
 
     def test086(self):
         """test86: unittestDBSClientReader_t.blockDump with block_name"""
@@ -1142,13 +1166,10 @@ class DBSClientReader_t(unittest.TestCase):
         """test93d unittestDBSClientReader_t.listBlockOrigin: """
         self.api.listBlockOrigin(origin_site_name=self.testparams['site'], block_name=self.testparams['block'])
 
+    @checkException400
     def test094(self):
         """test94 unittestDBSClientReader_t.listBlockOrigin: """
-        try:
-                self.api.listBlockOrigin(origin_site_name=self.testparams['site'])
-        except dbsClientException as e:
-                if "Invalid input:" in str(e):
-                        pass
+        self.api.listBlockOrigin(origin_site_name=self.testparams['site'])
 
     def test095(self):
         """test095: unittestDBSClientReader_t.listBlockSummaries: input validation test"""
