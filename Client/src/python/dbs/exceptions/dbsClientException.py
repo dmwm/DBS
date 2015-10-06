@@ -5,7 +5,7 @@ import exceptions
 
 class dbsClientException(exceptions.Exception):
 
-    def __init__(self,reason,message):
+    def __init__(self, reason, message):
         Exception.__init__(self)
         self.name = str(self.__class__.__name__)
         self.reason = reason

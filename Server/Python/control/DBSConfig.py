@@ -29,14 +29,14 @@ elif VARIANT == 'preprod':
   db_mapping = {'prod/global': [dbs3_pg_r,  {'reader':{},'writer':{'dbs': 'operator', 'dataops': 'production-operator'}}],
                 'dev/global':  [dbs3_l1_i2, {'reader':{},'writer':{}}],
                 'int/global':  [dbs3_l3_i2, {'reader':{},'writer':{}}],
-                'int/phys03':  [dbs3_ip1_i2,{'reader':{},'writer':{}}]}
+                'int/phys03':  [dbs3_ip1_i2, {'reader':{},'writer':{}}]}
 elif VARIANT == 'dev':
   db_mapping = {'prod/global': [dbs3_p2_i2, {'reader':{},'writer':{'dbs': 'operator', 'dataops': 'production-operator'}}],
                 'dev/global':  [dbs3_l1_i2, {'reader':{},'writer':{}}],
                 'int/global':  [dbs3_l4_i2, {'reader':{},'writer':{}}],
-                'dev/phys03':  [dbs3_dp1_i2,{'reader':{},'writer':{}}]}
+                'dev/phys03':  [dbs3_dp1_i2, {'reader':{},'writer':{}}]}
 else:
-  db_mapping = {'dev/global': [dbs3_l2_i2,{'reader':{},'writer':{}}],
+  db_mapping = {'dev/global': [dbs3_l2_i2, {'reader':{},'writer':{}}],
                 'dev/phys03': [dbs3_p_i2, {'reader':{},'writer':{}}]}
 
 config = Configuration()
@@ -63,7 +63,7 @@ config.dbs.instances = list(set([i for r in view_mapping[VARIANT].values() for i
 
 ### Create views for DBSReader, DBSWriter and DBSMigrate
 active = config.dbs.views.section_('active')
-for viewname, access in [('DBSReader','reader'),('DBSWriter','writer'),('DBSMigrate','writer')]:
+for viewname, access in [('DBSReader', 'reader'), ('DBSWriter', 'writer'), ('DBSMigrate', 'writer')]:
   if view_mapping[VARIANT][viewname]:
     active.section_(viewname)
     view = getattr(active, viewname)

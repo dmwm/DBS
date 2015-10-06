@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     input_files = glob.glob(options.input)
 
-    for input_file in in input_files:
+    for input_file in input_files:
         with open(input_file, 'r') as f:
             block_dump = literal_eval(f.read())
 

@@ -11,7 +11,7 @@ from functools import wraps
 
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
 from DBSWriterModel_t import outDict
-from dbs.utils.dbsException import dbsException,dbsExceptionCode
+from dbs.utils.dbsException import dbsException, dbsExceptionCode
 
 
 def checkException400(f):
@@ -44,8 +44,8 @@ class DBSReaderModel_t(unittest.TestCase):
     def setUp(self):
         """setup all necessary parameters"""
         global testparams
-        filename=os.path.join(os.path.dirname(os.path.abspath(__file__)),'info.dict')
-        infofile=open(filename,"r")
+        filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'info.dict')
+        infofile=open(filename, "r")
         testparams=importCode(infofile, "testparams", 0).info
 
         if len(testparams) == 0:
@@ -362,27 +362,27 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test004a(self):
         """test004a: web.DBSReaderModel.listDatasetArray: basic test"""
-        data = {'dataset':[testparams['dataset'],testparams['child_dataset']]}
-        api.insert('datasetlist',data) ## it is a post request, therefore insert is used
+        data = {'dataset':[testparams['dataset'], testparams['child_dataset']]}
+        api.insert('datasetlist', data) ## it is a post request, therefore insert is used
 
     def test004b(self):
         """test004b: web.DBSReaderModel.listDatasetArray: basic test"""
 	res1 = api.list('datasets', dataset=testparams['dataset'], detail=True, dataset_access_type='*')
         res2 = api.list('datasets', dataset=testparams['child_dataset'], detail=True)
-        data = {'dataset_id':[res1[0]['dataset_id'],res2[0]['dataset_id']]}
-        api.insert('datasetlist',data) ## it is a post request, therefore insert is used
+        data = {'dataset_id':[res1[0]['dataset_id'], res2[0]['dataset_id']]}
+        api.insert('datasetlist', data) ## it is a post request, therefore insert is used
 
     def test004c(self):
         """test004c: web.DBSReaderModel.listDatasetArray: basic test"""
-        data = {'dataset':[testparams['dataset'],testparams['child_dataset']], 'detail':True}
-        api.insert('datasetlist',data) ## it is a post request, therefore insert is used
+        data = {'dataset':[testparams['dataset'], testparams['child_dataset']], 'detail':True}
+        api.insert('datasetlist', data) ## it is a post request, therefore insert is used
     
     def test004d(self):
         """test004d: web.DBSReaderModel.listDatasetArray: basic test"""
         res1 = api.list('datasets', dataset=testparams['dataset'], detail=True, dataset_access_type='*')
         res2 = api.list('datasets', dataset=testparams['child_dataset'], detail=True)
-        data = {'dataset_id':[res1[0]['dataset_id'],res2[0]['dataset_id']], 'detail':True}
-        api.insert('datasetlist',data) ## it is a post request, therefore insert is used
+        data = {'dataset_id':[res1[0]['dataset_id'], res2[0]['dataset_id']], 'detail':True}
+        api.insert('datasetlist', data) ## it is a post request, therefore insert is used
 
     
     def test005a(self):
@@ -391,11 +391,11 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test005b(self):
         """test005b: web.DBSReaderModel.listDataTiers: basic test"""
-        api.list('datatiers',data_tier_name=testparams['tier'])
+        api.list('datatiers', data_tier_name=testparams['tier'])
 
     def test005c(self):
         """test005c: web.DBSReaderModel.listDataTiers: basic test"""
-        api.list('datatiers',data_tier_name=testparams['tier']+'*')
+        api.list('datatiers', data_tier_name=testparams['tier']+'*')
 
     @checkException400
     def test006a(self):
@@ -634,7 +634,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test007d13(self):
         """test007d13: web.DBSReaderModel.listFiles: with dataset, lumi list"""
-        api.list('files', dataset=testparams['dataset'], lumi_list=[[27414, 26422], [29838,30000]],
+        api.list('files', dataset=testparams['dataset'], lumi_list=[[27414, 26422], [29838, 30000]],
                         run_num=testparams['run_num'], detail=True)
 
     def test007e(self):
@@ -781,25 +781,25 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test007K16(self):
         """test007k16: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
-        data = {'dataset':testparams['dataset'], 'lumi_list': [[27414, 27422], [39999,40000] ],
+        data = {'dataset':testparams['dataset'], 'lumi_list': [[27414, 27422], [39999, 40000] ],
                  'run_num':testparams['run_num']}
         api.insert('fileArray', data)
 
     def test007k17(self):
         """test007k17: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
-        data = {'dataset' : testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,30000]],
+        data = {'dataset' : testparams['dataset'], 'lumi_list': [[27414, 26422], [29838, 30000]],
                  'run_num': testparams['run_num'], 'validFileOnly':1}
         api.insert('fileArray', data)
 
     def test007k18(self):
         """test007k18: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list, validFileOnly"""
-        data = {'dataset': testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,30000]],
+        data = {'dataset': testparams['dataset'], 'lumi_list': [[27414, 26422], [29838, 30000]],
                  'run_num' : testparams['run_num'], 'validFileOnly':0}
         api.insert('fileArray', data)   
 
     def test007k19(sel):
         """test007k19: web.DBSReaderModel.listFileArray: with dataset, lumi list that has to be a list"""
-        data = { 'dataset':testparams['dataset'], 'lumi_list': [[27414, 26422], [29838,30000]],
+        data = { 'dataset':testparams['dataset'], 'lumi_list': [[27414, 26422], [29838, 30000]],
                 'run_num' : testparams['run_num'], 'detail':1}
         api.insert('fileArray', data)
 
@@ -836,49 +836,49 @@ class DBSReaderModel_t(unittest.TestCase):
     @checkException400
     def test007m(self):
         """test007m: web.DBSReaderModel.listFiles: basic negative test"""
-        api.list('files',release_version=testparams['release_version'])
+        api.list('files', release_version=testparams['release_version'])
 
     @checkException400
     def test007n(self):
         """test007n: web.DBSReaderModel.listFiles: basic negative test"""
-        api.list('files',pset_hash=testparams['pset_hash'])
+        api.list('files', pset_hash=testparams['pset_hash'])
 
     @checkException400
     def test007o(self):
         """test007o: web.DBSReaderModel.listFiles: basic negative test"""
-        api.list('files',app_name=testparams['app_name'])
+        api.list('files', app_name=testparams['app_name'])
 
     @checkException400
     def test007p(self):
         """test007p: web.DBSReaderModel.listFiles: basic negative test"""
-        api.list('files',output_module_label=testparams['output_module_label'])
+        api.list('files', output_module_label=testparams['output_module_label'])
 
     def test007q(self):
         """test007q: web.DBSReaderModel.listFiles: basic test"""
         lfn= testparams['files'][1]
-        api.list('files',logical_file_name=lfn,release_version=testparams['release_version'])
+        api.list('files', logical_file_name=lfn, release_version=testparams['release_version'])
 
     def test007r(self):
         """test007r: web.DBSReaderModel.listFiles: basic test"""
         lfn= testparams['files'][1]
-        api.list('files',logical_file_name=lfn,pset_hash=testparams['pset_hash'])
+        api.list('files', logical_file_name=lfn, pset_hash=testparams['pset_hash'])
 
     def test007s(self):
         """test007s: web.DBSReaderModel.listFiles: basic test"""
         lfn= testparams['files'][1]
-        api.list('files',logical_file_name=lfn,app_name=testparams['app_name'])
+        api.list('files', logical_file_name=lfn, app_name=testparams['app_name'])
 
     def test007t(self):
         """test007t: web.DBSReaderModel.listFiles: basic test"""
         lfn= testparams['files'][1]
-        api.list('files',logical_file_name=lfn,output_module_label=testparams['output_module_label'])
+        api.list('files', logical_file_name=lfn, output_module_label=testparams['output_module_label'])
 
     def test007u(self):
         """test007u: web.DBSReaderModel.listFiles: basic test"""
         lfn= testparams['files'][1]
-        api.list('files',logical_file_name=lfn,output_module_label=testparams['output_module_label'],
-                 app_name=testparams['app_name'],pset_hash=testparams['pset_hash'],
-                 release_version=testparams['release_version'],detail=True)
+        api.list('files', logical_file_name=lfn, output_module_label=testparams['output_module_label'],
+                 app_name=testparams['app_name'], pset_hash=testparams['pset_hash'],
+                 release_version=testparams['release_version'], detail=True)
     def test007v1(self):
         """test007v1: web.DBSReaderModel.listFiles: basic test """
         api.list('files', block_name=testparams['block'], detail=True)
@@ -1228,25 +1228,25 @@ class DBSReaderModel_t(unittest.TestCase):
     def test011i(self):
         """test011i: web.DBSReaderModel.listFile with config info and block"""
         api.list('files',  block_name=testparams['block'],
-                 release_version=testparams['release_version'] , pset_hash=testparams['pset_hash'],
+                 release_version=testparams['release_version'], pset_hash=testparams['pset_hash'],
                  app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
 
     def test011j(self):
         """test011j: web.DBSReaderModel.listFile with config info, block and detail """
         api.list('files',  block_name=testparams['block'],
-                 release_version=testparams['release_version'] , pset_hash=testparams['pset_hash'],
+                 release_version=testparams['release_version'], pset_hash=testparams['pset_hash'],
                  app_name=testparams['app_name'], output_module_label=testparams['output_module_label'], detail=True)
 
     def test011k(self):
         """test011k: web.DBSReaderModel.listFile with config info and dataset"""
         api.list('files',  dataset=testparams['dataset'],
-                 release_version=testparams['release_version'] , pset_hash=testparams['pset_hash'],
+                 release_version=testparams['release_version'], pset_hash=testparams['pset_hash'],
                  app_name=testparams['app_name'], output_module_label=testparams['output_module_label'])
 
     def test011l(self):
         """test011l: web.DBSReaderModel.listFile with config info, dataset and detail"""
         api.list('files',  dataset=testparams['dataset'],
-                 release_version=testparams['release_version'] , pset_hash=testparams['pset_hash'],
+                 release_version=testparams['release_version'], pset_hash=testparams['pset_hash'],
                  app_name=testparams['app_name'], output_module_label=testparams['output_module_label'], detail=True)
 
     def test011m(self):
@@ -1372,20 +1372,20 @@ class DBSReaderModel_t(unittest.TestCase):
     @checkException400
     def test020b(self):
         """test020b: web.DBSReaderModel.listFileSummaries: basic negative test"""
-        api.list('filesummaries',block_name="/*")
+        api.list('filesummaries', block_name="/*")
 
     @checkException400
     def test020c(self):
         """test020c: web.DBSReaderModel.listFileSummaries: basic negative test"""
-        api.list('filesummaries',dataset='/*')
+        api.list('filesummaries', dataset='/*')
 
     def test020d(self):
         """test020d: web.DBSReaderModel.listFileSummaries: basic test"""
-        api.list('filesummaries',dataset=testparams['dataset'])
+        api.list('filesummaries', dataset=testparams['dataset'])
 
     def test020e(self):
         """test020e: web.DBSReaderModel.listFileSummaries: basic test"""
-        api.list('filesummaries',block_name=testparams['block'])
+        api.list('filesummaries', block_name=testparams['block'])
 
     def test020f(self):
         """test020f: web.DBSReaderModel.listFileSummaries: basic test"""
@@ -1394,16 +1394,16 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test020g(self):
         """test020g: web.DBSReaderModel.listFileSummaries: basic test"""
-        api.list('filesummaries',dataset=testparams['dataset'], validFileOnly="2")
+        api.list('filesummaries', dataset=testparams['dataset'], validFileOnly="2")
 
     def test020h(self):
         """test020h: web.DBSReaderModel.listFileSummaries: basic test"""
-        api.list('filesummaries',dataset=testparams['dataset'], validFileOnly=2)
+        api.list('filesummaries', dataset=testparams['dataset'], validFileOnly=2)
 
     @checkException400
     def test020i(self):
         """test020i: web.DBSReaderModel.listFileSummaries: basic test"""
-        api.list('filesummaries',dataset=testparams['dataset'], validFileOnly="*")
+        api.list('filesummaries', dataset=testparams['dataset'], validFileOnly="*")
 
     def test021a(self):
         """test021a: web.DBSReaderModel.dumpBlock : basic """
@@ -1425,11 +1425,11 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test022b(self):
         """test022b: web.DBSReaderModel.listAcquisitionEras: basic test"""
-        api.list('acquisitioneras',acquisition_era_name=testparams['acquisition_era'])
+        api.list('acquisitioneras', acquisition_era_name=testparams['acquisition_era'])
 
     def test022c(self):
         """test022c: web.DBSReaderModel.listAcquisitionEras: basic test"""
-        api.list('acquisitioneras',acquisition_era_name=testparams['acquisition_era']+'*')
+        api.list('acquisitioneras', acquisition_era_name=testparams['acquisition_era']+'*')
 
     def test023a(self):
         """test023a: web.DBSReaderModel.listReleaseVersions: basic test"""
@@ -1437,24 +1437,24 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test023b(self):
         """test023b: web.DBSReaderModel.listReleaseVersions: basic test"""
-        api.list('releaseversions',release_version=testparams['release_version'])
+        api.list('releaseversions', release_version=testparams['release_version'])
 
     def test023c(self):
         """test023c: web.DBSReaderModel.listReleaseVersions: basic test"""
-        api.list('releaseversions',release_version=testparams['release_version']+'*')
+        api.list('releaseversions', release_version=testparams['release_version']+'*')
 
     def test023d(self):
         """test023d: web.DBSReaderModel.listReleaseVersions: basic test"""
-        api.list('releaseversions',dataset=testparams['dataset'])
+        api.list('releaseversions', dataset=testparams['dataset'])
 
     @checkException400
     def test023e(self):
         """test023e: web.DBSReaderModel.listReleaseVersions: basic test"""
-        api.list('releaseversions',dataset=testparams['dataset']+'*')
+        api.list('releaseversions', dataset=testparams['dataset']+'*')
 
     def test023f(self):
         """test023f: web.DBSReaderModel.listReleaseVersions: basic test"""
-        api.list('releaseversions',dataset=testparams['dataset'],release_version=testparams['release_version'])
+        api.list('releaseversions', dataset=testparams['dataset'], release_version=testparams['release_version'])
 
     def test024a(self):
         """test024a: web.DBSReaderModel.listDatasetAccessTypes: basic test"""
@@ -1551,7 +1551,7 @@ class DBSReaderModel_t(unittest.TestCase):
         """test028a: web.DBSReaderModel.getServerInfo: check that version is returned"""
         reg_ex = r'^(3+\.[0-9]+\.[0-9]+[\-\.a-z0-9]*$)'
         version = api.list('serverinfo')
-        self.assertTrue(version.has_key('dbs_version'))
+        self.assertTrue('dbs_version' in version)
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
 
 if __name__ == "__main__":

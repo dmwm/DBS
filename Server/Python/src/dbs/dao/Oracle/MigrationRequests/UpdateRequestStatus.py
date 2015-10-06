@@ -69,7 +69,7 @@ class UpdateRequestStatus(DBFormatter):
 	    migration_status, migration_request_id
         """	
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/UpdateRequestStatus. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/UpdateRequestStatus. Expects db connection from upper layer.")
         if daoinput['migration_status'] == 1:
            sql = self.sql2 
         elif daoinput['migration_status'] == 2:

@@ -196,8 +196,8 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   docroot = "doc/build/html"
   system = process_dependencies(systems[system_name])
   exsrc = sum((glob("%s" % x) for x in system.get('examples', [])), [])
-  configs = sum((glob("%s" % x) for x in system.get('conf',[])), [])
-  data = sum((glob("%s" % x) for x in system.get('data',[])), [])
+  configs = sum((glob("%s" % x) for x in system.get('conf', [])), [])
+  data = sum((glob("%s" % x) for x in system.get('data', [])), [])
   statics = sum((glob("%s" % x) for x in system.get('statics', [])), [])
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
 
@@ -210,7 +210,7 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   dist.data_files = [('examples', exsrc), ('%sbin' % patch_x, binsrc),
                      ('conf', configs), ('data', data), ('statics', statics)]
 
-  for directory in set(os.path.dirname(path.replace('Client/utils/','',1)) for path in exsrc):
+  for directory in set(os.path.dirname(path.replace('Client/utils/', '', 1)) for path in exsrc):
       files = [x for x in exsrc if x.startswith('Client/utils/%s/' % directory)]
       dist.data_files.append(('examples/%s' % (directory), files))
 

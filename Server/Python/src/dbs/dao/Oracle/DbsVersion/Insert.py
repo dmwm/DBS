@@ -16,33 +16,33 @@ class Insert(DBFormatter):
             binds = {}
             if type(dbs_versionsObj) == type ('object'):
             	binds = {
-			'dbsversionid' : dbs_versionsObj['dbsversionid'],
-			'schemaversion' : dbs_versionsObj['schemaversion'],
-			'dbsreleaseversion' : dbs_versionsObj['dbsreleaseversion'],
-			'instancename' : dbs_versionsObj['instancename'],
-			'instancetype' : dbs_versionsObj['instancetype'],
-			'creationdate' : dbs_versionsObj['creationdate'],
-			'lastmodificationdate' : dbs_versionsObj['lastmodificationdate'],
+			'dbsversionid': dbs_versionsObj['dbsversionid'],
+			'schemaversion': dbs_versionsObj['schemaversion'],
+			'dbsreleaseversion': dbs_versionsObj['dbsreleaseversion'],
+			'instancename': dbs_versionsObj['instancename'],
+			'instancetype': dbs_versionsObj['instancetype'],
+			'creationdate': dbs_versionsObj['creationdate'],
+			'lastmodificationdate': dbs_versionsObj['lastmodificationdate'],
                  }
 
             elif type(dbs_versionsObj) == type([]):
                binds = []
                for item in dbs_versionsObj:
                    binds.append({
- 	                'dbsversionid' : item['dbsversionid'],
- 	                'schemaversion' : item['schemaversion'],
- 	                'dbsreleaseversion' : item['dbsreleaseversion'],
- 	                'instancename' : item['instancename'],
- 	                'instancetype' : item['instancetype'],
- 	                'creationdate' : item['creationdate'],
- 	                'lastmodificationdate' : item['lastmodificationdate'],
+ 	                'dbsversionid': item['dbsversionid'],
+ 	                'schemaversion': item['schemaversion'],
+ 	                'dbsreleaseversion': item['dbsreleaseversion'],
+ 	                'instancename': item['instancename'],
+ 	                'instancetype': item['instancetype'],
+ 	                'creationdate': item['creationdate'],
+ 	                'lastmodificationdate': item['lastmodificationdate'],
  	                })
                return binds
 
 
     def execute( self, conn, dbs_versionsObj, transaction=False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DbsVersion/Insert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DbsVersion/Insert. Expects db connection from upper layer.")
         
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
 	return

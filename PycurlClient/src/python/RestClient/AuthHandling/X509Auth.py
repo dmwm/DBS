@@ -18,7 +18,7 @@ class X509Auth(object):
 
         #Check if ssl_cert, ssl_key and ca_path do exist
         if not (os.path.isfile(self._ssl_key) and os.path.isfile(self._ssl_cert)):
-            raise ClientAuthException("key or cert file does not exist: %s, %s" % (self._ssl_key,self._ssl_cert))
+            raise ClientAuthException("key or cert file does not exist: %s, %s" % (self._ssl_key, self._ssl_cert))
 
         if not (os.path.isdir(self._ca_path)):
             raise ClientAuthException("CA path does not exist: %s" % (self._ca_path))
@@ -27,7 +27,7 @@ class X509Auth(object):
         """
         Get CA Path to check the validity of the server host certificate on the client side
         """
-        if os.environ.has_key("X509_CERT_DIR"):
+        if "X509_CERT_DIR" in os.environ:
             self._ca_path = os.environ['X509_CERT_DIR']
 
         elif os.path.exists('/etc/grid-security/certificates'):
@@ -43,17 +43,17 @@ class X509Auth(object):
         """
         # Now we're trying to guess what the right cert/key combo is...
         # First preference to HOST Certificate, This is how it set in Tier0
-        if os.environ.has_key('X509_HOST_CERT'):
+        if 'X509_HOST_CERT' in os.environ:
             self._ssl_cert = os.environ['X509_HOST_CERT']
             self._ssl_key = os.environ['X509_HOST_KEY']
 
         # Second preference to User Proxy, very common
-        elif os.environ.has_key('X509_USER_PROXY') and os.path.exists(os.environ['X509_USER_PROXY']):
+        elif 'X509_USER_PROXY' in os.environ and os.path.exists(os.environ['X509_USER_PROXY']):
             self._ssl_cert = os.environ['X509_USER_PROXY']
             self._ssl_key = self._ssl_cert
 
         # Third preference to User Cert/Proxy combinition
-        elif os.environ.has_key('X509_USER_CERT') and os.environ.has_key('X509_USER_KEY'):
+        elif 'X509_USER_CERT' in os.environ and 'X509_USER_KEY' in os.environ:
             self._ssl_cert = os.environ['X509_USER_CERT']
             self._ssl_key = os.environ['X509_USER_KEY']
 

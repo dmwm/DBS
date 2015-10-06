@@ -25,7 +25,7 @@ class SummaryList(DBFormatter):
 
     def execute(self, conn, block_name="", dataset="",  run_num=-1, validFileOnly=0, transaction=False):
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/SummaryList. Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/SummaryList. Expects db connection from upper layer.")
 
         binds = {}
         whererun = ''
@@ -48,7 +48,7 @@ class SummaryList(DBFormatter):
         if run_num != -1:
             #
             for r in parseRunRange(run_num):
-                if isinstance(r, basestring) or isinstance(r, (long,int)):
+                if isinstance(r, basestring) or isinstance(r, (long, int)):
                     #if not wheresql_run_list:
                     #    wheresql_run_list = " fl.RUN_NUM = :run_list "
                     run_list.append(str(r))

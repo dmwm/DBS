@@ -7,7 +7,7 @@ class DBS3ApiFactory(object):
         self.config = config or {}
 
     def get_api(self):
-        return DbsApi(url=self.config.get("url","https://cmsweb.cern.ch/dbs/int/global/DBSReader/"))
+        return DbsApi(url=self.config.get("url", "https://cmsweb.cern.ch/dbs/int/global/DBSReader/"))
 
 class DBSDataProvider(object):
     def __init__(self, config):
@@ -28,7 +28,7 @@ def create_api(api="DbsApi", config=None):
                      'DBSDataProvider': DBSDataProvider(config),
                      'PhedexDataProvider': PhedexDataProvider(config)}
 
-    factory = known_factory.get(api,None)
+    factory = known_factory.get(api, None)
 
     if not factory:
         raise NotImplementedError, "A factory for api %s has not yet been implemented." % (api)
@@ -36,5 +36,5 @@ def create_api(api="DbsApi", config=None):
     return factory.get_api()
 
 if __name__ == "__main__":
-    api = create_api(api="DbsApi",config=dict(url="https://cmsweb.cern.ch/dbs/int/global/DBSReader/"))
+    api = create_api(api="DbsApi", config=dict(url="https://cmsweb.cern.ch/dbs/int/global/DBSReader/"))
     print dir(api)

@@ -75,7 +75,7 @@ class DBSServicesRegistry(RESTModel):
             addthis['location'] = service.get('LOCATION', 'HYPERSPACE')
             addthis['status'] = service.get('STATUS', 'UNKNOWN')
             addthis['admin'] = service.get('ADMIN', 'UNADMINISTRATED')
-            addthis['uri'] = service.get('URI','')
+            addthis['uri'] = service.get('URI', '')
             if addthis['uri'] == '':
                 msg = (("%s DBSServicesRegistry/addServices." + 
                         " Service URI must be provided.\n") %
@@ -83,7 +83,7 @@ class DBSServicesRegistry(RESTModel):
                 self.logger.exception(msg)
                 raise Exception("dbsException-3", msg)
             addthis['db'] = service.get('DB', 'NO_DATABASE')
-            addthis['version'] = service.get('VERSION','UNKNOWN' )
+            addthis['version'] = service.get('VERSION', 'UNKNOWN' )
             addthis['last_contact'] = dbsUtils().getTime()
             addthis['comments'] = service.get('COMMENTS', 'NO COMMENTS')
             addthis['alias'] = service.get('ALIAS', 'No Alias')

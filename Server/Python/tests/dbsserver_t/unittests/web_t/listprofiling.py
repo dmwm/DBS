@@ -1,7 +1,7 @@
 import cProfile
 from DBSReaderModel_t import DBSReaderModel_test
 from  DBSReaderModel_t import importCode
-infofile=open("info.dict","r")
+infofile=open("info.dict", "r")
 testparams=importCode(infofile, "testparams", 0).info
 DBSReaderModel_test().setUp()
 #cProfile.run("DBSReaderModel_test(). importCode(code,name,add_to_sys_modules=0)")

@@ -14,7 +14,7 @@ from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
 def get_relative_path():
     return os.path.dirname(os.path.abspath(os.path.join(os.getcwd(), sys.argv[0])))
 
-def get_test_names(search_path,search_pattern,base_dir):
+def get_test_names(search_path, search_pattern, base_dir):
     excluded_files = []
     module_names = []
 
@@ -23,7 +23,7 @@ def get_test_names(search_path,search_pattern,base_dir):
             if fnmatch.fnmatch(test_file, search_pattern) and files not in excluded_files:
                 filename = os.path.join(root, test_file)
                 #Figure out the module name
-                module_name = os.path.relpath(filename,base_dir).split('/')
+                module_name = os.path.relpath(filename, base_dir).split('/')
                 del module_name[-1] #remove filename from list
                 module_name.append(os.path.splitext(test_file)[0])#add class name
                 module_names.append('.'.join(module_name))
@@ -57,7 +57,7 @@ def create_deployment_test_suite(insert_data):
     from dbsclient_t.deployment.DBSDeployment_t import PrepareDeploymentsTests
     from dbsclient_t.deployment.DBSDeployment_t import PostDeploymentTests
     
-    RESTModel = ('DBSReader','DBSWriter')
+    RESTModel = ('DBSReader', 'DBSWriter')
 
     TestSuite = unittest.TestSuite()
 
@@ -144,7 +144,7 @@ class TestCommand(Command):
         if self.cmsweb_testbed:
             self.unitall, self.validation, self.deployment = (True, True, True)
 
-        if self.unit in ('ClientWriter','ClientReader','ClientBlockWriter'):
+        if self.unit in ('ClientWriter', 'ClientReader', 'ClientBlockWriter'):
             TestSuite.addTests(create_test_suite(unit_tests, 'DBS%s_t.py' % self.unit, base_dir))
 
         if self.unitall:

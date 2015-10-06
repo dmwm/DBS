@@ -14,9 +14,9 @@ from types import GeneratorType
 class List_t(unittest.TestCase):
     @DaoConfig("DBSReader")
     def __init__(self, methodName='runTest'):
-        super(List_t,self).__init__(methodName)
-        data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
-        self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
+        super(List_t, self).__init__(methodName)
+        data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data.pkl')
+        self.data_provider = create_dbs_data_provider(data_type='transient', data_location=data_location)
         self.lumi_data = self.data_provider.get_file_lumi_data()
         #needs to be regenerated, since it was not used in Insert_t
         self.block_data = self.data_provider.get_block_data(regenerate=True) 
@@ -29,7 +29,7 @@ class List_t(unittest.TestCase):
         #List API returns a list of lumi sections, whereas the Insert API needs a single lumi_section_number per file
         #IMHO that should be fixed
         for entry in self.lumi_data:
-            if entry.has_key('lumi_section_num'):
+            if 'lumi_section_num' in entry:
                 entry['lumi_section_num'] = [entry['lumi_section_num']]
 
     def tearDown(self):

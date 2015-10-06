@@ -64,7 +64,7 @@ class TestServer(unittest.TestCase):
                     "MD5":"md5",
                     "AUTO_CROSS_SECTION":1234.}
             sinput.append(file)
-        self.cli.put("files",{"files": sinput})
+        self.cli.put("files", {"files": sinput})
         
     def test05(self):
         "insert one File with Lumi Sections and file parents"

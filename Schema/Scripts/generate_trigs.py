@@ -142,7 +142,7 @@ for aline in lines:
 
 ###### Generate AUTO INC Triggers
 
-for (t,z) in trigs : 
+for (t, z) in trigs : 
 	print z.replace( "__PK__", tbl_pk_map[t] )
 
 

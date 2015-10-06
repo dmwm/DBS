@@ -59,19 +59,19 @@ class DBS3StressTest(Thread):
         #insertFile
         sinput = []
         for k in range(self.NPARENTS):
-            fl = {"LOGICAL_FILE_NAME":"/store/sut_file_%s_%s.root" % (self.IC, str(k)),
-                    "IS_FILE_VALID":1,
-                    "BLOCK":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC),
-                    "DATASET":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (self.IC, self.IC),
-                    "FILE_TYPE":"EDM",
-                    "CHECK_SUM":"999",
-                    "EVENT_COUNT":10000,
-                    "FILE_SIZE":1024.,
-                    "ADLER32":"adler32",
-                    "MD5":"md5",
-                    "AUTO_CROSS_SECTION":1234.,
-                    "FILE_LUMI_LIST":[],
-                    "FILE_PARENT_LIST":[],}
+            fl = {"LOGICAL_FILE_NAME": "/store/sut_file_%s_%s.root" % (self.IC, str(k)),
+                    "IS_FILE_VALID": 1,
+                    "BLOCK": "/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC),
+                    "DATASET": "/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (self.IC, self.IC),
+                    "FILE_TYPE": "EDM",
+                    "CHECK_SUM": "999",
+                    "EVENT_COUNT": 10000,
+                    "FILE_SIZE": 1024.,
+                    "ADLER32": "adler32",
+                    "MD5": "md5",
+                    "AUTO_CROSS_SECTION": 1234.,
+                    "FILE_LUMI_LIST": [],
+                    "FILE_PARENT_LIST": [],}
             sinput.append(fl)
         t = time.time()
         self.cli.put("files", {"files":sinput})

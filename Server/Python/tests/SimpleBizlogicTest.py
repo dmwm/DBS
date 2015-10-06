@@ -68,7 +68,7 @@ class Test:
 		    'output_configs': [{'release_version': u'CMSSW_2_1_7', 'pset_hash': u'NO_PSET_HASH', 'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
 		    {'release_version': u'CMSSW_2_1_7', 'pset_hash': u'76e303993a1c2f842159dbfeeed9a0dd', 'app_name': u'cmsRun', 'output_module_label': u'output'}], 
 		    'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': 'GEN-SIM-RAW',
-		    'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+		    'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
 		    #'processing_version': '1',  'acquisition_era_name': u'',
 		}
 	binput = {'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': u'/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-DIGI-RAW', 
@@ -79,7 +79,7 @@ class Test:
 			    {'release_version': u'CMSSW_3_1_2', 'pset_hash': u'NO_PSET_HASH', 'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
 			    {'release_version': u'CMSSW_3_1_2', 'pset_hash': u'4847ed25a7e108a7b1e704a26f345aa8', 'app_name': u'cmsRun', 'output_module_label': u'output'}
 			],
-		    'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+		    'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
 		}
 
         bo.insertDataset(binput)
@@ -133,7 +133,7 @@ class Test:
 				    'file_parent_list': [], 'event_count': u'1619', 'logical_file_name': 
 					'/store/mc/parent_684/0.root', 
 		'block': '/unittest_web_primary_ds_name_684/unittest_web_dataset_684/GEN-SIM-RAW#684',
-		'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+		'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
 		}
 		]
 		bo.insertFile(binput)

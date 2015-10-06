@@ -26,7 +26,7 @@ FROM %sFILES F
         returns id for a given lfn
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/GetID. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/GetID. Expects db connection from upper layer.")
 
         sql = self.sql
         sql += "WHERE F.LOGICAL_FILE_NAME = :lfn"

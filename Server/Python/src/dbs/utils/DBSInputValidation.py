@@ -5,7 +5,7 @@ To use with _validate_input method of the RESTModel implementation
 import cjson
 from cherrypy import log as clog
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
-from dbs.utils.dbsException import dbsException,dbsExceptionCode
+from dbs.utils.dbsException import dbsException, dbsExceptionCode
 
 from WMCore.Lexicon import *
 
@@ -71,7 +71,7 @@ def inputChecks(**_params_):
 				    try:
 				        int(value)
 				    except Exception, e:
-				        dbsExceptionHandler("dbsException-invalid-input2", message="invalid value for %s" %name, serverError="invalid value %s for %s" %(value,name), logger=log.error)	
+				        dbsExceptionHandler("dbsException-invalid-input2", message="invalid value for %s" %name, serverError="invalid value %s for %s" %(value, name), logger=log.error)	
                                 elif name =='block_name':
                                     if '*' in value:
                                         searchblock(value)
@@ -157,18 +157,18 @@ def check_proc_ds(proc_ds):
 
 acceptedInputDataTypes = {
     ################
-    str:set(['data_tier_name', 'release_version', 'pset_hash', 'pset_name','lfn', 'app_name', 'output_module_label', 'global_tag', 
+    str:set(['data_tier_name', 'release_version', 'pset_hash', 'pset_name', 'lfn', 'app_name', 'output_module_label', 'global_tag', 
          'scenario', 'file_parent_lfn', 'parent_logical_file_name', 'logical_file_name', 'processing_version', 'description', 
          'create_by', 'dataset', 'physics_group_name', 'processed_ds_name', 'dataset_access_type', 'data_tier_name',
          'primary_ds_name', 'primary_ds_type', 'acquisition_era_name', 'last_modified_by', 'detail', 
-         'prep_id', 'block_name', 'origin_site_name','primary_ds_type', 'primary_ds_name', 'check_sum', 'adler32', 
+         'prep_id', 'block_name', 'origin_site_name', 'primary_ds_type', 'primary_ds_name', 'check_sum', 'adler32', 
          'file_type', 'md5', 'file_size', 'migration_url', 'migration_input', 'file_count', 'block_size', 'start_date', 'end_date',
-         'last_modification_date', 'creation_date', 'event_count','file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id',
+         'last_modification_date', 'creation_date', 'event_count', 'file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id',
          'open_for_writing', 'detail', 'processing_version', 'xtcrosssection', 'auto_cross_section', 'validFileOnly', 'dataset_id', 'lumi_list']),
     ################
     int:set(['file_count', 'block_size', 'start_date', 'end_date', 'last_modification_date', 'creation_date', 'event_count', 
-         'file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id' ,'open_for_writing', 'detail', 'processing_version',
-         'xtcrosssection', 'auto_cross_section', 'check_sum', 'adler32', 'validFileOnly','dataset_id', 'lumi_list']),
+         'file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id', 'open_for_writing', 'detail', 'processing_version',
+         'xtcrosssection', 'auto_cross_section', 'check_sum', 'adler32', 'validFileOnly', 'dataset_id', 'lumi_list']),
     ################
     dict:[],
     ################
@@ -207,20 +207,20 @@ acceptedInputKeys = {
     'block': ['block_name', 'open_for_writing', 'origin_site_name', 'dataset', 'creation_date', 'creation_date', 'create_by',\
               'last_modification_date', 'last_modified_by', 'file_count', 'block_size'],
     ################
-    'acquisition_era':['acquisition_era_name','description', 'start_date','end_date'],
+    'acquisition_era':['acquisition_era_name', 'description', 'start_date', 'end_date'],
     ################
     'primds':['primary_ds_type', 'primary_ds_name', 'creation_date', 'create_by'],
     ################
     'files':['check_sum', 'file_lumi_list', 'event_count', 'file_type', 'logical_file_name', 'file_size',\
-	     'file_output_config_list', 'file_parent_list','last_modified_by', 'last_modification_date',\
+	     'file_output_config_list', 'file_parent_list', 'last_modified_by', 'last_modification_date',\
              'create_by', 'creation_date', 'auto_cross_section',\
-             'adler32', 'dataset', 'block_name', 'md5', 'run_num','validFileOnly', \
+             'adler32', 'dataset', 'block_name', 'md5', 'run_num', 'validFileOnly', \
              'detail', 'run_num', 'release_version', 'pset_hash', 'app_name', 'output_module_label',\
              'origin_site_name', 'lumi_list'],
     ################
     'file_lumi_list':['lumi_section_num', 'run_num'],
     ################
-    'migration_rqst':['migration_url','migration_input', 'migration_rqst_id']
+    'migration_rqst':['migration_url', 'migration_input', 'migration_rqst_id']
     ################
     }
 
@@ -240,21 +240,21 @@ validationFunction = {
     }
 
 validationFunctionWildcard = {
-    'block_name':searchblock,
-    'dataset':searchdataset,
+    'block_name': searchblock,
+    'dataset': searchdataset,
     }
 
 
 def validateJSONInputNoCopy(input_key,input_data, read=False):
     log = clog.error_log
-    if isinstance(input_data,dict):
+    if isinstance(input_data, dict):
         for key in input_data.keys():
             if key not in acceptedInputKeys[input_key]:
                 dbsExceptionHandler('dbsException-invalid-input2', message="Invalid Input Key %s..." %key[:10],\
                                     logger=log.error, serverError="%s is not a valid input key for %s"%(key, input_key))
             else:
-                input_data[key] = validateJSONInputNoCopy(key,input_data[key], read=read)
-    elif isinstance(input_data,list):
+                input_data[key] = validateJSONInputNoCopy(key, input_data[key], read=read)
+    elif isinstance(input_data, list):
         l = []
         for x in input_data:
             l.append(validateJSONInputNoCopy(input_key, x, read=read))
@@ -264,17 +264,17 @@ def validateJSONInputNoCopy(input_key,input_data, read=False):
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type str for key-value %s... %s..." \
                 %(input_key[:10], input_data[:10]), logger=log.error,\
                 serverError="Input data %s is not a valid input type str for key %s"%(input_data, input_key))
-        validateStringInput(input_key,input_data, read=read)
+        validateStringInput(input_key, input_data, read=read)
         if '*' in input_data: input_data = input_data.replace('*', '%')
-    elif isinstance(input_data,int):
+    elif isinstance(input_data, int):
         if input_key not in acceptedInputDataTypes[int]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type int for key-value %s..,  %s"\
             %(input_key[:10], input_data), logger=log.error, serverError="Input data %s is not a valid input type for key %s"%(input_data, input_key))
-    elif isinstance(input_data,long):
+    elif isinstance(input_data, long):
         if input_key not in acceptedInputDataTypes[long]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type long for key-value %s... %s" \
             %(input_key[:10], input_data), logger=log.error, serverError="Input data %s is not a valid date type for key %s"%(input_data, input_key))
-    elif isinstance(input_data,float):
+    elif isinstance(input_data, float):
         if input_key not in acceptedInputDataTypes[float]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type float for key-value %s..., %s"\
             %(input_key[:10], input_data), logger=log.error, serverError="Input data %s is not a valid data type for key %s"%(input_data, input_key))

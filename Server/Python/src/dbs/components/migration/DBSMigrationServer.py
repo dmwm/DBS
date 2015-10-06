@@ -63,7 +63,7 @@ from WMCore.Database.DBFactory import DBFactory
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
-from dbs.utils.dbsException import dbsException,dbsExceptionCode
+from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.business.DBSMigrate import DBSMigrate  
 from dbs.business.DBSBlockInsert import DBSBlockInsert
 from cherrypy import HTTPError
@@ -117,7 +117,7 @@ class MigrationTask(SequencialTaskBase):
 	print connectUrl
         dbFactory = DBFactory(MgrLogger, connectUrl, options={})
         self.dbi = dbFactory.connect()
-        self.dbFormatter = DBFormatter(MgrLogger,self.dbi)
+        self.dbFormatter = DBFormatter(MgrLogger, self.dbi)
         self.dbsMigrate = DBSMigrate(MgrLogger, self.dbi, dbowner)
         self.DBSBlockInsert = DBSBlockInsert(MgrLogger, self.dbi, dbowner)
     
@@ -208,7 +208,7 @@ class MigrationTask(SequencialTaskBase):
                         if  migration_status == 2:
                             self.dbsMigrate.updateMigrationBlockStatus(migration_status=2,
                                 migration_block=self.migration_block_ids[idx])
-                    MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + " Done insert block: %s for request id: %s" %(bName,self.migration_req_id))
+                    MgrLogger.error("-"*20 + time.asctime(time.gmtime()) + " Done insert block: %s for request id: %s" %(bName, self.migration_req_id))
                 self.dbsMigrate.updateMigrationRequestStatus(2, self.migration_req_id)
             except Exception as ex:
                 self.inserted = False

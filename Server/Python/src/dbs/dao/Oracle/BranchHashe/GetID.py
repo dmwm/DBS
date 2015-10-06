@@ -27,7 +27,7 @@ FROM %sBRANCH_HASHES BH
         returns id for a given branch hash
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/BranchHashe/GetID. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/BranchHashe/GetID. Expects db connection from upper layer.")
             
         sql = self.sql
         sql += "WHERE BH.HASH = :branch_hash"

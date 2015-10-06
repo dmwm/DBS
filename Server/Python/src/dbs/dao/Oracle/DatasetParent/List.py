@@ -31,7 +31,7 @@ JOIN %sDATASETS D ON  D.DATASET_ID = DP.THIS_DATASET_ID
     def execute(self, conn, dataset, transaction=False):
         """ dataset is required parameter"""
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DatasetParent/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DatasetParent/List. Expects db connection from upper layer.")
             
         sql = self.sql
         sql += "WHERE D.DATASET = :dataset"

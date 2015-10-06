@@ -36,16 +36,16 @@ class DASMapping(object):
                                 }]
                                 }
         """
-        with open(self._mapfile,'r') as f:
+        with open(self._mapfile, 'r') as f:
             for entry in yaml.load_all(f):
                 das2dbs_param_map = {}
-                if not entry.has_key('lookup'):
+                if 'lookup' not in entry:
                     continue
                 for param_map in entry['das_map']:
-                    if param_map.has_key('api_arg'):
+                    if 'api_arg' in param_map:
                         das2dbs_param_map[param_map['das_key']] = param_map['api_arg']
 
-                self._das_map.setdefault(entry['lookup'],[]).append({'params' : entry['params'],
+                self._das_map.setdefault(entry['lookup'], []).append({'params' : entry['params'],
                                                                      'url' : entry['url'],
                                                                      'das2dbs_param_map' : das2dbs_param_map})
 
@@ -68,7 +68,7 @@ class DASMapping(object):
             ###DAS and DBS3 do not use the parameters, for example block in DAS vs. block_name in DBS3
             ###Needs translation using das3dbs_param_map
             das2dbs_param_map = api_call['das2dbs_param_map']
-            das2dbs_key_changer = lambda key, map=das2dbs_param_map: map[key] if map.has_key(key) else key
+            das2dbs_key_changer = lambda key, map=das2dbs_param_map: map[key] if key in map else key
             das_param_keys = set(map(das2dbs_key_changer, das_params.keys()))
 
             api_params = set(api_call['params'].keys())
@@ -122,7 +122,7 @@ def extract_das_parameters(das_query):
 
     for parameter in parameters:
         try:
-            key, value = parameter.strip().split('=',1)
+            key, value = parameter.strip().split('=', 1)
         except ValueError:
             lookup = parameter
         else:
@@ -130,7 +130,7 @@ def extract_das_parameters(das_query):
                 das_params.update({key : value})
 
     if not lookup:
-        for keyword in ('dataset','block','file'):
+        for keyword in ('dataset', 'block', 'file'):
             try:
                 das_params[keyword]
             except KeyError:

@@ -2,11 +2,11 @@
 DBS3 Migration Server Configuration
 """
 from WMCore.Configuration import Configuration
-import os,sys
+import os, sys
 
 ROOTDIR = os.path.normcase(os.path.abspath(__file__)).rsplit('/', 3)[0]
 
-sys.path.append(os.path.join(ROOTDIR,'auth/dbs'))
+sys.path.append(os.path.join(ROOTDIR, 'auth/dbs'))
 
 from DBSSecrets import dbs3_dp01_i2
 from DBSSecrets import dbs3_p2_i2
@@ -21,7 +21,7 @@ config.web.log_screen = True
 config.web.thread_pool = 10
 
 config.component_('dbsmigration')
-config.dbsmigration.instances = ['prod/global','dev/global','int/global']
+config.dbsmigration.instances = ['prod/global', 'dev/global', 'int/global']
 config.dbsmigration.section_('database')
 db_instances = config.dbsmigration.database.section_('instances')
 

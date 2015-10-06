@@ -105,8 +105,8 @@ class TestBusiness(unittest.TestCase):
         bo = DBSDataset(self.logger, self.dbi)
         bo.listDatasets()
         bo.listDatasets("a")
-        bo.listDatasets("a","%b")
-        bo.listDatasets("a", "b","c%")
+        bo.listDatasets("a", "%b")
+        bo.listDatasets("a", "b", "c%")
         bo.listDatasets(primdsname = "a", datatiername = "c", procdsname = "vax")
 
         

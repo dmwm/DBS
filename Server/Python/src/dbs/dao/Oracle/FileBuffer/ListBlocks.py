@@ -23,7 +23,7 @@ class ListBlocks(DBFormatter):
 	simple execute
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileBuffer/ListBlocks. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileBuffer/ListBlocks. Expects db connection from upper layer.")
         
         binds = {}
         cursors = self.dbi.processData(self.sql, binds, conn, transaction, returnCursor=True)

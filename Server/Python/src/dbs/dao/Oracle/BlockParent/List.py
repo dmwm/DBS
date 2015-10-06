@@ -28,7 +28,7 @@ class List(DBFormatter):
         block: /a/b/c#d
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/BlockParent/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/BlockParent/List. Expects db connection from upper layer.")
 
         sql = self.sql
         

@@ -84,7 +84,7 @@ def updateFileStatus(status, recursive, files=[], blocks=[]):
         logging.error("invalid file status from user. DBS cannot set file status to be %s" % status)
         sys.exit(1)
 
-    if recursive in ['True','true', '1', 'y', 'yes', 'yeah', 'yup', 'certainly']:
+    if recursive in ['True', 'true', '1', 'y', 'yes', 'yeah', 'yup', 'certainly']:
         flst = isChildrenValid(files=files, blocks=blocks,  pstatus=fstatus )
     else:
         flst = isFileValid(files=files, blocks=blocks, fstatus=fstatus)

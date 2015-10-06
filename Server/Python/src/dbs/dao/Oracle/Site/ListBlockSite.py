@@ -26,7 +26,7 @@ class ListBlockSite(DBFormatter):
         Lists all sites for the block.
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/Site/ListBlockSite. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Site/ListBlockSite. Expects db connection from upper layer.")
 
 	sql = self.sql
 

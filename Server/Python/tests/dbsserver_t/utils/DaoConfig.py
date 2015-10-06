@@ -12,12 +12,12 @@ def get_db_config(configfile, service='DBSReader', dbinstance='dev/global'):
     
     appconfig = cfg.section_(app)
     dbsconfig = getattr(appconfig.views.active, service)
-    dbconfig = getattr(dbsconfig.database.instances,dbinstance)
+    dbconfig = getattr(dbsconfig.database.instances, dbinstance)
 
     return dbconfig.dbowner, dbconfig.connectUrl
 
 class DaoConfig(object):
-    def __init__(self,service):
+    def __init__(self, service):
         self.service = service
         
     def __call__(self, func,*args,**kwargs):
@@ -41,7 +41,7 @@ def add_dao_configuration(f):
     @wraps(f)
     def wrapper(self,*args,**kwargs):
         config = os.environ['DBS_TEST_CONFIG']
-        service = os.environ.get("DBS_TEST_SERVICE","DBSReader")
+        service = os.environ.get("DBS_TEST_SERVICE", "DBSReader")
         
         dbowner, connectUrl = get_db_config(configfile=config, service=service)
 

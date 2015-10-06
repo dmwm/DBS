@@ -36,7 +36,7 @@ class Remove(DBFormatter):
 	    migration_request_id
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/Remove. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/Remove. Expects db connection from upper layer.")
         daoinput['create_by'] = dbsUtils().getCreateBy()
 	try:
             msg = "DBSMigration: Invalid request. Sucessfully processed or processing requests cannot be removed,\

@@ -12,9 +12,9 @@ from random import shuffle
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url':os.environ.get("DBS_READER_URL","https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
+config = {'url':os.environ.get("DBS_READER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
 
-api = create_api('DbsApi',config=config)
+api = create_api('DbsApi', config=config)
 
 payload_handler = PayloadHandler()
 

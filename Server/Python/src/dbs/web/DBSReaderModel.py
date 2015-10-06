@@ -40,7 +40,7 @@ from WMCore.DAOFactory import DAOFactory
 
 
 #Necessary for sphinx documentation and server side unit tests.
-if not getattr(tools,"secmodv2",None):
+if not getattr(tools, "secmodv2", None):
     class FakeAuthForDoc(object):
         def __init__(self, *args, **kwargs):
             pass
@@ -100,7 +100,7 @@ class DBSReaderModel(RESTModel):
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
                                 'pset_hash', 'app_name', 'output_module_label', 'global_tag', 'processing_version',
-                                'acquisition_era_name', 'run_num','physics_group_name', 'logical_file_name',
+                                'acquisition_era_name', 'run_num', 'physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                                 'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail', 'dataset_id'],
@@ -117,7 +117,7 @@ class DBSReaderModel(RESTModel):
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num',
                         'origin_site_name', 'lumi_list', 'detail', 'validFileOnly'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
-        self._addMethod('POST', 'fileArray', self.listFileArray,secured=True,
+        self._addMethod('POST', 'fileArray', self.listFileArray, secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name', 'dataset',
                         'run_num', 'validFileOnly'], secured=True,
@@ -143,7 +143,7 @@ class DBSReaderModel(RESTModel):
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
-        self._addMethod('GET', 'datatiers',self.listDataTiers, args=['data_tier_name'], secured=True,
+        self._addMethod('GET', 'datatiers', self.listDataTiers, args=['data_tier_name'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'blockparents', self.listBlockParents, args=['block_name'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -233,8 +233,8 @@ class DBSReaderModel(RESTModel):
         :rtype: list of dicts
 
         """
-        primary_ds_name = primary_ds_name.replace("*","%")
-        primary_ds_type = primary_ds_type.replace("*","%")
+        primary_ds_name = primary_ds_name.replace("*", "%")
+        primary_ds_type = primary_ds_type.replace("*", "%")
         try:
             return self.dbsPrimaryDataset.listPrimaryDatasets(primary_ds_name, primary_ds_type)
         except dbsException as de:
@@ -258,9 +258,9 @@ class DBSReaderModel(RESTModel):
 
         """
         if primary_ds_type:
-            primary_ds_type = primary_ds_type.replace("*","%")
+            primary_ds_type = primary_ds_type.replace("*", "%")
         if dataset:
-            dataset = dataset.replace("*","%")
+            dataset = dataset.replace("*", "%")
         try:
             return self.dbsPrimaryDataset.listPrimaryDSTypes(primary_ds_type, dataset)
         except dbsException as de:
@@ -272,11 +272,11 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('run_num')
     @inputChecks( dataset=basestring, parent_dataset=basestring, release_version=basestring, pset_hash=basestring,
-                 app_name=basestring, output_module_label=basestring, global_tag=basestring, processing_version=(int,basestring), acquisition_era_name=basestring,
-                 run_num=(long,int,basestring,list), physics_group_name=basestring, logical_file_name=basestring, primary_ds_name=basestring,
+                 app_name=basestring, output_module_label=basestring, global_tag=basestring, processing_version=(int, basestring), acquisition_era_name=basestring,
+                 run_num=(long, int, basestring, list), physics_group_name=basestring, logical_file_name=basestring, primary_ds_name=basestring,
                  primary_ds_type=basestring, processed_ds_name=basestring, data_tier_name=basestring, dataset_access_type=basestring, prep_id=basestring,
-                 create_by=(basestring), last_modified_by=(basestring), min_cdate=(int,basestring), max_cdate=(int,basestring),
-                 min_ldate=(int,basestring), max_ldate=(int, basestring), cdate=(int,basestring), ldate=(int,basestring), detail=(bool,basestring),
+                 create_by=(basestring), last_modified_by=(basestring), min_cdate=(int, basestring), max_cdate=(int, basestring),
+                 min_ldate=(int, basestring), max_ldate=(int, basestring), cdate=(int, basestring), ldate=(int, basestring), detail=(bool, basestring),
                  dataset_id=(int, long, basestring))
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="", global_tag="",
@@ -372,14 +372,14 @@ class DBSReaderModel(RESTModel):
         try:
             dataset_id = int(dataset_id)
         except:
-            dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input for dataset_id that has to be an int." ,
+            dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input for dataset_id that has to be an int.",
                                 self.logger.exception, 'dataset_id has to be an int.')
         if create_by.find('*')!=-1 or create_by.find('%')!=-1 or last_modified_by.find('*')!=-1\
                 or last_modified_by.find('%')!=-1:
             dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input for create_by or last_modified_by.\
             No wildcard allowed.",  self.logger.exception, 'No wildcards allowed for create_by or last_modified_by')
         try:
-            if isinstance(min_cdate,basestring) and ('*' in min_cdate or '%' in min_cdate):
+            if isinstance(min_cdate, basestring) and ('*' in min_cdate or '%' in min_cdate):
                 min_cdate = 0
             else:
                 try:
@@ -387,7 +387,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for min_cdate")
             
-            if isinstance(max_cdate,basestring) and ('*' in max_cdate or '%' in max_cdate):
+            if isinstance(max_cdate, basestring) and ('*' in max_cdate or '%' in max_cdate):
                 max_cdate = 0
             else:
                 try:
@@ -395,7 +395,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_cdate")
             
-            if isinstance(min_ldate,basestring) and ('*' in min_ldate or '%' in min_ldate):
+            if isinstance(min_ldate, basestring) and ('*' in min_ldate or '%' in min_ldate):
                 min_ldate = 0
             else:
                 try:
@@ -403,7 +403,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for min_ldate")
             
-            if isinstance(max_ldate,basestring) and ('*' in max_ldate or '%' in max_ldate):
+            if isinstance(max_ldate, basestring) and ('*' in max_ldate or '%' in max_ldate):
                 max_ldate = 0
             else:
                 try:
@@ -411,7 +411,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_ldate")
             
-            if isinstance(cdate,basestring) and ('*' in cdate or '%' in cdate):
+            if isinstance(cdate, basestring) and ('*' in cdate or '%' in cdate):
                 cdate = 0
             else:
                 try:
@@ -419,7 +419,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for cdate")
             
-            if isinstance(ldate,basestring) and ('*' in ldate or '%' in ldate):
+            if isinstance(ldate, basestring) and ('*' in ldate or '%' in ldate):
                 ldate = 0
             else:
                 try:
@@ -492,11 +492,11 @@ class DBSReaderModel(RESTModel):
         :returns: List of dictionaries containing the following keys (data_tier_id, data_tier_name, create_by, creation_date)
 
         """
-        data_tier_name = data_tier_name.replace("*","%")
+        data_tier_name = data_tier_name.replace("*", "%")
 
         try:
             conn = self.dbi.connection()
-            return self.dbsDataTierListDAO.execute(conn,data_tier_name.upper())
+            return self.dbsDataTierListDAO.execute(conn, data_tier_name.upper())
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except ValueError as ve:
@@ -515,8 +515,8 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('run_num')
     @inputChecks(dataset=basestring, block_name=basestring, data_tier_name=basestring, origin_site_name=basestring, logical_file_name=basestring,
-                 run_num=(long,int,basestring,list), min_cdate=(int,basestring), max_cdate=(int, basestring), min_ldate=(int,basestring),
-                 max_ldate=(int,basestring), cdate=(int,basestring),  ldate=(int,basestring), open_for_writing=(int,basestring), detail=(basestring,bool))
+                 run_num=(long, int, basestring, list), min_cdate=(int, basestring), max_cdate=(int, basestring), min_ldate=(int, basestring),
+                 max_ldate=(int, basestring), cdate=(int, basestring),  ldate=(int, basestring), open_for_writing=(int, basestring), detail=(basestring, bool))
     def listBlocks(self, dataset="", block_name="", data_tier_name="", origin_site_name="",
                    logical_file_name="",run_num=-1, min_cdate='0', max_cdate='0',
                    min_ldate='0', max_ldate='0', cdate='0',  ldate='0', open_for_writing=-1, detail=False):
@@ -558,12 +558,12 @@ class DBSReaderModel(RESTModel):
         :rtype: list of dicts
 
         """
-        dataset = dataset.replace("*","%")
-        block_name = block_name.replace("*","%")
-        logical_file_name = logical_file_name.replace("*","%")
-        origin_site_name = origin_site_name.replace("*","%")
+        dataset = dataset.replace("*", "%")
+        block_name = block_name.replace("*", "%")
+        logical_file_name = logical_file_name.replace("*", "%")
+        origin_site_name = origin_site_name.replace("*", "%")
         #
-	if isinstance(min_cdate,basestring) and ('*' in min_cdate or '%' in min_cdate):
+	if isinstance(min_cdate, basestring) and ('*' in min_cdate or '%' in min_cdate):
             min_cdate = 0
         else:
             try:
@@ -571,7 +571,7 @@ class DBSReaderModel(RESTModel):
             except:
                 dbsExceptionHandler("dbsException-invalid-input", "invalid input for min_cdate")
         #
-        if isinstance(max_cdate,basestring) and ('*' in max_cdate or '%' in max_cdate):
+        if isinstance(max_cdate, basestring) and ('*' in max_cdate or '%' in max_cdate):
             max_cdate = 0
         else:
             try:
@@ -579,7 +579,7 @@ class DBSReaderModel(RESTModel):
             except:
                 dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_cdate")
         #
-        if isinstance(min_ldate,basestring) and ('*' in min_ldate or '%' in min_ldate):
+        if isinstance(min_ldate, basestring) and ('*' in min_ldate or '%' in min_ldate):
             min_ldate = 0
         else:
             try:
@@ -603,7 +603,7 @@ class DBSReaderModel(RESTModel):
             except:
                 dbsExceptionHandler("dbsException-invalid-input", "invalid input for cdate")
         #
-        if isinstance(cdate,basestring) and ('*' in ldate or '%' in ldate):
+        if isinstance(cdate, basestring) and ('*' in ldate or '%' in ldate):
             ldate = 0
         else:
             try:
@@ -614,7 +614,7 @@ class DBSReaderModel(RESTModel):
         detail = detail in (True, 1, "True", "1", 'true')
         try:
             b= self.dbsBlock.listBlocks(dataset, block_name, data_tier_name, origin_site_name, logical_file_name,
-                                  run_num, min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, open_for_writing,detail)
+                                  run_num, min_cdate, max_cdate, min_ldate, max_ldate, cdate, ldate, open_for_writing, detail)
 	    #for item in b:
 		#yield item
 	    return b	
@@ -712,7 +712,7 @@ class DBSReaderModel(RESTModel):
         :rtype: list of dicts
 
         """
-        block_name = block_name.replace("*","%")
+        block_name = block_name.replace("*", "%")
         try:
             return self.dbsBlock.listBlockChildren(block_name)
         except dbsException as de:
@@ -778,7 +778,7 @@ class DBSReaderModel(RESTModel):
     @transformInputType( 'run_num')
     @inputChecks(dataset =basestring, block_name=basestring, logical_file_name =(basestring), release_version=basestring, pset_hash=basestring, app_name=basestring,\
                  output_module_label=basestring, run_num=(long, int, basestring, list), origin_site_name=basestring,
-                 lumi_list=(basestring,list), detail=(basestring,bool), validFileOnly=(basestring, int))
+                 lumi_list=(basestring, list), detail=(basestring, bool), validFileOnly=(basestring, int))
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "",
         release_version="", pset_hash="", app_name="", output_module_label="",
         run_num=-1, origin_site_name="", lumi_list="", detail=False, validFileOnly=0):
@@ -830,7 +830,7 @@ class DBSReaderModel(RESTModel):
         dataset = dataset.replace("*", "%")
         if lumi_list:
             if run_num ==-1 or not run_num :
-                dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.",self.logger.exception)
+                dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.", self.logger.exception)
             else:
                 try:
                     lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
@@ -847,7 +847,7 @@ class DBSReaderModel(RESTModel):
         detail = detail in (True, 1, "True", "1", 'true')
         output_module_label = output_module_label.replace("*", "%")
         try:
-            result =  self.dbsFile.listFiles(dataset, block_name, logical_file_name , release_version , pset_hash, app_name,
+            result =  self.dbsFile.listFiles(dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
                                         output_module_label, run_num, origin_site_name, lumi_list, detail, validFileOnly)
     	    for item in result:
 		yield item	
@@ -948,7 +948,7 @@ class DBSReaderModel(RESTModel):
             yield item
 
     @transformInputType('run_num')
-    @inputChecks(block_name=basestring, dataset=basestring, run_num=(long,int,basestring,list), validFileOnly=(int, basestring))
+    @inputChecks(block_name=basestring, dataset=basestring, run_num=(long, int, basestring, list), validFileOnly=(int, basestring))
     def listFileSummaries(self, block_name='', dataset='', run_num=-1, validFileOnly=0):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. 
@@ -1030,7 +1030,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(dataset=basestring, logical_file_name=basestring, release_version=basestring, pset_hash=basestring, app_name=basestring,\
-                 output_module_label=basestring, block_id=(int,basestring), global_tag=basestring)
+                 output_module_label=basestring, block_id=(int, basestring), global_tag=basestring)
     def listOutputConfigs(self, dataset="", logical_file_name="",
                           release_version="", pset_hash="", app_name="",
                           output_module_label="", block_id=0, global_tag=''):
@@ -1076,7 +1076,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('logical_file_name')
-    @inputChecks(logical_file_name=(basestring, list), block_id=(int,basestring), block_name=basestring)
+    @inputChecks(logical_file_name=(basestring, list), block_id=(int, basestring), block_name=basestring)
     def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
         """
         API to list file parents
@@ -1123,7 +1123,7 @@ class DBSReaderModel(RESTModel):
         if isinstance(logical_file_name, list):
             for f in logical_file_name:
                 if '*' in f or '%' in f:
-                    dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,"No \
+                    dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"], self.logger.exception, "No \
                                          wildcard allow in LFN list" )
 
         try:
@@ -1136,7 +1136,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('run_num')
-    @inputChecks(logical_file_name=(basestring, list), block_name=basestring, run_num=(long,int,basestring,list), validFileOnly=(int,basestring))
+    @inputChecks(logical_file_name=(basestring, list), block_name=basestring, run_num=(long, int, basestring, list), validFileOnly=(int, basestring))
     def listFileLumis(self, logical_file_name="", block_name="", run_num=-1, validFileOnly=0):
         """
         API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support in this API
@@ -1328,7 +1328,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
                                 self.logger.exception, sError)
 
-    @inputChecks(processing_version=(basestring,int))
+    @inputChecks(processing_version=(basestring, int))
     def listProcessingEras(self, processing_version=0):
         """
         API to list all Processing Eras in DBS.
@@ -1365,7 +1365,7 @@ class DBSReaderModel(RESTModel):
 
         """
         if release_version:
-            release_version = release_version.replace("*","%")
+            release_version = release_version.replace("*", "%")
         try:
             return self.dbsReleaseVersion.listReleaseVersions(release_version, dataset, logical_file_name )
         except dbsException as de:
@@ -1387,7 +1387,7 @@ class DBSReaderModel(RESTModel):
 
         """
         if dataset_access_type:
-            dataset_access_type = dataset_access_type.replace("*","%")
+            dataset_access_type = dataset_access_type.replace("*", "%")
         try:
             return self.dbsDatasetAccessType.listDatasetAccessTypes(dataset_access_type)
         except dbsException as de:

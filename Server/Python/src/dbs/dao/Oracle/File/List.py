@@ -47,7 +47,7 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
                 release_version="", pset_hash="", app_name="", output_module_label="",
                 run_num=-1, origin_site_name="", lumi_list=[], validFileOnly=0, transaction=False):
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/List. Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/List. Expects db connection from upper layer.")
         sql = self.sql_cond
         binds = {}
         sql_sel = self.sql_sel
@@ -111,7 +111,7 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
             sql += " AND OMC.OUTPUT_MODULE_LABEL  %s :output_module_label" %op
             binds.update({"output_module_label":output_module_label})
         if (origin_site_name):
-            op = ("=","like")["%" in origin_site_name]
+            op = ("=", "like")["%" in origin_site_name]
             sql += " AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op
             binds.update({"origin_site_name":origin_site_name})
         if run_num != -1 and run_num : # elimnate empty list run_num=[]
