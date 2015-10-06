@@ -2,6 +2,7 @@
 """
 DBS 3 Migration Service unittests
 """
+from __future__ import print_function
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
 from dbsserver_t.utils.DBSDataProvider import DBSBlockDataProvider, create_child_data_provider
 from dbsserver_t.utils.TestTools import expectedFailure
@@ -77,7 +78,7 @@ class DBSMigrationServer_t(unittest.TestCase):
                 pass
 
         config = os.environ['DBS_TEST_CONFIG']
-        service = os.environ.get("DBS_TEST_SERVICE","DBSMigrate")
+        service = os.environ.get("DBS_TEST_SERVICE", "DBSMigrate")
         #migration_test=True for forcing to use dbs3_dp2_i2 as destination DB.
         # Always use the writer account of dbs3_dp2_i2. No matter it is a DBSMigrate, DBSWriter or DBSReader.
         cls._migrate_api = DBSRestApi(config, service, migration_test=True)
@@ -128,8 +129,8 @@ class DBSMigrationServer_t(unittest.TestCase):
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : block_data}
             ###schedule only the first block for migration
-            print "\t----\t"
-	    print toMigrate	
+            print("\t----\t")
+	    print(toMigrate)	
             self._migrate_api.insert('submit', toMigrate)
 
     def test_03_handle_migration_requests(self):
@@ -186,7 +187,7 @@ class DBSMigrationServer_t(unittest.TestCase):
                 for key, value in input.iteritems():
                     if key in non_comparable_keys:
                         continue ###do not compare id's
-                    self.assertTrue(output.has_key(key))
+                    self.assertTrue(key in output)
                     check(value, output[key])
             elif isinstance(input, list):
                 for element_in, element_out in zip(sorted(remove_non_comparable_keys(input, non_comparable_keys)),

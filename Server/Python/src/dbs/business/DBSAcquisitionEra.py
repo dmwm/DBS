@@ -69,9 +69,9 @@ class DBSAcquisitionEra:
             self.acqin.execute(conn, businput, tran)
             tran.commit()
             tran = None
-        except KeyError, ke:
+        except KeyError as ke:
             dbsExceptionHandler('dbsException-invalid-input', "Invalid input:"+ke.args[0])
-        except Exception, ex:
+        except Exception as ex:
             if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                 dbsExceptionHandler('dbsException-invalid-input2', "Invalid input: acquisition_era_name already exists in DB",  serverError="%s" %ex)
             else:

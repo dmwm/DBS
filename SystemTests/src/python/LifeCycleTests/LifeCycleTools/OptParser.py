@@ -1,3 +1,4 @@
+from __future__ import print_function
 from optparse import OptionParser
 
 def get_command_line_options(executable_name, arguments):
@@ -13,4 +14,4 @@ def get_command_line_options(executable_name, arguments):
 
 if __name__ == '__main__':
     import sys
-    print get_command_line_options(__name__, sys.argv)
+    print(get_command_line_options(__name__, sys.argv))

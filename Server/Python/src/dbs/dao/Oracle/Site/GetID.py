@@ -26,7 +26,7 @@ FROM %sSITES S
         returns id for a give site
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/Site/GetID. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Site/GetID. Expects db connection from upper layer.")
 
         sql = self.sql
         sql += " WHERE S.SITE_NAME = :site_name" 

@@ -78,16 +78,16 @@ class DBSFileBuffer:
             
             for ablob in businput:
                 block_id = ablob["file"]["block_id"]
-                if ablob.has_key("file") : 
+                if "file" in ablob : 
                     files.append(ablob["file"])
                     fidl.append(ablob["file"]["file_id"])
                     flfnl.append({"logical_file_name" :
                                     ablob["file"]["logical_file_name"] })
-                if ablob.has_key("file_lumi_list") :
+                if "file_lumi_list" in ablob :
                     lumis.extend(ablob["file_lumi_list"])
-                if ablob.has_key("file_parent_list") :
+                if "file_parent_list" in ablob :
                     parents.extend(ablob["file_parent_list"])
-                if ablob.has_key("file_output_config_list") :
+                if "file_output_config_list" in ablob :
                     configs.extend(ablob["file_output_config_list"])
 
             # insert files
@@ -142,7 +142,7 @@ class DBSFileBuffer:
                         try:
                             self.blkparentin.execute(conn, abp,
                                                 transaction=tran)
-                        except SQLAlchemyIntegrityError, ex:
+                        except SQLAlchemyIntegrityError as ex:
                             if (str(ex).find("unique constraint") != -1 or
                                 str(ex).lower().find("duplicate") != -1):
                                 pass
@@ -170,7 +170,7 @@ class DBSFileBuffer:
                         try:
                             self.dsparentin.execute(conn, adsp,
                                                     transaction=tran)
-                        except SQLAlchemyIntegrityError, ex:
+                        except SQLAlchemyIntegrityError as ex:
                             if (str(ex).find("unique constraint") != -1 or
                                 str(ex).lower().find("duplicate") != -1):
                                 pass
@@ -190,7 +190,7 @@ class DBSFileBuffer:
             # All good ?. 
             tran.commit()
 
-        except Exception, e:
+        except Exception as e:
             if tran:
                 tran.rollback()
             self.logger.exception(e)

@@ -131,7 +131,7 @@ class BriefList(DBFormatter):
             elif not wheresql_run_range and wheresql_run_list:
                 wheresql += " and "  + wheresql_run_list
         #
-        sql = " ".join((generatedsql ,basesql, self.fromsql, joinsql, wheresql))
+        sql = " ".join((generatedsql, basesql, self.fromsql, joinsql, wheresql))
 
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         for i in cursors:

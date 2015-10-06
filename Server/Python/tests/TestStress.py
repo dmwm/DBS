@@ -1,4 +1,5 @@
 """This module provides all basic tests for the server"""
+from __future__ import print_function
 
 __revision__ = "$Id: TestStress.py,v 1.3 2009/11/29 11:37:54 akhukhun Exp $"
 __version__ = "$Revision: 1.3 $"
@@ -27,7 +28,7 @@ class DBS3StressTest(Thread):
                   "PRIMARY_DS_TYPE":"TEST"}
         t = time.time()
         self.cli.put("primarydatasets", dinput)
-        print "%s: INSERT PRIMARY DATASET:    %s" % (self.IC, time.time() - t)
+        print("%s: INSERT PRIMARY DATASET:    %s" % (self.IC, time.time() - t))
  
         #insertDataset
         dinput = {"PRIMARY_DS_NAME":"SUT_%s" % self.IC,
@@ -44,7 +45,7 @@ class DBS3StressTest(Thread):
                   "GLOBAL_TAG":"GLOBALTAG"}
         t = time.time()
         self.cli.put("datasets", dinput)
-        print "%s: INSERT DATASET :    %s" % (self.IC, time.time() - t)
+        print("%s: INSERT DATASET :    %s" % (self.IC, time.time() - t))
  
         #insertBlock
         dinput = {"BLOCK_NAME":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC),
@@ -54,28 +55,28 @@ class DBS3StressTest(Thread):
                   }
         t = time.time()
         self.cli.put("blocks", dinput)
-        print "%s: INSERT BLOCK:    %s" % (self.IC, time.time() - t)
+        print("%s: INSERT BLOCK:    %s" % (self.IC, time.time() - t))
  
         #insertFile
         sinput = []
         for k in range(self.NPARENTS):
-            fl = {"LOGICAL_FILE_NAME":"/store/sut_file_%s_%s.root" % (self.IC, str(k)),
-                    "IS_FILE_VALID":1,
-                    "BLOCK":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC),
-                    "DATASET":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (self.IC, self.IC),
-                    "FILE_TYPE":"EDM",
-                    "CHECK_SUM":"999",
-                    "EVENT_COUNT":10000,
-                    "FILE_SIZE":1024.,
-                    "ADLER32":"adler32",
-                    "MD5":"md5",
-                    "AUTO_CROSS_SECTION":1234.,
-                    "FILE_LUMI_LIST":[],
-                    "FILE_PARENT_LIST":[],}
+            fl = {"LOGICAL_FILE_NAME": "/store/sut_file_%s_%s.root" % (self.IC, str(k)),
+                    "IS_FILE_VALID": 1,
+                    "BLOCK": "/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC),
+                    "DATASET": "/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (self.IC, self.IC),
+                    "FILE_TYPE": "EDM",
+                    "CHECK_SUM": "999",
+                    "EVENT_COUNT": 10000,
+                    "FILE_SIZE": 1024.,
+                    "ADLER32": "adler32",
+                    "MD5": "md5",
+                    "AUTO_CROSS_SECTION": 1234.,
+                    "FILE_LUMI_LIST": [],
+                    "FILE_PARENT_LIST": [],}
             sinput.append(fl)
         t = time.time()
         self.cli.put("files", {"files":sinput})
-        print "%s: INSERT FILES:    %s" % (self.IC, time.time() - t)
+        print("%s: INSERT FILES:    %s" % (self.IC, time.time() - t))
         
         #insert one File with Lumi Sections and file parents
         lumilist = []
@@ -104,21 +105,21 @@ class DBS3StressTest(Thread):
             sinput.append(fl)
         t = time.time()
         self.cli.put("files", {"files":sinput})
-        print "%s: INSERT FILE WITH P&L:    %s" % (self.IC, time.time() - t)
+        print("%s: INSERT FILE WITH P&L:    %s" % (self.IC, time.time() - t))
         
         
         #listPrimaryDatasets
         t = time.time()
         self.cli.get("primarydatasets")
         res = self.cli.get("primarydatasets/SUT_%s" % self.IC)
-        print "%s: LIST PRIMARY DATASETS:    %s" % (self.IC, time.time() - t)
+        print("%s: LIST PRIMARY DATASETS:    %s" % (self.IC, time.time() - t))
     
         #listDatasets
         t = time.time()
         self.cli.get("datasets")
         params = {"dataset":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO" % (self.IC, self.IC)}
         res = self.cli.get("datasets", params)
-        print "%s: LIST DATASETS:    %s" % (self.IC, time.time() - t)
+        print("%s: LIST DATASETS:    %s" % (self.IC, time.time() - t))
         
         
         #listBlocks
@@ -127,15 +128,15 @@ class DBS3StressTest(Thread):
         res = self.cli.get("blocks", params)
         params = {"block":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC)}
         res = self.cli.get("blocks", params)
-        print "%s: LIST BLOCKS:    %s" % (self.IC, time.time() - t)
+        print("%s: LIST BLOCKS:    %s" % (self.IC, time.time() - t))
 
         #listFiles
         t = time.time()
         params = {"block":"/SUT_%s/SUT_PROCESSED_DATASET_V%s/GEN-SIM-RECO#SUT_BLOCK_%s" % (self.IC, self.IC, self.IC)}
         res = self.cli.get("files", params)
-        print "%s: LIST FILES:    %s" % (self.IC, time.time() - t)
+        print("%s: LIST FILES:    %s" % (self.IC, time.time() - t))
 
-        print "%s: TEST FINISHED in %s SECONDS" % (self.IC, time.time() - t0)
+        print("%s: TEST FINISHED in %s SECONDS" % (self.IC, time.time() - t0))
         
 if __name__ == "__main__":
     for i in range(200, 210):

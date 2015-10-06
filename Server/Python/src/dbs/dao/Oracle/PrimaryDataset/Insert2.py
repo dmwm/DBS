@@ -24,7 +24,7 @@ class Insert2(DBFormatter):
 
     def execute( self, conn, inputObj, transaction=False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","PrimaryDataset/Insert2. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "PrimaryDataset/Insert2. Expects db connection from upper layer.")
             
         result = self.dbi.processData(self.sql, inputObj, conn, transaction)
             

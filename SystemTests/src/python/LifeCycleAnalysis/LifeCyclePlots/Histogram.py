@@ -1,3 +1,4 @@
+from __future__ import print_function
 from ROOT import gStyle, TCanvas, TFile, TH1F, TH2F, THStack, TPaveStats
 
 class BasicHisto(object):
@@ -45,19 +46,19 @@ class BasicHisto(object):
 
     def draw(self):
         # create canvas to draw histogram
-        if not getattr(self,'_canvas', None):
+        if not getattr(self, '_canvas', None):
             self.create_canvas()
 
         # set axis label
-        self._histogram.GetXaxis().SetTitle(self._label.get('x',""));
-        self._histogram.GetYaxis().SetTitle(self._label.get('y',""));
+        self._histogram.GetXaxis().SetTitle(self._label.get('x', ""));
+        self._histogram.GetYaxis().SetTitle(self._label.get('y', ""));
         # set colors
-        self._histogram.SetFillColor(self._color.get("fill",0))
-        self._histogram.SetLineColor(self._color.get("line",1))
-        self._histogram.SetMarkerColor(self._color.get("marker",1))
+        self._histogram.SetFillColor(self._color.get("fill", 0))
+        self._histogram.SetLineColor(self._color.get("line", 1))
+        self._histogram.SetMarkerColor(self._color.get("marker", 1))
         # set log axis
-        self._canvas.SetLogx(self._log.get('x',False))
-        self._canvas.SetLogy(self._log.get('y',False))
+        self._canvas.SetLogx(self._log.get('x', False))
+        self._canvas.SetLogy(self._log.get('y', False))
 
         # set additional options
         for key, value in self._add_options.iteritems():
@@ -86,14 +87,14 @@ class BasicHisto(object):
         try:
             self._canvas.Print("%s/%s.%s" % (output_directory, self._name, format), format)
         except AttributeError:
-            print "You have to draw histograms before saving."
+            print("You have to draw histograms before saving.")
             pass
 
     def set_stats_style(self):
-        stat_box = TPaveStats(0.816092,0.7415254,0.9971264,0.9300847,"brNDC")
+        stat_box = TPaveStats(0.816092, 0.7415254, 0.9971264, 0.9300847, "brNDC")
         stat_box.SetBorderSize(1);
         stat_box.SetFillColor(0)
-        stat_box.SetTextColor(self._color.get("line",1));
+        stat_box.SetTextColor(self._color.get("line", 1));
         stat_box.SetTextAlign(12);
         stat_box.SetTextFont(42);
         stat_box.SetName("stats_%s" % (self._name))
@@ -162,7 +163,7 @@ class StackedHisto(object):
 
     def draw(self):
         # create canvas to draw histogram
-        if not getattr(self,'_canvas', None):
+        if not getattr(self, '_canvas', None):
             self.create_canvas()
         self._hstack.Draw('nostack')
 
@@ -170,7 +171,7 @@ class StackedHisto(object):
         try:
             self._canvas.Print("%s/%s.%s" % (output_directory, self._name, format), format)
         except AttributeError:
-            print "You have to draw histograms before saving."
+            print("You have to draw histograms before saving.")
             pass
 
     def set_stats_style(self):

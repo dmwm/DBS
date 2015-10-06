@@ -22,7 +22,7 @@ class List(DBFormatter):
 	simple execute
         """
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileBuffer/List. Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileBuffer/List. Expects db connection from upper layer.")
 
 	sql = self.sql
         binds = { "block_id" : block_id}

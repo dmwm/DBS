@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
@@ -11,9 +12,9 @@ import tempfile
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url':os.environ.get("DBS_READER_URL","https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
+config = {'url':os.environ.get("DBS_READER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
 
-api = create_api('DbsApi',config=config)
+api = create_api('DbsApi', config=config)
 
 payload_handler = PayloadHandler()
 
@@ -37,7 +38,7 @@ timer.update_stats({'server_request_timing' : float(request_processing_time)/100
 
 timer.stat_to_server()
 
-print "PrimaryDSType is %s" % (ds_type)
+print("PrimaryDSType is %s" % (ds_type))
 
 ## list all files in DBS3 for a given dataset
 timing.get('stats').update({'api' : 'listFiles'})
@@ -51,7 +52,7 @@ timer.update_stats({'server_request_timing' : float(request_processing_time)/100
 
 timer.stat_to_server()
 
-print "Found %s files for dataset %s" % (len(files), initial)
+print("Found %s files for dataset %s" % (len(files), initial))
 
 ## list parent_files and file_lumis for all the files
 for this_file in files:
@@ -67,7 +68,7 @@ for this_file in files:
     
     timer.stat_to_server()
     
-    print "Found %s parents for file %s" % (len(parent_files), logical_file_name)
+    print("Found %s parents for file %s" % (len(parent_files), logical_file_name))
 
     timing.get('stats').update({'api' : 'listFileLumis','query' : str(logical_file_name)})
     with TimingStat(timing, stat_client) as timer:
@@ -80,5 +81,5 @@ for this_file in files:
     
     timer.stat_to_server()
     
-    print "Found %s lumis for file %s" % (len(file_lumis), logical_file_name)
+    print("Found %s lumis for file %s" % (len(file_lumis), logical_file_name))
                                           

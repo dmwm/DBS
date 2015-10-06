@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #
+from __future__ import print_function
 import sys
 from DBSAPI.dbsApi import DbsApi
 from DBSAPI.dbsException import *
@@ -10,7 +11,7 @@ import xml.sax, xml.sax.handler
 #
 try:
   optManager  = DbsOptionParser()
-  (opts,args) = optManager.getOpt()
+  (opts, args) = optManager.getOpt()
   api = DbsApi(opts.__dict__)
   datasets=[	
 		#"/Cosmics/Commissioning08-v1/RAW", 
@@ -28,7 +29,7 @@ try:
     for ablock in blocks:
 	data=api.listDatasetContents(dataset, ablock["Name"])
   	#print data
-	print "-- SQL Statements for Dataset : %s and Block : %s " % (dataset, ablock["Name"])
+	print("-- SQL Statements for Dataset : %s and Block : %s " % (dataset, ablock["Name"]))
   	class Handler (xml.sax.handler.ContentHandler):
 
 		def __init__(self):
@@ -93,7 +94,7 @@ try:
 				self.sqls['app_version'].append("\nINSERT INTO RELEASE_VERSIONS (VERSION) VALUES ( '%s' ); " % attrs.get('app_version') )
 				self.sqls['app_executable_name'].append("\nINSERT INTO APPLICATION_EXECUTABLES (APP_NAME) VALUES ( '%s' );" %attrs.get('app_executable_name') )
 				self.sqls['ps_hash'].append("\nINSERT INTO PARAMETER_SET_HASHES(HASH, NAME) VALUES ( '%s', '%s' );" % ('NO_PSET_HASH', 'NO_PSET_HASH') )
-				self.sqls['process_configurations'].append( "\nINSERT INTO OUTPUT_MODULE_CONFIGS(APP_EXEC_ID, RELEASE_VERSION_ID, PARAMETER_SET_HASH_ID, OUTPUT_MODULE_LABEL, CREATION_DATE, CREATE_BY) VALUES ( (SELECT APP_EXEC_ID FROM APPLICATION_EXECUTABLES WHERE APP_NAME='%s'), (SELECT RELEASE_VERSION_ID FROM RELEASE_VERSIONS WHERE VERSION='%s'), (SELECT PARAMETER_SET_HASH_ID FROM PARAMETER_SET_HASHES WHERE NAME='NO_PSET_HASH'), '%s', '%s', '%s');" % ( attrs.get('app_executable_name'), attrs.get('app_version'), 'NO_OUTPUT_MODULE_LABEL', self.creation_date , self.created_by ) )
+				self.sqls['process_configurations'].append( "\nINSERT INTO OUTPUT_MODULE_CONFIGS(APP_EXEC_ID, RELEASE_VERSION_ID, PARAMETER_SET_HASH_ID, OUTPUT_MODULE_LABEL, CREATION_DATE, CREATE_BY) VALUES ( (SELECT APP_EXEC_ID FROM APPLICATION_EXECUTABLES WHERE APP_NAME='%s'), (SELECT RELEASE_VERSION_ID FROM RELEASE_VERSIONS WHERE VERSION='%s'), (SELECT PARAMETER_SET_HASH_ID FROM PARAMETER_SET_HASHES WHERE NAME='NO_PSET_HASH'), '%s', '%s', '%s');" % ( attrs.get('app_executable_name'), attrs.get('app_version'), 'NO_OUTPUT_MODULE_LABEL', self.creation_date, self.created_by ) )
 
 			if name == 'processed_dataset_algorithm':
 				self.sqls['processed_dataset_algorithm'].append("\nINSERT INTO DATASET_OUTPUT_MOD_CONFIGS(DATASET_ID, DS_OUTPUT_MOD_CONF_ID) VALUES ((SELECT DATASET_ID FROM DATASETS WHERE DATASET='%s'), (SELECT OUTPUT_MOD_CONFIG_ID FROM OUTPUT_MODULE_CONFIGS WHERE APP_EXEC_ID=(SELECT APP_EXEC_ID FROM APPLICATION_EXECUTABLES WHERE APP_NAME='%s') AND RELEASE_VERSION_ID=(SELECT RELEASE_VERSION_ID FROM RELEASE_VERSIONS WHERE VERSION='%s') AND PARAMETER_SET_HASH_ID=(SELECT PARAMETER_SET_HASH_ID FROM PARAMETER_SET_HASHES WHERE NAME='NO_PSET_HASH')) );" % (self.path, attrs.get('app_executable_name'), attrs.get('app_version')) )
@@ -107,36 +108,36 @@ try:
 
 			if name =='run':
 				if attrs.get('run_number') not in self.already_run:
-					self.sqls['run'].append("\nINSERT INTO DATASET_RUNS(DATASET_ID, RUN_NUMBER, COMPLETE, LUMI_SECTION_COUNT, CREATION_DATE, CREATE_BY) VALUES ((SELECT DATASET_ID FROM DATASETS WHERE DATASET= '%s'), '%s','%s', '%s', '%s', '%s');" % ( self.path, attrs.get('run_number'), '1', attrs.get('number_of_lumi_sections'), self.creation_date , self.created_by ) )
+					self.sqls['run'].append("\nINSERT INTO DATASET_RUNS(DATASET_ID, RUN_NUMBER, COMPLETE, LUMI_SECTION_COUNT, CREATION_DATE, CREATE_BY) VALUES ((SELECT DATASET_ID FROM DATASETS WHERE DATASET= '%s'), '%s','%s', '%s', '%s', '%s');" % ( self.path, attrs.get('run_number'), '1', attrs.get('number_of_lumi_sections'), self.creation_date, self.created_by ) )
 					self.already_run.append(attrs.get('run_number'))
 
 		def endElement(self, name) :
 			if name == 'dbs':
 				#print self.sqls
-				print self.sqls['primary']
-				print self.sqls['processed']
-				print self.sqls['data_tier']
-				for x in self.sqls['paths'] : print x
-				print self.sqls['block'] 
-				for x in self.sqls['storage_element'] : print x			
-				for x in self.sqls['block_storage_elements'] : print x
-				for x in self.sqls['app_version'] : print x
-				for x in self.sqls['app_executable_name']: print x
-				for x in self.sqls['ps_hash'] : print x
-				for x in self.sqls['process_configurations'] : print x
-				for x in self.sqls['processed_dataset_algorithm'] : print x
-				for x in self.sqls['file'] : print x
+				print(self.sqls['primary'])
+				print(self.sqls['processed'])
+				print(self.sqls['data_tier'])
+				for x in self.sqls['paths'] : print(x)
+				print(self.sqls['block']) 
+				for x in self.sqls['storage_element'] : print(x)			
+				for x in self.sqls['block_storage_elements'] : print(x)
+				for x in self.sqls['app_version'] : print(x)
+				for x in self.sqls['app_executable_name']: print(x)
+				for x in self.sqls['ps_hash'] : print(x)
+				for x in self.sqls['process_configurations'] : print(x)
+				for x in self.sqls['processed_dataset_algorithm'] : print(x)
+				for x in self.sqls['file'] : print(x)
 				for x in self.sqls['lfn'] : 
 					for y in self.sqls['file_algorithm'] : y.replace('__FILE_LFN__', x)
 					for y in self.sqls['file_lumi_section'] : y.replace('__FILE_LFN__', x)	
-				for x in self.sqls['run'] : print x
-				print "\n\n"
+				for x in self.sqls['run'] : print(x)
+				print("\n\n")
 
   	xml.sax.parseString (data, Handler ())
 
-except DbsApiException, ex:
-  print "Caught API Exception %s: %s "  % (ex.getClassName(), ex.getErrorMessage() )
+except DbsApiException as ex:
+  print("Caught API Exception %s: %s "  % (ex.getClassName(), ex.getErrorMessage() ))
   if ex.getErrorCode() not in (None, ""):
-    print "DBS Exception Error Code: ", ex.getErrorCode()
+    print("DBS Exception Error Code: ", ex.getErrorCode())
 
 

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 lines=open("../DDL/DBS3-Oracle.sql", "r").readlines()
 tablefound=0
@@ -7,35 +8,35 @@ inserts=[]
 selects=[]
 trigs=[]
 
-trig_tbl_map = {"ACQUISITION_ERAS" : "AQE",
-"APPLICATION_EXECUTABLES": "AE" ,
-"ASSOCIATED_FILES": "AF" ,
-"BLOCKS": "BK" ,
-"BLOCK_PARENTS": "BP" ,
-"BLOCK_STORAGE_ELEMENTS": "BSE" ,
-"BRANCH_HASHES": "BH" ,
-"DATA_TIERS": "DT" ,
+trig_tbl_map = {"ACQUISITION_ERAS": "AQE",
+"APPLICATION_EXECUTABLES": "AE",
+"ASSOCIATED_FILES": "AF",
+"BLOCKS": "BK",
+"BLOCK_PARENTS": "BP",
+"BLOCK_STORAGE_ELEMENTS": "BSE",
+"BRANCH_HASHES": "BH",
+"DATA_TIERS": "DT",
 "DBS_VERSIONS": "DV", 
-"FILES": "FL" ,
-"FILE_LUMIS": "FLM" ,
-"FILE_PARENTS": "FP" ,
-"FILE_PROCESS_CONFIGS": "FPC" ,
-"FILE_TYPES": "FT" ,
-"PARAMETER_SET_HASHES": "PSH" ,
-"PATHS": "PH" ,
-"PATH_PARENTS": "PP" ,
-"PATH_PROCESS_CONFIGS": "PPC" ,
-"PATH_RUNS": "PR" ,
-"PATH_TYPES": "PT" ,
-"PHYSICS_GROUPS": "PG" ,
-"PRIMARY_DATASETS": "PDS" ,
-"PRIMARY_DS_TYPES": "PDT" ,
-"PROCESSED_DATASETS": "PSDS" ,
-"PROCESSING_ERAS": "PE" ,
-"PROCESS_CONFIGURATIONS": "PC" ,
-"RELEASE_VERSIONS": "RV" ,
-"SITES": "SI" ,
-"STORAGE_ELEMENTS": "SE" ,
+"FILES": "FL",
+"FILE_LUMIS": "FLM",
+"FILE_PARENTS": "FP",
+"FILE_PROCESS_CONFIGS": "FPC",
+"FILE_TYPES": "FT",
+"PARAMETER_SET_HASHES": "PSH",
+"PATHS": "PH",
+"PATH_PARENTS": "PP",
+"PATH_PROCESS_CONFIGS": "PPC",
+"PATH_RUNS": "PR",
+"PATH_TYPES": "PT",
+"PHYSICS_GROUPS": "PG",
+"PRIMARY_DATASETS": "PDS",
+"PRIMARY_DS_TYPES": "PDT",
+"PROCESSED_DATASETS": "PSDS",
+"PROCESSING_ERAS": "PE",
+"PROCESS_CONFIGURATIONS": "PC",
+"RELEASE_VERSIONS": "RV",
+"SITES": "SI",
+"STORAGE_ELEMENTS": "SE",
 }
 
 tbl_pk_map={}
@@ -103,5 +104,5 @@ for aline in lines:
 
 ###### Generate AUTO INC Triggers
 
-for (t,z) in trigs : 
-	print z.replace( "__PK__", tbl_pk_map[t] )
+for (t, z) in trigs : 
+	print(z.replace( "__PK__", tbl_pk_map[t] ))

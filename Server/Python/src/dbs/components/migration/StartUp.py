@@ -38,7 +38,7 @@ def configure(configfile):
 
     for instance in migration_cfg.instances:
         instance_settings = getattr(migration_cfg.database.instances, instance)
-        migration_config.setdefault('database',{}).update({instance :
+        migration_config.setdefault('database', {}).update({instance :
                                                            {'threads' : instance_settings.threads,
                                                             'dbowner' : instance_settings.dbowner,
                                                             'engineParameters' : instance_settings.engineParameters,

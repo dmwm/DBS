@@ -14,7 +14,7 @@ class Insert(DBFormatter):
 
     def execute( self, conn, psetHashObj, transaction=False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ParameterSetHashe/Insert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ParameterSetHashe/Insert. Expects db connection from upper layer.")
 
         result = self.dbi.processData(self.sql, psetHashObj, conn, transaction)
 	

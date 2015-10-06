@@ -1,3 +1,4 @@
+from __future__ import print_function
 from dbs.apis.dbsClient import *
 src_url="http://localhost:8585"
 dst_url="http://cmssrv18.fnal.gov:8585/MIGRATE"
@@ -19,7 +20,7 @@ print dbs3api.migrateSubmit(data)
 """
 
 data = dict(migration_url="http://vocms08.cern.ch:8585/DBS", migration_input='/Cosmics/CRAFT09-CRAFT09_R_V4_CosmicsSeq_v1/RECO')
-print dbs3api.migrateSubmit(data)
+print(dbs3api.migrateSubmit(data))
     
 #for i in xrange(50):
 #    data = dict(migration_url=src_url, migration_dataset='data_03_%i' % i) 

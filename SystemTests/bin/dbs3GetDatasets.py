@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
@@ -12,9 +13,9 @@ from random import shuffle
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url':os.environ.get("DBS_READER_URL","https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
+config = {'url':os.environ.get("DBS_READER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
 
-api = create_api('DbsApi',config=config)
+api = create_api('DbsApi', config=config)
 
 payload_handler = PayloadHandler()
 
@@ -25,7 +26,7 @@ named_pipe = payload_handler.payload['workflow']['NamedPipe']
 stat_client = StatsPipeClient(named_pipe)
 
 initial = payload_handler.payload['workflow']['InitialRequest']
-print "Initial request string: %s" % (initial)
+print("Initial request string: %s" % (initial))
 
 ## first step (list all datasets in DBS3 below the 'initial' root)
 
@@ -51,7 +52,7 @@ datasets = filter(lambda x: x.find('T0TEST')==-1, datasets)
 #re-arrange the order of datasets, to have a more realistic chaotic use
 shuffle(datasets)
 
-print "Found %s datasets" % (len(datasets))
+print("Found %s datasets" % (len(datasets)))
 
 for dataset, interval in zip(datasets, increase_interval(start=0.0, step=0.2)):
   p = payload_handler.clone_payload()

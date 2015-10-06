@@ -11,7 +11,7 @@ from dbs.dao.Oracle.PhysicsGroup.List import List as PhysicsGroupList
 class List_t(unittest.TestCase):
     @DaoConfig("DBSReader")
     def __init__(self, methodName='runTest'):
-        super(List_t,self).__init__(methodName)
+        super(List_t, self).__init__(methodName)
         #use persistent data, since inserts are not foreseen
         self.data_provider = create_dbs_data_provider(data_type='persistent')
         self.data = set((data['physics_group_name'] for data in self.data_provider.get_physics_group_data()))

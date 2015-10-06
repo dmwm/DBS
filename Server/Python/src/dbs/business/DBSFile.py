@@ -3,6 +3,7 @@
 """
 This module provides business object class to interact with File.
 """
+from __future__ import print_function
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
@@ -53,7 +54,7 @@ class DBSFile:
         if((logical_file_name=='' or '*'in logical_file_name or '%' in logical_file_name) \
             and (block_name=='' or '*' in block_name or '%' in block_name) and input_body==-1 ):
             dbsExceptionHandler('dbsException-invalid-input', \
-                "Fully specified logical_file_name or block_name is required if GET is called. No wildcards are allowed." ,
+                "Fully specified logical_file_name or block_name is required if GET is called. No wildcards are allowed.",
 		 self.logger.exception, "Fully specified logical_file_name or block_name is required if GET is called. No wildcards are allowed.")
         elif input_body != -1 :
             try:
@@ -61,7 +62,7 @@ class DBSFile:
                 run_num = input_body.get("run_num", -1)
                 validFileOnly = input_body.get("validFileOnly", 0)
                 block_name = ""
-            except cjson.DecodeError, de:
+            except cjson.DecodeError as de:
                 msg = "business/listFileLumis requires at least a list of logical_file_name. %s" % de
                 dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, msg)
         elif input_body != -1 and (logical_file_name is not None or block_name is not None): 
@@ -150,7 +151,7 @@ class DBSFile:
             self.updatestatus.execute(conn, logical_file_name, is_file_valid, lost, trans)
             trans.commit()
             trans = None
-        except Exception, ex:
+        except Exception as ex:
             if trans:
                 trans.rollback()
                 trans = None
@@ -193,7 +194,7 @@ class DBSFile:
         if ('%' in block_name):
             dbsExceptionHandler('dbsException-invalid-input', "You must specify exact block name not a pattern", self.logger.exception)
         elif ('%' in dataset):
-	    print "***** in dataset name"
+	    print("***** in dataset name")
             dbsExceptionHandler('dbsException-invalid-input', " You must specify exact dataset name not a pattern", self.logger.exception)
         elif (not dataset  and not block_name and (not logical_file_name or '%'in logical_file_name) ):
             dbsExceptionHandler('dbsException-invalid-input', """You must specify one of the parameter groups:  \
@@ -283,7 +284,7 @@ class DBSFile:
             block_id = -1
             dsconfigs = []
             for f in businput:
-                if not (f.has_key("logical_file_name") and f.has_key("block_name") and f.has_key("dataset") ):
+                if not ("logical_file_name" in f and "block_name" in f and "dataset" in f ):
                     dbsExceptionHandler('dbsException-invalid-input', "DBSFile/insertFile must have logical_file_name, block_name and dataset as input")
                 if f["block_name"].split('#')[0] != f["dataset"]:
                     dbsExceptionHandler('dbsException-invalid-input', "DBSFile/insertFile: dataset and block_name NOT match")
@@ -308,7 +309,7 @@ class DBSFile:
 			    if  b["open_for_writing"] != 1 : 
 				dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,
 				    "Block %s is not open for writting" %f["block_name"])
-			    if b.has_key("block_id"):
+			    if "block_id" in b:
 				block_id = b["block_id"]
 			    else:
 				dbsExceptionHandler("dbsException-missing-data", "Block not found", None,
@@ -368,7 +369,7 @@ class DBSFile:
                         fileInserted = True
                     else:
                         file_clob['file'] = filein
-                except SQLAlchemyIntegrityError, ex:
+                except SQLAlchemyIntegrityError as ex:
                     if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                         # Lets move on to NEXT file, we do not want to continue processing this file
 
@@ -382,7 +383,7 @@ class DBSFile:
 
                 #process file parents, file lumi, file outputmodconfigs, ...
                 #file lumi sections
-                if f.has_key("file_lumi_list"):
+                if "file_lumi_list" in f:
                     fllist = f["file_lumi_list"]
                     if len(fllist) > 0:
                         for fl in fllist:
@@ -393,7 +394,7 @@ class DBSFile:
                             fldao["file_id"] = filein["file_id"]
                             flumis2insert.append(fldao)
 
-                if f.has_key("file_parent_list"):
+                if "file_parent_list" in f:
                     #file parents
                     fplist = f["file_parent_list"]
 
@@ -402,7 +403,7 @@ class DBSFile:
                         fpdao["this_file_id"] = filein["file_id"]
                         fpdao["parent_logical_file_name"] = fp["file_parent_lfn"]
                         fparents2insert.append(fpdao)
-                if f.has_key("file_output_config_list"):
+                if "file_output_config_list" in f:
                     #file output config modules
                     foutconfigs = f["file_output_config_list"]
                     if(len(foutconfigs) > 0):
@@ -446,7 +447,7 @@ class DBSFile:
                     try:
                         self.logger.warning(file_clob)
                         self.filebufin.execute(conn, filein['logical_file_name'], block_id, file_clob, transaction=tran)
-                    except SQLAlchemyIntegrityError, ex:
+                    except SQLAlchemyIntegrityError as ex:
                         if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                             pass
                         else:
@@ -461,7 +462,7 @@ class DBSFile:
                             self.blkparentin.execute(conn, bkParentage2insert, transaction=tran)
                             dsParentage2insert={'this_dataset_id': filein["dataset_id"], 'parent_logical_file_name' : fp['parent_logical_file_name']}
                             self.dsparentin.execute(conn, dsParentage2insert, transaction=tran)
-                        except SQLAlchemyIntegrityError, ex:
+                        except SQLAlchemyIntegrityError as ex:
                             #ORA-00001
                             if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP") != -1) or str(ex).find("PK_BP") != -1 or str(ex).lower().find("duplicate") != -1:
                                 pass
@@ -481,7 +482,7 @@ class DBSFile:
             tran.commit()
             tran = None
 
-        except Exception, ex:
+        except Exception as ex:
             if tran:
                 tran.rollback()
                 tran = None

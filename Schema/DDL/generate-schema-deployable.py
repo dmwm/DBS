@@ -14,8 +14,8 @@ reader_account="ACCT_CMS_DBS3_READER"
 writer_account="ACCT_CMS_DBS3_WRITER"
 admin_account="ACCT_CMS_DBS3_ADMIN"
 #
-shutil.copyfile('create-oracle-schema.sql','oracle-deployable.sql')
-for line in fileinput.input("oracle-deployable.sql",inplace=1):
+shutil.copyfile('create-oracle-schema.sql', 'oracle-deployable.sql')
+for line in fileinput.input("oracle-deployable.sql", inplace=1):
     if "CMS_DBS3_READ_ROLE" in line:
             line=line.replace("CMS_DBS3_READ_ROLE", reader_role_name)
     if "CMS_DBS3_WRITE_ROLE" in line:

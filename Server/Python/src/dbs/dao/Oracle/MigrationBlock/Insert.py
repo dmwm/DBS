@@ -23,6 +23,6 @@ VALUES(:migration_block_id, :migration_request_id, :migration_block_name, :migra
 	insert into MIGRATION_BLOCKS
         """
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationBlock/Insert. Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationBlock/Insert. Expects db connection from upper layer.")
 
         self.dbi.processData(self.sql, daoinput, conn, transaction)

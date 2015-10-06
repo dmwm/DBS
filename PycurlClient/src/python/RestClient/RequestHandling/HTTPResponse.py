@@ -17,7 +17,7 @@ class HTTPResponse(object):
                 self._version, self._code = initial_header[0:2]
                 self._msg = initial_header[2] if len(initial_header) > 2 else '' 
             elif header != "":
-                self._header_dict.update(dict([header.split(':',1)]))
+                self._header_dict.update(dict([header.split(':', 1)]))
 
     @property
     def body(self):
@@ -58,20 +58,20 @@ class HTTPResponse(object):
     @property
     def code(self):
         """Returns http code from server response header"""
-        if not hasattr(self,'_code'):
+        if not hasattr(self, '_code'):
             self.__parse_header()
         return self._code
 
     @property
     def msg(self):
         """Returns message from server response header"""
-        if not hasattr(self,'_msg'):
+        if not hasattr(self, '_msg'):
             self.__parse_header()
         return self._msg
 
     @property
     def version(self):
         """Returns used HTTP version from server response header"""
-        if not hasattr(self,'_version'):
+        if not hasattr(self, '_version'):
             self.__parse_header()
         return self._version

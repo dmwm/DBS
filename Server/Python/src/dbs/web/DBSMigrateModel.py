@@ -19,7 +19,7 @@ from dbs.business.DBSMigrate import DBSMigrate
 __server__version__ = "$Name:  $"
 
 #Necessary for sphinx documentation and server side unit tests.
-if not getattr(tools,"secmodv2",None):
+if not getattr(tools, "secmodv2", None):
     class FakeAuthForDoc(object):
         def __init__(self,*args,**kwargs):
             pass
@@ -75,7 +75,7 @@ class DBSMigrateModel(RESTModel):
         body = request.body.read()
         indata = cjson.decode(body)
         try:
-            indata = validateJSONInputNoCopy("migration_rqst",indata)
+            indata = validateJSONInputNoCopy("migration_rqst", indata)
             indata.update({"creation_date": dbsUtils().getTime(),
                 "last_modification_date" : dbsUtils().getTime(),
                 "create_by" : dbsUtils().getCreateBy() ,
@@ -92,7 +92,7 @@ class DBSMigrateModel(RESTModel):
 	    else:	
 		dbsExceptionHandler('dbsException-server-error',  str(ex), self.logger.exception, sError)
     
-    @inputChecks(migration_rqst_id=(long,int,basestring), block_name=basestring, dataset=basestring, user=basestring)
+    @inputChecks(migration_rqst_id=(long, int, basestring), block_name=basestring, dataset=basestring, user=basestring)
     def status(self, migration_rqst_id="", block_name="", dataset="", user=""):
         """
         Interface to query status of a migration request
@@ -123,10 +123,10 @@ class DBSMigrateModel(RESTModel):
         body = request.body.read()
         indata = cjson.decode(body)
         try:
-            indata = validateJSONInputNoCopy("migration_rqst",indata)
+            indata = validateJSONInputNoCopy("migration_rqst", indata)
             return self.dbsMigrate.removeMigrationRequest(indata)
-        except dbsException, he:
+        except dbsException as he:
             dbsExceptionHandler(he.eCode, he.message, self.logger.exception, he.message)
-        except Exception, e:
+        except Exception as e:
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, str(e))
 

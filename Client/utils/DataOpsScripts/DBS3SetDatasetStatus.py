@@ -43,7 +43,7 @@ def update_dataset_type(dataset, new_status):
 def update_file_status(dataset, new_status):
     files = api.listFiles(dataset=dataset)
 
-    file_status = (1,0)[options.new_status in ['DELETED', 'DEPRECATED', 'INVALID']]
+    file_status = (1, 0)[options.new_status in ['DELETED', 'DEPRECATED', 'INVALID']]
 
     for this_file in files:
         logging.debug('Update file status for file %s to status %s' % (this_file['logical_file_name'], file_status))
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     ###update status of the dataset
     update_dataset_type(dataset=options.dataset, new_status=new_status)
 
-    if options.recursive in ['True','true', '1', 'y', 'yes', 'yeah', 'yup', 'certainly']:
+    if options.recursive in ['True', 'true', '1', 'y', 'yes', 'yeah', 'yup', 'certainly']:
         ###update status of children datasets as well
         for child_dataset in list_dataset_children(options.dataset):
             update_file_status(dataset=child_dataset, new_status=new_status)

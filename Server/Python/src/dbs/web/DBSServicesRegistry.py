@@ -42,7 +42,7 @@ class DBSServicesRegistry(RESTModel):
             conn = self.dbi.connection()
             result = self.serviceslist.execute(conn)
             return result
-        except Exception, ex:
+        except Exception as ex:
             msg = (("%s DBSServicesRegistry/getServices." + 
                     " %s\n. Exception trace: \n %s") %
                    (DBSEXCEPTIONS['dbsException-3'], ex,
@@ -75,7 +75,7 @@ class DBSServicesRegistry(RESTModel):
             addthis['location'] = service.get('LOCATION', 'HYPERSPACE')
             addthis['status'] = service.get('STATUS', 'UNKNOWN')
             addthis['admin'] = service.get('ADMIN', 'UNADMINISTRATED')
-            addthis['uri'] = service.get('URI','')
+            addthis['uri'] = service.get('URI', '')
             if addthis['uri'] == '':
                 msg = (("%s DBSServicesRegistry/addServices." + 
                         " Service URI must be provided.\n") %
@@ -83,27 +83,27 @@ class DBSServicesRegistry(RESTModel):
                 self.logger.exception(msg)
                 raise Exception("dbsException-3", msg)
             addthis['db'] = service.get('DB', 'NO_DATABASE')
-            addthis['version'] = service.get('VERSION','UNKNOWN' )
+            addthis['version'] = service.get('VERSION', 'UNKNOWN' )
             addthis['last_contact'] = dbsUtils().getTime()
             addthis['comments'] = service.get('COMMENTS', 'NO COMMENTS')
             addthis['alias'] = service.get('ALIAS', 'No Alias')
             self.servicesadd.execute(conn, addthis, tran)
             tran.commit()
-        except exceptions.IntegrityError, ex:
+        except exceptions.IntegrityError as ex:
             if (str(ex).find("unique constraint") != -1 or
                 str(ex).lower().find("duplicate") != -1) :
                 #Update the service instead
                 try:
                     self.servicesupdate.execute(conn, addthis, tran)
                     tran.commit()
-                except Exception, ex:
+                except Exception as ex:
                     msg = (("%s DBSServiceRegistry/addServices." + 
                             " %s\n. Exception trace: \n %s") %
                            (DBSEXCEPTIONS['dbsException-3'], ex,
                             traceback.format_exc()))
                     self.logger.exception(msg ) 
                     raise Exception ("dbsException-3", msg )
-        except Exception, ex:
+        except Exception as ex:
             tran.rollback()
             msg = (("%s DBSServiceRegistry/addServices." + 
                     " %s\n. Exception trace: \n %s") %

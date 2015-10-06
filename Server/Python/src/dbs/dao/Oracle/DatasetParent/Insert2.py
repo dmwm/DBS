@@ -24,13 +24,13 @@ class Insert2(DBFormatter):
 
     def execute( self, conn, binds, transaction=False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DatasetParent/Insert2. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DatasetParent/Insert2. Expects db connection from upper layer.")
         
         bind = {}
         bindlist=[]
         if isinstance(binds, dict):
             self.dbi.processData(self.sql, binds, conn, transaction)
-        elif isinstance(binds,list):
+        elif isinstance(binds, list):
             for pf in binds:
                 bind = {"this_dataset_id":pf["this_dataset_id"], "parent_logical_file_name": pf["parent_logical_file_name"]}
                 bindlist.append(bind)

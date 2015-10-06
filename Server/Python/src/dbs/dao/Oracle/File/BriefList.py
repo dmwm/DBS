@@ -28,7 +28,7 @@ class BriefList(DBFormatter):
             release_version="", pset_hash="", app_name="", output_module_label="",
 	    run_num=-1, origin_site_name="", lumi_list=[], validFileOnly=0, transaction=False):
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/BriefList. Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/BriefList. Expects db connection from upper layer.")
 	#import pdb
 	#pdb.set_trace()
         binds = {}
@@ -115,7 +115,7 @@ class BriefList(DBFormatter):
 	if (origin_site_name):
 	    if not block_name:
 		joinsql += " JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID" % (self.owner)
-	    op = ("=","like")["%" in origin_site_name]
+	    op = ("=", "like")["%" in origin_site_name]
     	    wheresql += " AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
 	    binds.update({"origin_site_name":origin_site_name})
 	

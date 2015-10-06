@@ -71,7 +71,7 @@ class DBSBlock:
             for d in dataset1:
 		if d:
 		    dataset = d
-		    dconfig_list = self.outputCoflist.execute(conn,dataset=dataset['dataset'])
+		    dconfig_list = self.outputCoflist.execute(conn, dataset=dataset['dataset'])
                 else: return {}
             #get block parentage
             bparent = self.blockparentlist.execute(conn, block['block_name'])
@@ -137,7 +137,7 @@ class DBSBlock:
         """
         Used to toggle the status of a block open_for_writing=1, open for writing, open_for_writing=0, closed
         """
-        if open_for_writing not in [1, 0, '1','0']:
+        if open_for_writing not in [1, 0, '1', '0']:
             msg = "DBSBlock/updateStatus. open_for_writing can only be 0 or 1 : passed %s."\
                    % open_for_writing 
             dbsExceptionHandler('dbsException-invalid-input', msg)
@@ -148,7 +148,7 @@ class DBSBlock:
             self.updatestatus.execute(conn, block_name, open_for_writing, dbsUtils().getTime(), trans)
             trans.commit()
             trans = None
-        except Exception, ex:
+        except Exception as ex:
             if trans:
                 trans.rollback()
             if conn:conn.close()
@@ -238,7 +238,7 @@ class DBSBlock:
                     if not data_tier_name or re.search("['%','*']", data_tier_name):
                         msg = "DBSBlock/listBlock. You must specify at least one parameter(dataset, block_name,\
 			       	data_tier_name, logical_file_name) with listBlocks api"
-                        dbsExceptionHandler('dbsException-invalid-input2', msg,self.logger.exception, msg)
+                        dbsExceptionHandler('dbsException-invalid-input2', msg, self.logger.exception, msg)
 
         if data_tier_name:
             if not (min_cdate and max_cdate) or (max_cdate-min_cdate)>32*24*3600:
@@ -289,7 +289,7 @@ class DBSBlock:
 
         NEED to validate there are no extra keys in the businput
         """
-        if not (businput.has_key("block_name") and businput.has_key("origin_site_name")  ):
+        if not ("block_name" in businput and "origin_site_name" in businput  ):
             dbsExceptionHandler('dbsException-invalid-input', "business/DBSBlock/insertBlock must have block_name and origin_site_name as input")
         conn = self.dbi.connection()
         tran = conn.begin()
@@ -317,7 +317,7 @@ class DBSBlock:
 
             tran.commit()
             tran = None
-        except Exception, e:
+        except Exception as e:
             if str(e).lower().find("unique constraint") != -1 or str(e).lower().find("duplicate") != -1:
                 pass
             else:

@@ -30,7 +30,7 @@ FROM %sMIGRATION_REQUESTS MR
         Lists all requests if pattern is not provided.
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/List. Expects db connection from upper layer.")
         sql = self.sql
         binds = {}
 	if migration_request_id:

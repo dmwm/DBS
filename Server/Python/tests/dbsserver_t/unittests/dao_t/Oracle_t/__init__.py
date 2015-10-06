@@ -1,11 +1,12 @@
 """
 Oracle DAO unittests package.
 """
+from __future__ import print_function
 
 __revision__ = "$Id: __init__.py,v 1.1 2010/01/01 19:54:40 akhukhun Exp $"
 __version__ = "$Revision: 1.1 $"
 
-__all__ = ['PrimaryDataset_t','Dataset_t', 'Block_t', 'File_t', 
+__all__ = ['PrimaryDataset_t', 'Dataset_t', 'Block_t', 'File_t', 
            'DatasetParent_t', 'OutputModuleConfig_t', 'FileLumi_t', 
            'FileParent_t']
 
@@ -24,7 +25,7 @@ def modules():
     return modules
 
 def run(logfile="", verbosity=2):
-    print "\nDAO Unittests"
+    print("\nDAO Unittests")
     
     loader = unittest.TestLoader().loadTestsFromModule
     suites = [loader(m) for m in modules()]

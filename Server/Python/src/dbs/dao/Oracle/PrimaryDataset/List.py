@@ -3,7 +3,7 @@
 This module provides PrimaryDataset.List data access object.
 """
 from WMCore.Database.DBFormatter import DBFormatter
-from dbs.utils.dbsException import dbsException,dbsExceptionCode
+from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 
@@ -50,7 +50,7 @@ JOIN %sPRIMARY_DS_TYPES PT ON PT.PRIMARY_DS_TYPE_ID = P.PRIMARY_DS_TYPE_ID
             op = ("=", "like")["%" in primary_ds_name]
             op1 = ("=", "like")["%" in primary_ds_type]
             sql += "WHERE P.PRIMARY_DS_NAME %s :primary_ds_name and PT.PRIMARY_DS_TYPE %s :primary_ds_type"\
-                %(op,op1)
+                %(op, op1)
             binds.update(primary_ds_name=primary_ds_name)
             binds.update(primary_ds_type=primary_ds_type)
         else:

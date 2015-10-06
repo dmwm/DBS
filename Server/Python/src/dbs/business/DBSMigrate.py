@@ -3,6 +3,7 @@
 """
 This module provides dataset migration business object class.
 """
+from __future__ import print_function
 
 __revision__ = "$Id: DBSMigrate.py,v 1.17 2010/09/14 14:53:54 yuyi Exp $"
 __version__ = "$Revision: 1.17 $"
@@ -27,7 +28,7 @@ from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
 
 def pprint(a):
-    print json.dumps(a, sort_keys=True, indent=4)
+    print(json.dumps(a, sort_keys=True, indent=4))
 
 def remove_duplicated_items(ordered_dict):
     unique_block_list = set()
@@ -107,7 +108,7 @@ class DBSMigrate:
             return remove_duplicated_items(ordered_dict)
         except dbsException:
             raise
-        except Exception, ex:
+        except Exception as ex:
             if 'urlopen error' in str(ex):
                 message='Connection to source DBS server refused. Check your source url.'
             elif 'Bad Request' in str(ex):
@@ -291,7 +292,7 @@ class DBSMigrate:
             tran = conn.begin()
             self.mgrremove.execute(conn, migration_rqst)
             tran.commit()
-        except Exception, ex:
+        except Exception as ex:
             if conn: conn.close()
             raise
         if conn: conn.close()
@@ -334,7 +335,7 @@ class DBSMigrate:
                 else:
                     ordered_list = self.prepareDatasetMigrationList(conn, request)
             # now we have the blocks that need to be queued (ordered)
-        except Exception, ex:
+        except Exception as ex:
             if conn: conn.close()
             raise
 
@@ -508,7 +509,7 @@ class DBSMigrate:
         try:
             if migration_block:
                 upst = dict(migration_status=migration_status,
-                        migration_block_id=migration_block,last_modification_date=dbsUtils().getTime())
+                        migration_block_id=migration_block, last_modification_date=dbsUtils().getTime())
             elif migration_request:
                 upst = dict(migration_status=migration_status, migration_request_id=migration_request,
                             last_modification_date=dbsUtils().getTime())
@@ -528,7 +529,7 @@ class DBSMigrate:
             spliturl = urlparse.urlparse(resturl)
             callType = spliturl[0]
             if callType != 'http' and callType != 'https':
-                raise ValueError, "unknown URL type: %s" % callType
+                raise ValueError("unknown URL type: %s" % callType)
 
             content = "application/json"
             UserID = os.environ['USER']+'@'+socket.gethostname()
@@ -538,13 +539,13 @@ class DBSMigrate:
             restapi = self.rest_client_pool.get_rest_client()
             httpresponse = restapi.get(resturl, method, params, data, request_headers)
             return httpresponse.body
-        except urllib2.HTTPError, httperror:
+        except urllib2.HTTPError as httperror:
             raise httperror
-        except urllib2.URLError, urlerror:
+        except urllib2.URLError as urlerror:
             raise urlerror
-        except HTTPError, DBShttp_error:
+        except HTTPError as DBShttp_error:
             raise DBShttp_error
-        except Exception, e:
+        except Exception as e:
             raise e
 
     def getSrcDatasetParents(self, url, dataset):
@@ -553,7 +554,7 @@ class DBSMigrate:
         """
         #resturl = "%s/datasetparents?dataset=%s" % (url, dataset)
         params={'dataset':dataset}
-        return cjson.decode(self.callDBSService(url, 'datasetparents', params,{}))
+        return cjson.decode(self.callDBSService(url, 'datasetparents', params, {}))
 
     def getSrcBlockParents(self, url, block):
         """

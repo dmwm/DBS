@@ -18,6 +18,6 @@ values (:run_num, :lumi_section_num, :file_id)
 
     def execute( self, conn, daoinput, transaction = False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/Insert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileLumi/Insert. Expects db connection from upper layer.")
         self.dbi.processData(self.sql, daoinput, conn, transaction)
 

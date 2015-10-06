@@ -36,7 +36,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
     def execute(self, conn, block_name="", logical_file_name="",
 	    maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[], transaction=False):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/File/MgrtList. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/MgrtList. Expects db connection from upper layer.")
 
 	sql = self.sql 
         binds = {}
@@ -62,7 +62,7 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 	    sql += "AND FL.LUMI_SECTION_NUM in :lumi_list"
 	    binds.update({"lumi_list":lumi_list})
 	if (origin_site_name):
-	    op = ("=","like")["%" in origin_site_name]
+	    op = ("=", "like")["%" in origin_site_name]
     	    sql += "AND B.ORIGIN_SITE_NAME %s  :origin_site_name" % op 
 	    binds.update({"origin_site_name":origin_site_name})
 	#    

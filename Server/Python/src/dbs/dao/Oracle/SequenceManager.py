@@ -23,7 +23,7 @@ class  SequenceManager(DBFormatter):
 
         #FIXME: Do we need to lock the tables here?
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed","Oracle/SequenceManager. Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/SequenceManager. Expects db connection from upper layer.")
 
         sql = "select %s%s.nextval as val from dual" % (self.owner, seqName)
         result = self.dbi.processData(sql, conn=conn, transaction=transaction)

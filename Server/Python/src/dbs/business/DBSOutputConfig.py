@@ -62,9 +62,9 @@ class DBSOutputConfig:
 
         Updated Oct 12, 2011    
         """
-        if not (businput.has_key("app_name")  and businput.has_key("release_version")\
-            and businput.has_key("pset_hash") and businput.has_key("output_module_label")
-            and businput.has_key("global_tag")):
+        if not ("app_name" in businput  and "release_version" in businput\
+            and "pset_hash" in businput and "output_module_label" in businput
+            and "global_tag" in businput):
             dbsExceptionHandler('dbsException-invalid-input', "business/DBSOutputConfig/insertOutputConfig require:\
                 app_name, release_version, pset_hash, output_module_label and global_tag")
 
@@ -77,7 +77,7 @@ class DBSOutputConfig:
             self.outmodin.execute(conn, businput, tran)
             tran.commit()
             tran = None
-        except SQLAlchemyIntegrityError, ex:
+        except SQLAlchemyIntegrityError as ex:
             if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                 #if the validation is due to a unique constrain break in OUTPUT_MODULE_CONFIGS
                 if str(ex).find("TUC_OMC_1") != -1: pass
@@ -87,16 +87,16 @@ class DBSOutputConfig:
                         self.outmodin.execute(conn, businput, tran)
                         tran.commit()
                         tran =  None
-                    except SQLAlchemyIntegrityError, ex1:
+                    except SQLAlchemyIntegrityError as ex1:
                         if str(ex1).find("unique constraint") != -1 and str(ex1).find("TUC_OMC_1") != -1: pass
-                    except Exception, e1:
+                    except Exception as e1:
                         if tran:
                             tran.rollback()
                             tran = None
                         raise
             else:
                 raise
-        except Exception, e:
+        except Exception as e:
             if tran:
                 tran.rollback()
             raise

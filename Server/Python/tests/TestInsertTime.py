@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #
+from __future__ import print_function
 import os
 import sys
 import time
@@ -122,7 +123,7 @@ class DBS2to3Migrate(Thread):
                     nlumis = sum([len(f["FILE_LUMI_LIST"]) for f in self.files])
                     nparents = sum([len(f["FILE_PARENT_LIST"]) for f in self.files])
                     weight = nfiles * (nlumis+nparents+1)
-                    print "BLOCK: %s,  WEIGHT: %s, TIME: %s sec" % (self.block["BLOCK_NAME"], weight, tm)
+                    print("BLOCK: %s,  WEIGHT: %s, TIME: %s sec" % (self.block["BLOCK_NAME"], weight, tm))
 
                     blockinfo["time"] = tm
                     blockinfo["weight"] = weight
@@ -147,7 +148,7 @@ class DBS2to3Migrate(Thread):
             block = self.insert(self.dbs3api, data)
             dt += block["time"]
             dw += block["weight"] 
-        print "DATASET: %s, WEIGHT: %s, TOTAL TIME: %s" % (self.dataset, dw+1, dt)
+        print("DATASET: %s, WEIGHT: %s, TOTAL TIME: %s" % (self.dataset, dw+1, dt))
 
                 
 if __name__ == "__main__":

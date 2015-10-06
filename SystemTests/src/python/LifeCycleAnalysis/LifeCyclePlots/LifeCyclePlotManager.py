@@ -1,3 +1,4 @@
+from __future__ import print_function
 from LifeCycleAnalysis.LifeCyclePlots.HistoManager import HistoManager
 from LifeCycleAnalysis.LifeCyclePlots.Histogram import Histo1D, Histo2D
 
@@ -22,7 +23,7 @@ class StatisticPlots(object):
         self._list_of_apis = list_of_apis
         # api as keys and numbers as value, to fill 0,1,2,3,4 bins in APIAccessCounter histogramm and
         # to set bin label later accordingly
-        self._enumerated_dict_of_apis = dict(zip(self._list_of_apis, xrange(len(self._list_of_apis))))
+        self._enumerated_dict_of_apis = dict(list(zip(self._list_of_apis, xrange(len(self._list_of_apis)))))
         self._starttime = starttime
         self._endtime = endtime
         self._test_type = test_type
@@ -61,7 +62,7 @@ class StatisticPlots(object):
                         x_value_to_fill="ClientTiming",
                         label={'x':"Time [s]",'y':"#"},
                         color={'line':self._color,'fill':self._color},
-                        add_options={'GetXaxis.SetRangeUser':(0.0,10.0)})]
+                        add_options={'GetXaxis.SetRangeUser':(0.0, 10.0)})]
 
     def _create_server_request_timing(self, api='All'):
         if api=='All':
@@ -75,7 +76,7 @@ class StatisticPlots(object):
                         x_value_to_fill="ServerTiming",
                         label={'x':"Time [s]",'y':"#"},
                         color={'line':self._color, 'fill':self._color},
-                        add_options={'GetXaxis.SetRangeUser':(0.0,120.0)})]
+                        add_options={'GetXaxis.SetRangeUser':(0.0, 120.0)})]
 
     def _create_client_request_timing_hires(self, api='All'):
         if api=='All':
@@ -89,7 +90,7 @@ class StatisticPlots(object):
                         x_value_to_fill="ClientTiming",
                         label={'x':"Time [s]",'y':"#"},
                         color={'line':self._color,'fill':self._color},
-                        add_options={'GetXaxis.SetRangeUser':(0.0,0.5)})]
+                        add_options={'GetXaxis.SetRangeUser':(0.0, 0.5)})]
 
     def _create_server_request_timing_hires(self, api='All'):
         if api=='All':
@@ -103,7 +104,7 @@ class StatisticPlots(object):
                         x_value_to_fill="ServerTiming",
                         label={'x':"Time [s]",'y':"#"},
                         color={'line':self._color, 'fill':self._color},
-                        add_options={'GetXaxis.SetRangeUser':(0.0,0.5)})]
+                        add_options={'GetXaxis.SetRangeUser':(0.0, 0.5)})]
 
     def _create_content_length(self, api='All'):
         if api=='All':
@@ -117,7 +118,7 @@ class StatisticPlots(object):
                         x_value_to_fill="ContentLength",
                         label={'x':"Size [bytes]",'y':"#"},
                         color={'line':self._color,'fill':self._color},
-                        add_options={'GetXaxis.SetRangeUser':(0.0,10000.0)})]
+                        add_options={'GetXaxis.SetRangeUser':(0.0, 10000.0)})]
 
     def _create_access_per_second(self, api='All'):
         if api=='All':
@@ -141,7 +142,7 @@ class StatisticPlots(object):
                         y_value_to_fill="ContentLength",
                         label={'x':"Time [s]",'y':"Content Length [bytes]"},
                         color={'line':self._color,'marker':self._color},
-                        add_options={'GetXaxis.SetRangeUser':(0.0,10.0)})]
+                        add_options={'GetXaxis.SetRangeUser':(0.0, 10.0)})]
 
     def _create_server_request_timing_vs_content_length(self):
         return [Histo2D(name='ServerRequestTimingVsContentLength%s' % self._test_type, title='Server Request Timing Vs Content Length (%s)' % self._test_type,
@@ -151,7 +152,7 @@ class StatisticPlots(object):
                         y_value_to_fill="ContentLength",
                         label={'x':"Time [s]",'y':"Content Length [bytes]"},
                         color={'line':self._color, 'marker':self._color},
-                        add_options={'GetXaxis.SetRangeUser':(0.0,10.0)})]
+                        add_options={'GetXaxis.SetRangeUser':(0.0, 10.0)})]
 
     def _create_client_request_timing_vs_server_request_timing(self):
         return [Histo2D(name='ClientRequestTimingVsServerRequestTiming%s' % self._test_type, title='Client Request Timing Vs Server Request Timing (%s)' % self._test_type,
@@ -161,7 +162,7 @@ class StatisticPlots(object):
                         y_value_to_fill="ServerTiming",
                         label={'x':"Client Time [s]",'y':"Server Time [s]"},
                         color={'line':self._color,'marker':self._color},
-                        add_options={'GetXaxis.SetRangeUser':(0.0,10.0)})]
+                        add_options={'GetXaxis.SetRangeUser':(0.0, 10.0)})]
 
     def _create_client_request_timing_vs_api(self):
         histo = Histo2D(name='ClientRequestTimingVsAPI%s' % self._test_type, title='Client Request Timing Vs API (%s)' % self._test_type,
@@ -174,7 +175,7 @@ class StatisticPlots(object):
                         color={'line':self._color,'marker':self._color})
 
         for api in self._list_of_apis:
-            histo.histogram.GetXaxis().SetBinLabel(self._enumerated_dict_of_apis.get(api)+1,api) # Bin enumerations starts at 1
+            histo.histogram.GetXaxis().SetBinLabel(self._enumerated_dict_of_apis.get(api)+1, api) # Bin enumerations starts at 1
 
         return [histo]
 
@@ -187,10 +188,10 @@ class StatisticPlots(object):
                         y_value_to_fill="ClientTiming",
                         label={'y':"Client Time [s]"},
                         color={'line':self._color,'marker':self._color},
-                        add_options={'GetYaxis.SetRangeUser':(0.0,2.0)})
+                        add_options={'GetYaxis.SetRangeUser':(0.0, 2.0)})
 
         for api in self._list_of_apis:
-            histo.histogram.GetXaxis().SetBinLabel(self._enumerated_dict_of_apis.get(api)+1,api) # Bin enumerations starts at 1
+            histo.histogram.GetXaxis().SetBinLabel(self._enumerated_dict_of_apis.get(api)+1, api) # Bin enumerations starts at 1
 
         return [histo]
 
@@ -336,5 +337,5 @@ class LifeCyclePlotManager(object):
             else:
                 duplicated_histo_names = set(stripped_histo_names)
 
-        print duplicated_histo_names
+        print(duplicated_histo_names)
         #self._histo_managers['stacked_histos'] = HistoManager()

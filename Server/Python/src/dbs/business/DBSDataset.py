@@ -83,7 +83,7 @@ class DBSDataset:
             self.updatestatus.execute(conn, dataset, is_dataset_valid, trans)
             trans.commit()
             trans = None
-        except Exception, ex:
+        except Exception as ex:
             if trans:
                 trans.rollback()
             raise ex
@@ -107,7 +107,7 @@ class DBSDataset:
             self.updatetype.execute(conn, dataset, dataset_access_type.upper(), trans)
             trans.commit()
             trans = None
-        except SQLAlchemyDatabaseError, ex:
+        except SQLAlchemyDatabaseError as ex:
             if str(ex).find("ORA-01407") != -1:
                 dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input", None, "DBSDataset/updateType. A Valid dataset_access_type is required.")
         finally:
@@ -192,12 +192,12 @@ class DBSDataset:
         physics_group(name), xtcrosssection, creation_date, create_by, 
         last_modification_date, last_modified_by
         """ 
-        if not (businput.has_key("primary_ds_name") and businput.has_key("dataset")
-                and businput.has_key("dataset_access_type") and businput.has_key("processed_ds_name") ):
+        if not ("primary_ds_name" in businput and "dataset" in businput
+                and "dataset_access_type" in businput and "processed_ds_name" in businput ):
             dbsExceptionHandler('dbsException-invalid-input', "business/DBSDataset/insertDataset must have dataset,\
                 dataset_access_type, primary_ds_name, processed_ds_name as input")
 
-        if not businput.has_key("data_tier_name"):
+        if "data_tier_name" not in businput:
             dbsExceptionHandler('dbsException-invalid-input', "insertDataset must have data_tier_name as input.")
 
         conn = self.dbi.connection()
@@ -213,9 +213,9 @@ class DBSDataset:
             #althrough acquisition era and processing version is not required for a dataset in the schema(the schema is build this way because
             #we need to accomdate the DBS2 data), but we impose the requirement on the API. So both acquisition and processing eras are required 
             #YG 12/07/2011  TK-362
-            if businput.has_key("acquisition_era_name") and businput.has_key("processing_version"):
+            if "acquisition_era_name" in businput and "processing_version" in businput:
                 erals=businput["processed_ds_name"].rsplit('-')
-                if erals[0]==businput["acquisition_era_name"] and erals[len(erals)-1]=="%s%s"%("v",businput["processing_version"]):
+                if erals[0]==businput["acquisition_era_name"] and erals[len(erals)-1]=="%s%s"%("v", businput["processing_version"]):
                     dsdaoinput["processed_ds_name"] = businput["processed_ds_name"]
                 else:
                     dbsExceptionHandler('dbsException-invalid-input', "insertDataset:\
@@ -239,7 +239,7 @@ class DBSDataset:
                                 businput["data_tier_name"].upper()),
                                "prep_id" : businput.get("prep_id", None),
                                "xtcrosssection" : businput.get("xtcrosssection", None),
-                               "creation_date" : businput.get("creation_date",dbsUtils().getTime() ),
+                               "creation_date" : businput.get("creation_date", dbsUtils().getTime() ),
                                "create_by" : businput.get("create_by", dbsUtils().getCreateBy()) ,
                                "last_modification_date" : businput.get("last_modification_date", dbsUtils().getTime()),
                                #"last_modified_by" : businput.get("last_modified_by", dbsUtils().getModifiedBy())
@@ -256,7 +256,7 @@ class DBSDataset:
             else: dsdaoinput["physics_group_id"] = None
             """
             # See if Processing Era exists
-            if businput.has_key("processing_version") and businput["processing_version"] != 0:
+            if "processing_version" in businput and businput["processing_version"] != 0:
                 dsdaoinput["processing_era_id"] = self.proceraid.execute(conn, businput["processing_version"])
                 if dsdaoinput["processing_era_id"] == -1 :
                     dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: processing_version not found in DB") 
@@ -264,7 +264,7 @@ class DBSDataset:
                 dbsExceptionHandler("dbsException-invalid-input", "DBSDataset/insertDataset: processing_version is required")
 
             # See if Acquisition Era exists
-            if businput.has_key("acquisition_era_name"):
+            if "acquisition_era_name" in businput:
                 dsdaoinput["acquisition_era_id"] = self.acqeraid.execute(conn, businput["acquisition_era_name"])
                 if dsdaoinput["acquisition_era_id"] == -1:
                     dbsExceptionHandler("dbsException-missing-data", "DBSDataset/insertDataset: acquisition_era_name not found in DB")
@@ -273,7 +273,7 @@ class DBSDataset:
             try:
                 # insert the dataset
                 self.datasetin.execute(conn, dsdaoinput, tran)
-            except SQLAlchemyIntegrityError, ex:
+            except SQLAlchemyIntegrityError as ex:
                 if (str(ex).lower().find("unique constraint") != -1 or
                     str(ex).lower().find("duplicate") != -1):
                     # dataset already exists, lets fetch the ID
@@ -288,14 +288,14 @@ class DBSDataset:
                 if (str(ex).find("ORA-01400") ) != -1 :
                     dbsExceptionHandler("dbsException-missing-data", "insertDataset must have: dataset,\
                                           primary_ds_name, processed_ds_name, data_tier_name ")
-            except Exception, e:
+            except Exception as e:
                 raise       
 
             #FIXME : What about the READ-only status of the dataset
             #There is no READ-oly status for a dataset.
 
             # Create dataset_output_mod_mod_configs mapping
-            if businput.has_key("output_configs"):
+            if "output_configs" in businput:
                 for anOutConfig in businput["output_configs"]:
                     dsoutconfdaoin = {}
                     dsoutconfdaoin["dataset_id"] = dsdaoinput["dataset_id"]
@@ -314,7 +314,7 @@ class DBSDataset:
                                                                                    anOutConfig["global_tag"]))
                     try:
                         self.datasetoutmodconfigin.execute(conn, dsoutconfdaoin, tran)
-                    except Exception, ex:
+                    except Exception as ex:
                         if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                             pass
                         else:

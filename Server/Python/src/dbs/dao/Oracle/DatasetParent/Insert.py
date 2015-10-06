@@ -19,7 +19,7 @@ class Insert(DBFormatter):
 	    
     def execute( self, conn, binds, transaction=False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DatasetParent/Insert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DatasetParent/Insert. Expects db connection from upper layer.")
             
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
 

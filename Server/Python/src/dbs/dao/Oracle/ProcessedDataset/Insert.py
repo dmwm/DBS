@@ -26,6 +26,6 @@ class Insert(DBFormatter):
         processeddsid, processeddsname
 	"""
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ProcessedDataset/Insert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ProcessedDataset/Insert. Expects db connection from upper layer.")
 
 	self.dbi.processData(self.sql, daoinput, conn, transaction)

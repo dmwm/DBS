@@ -11,7 +11,7 @@ from dbs.dao.Oracle.PrimaryDSType.List import List as PrimaryDSTypeList
 class List_t(unittest.TestCase):
     @DaoConfig("DBSReader")
     def __init__(self, methodName='runTest'):
-        super(List_t,self).__init__(methodName)
+        super(List_t, self).__init__(methodName)
         #use persistent data, since inserts are not foreseen
         self.data_provider = create_dbs_data_provider(data_type='persistent')
         self.data = set((data['data_type'] for data in self.data_provider.get_primary_ds_type_data()))

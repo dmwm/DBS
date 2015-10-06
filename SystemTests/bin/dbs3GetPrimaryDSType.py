@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from LifeCycleTools.APIFactory import create_api
 from LifeCycleTools.PayloadHandler import PayloadHandler
 from LifeCycleTools.Timing import TimingStat
@@ -10,9 +11,9 @@ import sys
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url':os.environ.get("DBS_READER_URL","https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
+config = {'url':os.environ.get("DBS_READER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
 
-api = create_api('DbsApi',config=config)
+api = create_api('DbsApi', config=config)
 
 payload_handler = PayloadHandler()
 
@@ -35,7 +36,7 @@ timer.update_stats({'server_request_timing' : float(api.request_processing_time)
 
 timer.stat_to_server()
 
-print "data type: %s" % (ds_type['data_type'])
+print("data type: %s" % (ds_type['data_type']))
 
 p = payload_handler.clone_payload()
 #p['workflow']['data_type'] = ds_type['data_type']

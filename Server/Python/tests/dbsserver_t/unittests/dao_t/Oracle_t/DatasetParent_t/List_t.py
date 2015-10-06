@@ -15,9 +15,9 @@ from dbs.dao.Oracle.DatasetParent.List import List as DatasetParentList
 class List_t(unittest.TestCase):
     @DaoConfig("DBSReader")
     def __init__(self, methodName='runTest'):
-        super(List_t,self).__init__(methodName)
-        data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
-        self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
+        super(List_t, self).__init__(methodName)
+        data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data.pkl')
+        self.data_provider = create_dbs_data_provider(data_type='transient', data_location=data_location)
         self.data = self.data_provider.get_dataset_parentage_data()
        
     def setUp(self):

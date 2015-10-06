@@ -2,6 +2,7 @@
 """
 This scripts is used to check WMAgent data injected into DBS2 and DBS3 simutanously
 """
+from __future__ import print_function
 from optparse import OptionParser
 from string import Template
 import pprint, logging, os, sys, unittest
@@ -24,7 +25,7 @@ except:
                                 'reader' : 'oracle://reader:passwd@instance'
                                },
                                 'databaseOwner' : 'owner'}"""
-    print msg
+    print(msg)
 
 def get_command_line_options(executable_name, arguments):
     parser = OptionParser(usage="%s options" % executable_name)
@@ -529,7 +530,7 @@ class DBQuery(object):
         logger = logging.getLogger()
         dbFactory = DBFactory(logger, connectUrl, options={})
         self.dbi = dbFactory.connect()
-        self.dbFormatter = DBFormatter(logger,self.dbi)
+        self.dbFormatter = DBFormatter(logger, self.dbi)
 
     def execute(self, query, binds={}):
         connection = self.dbi.connection()

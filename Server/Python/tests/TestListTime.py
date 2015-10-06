@@ -1,4 +1,5 @@
 """This module provides all basic tests for the server"""
+from __future__ import print_function
 
 __revision__ = "$Id: TestListTime.py,v 1.2 2009/11/29 11:37:54 akhukhun Exp $"
 __version__ = "$Revision: 1.2 $"
@@ -26,7 +27,7 @@ class DBS3ListTest(Thread):
         for i in range(20):
             d = datasets[i]
             files = self.cli.get("files?dataset=%s" % d["DATASET"])
-            print "TEST: %s,  DATASET: %s, Time: %s " % (self.IC, d["DATASET"], time.time() - t)
+            print("TEST: %s,  DATASET: %s, Time: %s " % (self.IC, d["DATASET"], time.time() - t))
         #print "%s: LIST DATASETS:    %s" % (self.IC, time.time() - t)
         
         

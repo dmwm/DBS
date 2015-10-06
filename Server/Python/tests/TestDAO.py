@@ -2,6 +2,7 @@
 As the number of tests increase we will probably repackage these tests
 to separate package/modules for each DAO object
 """
+from __future__ import print_function
 
 __revision__ = "$Id: TestDAO.py,v 1.5 2009/11/29 11:37:55 akhukhun Exp $"
 __version__ = "$Revision: 1.5 $"
@@ -136,8 +137,8 @@ class TestDAO(unittest.TestCase):
         """File.List"""
         from dbs.dao.Oracle.File.List import List as FileList
         dao = FileList(self.logger, self.dbi)
-        print dao.execute("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO")
-        print dao.execute("/SUT_11/SUT_PROCESSED_DATASET_V11/GEN-SIM-RECO")
+        print(dao.execute("/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO"))
+        print(dao.execute("/SUT_11/SUT_PROCESSED_DATASET_V11/GEN-SIM-RECO"))
         dao.execute(block = "/RelValQCD_Pt_80_120/CMSSW_3_1_3-MC_31X_V5-v1/GEN-SIM-RECO#b110ad98-ab46-4f56-ad7c-ce762f2450c7")
         
     def test12(self):

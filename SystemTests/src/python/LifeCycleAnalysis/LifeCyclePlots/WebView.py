@@ -33,6 +33,6 @@ class WebView(object):
             yield '<img src="%s"/>' % (picture)
         
     def create_web_view(self, filename="index.html"):
-        with open(os.path.join(self._description, filename) ,'w') as f:
+        with open(os.path.join(self._description, filename), 'w') as f:
             f.write(self.doctype)
             f.writelines(self.html_code())

@@ -2,12 +2,12 @@ from WMCore.Database.DBFactory import DBFactory
 from WMCore.Database.DBFormatter import DBFormatter
 
 class DBApi(object):
-    def __init__(self,logger,connectUrl,owner):
+    def __init__(self, logger, connectUrl, owner):
         object.__init__(self)
 
         dbFactory = DBFactory(logger, connectUrl, options={})
         self.dbi = dbFactory.connect()
-        self.dbFormatter = DBFormatter(logger,self.dbi)
+        self.dbFormatter = DBFormatter(logger, self.dbi)
         self.owner = owner
         
         self.sqlDict = {'trig':
@@ -61,7 +61,7 @@ class DBApi(object):
         return results
     
     def getMaxID(self, primaryK, tableName):
-        sql = "SELECT MAX(%s) maxid FROM %s.%s" %(primaryK,self.owner, tableName)
+        sql = "SELECT MAX(%s) maxid FROM %s.%s" %(primaryK, self.owner, tableName)
         conn = self.dbi.connection()
         cursors = self.dbi.processData(sql, {}, conn, 
                                     transaction=False, returnCursor=True)
@@ -70,7 +70,7 @@ class DBApi(object):
  
     def _queryDB(self,query,binds, conn, sort=True):
         
-        cursors = self.dbi.processData(self.sqlDict[query], binds,conn,
+        cursors = self.dbi.processData(self.sqlDict[query], binds, conn,
                                        transaction=False, returnCursor=True)
         
         return self.dbFormatter.formatCursor(cursors[0])
@@ -83,7 +83,7 @@ def generator():
 
     output = open('recreateSequence.sql', 'w') 
     logger = logging.getLogger()
-    dbapi = DBApi(logger,connectUrlDBS3,ownerDBS3)
+    dbapi = DBApi(logger, connectUrlDBS3, ownerDBS3)
     results = dbapi.getTrig()
     for t, s in results.iteritems():
         #print '\n **********'
@@ -103,7 +103,7 @@ def generator():
                   MINVALUE %s
                   NOCYCLE
                   CACHE %s
-                  NOORDER;""" %(ownerDBS3, s, int(maxID)+1,seqV[0]['inc'], maxID, seqV[0]['csz'] )
+                  NOORDER;""" %(ownerDBS3, s, int(maxID)+1, seqV[0]['inc'], maxID, seqV[0]['csz'] )
            sql3 = """ GRANT SELECT ON %s.%s TO %s;""" %(ownerDBS3, s, role) 
            output.write(sql1+'\n')
            output.write(sql2+'\n')

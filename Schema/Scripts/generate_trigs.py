@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 lines=open("../DDL/create-oracle-schema.sql", "r").readlines()
 tablefound=0
@@ -142,10 +143,10 @@ for aline in lines:
 
 ###### Generate AUTO INC Triggers
 
-for (t,z) in trigs : 
-	print z.replace( "__PK__", tbl_pk_map[t] )
+for (t, z) in trigs : 
+	print(z.replace( "__PK__", tbl_pk_map[t] ))
 
 
 
-print "REMOVE the FB_TRIG, its NOT REQUIRED"
+print("REMOVE the FB_TRIG, its NOT REQUIRED")
 

@@ -13,7 +13,7 @@ class Insert(DBFormatter):
 
     def execute( self, conn, block_site_id="", block_id="", site_name="", transaction=False ):
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/BlockSite/Insert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/BlockSite/Insert. Expects db connection from upper layer.")
             
 	binds={}
 	binds['blocksiteid']=block_site_id

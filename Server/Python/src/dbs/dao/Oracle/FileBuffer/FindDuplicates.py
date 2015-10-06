@@ -2,6 +2,7 @@
 """
 This module provides FileBuffer.FindDuplicates data access object.
 """
+from __future__ import print_function
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
@@ -23,9 +24,9 @@ class FindDuplicates(DBFormatter):
         """	
 	binds={}
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileBuffer/FindDuplicates. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileBuffer/FindDuplicates. Expects db connection from upper layer.")
 
-	print self.sql
+	print(self.sql)
         cursors=self.dbi.processData(self.sql, binds, conn, transaction, returnCursor=True)
         result = self.formatCursor(cursors[0])
         return result

@@ -23,7 +23,7 @@ FROM %sACQUISITION_ERAS AE
 
     def execute(self, conn, acquisitionEra="", transaction = False):
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/AcquisitionEra/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/AcquisitionEra/List. Expects db connection from upper layer.")
         sql = self.sql
 	binds={}
 	if acquisitionEra:

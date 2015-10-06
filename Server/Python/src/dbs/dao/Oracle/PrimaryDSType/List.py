@@ -7,7 +7,7 @@ __version__ = "$Revision: 1.12 $"
 
 
 from WMCore.Database.DBFormatter import DBFormatter
-from dbs.utils.dbsException import dbsException,dbsExceptionCode
+from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
 class List(DBFormatter):
@@ -52,7 +52,7 @@ FROM %sPRIMARY_DS_TYPES PDT
             sql += "JOIN %sPRIMARY_DATASETS PDS on PDS.PRIMARY_DS_TYPE_ID = PDT.PRIMARY_DS_TYPE_ID \
                     JOIN %sDATASETS DS ON DS.PRIMARY_DS_ID = PDS.PRIMARY_DS_ID \
                     WHERE DS.DATASET %s :dataset and PDT.PRIMARY_DS_TYPE %s :primdstype" \
-                    %(self.owner, self.owner,op1, op)
+                    %(self.owner, self.owner, op1, op)
             binds = {"primdstype":dsType, "dataset":dataset}
 	else:
 	    dbsExceptionHandler('dbsException-invalid-input', "DAO Primary_DS_TYPE List accepts no input, or\

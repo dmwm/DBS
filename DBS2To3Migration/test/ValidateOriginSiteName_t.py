@@ -1,6 +1,7 @@
 """
 Unittests to validate translation of the origin_site_name between DBS 2 nad DBS 3
 """
+from __future__ import print_function
 
 import logging
 import unittest
@@ -20,7 +21,7 @@ except:
                             'reader' : 'oracle://reader:passwd@instance'
                             },
                             'databaseOwner' : 'owner'}"""
-    print msg
+    print(msg)
     raise
 
 

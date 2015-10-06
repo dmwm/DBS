@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
@@ -10,9 +11,9 @@ import sys
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url':os.environ.get("DBS_READER_URL","https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
+config = {'url':os.environ.get("DBS_READER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
 
-api = create_api('DbsApi',config=config)
+api = create_api('DbsApi', config=config)
 
 payload_handler = PayloadHandler()
 
@@ -36,7 +37,7 @@ timer.update_stats({'server_request_timing' : float(api.request_processing_time)
 
 timer.stat_to_server()
 
-print "Found %s files"  %(len(files))
+print("Found %s files"  %(len(files)))
 
 for this_file, interval in zip(files, increase_interval(0.0, 0.1)):
   p = payload_handler.clone_payload()

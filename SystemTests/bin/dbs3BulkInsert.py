@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
@@ -11,9 +12,9 @@ import time
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url':os.environ.get("DBS_WRITER_URL","https://cmsweb.cern.ch/dbs/int/global/DBSWriter/")}
+config = {'url':os.environ.get("DBS_WRITER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSWriter/")}
 
-api = create_api('DbsApi',config=config)
+api = create_api('DbsApi', config=config)
 
 payload_handler = PayloadHandler()
 
@@ -44,7 +45,7 @@ for block in block_dump:
     if stat_client:
         timer.stat_to_server()
 
-    print "Inserted block %s" % (block['block']['block_name'])
+    print("Inserted block %s" % (block['block']['block_name']))
 
     if injection_repetition_rate != -1:
         time.sleep(injection_repetition_rate)

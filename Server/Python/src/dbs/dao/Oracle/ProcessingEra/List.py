@@ -26,7 +26,7 @@ FROM %sPROCESSING_ERAS PE
 
     def execute(self, conn, processingV="", transaction = False):
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ProcessingEra/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ProcessingEra/List. Expects db connection from upper layer.")
 
         sql = self.sql
 	binds={}

@@ -1,6 +1,7 @@
 """
 client writer unittests
 """
+from __future__ import print_function
 import os, sys, imp
 import time
 import uuid
@@ -33,10 +34,10 @@ class DBSClientBlockWriter_t(unittest.TestCase):
     def setUpClass(cls):
         """Class method to set-up the class"""
         ### necessary since one instance per test case is created and pid and testparams need to be shared between instances
-        infofile=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'blockdump.dict'),"r")
+        infofile=open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'blockdump.dict'), "r")
         cls.testparams=importCode(infofile, "testparams", 0).blockDump
         cls.uid = uuid.uuid4().time_mid
-        print "****uid=%s******" % cls.uid
+        print("****uid=%s******" % cls.uid)
 
     def setUp(self):
         """setup all necessary parameters"""
@@ -58,7 +59,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         self.testparams['dataset_conf_list'][0]['app_name'] = "%s_%s"%(self.testparams['dataset_conf_list'][0]['app_name'], self.uid)
         for i in range(len(self.testparams['file_conf_list'])):
             self.testparams['file_conf_list'][i]['app_name'] = "%s_%s"%(self.testparams['file_conf_list'][i]['app_name'], self.uid)
-            self.testparams['file_conf_list'][i]['lfn'] = self.testparams['file_conf_list'][i]['lfn'].replace('.root','_%s.root' %(self.uid))
+            self.testparams['file_conf_list'][i]['lfn'] = self.testparams['file_conf_list'][i]['lfn'].replace('.root', '_%s.root' %(self.uid))
 
         for k in range(len(self.testparams['files'])):
              self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (self.uid))
@@ -75,24 +76,24 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         #for  k in range(len(self.testparams['file_parent_list'])):
         #    self.testparams['file_parent_list'][k]['logical_file_name'] = "%s_%s" %(self.testparams['file_parent_list'][k]['logical_file_name'],self.uid)
         self.api.insertBulkBlock(blockDump=self.testparams)
-        print "Done inserting parent files"
+        print("Done inserting parent files")
 
     def test1001(self):
         """insert chidren with parentage: the privious inserted files are the parents"""
         self.testparams['file_parent_list'] = []
         for k in range(len(self.testparams['files'])):
-            self.testparams['file_parent_list'].append({'logical_file_name': self.testparams['files'][k]['logical_file_name'].replace('.root','_child.root'),
+            self.testparams['file_parent_list'].append({'logical_file_name': self.testparams['files'][k]['logical_file_name'].replace('.root', '_child.root'),
                                              'parent_logical_file_name': self.testparams['files'][k]['logical_file_name']})
-            self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root','_child.root')
-        self.testparams['dataset']['dataset'] = '%s-%s' %(self.testparams['dataset']['dataset'],'CHD')
+            self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_child.root')
+        self.testparams['dataset']['dataset'] = '%s-%s' %(self.testparams['dataset']['dataset'], 'CHD')
 	#print self.testparams['dataset']['dataset']
-        self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace("#","#00")
+        self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace("#", "#00")
 	#print self.testparams['block']['block_name']
         for i in range(len(self.testparams['file_conf_list'])):
-            self.testparams['file_conf_list'][i]['lfn'] =  self.testparams['file_conf_list'][i]['lfn'].replace('.root','_child.root')
+            self.testparams['file_conf_list'][i]['lfn'] =  self.testparams['file_conf_list'][i]['lfn'].replace('.root', '_child.root')
 
         self.api.insertBulkBlock(blockDump=self.testparams)
-        print "Done inserting child files"
+        print("Done inserting child files")
 
     def test1002(self):
         """insert duplicated block"""

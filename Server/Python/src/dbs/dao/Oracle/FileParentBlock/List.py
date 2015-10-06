@@ -26,7 +26,7 @@ class List(DBFormatter):
 	file_id_list : file_id_list 
 	"""
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileParentBlock/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileParentBlock/List. Expects db connection from upper layer.")
 
 	sql=self.sql
 	binds={}

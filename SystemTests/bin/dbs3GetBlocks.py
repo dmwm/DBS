@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
@@ -10,9 +11,9 @@ import sys
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url':os.environ.get("DBS_READER_URL","https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
+config = {'url':os.environ.get("DBS_READER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
 
-api = create_api('DbsApi',config=config)
+api = create_api('DbsApi', config=config)
 
 payload_handler = PayloadHandler()
 
@@ -23,7 +24,7 @@ named_pipe = payload_handler.payload['workflow']['NamedPipe']
 stat_client = StatsPipeClient(named_pipe)
 
 initial = payload_handler.payload['workflow']['dataset']
-print "Dataset name: %s" % (initial)
+print("Dataset name: %s" % (initial))
 
 timing = {'stats':{'api':'listBlocks', 'query':str(initial)}}
 
@@ -33,7 +34,7 @@ with TimingStat(timing, stat_client):
 
 timer.stat_to_timer()
 
-print "Found %s blocks" % (len(blocks))
+print("Found %s blocks" % (len(blocks)))
 
 for block in blocks:
   p = payload_handler.clone_payload()
