@@ -12,7 +12,7 @@ def change_file_size(block_dict, file_dict):
     block = block_dict['block']
     old_file_size = file_dict['file_size']
     block['block_size'] -= old_file_size
-    new_file_size = int(random.gauss(1000000000,90000000))
+    new_file_size = int(random.gauss(1000000000, 90000000))
     block['block_size'] += new_file_size
     file_dict['file_size'] = new_file_size
 

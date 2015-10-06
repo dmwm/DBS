@@ -72,7 +72,7 @@ for aline in lines:
 		print "classname::: "+classname
 		try: 
 			os.mkdir(dao_path)
-		except os.error , e:
+		except os.error, e:
 			if str(e).find ('File exists') != -1 : pass
 			else : raise e
 

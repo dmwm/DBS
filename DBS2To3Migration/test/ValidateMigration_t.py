@@ -63,7 +63,7 @@ def listComparision(resultsDBS2, resultsDBS3):
 
 def diffKeys(resultDBS2, resultDBS3):
     for i in resultDBS3.keys():
-        if resultDBS2.has_key(i):
+        if i in resultDBS2:
             if resultDBS3[i] == resultDBS2[i]:
                 pass
             else:

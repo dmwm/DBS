@@ -13,9 +13,9 @@ from dbs.dao.Oracle.Block.GetID import GetID as BlockID
 class Insert_t(unittest.TestCase):
     @DaoConfig("DBSWriter")
     def __init__(self, methodName='runTest'):
-        super(Insert_t,self).__init__(methodName)
-        data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
-        self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
+        super(Insert_t, self).__init__(methodName)
+        data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data.pkl')
+        self.data_provider = create_dbs_data_provider(data_type='transient', data_location=data_location)
         self.data = self.data_provider.get_block_parentage_data(regenerate=True)[0]
 
     def setUp(self):

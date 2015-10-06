@@ -2,7 +2,7 @@ from cherrypy import request, response, HTTPError
 import logging
 import time
 
-from dbs.utils.dbsException import dbsException,dbsExceptionCode
+from dbs.utils.dbsException import dbsException, dbsExceptionCode
 def dbsExceptionHandler(eCode='', message='', logger=None , serverError=''):
     """
     This utility function handles all dbs exceptions. It will log , raise exception

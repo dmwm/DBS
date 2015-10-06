@@ -23,7 +23,7 @@ dbsExceptionCode = {
 class dbsException(exceptions.Exception):
 
     def __init__(self, eCode, message, serverError, **data):
-        super(dbsException,self).__init__(message)
+        super(dbsException, self).__init__(message)
         self.name = str(self.__class__.__name__) 
         self.eCode=eCode
         self.message=message

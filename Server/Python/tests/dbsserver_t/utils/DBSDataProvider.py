@@ -21,9 +21,9 @@ def sort_data(data, sort_key):
     return sorted(data, key=lambda entry: entry[sort_key])
 
 def strip_volatile_fields(data):
-    volatile_fields = ['block_id','parent_block_id', 'branch_hash_id',
+    volatile_fields = ['block_id', 'parent_block_id', 'branch_hash_id',
                        'dataset_id', 'parent_dataset_id', 'data_tier_id',
-                       'file_id', 'parent_file_id','file_type_id',
+                       'file_id', 'parent_file_id', 'file_type_id',
                        'primary_ds_id', 'primary_ds_type_id']
 
     if isinstance(data, list):
@@ -53,13 +53,13 @@ class DBSTransientData(object):
         self.username = getpass.getuser()
         self.data = {}
         self.data_location = data_location
-        self.template_data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'../data/template_transient_test_data.pkl')
+        self.template_data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../data/template_transient_test_data.pkl')
 
     def __del__(self):
         self.__class__.instance_count -= 1
 
     def get_data(self, key):
-        if not self.data.has_key(key):
+        if key not in self.data:
             self.load_data(key)
 
         return self.data.get(key)
@@ -69,7 +69,7 @@ class DBSTransientData(object):
         pkl_test_data = pickle.load(test_data_file)
         test_data_file.close()
 
-        if isinstance(pkl_test_data, dict) and pkl_test_data.has_key(key):
+        if isinstance(pkl_test_data, dict) and key in pkl_test_data:
             self.data.update(pkl_test_data)
         else:
             raise TypeError("Input file %s does not contain the right format!" % (self.data_location))
@@ -80,10 +80,10 @@ class DBSTransientData(object):
         test_data_file.close()
 
     def generate_data(self, key):
-        template_data_file = file(self.template_data_location,'r')
+        template_data_file = file(self.template_data_location, 'r')
         template_test_data = pickle.load(template_data_file)
 
-        if not (isinstance(template_test_data, dict) and template_test_data.has_key(key)):
+        if not (isinstance(template_test_data, dict) and key in template_test_data):
             raise TypeError("Template file %s does not contain the right format!" % (self.template_data_location))
 
         template_data = template_test_data.get(key)
@@ -91,8 +91,8 @@ class DBSTransientData(object):
         generated_data = []
 
         for list_entry in template_data:
-            for entry,value in list_entry.iteritems():
-                if isinstance(value,str):
+            for entry, value in list_entry.iteritems():
+                if isinstance(value, str):
                     if value.find("@unique_id@") != -1:
                         list_entry[entry] = list_entry[entry].replace("@unique_id@", self.unixtime)
                     if value.find("@date@") != -1:
@@ -106,7 +106,7 @@ class DBSTransientData(object):
 
                     #check if string contains only digits, since DBS3 returns int's in that case,
                     #except for md5, adler32 and checksum
-                    if list_entry[entry].isdigit() and entry not in ['md5','adler32','check_sum']:
+                    if list_entry[entry].isdigit() and entry not in ['md5', 'adler32', 'check_sum']:
                         list_entry[entry] = int(list_entry[entry])
 
             generated_data.append(list_entry)
@@ -119,7 +119,7 @@ class DBSTransientData(object):
     @classmethod
     def reset_unique_ids(cls):
         cls.unixtime = str(int(time.time()))
-        cls.unique_hash = str(uuid.uuid1()).replace('-','')
+        cls.unique_hash = str(uuid.uuid1()).replace('-', '')
 
 class DBSPersistentData(object):
     def __init__(self, data_location=None):
@@ -131,7 +131,7 @@ class DBSPersistentData(object):
             self.data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../data/persistent_test_data.pkl')
 
     def get_data(self, key):
-        if not self.data.has_key(key):
+        if key not in self.data:
             self.load_data(key)
 
         return self.data.get(key)
@@ -141,7 +141,7 @@ class DBSPersistentData(object):
         pkl_test_data = pickle.load(test_data_file)
         test_data_file.close()
 
-        if isinstance(pkl_test_data, dict) and pkl_test_data.has_key(key):
+        if isinstance(pkl_test_data, dict) and key in pkl_test_data:
             self.data.update(pkl_test_data)
         else:
             raise TypeError("Input file %s does not have the right format or does not contain key %s!" % (self.data_location, key))
@@ -306,7 +306,7 @@ class DBSBlockDataProvider(object):
         return ret_val
 
     def files(self, block_name):
-        if not (hasattr(self, '_files') and self._files.has_key(block_name)):
+        if not (hasattr(self, '_files') and block_name in self._files):
             self._files[block_name] = []
             num_of_created_blocks = len(self._files)
             for i in xrange((num_of_created_blocks-1) * self._num_of_files,
@@ -352,11 +352,11 @@ class DBSBlockDataProvider(object):
 
     def _generate_block_is_open(self):
         "generates block is open status"
-        return random.randint(0,1)
+        return random.randint(0, 1)
 
     def _generate_cksum(self):
         "generates checksum"
-        return random.randint(1000,9999)
+        return random.randint(1000, 9999)
 
     def _generate_event_count(self):
         "generate event count for a given file, if not already available"
@@ -382,9 +382,9 @@ class DBSBlockDataProvider(object):
              self._uid,
              file_counter)
 
-    def _generate_file_size(self, func='gauss', params=(1000000000,90000000)):
+    def _generate_file_size(self, func='gauss', params=(1000000000, 90000000)):
         "generates new file size"
-        return int(abs(getattr(random,func)(*params)))
+        return int(abs(getattr(random, func)(*params)))
 
     def _generate_file_lumi_list(self):
         "generate file lumi list for a given file, if not already available"
@@ -433,7 +433,7 @@ class DBSBlockDataProvider(object):
         "return block is open"
         if not hasattr(self, '_block_is_open'):
             self._block_is_open = {block_name : self._generate_block_is_open()}
-        elif not self._block_is_open.has_key(block_name):
+        elif block_name not in self._block_is_open:
             self._block_is_open.update({block_name : self._generate_block_is_open()})
 
         return self._block_is_open[block_name]
@@ -441,7 +441,7 @@ class DBSBlockDataProvider(object):
     @property
     def dataset_access_type(self):
         "return dataset access type"
-        if not hasattr(self,'_dataset_access_type'):
+        if not hasattr(self, '_dataset_access_type'):
             self._dataset_access_type = "VALID"
         return self._dataset_access_type
 
@@ -503,7 +503,7 @@ class DBSBlockDataProvider(object):
         "return primary dataset type"
         if not hasattr(self, '_primary_ds_type'):
             primary_ds_types = ['mc', 'data']
-            self._primary_ds_type = primary_ds_types[random.randint(0,1)]
+            self._primary_ds_type = primary_ds_types[random.randint(0, 1)]
         return self._primary_ds_type
 
     @property

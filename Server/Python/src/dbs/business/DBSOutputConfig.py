@@ -62,9 +62,9 @@ class DBSOutputConfig:
 
         Updated Oct 12, 2011    
         """
-        if not (businput.has_key("app_name")  and businput.has_key("release_version")\
-            and businput.has_key("pset_hash") and businput.has_key("output_module_label")
-            and businput.has_key("global_tag")):
+        if not ("app_name" in businput  and "release_version" in businput\
+            and "pset_hash" in businput and "output_module_label" in businput
+            and "global_tag" in businput):
             dbsExceptionHandler('dbsException-invalid-input', "business/DBSOutputConfig/insertOutputConfig require:\
                 app_name, release_version, pset_hash, output_module_label and global_tag")
 

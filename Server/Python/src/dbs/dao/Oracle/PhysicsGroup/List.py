@@ -25,7 +25,7 @@ class List(DBFormatter):
         returns id for a given physics group name
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/PhysicsGroup/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/PhysicsGroup/List. Expects db connection from upper layer.")
 
         binds={}
         if name:

@@ -26,7 +26,7 @@ class List(DBFormatter):
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationBlock/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationBlock/List. Expects db connection from upper layer.")
 
         binds = { "migration_request_id" : migration_request_id }
 	cursors = self.dbi.processData(self.sql, binds, conn, transaction, returnCursor=True)

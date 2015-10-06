@@ -22,7 +22,7 @@ class DeleteDuplicates(DBFormatter):
 	simple execute
         """	
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileBuffer/DeleteDupicates. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileBuffer/DeleteDupicates. Expects db connection from upper layer.")
 
 	print self.sql
         self.dbi.processData(self.sql, logical_file_name, conn, transaction)

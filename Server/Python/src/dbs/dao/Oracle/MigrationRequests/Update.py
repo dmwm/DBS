@@ -27,6 +27,6 @@ WHERE MIGRATION_REQUEST_ID=:migration_request_id""" %  self.owner
 	    migration_status, migration_request_id
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationRequests/Update. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/Update. Expects db connection from upper layer.")
 
         result = self.dbi.processData(self.sql, daoinput, conn, transaction)

@@ -31,7 +31,7 @@ class GetDSConfigs(DBFormatter):
         returns id for a given dataset = /primds/procds/tier
         """	
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DatasetOutputMod_config/GetDSConfigs. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DatasetOutputMod_config/GetDSConfigs. Expects db connection from upper layer.")
 
         sql = self.sql
         binds = {"dataset":dataset}

@@ -16,6 +16,6 @@ class List(DBFormatter):
 
     def execute(self, conn, transaction = False):
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/DoNothing/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DoNothing/List. Expects db connection from upper layer.")
 
         return []

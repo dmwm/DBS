@@ -12,7 +12,7 @@ url=os.environ['DBS_WRITER_URL']
 dbs3api = DbsApi(url=url)
 
 try:
-    infofile=open("blockdump.dict","r")
+    infofile=open("blockdump.dict", "r")
     indata = infofile.read()
     id=indata.find("=")
     d = indata[(id+1):]

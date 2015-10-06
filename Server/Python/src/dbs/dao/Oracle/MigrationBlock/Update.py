@@ -42,7 +42,7 @@ class Update(DBFormatter):
         """
         #print daoinput['migration_block_id']
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/MigrationBlock/Update. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationBlock/Update. Expects db connection from upper layer.")
         if daoinput['migration_status'] == 1:
            sql = self.sql + "  (MIGRATION_STATUS = 0  or MIGRATION_STATUS = 3)" 
         elif daoinput['migration_status'] == 2 or daoinput['migration_status'] == 3 or daoinput['migration_status'] == 9:

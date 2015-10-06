@@ -17,7 +17,7 @@ from dbsserver_t.utils.DBSRestApi import DBSRestApi
 from WMCore.WebTools.FrontEndAuth import FrontEndAuth
 
 config = os.environ["DBS_TEST_CONFIG"]
-service = os.environ.get("DBS_TEST_SERVICE","DBSWriter")
+service = os.environ.get("DBS_TEST_SERVICE", "DBSWriter")
 api = DBSRestApi(config, service)
 uid = uuid.uuid4().time_mid
 print "****uid=%s******" %uid
@@ -68,7 +68,7 @@ outDict={
 }
 
 class checkException(object):
-    def __init__(self,msg):
+    def __init__(self, msg):
         self.msg = msg
 
     def __call__(self,func,*args,**kwargs):
@@ -213,7 +213,7 @@ class DBSWriterModel_t(unittest.TestCase):
                  'output_module_label': output_module_label, 'global_tag': global_tag},
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'prep_id':child_prep_id,
+            'prep_id': child_prep_id,
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
         api.insert('datasets', childdata)
@@ -385,7 +385,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 #'is_file_valid': 1
                 }
@@ -415,7 +415,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 #'is_file_valid': 1
                 }
@@ -511,7 +511,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 #'is_file_valid': 1
                 }
             flist.append(f)
@@ -541,7 +541,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 #'is_file_valid': 1
                 }
@@ -558,7 +558,7 @@ class DBSWriterModel_t(unittest.TestCase):
         for i in range(10):
             f={
                 'dataset': dataset,
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 #'is_file_valid': 1
                 }
@@ -574,7 +574,7 @@ class DBSWriterModel_t(unittest.TestCase):
         for i in range(10):
             f={
                 'dataset': dataset,
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 'check_sum' : "1234",
                 'adler32':  "abc123"
@@ -592,7 +592,7 @@ class DBSWriterModel_t(unittest.TestCase):
         for i in range(10):
             f={
                 'dataset': dataset,
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 'check_sum' : "1234"
                 #'is_file_valid': 1
@@ -609,7 +609,7 @@ class DBSWriterModel_t(unittest.TestCase):
         for i in range(10):
             f={
                 'dataset': dataset,
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 'adler32':  "abc123"
                 #'is_file_valid': 1
@@ -626,7 +626,7 @@ class DBSWriterModel_t(unittest.TestCase):
         for i in range(10):
             f={
                 'dataset': dataset,
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 'md5':  "abc"
                 #'is_file_valid': 1
@@ -640,14 +640,14 @@ class DBSWriterModel_t(unittest.TestCase):
     def test08a(self):
         """test08a: testweb.DBSWriterModel.insertDataTier: Basic test"""
         data = {'data_tier_name':tier}
-        api.insert('datatiers',data)
+        api.insert('datatiers', data)
 
     @checkException("data_tier_name")
     def test08b(self):
         """test08b: web.DBSWriterModel.insertDataTier: missing data should raise exception"""
         data = {}
 
-        api.insert('datatiers',data)
+        api.insert('datatiers', data)
 
     def test09a(self):
         """test09a: web.DBSWriterModel.updateDatasetType: Basic test """
@@ -666,7 +666,7 @@ class DBSWriterModel_t(unittest.TestCase):
     @checkException("dataset")
     def test09c(self):
         """test09c: web.DBSWriterModel.updateDatasetType: Basic test """
-        api.update('datasets',dataset_access_type="DEPRECATED")
+        api.update('datasets', dataset_access_type="DEPRECATED")
 
     def test10a(self):
         """test10a: web.DBSWriterModel.updateFileStatus: Basic test logical_file_name"""
@@ -748,7 +748,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
-                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid,i),
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 }
             fileList.append(f)
 
@@ -814,7 +814,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     {u'lumi_section_num': '29838', u'run_num': '1'}
                     ],
                 u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall09/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                u'logical_file_name': "/store/mc/Fall09/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
 
@@ -830,7 +830,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     {u'lumi_section_num': '29838', u'run_num': '1'}
                     ],
                 u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                u'logical_file_name': "/store/mc/Fall/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
         for i in range(2):
@@ -845,7 +845,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     {u'lumi_section_num': '29838', u'run_num': '1'}
                     ],
                 u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall15/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                u'logical_file_name': "/store/mc/Fall15/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
 
@@ -853,14 +853,14 @@ class DBSWriterModel_t(unittest.TestCase):
                                 u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
             fileConfigList.append(file_output_dict)
 
-        data = {'file_conf_list' : fileConfigList,
-                'dataset_conf_list' : [output_module_dict],
-                'processing_era' : processing_dict,
-                'files' : fileList,
-                'dataset' : dataset_dict,
-                'primds' : primary_dict,
-                'acquisition_era' : acquisition_dict,
-                'block' : block_dict,
+        data = {'file_conf_list': fileConfigList,
+                'dataset_conf_list': [output_module_dict],
+                'processing_era': processing_dict,
+                'files': fileList,
+                'dataset': dataset_dict,
+                'primds': primary_dict,
+                'acquisition_era': acquisition_dict,
+                'block': block_dict,
                 }
 
         api.insert('bulkblocks', data)
@@ -913,7 +913,7 @@ class DBSWriterModel_t(unittest.TestCase):
                     {u'lumi_section_num': '29838', u'run_num': '1'}
                     ],
                 u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id,i),
+                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
 
@@ -921,21 +921,21 @@ class DBSWriterModel_t(unittest.TestCase):
                                 u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
             fileConfigList.append(file_output_dict)
 
-        data = {'file_conf_list' : fileConfigList,
-                'dataset_conf_list' : [output_module_dict],
-                'processing_era' : processing_dict,
-                'files' : fileList,
-                'dataset' : dataset_dict,
-                'primds' : primary_dict,
-                'acquisition_era' : acquisition_dict,
-                'block' : block_dict,
+        data = {'file_conf_list': fileConfigList,
+                'dataset_conf_list': [output_module_dict],
+                'processing_era': processing_dict,
+                'files': fileList,
+                'dataset': dataset_dict,
+                'primds': primary_dict,
+                'acquisition_era': acquisition_dict,
+                'block': block_dict,
                 }
 
         api.insert('bulkblocks', data)
 
     def test999(self):
         """setup all necessary parameters"""
-        filename=os.path.join(os.path.dirname(os.path.abspath(__file__)),'info.dict')
+        filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'info.dict')
         infoout=open(filename, "w")
         infoout.write("info="+str(outDict))
         infoout.close()

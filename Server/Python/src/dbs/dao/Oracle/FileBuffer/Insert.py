@@ -14,7 +14,7 @@ class Insert(DBFormatter):
 
     def execute(self, conn, logical_file_name, block_id, file_clob, transaction = False):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileBuffer/Insert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileBuffer/Insert. Expects db connection from upper layer.")
 	
 	binds={}
 	binds['logical_file_name']=logical_file_name

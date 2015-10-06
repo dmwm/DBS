@@ -27,7 +27,7 @@ FROM %sFILE_DATA_TYPES FT
         returns id for a given file type
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileType/GetID. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileType/GetID. Expects db connection from upper layer.")
 
         sql = self.sql
         sql += "WHERE FT.FILE_TYPE = :filetype"

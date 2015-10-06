@@ -34,24 +34,24 @@ parent_block="%s#%s" % (parent_dataset, uid)
 flist=[]
 
 outDict={
-"primary_ds_name" : primary_ds_name,
-"procdataset" : procdataset,
-"tier" : tier,
-"dataset" : dataset,
-"parent_dataset" : parent_dataset,
-"app_name" : app_name,
-"output_module_label" : output_module_label,
-"global_tag" : global_tag,
-"pset_hash" : pset_hash,
-"release_version" : release_version,
-"site" : site,
-"block" : block,
-"parent_block" : parent_block,
-"files" : [],
-"parent_files" : [],
-"runs" : [97,98,99],
-"acquisition_era" : acquisition_era_name,
-"processing_version" : processing_version,
+"primary_ds_name": primary_ds_name,
+"procdataset": procdataset,
+"tier": tier,
+"dataset": dataset,
+"parent_dataset": parent_dataset,
+"app_name": app_name,
+"output_module_label": output_module_label,
+"global_tag": global_tag,
+"pset_hash": pset_hash,
+"release_version": release_version,
+"site": site,
+"block": block,
+"parent_block": parent_block,
+"files": [],
+"parent_files": [],
+"runs": [97, 98, 99],
+"acquisition_era": acquisition_era_name,
+"processing_version": processing_version,
 }
 
 class DBSClientWriter_t(unittest.TestCase):
@@ -109,7 +109,7 @@ class DBSClientWriter_t(unittest.TestCase):
                  'output_module_label': output_module_label, 'global_tag':global_tag}
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "testuer",
+            'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "testuer",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
 
@@ -124,7 +124,7 @@ class DBSClientWriter_t(unittest.TestCase):
                  'output_module_label': output_module_label, 'global_tag':global_tag}
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "testuser",
+            'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "testuser",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
         self.api.insertDataset(datasetObj=parentdata)
@@ -139,7 +139,7 @@ class DBSClientWriter_t(unittest.TestCase):
                  'output_module_label': output_module_label, 'global_tag':global_tag},
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+            'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
 
@@ -152,7 +152,7 @@ class DBSClientWriter_t(unittest.TestCase):
             'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
             'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date' : 1234, 'create_by' : 'testuser', "last_modification_date" : 1234, "last_modified_by"
+            'creation_date': 1234, 'create_by': 'testuser', "last_modification_date": 1234, "last_modified_by"
             : "testuser",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
@@ -302,7 +302,7 @@ class DBSClientWriter_t(unittest.TestCase):
 
     def test208(self):
         """test208 generating the output file for reader test"""
-        infoout=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"info.dict"), "w")
+        infoout=open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "info.dict"), "w")
         infoout.write("info="+str(outDict))
         infoout.close()
 

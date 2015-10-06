@@ -143,7 +143,7 @@ class DBSBlockInsert :
             #Throw exception to let the up layer know. YG 11/17/2010
                 if tran:tran.rollback()
                 if conn:conn.close()
-                dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertBlock. Block %s already exists." % (block['block_name']), self.logger.exception, "DBSBlockInsert/insertBlock. Block %s already exists." % (block['block_name']))
+                dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/insertBlock. Block %s already exists." % (block['block_name']), self.logger.exception, "DBSBlockInsert/insertBlock. Block %s already exists." % (block['block_name']))
             elif str(ex).find("ORA-01400") > -1:
                 if tran:tran.rollback()
                 if conn:conn.close()
@@ -167,7 +167,7 @@ class DBSBlockInsert :
         try:
             fileList = blockcontent['files']
             fileConfigList = blockcontent['file_conf_list']
-            if blockcontent.has_key('file_parent_list'):
+            if 'file_parent_list' in blockcontent:
                 fileParentList = blockcontent['file_parent_list']
             else:
                 fileParentList = []
@@ -274,7 +274,7 @@ class DBSBlockInsert :
             if tran:tran.rollback()
             if conn:conn.close()
             dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/FileParents: \
-                KeyError exception: %s. " %ex.args[0] , self.logger.exception, "DBSBlockInsert/FileParents:\
+                KeyError exception: %s. " %ex.args[0], self.logger.exception, "DBSBlockInsert/FileParents:\
 		KeyError exception: %s. " %ex.args[0])
         except Exception, ex:
             if tran:tran.rollback()
@@ -383,7 +383,7 @@ class DBSBlockInsert :
                     elif str(ex).find("ORA-01400") > -1:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        dbsExceptionHandler("dbsException-missing-data"," Missing data when inserting to dataset_parents. ", self.logger.exception, str(ex))
+                        dbsExceptionHandler("dbsException-missing-data", " Missing data when inserting to dataset_parents. ", self.logger.exception, str(ex))
                     else:
                         if tran:tran.rollback()
                         if conn:conn.close()
@@ -471,7 +471,7 @@ class DBSBlockInsert :
                 except KeyError, ex:
                     if tran:tran.rollback()
                     if conn:conn.close()
-                    dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertOutputModuleConfig: \
+                    dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/insertOutputModuleConfig: \
                                          KeyError exception: %s. " %ex.args[0],
 					 self.logger.exception, 
 					"DBSBlockInsert/insertOutputModuleConfig: KeyError exception: %s. " %ex.args[0])
@@ -503,7 +503,7 @@ class DBSBlockInsert :
                     elif str(ex).find("ORA-01400") > -1:
                         if tran:tran.rollback()
                         if conn:conn.close()
-                        dbsExceptionHandler("dbsException-missing-data","Missing data when inserting Configure. ", 
+                        dbsExceptionHandler("dbsException-missing-data", "Missing data when inserting Configure. ", 
 				self.logger.exception, str(ex))
                     else:
                         if tran:tran.rollback()
@@ -573,7 +573,7 @@ class DBSBlockInsert :
             primds = blockcontent["primds"]
 
             primds["primary_ds_id"] = self.primdsid.execute(conn,
-                                      primds["primary_ds_name"],transaction=tran)
+                                      primds["primary_ds_name"], transaction=tran)
             if primds["primary_ds_id"] <= 0:
                 #primary dataset is not in db yet.
                 try:
@@ -632,13 +632,13 @@ class DBSBlockInsert :
 
             #3 Deal with Acquisition era
             aq = blockcontent.get('acquisition_era', {})
-            has_acquisition_era_name = aq.has_key('acquisition_era_name')
-            has_start_date = aq.has_key('start_date')
+            has_acquisition_era_name = 'acquisition_era_name' in aq
+            has_start_date = 'start_date' in aq
 
             def insert_acquisition_era():
                 try:
                     #insert acquisition era into db
-                    aq['acquisition_era_id'] = self.sm.increment(conn,"SEQ_AQE")
+                    aq['acquisition_era_id'] = self.sm.increment(conn, "SEQ_AQE")
                     self.acqin.execute(conn, aq, tran)
                     dataset['acquisition_era_id'] = aq['acquisition_era_id']
                 except exceptions.IntegrityError, ei:
@@ -695,10 +695,10 @@ acquisition era, but with different cases.")
             #4 Deal with Processing era
             pera = blockcontent.get('processing_era', {})
 
-            if pera.has_key('processing_version'):
+            if 'processing_version' in pera:
                 try:
                     #insert processing era into db
-                    pera['processing_era_id'] = self.sm.increment(conn,"SEQ_PE")
+                    pera['processing_era_id'] = self.sm.increment(conn, "SEQ_PE")
                     #pera['processing_version'] = pera['processing_version'].upper()
                     self.procsingin.execute(conn, pera, tran)
                     dataset['processing_era_id'] = pera['processing_era_id']
@@ -742,7 +742,7 @@ acquisition era, but with different cases.")
             #already checked when they were inserted into the source dbs.  YG 7/12/2012
             if not migration and aq["acquisition_era_name"] != "CRAB" and aq["acquisition_era_name"] != "LHE":
                 erals=dataset["processed_ds_name"].rsplit('-')
-                if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v",pera["processing_version"]):
+                if erals[0] != aq["acquisition_era_name"] or erals[len(erals)-1] != "%s%s"%("v", pera["processing_version"]):
                     if tran:tran.rollback()
                     if conn:conn.close()
                     dbsExceptionHandler('dbsException-invalid-input2', "BlockInsert:\
@@ -755,7 +755,7 @@ acquisition era, but with different cases.")
         except KeyError, ex:
             if tran:tran.rollback()
             if conn:conn.close()
-            dbsExceptionHandler("dbsException-invalid-input2","DBSBlockInsert/insertOutputModuleConfig: \
+            dbsExceptionHandler("dbsException-invalid-input2", "DBSBlockInsert/insertOutputModuleConfig: \
                                          KeyError exception: %s. " %ex.args[0], self.logger.exception,
 				         "DBSBlockInsert/insertOutputModuleConfig: KeyError exception: %s." %ex.args[0]	)            
         except:
@@ -785,7 +785,7 @@ acquisition era, but with different cases.")
                             dbsExceptionHandler(message='InsertPhysicsGroup Error', logger=self.logger.exception, serverError="InsertPhysicsGroup: "+ str(ex))
                         if (str(ex).find("ORA-00001") != -1 and str(ex).find("TUC_PG_PHYSICS_GROUP_NAME") != -1) or\
                             str(ex).lower().find("duplicate") != -1:
-                            phgId = self.phygrpid.execute(conn, phg,transaction=tran)
+                            phgId = self.phygrpid.execute(conn, phg, transaction=tran)
                             if phgId <= 0:
                                 if tran:tran.rollback()
                                 if conn:conn.close()
@@ -865,7 +865,7 @@ acquisition era, but with different cases.")
                 dataset['dataset_id'] = self.datasetid.execute(conn,
                                                 dataset['dataset'])
                 if dataset['dataset_id'] <= 0:
-                    dataset['dataset_id'] = self.sm.increment(conn,"SEQ_DS")
+                    dataset['dataset_id'] = self.sm.increment(conn, "SEQ_DS")
                     if not migration:
                         dataset['last_modified_by'] = dbsUtils().getCreateBy()
                         dataset['create_by'] = dbsUtils().getCreateBy()
@@ -879,7 +879,7 @@ acquisition era, but with different cases.")
                         if str(ei).find("ORA-00001") != -1 or str(ei).lower().find("duplicate") !=-1:
                             if conn.closed:
                                 conn = self.dbi.connection()
-                            dataset['dataset_id'] = self.datasetid.execute(conn,dataset['dataset'])
+                            dataset['dataset_id'] = self.datasetid.execute(conn, dataset['dataset'])
                             if dataset['dataset_id'] <= 0:
                                 if tran:tran.rollback()
                                 if conn:conn.close()

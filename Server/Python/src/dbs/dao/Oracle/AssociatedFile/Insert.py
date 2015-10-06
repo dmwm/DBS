@@ -16,18 +16,18 @@ class Insert(DBFormatter):
         binds = {}
         if type(associated_filesObj) == type ('object'):
             binds = {
-                'assocatedfileid' : associated_filesObj['assocatedfileid'],
-                'thisfileid' : associated_filesObj['thisfileid'],
-                'assocatedfile' : associated_filesObj['assocatedfile'],
+                'assocatedfileid': associated_filesObj['assocatedfileid'],
+                'thisfileid': associated_filesObj['thisfileid'],
+                'assocatedfile': associated_filesObj['assocatedfile'],
             }
 
         elif type(associated_filesObj) == type([]):
             binds = []
             for item in associated_filesObj:
                 binds.append({
-                    'assocatedfileid' : item['assocatedfileid'],
-                    'thisfileid' : item['thisfileid'],
-                    'assocatedfile' : item['assocatedfile'],
+                    'assocatedfileid': item['assocatedfileid'],
+                    'thisfileid': item['thisfileid'],
+                    'assocatedfile': item['assocatedfile'],
                 })
 
             return binds
@@ -35,7 +35,7 @@ class Insert(DBFormatter):
 
     def execute( self, associated_filesObj, conn, transaction=False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/AssociatedFile/Insert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/AssociatedFile/Insert. Expects db connection from upper layer.")
             
         ##binds = self.getBinds( associated_filesObj )
         result = self.dbi.processData(self.sql, binds, conn, transaction)

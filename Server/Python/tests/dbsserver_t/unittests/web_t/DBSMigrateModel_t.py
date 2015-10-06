@@ -38,7 +38,7 @@ class DBSMigrateModel_t(unittest.TestCase):
         cls._child_data_provider = create_child_data_provider(cls._parent_data_provider)
         cls._independent_child_data_provider = create_child_data_provider(cls._independent_data_provider)
         config = os.environ['DBS_TEST_CONFIG']
-        service = os.environ.get("DBS_TEST_SERVICE","DBSMigrate")
+        service = os.environ.get("DBS_TEST_SERVICE", "DBSMigrate")
         cls._migrate_api = DBSRestApi(config, service, migration_test=True)
         cls._migration_url = 'https://%s/dbs/dev/global/DBSWriter' % (socket.getfqdn())
         #Don't remove the commented line below until I have a better way to accommodate the development environment.
@@ -97,21 +97,21 @@ class DBSMigrateModel_t(unittest.TestCase):
     def test_06_migration_status(self):
         """test06: Test to check the status of an ongoing migration between different DBS instances by id"""
         status = self._migrate_api.list('status')
-        self.assertTrue(isinstance(status,list))
+        self.assertTrue(isinstance(status, list))
 
         for migration_rqst_id in self._saved_data['migration_rqst_ids']:
             status = self._migrate_api.list('status', migration_rqst_id)
-            self.assertEqual(len(status),1)
+            self.assertEqual(len(status), 1)
 
     def test_07_migration_status(self):
         """test07: Test to check the status of an ongoing migration between different DBS instances by block"""
         for migration_input in self._saved_data['migration_inputs']:
             status = self._migrate_api.list('status', block_name=migration_input)
-            self.assertEqual(len(status),1)
+            self.assertEqual(len(status), 1)
 
     def test_08_migration_status(self):
         """test08: Test to check the status of an ongoing migration between different DBS instances by dataset"""
-        datasets = set((block_name.split('#',1)[0] for block_name in self._saved_data['migration_inputs']))
+        datasets = set((block_name.split('#', 1)[0] for block_name in self._saved_data['migration_inputs']))
         for dataset in datasets:
             status = self._migrate_api.list('status', dataset=dataset)
             self.assertTrue(len(status)>=1)

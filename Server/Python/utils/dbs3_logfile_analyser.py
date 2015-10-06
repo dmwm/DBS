@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
         for log_entry in log_entries:
             if log_entry['request'].find('bulkblocks')!=-1:
-                request_time = time.strptime(log_entry['time'],'%d/%b/%Y:%H:%M:%S')
+                request_time = time.strptime(log_entry['time'], '%d/%b/%Y:%H:%M:%S')
                 data.append(time.mktime(request_time))
 
     histo, bin_edges = numpy.histogram(data, int(max(data))-int(min(data)))

@@ -47,7 +47,7 @@ class DBSWriterModel(DBSReaderModel):
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'acquisitioneras', self.insertAcquisitionEra, secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
-        self._addMethod('PUT', 'acquisitioneras', self.updateAcqEraEndDate, args=['acquisition_era_name','end_date'],
+        self._addMethod('PUT', 'acquisitioneras', self.updateAcqEraEndDate, args=['acquisition_era_name', 'end_date'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'processingeras', self.insertProcessingEra, secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
@@ -61,7 +61,7 @@ class DBSWriterModel(DBSReaderModel):
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('PUT', 'datasets', self.updateDataset, args=['dataset', 'dataset_access_type'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
-        self._addMethod('PUT', 'blocks', self.updateBlock,args=['block_name', 'open_for_writing', 'origin_site_name'],
+        self._addMethod('PUT', 'blocks', self.updateBlock, args=['block_name', 'open_for_writing', 'origin_site_name'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'datatiers', self.insertDataTier, secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
@@ -81,7 +81,7 @@ class DBSWriterModel(DBSReaderModel):
         try :
             body = request.body.read()
             indata = cjson.decode(body)
-            indata = validateJSONInputNoCopy("primds",indata)
+            indata = validateJSONInputNoCopy("primds", indata)
             indata.update({"creation_date": dbsUtils().getTime(), "create_by": dbsUtils().getCreateBy() })
             self.dbsPrimaryDataset.insertPrimaryDataset(indata)
         except cjson.DecodeError as dc:
@@ -113,7 +113,7 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            indata = validateJSONInputNoCopy("dataset_conf_list",indata)
+            indata = validateJSONInputNoCopy("dataset_conf_list", indata)
             indata.update({"creation_date": dbsUtils().getTime(),
                            "create_by" : dbsUtils().getCreateBy()})
             self.dbsOutputConfig.insertOutputConfig(indata)
@@ -164,7 +164,7 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            indata = validateJSONInputNoCopy("acquisition_era",indata)
+            indata = validateJSONInputNoCopy("acquisition_era", indata)
             indata.update({"start_date": indata.get("start_date", dbsUtils().getTime()),\
                            "creation_date": indata.get("creation_date", dbsUtils().getTime()), \
                            "create_by" : dbsUtils().getCreateBy() })
@@ -260,7 +260,7 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            indata = validateJSONInputNoCopy("blockBulk",indata)
+            indata = validateJSONInputNoCopy("blockBulk", indata)
             self.dbsBlockInsert.putBlock(indata)
         except cjson.DecodeError as dc:
             dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert BulkBlock input",  self.logger.exception, str(dc))
@@ -293,7 +293,7 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            indata = validateJSONInputNoCopy("block",indata)
+            indata = validateJSONInputNoCopy("block", indata)
             self.dbsBlock.insertBlock(indata)
         except cjson.DecodeError as dc:
             dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert Block input",  self.logger.exception, str(dc))
@@ -333,24 +333,24 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)["files"]
-            if not isinstance(indata, (list,dict)):
+            if not isinstance(indata, (list, dict)):
                  dbsExceptionHandler("dbsException-invalid-input", "Invalid Input DataType", self.logger.exception, \
                                       "insertFile expects input as list or dirc")
             businput = []
             if type(indata) == dict:
                 indata = [indata]
-            indata = validateJSONInputNoCopy("files",indata)
+            indata = validateJSONInputNoCopy("files", indata)
             for f in indata:
                 f.update({
                      #"dataset":f["dataset"],
                      "creation_date": f.get("creation_date", dbsUtils().getTime()),
                      "create_by" : dbsUtils().getCreateBy(),
                      "last_modification_date": f.get("last_modification_date", dbsUtils().getTime()),
-                     "last_modified_by": f.get("last_modified_by" , dbsUtils().getCreateBy()),
-                     "file_lumi_list":f.get("file_lumi_list",[]),
-                     "file_parent_list":f.get("file_parent_list",[]),
-                     "file_assoc_list":f.get("assoc_list",[]),
-                     "file_output_config_list":f.get("file_output_config_list",[])})
+                     "last_modified_by": f.get("last_modified_by", dbsUtils().getCreateBy()),
+                     "file_lumi_list":f.get("file_lumi_list", []),
+                     "file_parent_list":f.get("file_parent_list", []),
+                     "file_assoc_list":f.get("assoc_list", []),
+                     "file_output_config_list":f.get("file_output_config_list", [])})
                 businput.append(f)
             self.dbsFile.insertFile(businput, qInserts)
         except cjson.DecodeError as dc:
@@ -365,7 +365,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('logical_file_name')
-    @inputChecks(logical_file_name=(basestring,list), is_file_valid=(int, basestring), lost=(int, basestring, bool ))
+    @inputChecks(logical_file_name=(basestring, list), is_file_valid=(int, basestring), lost=(int, basestring, bool ))
     def updateFile(self, logical_file_name=[], is_file_valid=1, lost=0):
         """
         API to update file status
@@ -378,10 +378,10 @@ class DBSWriterModel(DBSReaderModel):
         :type lost: bool
 
         """
-        if lost in [1, True, 'True','true', '1', 'y', 'yes']:
+        if lost in [1, True, 'True', 'true', '1', 'y', 'yes']:
             lost = 1
-            if is_file_valid in [1, True, 'True','true', '1', 'y', 'yes']:
-                dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,\
+            if is_file_valid in [1, True, 'True', 'true', '1', 'y', 'yes']:
+                dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"], self.logger.exception,\
                                     "Lost file must set to invalid" )
         else: lost = 0
 
@@ -390,7 +390,7 @@ class DBSWriterModel(DBSReaderModel):
         except dbsException as de:
             for f in logical_file_name:
                 if '*' in f or '%' in f:
-                    dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"],self.logger.exception,"No \
+                    dbsExceptionHandler("dbsException-invalid-input2", dbsExceptionCode["dbsException-invalid-input2"], self.logger.exception, "No \
                     wildcard allow in LFN" )
             self.dbsFile.updateStatus(logical_file_name, is_file_valid, lost)
         except dbsException as de:
@@ -427,7 +427,7 @@ class DBSWriterModel(DBSReaderModel):
             sError = "DBSWriterModel\updateDataset. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(block_name=basestring, open_for_writing=(int,basestring), origin_site_name=basestring)
+    @inputChecks(block_name=basestring, open_for_writing=(int, basestring), origin_site_name=basestring)
     def updateBlock(self, block_name="", open_for_writing=-1, origin_site_name=""):
         """
         API to update block status

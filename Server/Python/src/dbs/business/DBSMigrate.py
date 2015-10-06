@@ -508,7 +508,7 @@ class DBSMigrate:
         try:
             if migration_block:
                 upst = dict(migration_status=migration_status,
-                        migration_block_id=migration_block,last_modification_date=dbsUtils().getTime())
+                        migration_block_id=migration_block, last_modification_date=dbsUtils().getTime())
             elif migration_request:
                 upst = dict(migration_status=migration_status, migration_request_id=migration_request,
                             last_modification_date=dbsUtils().getTime())
@@ -553,7 +553,7 @@ class DBSMigrate:
         """
         #resturl = "%s/datasetparents?dataset=%s" % (url, dataset)
         params={'dataset':dataset}
-        return cjson.decode(self.callDBSService(url, 'datasetparents', params,{}))
+        return cjson.decode(self.callDBSService(url, 'datasetparents', params, {}))
 
     def getSrcBlockParents(self, url, block):
         """

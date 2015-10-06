@@ -45,7 +45,7 @@ def checkInputParameter(method, parameters, validParameters, requiredParameters=
                                      % (method, parameter, validParameters))
 
     if requiredParameters is not None:
-        if requiredParameters.has_key('multiple'):
+        if 'multiple' in requiredParameters:
             match = False
             for requiredParameter in requiredParameters['multiple']:
                 if requiredParameter!='detail' and requiredParameter in parameters:
@@ -56,14 +56,14 @@ def checkInputParameter(method, parameters, validParameters, requiredParameters=
                                          "API %s does require one of the parameters %s" \
                                          % (method, requiredParameters['multiple']))
 
-        if requiredParameters.has_key('forced'):
+        if 'forced' in requiredParameters:
             for requiredParameter in requiredParameters['forced']:
                 if requiredParameter not in parameters:
                     raise dbsClientException("Invalid input",
                                              "API %s does require the parameter %s. Forced required parameters are %s" \
-                                             % (method, requiredParameter,requiredParameters['forced']))
+                                             % (method, requiredParameter, requiredParameters['forced']))
 
-        if requiredParameters.has_key('standalone'):
+        if 'standalone' in requiredParameters:
             overlap = []
             for requiredParameter in requiredParameters['standalone']:
                 if requiredParameter in parameters:
@@ -117,7 +117,7 @@ def split_calls(func):
             for key, value in kwargs.iteritems():
                 ###only one (first) list at a time is splitted,
                 ###currently only file lists are supported
-                if key in ('logical_file_name','block_name', 'lumi_list', 'run_num') and isinstance(value, list):
+                if key in ('logical_file_name', 'block_name', 'lumi_list', 'run_num') and isinstance(value, list):
                     ret_val = []
                     for splitted_param in list_parameter_splitting(data=dict(kwargs), #make a copy, since it is manipulated
                                                                    key=key,
@@ -212,12 +212,12 @@ class DbsApi(object):
         """
         data = http_error.body
         try:
-            if isinstance(data,str):
+            if isinstance(data, str):
                 data = cjson.decode(data)
         except:
             raise http_error
 
-        if isinstance(data, dict) and data.has_key('exception'):# re-raise with more details
+        if isinstance(data, dict) and 'exception' in data:# re-raise with more details
             raise HTTPError(http_error.url, data['exception'], data['message'], http_error.header, http_error.body)
 
         raise http_error
@@ -290,7 +290,7 @@ class DbsApi(object):
         :key end_date: end data of the acquisition era (unixtime, int) (Optional)
 
         """
-        return self.__callServer("acquisitioneras", data=acqEraObj , callmethod='POST' )
+        return self.__callServer("acquisitioneras", data=acqEraObj, callmethod='POST' )
 
     def insertBlock(self, blockObj):
         """
@@ -305,7 +305,7 @@ class DbsApi(object):
         :key origin_site_name: Origin Site Name (Required)
 
         """
-        return self.__callServer("blocks", data=blockObj , callmethod='POST' )
+        return self.__callServer("blocks", data=blockObj, callmethod='POST' )
 
     def insertBulkBlock(self, blockDump):
         """
@@ -314,7 +314,7 @@ class DbsApi(object):
         :type blockDump: dict
 
         """
-        return self.__callServer("bulkblocks", data=blockDump , callmethod='POST' )
+        return self.__callServer("bulkblocks", data=blockDump, callmethod='POST' )
 
     def insertDataset(self, datasetObj):
         """
@@ -335,7 +335,7 @@ class DbsApi(object):
         :key output_configs: List(dict) with keys release_version, pset_hash, app_name, output_module_label and global tag
 
         """
-        return self.__callServer("datasets", data = datasetObj , callmethod='POST' )
+        return self.__callServer("datasets", data = datasetObj, callmethod='POST' )
 
     def insertDataTier(self, dataTierObj):
         """
@@ -346,7 +346,7 @@ class DbsApi(object):
         :key data_tier_name: Data Tier that needs to be inserted
 
         """
-        return self.__callServer("datatiers", data = dataTierObj , callmethod='POST' )
+        return self.__callServer("datatiers", data = dataTierObj, callmethod='POST' )
 
     def insertFiles(self, filesList, qInserts=False):
         """
@@ -375,8 +375,8 @@ class DbsApi(object):
         """
 
         if not qInserts: #turn off qInserts
-            return self.__callServer("files", params={'qInserts': qInserts}, data=filesList , callmethod='POST' )
-        return self.__callServer("files", data=filesList , callmethod='POST' )
+            return self.__callServer("files", params={'qInserts': qInserts}, data=filesList, callmethod='POST' )
+        return self.__callServer("files", data=filesList, callmethod='POST' )
 
     def insertOutputConfig(self, outputConfigObj):
         """
@@ -393,7 +393,7 @@ class DbsApi(object):
         :key pset_name: Pset Name (Optional, default is None)
 
         """
-        return self.__callServer("outputconfigs", data=outputConfigObj , callmethod='POST' )
+        return self.__callServer("outputconfigs", data=outputConfigObj, callmethod='POST' )
 
     def insertPrimaryDataset(self, primaryDSObj):
         """
@@ -417,7 +417,7 @@ class DbsApi(object):
         :key description: Description (Optional)
 
         """
-        return self.__callServer("processingeras", data=procEraObj , callmethod='POST' )
+        return self.__callServer("processingeras", data=procEraObj, callmethod='POST' )
 
     def listApiDocumentation(self):
         """
@@ -533,7 +533,7 @@ class DbsApi(object):
         :rtype: list of dicts
 
         """
-        validParameters = ['dataset','block_name', 'data_tier_name', 'origin_site_name',
+        validParameters = ['dataset', 'block_name', 'data_tier_name', 'origin_site_name',
                            'logical_file_name', 'run_num', 'open_for_writing', 'min_cdate',
                            'max_cdate', 'min_ldate', 'max_ldate',
                            'cdate', 'ldate', 'detail']
@@ -664,7 +664,7 @@ class DbsApi(object):
                            'run_num', 'physics_group_name', 'logical_file_name',
                            'primary_ds_name', 'primary_ds_type', 'data_tier_name',
                            'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
-                           'min_cdate','max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate',
+                           'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate',
                            'detail', 'dataset_id']
 
         #set defaults
@@ -1047,7 +1047,7 @@ class DbsApi(object):
                             lapp = i[1]-i[0]+1
                 if sm:
                     split_lumi_list.append(sm)
-            elif key in ('logical_file_name','run_num', 'lumi_list') and isinstance(value, list) and len(value)>max_list_len:
+            elif key in ('logical_file_name', 'run_num', 'lumi_list') and isinstance(value, list) and len(value)>max_list_len:
                 mykey =key
 #
         if mykey:  
@@ -1068,7 +1068,7 @@ class DbsApi(object):
         #Make sure this changes when we move to 2.7 or 3.0
         #http://stackoverflow.com/questions/11092511/python-list-of-unique-dictionaries
         # YG May-26-2015
-        return dict((v['logical_file_name'],v) for v in results).values()
+        return dict((v['logical_file_name'], v) for v in results).values()
 
     def listFileSummaries(self, **kwargs):
         """

@@ -26,7 +26,7 @@ class GetID(DBFormatter):
         returns id for a given application
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/ApplicationExecutable/GetID. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ApplicationExecutable/GetID. Expects db connection from upper layer.")
             
         binds = {"app_name":name}
         result = self.dbi.processData(self.sql, binds, conn, transaction)

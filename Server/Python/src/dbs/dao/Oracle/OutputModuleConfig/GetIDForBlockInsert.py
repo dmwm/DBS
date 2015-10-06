@@ -37,7 +37,7 @@ class GetIDForBlockInsert(DBFormatter):
         you better have them in blockInsert
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/OutputModuleConfig/GetIDForBlockInsert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/OutputModuleConfig/GetIDForBlockInsert. Expects db connection from upper layer.")
 
         binds = {}
         binds["app_name"]=app

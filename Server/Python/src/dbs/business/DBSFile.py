@@ -53,7 +53,7 @@ class DBSFile:
         if((logical_file_name=='' or '*'in logical_file_name or '%' in logical_file_name) \
             and (block_name=='' or '*' in block_name or '%' in block_name) and input_body==-1 ):
             dbsExceptionHandler('dbsException-invalid-input', \
-                "Fully specified logical_file_name or block_name is required if GET is called. No wildcards are allowed." ,
+                "Fully specified logical_file_name or block_name is required if GET is called. No wildcards are allowed.",
 		 self.logger.exception, "Fully specified logical_file_name or block_name is required if GET is called. No wildcards are allowed.")
         elif input_body != -1 :
             try:
@@ -283,7 +283,7 @@ class DBSFile:
             block_id = -1
             dsconfigs = []
             for f in businput:
-                if not (f.has_key("logical_file_name") and f.has_key("block_name") and f.has_key("dataset") ):
+                if not ("logical_file_name" in f and "block_name" in f and "dataset" in f ):
                     dbsExceptionHandler('dbsException-invalid-input', "DBSFile/insertFile must have logical_file_name, block_name and dataset as input")
                 if f["block_name"].split('#')[0] != f["dataset"]:
                     dbsExceptionHandler('dbsException-invalid-input', "DBSFile/insertFile: dataset and block_name NOT match")
@@ -308,7 +308,7 @@ class DBSFile:
 			    if  b["open_for_writing"] != 1 : 
 				dbsExceptionHandler("dbsException-conflict-data", "Block closed", None,
 				    "Block %s is not open for writting" %f["block_name"])
-			    if b.has_key("block_id"):
+			    if "block_id" in b:
 				block_id = b["block_id"]
 			    else:
 				dbsExceptionHandler("dbsException-missing-data", "Block not found", None,
@@ -382,7 +382,7 @@ class DBSFile:
 
                 #process file parents, file lumi, file outputmodconfigs, ...
                 #file lumi sections
-                if f.has_key("file_lumi_list"):
+                if "file_lumi_list" in f:
                     fllist = f["file_lumi_list"]
                     if len(fllist) > 0:
                         for fl in fllist:
@@ -393,7 +393,7 @@ class DBSFile:
                             fldao["file_id"] = filein["file_id"]
                             flumis2insert.append(fldao)
 
-                if f.has_key("file_parent_list"):
+                if "file_parent_list" in f:
                     #file parents
                     fplist = f["file_parent_list"]
 
@@ -402,7 +402,7 @@ class DBSFile:
                         fpdao["this_file_id"] = filein["file_id"]
                         fpdao["parent_logical_file_name"] = fp["file_parent_lfn"]
                         fparents2insert.append(fpdao)
-                if f.has_key("file_output_config_list"):
+                if "file_output_config_list" in f:
                     #file output config modules
                     foutconfigs = f["file_output_config_list"]
                     if(len(foutconfigs) > 0):

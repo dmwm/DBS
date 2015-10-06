@@ -42,7 +42,7 @@ if __name__ == '__main__':
         cur.execute("CREATE TABLE Statistics(Id INTEGER PRIMARY KEY, Query TEXT, ApiCall TEXT, ClientTiming DOUBLE, ServerTiming DOUBLE, ServerTimeStamp INT, ContentLength INT)")
         
         for file_name in file_names:
-            with file(file_name,'r') as f:
+            with file(file_name, 'r') as f:
                 try:
                     stats = json.load(f).get("stats")
                 except ValueError as ex:

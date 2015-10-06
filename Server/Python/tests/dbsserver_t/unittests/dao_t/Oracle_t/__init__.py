@@ -5,7 +5,7 @@ Oracle DAO unittests package.
 __revision__ = "$Id: __init__.py,v 1.1 2010/01/01 19:54:40 akhukhun Exp $"
 __version__ = "$Revision: 1.1 $"
 
-__all__ = ['PrimaryDataset_t','Dataset_t', 'Block_t', 'File_t', 
+__all__ = ['PrimaryDataset_t', 'Dataset_t', 'Block_t', 'File_t', 
            'DatasetParent_t', 'OutputModuleConfig_t', 'FileLumi_t', 
            'FileParent_t']
 

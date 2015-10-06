@@ -113,7 +113,7 @@ class DBSValidation_t(unittest.TestCase):
                  'output_module_label': output_module_label, 'global_tag' : global_tag},
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date' : 1234, 'create_by' : 'anzar', "last_modification_date" : 1234, "last_modified_by" : "anzar",
+            'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
         self.api.insertDataset(datasetObj=data)
@@ -179,7 +179,7 @@ class DBSValidation_t(unittest.TestCase):
         self.api.insertPrimaryDataset(primaryDSObj=pridata)
         primary_ds_name_parent = primary_ds_name+'_parent'
 
-        dataset_parent = "/%s/%s/%s" % (primary_ds_name_parent,procdataset_parent,tier)
+        dataset_parent = "/%s/%s/%s" % (primary_ds_name_parent, procdataset_parent, tier)
         data = {
             'physics_group_name': 'Tracker', 'dataset': dataset_parent,
             'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset_parent,
@@ -189,7 +189,7 @@ class DBSValidation_t(unittest.TestCase):
                  'output_module_label': output_module_label, 'global_tag': global_tag},
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date' : 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
+            'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
         self.api.insertDataset(datasetObj=data)
@@ -287,7 +287,7 @@ class DBSValidation_t(unittest.TestCase):
         self.api.updateFileStatus(logical_file_name=logical_file_name, is_file_valid=0)
         #listfile
         filesInDBS=self.api.listFiles(logical_file_name=logical_file_name, detail=True)
-        self.assertEqual(len(filesInDBS) ,1)
+        self.assertEqual(len(filesInDBS), 1)
         self.assertEqual(filesInDBS[0]['is_file_valid'], 0)
 
     def test09(self):
@@ -321,7 +321,7 @@ class DBSValidation_t(unittest.TestCase):
                     if key == "description":
                         print "----input description---"
                         print value
-                    self.assertTrue(output.has_key(key))
+                    self.assertTrue(key in output)
                     if key == "processing_era":
                         print "---------output value -----------"
                         print output[key]
@@ -352,7 +352,7 @@ class DBSValidation_t(unittest.TestCase):
         toMigrate = {'migration_url': self.source_url,
                      'migration_input': dataset_to_migrate}
         migration_request = self.migration_api.submitMigration(toMigrate)
-        self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))
+        self.assertTrue('migration_request_id' in migration_request['migration_details'])
         migration_request_id = migration_request['migration_details']['migration_request_id']
         print "____toMigrate___"
         print toMigrate
@@ -381,7 +381,7 @@ class DBSValidation_t(unittest.TestCase):
                                 del output[key][key2remove]
                             except KeyError:
                                 pass
-                    self.assertTrue(output.has_key(key))
+                    self.assertTrue(key in output)
                     check(value, output[key])
             elif isinstance(input, list):
                 for element_in, element_out in zip(sorted(remove_non_comparable_keys(input, non_comparable_keys)),
@@ -413,7 +413,7 @@ class DBSValidation_t(unittest.TestCase):
         toMigrate = {'migration_url': self.source_url,
                      'migration_input': block_to_migrate}
         migration_request = self.migration_api.submitMigration(toMigrate)
-        self.assertTrue(migration_request['migration_details'].has_key('migration_request_id'))
+        self.assertTrue('migration_request_id' in migration_request['migration_details'])
         migration_request_id = migration_request['migration_details']['migration_request_id']
         print "____toMigrate___"
         print toMigrate
@@ -442,7 +442,7 @@ class DBSValidation_t(unittest.TestCase):
                                 del output[key][key2remove]
                             except KeyError:
                                 pass
-                    self.assertTrue(output.has_key(key))
+                    self.assertTrue(key in output)
                     check(value, output[key])
             elif isinstance(input, list):
                 for element_in, element_out in zip(sorted(remove_non_comparable_keys(input, non_comparable_keys)),
@@ -476,7 +476,7 @@ class DBSValidation_t(unittest.TestCase):
         """test15: Test to get server information"""
         reg_ex = r'^(3+\.[0-9]+\.[0-9]+[\.\-a-z0-9]*$)'
         version = self.api.serverinfo()
-        self.assertTrue(version.has_key('dbs_version'))
+        self.assertTrue('dbs_version' in version)
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
 
 if __name__ == "__main__":

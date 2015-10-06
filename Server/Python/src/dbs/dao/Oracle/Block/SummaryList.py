@@ -63,7 +63,7 @@ class SummaryList(DBFormatter):
         else:
             # Oracle IN only supports a maximum of 1,000 values
             # (ORA-01795: maximum number of expressions in a list is 1000)
-            if isinstance(block_name,basestring):
+            if isinstance(block_name, basestring):
                 block_name=[block_name]
             block_clause = "BS.BLOCK_NAME IN (SELECT TOKEN FROM TOKEN_GENERATOR) "
             generatedsql, run_binds = create_token_generator(block_name)

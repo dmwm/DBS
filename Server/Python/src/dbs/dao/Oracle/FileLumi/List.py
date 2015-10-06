@@ -36,8 +36,8 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 	lfn_generator = ""
 	run_generator = ""
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileLumi/List. Expects db connection from upper layer.")            
-        if logical_file_name and not isinstance(logical_file_name,list):
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileLumi/List. Expects db connection from upper layer.")            
+        if logical_file_name and not isinstance(logical_file_name, list):
             binds = {'logical_file_name': logical_file_name}
             if int(validFileOnly) == 0:
 		if migration:   #migration always call with single file and include all files no matter valid or not.
@@ -58,7 +58,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 				     WHERE F.IS_FILE_VALID = 1 AND F.LOGICAL_FILE_NAME = :logical_file_name 
 				     AND DT.DATASET_ACCESS_TYPE in ('VALID', 'PRODUCTION') 
 				 """.format(owner=self.owner)
-        elif logical_file_name and isinstance(logical_file_name,list):
+        elif logical_file_name and isinstance(logical_file_name, list):
 	    sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID """.format(owner=self.owner)	
             lfn_generator, binds = create_token_generator(logical_file_name)
             if validFileOnly == 0:
@@ -139,7 +139,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 	    for i in result:
 		r = i['run_num']
 		f = i['logical_file_name']
-		file_run_lumi.setdefault((f,r), []).append(i['lumi_section_num'])
+		file_run_lumi.setdefault((f, r), []).append(i['lumi_section_num'])
 	    for k, v in file_run_lumi.iteritems():
 		yield {'logical_file_name':k[0], 'run_num':k[1], 'lumi_section_num':v}
         del file_run_lumi

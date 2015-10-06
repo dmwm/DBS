@@ -67,7 +67,7 @@ class DBSDataProvider(object):
         return ret_val
 
     def files(self, block_name):
-        if not (hasattr(self, '_files') and self._files.has_key(block_name)):
+        if not (hasattr(self, '_files') and block_name in self._files):
             self._files[block_name] = []
             for i in xrange(self._num_of_files):
                 logical_file_name = self._generate_file_name(i)
@@ -85,7 +85,7 @@ class DBSDataProvider(object):
 
     def _generate_adler32(self):
         "generates adler32 checksum"
-        return random.randint(1000,9999)
+        return random.randint(1000, 9999)
 
     def _generate_auto_cross_section(self):
         "generate auto cross section for a given file, if not already available"
@@ -100,11 +100,11 @@ class DBSDataProvider(object):
 
     def _generate_block_is_open(self):
         "generates block is open status"
-        return random.randint(0,1)
+        return random.randint(0, 1)
 
     def _generate_cksum(self):
         "generates checksum"
-        return random.randint(1000,9999)
+        return random.randint(1000, 9999)
 
     def _generate_event_count(self):
         "generate event count for a given file, if not already available"
@@ -130,9 +130,9 @@ class DBSDataProvider(object):
              self._uid,
              file_counter)
 
-    def _generate_file_size(self, func='gauss', params=(1000000000,90000000)):
+    def _generate_file_size(self, func='gauss', params=(1000000000, 90000000)):
         "generates new file size"
-        return int(abs(getattr(random,func)(*params)))
+        return int(abs(getattr(random, func)(*params)))
 
     def _generate_file_lumi_list(self):
         "generate file lumi list for a given file, if not already available"
@@ -181,7 +181,7 @@ class DBSDataProvider(object):
         "return block is open"
         if not hasattr(self, '_block_is_open'):
             self._block_is_open = {block_name : self._generate_block_is_open()}
-        elif not self._block_is_open.has_key(block_name):
+        elif block_name not in self._block_is_open:
             self._block_is_open.update({block_name : self._generate_block_is_open()})
 
         return self._block_is_open[block_name]
@@ -189,7 +189,7 @@ class DBSDataProvider(object):
     @property
     def dataset_access_type(self):
         "return dataset access type"
-        if not hasattr(self,'_dataset_access_type'):
+        if not hasattr(self, '_dataset_access_type'):
             self._dataset_access_type = "VALID"
         return self._dataset_access_type
 
@@ -251,7 +251,7 @@ class DBSDataProvider(object):
         "return primary dataset type"
         if not hasattr(self, '_primary_ds_type'):
             primary_ds_types = ['mc', 'data']
-            self._primary_ds_type = primary_ds_types[random.randint(0,1)]
+            self._primary_ds_type = primary_ds_types[random.randint(0, 1)]
         return self._primary_ds_type
 
     @property

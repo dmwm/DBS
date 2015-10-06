@@ -9,7 +9,7 @@ class Insert(InsertSingle):
     """ DAO for Insert Site """
     def execute( self, conn, daoinput, transaction=False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/Site/Insert. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Site/Insert. Expects db connection from upper layer.")
 
         self.executeSingle(conn, daoinput, "SITES", transaction)
         

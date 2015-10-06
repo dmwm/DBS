@@ -101,7 +101,7 @@ if __name__ == "__main__":
             raise ex
 
     if reader_tests and writer_tests:
-        plot_manager.add_stacked_histos(categories=['reader_stats','writer_stats'])
+        plot_manager.add_stacked_histos(categories=['reader_stats', 'writer_stats'])
 
     plot_manager.draw_histos()
 

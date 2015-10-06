@@ -18,7 +18,7 @@ class StatsPipeClient(object):
 
     def __send(self, stats):
         try:
-            self.f = open(self.named_pipe,'wb')
+            self.f = open(self.named_pipe, 'wb')
             cPickle.dump(stats, self.f, cPickle.HIGHEST_PROTOCOL)
             self.f.close()
         except IOError as self._ex:

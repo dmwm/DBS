@@ -13,12 +13,12 @@ def stripChangingParameters(data):
                    'last_modified_by', 'last_modification_date', 'dataset_id', 'origin_site_name', 'child_dataset_id',
                    'parent_dataset_id', 'file_id', 'file_type_id', 'block_id', 'start_date', 'end_date']
 
-    if isinstance(data,dict):
+    if isinstance(data, dict):
         for key in keys2remove:
-            if data.has_key(key):
+            if key in data:
                 del data[key]
 
-    elif isinstance(data,list):
+    elif isinstance(data, list):
         data = [stripChangingParameters(entry) for entry in data]
 
     else:
@@ -191,10 +191,10 @@ class PostDeploymentTests(unittest.TestCase):
         result = []
 
         if len(acquisitioneras) != 0:
-            result.append(acquisitioneras[0].has_key("acquisition_era_name"))
-            result.append(acquisitioneras[0].has_key("create_by"))
-            result.append(acquisitioneras[0].has_key("description"))
-            result.append(acquisitioneras[0].has_key("creation_date"))
+            result.append("acquisition_era_name" in acquisitioneras[0])
+            result.append("create_by" in acquisitioneras[0])
+            result.append("description" in acquisitioneras[0])
+            result.append("creation_date" in acquisitioneras[0])
 
         self.assertTrue(len(acquisitioneras) != 0)
         self.assertFalse(False in result)
@@ -406,10 +406,10 @@ TEST_CHILD-v4711/RECO"))
         result = []
 
         if len(datatiers) != 0:
-            result.append(datatiers[0].has_key("create_by"))
-            result.append(datatiers[0].has_key("creation_date"))
-            result.append(datatiers[0].has_key("data_tier_name"))
-            result.append(datatiers[0].has_key("data_tier_id"))
+            result.append("create_by" in datatiers[0])
+            result.append("creation_date" in datatiers[0])
+            result.append("data_tier_name" in datatiers[0])
+            result.append("data_tier_id" in datatiers[0])
 
         self.assertTrue(len(datatiers) != 0)
         self.assertFalse(False in result)
@@ -429,8 +429,8 @@ TEST_CHILD-v4711/RECO"))
         result = []
 
         if len(datatypes) != 0:
-            result.append(datatypes[0].has_key("primary_ds_type_id"))
-            result.append(datatypes[0].has_key("data_type"))
+            result.append("primary_ds_type_id" in datatypes[0])
+            result.append("data_type" in datatypes[0])
 
         self.assertTrue(len(datatypes) != 0)
         self.assertFalse(False in result)
@@ -589,7 +589,7 @@ ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf57
 DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_%s.root' % i],
                           u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_%s.root' % j}
-                         for i, j in zip(xrange(10),xrange(10))]
+                         for i, j in zip(xrange(10), xrange(10))]
 
         parents = sorted(self.api.listFileParents(logical_file_name=["/store/mc/DBS3DeploymentTestPrimary/DBS3_\
 DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-\
@@ -785,7 +785,7 @@ DEPLOYMENT_TEST-v4711/RAW",
     def test_server_version(self):
         reg_ex = r'^(3+\.[0-9]+\.[0-9]+[\-\.a-z0-9]*$)'
         version = self.api.serverinfo()
-        self.assertTrue(version.has_key('dbs_version'))
+        self.assertTrue('dbs_version' in version)
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
 
 if __name__ == "__main__":

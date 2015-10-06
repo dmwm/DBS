@@ -12,9 +12,9 @@ import urllib
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url':os.environ.get("DBS_READER_URL","https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
+config = {'url':os.environ.get("DBS_READER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSReader/")}
 
-api = create_api('DbsApi',config=config)
+api = create_api('DbsApi', config=config)
 
 payload_handler = PayloadHandler()
 
@@ -31,7 +31,7 @@ for das_query in das_queries:
     api_call = getattr(api, api_call_name)
     query = das_query[api_call_name]
 
-    encoded_query = urllib.urlencode(query,doseq=True)
+    encoded_query = urllib.urlencode(query, doseq=True)
 
     timing = {'stats':{'query' : encoded_query, 'api' : api_call_name}}
 

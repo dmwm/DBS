@@ -13,9 +13,9 @@ from dbs.dao.Oracle.File.GetID import GetID as FileID
 class Insert_t(unittest.TestCase):
     @DaoConfig("DBSWriter")
     def __init__(self, methodName='runTest'):
-        super(Insert_t,self).__init__(methodName)
-        data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)),'test_data.pkl')
-        self.data_provider = create_dbs_data_provider(data_type='transient',data_location=data_location)
+        super(Insert_t, self).__init__(methodName)
+        data_location = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data.pkl')
+        self.data_provider = create_dbs_data_provider(data_type='transient', data_location=data_location)
         self.lumi_data = self.data_provider.get_file_lumi_data(regenerate=True)[0]
                  
     def setUp(self):

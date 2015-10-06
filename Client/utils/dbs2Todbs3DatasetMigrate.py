@@ -88,9 +88,9 @@ class migrateDBS2TODBS3:
 				
 			if name == 'processed_dataset':
 				self.dataset=	{
-						"is_dataset_valid": 1 , "primary_ds_name": self.primary_dataset, "primary_ds_type": "test", 
-						"dataset_access_type":"PRODUCTION",
-						"global_tag": attrs.get('global_tag'),"xtcrosssection":123,"physics_group_name": "Tracker", 
+						"is_dataset_valid": 1, "primary_ds_name": self.primary_dataset, "primary_ds_type": "test", 
+						"dataset_access_type": "PRODUCTION",
+						"global_tag": attrs.get('global_tag'), "xtcrosssection": 123, "physics_group_name": "Tracker", 
 						#"processing_version" : "1", 
 						#"acquisition_era_name" : attrs.get('acquisition_era')
 						"processed_ds_name": attrs.get('processed_datatset_name'),
@@ -211,10 +211,10 @@ class migrateDBS2TODBS3:
 					block_time['file_lumi_section_count']=0
 					block_time['file_parent_count']=0
 					for file in self.files:
-						if file.has_key('file_lumi_list'):
+						if 'file_lumi_list' in file:
 							block_time['block_weight']+=long(len(file['file_lumi_list']))
 							block_time['file_lumi_section_count']+=long(len(file['file_lumi_list']))
-						if file.has_key('file_parent_list'):
+						if 'file_parent_list' in file:
 							block_time['block_weight']+=long(len(file['file_parent_list']))
 							block_time['file_parent_count']+=long(len(file['file_parent_list']))
 					#print "fin"

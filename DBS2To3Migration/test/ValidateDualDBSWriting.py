@@ -529,7 +529,7 @@ class DBQuery(object):
         logger = logging.getLogger()
         dbFactory = DBFactory(logger, connectUrl, options={})
         self.dbi = dbFactory.connect()
-        self.dbFormatter = DBFormatter(logger,self.dbi)
+        self.dbFormatter = DBFormatter(logger, self.dbi)
 
     def execute(self, query, binds={}):
         connection = self.dbi.connection()

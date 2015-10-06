@@ -22,7 +22,7 @@ class DeleteFiles(DBFormatter):
 	simple execute
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed","Oracle/FileBuffer/DeleteFiles. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileBuffer/DeleteFiles. Expects db connection from upper layer.")
 
         self.dbi.processData(self.sql, logical_file_name, conn, transaction, returnCursor=True)
 

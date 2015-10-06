@@ -126,7 +126,7 @@ public class %s extends JSONObject  {
         public %s ( %s ) throws Exception  {
 		%s
         }
-""" % ( classname , ctor, putonce )
+""" % ( classname, ctor, putonce )
 
 		f=open(classname+".java", "w")
 		f.write(header)
