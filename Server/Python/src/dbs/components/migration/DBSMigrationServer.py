@@ -1,3 +1,4 @@
+from __future__ import print_function
 import time
 import cherrypy
 import threading
@@ -80,7 +81,11 @@ class SequencialTaskBase(object):
                 return
             try:
                 call()
+<<<<<<< HEAD
             except Exception, ex:
+=======
+            except Exception as ex:
+>>>>>>> b320fd79a8b5274ab2cd36f3f8ab3bea5e868484
                 #log the excpeiotn and break. 
                 #SequencialTasks are interconnected between functions  
                 MgrLogger.error( time.asctime(time.gmtime()) + str(ex))  #YG
@@ -114,7 +119,11 @@ class MigrationTask(SequencialTaskBase):
         self.inserted = True
         dbowner = self.db_config.get('dbowner')
         connectUrl = self.db_config.get('connectUrl')
+<<<<<<< HEAD
 	print connectUrl
+=======
+	print(connectUrl)
+>>>>>>> b320fd79a8b5274ab2cd36f3f8ab3bea5e868484
         dbFactory = DBFactory(MgrLogger, connectUrl, options={})
         self.dbi = dbFactory.connect()
         self.dbFormatter = DBFormatter(MgrLogger, self.dbi)
@@ -143,7 +152,11 @@ class MigrationTask(SequencialTaskBase):
                 self.dbsMigrate.updateMigrationRequestStatus(migration_status, self.migration_req_id)
             except IndexError: 
                 return #No request found. Exit.
+<<<<<<< HEAD
         except Exception, ex:
+=======
+        except Exception as ex:
+>>>>>>> b320fd79a8b5274ab2cd36f3f8ab3bea5e868484
             MgrLogger.error( time.asctime(time.gmtime()) + str(ex) )
             self.sourceUrl = None
             return   # don't need to go down.
@@ -172,7 +185,11 @@ class MigrationTask(SequencialTaskBase):
                 #MgrLogger.error("-"*20+ 'Regester ID: %s '%self.migration_req_id + 'Migration Block Names: ')
                 #MgrLogger.error("block_name: %s. Set all block status=1 " %self.block_names)
                 self.dbsMigrate.updateMigrationBlockStatus(migration_status=1, migration_block=self.migration_block_ids)
+<<<<<<< HEAD
         except Exception, ex:
+=======
+        except Exception as ex:
+>>>>>>> b320fd79a8b5274ab2cd36f3f8ab3bea5e868484
             self.sourceUrl = None
             #MgrLogger.error( time.asctime(time.gmtime()) + str(ex) )
             #print "set MIGRATION_STATUS = 3(failed) for blocks of MIGRATION_REQUESTS_ID=%s" %self.migration_req_id
@@ -196,14 +213,30 @@ class MigrationTask(SequencialTaskBase):
                         self.DBSBlockInsert.putBlock(data, migration=True)
                         migration_status = 2
 		    except HTTPError as he:
+<<<<<<< HEAD
 		        raise	
+=======
+                        if "Block %s already exists" % (bName) in str(he):
+                            migration_status = 2
+                        else:
+                            raise	
+>>>>>>> b320fd79a8b5274ab2cd36f3f8ab3bea5e868484
                     except dbsException as de:
                         if "Block %s already exists" % (bName) in de.message:
                             #the block maybe get into the destination by other means. 
                             #skip this block and continue.
                             migration_status = 2
                         else:
+<<<<<<< HEAD
                             raise 
+=======
+                            raise
+                    except Exception as ex:
+                        if "Block %s already exists" % (bName) in str(ex):
+                            migration_status = 2
+                        else:
+                            raise
+>>>>>>> b320fd79a8b5274ab2cd36f3f8ab3bea5e868484
                     finally:
                         if  migration_status == 2:
                             self.dbsMigrate.updateMigrationBlockStatus(migration_status=2,

@@ -1,6 +1,7 @@
 """
 client writer unittests
 """
+from __future__ import print_function
 import os
 import sys
 import time
@@ -10,9 +11,9 @@ from dbs.apis.dbsClient import *
 from ctypes import *
 
 uid = uuid.uuid4().time_mid
-print "****uid=%s******" %uid
+print("****uid=%s******" %uid)
 
-print os.environ['DBS_WRITER_URL']
+print(os.environ['DBS_WRITER_URL'])
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 processing_version="%s" %(uid if (uid<9999) else uid%9999)
 acquisition_era_name="acq_era_%s" %uid

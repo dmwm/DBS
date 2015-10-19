@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from optparse import OptionParser
 
 from dbs.apis.dbsClient import DbsApi
@@ -24,10 +25,10 @@ if __name__ == '__main__':
 
     with open(options.blocks, 'r') as f:
         for block_name in f:
-            print "Checking block %s: " % block_name
+            print("Checking block %s: " % block_name)
             block_dump_src = sorted(api_src.blockDump(block_name=block_name))
             block_dump_dst = sorted(api_dst.blockDump(block_name=block_name))
             if block_dump_src == block_dump_dst:
-                print "Ok"
+                print("Ok")
             else:
-                print "Failure"
+                print("Failure")

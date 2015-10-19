@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import time
 import logging
@@ -14,8 +15,8 @@ class DBS3BusinessList(threading.Thread):
 
     def run(self):
         t = time.time()
-        print self.bo.listFiles("/GlobalAug07-C/Online/RAW")
-        print "Time: %s " % (time.time() - t)
+        print(self.bo.listFiles("/GlobalAug07-C/Online/RAW"))
+        print("Time: %s " % (time.time() - t))
 
 if __name__ == "__main__":
     for i in range(50):

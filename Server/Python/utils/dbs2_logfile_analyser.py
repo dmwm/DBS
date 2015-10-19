@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from optparse import OptionParser
 import json, os, re, sys, time
 import numpy
@@ -30,9 +31,9 @@ if __name__ == '__main__':
                 data.append(time.mktime(request_time))
 
     histo, bin_edges = numpy.histogram(data, int(max(data))-int(min(data)))
-    print "Mean: %s requests/s" % (numpy.mean(histo))
-    print "Median: %s requests/s" % (numpy.median(histo))
-    print "Standard deviation: %s requests/s" %(numpy.std(histo))
+    print("Mean: %s requests/s" % (numpy.mean(histo)))
+    print("Median: %s requests/s" % (numpy.median(histo)))
+    print("Standard deviation: %s requests/s" %(numpy.std(histo)))
     import matplotlib.pyplot as plt
     plt.bar(bin_edges[:-1], histo, width = 1)
     plt.xlim(min(bin_edges), max(bin_edges))

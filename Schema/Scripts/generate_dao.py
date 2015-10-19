@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 
 def makeMethodNameOld(str):
@@ -69,10 +70,10 @@ for aline in lines:
 		####Write down class header
 
 		dao_path="DAO/"+classname
-		print "classname::: "+classname
+		print("classname::: "+classname)
 		try: 
 			os.mkdir(dao_path)
-		except os.error, e:
+		except os.error as e:
 			if str(e).find ('File exists') != -1 : pass
 			else : raise e
 

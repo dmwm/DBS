@@ -1,6 +1,7 @@
 """
 web unittests
 """
+from __future__ import absolute_import
 import imp
 import os
 import re
@@ -10,7 +11,7 @@ import time
 from functools import wraps
 
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
-from DBSWriterModel_t import outDict
+from .DBSWriterModel_t import outDict
 from dbs.utils.dbsException import dbsException, dbsExceptionCode
 
 
@@ -20,7 +21,7 @@ def checkException400(f):
         out = None
         try:
             out = f(self, *args, **kwargs)
-        except Exception, ex:
+        except Exception as ex:
             if 'HTTPError 400' not in ex.args[0]:
                 self.fail("Exception was expected and was not raised.")
         else:

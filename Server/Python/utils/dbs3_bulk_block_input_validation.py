@@ -2,6 +2,7 @@
 """
 Script to validate the input of bulk block insert API using WMCore block dump
 """
+from __future__ import print_function
 from optparse import OptionParser
 from ast import literal_eval
 import glob
@@ -34,4 +35,4 @@ if __name__ == '__main__':
             except:
                 raise
             else:
-                print "Successfully validated!"
+                print("Successfully validated!")

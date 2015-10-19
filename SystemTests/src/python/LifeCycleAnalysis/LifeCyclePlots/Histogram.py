@@ -1,3 +1,4 @@
+from __future__ import print_function
 from ROOT import gStyle, TCanvas, TFile, TH1F, TH2F, THStack, TPaveStats
 
 class BasicHisto(object):
@@ -86,7 +87,7 @@ class BasicHisto(object):
         try:
             self._canvas.Print("%s/%s.%s" % (output_directory, self._name, format), format)
         except AttributeError:
-            print "You have to draw histograms before saving."
+            print("You have to draw histograms before saving.")
             pass
 
     def set_stats_style(self):
@@ -170,7 +171,7 @@ class StackedHisto(object):
         try:
             self._canvas.Print("%s/%s.%s" % (output_directory, self._name, format), format)
         except AttributeError:
-            print "You have to draw histograms before saving."
+            print("You have to draw histograms before saving.")
             pass
 
     def set_stats_style(self):

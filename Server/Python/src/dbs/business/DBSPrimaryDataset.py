@@ -81,7 +81,7 @@ class DBSPrimaryDataset:
             dbsExceptionHandler("dbsException-missing-data",
                 " DBSPrimaryDataset/insertPrimaryDataset. %s" % ie)
             self.logger.warning(" DBSPrimaryDataset/insertPrimaryDataset. Missing: %s" % ie)
-        except Exception, ex:
+        except Exception as ex:
             if (str(ex).lower().find("unique constraint") != -1 or
                 str(ex).lower().find("duplicate") != -1):
                 self.logger.warning("DBSPrimaryDataset/insertPrimaryDataset:" +

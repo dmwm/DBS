@@ -1,3 +1,4 @@
+from __future__ import print_function
 import subprocess
 #
 #subprocess.call("python2.6 test.py", shell=True)
@@ -19,7 +20,7 @@ for adst in ds_lst:
 	if adst.startswith("d ") : continue
 	else : 
 		cmd="python2.6 dbs2Todbs3DatasetMigrate.py %s %s" % (url, adst)
-		print cmd
+		print(cmd)
 		procs[adst]=subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
 	count += 1
 	done_ds += "d "+adst+"\n"
@@ -35,7 +36,7 @@ while wait == 1:
 		
 for item in procs.keys():
 	stdout_value = procs[item].communicate()[0]
-	print stdout_value
+	print(stdout_value)
 
 doneds_fs=open("done_datasets.txt", "w")
 doneds_fs.write(done_ds)

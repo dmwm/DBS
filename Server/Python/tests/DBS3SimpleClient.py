@@ -2,6 +2,7 @@
 """
 Very simple dbs3 client:
 """
+from __future__ import print_function
 
 __revision__ = "$Id: DBS3SimpleClient.py,v 1.8 2009/11/29 11:37:54 akhukhun Exp $"
 __version__ = "$Revision: 1.8 $"
@@ -51,6 +52,6 @@ if __name__ == "__main__":
            "yypy":"http://localhost/intlyy/"}
     CLI = DBS3Client(url[sys.argv[1]])
     res = CLI.get(sys.argv[2])
-    print json.dumps(res, sort_keys = True, indent = 4)
+    print(json.dumps(res, sort_keys = True, indent = 4))
     #print res
 

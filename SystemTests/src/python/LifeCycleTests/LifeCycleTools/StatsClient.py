@@ -21,7 +21,8 @@ class StatsPipeClient(object):
             self.f = open(self.named_pipe, 'wb')
             cPickle.dump(stats, self.f, cPickle.HIGHEST_PROTOCOL)
             self.f.close()
-        except IOError as self._ex:
+        except IOError as xxx_todo_changeme:
+            self._ex = xxx_todo_changeme
             if self._ex.errno == 32:
                 #means broken pipe, happens if the StatServer runs out of data
                 #and needs to re-open the connection, because of a thrown EOFError

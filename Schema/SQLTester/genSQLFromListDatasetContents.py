@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #
+from __future__ import print_function
 import sys
 from DBSAPI.dbsApi import DbsApi
 from DBSAPI.dbsException import *
@@ -28,7 +29,7 @@ try:
     for ablock in blocks:
 	data=api.listDatasetContents(dataset, ablock["Name"])
   	#print data
-	print "-- SQL Statements for Dataset : %s and Block : %s " % (dataset, ablock["Name"])
+	print("-- SQL Statements for Dataset : %s and Block : %s " % (dataset, ablock["Name"]))
   	class Handler (xml.sax.handler.ContentHandler):
 
 		def __init__(self):
@@ -113,30 +114,30 @@ try:
 		def endElement(self, name) :
 			if name == 'dbs':
 				#print self.sqls
-				print self.sqls['primary']
-				print self.sqls['processed']
-				print self.sqls['data_tier']
-				for x in self.sqls['paths'] : print x
-				print self.sqls['block'] 
-				for x in self.sqls['storage_element'] : print x			
-				for x in self.sqls['block_storage_elements'] : print x
-				for x in self.sqls['app_version'] : print x
-				for x in self.sqls['app_executable_name']: print x
-				for x in self.sqls['ps_hash'] : print x
-				for x in self.sqls['process_configurations'] : print x
-				for x in self.sqls['processed_dataset_algorithm'] : print x
-				for x in self.sqls['file'] : print x
+				print(self.sqls['primary'])
+				print(self.sqls['processed'])
+				print(self.sqls['data_tier'])
+				for x in self.sqls['paths'] : print(x)
+				print(self.sqls['block']) 
+				for x in self.sqls['storage_element'] : print(x)			
+				for x in self.sqls['block_storage_elements'] : print(x)
+				for x in self.sqls['app_version'] : print(x)
+				for x in self.sqls['app_executable_name']: print(x)
+				for x in self.sqls['ps_hash'] : print(x)
+				for x in self.sqls['process_configurations'] : print(x)
+				for x in self.sqls['processed_dataset_algorithm'] : print(x)
+				for x in self.sqls['file'] : print(x)
 				for x in self.sqls['lfn'] : 
 					for y in self.sqls['file_algorithm'] : y.replace('__FILE_LFN__', x)
 					for y in self.sqls['file_lumi_section'] : y.replace('__FILE_LFN__', x)	
-				for x in self.sqls['run'] : print x
-				print "\n\n"
+				for x in self.sqls['run'] : print(x)
+				print("\n\n")
 
   	xml.sax.parseString (data, Handler ())
 
-except DbsApiException, ex:
-  print "Caught API Exception %s: %s "  % (ex.getClassName(), ex.getErrorMessage() )
+except DbsApiException as ex:
+  print("Caught API Exception %s: %s "  % (ex.getClassName(), ex.getErrorMessage() ))
   if ex.getErrorCode() not in (None, ""):
-    print "DBS Exception Error Code: ", ex.getErrorCode()
+    print("DBS Exception Error Code: ", ex.getErrorCode())
 
 

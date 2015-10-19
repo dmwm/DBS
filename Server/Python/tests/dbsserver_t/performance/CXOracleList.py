@@ -1,3 +1,4 @@
+from __future__ import print_function
 import cx_Oracle
 import threading
 import time
@@ -37,10 +38,10 @@ WHERE D.DATASET = :dataset
         desc = cursor.description
         keys = [desc[i][0] for i in range(len(desc))]
         for r in cursor.fetchall():
-            dict(zip(keys, r))
+            dict(list(zip(keys, r)))
         cursor.close()
         connection.close()
-        print "Time: %s " % (time.time() - t)
+        print("Time: %s " % (time.time() - t))
 
 
 if __name__ == "__main__":

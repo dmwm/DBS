@@ -148,7 +148,7 @@ class DBSBlock:
             self.updatestatus.execute(conn, block_name, open_for_writing, dbsUtils().getTime(), trans)
             trans.commit()
             trans = None
-        except Exception, ex:
+        except Exception as ex:
             if trans:
                 trans.rollback()
             if conn:conn.close()
@@ -317,7 +317,7 @@ class DBSBlock:
 
             tran.commit()
             tran = None
-        except Exception, e:
+        except Exception as e:
             if str(e).lower().find("unique constraint") != -1 or str(e).lower().find("duplicate") != -1:
                 pass
             else:

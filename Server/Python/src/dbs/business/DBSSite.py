@@ -51,7 +51,7 @@ class DBSSite:
             businput["site_id"] = self.sm.increment(conn, "SEQ_SI", tran)
             self.sitein.execute(conn, businput, tran)
             tran.commit()
-        except Exception, ex:
+        except Exception as ex:
             if (str(ex).lower().find("unique constraint") != -1 or
                 str(ex).lower().find("duplicate") != -1):
                 # already exists, lets fetch the ID

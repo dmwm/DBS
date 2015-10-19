@@ -1,6 +1,7 @@
 """
 DBS SQL QUERIES for unittests to validate the DBS2 to DBS3 migration
 """
+from __future__ import print_function
 from WMCore.Database.DBFactory import DBFactory
 from WMCore.Database.DBFormatter import DBFormatter
 
@@ -768,7 +769,7 @@ class DBSSqlQueries(object):
             for i in range(split):
                 start = min_id + (i*stepwidth)
 
-                print "Progress: %i" % (int(float(i*stepwidth*100)/float(max_id-min_id))) 
+                print("Progress: %i" % (int(float(i*stepwidth*100)/float(max_id-min_id)))) 
 
                 if i != (split-1):
                     bind_dict = {"min_id": start, "max_id": start+stepwidth}

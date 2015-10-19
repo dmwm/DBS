@@ -77,7 +77,7 @@ class DBSOutputConfig:
             self.outmodin.execute(conn, businput, tran)
             tran.commit()
             tran = None
-        except SQLAlchemyIntegrityError, ex:
+        except SQLAlchemyIntegrityError as ex:
             if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                 #if the validation is due to a unique constrain break in OUTPUT_MODULE_CONFIGS
                 if str(ex).find("TUC_OMC_1") != -1: pass
@@ -87,16 +87,16 @@ class DBSOutputConfig:
                         self.outmodin.execute(conn, businput, tran)
                         tran.commit()
                         tran =  None
-                    except SQLAlchemyIntegrityError, ex1:
+                    except SQLAlchemyIntegrityError as ex1:
                         if str(ex1).find("unique constraint") != -1 and str(ex1).find("TUC_OMC_1") != -1: pass
-                    except Exception, e1:
+                    except Exception as e1:
                         if tran:
                             tran.rollback()
                             tran = None
                         raise
             else:
                 raise
-        except Exception, e:
+        except Exception as e:
             if tran:
                 tran.rollback()
             raise

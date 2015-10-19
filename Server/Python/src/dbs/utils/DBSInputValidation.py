@@ -38,7 +38,7 @@ def inputChecks(**_params_):
         def wrapped(*args, **kw):
             arg_names = _func_.func_code.co_varnames[:_func_.func_code.co_argcount]
             ka = {}
-            ka.update(zip(arg_names, args))
+            ka.update(list(zip(arg_names, args)))
             ka.update(kw)
             #print ka
             for name, value in ka.iteritems():
@@ -70,7 +70,7 @@ def inputChecks(**_params_):
                                 elif name =='validFileOnly': 
 				    try:
 				        int(value)
-				    except Exception, e:
+				    except Exception as e:
 				        dbsExceptionHandler("dbsException-invalid-input2", message="invalid value for %s" %name, serverError="invalid value %s for %s" %(value, name), logger=log.error)	
                                 elif name =='block_name':
                                     if '*' in value:
@@ -142,7 +142,7 @@ def inputChecks(**_params_):
                             #print ae
                             dbsExceptionHandler("dbsException-invalid-input2", message="Invalid Input Data %s...: Not Match Required Format" %value[:10],\
                                         serverError=serverLog, logger=log.error)
-			except Exception, e1:
+			except Exception as e1:
 			    raise	
 			
             return _func_(*args, **kw)

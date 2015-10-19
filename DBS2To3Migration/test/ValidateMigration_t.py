@@ -1,6 +1,7 @@
 """
 Unittests to validate the DBS2 to DBS3 migration
 """
+from __future__ import print_function
 
 import logging
 import unittest
@@ -20,7 +21,7 @@ except:
                             'reader' : 'oracle://reader:passwd@instance'
                             },
                             'databaseOwner' : 'owner'}"""
-    print msg
+    print(msg)
     raise
 
 
@@ -36,19 +37,19 @@ def listComparision(resultsDBS2, resultsDBS3):
         #find the difference
         for resultDBS2 in resultsDBS2:
             if resultDBS2 not in resultsDBS3:
-                print "No Match for: %s in DBS3" % (resultDBS2)
+                print("No Match for: %s in DBS3" % (resultDBS2))
                 diffList.append(resultDBS2)
 
         for resultDBS3 in resultsDBS3:
             if resultDBS3 not in resultsDBS2:
-                print "No Match for: %s in DBS2" % (resultDBS3)
+                print("No Match for: %s in DBS2" % (resultDBS3))
                 diffList.append(resultDBS3)
         return False
             
     else: # first hint that something is wrong
         for resultDBS2 in resultsDBS2:
             if resultDBS2 not in resultsDBS3:
-                print "No Match for: %s in DBS3" % (resultDBS2)
+                print("No Match for: %s in DBS3" % (resultDBS2))
                 diffList.append(resultDBS2)
                 
         if len(diffList) == abs(len(resultsDBS2)-len(resultsDBS3)):
@@ -57,7 +58,7 @@ def listComparision(resultsDBS2, resultsDBS3):
         else:
             for resultDBS3 in resultsDBS3:
                 if resultDBS3 not in resultsDBS2:
-                    print "No Match for: %s in DBS2" % (resultDBS3)
+                    print("No Match for: %s in DBS2" % (resultDBS3))
                     diffList.append(resultDBS3)
             return False
 
@@ -67,9 +68,9 @@ def diffKeys(resultDBS2, resultDBS3):
             if resultDBS3[i] == resultDBS2[i]:
                 pass
             else:
-                print "%s differs: %s,%s" % (i, resultDBS2[i], resultDBS3[i])
+                print("%s differs: %s,%s" % (i, resultDBS2[i], resultDBS3[i]))
         else:
-            print "DBS2 has no key %s" % (i)
+            print("DBS2 has no key %s" % (i))
 
 class CompareDBS2ToDBS3(unittest.TestCase):
     def __init__(self, methodName='runTest'):

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import logging
 from WMCore.Database.DBFactory import DBFactory
 
@@ -27,7 +28,7 @@ class Test:
 	"""
 	dao = FPBList.List(self.logger, self.dbi, "anzar")
 	ret=dao.execute(file_id=13841)
-	print ret
+	print(ret)
 
     def testListBlock(self):
 	dao = LBlock.List(self.logger, self.dbi, "__MYSQL__")

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from dbs.exceptions.dbsClientException import dbsClientException
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from RestClient.RestApi import RestApi
@@ -198,8 +199,7 @@ class DbsApi(object):
         try:
             json_ret=cjson.decode(self.http_response.body)
         except cjson.DecodeError:
-            print >> sys.stderr,\
-                "The server output is not a valid json, most probably you have a typo in the url.\n%s.\n" % self.url
+            print("The server output is not a valid json, most probably you have a typo in the url.\n%s.\n" % self.url, file=sys.stderr)
             raise dbsClientException("Invalid url", "Possible urls are %s" %self.http_response.body)
 
         return json_ret
@@ -1436,7 +1436,7 @@ if __name__ == "__main__":
     #read_proxy="http://cmsfrontier1.fnal.gov:3128"
     read_proxy=""
     api = DbsApi(url=url, proxy=read_proxy)
-    print api.serverinfo()
+    print(api.serverinfo())
     #print api.listPrimaryDatasets()
     #print api.listAcquisitionEras()
     #print api.listProcessingEras()

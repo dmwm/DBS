@@ -1,4 +1,5 @@
 """Module provides the the class for sql/ tests with cx_Oracle"""
+from __future__ import print_function
 
 __revision__ = "$Id: CXOracleSQL.py,v 1.1 2010/01/01 19:54:38 akhukhun Exp $"
 __version__ = "$Revision: 1.1 $"
@@ -18,18 +19,18 @@ class SQLTester:
     def execute(self, sql, binds={}):
         connection = cx_Oracle.connect(self.dburl) 
         cursor = connection.cursor()
-        print sql
-        print binds
+        print(sql)
+        print(binds)
         if binds:
             cursor.execute(sql, binds)
         else:
             cursor.execute(sql)
         desc = cursor.description
         keys = [desc[i][0] for i in range(len(desc))]
-        result = [dict(zip(keys, r)) for r in cursor.fetchall()]
+        result = [dict(list(zip(keys, r))) for r in cursor.fetchall()]
         cursor.close()
         connection.close()
-        print json.dumps(result, sort_keys=True, indent=4)
+        print(json.dumps(result, sort_keys=True, indent=4))
 
 if __name__ == "__main__":
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #DBS-3 imports
+from __future__ import print_function
 from dbs.apis.dbsClient import *
 #url="http://cmssrv48.fnal.gov:8989/DBSServlet"
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
@@ -11,8 +12,8 @@ dbs3api = DbsApi(url=url)
 #print dbs3api.listPrimaryDatasets()
 try:
     dbs3api.insertPrimaryDataset({"primary_ds_type": "test", "primary_ds_name": "yuyi_pri"})
-except Exception, e:
-    print e
+except Exception as e:
+    print(e)
 # Is service Alive
 """
 print dbs3api.ping()

@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 import cProfile
-from DBSReaderModel_t import DBSReaderModel_test
-from  DBSReaderModel_t import importCode
+from .DBSReaderModel_t import DBSReaderModel_test
+from  .DBSReaderModel_t import importCode
 infofile=open("info.dict", "r")
 testparams=importCode(infofile, "testparams", 0).info
 DBSReaderModel_test().setUp()

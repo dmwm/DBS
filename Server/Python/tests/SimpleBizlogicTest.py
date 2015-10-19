@@ -1,3 +1,4 @@
+from __future__ import print_function
 import logging
 from WMCore.Database.DBFactory import DBFactory
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
@@ -30,7 +31,7 @@ class Test:
 	bo.updateStatus('/store/mc/Winter09/TTbar-madgraph/GEN-SIM-DIGI-RECO/IDEAL_V11_FastSim_v1/0060/0A83790D-71E1-DD11-9732-001EC9AAA058.root', 1)
     def testRun(self):
 	bo = DBSRun(self.logger, self.dbi, self.owner)
-	print bo.listRuns(minRun=5, maxRun=9)
+	print(bo.listRuns(minRun=5, maxRun=9))
 
 
     def testPrimary(self):
