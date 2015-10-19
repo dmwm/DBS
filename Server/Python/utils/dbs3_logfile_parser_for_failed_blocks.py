@@ -6,6 +6,7 @@ grep -o -P \"(?<=Block name:\s)\S+$\" dbs-20130521.log | uniq  -d
 
 Not yet working since log files ar not consecutive at the moment
 """
+from __future__ import print_function
 from optparse import OptionParser
 
 import re
@@ -23,7 +24,7 @@ def get_command_line_options():
 
 def find_status_code(iterator):
     while True:
-        log_line = iterator.next()
+        log_line = next(iterator)
         match_obj = log_pattern.match(log_line)
         try:
             match_dict = match_obj.groupdict()
@@ -57,5 +58,5 @@ if __name__ == '__main__':
             if match_obj:
                 status_code = find_status_code(read_lines)
                 if status_code!='200':
-                    print match_obj.groupdict()['block_name']
-                    print status_code
+                    print(match_obj.groupdict()['block_name'])
+                    print(status_code)

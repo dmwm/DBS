@@ -83,7 +83,7 @@ class DBSDataset:
             self.updatestatus.execute(conn, dataset, is_dataset_valid, trans)
             trans.commit()
             trans = None
-        except Exception, ex:
+        except Exception as ex:
             if trans:
                 trans.rollback()
             raise ex
@@ -107,7 +107,7 @@ class DBSDataset:
             self.updatetype.execute(conn, dataset, dataset_access_type.upper(), trans)
             trans.commit()
             trans = None
-        except SQLAlchemyDatabaseError, ex:
+        except SQLAlchemyDatabaseError as ex:
             if str(ex).find("ORA-01407") != -1:
                 dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input", None, "DBSDataset/updateType. A Valid dataset_access_type is required.")
         finally:
@@ -273,7 +273,7 @@ class DBSDataset:
             try:
                 # insert the dataset
                 self.datasetin.execute(conn, dsdaoinput, tran)
-            except SQLAlchemyIntegrityError, ex:
+            except SQLAlchemyIntegrityError as ex:
                 if (str(ex).lower().find("unique constraint") != -1 or
                     str(ex).lower().find("duplicate") != -1):
                     # dataset already exists, lets fetch the ID
@@ -288,7 +288,7 @@ class DBSDataset:
                 if (str(ex).find("ORA-01400") ) != -1 :
                     dbsExceptionHandler("dbsException-missing-data", "insertDataset must have: dataset,\
                                           primary_ds_name, processed_ds_name, data_tier_name ")
-            except Exception, e:
+            except Exception as e:
                 raise       
 
             #FIXME : What about the READ-only status of the dataset
@@ -314,7 +314,7 @@ class DBSDataset:
                                                                                    anOutConfig["global_tag"]))
                     try:
                         self.datasetoutmodconfigin.execute(conn, dsoutconfdaoin, tran)
-                    except Exception, ex:
+                    except Exception as ex:
                         if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                             pass
                         else:

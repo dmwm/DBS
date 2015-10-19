@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from optparse import OptionParser
 import json, os, re, sys
 
@@ -57,6 +58,6 @@ if options.output:
     with open(options.output, 'w') as f:
         json.dump(log_entries, f)
 else:
-    print log_entries    
+    print(log_entries)    
     
     

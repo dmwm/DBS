@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
@@ -33,7 +34,7 @@ with TimingStat(migration_timing, stat_client, stats_name="migration_stats") as 
     request_timing = {'stats': {'api': 'submit', 'query': str(initial)}}
 
     migration_input = dict(migration_url=migration_url, migration_input=initial)
-    print "Putting migration_request: %s" % (migration_input)
+    print("Putting migration_request: %s" % (migration_input))
 
     with TimingStat(request_timing, stat_client) as request_timer:
         migration_task = api.submitMigration(migration_input)

@@ -142,7 +142,7 @@ class DBSFileBuffer:
                         try:
                             self.blkparentin.execute(conn, abp,
                                                 transaction=tran)
-                        except SQLAlchemyIntegrityError, ex:
+                        except SQLAlchemyIntegrityError as ex:
                             if (str(ex).find("unique constraint") != -1 or
                                 str(ex).lower().find("duplicate") != -1):
                                 pass
@@ -170,7 +170,7 @@ class DBSFileBuffer:
                         try:
                             self.dsparentin.execute(conn, adsp,
                                                     transaction=tran)
-                        except SQLAlchemyIntegrityError, ex:
+                        except SQLAlchemyIntegrityError as ex:
                             if (str(ex).find("unique constraint") != -1 or
                                 str(ex).lower().find("duplicate") != -1):
                                 pass
@@ -190,7 +190,7 @@ class DBSFileBuffer:
             # All good ?. 
             tran.commit()
 
-        except Exception, e:
+        except Exception as e:
             if tran:
                 tran.rollback()
             self.logger.exception(e)

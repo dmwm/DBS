@@ -6,6 +6,7 @@
  python EventsPerDay.py -d '/*/*Fall13-POST*/GEN-SIM'
                        
 """ 
+from __future__ import print_function
 import  sys, time
 from optparse import OptionParser
 from time import gmtime
@@ -73,7 +74,7 @@ def main():
 			f[day] = f[day] + b["num_event"] 
 	for i in range(lenth):
 		#print (lenth-1)-i, ":  ", f[i], "  ", sum(item['all'] for item in f[i:lenth]) 
-		print i, ": ", f[(lenth-1)-i], " ", sum(item for item in f[(lenth-1)-i:lenth])
+		print(i, ": ", f[(lenth-1)-i], " ", sum(item for item in f[(lenth-1)-i:lenth]))
 	sys.exit(0);
 
 if __name__ == "__main__":

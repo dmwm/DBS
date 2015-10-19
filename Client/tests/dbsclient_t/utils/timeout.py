@@ -1,3 +1,4 @@
+from __future__ import print_function
 from time import sleep
 import signal
 
@@ -21,11 +22,11 @@ class Timeout(object):
         raise TimeoutError("Call did not finish in %s s." % self._timeout)
 
 if __name__ == '__main__':
-    print "Testing sleep with 1 s and 2 s timeout"
+    print("Testing sleep with 1 s and 2 s timeout")
     with Timeout(2):
         sleep(1)
 
-    print "Testing infinite sleep and 1 s timeout"
+    print("Testing infinite sleep and 1 s timeout")
     with Timeout(1):
         while True:
             sleep(1)

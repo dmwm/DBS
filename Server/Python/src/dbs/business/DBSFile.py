@@ -3,6 +3,7 @@
 """
 This module provides business object class to interact with File.
 """
+from __future__ import print_function
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
@@ -61,7 +62,7 @@ class DBSFile:
                 run_num = input_body.get("run_num", -1)
                 validFileOnly = input_body.get("validFileOnly", 0)
                 block_name = ""
-            except cjson.DecodeError, de:
+            except cjson.DecodeError as de:
                 msg = "business/listFileLumis requires at least a list of logical_file_name. %s" % de
                 dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, msg)
         elif input_body != -1 and (logical_file_name is not None or block_name is not None): 
@@ -150,7 +151,7 @@ class DBSFile:
             self.updatestatus.execute(conn, logical_file_name, is_file_valid, lost, trans)
             trans.commit()
             trans = None
-        except Exception, ex:
+        except Exception as ex:
             if trans:
                 trans.rollback()
                 trans = None
@@ -193,7 +194,7 @@ class DBSFile:
         if ('%' in block_name):
             dbsExceptionHandler('dbsException-invalid-input', "You must specify exact block name not a pattern", self.logger.exception)
         elif ('%' in dataset):
-	    print "***** in dataset name"
+	    print("***** in dataset name")
             dbsExceptionHandler('dbsException-invalid-input', " You must specify exact dataset name not a pattern", self.logger.exception)
         elif (not dataset  and not block_name and (not logical_file_name or '%'in logical_file_name) ):
             dbsExceptionHandler('dbsException-invalid-input', """You must specify one of the parameter groups:  \
@@ -368,7 +369,7 @@ class DBSFile:
                         fileInserted = True
                     else:
                         file_clob['file'] = filein
-                except SQLAlchemyIntegrityError, ex:
+                except SQLAlchemyIntegrityError as ex:
                     if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                         # Lets move on to NEXT file, we do not want to continue processing this file
 
@@ -446,7 +447,7 @@ class DBSFile:
                     try:
                         self.logger.warning(file_clob)
                         self.filebufin.execute(conn, filein['logical_file_name'], block_id, file_clob, transaction=tran)
-                    except SQLAlchemyIntegrityError, ex:
+                    except SQLAlchemyIntegrityError as ex:
                         if str(ex).find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                             pass
                         else:
@@ -461,7 +462,7 @@ class DBSFile:
                             self.blkparentin.execute(conn, bkParentage2insert, transaction=tran)
                             dsParentage2insert={'this_dataset_id': filein["dataset_id"], 'parent_logical_file_name' : fp['parent_logical_file_name']}
                             self.dsparentin.execute(conn, dsParentage2insert, transaction=tran)
-                        except SQLAlchemyIntegrityError, ex:
+                        except SQLAlchemyIntegrityError as ex:
                             #ORA-00001
                             if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP") != -1) or str(ex).find("PK_BP") != -1 or str(ex).lower().find("duplicate") != -1:
                                 pass
@@ -481,7 +482,7 @@ class DBSFile:
             tran.commit()
             tran = None
 
-        except Exception, ex:
+        except Exception as ex:
             if tran:
                 tran.rollback()
                 tran = None

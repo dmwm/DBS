@@ -2,6 +2,7 @@
 DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
+from __future__ import print_function
 from random import choice
 import os
 import re
@@ -14,7 +15,7 @@ from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from dbs.apis.dbsClient import *
 
 uid = uuid.uuid4().time_mid
-print "****uid=%s******" % uid
+print("****uid=%s******" % uid)
 acquisition_era_name = "Acq_Era_%s" % uid
 processing_version = (uid if (uid < 9999) else uid % 9999)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
@@ -313,24 +314,24 @@ class DBSValidation_t(unittest.TestCase):
             if isinstance(input, dict):
                 for key, value in input.iteritems():
                     if key == "processing_era":
-                        print "------input value----"
-                        print value
+                        print("------input value----")
+                        print(value)
                     if key== "processing_version":
-                        print "---input processing_version--"
-                        print value
+                        print("---input processing_version--")
+                        print(value)
                     if key == "description":
-                        print "----input description---"
-                        print value
+                        print("----input description---")
+                        print(value)
                     self.assertTrue(key in output)
                     if key == "processing_era":
-                        print "---------output value -----------"
-                        print output[key]
+                        print("---------output value -----------")
+                        print(output[key])
                     if key== "processing_version":
-                        print "----output processing_version-----"
-                        print output[key]
+                        print("----output processing_version-----")
+                        print(output[key])
                     if key == "description":
-                        print "--------output description--------"
-                        print output[key]
+                        print("--------output description--------")
+                        print(output[key])
                     check(value, output[key])
             elif isinstance(input, list):
                 for element_in, element_out in zip(sorted(input), sorted(output)):
@@ -354,10 +355,10 @@ class DBSValidation_t(unittest.TestCase):
         migration_request = self.migration_api.submitMigration(toMigrate)
         self.assertTrue('migration_request_id' in migration_request['migration_details'])
         migration_request_id = migration_request['migration_details']['migration_request_id']
-        print "____toMigrate___"
-        print toMigrate
-        print "----------migration_request -----------"
-        print migration_request
+        print("____toMigrate___")
+        print(toMigrate)
+        print("----------migration_request -----------")
+        print(migration_request)
 
         ###check migration status for max. 300s (should be enough time to migrate the dataset)
         with Timeout(300):
@@ -415,10 +416,10 @@ class DBSValidation_t(unittest.TestCase):
         migration_request = self.migration_api.submitMigration(toMigrate)
         self.assertTrue('migration_request_id' in migration_request['migration_details'])
         migration_request_id = migration_request['migration_details']['migration_request_id']
-        print "____toMigrate___"
-        print toMigrate
-        print "----------migration_request -----------"
-        print migration_request 
+        print("____toMigrate___")
+        print(toMigrate)
+        print("----------migration_request -----------")
+        print(migration_request) 
 
         ###check migration status for max. 300s (should be enough time to migrate the dataset)
         with Timeout(300):

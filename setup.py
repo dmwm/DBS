@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys, os, os.path, re, shutil, string
 from distutils.core import setup, Command
 from distutils.command.build import build
@@ -170,7 +171,7 @@ def process_dependencies(system):
   for dependency in dependencies:
     dependant_system = systems[dependency]
     if dependant_system['srcdir'] != srcdir:
-      print "Dependencies have to be in the same root directory"
+      print("Dependencies have to be in the same root directory")
       sys.exit(1)
 
     dependants = process_dependencies(dependant_system)
@@ -236,11 +237,11 @@ class BuildCommand(Command):
   def finalize_options(self):
     # Check options.
     if self.system == None:
-      print "System not specified, please use '-s dbs-web', '-s dbs-client', '-s pycurl-client' or '-s dbs-migration'"
+      print("System not specified, please use '-s dbs-web', '-s dbs-client', '-s pycurl-client' or '-s dbs-migration'")
       sys.exit(1)
     elif self.system not in systems:
-      print "System %s unrecognised, please use '-s dbs-web', '-s dbs-client', '-s pycurl-client' or \
-'-s dbs-migration'" % self.system
+      print("System %s unrecognised, please use '-s dbs-web', '-s dbs-client', '-s pycurl-client' or \
+'-s dbs-migration'" % self.system)
       sys.exit(1)
 
     # Expand various sources and maybe do the c++ build.
@@ -285,15 +286,15 @@ class InstallCommand(install):
   def finalize_options(self):
     # Check options.
     if self.system == None:
-      print "System not specified, please use '-s dbs-web', 'dbs-client', 'pycurl-client', 'dbs-migration',\
-'LifeCycleTests' or 'LifeCycleAnalysis'"
+      print("System not specified, please use '-s dbs-web', 'dbs-client', 'pycurl-client', 'dbs-migration',\
+'LifeCycleTests' or 'LifeCycleAnalysis'")
       sys.exit(1)
     elif self.system not in systems:
-      print "System %s unrecognised, please use '-s dbs-web', 'dbs-client', 'pycurl-client', 'dbs-migration',\
-'LifeCycleTests' or 'LifeCycleAnalysis'" % self.system
+      print("System %s unrecognised, please use '-s dbs-web', 'dbs-client', 'pycurl-client', 'dbs-migration',\
+'LifeCycleTests' or 'LifeCycleAnalysis'" % self.system)
       sys.exit(1)
     if self.patch and not os.path.isdir("%s/xbin" % self.prefix):
-      print "Patch destination %s does not look like a valid location." % self.prefix
+      print("Patch destination %s does not look like a valid location." % self.prefix)
       sys.exit(1)
 
     # Expand various sources, but don't build anything from c++ now.

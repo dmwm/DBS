@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import time
 
@@ -14,7 +15,7 @@ except:
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
 url="http://vocms09.cern.ch:8989/DBSServlet"
 if len(sys.argv) < 1:
-    print "Usage: python %s <block>" %sys.argv[0]
+    print("Usage: python %s <block>" %sys.argv[0])
     sys.exit(1)
 		
 # API Object    
@@ -35,4 +36,4 @@ time_count={}
 time_count["block"] = thisBlock
 time_count["number_of_files"] =  len(list_f)
 time_count["retrive_time"] = end_time - start_time
-print time_count
+print(time_count)

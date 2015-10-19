@@ -90,7 +90,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSWriterModel/insertPrimaryDataset. %s\n Exception trace: \n %s" \
                         % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -123,7 +123,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSWriterModel/insertOutputConfig. %s\n. Exception trace: \n %s" \
                             % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -145,7 +145,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSWriterModel/update.AcqEraEndDate %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -175,7 +175,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = " DBSWriterModel/insertAcquisitionEra. %s\n. Exception trace: \n %s" \
                         % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -203,7 +203,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSWriterModel/insertProcessingEra. %s\n. Exception trace: \n %s" \
                             % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -244,7 +244,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = " DBSWriterModel/insertDataset. %s\n. Exception trace: \n %s" \
                         % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -268,7 +268,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             #illegal variable name/number
             if str(ex).find("ORA-01036") != -1:
                 dbsExceptionHandler("dbsException-invalid-input2", "illegal variable name/number from input",  self.logger.exception, str(ex))
@@ -299,7 +299,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert Block input",  self.logger.exception, str(dc))
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSWriterModel/insertBlock. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -359,7 +359,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSWriterModel/insertFile. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -397,7 +397,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSWriterModel/updateFile. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
@@ -423,7 +423,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSWriterModel\updateDataset. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
@@ -449,7 +449,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
         except HTTPError as he:
             raise he
-        except Exception, ex:
+        except Exception as ex:
             sError = "DBSWriterModel\updateStatus. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'],
                                 self.logger.exception, sError)

@@ -2,6 +2,7 @@
 """
 This module provides FileBuffer.DeleteDuplicates data access object.
 """
+from __future__ import print_function
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 
@@ -24,6 +25,6 @@ class DeleteDuplicates(DBFormatter):
 	if not conn:
 	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileBuffer/DeleteDupicates. Expects db connection from upper layer.")
 
-	print self.sql
+	print(self.sql)
         self.dbi.processData(self.sql, logical_file_name, conn, transaction)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
@@ -36,7 +37,7 @@ timer.update_stats({'server_request_timing' : float(api.request_processing_time)
 
 timer.stat_to_server()
 
-print "Found %s file lumis" % (len(file_lumis)) 
+print("Found %s file lumis" % (len(file_lumis))) 
     
 #p = payload_handler.clone_payload()
 #p['workflow']['file_lumis'] = file_lumis

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import os
 import sys
 
@@ -8,7 +9,7 @@ __version__ = "$Revision: 1.2 $"
 try:
     fw = open('testResultGT1500.txt', 'w')
 except IOError:
-    print 'Can\'t open file for writing.'
+    print('Can\'t open file for writing.')
     sys.exit(0)
 
 #fw.writelines("weight                         time\n")
@@ -17,7 +18,7 @@ path="log21-4"  # insert the path to the directory of interest
 dirList=os.listdir(path)
 for fname in dirList:
     fname="log21-4/"+fname 
-    print fname
+    print(fname)
     try:
 	fr = open(fname, 'r')
 	for a in fr.readlines():
@@ -37,6 +38,6 @@ for fname in dirList:
 		    #fw.writelines(str(hz)+"\n")
 	fr.close()
     except IOError:
-	print 'Cannot open file %s for reading.' %fname
+	print('Cannot open file %s for reading.' %fname)
 fw.close()
     

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #
+from __future__ import print_function
 import sys
 import time
 #DBS-2 imports
@@ -42,7 +43,7 @@ class migrateDBS2TODBS3:
 	blockparents = self.dbs2api.listBlockParents(block_name=ablock['Name'])
 	for aparent_block in blockparents:
 	    self.migrateBlock(aparent_block)
-	print "NOW migrating : %s : from : %s TO : %s " % (ablock['Name'], self.srcURL, self.dstURL)    
+	print("NOW migrating : %s : from : %s TO : %s " % (ablock['Name'], self.srcURL, self.dstURL))    
 	block_time={}
         # Collect information here	
 	# Check if XML file already exists in loacl disk, use that
@@ -60,7 +61,7 @@ class migrateDBS2TODBS3:
 		fp.write(data)
 		fp.close()
 	#print data
-	print "Processing Dataset : %s and Block : %s " % (dataset, blockName)
+	print("Processing Dataset : %s and Block : %s " % (dataset, blockName))
   	class Handler (xml.sax.handler.ContentHandler):
 
 		def __init__(self, dbs3api):
@@ -218,8 +219,8 @@ class migrateDBS2TODBS3:
 							block_time['block_weight']+=long(len(file['file_parent_list']))
 							block_time['file_parent_count']+=long(len(file['file_parent_list']))
 					#print "fin"
-				except Exception, ex:
-					print ex
+				except Exception as ex:
+					print(ex)
   	xml.sax.parseString (data, Handler (self.dbs3api))
 	return block_time
 
@@ -227,7 +228,7 @@ if __name__=='__main__':
     try:
 	#print sys.argv
 	if len(sys.argv) < 3: 
-	    print "Usage: python %s <dbs2url> <dbs3url> <dataset>" %sys.argv[0]
+	    print("Usage: python %s <dbs2url> <dbs3url> <dataset>" %sys.argv[0])
 	    sys.exit(1)
 	#url="http://vocms09.cern.ch:8585/dbs3"
 	dbs2url=sys.argv[1]
@@ -238,26 +239,26 @@ if __name__=='__main__':
 	mig_srvc=migrateDBS2TODBS3(dbs2url, dbs3url)
 	mig_srvc.migrateWithParents(dataset)
 	block_time_lst=mig_srvc.getStats()
-	print "-------------------------------------------------------------------------------------------------"
-	print "-------------------------------------------------------------------------------------------------"
-	print " MIGRATED : %s : from : %s TO : %s " % (dataset, dbs2url, dbs3url)
-	print "-------------------------------------------------------------------------------------------------"
-	print "-------------------------------------------------------------------------------------------------"
-	print "RAW DATA: %s " % str(block_time_lst)
-	print "\n"
+	print("-------------------------------------------------------------------------------------------------")
+	print("-------------------------------------------------------------------------------------------------")
+	print(" MIGRATED : %s : from : %s TO : %s " % (dataset, dbs2url, dbs3url))
+	print("-------------------------------------------------------------------------------------------------")
+	print("-------------------------------------------------------------------------------------------------")
+	print("RAW DATA: %s " % str(block_time_lst))
+	print("\n")
 	total_t=0.0
 	total_b=0.0
 	for item in block_time_lst:
-		print "Time Spent : %s (seconds) while Block Weightage is : %s [files: %s, avg lumis_per_file: %s, avg parent_per_file: %s]" \
+		print("Time Spent : %s (seconds) while Block Weightage is : %s [files: %s, avg lumis_per_file: %s, avg parent_per_file: %s]" \
 				% ( str(item['TimeSpent']), str(item['block_weight']), item['file_count'], \
-						str( item['file_lumi_section_count']/item['file_count'] ), str(item['file_parent_count']/item['file_count'] ) )
+						str( item['file_lumi_section_count']/item['file_count'] ), str(item['file_parent_count']/item['file_count'] ) ))
 		total_t+=item['TimeSpent']
 		total_b+=item['block_weight']
-	print "-------------------------------------------------------------------------------------------------\n\n"
-	print "Total time spent: %s (seconds) for total block weightage of: %s " %( str(total_t), str(total_b) )
+	print("-------------------------------------------------------------------------------------------------\n\n")
+	print("Total time spent: %s (seconds) for total block weightage of: %s " %( str(total_t), str(total_b) ))
 
-    except Exception, ex:
-	print ex
-	print "-------------------------------------------------------------------------------------------------\n\n"
+    except Exception as ex:
+	print(ex)
+	print("-------------------------------------------------------------------------------------------------\n\n")
 
 

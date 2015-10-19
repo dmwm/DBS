@@ -57,9 +57,9 @@ class DBSDataTier:
             self.dtin.execute(conn, businput, tran)
             tran.commit()
             tran = None
-        except KeyError, ke:
+        except KeyError as ke:
             dbsExceptionHandler('dbsException-invalid-input', "Invalid input:"+ke.args[0])
-        except Exception, ex:
+        except Exception as ex:
             if str(ex).lower().find("unique constraint") != -1 or str(ex).lower().find("duplicate") != -1:
                 # already exist
                 self.logger.warning("Unique constraint violation being ignored...")

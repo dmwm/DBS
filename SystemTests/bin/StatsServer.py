@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from optparse import OptionParser, OptionGroup
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import cPickle
@@ -109,7 +110,7 @@ class StatsXMLRPCServer(SimpleXMLRPCServer):
         signal.signal(signum, self.signal_handler)
 
     def signal_handler(self, signum, frame):
-        print "Caught signal", signum
+        print("Caught signal", signum)
         self.shutdown()
 
     def shutdown(self):
@@ -143,7 +144,7 @@ class StatsPipeServer(object):
         signal.signal(signum, self.signal_handler)
 
     def signal_handler(self, signum, frame):
-        print "Caught signal", signum
+        print("Caught signal", signum)
         self.shutdown()
 
     def shutdown(self):

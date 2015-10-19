@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from optparse import OptionParser
 import json, os, re, sys
 
@@ -54,11 +55,11 @@ with open(options.input, 'r') as f:
         try:
             log_entries.append(replace_values(match_obj.groupdict()))
         except AttributeError:
-            print "The following line does not match the pattern:\n %s" % (line.strip())
+            print("The following line does not match the pattern:\n %s" % (line.strip()))
             pass
 
 if options.output:
     with open(options.output, 'w') as f:
         json.dump(log_entries, f)
 else:
-    print log_entries
+    print(log_entries)

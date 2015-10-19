@@ -1,6 +1,7 @@
 """
 web unittests
 """
+from __future__ import print_function
 
 __revision__ = "$Id: DBSWriterModel_t.py,v 1.27 2010/08/24 19:48:44 yuyi Exp $"
 __version__ = "$Revision: 1.27 $"
@@ -20,7 +21,7 @@ config = os.environ["DBS_TEST_CONFIG"]
 service = os.environ.get("DBS_TEST_SERVICE", "DBSWriter")
 api = DBSRestApi(config, service)
 uid = uuid.uuid4().time_mid
-print "****uid=%s******" %uid
+print("****uid=%s******" %uid)
 acquisition_era_name="Acq_Era_%s" %uid
 processing_version="%s" %(uid if (uid<9999) else uid%9999)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
@@ -77,7 +78,7 @@ class checkException(object):
             test_class = args[0]
             try:
                 out = func(*args,**kwargs)
-            except Exception, ex:
+            except Exception as ex:
                 if self.msg not in ex.args[0]:
                     test_class.fail("Exception was expected and was not raised")
             else:
