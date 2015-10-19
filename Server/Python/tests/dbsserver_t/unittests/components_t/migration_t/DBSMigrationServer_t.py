@@ -2,6 +2,7 @@
 """
 DBS 3 Migration Service unittests
 """
+from __future__ import print_function
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
 from dbsserver_t.utils.DBSDataProvider import DBSBlockDataProvider, create_child_data_provider
 from dbsserver_t.utils.TestTools import expectedFailure
@@ -128,8 +129,8 @@ class DBSMigrationServer_t(unittest.TestCase):
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : block_data}
             ###schedule only the first block for migration
-            print "\t----\t"
-	    print toMigrate	
+            print("\t----\t")
+	    print(toMigrate)	
             self._migrate_api.insert('submit', toMigrate)
 
     def test_03_handle_migration_requests(self):

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 lines=open("../DDL/DBS3-Oracle.sql", "r").readlines()
 tablefound=0
@@ -104,4 +105,4 @@ for aline in lines:
 ###### Generate AUTO INC Triggers
 
 for (t, z) in trigs : 
-	print z.replace( "__PK__", tbl_pk_map[t] )
+	print(z.replace( "__PK__", tbl_pk_map[t] ))

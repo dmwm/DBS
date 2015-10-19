@@ -1,3 +1,4 @@
+from __future__ import print_function
 import fnmatch
 import os
 import re
@@ -106,21 +107,21 @@ class TestCommand(Command):
     def finalize_options(self):
         #Check if environment us set-up correctly
         if not os.environ.get("DBS3_CLIENT_ROOT"):
-            print """You have to source init.sh before running unittests\n
+            print("""You have to source init.sh before running unittests\n
             If you are using rpm based development environment on a VM, \n
-            try to source /data/current/<Repository>/slc5_amd64_gcc461/cms/dbs3-client/<Version>/etc/profile.d/init.sh."""
+            try to source /data/current/<Repository>/slc5_amd64_gcc461/cms/dbs3-client/<Version>/etc/profile.d/init.sh.""")
             sys.exit(1)
 
         if not self.host:
-            print "Please, specify a host to use, for example using --host=https://cmsweb-testbed.cern.ch"
+            print("Please, specify a host to use, for example using --host=https://cmsweb-testbed.cern.ch")
             sys.exit(2)
 
         if not (self.unit or self.unitall or self.validation or self.deployment or self.cmsweb_testbed):
-            print "Please, specify one of the following options.\n%s" % self.description
+            print("Please, specify one of the following options.\n%s" % self.description)
             sys.exit(3)
 
         if self.unit not in (None, 'ClientWriter', 'ClientReader', 'ClientBlockWriter'):
-            print "Valid options for --unit are ClientWriter, ClientReader or ClientBlockWriter"
+            print("Valid options for --unit are ClientWriter, ClientReader or ClientBlockWriter")
             sys.exit(4)
 
     def run(self):

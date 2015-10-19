@@ -1,3 +1,4 @@
+from __future__ import print_function
 #DBS-3 imports
 from dbs.apis.dbsClient import *
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
@@ -16,7 +17,7 @@ try:
     #print dbs3api.listDataTiers()
     dbs3api.insertDataTier(datatier)
     #dbs3api.insertPrimaryDataset({"primary_ds_type":"mc" , "primary_ds_name":"RelVal151SingleGammaPt35"})
-    print "All Done"
-except Exception, e:
-    print e
+    print("All Done")
+except Exception as e:
+    print(e)
 

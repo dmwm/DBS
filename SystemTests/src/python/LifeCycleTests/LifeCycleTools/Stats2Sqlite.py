@@ -1,3 +1,4 @@
+from __future__ import print_function
 from optparse import OptionParser
 import sqlite3 as sqlite
 import glob, json, os, sys
@@ -46,8 +47,8 @@ if __name__ == '__main__':
                 try:
                     stats = json.load(f).get("stats")
                 except ValueError as ex:
-                    print "Open file %s" % (file_name)
-                    print ex
+                    print("Open file %s" % (file_name))
+                    print(ex)
                     pass
                 
             insertStats(cur, stats)

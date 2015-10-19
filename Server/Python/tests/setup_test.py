@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys, os
 import fnmatch
 from glob import glob
@@ -59,34 +60,34 @@ class TestCommand(Command):
         #Check if environment is set-up correctly
         if not os.environ.get("DBS3_SERVER_ROOT"):
             if not os.environ.get("DBS3_ROOT"):  
-                print """You have to source init.sh before running unittests\n
+                print("""You have to source init.sh before running unittests\n
                 If you are using rpm based development environment on a VM,\n
                 try to source /data/current/apps/dbs/etc/profile.d/init.sh.\n
                 If your are using development environment, source Server/Python/control/setup.sh.\n
                 It will point to the base directory of your DBS3 installation to $DBS3_ROOT and that PYTHON_PATH\n
-                is set-up correctly."""
+                is set-up correctly.""")
                 sys.exit(1)
             else:
                 os.environ['DBS3_SERVER_ROOT'] = os.environ['DBS3_ROOT']
 
         if not self.config:
-            print "Please, specify a config file using --config=<cfgfile> argument"
+            print("Please, specify a config file using --config=<cfgfile> argument")
             sys.exit(3)
 
         if not self.secrets:
-            print "Please, specify the path to the DBSSecrets file using --secrets=<path_to_secretsfile> argument."
+            print("Please, specify the path to the DBSSecrets file using --secrets=<path_to_secretsfile> argument.")
             sys.exit(4)
 
         if not os.access(self.config, os.F_OK and os.R_OK):
-            print "Cannot read config file %s.\n Please, ensure that it exists and you have the privileges to read it." %(self.config)
+            print("Cannot read config file %s.\n Please, ensure that it exists and you have the privileges to read it." %(self.config))
             sys.exit(5)
 
         if not self.web and not self.weball and not self.dao and not self.business and not self.migration and not self.allTests:
-            print "Please, specify one of the following options.\n%s" % self.description
+            print("Please, specify one of the following options.\n%s" % self.description)
             sys.exit(6)
 
         if self.web not in [None, 'DBSWriter', 'DBSReader', 'DBSMigrate']:
-            print "Valid options for --web are DBSReader, DBSWriter or DBSMigrate"
+            print("Valid options for --web are DBSReader, DBSWriter or DBSMigrate")
             sys.exit(7)
 
     def run(self):

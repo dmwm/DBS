@@ -125,8 +125,8 @@ class DBSMigrateModel(RESTModel):
         try:
             indata = validateJSONInputNoCopy("migration_rqst", indata)
             return self.dbsMigrate.removeMigrationRequest(indata)
-        except dbsException, he:
+        except dbsException as he:
             dbsExceptionHandler(he.eCode, he.message, self.logger.exception, he.message)
-        except Exception, e:
+        except Exception as e:
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, str(e))
 

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from LifeCycleAnalysis.LifeCyclePlots.HistoManager import HistoManager
 from LifeCycleAnalysis.LifeCyclePlots.Histogram import Histo1D, Histo2D
 
@@ -22,7 +23,7 @@ class StatisticPlots(object):
         self._list_of_apis = list_of_apis
         # api as keys and numbers as value, to fill 0,1,2,3,4 bins in APIAccessCounter histogramm and
         # to set bin label later accordingly
-        self._enumerated_dict_of_apis = dict(zip(self._list_of_apis, xrange(len(self._list_of_apis))))
+        self._enumerated_dict_of_apis = dict(list(zip(self._list_of_apis, xrange(len(self._list_of_apis)))))
         self._starttime = starttime
         self._endtime = endtime
         self._test_type = test_type
@@ -336,5 +337,5 @@ class LifeCyclePlotManager(object):
             else:
                 duplicated_histo_names = set(stripped_histo_names)
 
-        print duplicated_histo_names
+        print(duplicated_histo_names)
         #self._histo_managers['stacked_histos'] = HistoManager()

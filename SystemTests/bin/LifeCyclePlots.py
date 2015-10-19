@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.6
+from __future__ import print_function
 from ROOT import gROOT, TFile
 from LifeCycleAnalysis.LifeCyclePlots.LifeCyclePlotManager import LifeCyclePlotManager
 from LifeCycleAnalysis.LifeCyclePlots.SqliteDAO import SqliteDAO
@@ -41,7 +42,7 @@ if __name__ == "__main__":
         try:
             os.mkdir(options.description)
         except OSError as oserr:
-            print "Directory %s does already exists, please clean-up." % (options.description)
+            print("Directory %s does already exists, please clean-up." % (options.description))
             raise oserr
 
     gROOT.Reset()

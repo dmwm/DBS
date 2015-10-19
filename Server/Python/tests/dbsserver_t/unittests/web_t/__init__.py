@@ -1,13 +1,14 @@
 """
 web unittests package.
 """
+from __future__ import print_function
 
 __all__ = ['DBSWriterModel_t', 'DBSReaderModel_t']
 
 import unittest
 
 def run(logfile="", verbosity=2):
-    print "\nWeb Unittests:"
+    print("\nWeb Unittests:")
     loader = unittest.TestLoader().loadTestsFromModule
     modules = (__import__(m) for m in __all__)
     suites = [loader(m) for m in modules]

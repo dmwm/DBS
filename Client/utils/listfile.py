@@ -1,3 +1,4 @@
+from __future__ import print_function
 #DBS-3 imports
 import time
 from dbs.apis.dbsClient import *
@@ -14,17 +15,17 @@ dbs3api = DbsApi(url=url)
 #print dbs3api.listFile(dataset="/TTbar/Summer09-MC_31X_V3-v1/GEN-SIM-RAW")
 t1=time.time()
 dbs3api.listFile(block="/TTbar/Summer09-MC_31X_V3-v1/GEN-SIM-RAW#f99b4c09-a68f-4e73-8f4c-560c1fa922fc")
-print url
+print(url)
 t2=time.time()-t1
-print t2
+print(t2)
 
 
 url="http://cmssrv48.fnal.gov:8989/DBSServlet"
 api = DbsApi(url=url)
 t1=time.time()
 dbs3api.listFile(block="/TTbar/Summer09-MC_31X_V3-v1/GEN-SIM-RAW#f99b4c09-a68f-4e73-8f4c-560c1fa922fc")
-print url
+print(url)
 t2=time.time()-t1
-print t2
+print(t2)
 
 

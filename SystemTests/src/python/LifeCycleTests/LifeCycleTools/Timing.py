@@ -1,3 +1,4 @@
+from __future__ import print_function
 import time
 import json
 
@@ -47,4 +48,4 @@ if __name__ == "__main__":
     with TimingStat(test):
         time.sleep(1)
 
-    print test
+    print(test)

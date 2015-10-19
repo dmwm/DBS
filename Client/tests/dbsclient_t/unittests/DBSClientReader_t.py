@@ -1,6 +1,7 @@
 """
 web unittests
 """
+from __future__ import print_function
 import imp
 import os
 import re
@@ -18,7 +19,7 @@ def checkException400(f):
         out = None
         try:
             out = f(self, *args, **kwargs)
-        except Exception, ex:
+        except Exception as ex:
             if 'HTTPError 400' not in ex.args[0]:
                 self.fail("Exception was expected and was not raised.")
         else:
@@ -800,7 +801,7 @@ class DBSClientReader_t(unittest.TestCase):
     @checkException400
     def test042(self):
         """test42 unittestDBSClientReader_t.listFileParents: basic test"""
-        print self.api.listFileParents()
+        print(self.api.listFileParents())
 
     def test043(self):
         """test43 unittestDBSClientReader_t.listFileParents: basic test"""

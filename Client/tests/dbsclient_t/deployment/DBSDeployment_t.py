@@ -1,6 +1,7 @@
 """
 DBS 3 Post-Deployment Tests for Operators of CMSWEB (These tests are read only!)
 """
+from __future__ import print_function
 import json
 import os
 import re
@@ -796,14 +797,14 @@ if __name__ == "__main__":
 
     args = sys.argv
     if len(args) == 1:
-        print message
+        print(message)
         sys.exit()
     elif len(args) != 2:
-        print message
+        print(message)
         sys.exit()
     else:
         if args[1] not in ['insert=True', 'insert=False']:
-            print message
+            print(message)
             sys.exit()
 
     RESTModel = ('DBSReader', 'DBSWriter')

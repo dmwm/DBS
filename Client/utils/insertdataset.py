@@ -1,3 +1,4 @@
+from __future__ import print_function
 #DBS-3 imports
 from dbs.apis.dbsClient import *
 import os
@@ -14,9 +15,9 @@ dataset={'primary_ds_name': 'yuyi_pri', 'physics_group_name': 'Tracker',
 dataset.update({'dataset' : '/%s/%s/%s' %(dataset['primary_ds_name'], dataset['processed_ds_name'],
                 dataset['data_tier_name'])})
 
-print dataset.keys()
+print(dataset.keys())
 
-print dbs3api.insertDataset(dataset)
+print(dbs3api.insertDataset(dataset))
 # Is service Alive
 """
 print dbs3api.ping()

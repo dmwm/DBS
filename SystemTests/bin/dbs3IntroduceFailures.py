@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler
 from LifeCycleTests.LifeCycleTools.OptParser import get_command_line_options
 
@@ -73,7 +74,7 @@ for block in block_dump:
                         files_to_delete.extend(ret_val[0])
                         file_conf_to_delete.extend(ret_val[1])
                 except Exception as ex:
-                    print "%s does not support the failure %s" % (os.path.basename(__file__), failure)
+                    print("%s does not support the failure %s" % (os.path.basename(__file__), failure))
                     raise ex
 
     for del_file in reversed(files_to_delete):
