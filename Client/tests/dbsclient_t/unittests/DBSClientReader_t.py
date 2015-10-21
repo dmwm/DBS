@@ -798,10 +798,17 @@ class DBSClientReader_t(unittest.TestCase):
         """test41 unittestDBSClientReader_t.listFileParents: basic test"""
         self.api.listFileParents(logical_file_name=self.testparams['files'][0])
     
-    @checkException400
     def test042(self):
         """test42 unittestDBSClientReader_t.listFileParents: basic test"""
-        print(self.api.listFileParents())
+        try:
+            self.api.listFileParents()
+            self.fail("Exception was expected and was not raised.")
+        except Exception as e:
+            if 'Invalid input' not in str(e):
+                self.fail("Wrong exception was raised.")
+            else:
+                pass
+                
 
     def test043(self):
         """test43 unittestDBSClientReader_t.listFileParents: basic test"""
@@ -821,10 +828,16 @@ class DBSClientReader_t(unittest.TestCase):
         """test44 unittestDBSClientReader_t.listFileLumis: basic test"""
         self.api.listFileLumis(logical_file_name=self.testparams['files'][0])
 
-    @checkException400
     def test045(self):
         """test45 unittestDBSClientReader_t.listFileLumis: basic test"""
-        self.api.listFileLumis()
+        try:
+            self.api.listFileLumis()
+            self.fail("Exception was expected and was not raised.")
+        except Exception as e:
+            if 'Invalid input' not in str(e):
+                self.fail("Wrong exception was raised.")
+            else:
+                pass
 
     def test046(self):
         """test46 unittestDBSClientReader_t.listFileLumis: basic test"""
@@ -1103,10 +1116,17 @@ class DBSClientReader_t(unittest.TestCase):
         """test84: unittestDBSClientReader_t.listDatasetAccessType with dataset_access_type"""
         self.api.listDatasetAccessTypes(dataset_access_type="PRODUCTION")
 
-    @checkException400
     def test085(self):
         """test85: unittestDBSClientReader_t.blockDump"""
-        self.api.blockDump()
+        try:
+            self.api.blockDump()
+            self.fail("Exception was expected and was not raised.")
+        except Exception as e:
+            if 'Invalid input' not in str(e):
+                self.fail("Wrong exception was raised.")
+            else:
+                pass
+
 
     def test086(self):
         """test86: unittestDBSClientReader_t.blockDump with block_name"""
@@ -1167,10 +1187,17 @@ class DBSClientReader_t(unittest.TestCase):
         """test93d unittestDBSClientReader_t.listBlockOrigin: """
         self.api.listBlockOrigin(origin_site_name=self.testparams['site'], block_name=self.testparams['block'])
 
-    @checkException400
     def test094(self):
-        """test94 unittestDBSClientReader_t.listBlockOrigin: """
-        self.api.listBlockOrigin(origin_site_name=self.testparams['site'])
+        """test094 unittestDBSClientReader_t.listBlockOrigin: """
+        try:
+            self.api.listBlockOrigin(origin_site_name=self.testparams['site'])
+            self.fail("Exception was expected and was not raised.")
+        except Exception as e:
+            if 'Invalid input' not in str(e):
+                self.fail("Wrong exception was raised.")
+            else:
+                pass
+
 
     def test095(self):
         """test095: unittestDBSClientReader_t.listBlockSummaries: input validation test"""
