@@ -1,28 +1,14 @@
 from __future__ import print_function
-from dbs.apis.dbsClient import *
-src_url="http://localhost:8585"
-dst_url="http://cmssrv18.fnal.gov:8585/MIGRATE"
-dbs3api = DbsApi(url=dst_url)
-"""
-# Enqueue a dataset migration request
-data = dict(migration_url=src_url, migration_input='/RelValbJpsiX/CMSSW_2_0_0-RelVal-1207932667/RAW')
-print dbs3api.migrateSubmit(data)
-# Enqueu a block migration request
-data = dict(migration_url=src_url, migration_input='/RelValbJpsiX/CMSSW_2_0_0-RelVal-1207932667/RAW#1234_5678_910')
-print dbs3api.migrateSubmit(data)
-#   
+#!/usr/bin/env python
+from dbs.apis.dbsClient import DbsApi
 
-data = dict(migration_url="http://vocms08.cern.ch:8585/DBS", migration_input="/Cosmics/CRAFT09-CRAFT09_R_V4_CosmicsSeq_v1/RECO#33f71127-6994-4c1c-82aa-3bf9c4de8f45")
-print dbs3api.migrateSubmit(data)
+src_url="https://cmsweb-testbed.cern.ch/dbs/int/global/DBSReader"
+dst_url="https://dbs3-test1.cern.ch/dbs/dev/global/DBSMigrate"
+api = DbsApi(url=dst_url)
 
-data= dict(migration_url="http://vocms08.cern.ch:8585/DBS", migration_input="/Cosmics/CRAFT09-CRAFT09_R_V4_CosmicsSeq_v1/RECO#c218c8a5-8bc7-418f-9257-7993be8fb1d5")
-print dbs3api.migrateSubmit(data)
-"""
+data = dict(migration_url=src_url, migration_input='/AlCaPhiSymHcal/HAPPYHAPPYWARMFUZZY_T0TEST_WITHBUNNIESDANCINGAROUND-PFTHPFTHPTHFPFTHPHTH-v3EW35/RAW#04d0b5f4-26fa-4336-a8db-4b2295e20e6f')
 
-data = dict(migration_url="http://vocms08.cern.ch:8585/DBS", migration_input='/Cosmics/CRAFT09-CRAFT09_R_V4_CosmicsSeq_v1/RECO')
-print(dbs3api.migrateSubmit(data))
-    
-#for i in xrange(50):
-#    data = dict(migration_url=src_url, migration_dataset='data_03_%i' % i) 
-#    print dbs3api.migrateStart(data)
-
+try:
+        print (api.submitMigration(data))
+except Exception as e:
+        print (e)

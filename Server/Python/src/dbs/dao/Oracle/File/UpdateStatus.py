@@ -23,7 +23,7 @@ class UpdateStatus(DBFormatter):
         IS_FILE_VALID = :is_file_valid
         """.format(owner=self.owner)
 
-    def execute(self, conn, logical_file_name, is_file_valid, lost, transaction=False):
+    def execute(self, conn, logical_file_name, is_file_valid, lost, dataset, transaction=False):
         """
         for a given file or a list of files
         """
@@ -35,7 +35,7 @@ class UpdateStatus(DBFormatter):
                      mydate=dbsUtils().getTime(),
                      is_file_valid=is_file_valid)
 
-        if isinstance(logical_file_name, list):
+        if logical_file_name and isinstance(logical_file_name, list):
             lfn_generator, lfn_binds = create_token_generator(logical_file_name)
             ###with clause - subquery factory does only work with select statements, therefore lfn_generator
             ###has to be place in front of the SELECT statement in the WHERE clause
@@ -43,9 +43,13 @@ class UpdateStatus(DBFormatter):
             wheresql = """WHERE F.LOGICAL_FILE_NAME in ({lfn_generator} SELECT TOKEN FROM TOKEN_GENERATOR)
             """.format(lfn_generator=lfn_generator)
             binds.update(lfn_binds)
-        else:
+        elif logical_file_name :
             wheresql = "where F.LOGICAL_FILE_NAME=:logical_file_name"
             binds.update(logical_file_name=logical_file_name)
+        elif dataset:
+            wheresql = """ join {owner}DATASETS D on D.dataset_id = F.dataset_id 
+                          Where D.dataset=:dataset """.format(owner=self.owner)
+            binds.update(dataset=dataset)
 
         if lost:
             sql = "{sql}, file_size=0 {wheresql}".format(sql=self.sql,
