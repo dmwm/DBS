@@ -41,14 +41,9 @@ def update_dataset_type(dataset, new_status):
     api.updateDatasetType(dataset=dataset, dataset_access_type=new_status)
 
 def update_file_status(dataset, new_status):
-    files = api.listFiles(dataset=dataset)
-
     file_status = (1, 0)[options.new_status in ['DELETED', 'DEPRECATED', 'INVALID']]
-
-    for this_file in files:
-        logging.debug('Update file status for file %s to status %s' % (this_file['logical_file_name'], file_status))
-        api.updateFileStatus(logical_file_name=this_file['logical_file_name'],
-                             is_file_valid=file_status)
+    logging.debug('Update file status for all files in dataset %s to status %s' % (dataset, file_status))
+    api.updateFileStatus(is_file_valid=file_status, dataset=dataset)
 
 if __name__ == "__main__":
     options, args = get_command_line_options()

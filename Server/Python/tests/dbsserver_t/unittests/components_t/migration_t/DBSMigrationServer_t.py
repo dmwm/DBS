@@ -97,7 +97,7 @@ class DBSMigrationServer_t(unittest.TestCase):
         pass
 
     def test_00_insert_data_to_migrate(self):
-        """test00: Insert data to migrate into source DBS instance"""
+        """test00: Insert data to migrate into source DBS instance: In most cases, the data should be already in the source DBS inserted by --web=DBSMigrate test"""
         for block in chain(self._data_provider.block_dump(),
                            self._independent_data_provider.block_dump(),
                            self._parent_data_provider.block_dump(),
@@ -182,7 +182,7 @@ class DBSMigrationServer_t(unittest.TestCase):
         """test06: Try to validate the migrated data by comparing block dumps from source and destination DB"""
 	def check(input, output):
             non_comparable_keys = ('block_id', 'dataset_id', 'last_modification_date',
-                                   'parent_file_id', 'primary_ds_id')
+                                   'parent_file_id', 'primary_ds_id', 'description')
             if isinstance(input, dict):
                 for key, value in input.iteritems():
                     if key in non_comparable_keys:

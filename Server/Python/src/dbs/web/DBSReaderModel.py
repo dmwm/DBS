@@ -450,7 +450,7 @@ class DBSReaderModel(RESTModel):
         """
         API to list datasets in DBS. To be called by datasetlist url with post call.
 
-        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (must have either a list of dataset or dataset_id)
+        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (must have either a list of dataset or dataset_id), Max length 1000.
         :type dataset: list
 	:param dataset_id: list of dataset ids [dataset_id1,dataset_id2,..,dataset_idn, "dsid_min-dsid_max"] ((must have either a list of dataset or dataset_id)
         :type dataset_id: list
@@ -468,6 +468,14 @@ class DBSReaderModel(RESTModel):
             if body:
                 data = cjson.decode(body)
                 data = validateJSONInputNoCopy("dataset", data, read=True)
+                #Because CMSWEB has a 300 seconds responding time. We have to limit the array siz to make sure that
+                #the API can be finished in 300 second. 
+                # YG Nov-05-2015
+                max_array_size = 1000
+                if ( 'dataset' in data.keys() and isinstance(data['dataset'], list) and len(data['dataset'])>max_array_size)\
+                    or ('dataset_id' in data.keys() and isinstance(data['dataset_id'], list) and len(data['dataset_id'])>max_array_size):
+                    dbsExceptionHandler("dbsException-invalid-input",
+                                        "The Max list length supported in listDatasetArray is %s." %max_array_size, self.logger.exception)    
                 ret = self.dbsDataset.listDatasetArray(data)
         except cjson.DecodeError as De:
             dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
@@ -678,7 +686,7 @@ class DBSReaderModel(RESTModel):
         """
         API to list block parents of multiple blocks. To be called by blockparents url with post call.
 
-        :param block_names: list of block names [block_name1, block_name2, ...] (Required)
+        :param block_names: list of block names [block_name1, block_name2, ...] (Required). Mwx length 1000.
         :type block_names: list
 
         """
@@ -686,6 +694,13 @@ class DBSReaderModel(RESTModel):
             body = request.body.read()
             data = cjson.decode(body)
             data = validateJSONInputNoCopy("block", data, read=True)
+            #Because CMSWEB has a 300 seconds responding time. We have to limit the array siz to make sure that
+            #the API can be finished in 300 second. 
+            # YG Nov-05-2015
+            max_array_size = 1000
+            if ( 'block_names' in data.keys() and isinstance(data['block_names'], list) and len(data['block_names'])>max_array_size):
+                    dbsExceptionHandler("dbsException-invalid-input",
+                                        "The Max list length supported in listBlocksParents is %s." %max_array_size, self.logger.exception)
             return self.dbsBlock.listBlockParents(data["block_name"])
         except dbsException as de:
             dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
@@ -887,11 +902,11 @@ class DBSReaderModel(RESTModel):
         :type app_name: str
         :param output_module_label: name of the used output module
         :type output_module_label: str
-        :param run_num: run , run ranges, and run list. Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...].
+        :param run_num: run , run ranges, and run list. Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...]. Max length 1000.
         :type run_num: int, list, string
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
-        :param lumi_list: List containing luminosity sections
+        :param lumi_list: List containing luminosity sections. Max length 1000.
         :type lumi_list: list
         :param detail: Get detailed information about a file
         :type detail: bool
@@ -927,11 +942,11 @@ class DBSReaderModel(RESTModel):
                 #the API can be finished in 300 second. See github issues #465 for tests' results.
                 # YG May-20-2015
                 max_array_size = 1000
-                if ( 'run_num' in data.keys() and isinstance(data['run_num'], list) and len(data['run_num'])>1000)\
-                    or ('lumi_list' in data.keys() and isinstance(data['lumi_list'], list) and len(data['lumi_list'])>1000)\
-                    or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>1000):
+                if ( 'run_num' in data.keys() and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
+                    or ('lumi_list' in data.keys() and isinstance(data['lumi_list'], list) and len(data['lumi_list'])>max_array_size)\
+                    or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
                     dbsExceptionHandler("dbsException-invalid-input", 
-                                        "The Max list length supported in listFileArray is 1000.", self.logger.exception)
+                                        "The Max list length supported in listFileArray is %s." %max_array_size, self.logger.exception)
             #    
                 ret =  self.dbsFile.listFiles(input_body=data)
         except cjson.DecodeError as De:
@@ -1169,7 +1184,7 @@ class DBSReaderModel(RESTModel):
         """
 	API to list FileLumis for a given list of LFN. It is used with the POST method of fileLumis call.
 	
-	:param logical_file_name  
+        :param logical_file_name. Max length 1000.  
 	:type logical_file_name: list of str
         :param block_name
         :type block_name: str
@@ -1186,14 +1201,24 @@ class DBSReaderModel(RESTModel):
 	    if body:
 		data = cjson.decode(body)
 		data = validateJSONInputNoCopy("files", data, read=True)
-	    else:
-		data=''
+            else:
+                data = {}
+
+            #Because CMSWEB has a 300 seconds responding time. We have to limit the array siz to make sure that
+            #the API can be finished in 300 second. 
+            # YG Nov-05-2015
+            max_array_size = 1000 
+            if ( 'run_num' in data.keys() and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
+            or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
+                dbsExceptionHandler("dbsException-invalid-input",
+                                        "The Max list length supported in listLumiArray is %s." %max_array_size, self.logger.exception)
+ 
             if 'run_num' in data.keys() and not isinstance(data['run_num'], list) and (data['run_num']==1 or data['run_num']=="1"):
                 dbsExceptionHandler('dbsException-invalid-input1', 'run_num cannot be 1 in filelumiarray API.',
-			self.logger.exception, 'run_num cannot be 1 in filelumiarray API.')
+			self.logger.exception, 'run_num cannot be 1 in listFileLumiArray API.')
             if 'run_num' in data.keys() and isinstance(data['run_num'], list) and (1 in data['run_num'] or "1" in data['run_num']):
                 dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.', 
-			self.logger.exception, 'run_num cannot be 1 in filelumiarray API.')
+			self.logger.exception, 'run_num cannot be 1 in listFilelumiArray API.')
 	    result = self.dbsFile.listFileLumis(input_body=data)
 	    for r in result:
 	    	yield r

@@ -538,7 +538,8 @@ class DbsApi(object):
                            'max_cdate', 'min_ldate', 'max_ldate',
                            'cdate', 'ldate', 'detail']
 
-        requiredParameters = {'multiple': validParameters}
+        #requiredParameters = {'multiple': validParameters}
+        requiredParameters = {'multiple': ['dataset', 'block_name', 'data_tier_name', 'logical_file_name']}
 
         #set defaults
         if 'detail' not in kwargs.keys():
@@ -695,9 +696,9 @@ class DbsApi(object):
         """
         API to list datasets in DBS.
 
-        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required if dataset_id is not presented)
+        :param dataset: list of datasets [dataset1,dataset2,..,dataset n] (Required if dataset_id is not presented), Max length 1000.
         :type dataset: list
-        :param dataset_id: list of dataset_ids that are the primary keys of datasets table: [dataset_id1,dataset_id2,..,dataset_idn] (Required if dataset is not presented)
+        :param dataset_id: list of dataset_ids that are the primary keys of datasets table: [dataset_id1,dataset_id2,..,dataset_idn] (Required if dataset is not presented), Max length 1000.
         :type dataset: list
         :param dataset_access_type: List only datasets with that dataset access type (Optional)
         :type dataset_access_type: str
@@ -843,10 +844,10 @@ class DbsApi(object):
         """
         API to list Lumiis for a list of files. A list of logical_file_names is required. No wild card support in this API
 
-        :param logical_file_name: logical_file_name of file
-        :type logical_file_name: str
+        :param logical_file_name: logical_file_name of file, Max length 1000.
+        :type logical_file_name: str, list
         :param run_num: List lumi sections for a given run number (Optional). Possible format: run_num, "run_min-run_max", or ["run_min-run_max", run1, run2, ...] . run_num=1 is MC data and it will cause almost whole table scan, so run_num=1 will
-                        cause an input error.
+                        cause an input error. Max length 1000.
         :type run_num: int,str,list
         :param validFileOnly: default value is 0 (optional), when set to 1, only valid files counted.
         :type validFileOnly: int, str
@@ -958,7 +959,7 @@ class DbsApi(object):
         * If lumi_list is provided run only run_num=single-run-number is allowed
         * When lfn list is present, no run or lumi list is allowed.
 
-        :param logical_file_name: logical_file_name of the file
+        :param logical_file_name: logical_file_name of the file, Max length 1000.
         :type logical_file_name: str, list
         :param dataset: dataset
         :type dataset: str
@@ -972,11 +973,11 @@ class DbsApi(object):
         :type app_name: str
         :param output_module_label: name of the used output module
         :type output_module_label: str
-        :param run_num: run , run ranges, and run list
+        :param run_num: run , run ranges, and run list, Max list length 1000.
         :type run_num: int, list, string
         :param origin_site_name: site where the file was created
         :type origin_site_name: str
-        :param lumi_list: List containing luminosity sections
+        :param lumi_list: List containing luminosity sections, Max length 1000.
         :type lumi_list: list
         :param detail: Get detailed information about a file
         :type detail: bool

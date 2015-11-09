@@ -61,7 +61,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
         elif logical_file_name and isinstance(logical_file_name, list):
 	    sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID """.format(owner=self.owner)	
             lfn_generator, binds = create_token_generator(logical_file_name)
-            if validFileOnly == 0:
+            if int(validFileOnly) == 0:
                 wheresql = "WHERE F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
             else:
 		sql = sql + """ JOIN {owner}DATASETS D ON  D.DATASET_ID = F.DATASET_ID 
@@ -73,7 +73,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
             sql = "{lfn_generator} {sql} {wheresql}".format(lfn_generator=lfn_generator, sql=sql, wheresql=wheresql)
         elif block_name:
             binds = {'block_name': block_name}
-            if validFileOnly == 0:
+            if int(validFileOnly) == 0:
                 sql = self.sql + """ , F.LOGICAL_FILE_NAME as LOGICAL_FILE_NAME FROM {owner}FILE_LUMIS FL JOIN {owner}FILES F ON F.FILE_ID = FL.FILE_ID  
 				     JOIN {owner}BLOCKS B ON B.BLOCK_ID = F.BLOCK_ID  
 				     WHERE B.BLOCK_NAME = :block_name""".format(owner=self.owner)

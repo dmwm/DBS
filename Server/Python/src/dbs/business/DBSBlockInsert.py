@@ -821,8 +821,9 @@ acquisition era, but with different cases.")
             # This is to prevent users to insert random data tiers into phys* DB. YG May-15-2015
             dtId = 0
             dtId = self.tierid.execute(conn, dataset['data_tier_name'])   
-            if dtId == 0:
-                dbsExceptionHandler('dbsException-missing-data', 'Required data tier not found in DBS when insert dataset. ',
+            #When no data tier found, it return tier id -1
+            if dtId <= 0:
+                dbsExceptionHandler('dbsException-missing-data', 'Required data tier not found in DBS when insert dataset. Ask your admin adding the tier before insert/migrate the block/dataset.',
                          self.logger.exception, 'Required data tier not found in DBS when insert dataset. ')
             #7 Deal with dataset access type. A dataset must have a data type
             dataset['dataset_access_type'] = dataset['dataset_access_type'].upper()
@@ -884,9 +885,9 @@ acquisition era, but with different cases.")
                                 if tran:tran.rollback()
                                 if conn:conn.close()
                                 dbsExceptionHandler('dbsException-conflict-data',
-                                                    'Da taset not yet inserted by concurrent insert. ',
+                                                    'Dataset/[processed DS]/[dataset access type] not yet inserted by concurrent insert. ',
                                                     self.logger.exception,
-                                                    'Dataset not yet inserted by concurrent insert. '+ str(ei))
+                                                    'Dataset/[processed DS]/[dataset access type] not yet inserted by concurrent insert. '+ str(ei))
                         elif str(ei).find("ORA-01400") > -1:
                             if tran:tran.rollback()
                             if conn:conn.close()

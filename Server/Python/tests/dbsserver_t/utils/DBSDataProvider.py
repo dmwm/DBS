@@ -24,7 +24,7 @@ def strip_volatile_fields(data):
     volatile_fields = ['block_id', 'parent_block_id', 'branch_hash_id',
                        'dataset_id', 'parent_dataset_id', 'data_tier_id',
                        'file_id', 'parent_file_id', 'file_type_id',
-                       'primary_ds_id', 'primary_ds_type_id']
+                       'primary_ds_id', 'primary_ds_type_id', 'description']
 
     if isinstance(data, list):
         return [strip_volatile_fields(entry) for entry in data]
