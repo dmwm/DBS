@@ -12,7 +12,7 @@ from dbs.exceptions.dbsClientException import dbsClientException
 def stripChangingParameters(data):
     keys2remove = ['create_by', 'creation_date', 'data_tier_id', 'primary_ds_type_id', 'primary_ds_id',
                    'last_modified_by', 'last_modification_date', 'dataset_id', 'origin_site_name', 'child_dataset_id',
-                   'parent_dataset_id', 'file_id', 'file_type_id', 'block_id', 'start_date', 'end_date']
+                   'parent_dataset_id', 'file_id', 'file_type_id', 'block_id', 'start_date', 'end_date', 'description']
 
     if isinstance(data, dict):
         for key in keys2remove:
@@ -183,7 +183,7 @@ class PostDeploymentTests(unittest.TestCase):
         expected_data = [json.load(fp)]
 
         acquisitioneras = self.api.listAcquisitionEras(acquisition_era_name="DBS3_DEPLOYMENT_TEST_ERA")
-        self.assertEqual(expected_data, stripChangingParameters(acquisitioneras))
+        self.assertEqual(stripChangingParameters(expected_data), stripChangingParameters(acquisitioneras))
 
         fp.close()
 
@@ -726,7 +726,7 @@ DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379
 
         eras = stripChangingParameters(self.api.listProcessingEras(processing_version="4711"))
 
-        self.assertEqual(expected_data, eras)
+        self.assertEqual(stripChangingParameters(expected_data), eras)
 
         fp.close()
 

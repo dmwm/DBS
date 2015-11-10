@@ -34,7 +34,7 @@ class List_t(unittest.TestCase):
     def test02(self):
         """dao.Oracle.AcquisitionEra.List: Basic"""
         result = self.dao.execute(self.conn, acquisitionEra=self.data[0]['acquisition_era_name'])
-        self.assertEqual(strip_volatile_fields(result), self.data)
+        self.assertEqual(strip_volatile_fields(result), strip_volatile_fields(self.data))
 
     def test03(self):
         """dao.Oracle.AcquisitionEra.List: Basic"""

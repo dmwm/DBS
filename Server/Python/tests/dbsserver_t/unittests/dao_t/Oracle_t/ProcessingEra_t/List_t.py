@@ -34,7 +34,7 @@ class List_t(unittest.TestCase):
     def test02(self):
         """dao.Oracle.ProcessingEra.List: Basic"""
         result = self.dao.execute(self.conn, processingV=self.data[0]['processing_version'])
-        self.assertEqual(strip_volatile_fields(result), self.data)
+        self.assertEqual(strip_volatile_fields(result), strip_volatile_fields(self.data))
 
     def test03(self):
         """dao.Oracle.ProcessingEra.List: Basic"""
