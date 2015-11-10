@@ -19,6 +19,9 @@ def checkException400(f):
         out = None
         try:
             out = f(self, *args, **kwargs)
+        except dbsClientException as de:
+            if "Invalid input" not in de.reason:
+                self.fail("Exception was expected and was not raised.")
         except Exception as ex:
             if 'HTTPError 400' not in ex.args[0]:
                 self.fail("Exception was expected and was not raised.")
