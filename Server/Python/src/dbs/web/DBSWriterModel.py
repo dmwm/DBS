@@ -33,7 +33,7 @@ class DBSWriterModel(DBSReaderModel):
 
         #instantiate the page with the writer_config
 
-        if type(urls)==type({}):
+        if isinstance(urls, type({})):
             config.database.connectUrl = urls['writer']
 
         DBSReaderModel.__init__(self, config)
@@ -57,7 +57,7 @@ class DBSWriterModel(DBSReaderModel):
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'files', self.insertFile, args=['qInserts'], secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
-        self._addMethod('PUT', 'files', self.updateFile, args=['logical_file_name', 'is_file_valid', 'lost'],
+        self._addMethod('PUT', 'files', self.updateFile, args=['logical_file_name', 'is_file_valid', 'lost', 'dataset'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('PUT', 'datasets', self.updateDataset, args=['dataset', 'dataset_access_type'],
                          secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
@@ -334,10 +334,10 @@ class DBSWriterModel(DBSReaderModel):
             body = request.body.read()
             indata = cjson.decode(body)["files"]
             if not isinstance(indata, (list, dict)):
-                 dbsExceptionHandler("dbsException-invalid-input", "Invalid Input DataType", self.logger.exception, \
+                dbsExceptionHandler("dbsException-invalid-input", "Invalid Input DataType", self.logger.exception, \
                                       "insertFile expects input as list or dirc")
             businput = []
-            if type(indata) == dict:
+            if isinstance(indata, dict):
                 indata = [indata]
             indata = validateJSONInputNoCopy("files", indata)
             for f in indata:
