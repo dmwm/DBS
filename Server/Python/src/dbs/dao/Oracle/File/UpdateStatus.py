@@ -47,8 +47,9 @@ class UpdateStatus(DBFormatter):
             wheresql = "where F.LOGICAL_FILE_NAME=:logical_file_name"
             binds.update(logical_file_name=logical_file_name)
         elif dataset:
-            wheresql = """ join {owner}DATASETS D on D.dataset_id = F.dataset_id 
-                          Where D.dataset=:dataset """.format(owner=self.owner)
+            wheresql = """ where F.dataset_id in ( select D.dataset_id from {owner}DATASETS D 
+                           inner join {owner}FILES F2 on F2.dataset_id = D.dataset_id 
+                           Where D.dataset=:dataset) """.format(owner=self.owner)
             binds.update(dataset=dataset)
 
         if lost:

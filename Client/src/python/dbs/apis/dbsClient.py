@@ -1411,8 +1411,10 @@ class DbsApi(object):
         """
         API to update file status
 
-        :param logical_file_name: logical_file_name to update (Required)
+        :param logical_file_name: logical_file_name to update (Required if no dataset).
         :type logical_file_name: str or a list of str
+        :param dataset : dataset name to update all the files under it (Required if no lfn).
+        :type dataset: basestring
         :param is_file_valid: valid=1, invalid=0 (Required)
         :type is_file_valid: bool
         :param lost: default lost=0 to indicate a file is not lost in transfer
@@ -1420,9 +1422,9 @@ class DbsApi(object):
 
         """
 
-        validParameters = ['logical_file_name', 'is_file_valid', 'lost']
+        validParameters = ['logical_file_name', 'is_file_valid', 'lost', 'dataset']
 
-        requiredParameters = {'forced': ['logical_file_name', 'is_file_valid']}
+        requiredParameters = {'forced': ['is_file_valid'], 'multiple': ['logical_file_name', 'dataset']}
 
 
         checkInputParameter(method="updateFileStatus", parameters=kwargs.keys(), validParameters=validParameters,
