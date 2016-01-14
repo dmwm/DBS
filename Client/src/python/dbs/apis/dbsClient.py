@@ -894,6 +894,7 @@ class DbsApi(object):
         API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset, non-wildcarded block_name is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
 
+
         * For lumi_list the following two json formats are supported:
             - [a1, a2, a3,]
             - [[a,b], [c, d],]
@@ -956,7 +957,8 @@ class DbsApi(object):
             - [a1, a2, a3,]
             - [[a,b], [c, d],]
 	* lumi_list can be either a list of lumi section numbers as [a1, a2, a3,] or a list of lumi section range as [[a,b], [c, d],]. They cannot be mixed.
-        * If lumi_list is provided run only run_num=single-run-number is allowed
+        * If lumi_list is provided run only run_num=single-run-number is allowed.
+        * When run_num=1, one has to provide logical_file_name. 
         * When lfn list is present, no run or lumi list is allowed.
 
         :param logical_file_name: logical_file_name of the file, Max length 1000.
@@ -1003,6 +1005,9 @@ class DbsApi(object):
         # In order to protect DB and make sure the query can be return in 300 seconds, we limit the length of 
         # logical file names, lumi and run num to 1000. These number may be adjusted later if 
         # needed. YG   May-20-2015.
+
+        # CMS has all MC data with run_num=1. It almost is a full table scan if run_num=1 without lfn. So we will request lfn
+        # to be present when run_num=1. YG Jan 14, 2016
         if 'logical_file_name' in kwargs.keys() and isinstance(kwargs['logical_file_name'], list)\
             and len(kwargs['logical_file_name']) > 1:
             if 'run_num' in kwargs.keys() and kwargs['run_num'] and len(kwargs['run_num']) > 1 :
@@ -1021,6 +1026,11 @@ class DbsApi(object):
                 else:
                     if kwargs['run_num']==1 or kwargs['run_num']=='1':
                         raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 when no lumi.')
+
+        if 'run_num' in kwargs.keys() and (kwargs['run_num'] == 1 or kwargs['run_num'] == '1' or 1 in kwargs['run_num'] 
+                        or '1' in kwargs['run_num']):
+            if 'logical_file_name' not in kwargs.keys() or not kwargs['logical_file_name']:
+                raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 without logical_file_name. ')
         results = []
         mykey = None
         total_lumi_len = 0
