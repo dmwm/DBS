@@ -887,6 +887,7 @@ class DBSReaderModel(RESTModel):
 	* lumi_list can be either a list of lumi section numbers as [a1, a2, a3,] or a list of lumi section range as [[a,b], [c, d],]. Thay cannot be mixed.
         * If lumi_list is provided run only run_num=single-run-number is allowed
 	* When lfn list is present, no run or lumi list is allowed.
+        * When run_num =1 is present, logical_file_name should be present too.
 
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
@@ -938,6 +939,10 @@ class DBSReaderModel(RESTModel):
                                 dbsExceptionHandler("dbsException-invalid-input", 
                                                     "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
 
+                if 'run_num' in data and (data['run_num'] == 1 or data['run_num'] == '1' or 1 in data['run_num']
+                        or '1' in data['run_num']):
+                    if 'logical_file_name' not in data or not data['logical_file_name']:
+                        raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 without logical_file_name.')
                 #Because CMSWEB has a 300 seconds responding time. We have to limit the array siz to make sure that
                 #the API can be finished in 300 second. See github issues #465 for tests' results.
                 # YG May-20-2015
