@@ -1027,10 +1027,15 @@ class DbsApi(object):
                     if kwargs['run_num']==1 or kwargs['run_num']=='1':
                         raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 when no lumi.')
 
-        if 'run_num' in kwargs.keys() and (kwargs['run_num'] == 1 or kwargs['run_num'] == '1' or 1 in kwargs['run_num'] 
-                        or '1' in kwargs['run_num']):
-            if 'logical_file_name' not in kwargs.keys() or not kwargs['logical_file_name']:
-                raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 without logical_file_name. ')
+        #check if no lfn is given, but run_num=1 is used for searching
+        if ('logical_file_name' not in kwargs.keys() or not kwargs['logical_file_name']) and 'run_num' in kwargs.keys():
+            if isinstance(kwargs['run_num'], list):
+                if 1 in kwargs['run_num'] or '1' in kwargs['run_num']:
+                    raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 without logical_file_name.')
+            else:
+                if kwargs['run_num'] == 1 or kwargs['run_num'] == '1':
+                    raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 without logical_file_name.')
+        
         results = []
         mykey = None
         total_lumi_len = 0

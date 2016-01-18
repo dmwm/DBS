@@ -938,11 +938,16 @@ class DBSReaderModel(RESTModel):
                             if data['run_num']==1 or data['run_num']=='1':
                                 dbsExceptionHandler("dbsException-invalid-input", 
                                                     "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
-
-                if 'run_num' in data and (data['run_num'] == 1 or data['run_num'] == '1' or 1 in data['run_num']
-                        or '1' in data['run_num']):
-                    if 'logical_file_name' not in data or not data['logical_file_name']:
-                        raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 without logical_file_name.')
+                #check if run_num =1 w/o lfn
+                if ('logical_file_name' not in data or not data['logical_file_name']) and 'run_num' in data:
+                    if isinstance(data['run_num'], list):
+                        if 1 in data['run_num'] or '1' in data['run_num']:
+                            raise dbsClientException('Invalid input',
+                                  'files API does not supprt run_num=1 without logical_file_name.')
+                        else:
+                            if data['run_num'] == 1 or data['run_num'] == '1':
+                                raise dbsClientException('Invalid input',
+                                   'files API does not supprt run_num=1 without logical_file_name.')                
                 #Because CMSWEB has a 300 seconds responding time. We have to limit the array siz to make sure that
                 #the API can be finished in 300 second. See github issues #465 for tests' results.
                 # YG May-20-2015
