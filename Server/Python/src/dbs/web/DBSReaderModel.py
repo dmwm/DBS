@@ -928,17 +928,7 @@ class DBSReaderModel(RESTModel):
                     if 'run_num' not in data.keys() or not data['run_num'] or data['run_num'] ==-1 :
                         dbsExceptionHandler("dbsException-invalid-input", 
                                             "When lumi_list is given, require a single run_num.", self.logger.exception)
-                else:
-                    if 'run_num' in data:
-                        if isinstance(data['run_num'], list):
-                            if 1 in data['run_num'] or '1' in data['run_num']:
-                                dbsExceptionHandler("dbsException-invalid-input", 
-                                                    "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
-                        else:
-                            if data['run_num']==1 or data['run_num']=='1':
-                                dbsExceptionHandler("dbsException-invalid-input", 
-                                                    "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
-                #check if run_num =1 w/o lfn
+                #check if run_num =1 w/o lfn 
                 if ('logical_file_name' not in data or not data['logical_file_name']) and 'run_num' in data:
                     if isinstance(data['run_num'], list):
                         if 1 in data['run_num'] or '1' in data['run_num']:

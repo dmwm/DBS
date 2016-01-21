@@ -12,7 +12,9 @@ from itertools import chain
 import os
 import socket
 import time
-import unittest
+import unittest.case
+import unittest.runner
+import unittest.loader
 
 try:
     #This does not work on a dev-vm since dbsmigration as well as dbs contains the same package dbs, first package
@@ -22,11 +24,11 @@ except ImportError:
     import imp
     ###check if patches are available
     input_source = \
-        '/data/srv/current/apps/dbsmigration/xlib/python2.6/site-packages/dbs/components/migration/DBSMigrationServer.py'
+        '/data/srv/current/apps/dbsmigration/xlib/python2.7/site-packages/dbs/components/migration/DBSMigrationServer.py'
 
     if not os.path.exists(input_source):
         input_source = \
-            '/data/srv/current/apps/dbsmigration/lib/python2.6/site-packages/dbs/components/migration/DBSMigrationServer.py'
+            '/data/srv/current/apps/dbsmigration/lib/python2.7/site-packages/dbs/components/migration/DBSMigrationServer.py'
 
     MigrationServer = imp.load_source('DBSMigrationServer', input_source)
     MigrationTask = MigrationServer.MigrationTask
@@ -42,7 +44,7 @@ def remove_non_comparable_keys(values, non_comparable_keys):
                 del value[entry]
         yield value
 
-class DBSMigrationServer_t(unittest.TestCase):
+class DBSMigrationServer_t(unittest.case.TestCase):
     _data_provider = None
 
     def __init__(self, methodName='runTest'):
@@ -130,7 +132,7 @@ class DBSMigrationServer_t(unittest.TestCase):
                          'migration_input' : block_data}
             ###schedule only the first block for migration
             print("\t----\t")
-	    print(toMigrate)	
+            print(toMigrate)
             self._migrate_api.insert('submit', toMigrate)
 
     def test_03_handle_migration_requests(self):
@@ -151,7 +153,7 @@ class DBSMigrationServer_t(unittest.TestCase):
     
     def test_04_insert_migration_requests(self):
         """test04: Test to submit a migration request (No data copied) between different DBS instances by dataset"""
-     	datasets = set((block['dataset']['dataset']
+        datasets = set((block['dataset']['dataset']
                         for block in chain(self._child_data_provider.block_dump(),
                                            self._independent_child_data_provider.block_dump())))
         for dataset in datasets:
@@ -165,7 +167,7 @@ class DBSMigrationServer_t(unittest.TestCase):
                     pass
     def test_05_handle_migration_requests(self):
         """test05: Test to handle migration requests (actually copy data) between different DBS instances by dataset"""
-	for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
+        for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
             if status['migration_status']==0:
                 self._migration_task.getResource()
                 ###wait 5 seconds to ensure that status is changed
@@ -180,7 +182,7 @@ class DBSMigrationServer_t(unittest.TestCase):
                 self._migration_task.cleanup()
     def test_06_block_migration_validation(self):
         """test06: Try to validate the migrated data by comparing block dumps from source and destination DB"""
-	def check(input, output):
+        def check(input, output):
             non_comparable_keys = ('block_id', 'dataset_id', 'last_modification_date',
                                    'parent_file_id', 'primary_ds_id', 'description')
             if isinstance(input, dict):
@@ -211,5 +213,5 @@ class DBSMigrationServer_t(unittest.TestCase):
             check(block_dump_src, block_dump_dest)
             n = n+1
 if __name__ == "__main__":
-    SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSMigrationServer_t)
-    unittest.TextTestRunner(verbosity=2).run(SUITE)
+    SUITE = unittest.loader.TestLoader().loadTestsFromTestCase(DBSMigrationServer_t)
+    unittest.runner.TextTestRunner(verbosity=2).run(SUITE)

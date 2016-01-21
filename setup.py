@@ -323,7 +323,6 @@ class InstallCommand(install):
       else:
         cmd.install_dir = self.install_lib
       cmd.ensure_finalized()
-
       self.run_command(cmd_name)
       self.distribution.have_run[cmd_name] = 1
 
