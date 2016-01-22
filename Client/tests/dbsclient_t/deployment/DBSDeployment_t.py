@@ -41,7 +41,7 @@ class PrepareDeploymentsTests(unittest.case.TestCase):
     def __str__(self):
         ''' Override this so that we know which instance it is '''
         #return "(%s): %s (%s)" % (self.url, self._testMethodName, unittest.util.strclass(self.__class__))
-        return "(%s): %s (%s)" % (self.url, self._testMethodName, self.__class__.__module__, self.__class__.__name__ )
+        return "(%s): %s (%s.%s)" % (self.url, self._testMethodName, self.__class__.__module__, self.__class__.__name__ )
 
     def test_01_insert_primary_dataset(self):
         fp = file(os.path.join(self.base_dir, "PrimaryDatasets.json"), 'r')
@@ -168,7 +168,7 @@ class PostDeploymentTests(unittest.case.TestCase):
     def __str__(self):
         ''' Override this so that we know which instance it is '''
         #return "(%s): %s (%s)" % (self.url, self._testMethodName, unittest.util.strclass(self.__class__))
-        return "(%s): %s (%s)" % (self.url, self._testMethodName, self.__class__.__module__, self.__class__.__name__ )
+        return "(%s): %s (%s.%s)" % (self.url, self._testMethodName, self.__class__.__module__, self.__class__.__name__ )
 
     def set_rest_model(self, RESTModel):
         self._RESTModel = RESTModel

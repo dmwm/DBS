@@ -1010,7 +1010,7 @@ class DbsApi(object):
         # to be present when run_num=1. YG Jan 14, 2016
         if 'logical_file_name' in kwargs.keys() and isinstance(kwargs['logical_file_name'], list)\
             and len(kwargs['logical_file_name']) > 1:
-            if 'run_num' in kwargs.keys() and kwargs['run_num'] and len(kwargs['run_num']) > 1 :
+            if 'run_num' in kwargs.keys() and isinstance(kwargs['run_num'],list) and len(kwargs['run_num']) > 1 :
                 raise dbsClientException('Invalid input', 'files API does not supprt two lists: run_num and lfn. ')
             elif 'lumi_list' in kwargs.keys() and kwargs['lumi_list'] and len(kwargs['lumi_list']) > 1 :
                 raise dbsClientException('Invalid input', 'files API does not supprt two lists: lumi_lis and lfn. ')
