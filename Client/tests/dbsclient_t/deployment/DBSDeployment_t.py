@@ -5,7 +5,11 @@ from __future__ import print_function
 import json
 import os
 import re
-import unittest
+import unittest.case
+import unittest.suite
+import unittest.util
+import unittest.loader
+import unittest.runner
 from dbs.apis.dbsClient import *
 from dbs.exceptions.dbsClientException import dbsClientException
 
@@ -27,7 +31,7 @@ def stripChangingParameters(data):
 
     return data
 
-class PrepareDeploymentsTests(unittest.TestCase):
+class PrepareDeploymentsTests(unittest.case.TestCase):
     def __init__(self, methodName='runTest'):
         super(PrepareDeploymentsTests, self).__init__(methodName)
         self.url = os.environ['DBS_WRITER_URL']
@@ -36,7 +40,8 @@ class PrepareDeploymentsTests(unittest.TestCase):
 
     def __str__(self):
         ''' Override this so that we know which instance it is '''
-        return "(%s): %s (%s)" % (self.url, self._testMethodName, unittest._strclass(self.__class__))
+        #return "(%s): %s (%s)" % (self.url, self._testMethodName, unittest.util.strclass(self.__class__))
+        return "(%s): %s (%s)" % (self.url, self._testMethodName, self.__class__.__module__, self.__class__.__name__ )
 
     def test_01_insert_primary_dataset(self):
         fp = file(os.path.join(self.base_dir, "PrimaryDatasets.json"), 'r')
@@ -153,7 +158,7 @@ class PrepareDeploymentsTests(unittest.TestCase):
             self.api.insertFiles(filesList={'files': entry})
 
 
-class PostDeploymentTests(unittest.TestCase):
+class PostDeploymentTests(unittest.case.TestCase):
     def __init__(self, methodName='runTest'):
         self._RESTModel = 'DBSReader'
         self.url = os.environ['DBS_READER_URL']
@@ -162,7 +167,8 @@ class PostDeploymentTests(unittest.TestCase):
 
     def __str__(self):
         ''' Override this so that we know which instance it is '''
-        return "(%s): %s (%s)" % (self.url, self._testMethodName, unittest._strclass(self.__class__))
+        #return "(%s): %s (%s)" % (self.url, self._testMethodName, unittest.util.strclass(self.__class__))
+        return "(%s): %s (%s)" % (self.url, self._testMethodName, self.__class__.__module__, self.__class__.__name__ )
 
     def set_rest_model(self, RESTModel):
         self._RESTModel = RESTModel
@@ -812,16 +818,16 @@ if __name__ == "__main__":
     TestSuite = unittest.TestSuite()
 
     if args[1] == 'insert=True':
-        prepareTests = unittest.TestLoader().loadTestsFromTestCase(PrepareDeploymentsTests)
+        prepareTests = unittest.loader.TestLoader().loadTestsFromTestCase(PrepareDeploymentsTests)
         TestSuite.addTests(prepareTests)
     else:
         pass
     for model in RESTModel:
-        loadedTests = unittest.TestLoader().loadTestsFromTestCase(PostDeploymentTests)
+        loadedTests = unittest.loader.TestLoader().loadTestsFromTestCase(PostDeploymentTests)
 
         for test in loadedTests:
             test.RESTModel = model
 
         TestSuite.addTests(loadedTests)
 
-    unittest.TextTestRunner(verbosity=2).run(TestSuite)
+    unittest.runner.TextTestRunner(verbosity=2).run(TestSuite)

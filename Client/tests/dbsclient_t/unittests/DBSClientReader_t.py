@@ -780,9 +780,28 @@ class DBSClientReader_t(unittest.TestCase):
         """test34g unittestDBSClientReader_t.listFileArray: basic test"""
         self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
                                self.testparams['files'][2], self.testparams['files'][3]], detail=1)   
+    
+    def test034h(self):
+        """test34h unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
+                               self.testparams['files'][2], self.testparams['files'][3]], detail=1, run_num=1)
+    @checkException400
+    def test034i(self):
+        """test34i unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(run_num=1)
 
-    def test034h(self):	
-	"""test34h unittestDBSClientReader_t.listFileArray: test split a call into more than one listFileArray  calls"""
+    @checkException400
+    def test034j(self):
+        """test34j unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(dataset=self.testparams['dataset'], run_num=1)
+
+    @checkException400
+    def test034k(self):
+        """test34k unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(block_name=self.testparams['block'], run_num=1)
+
+    def test034l(self):	
+	"""test34l unittestDBSClientReader_t.listFileArray: test split a call into more than one listFileArray  calls"""
         lfn=[]
         ds = self.api.listDatasets()
 	for d in ds:
