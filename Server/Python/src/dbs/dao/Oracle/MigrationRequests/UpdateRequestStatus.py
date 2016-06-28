@@ -31,6 +31,7 @@ class UpdateRequestStatus(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
 	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
                     """UPDATE %sMIGRATION_REQUESTS 
@@ -69,7 +70,8 @@ class UpdateRequestStatus(DBFormatter):
 	    migration_status, migration_request_id
         """	
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/UpdateRequestStatus. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/MigrationRequests/UpdateRequestStatus. Expects db connection from upper layer.", 
+                                self.logger.exception)
         if daoinput['migration_status'] == 1:
            sql = self.sql2 
         elif daoinput['migration_status'] == 2:
@@ -77,6 +79,7 @@ class UpdateRequestStatus(DBFormatter):
         elif daoinput['migration_status'] == 3:
             sql = self.sql3 + " and MIGRATION_STATUS = 1 " 
         else:
-            dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationRequest/UpdateRequestStatus. Expected migration status to be 1, 2 or 3")
+            dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationRequest/UpdateRequestStatus. Expected migration status to be 1, 2 or 3",
+                                self.logger.exception)
         
 	result = self.dbi.processData(sql, daoinput, conn, transaction)

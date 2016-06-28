@@ -27,7 +27,8 @@ class Update(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.logger = logger
         self.sql = \
                         """UPDATE %sMIGRATION_BLOCKS
                            SET 
@@ -42,13 +43,13 @@ class Update(DBFormatter):
         """
         #print daoinput['migration_block_id']
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationBlock/Update. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/MigrationBlock/Update. Expects db connection from upper layer." ,self.logger.exception)
         if daoinput['migration_status'] == 1:
            sql = self.sql + "  (MIGRATION_STATUS = 0  or MIGRATION_STATUS = 3)" 
         elif daoinput['migration_status'] == 2 or daoinput['migration_status'] == 3 or daoinput['migration_status'] == 9:
             sql = self.sql + " MIGRATION_STATUS = 1 "
         else: 
-            dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationBlock/Update. Expected migration status to be 1, 2, 3, 0r 9") 
+            dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationBlock/Update. Expected migration status to be 1, 2, 3, 0r 9" ,self.logger.exception ) 
         #print sql
         if 'migration_request_id' in daoinput:
             sql3 = sql + "and MIGRATION_REQUEST_ID =:migration_request_id"
@@ -65,4 +66,4 @@ class Update(DBFormatter):
                     "last_modification_date":daoinput["last_modification_date"]})
                 result = self.dbi.processData(sql2, newdaoinput, conn, transaction)
         else:
-            dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationBlock/Update. Required IDs not in the input")
+            dbsExceptionHandler("dbsException-conflict-data", "Oracle/MigrationBlock/Update. Required IDs not in the input", self.logger.exception)

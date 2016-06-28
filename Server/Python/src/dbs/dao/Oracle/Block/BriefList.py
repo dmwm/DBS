@@ -21,6 +21,7 @@ class BriefList(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """ SELECT  B.BLOCK_NAME """ 
         self.fromsql = """  FROM %sBLOCKS B """ % self.owner
+        self.logger = logger
 
     def execute(self, conn, dataset="", block_name="", data_tier_name="", origin_site_name="", logical_file_name="",
                 run_num=-1, min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,
@@ -114,7 +115,7 @@ class BriefList(DBFormatter):
                     run_list.append(str(r))
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
-                        dbsExceptionHandler('dbsException-invalid-input', "DBS run_num range must be apart at least by 1.")
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run_num range must be apart at least by 1.", self.logger.exception)
                     wheresql_run_range = " FLM.RUN_NUM between :minrun and :maxrun "
                     binds.update({"minrun":r[0]})
                     binds.update({"maxrun":r[1]})

@@ -30,8 +30,6 @@ FROM %sPRIMARY_DS_TYPES PDT
         """
         Lists all primary dataset types if no user input is provided.
         """
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "PrimaryDSType/List expects db connection from upper layer.")
         sql = self.sql
         binds={}
         if not dsType  and not dataset:
@@ -56,7 +54,7 @@ FROM %sPRIMARY_DS_TYPES PDT
             binds = {"primdstype":dsType, "dataset":dataset}
 	else:
 	    dbsExceptionHandler('dbsException-invalid-input', "DAO Primary_DS_TYPE List accepts no input, or\
-            dataset,primary_ds_type as input.")
+            dataset,primary_ds_type as input.", self.logger.exception)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         """
         if len(cursors) == 0 :

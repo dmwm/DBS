@@ -34,8 +34,6 @@ class Insert(DBFormatter):
 
 
     def execute( self, conn, file_typesObj, transaction=False ):
-        if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileType/Insert. Expects db connection from upper layer.")
 	
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
 	return

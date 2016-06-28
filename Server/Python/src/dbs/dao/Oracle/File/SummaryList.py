@@ -24,9 +24,6 @@ class SummaryList(DBFormatter):
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 
     def execute(self, conn, block_name="", dataset="",  run_num=-1, validFileOnly=0, transaction=False):
-        if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/SummaryList. Expects db connection from upper layer.")
-
         binds = {}
         whererun = ''
         run_list = []

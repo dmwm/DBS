@@ -17,7 +17,8 @@ class UpdateStatus(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.logger = logger
         self.sql = """UPDATE %sDATASETS SET LAST_MODIFIED_BY=:myuser, LAST_MODIFICATION_DATE=:mydate, 
         IS_DATASET_VALID = :is_dataset_valid where DATASET = :dataset""" %  self.owner 
         
@@ -26,7 +27,7 @@ class UpdateStatus(DBFormatter):
         for a given file
         """	
 	if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/UpdateStatus.  Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/Dataset/UpdateStatus.  Expects db connection from upper layer.", self.logger.exception)
 	binds = { "dataset" : dataset , "is_dataset_valid" : is_dataset_valid, "mydate": dbsUtils().getTime(), "myuser": dbsUtils().getCreateBy()}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
     

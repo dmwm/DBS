@@ -15,6 +15,7 @@ class List(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """SELECT BC.BLOCK_NAME as THIS_BLOCK_NAME, BP.BLOCK_NAME as PARENT_BLOCK_NAME FROM %sBLOCKS BP
 			JOIN %sBLOCK_PARENTS BPRTS
@@ -28,7 +29,7 @@ class List(DBFormatter):
         block: /a/b/c#d
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/BlockParent/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/BlockParent/List. Expects db connection from upper layer.", self.logger.exception)
 
         sql = self.sql
         
@@ -38,7 +39,7 @@ class List(DBFormatter):
             binds = [{'block_name':x} for x in block_name]
         else: 
             msg = "Oracle/BlockParent/List. Block_name must be provided either as a string or as a list."
-            dbsExceptionHandler('dbsException-invalid-input', msg)
+            dbsExceptionHandler('dbsException-invalid-input', msg, self.logger.exception)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []
         for i in cursors:

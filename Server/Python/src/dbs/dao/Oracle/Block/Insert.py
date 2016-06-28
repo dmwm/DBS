@@ -14,8 +14,6 @@ class Insert(InsertSingle):
 	open_for_writing, origin_site(id), block_size,
         file_count, creation_date, create_by, lastmodification_date, lastmodified_by
         """
-	if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Block/Insert.  Expects db connection from upper layer.")
         self.executeSingle(conn, daoinput, "BLOCKS", transaction)
             
 

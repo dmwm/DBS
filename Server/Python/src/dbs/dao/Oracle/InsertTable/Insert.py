@@ -15,9 +15,6 @@ class InsertSingle(DBFormatter):
 	
     def executeSingle( self, conn, daoinput, tablename, transaction = False):			
 	"""build dynamic sql based on daoinput"""
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/InsertTable/Insert. Expects db connection from upper layer.")
-
 	sql1 = " insert into %s%s( " %(self.owner, tablename)
 	sql2 =" values("
 	"Now loop over all the input keys. We need to check if all the keys are valid !!!"

@@ -22,9 +22,6 @@ class ListOldest(DBFormatter):
         """
         Lists the oldest request queued 
         """
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/ListOldest. Expects db connection from upper layer.")
-
         binds = {}
 	result = self.dbi.processData(self.sql, binds, conn, transaction)
         result = self.formatDict(result)

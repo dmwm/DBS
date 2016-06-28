@@ -15,7 +15,8 @@ class Update(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.logger = logger
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 """UPDATE %sMIGRATION_REQUESTS 
 SET MIGRATION_STATUS=:migration_status 
@@ -27,6 +28,7 @@ WHERE MIGRATION_REQUEST_ID=:migration_request_id""" %  self.owner
 	    migration_status, migration_request_id
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/Update. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/MigrationRequests/Update. Expects db connection from upper layer.",
+                                self.logger.exception)
 
         result = self.dbi.processData(self.sql, daoinput, conn, transaction)

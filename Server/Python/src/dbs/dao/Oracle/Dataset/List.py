@@ -57,13 +57,11 @@ class List(DBFormatter):
                 primary_ds_type="", processed_ds_name="", data_tier_name="", dataset_access_type="", prep_id="",\
                 create_by='', last_modified_by='', min_cdate=0, max_cdate=0, min_ldate=0, max_ldate=0, cdate=0,\
                 ldate=0, dataset_id=-1, transaction=False):
-        #import pdb
-        #pdb.set_trace()
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "%s Oracle/Dataset/List.  Expects db connection from upper layer.")
-	sql = ""
+            dbsExceptionHandler("dbsException-failed-connect2host", "%s Oracle/Dataset/List.  Expects db connection from upper layer.", self.logger.exception)
+        sql = ""
         generatedsql = ''
-	basesql=self.basesql
+        basesql=self.basesql
         binds = {}
 	wheresql = "WHERE D.IS_DATASET_VALID = :is_dataset_valid " 
         if dataset and type(dataset) is list:  # for the POST method
@@ -89,7 +87,7 @@ class List(DBFormatter):
                     dataset_id_list.append(str(id))
                 if isinstance(id, run_tuple):
                     if id[0] == id[1]:
-			dbsExceptionHandler('dbsException-invalid-input', "DBS dataset_id range must be apart at least by 1.")
+			dbsExceptionHandler('dbsException-invalid-input', "DBS dataset_id range must be apart at least by 1.", self.logger.exception)
 		    wheresql_dataset_id_range = " D.DATASET_ID between :minid and :maxid "
 		    binds.update({"minid":id[0]})
 		    binds.update({"maxid":id[1]})
@@ -273,7 +271,7 @@ class List(DBFormatter):
                         run_list.append(str(r))
                     if isinstance(r, run_tuple):
                         if r[0] == r[1]:
-                            dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                            dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.", self.logger.exception)
                         wheresql_run_range = " FLLU.RUN_NUM between :minrun and :maxrun "
                         binds.update({"minrun":r[0]})
                         binds.update({"maxrun":r[1]})
@@ -293,7 +291,7 @@ class List(DBFormatter):
     		sql += wheresql
             else:
                 dbsExceptionHandler("dbsException-invalid-input", "Oracle/Dataset/List. Proper parameters are not\
-                    provided for listDatasets call.")
+                    provided for listDatasets call.", self.logger.exception)
         #self.logger.error( sql)
         #self.logger.error("binds=%s" %binds)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)

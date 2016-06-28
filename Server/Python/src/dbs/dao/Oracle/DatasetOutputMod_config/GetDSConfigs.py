@@ -15,6 +15,7 @@ class GetDSConfigs(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 	"""
@@ -31,7 +32,7 @@ class GetDSConfigs(DBFormatter):
         returns id for a given dataset = /primds/procds/tier
         """	
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DatasetOutputMod_config/GetDSConfigs. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/DatasetOutputMod_config/GetDSConfigs. Expects db connection from upper layer.", self.logger.exception)
 
         sql = self.sql
         binds = {"dataset":dataset}

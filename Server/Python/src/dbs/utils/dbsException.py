@@ -10,7 +10,7 @@ import logging
 import traceback
 
 dbsExceptionCode = {
-    'dbsException-db-conn-failed' : 'dbsException due to db connection failed: ',
+    'dbsException-failed-connect2host' : 'dbsException due to db connection failed: ',
     'dbsException-server-error' : 'dbsException due to internal server error: ',
     'dbsException-input-too-large' : "dbsException due to input exceeds a API's max limit : ",
     'dbsException-invalid-input' : 'dbsException due to invalid client input: ',

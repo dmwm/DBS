@@ -35,9 +35,6 @@ JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
 
     def execute(self, conn, block_name="", logical_file_name="",
 	    maxrun=-1, minrun=-1, origin_site_name="", lumi_list=[], transaction=False):
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/MgrtList. Expects db connection from upper layer.")
-
 	sql = self.sql 
         binds = {}
 	if (minrun and minrun != -1) and (maxrun and maxrun != -1):

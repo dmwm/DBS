@@ -44,9 +44,6 @@ class List(DBFormatter):
         """
         returns id for a given application
         """
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/OutputModuleConfig/List. Expects db connection from upper layer.")
-
 	#sql=self.sql	
         binds = {}
 	setAnd=False

@@ -27,10 +27,6 @@ class UpdateStatus(DBFormatter):
         """
         for a given file or a list of files
         """
-        if not conn:
-           dbsExceptionHandler("dbsException-db-conn-failed",
-                               "Oracle/File/UpdateStatus. Expects db connection from upper layer.")
-
         binds = dict(myuser=dbsUtils().getCreateBy(),
                      mydate=dbsUtils().getTime(),
                      is_file_valid=is_file_valid)

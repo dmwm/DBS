@@ -227,6 +227,7 @@ class DbsApi(object):
         """
         Returns the time needed to process the request by the frontend server in microseconds
         and the EPOC timestamp of the request in microseconds.
+
         :rtype: tuple containing processing time and timestamp
         """
         try:
@@ -238,12 +239,21 @@ class DbsApi(object):
     def requestContentLength(self):
         """
         Returns the content-length of the content return by the server
+       
         :rtype: str
         """
         try:
             return self.http_response.header.get('Content-Length')
         except AttributeError:
             return None
+
+    @split_calls
+    def testDoc(self, **kwargs):
+        """
+        test document.
+
+        """
+        pass
 
     def blockDump(self,**kwargs):
         """
@@ -891,9 +901,9 @@ class DbsApi(object):
     @split_calls    
     def listFiles(self, **kwargs):
         """
+        listFiles(**kwargs)
         API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset, non-wildcarded block_name is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
-
 
         * For lumi_list the following two json formats are supported:
             - [a1, a2, a3,]
@@ -928,6 +938,13 @@ class DbsApi(object):
         :type validFileOnly: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
+
+        .. note::
+        * There are five dataset access types: VALID, INVALID, PRODUCTION, DEPRECATED and DELETED.
+        * One file status: IS_FILE_VALID: 1 or 0.
+        * When a dataset is INVALID/ DEPRECATED/ DELETED, DBS will consider all the files under it is invalid not matter what value is_file_valid has. In general, when the dataset is in one of INVALID/ DEPRECATED/ DELETED, is_file_valid should all marked as 0, but some old DBS2 data was not.
+        * When Dataset is VALID/PRODUCTION, by default is_file_valid is all 1. But if individual file is invalid, then the file's is_file_valid is set to 0.
+        * DBS use this logical in its APIs that have validFileOnly variable.
 
         """
         validParameters = ['dataset', 'block_name', 'logical_file_name',

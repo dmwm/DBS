@@ -17,9 +17,6 @@ class Insert(DBFormatter):
             :primary_ds_type)""" % (self.owner)
 
     def execute( self, conn, primary_ds_typesObj, transaction=False ):
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/PrimaryDSType/Insert. Expects db connection from upper layer.")
-
 	result = self.dbi.processData(self.sql, primary_ds_typesObj, conn, transaction)
 	return
 

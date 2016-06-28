@@ -16,6 +16,7 @@ class ListChild(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """
         SELECT CF.LOGICAL_FILE_NAME child_logical_file_name,
@@ -30,10 +31,6 @@ class ListChild(DBFormatter):
         """
         Lists all primary datasets if pattern is not provided.
         """
-        if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed",
-                                "Oracle/FileParent/ListChild. Expects db connection from upper layer.")
-
         binds = {}
         sql = ''
 
@@ -57,7 +54,7 @@ class ListChild(DBFormatter):
             binds = {"block_id": block_id}
             sql = "{sql} {wheresql}".format(sql=self.sql, wheresql=wheresql)
         else:
-            dbsExceptionHandler('dbsException-invalid-input', "Logical_file_names is required for listChild dao.")
+            dbsExceptionHandler('dbsException-invalid-input', "Logical_file_names is required for listChild dao.", self.logger.exception)
 
         cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
         result = self.formatCursor(cursors[0])

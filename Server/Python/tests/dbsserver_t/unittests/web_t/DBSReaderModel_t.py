@@ -1166,6 +1166,13 @@ class DBSReaderModel_t(unittest.TestCase):
 	data = {"logical_file_name": [lfn1, lfn2], "validFileOnly": 0}
         api.insert('filelumis', data)
 
+    def test010w(self):
+        """test010lw: web.DBSReaderModel.listFileLumiArray: basic test """
+        lfn1 = testparams['files'][1]
+        lfn2 = testparams['files'][2]
+        data={"logical_file_name": [lfn1, lfn2], "run_num":'1-%s' %testparams['run_num'], "validFileOnly" :0}
+        api.insert('filelumis', data)
+
     def test010x(self):
         """test010lx: web.DBSReaderModel.listFileLumiArray: basic test """
         lfn1 = testparams['files'][1]

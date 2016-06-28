@@ -25,9 +25,6 @@ FROM %sPRIMARY_DATASETS P
         """
         returns id for a given primary dataset name
         """
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/PrimaryDataset/GetID. Expects db connection from upper layer.")
-
         sql = self.sql
         sql += "WHERE P.PRIMARY_DS_NAME = :primarydataset" 
         binds = {"primarydataset":name}

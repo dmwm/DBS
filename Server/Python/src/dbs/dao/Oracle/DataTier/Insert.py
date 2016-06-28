@@ -13,8 +13,6 @@ class Insert(DBFormatter):
             self.sql = """INSERT INTO %sDATA_TIERS ( DATA_TIER_ID, DATA_TIER_NAME, CREATION_DATE, CREATE_BY) VALUES (:data_tier_id, :data_tier_name, :creation_date, :create_by)""" % (self.owner)
 
     def execute( self, conn, dtObj, transaction=False, cache=None ):
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "dbs/dao/Oracle/DataTier/Insert expects db connection from upper layer.")
 	result = self.dbi.processData(self.sql, dtObj, conn, transaction)
 	# Now attempt to set this in cache
         if cache:

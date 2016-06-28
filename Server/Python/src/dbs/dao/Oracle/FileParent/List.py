@@ -32,9 +32,6 @@ class List(DBFormatter):
         """
         return {} if condition is not provided.
         """
-        if not conn:
-           dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileParent/List. Expects db connection from upper layer.")
-        
         sql = ''
         binds = {}
 

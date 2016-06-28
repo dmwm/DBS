@@ -12,9 +12,6 @@ class Insert(InsertSingle):
             self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 
     def execute( self, conn, binds, transaction=False ):
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ProcessingEra/Insert. Expects db connection from upper layer.")
-
         self.executeSingle(conn, binds, "PROCESSING_ERAS", transaction)
         
 	return

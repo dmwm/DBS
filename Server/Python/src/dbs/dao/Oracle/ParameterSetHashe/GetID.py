@@ -25,9 +25,6 @@ class GetID(DBFormatter):
         """
         returns id for a given application
         """
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ParameterSetHashe/GetID. Expects db connection from upper layer.")
-
         binds = {"pset_hash":pset_hash}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)

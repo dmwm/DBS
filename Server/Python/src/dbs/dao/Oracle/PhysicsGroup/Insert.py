@@ -17,7 +17,5 @@ class Insert(DBFormatter):
                           VALUES (:physics_group_id, :physics_group_name)""" % (self.owner)
 
     def execute( self, conn, physics_groupsObj, transaction=False):
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/PhysicsGroup/Insert. Expects db connection from upper layer.")
         self.dbi.processData(self.sql, physics_groupsObj, conn, transaction)
 	return

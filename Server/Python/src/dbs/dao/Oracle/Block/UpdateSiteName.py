@@ -27,8 +27,8 @@ LAST_MODIFICATION_DATE = :mtime where BLOCK_NAME = :block_name""".format(owner=s
         Update origin_site_name for a given block_name
         """
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Block/UpdateStatus. \
-Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/Block/UpdateStatus. \
+Expects db connection from upper layer.", self.logger.exception)
         binds = {"block_name": block_name, "origin_site_name": origin_site_name, "mtime": dbsUtils().getTime(),
                  "myuser": dbsUtils().getCreateBy()}
         self.dbi.processData(self.sql, binds, conn, transaction)

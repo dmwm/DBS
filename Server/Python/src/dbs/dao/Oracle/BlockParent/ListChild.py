@@ -15,6 +15,7 @@ class ListChild(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """SELECT BC.BLOCK_NAME FROM %sBLOCKS BC
 			JOIN %sBLOCK_PARENTS BPRTS
@@ -29,14 +30,14 @@ class ListChild(DBFormatter):
         """	
         if not conn:
             msg='Oracle/BlockParent/List. No DB connection found'
-            dbsExceptionHandler('dbsException-db-conn-failed', msg)
+            dbsExceptionHandler('dbsException-failed-connect2host', msg, self.logger.exception)
 
         sql = self.sql
         binds = {}
 	if block_name:
 	    binds.update(block_name = block_name)
         else:
-            dbsExceptionHandler("dbsException-invalid-input", "Oracle/BlockParent/ListChild. block_name must be provided.")
+            dbsExceptionHandler("dbsException-invalid-input", "Oracle/BlockParent/ListChild. block_name must be provided.", self.logger.exception)
 
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []

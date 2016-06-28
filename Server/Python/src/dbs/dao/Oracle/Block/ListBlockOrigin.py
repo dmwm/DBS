@@ -16,6 +16,7 @@ class ListBlockOrigin(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """SELECT B.BLOCK_NAME, B.OPEN_FOR_WRITING,
 B.BLOCK_SIZE, B.FILE_COUNT,
@@ -33,7 +34,7 @@ JOIN {owner}DATASETS DS ON DS.DATASET_ID = B.DATASET_ID """.format(owner=self.ow
         """
         if not conn:
             dbsExceptionHandler("dbsException-db-conn-failed",
-                                "Oracle/Block/List.  Expects db connection from upper layer.")
+                                "Oracle/Block/List.  Expects db connection from upper layer.", self.logger.exception)
         binds = {}
         if origin_site_name:
             wheresql = 'WHERE B.ORIGIN_SITE_NAME = :origin_site_name'

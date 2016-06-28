@@ -13,7 +13,4 @@ class Insert(DBFormatter):
             :file_id, :output_mod_config_id)""" % ((self.owner,)*2)
 
     def execute( self, conn, binds, transaction=False ):
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileOutputMod_config/Insert. Expects db connection from upper layer.")
-            
         result = self.dbi.processData(self.sql, binds, conn, transaction)

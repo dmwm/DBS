@@ -24,7 +24,8 @@ class BriefList(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-	self.basesql = " D.DATASET FROM %sDATASETS D " %  self.owner
+        self.basesql = " D.DATASET FROM %sDATASETS D " %  self.owner
+        self.logger = logger
 
     def execute(self, conn, dataset="", is_dataset_valid=1, parent_dataset="",
                 release_version="", pset_hash="", app_name="", output_module_label="", global_tag="",
@@ -35,7 +36,7 @@ class BriefList(DBFormatter):
                 ldate=0, dataset_id=-1,
                 transaction=False):
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/BriefList.  Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/Dataset/BriefList.  Expects db connection from upper layer.", self.logger.exception)
 	selectsql = 'SELECT '
 	joinsql = ''
         generatedsql = ''
@@ -65,7 +66,7 @@ class BriefList(DBFormatter):
 		    dataset_id_list.append(str(id))
                 if isinstance(id, run_tuple):
                     if id[0] == id[1]:
-		        dbsExceptionHandler('dbsException-invalid-input', "DBS dataset_id range must be apart at least by 1.")
+		        dbsExceptionHandler('dbsException-invalid-input', "DBS dataset_id range must be apart at least by 1.", self.logger.exception)
 		    wheresql_dataset_id_range = " D.DATASET_ID between :minid and :maxid " 
                     binds.update({"minid":id[0]})
                     binds.update({"maxid":id[1]})
@@ -248,7 +249,7 @@ class BriefList(DBFormatter):
                         run_list.append(str(r))
                     if isinstance(r, run_tuple):
                         if r[0] == r[1]:
-                            dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                            dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.", self.logger.exception)
                         wheresql_run_range = " FLLU.RUN_NUM between :minrun and :maxrun "
                         binds.update({"minrun":r[0]})
                         binds.update({"maxrun":r[1]})

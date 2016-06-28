@@ -25,8 +25,5 @@ VALUES(:migration_request_id, :migration_url, :migration_input, :migration_statu
 	:migration_request_id, :migration_url, :migration_input, :migration_status
 	:creation_date, :create_by, :last_modification_date, :last_modified_by
         """
-        if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/Insert. Expects db connection from upper layer.")
-
         self.dbi.processData(self.sql, daoinput, conn, transaction)
 
