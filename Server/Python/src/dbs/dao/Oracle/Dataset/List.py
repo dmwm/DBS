@@ -63,7 +63,7 @@ class List(DBFormatter):
         generatedsql = ''
         basesql=self.basesql
         binds = {}
-	wheresql = "WHERE D.IS_DATASET_VALID = :is_dataset_valid " 
+        wheresql = "WHERE D.IS_DATASET_VALID = :is_dataset_valid " 
         if dataset and type(dataset) is list:  # for the POST method
             ds_generator, binds2 = create_token_generator(dataset)
 	    binds.update(binds2)	
