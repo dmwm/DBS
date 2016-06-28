@@ -32,7 +32,7 @@ class UpdateRequestStatus(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.logger = logger
-	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
                     """UPDATE %sMIGRATION_REQUESTS 
                        SET 
