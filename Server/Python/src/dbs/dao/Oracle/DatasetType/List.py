@@ -24,8 +24,6 @@ SELECT DT.DATASET_ACCESS_TYPE FROM %sDATASET_ACCESS_TYPES DT
 """ % (self.owner)
 
     def execute(self, conn, datasetAccessType='', transaction = False):
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "dbs/dao/Oracle/DatasetAccessType/List expects db connection from upper layer.")
         sql = self.sql
 	binds={}
 	if datasetAccessType:

@@ -32,8 +32,6 @@ JOIN %sPRIMARY_DS_TYPES PT ON PT.PRIMARY_DS_TYPE_ID = P.PRIMARY_DS_TYPE_ID
         """
         Lists all primary datasets if pattern is not provided.
         """	
-	if not conn:
-	    dbsExceptionHandler('dbsException-db-conn-failed', "ParimaryDataset/List expects db connection from upper layer.")	    
         sql = self.sql
         binds = {}
         #import pdb

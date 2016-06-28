@@ -26,9 +26,6 @@ class GetID(DBFormatter):
         """
         returns id for a given processing version name
         """
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ProcessingEra/GetID. Expects db connection from upper layer.")
-
         binds = {"processing_version":name}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)

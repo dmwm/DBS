@@ -33,9 +33,6 @@ class GetID(DBFormatter):
         """
         returns id for a given application
         """
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/OutputModuleConfig/GetID. Expects db connection from upper layer.")
-
 	sql = self.sql
         binds = {}
 	setAnd=False
@@ -63,7 +60,7 @@ class GetID(DBFormatter):
                 sql += " O.GLOBAL_TAG=:global_tag"
                 binds["global_tag"]=global_tag
 	if app == release_version == pset_hash  == global_tag == "":
-            dbsExceptionHandler('dbsException-invalid-input', "%s Either app_name, release_version, pset_hash or global_tag must be provided")	
+            dbsExceptionHandler('dbsException-invalid-input', "%s Either app_name, release_version, pset_hash or global_tag must be provided", self.logger.exception)	
 
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)

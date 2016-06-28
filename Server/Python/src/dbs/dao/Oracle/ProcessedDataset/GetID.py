@@ -25,9 +25,6 @@ FROM %sPROCESSED_DATASETS PD
         """
         returns id for a given processed dataset name
         """
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ProcessedDataset/GetID. Expects db connection from upper layer.")
-
         sql = self.sql
         sql += "WHERE PD.PROCESSED_DS_NAME = :processeddsname" 
         binds = {"processeddsname":name}

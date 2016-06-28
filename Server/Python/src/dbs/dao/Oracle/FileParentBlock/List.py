@@ -18,6 +18,7 @@ class List(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """SELECT B.BLOCK_ID as BLOCK_ID, B.DATASET_ID as DATASET_ID FROM %sBLOCKS B JOIN %sFILES FL ON FL.BLOCK_ID=B.BLOCK_ID LEFT OUTER JOIN %sFILE_PARENTS FP ON FP.PARENT_FILE_ID = FL.FILE_ID WHERE FP.THIS_FILE_ID IN ( """% ((self.owner,)*3)
 
@@ -25,9 +26,6 @@ class List(DBFormatter):
 	"""
 	file_id_list : file_id_list 
 	"""
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileParentBlock/List. Expects db connection from upper layer.")
-
 	sql=self.sql
 	binds={}
 	if file_id_list:
@@ -39,7 +37,7 @@ class List(DBFormatter):
 		count+=1
 	    sql += ")"
 	else:
-            dbsExceptionHandler('dbsException-invalid-input', "Oracle/FileParentBlock/List. this_file_id not provided")
+            dbsExceptionHandler('dbsException-invalid-input', "Oracle/FileParentBlock/List. this_file_id not provided", self.logger.exception)
             
         result = self.dbi.processData(sql, binds, conn, transaction)
         plist = self.formatDict(result)

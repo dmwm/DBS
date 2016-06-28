@@ -16,7 +16,8 @@ class Remove(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.logger = logger
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 
 	#check before delete since rowcount is not supported in wmcore 
 	self.select = """
@@ -36,7 +37,8 @@ class Remove(DBFormatter):
 	    migration_request_id
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/Remove. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/MigrationRequests/Remove. Expects db connection from upper layer.",
+                                self.logger.exception)
         daoinput['create_by'] = dbsUtils().getCreateBy()
 	try:
             msg = "DBSMigration: Invalid request. Sucessfully processed or processing requests cannot be removed,\
@@ -46,6 +48,6 @@ class Remove(DBFormatter):
 		reqID = {'migration_rqst_id':daoinput['migration_rqst_id']}
 	        result = self.dbi.processData(self.sql, reqID, conn, transaction)
             else:
-                dbsExceptionHandler('dbsException-invalid-input', msg)
+                dbsExceptionHandler('dbsException-invalid-input', msg, self.logger.exception)
 	except:
             raise

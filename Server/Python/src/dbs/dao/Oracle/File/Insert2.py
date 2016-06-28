@@ -40,8 +40,6 @@ class Insert2(DBFormatter):
         """
 
     def execute(self, conn, daoinput, transaction = False):
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/Insert. Expects db connection from upper layer.")
 	
         #print "About to insert file with dataset id"
         #print binds[0]['dataset_id']

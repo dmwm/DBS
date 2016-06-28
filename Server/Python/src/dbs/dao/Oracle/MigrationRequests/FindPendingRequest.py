@@ -15,6 +15,7 @@ class FindPendingRequest(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
 		     
         self.sql ="""select MIGRATION_REQUEST_ID, MIGRATION_URL from %sMIGRATION_REQUESTS where MIGRATION_STATUS=0
@@ -26,7 +27,8 @@ class FindPendingRequest(DBFormatter):
 	find the pending request
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationRequests/FindPendingRequest. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/MigrationRequests/FindPendingRequest. Expects db connection from upper layer.", 
+                                self.logger.exception)
 
         binds = {}
 	result = self.dbi.processData(self.sql, binds, conn, transaction)

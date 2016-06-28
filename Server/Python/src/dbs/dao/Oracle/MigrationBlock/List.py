@@ -15,6 +15,7 @@ class List(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.logger = logger
         self.sql = """SELECT MIGRATION_BLOCK_ID, MIGRATION_REQUEST_ID, MIGRATION_BLOCK_NAME, MIGRATION_ORDER, 
 			MIGRATION_STATUS, CREATE_BY, CREATION_DATE, LAST_MODIFIED_BY, LAST_MODIFICATION_DATE 
 			FROM %sMIGRATION_BLOCKS 
@@ -26,7 +27,7 @@ class List(DBFormatter):
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationBlock/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/MigrationBlock/List. Expects db connection from upper layer.", self.logger.exception )
 
         binds = { "migration_request_id" : migration_request_id }
 	cursors = self.dbi.processData(self.sql, binds, conn, transaction, returnCursor=True)

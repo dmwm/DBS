@@ -24,9 +24,6 @@ class GetID(DBFormatter):
         """
         returns id for a given physics group name
         """
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/PhysicsGroup/GetID. Expects db connection from upper layer.")
-
         sql = self.sql
         binds = {"physicsgroup": name}
         result = self.dbi.processData(sql, binds, conn, transaction)

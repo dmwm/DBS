@@ -35,8 +35,6 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
 	wheresql = ""
 	lfn_generator = ""
 	run_generator = ""
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/FileLumi/List. Expects db connection from upper layer.")            
         if logical_file_name and not isinstance(logical_file_name, list):
             binds = {'logical_file_name': logical_file_name}
             if int(validFileOnly) == 0:

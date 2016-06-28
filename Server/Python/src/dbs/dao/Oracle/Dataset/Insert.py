@@ -44,7 +44,7 @@ class Insert(DBFormatter):
 	physics_group_name, xtcrosssection, creation_date, create_by, last_modification_date, last_modified_by
 	"""
 	if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Dataset/Insert.  Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/Dataset/Insert.  Expects db connection from upper layer.", self.logger.exception)
         if daoinput == {}:
             # Nothing to do
             return

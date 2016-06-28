@@ -20,6 +20,7 @@ class List(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = \
 	"""
@@ -30,9 +31,6 @@ class List(DBFormatter):
         """
         Lists all primary datasets if pattern is not provided.
         """
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DatasetRun/List. Expects db connection from upper layer.")
-
         sql = self.sql
         binds = {}
 	if logical_file_name and "%" not in logical_file_name:
@@ -63,7 +61,7 @@ class List(DBFormatter):
                     run_list.append(str(r))
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
-                        dbsExceptionHandler('dbsException-invalid-input', "DBS run_num range must be apart at least by 1.")
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run_num range must be apart at least by 1.", self.logger.exception)
                     wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
                     binds.update({"minrun":r[0]})
                     binds.update({"maxrun":r[1]})

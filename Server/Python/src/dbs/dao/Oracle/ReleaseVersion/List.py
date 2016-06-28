@@ -24,9 +24,6 @@ SELECT RV.RELEASE_VERSION FROM %sRELEASE_VERSIONS RV
 """ % (self.owner)
 
     def execute(self, conn, releaseVersion='', dataset='', logical_file_name='', transaction = False):
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ReleaseVersion/List. Expects db connection from upper layer.")
-
         sql = self.sql
 	binds={}
 	if releaseVersion and not dataset:

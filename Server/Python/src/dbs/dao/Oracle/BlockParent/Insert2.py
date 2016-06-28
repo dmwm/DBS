@@ -24,7 +24,7 @@ class Insert2(DBFormatter):
 
     def execute( self, conn, binds, transaction=False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/BlockParent/Insert2. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/BlockParent/Insert2. Expects db connection from upper layer.", self.logger.exception)
         bind = {}
         bindlist=[]
         if isinstance(binds, dict):
@@ -35,4 +35,4 @@ class Insert2(DBFormatter):
                 bindlist.append(bind)
             self.dbi.processData(self.sql, bindlist, conn, transaction)
         else:
-            dbsExceptionHandler('dbsException-invalid-input2', "Block id and parent lfn are required for BlockParent insert dao.")
+            dbsExceptionHandler('dbsException-invalid-input2', "Block id and parent lfn are required for BlockParent insert dao.", self.logger.exception)

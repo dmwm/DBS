@@ -22,13 +22,14 @@ class FindMigrateableBlocks(DBFormatter):
 			FROM %s MIGRATION_BLOCKS 
 			WHERE MIGRATION_REQUEST_ID=:migration_request_id AND MIGRATION_STATUS= 0 ORDER BY MIGRATION_ORDER DESC
 			""" % (self.owner)
+        self.logger = logger
 
     def execute(self, conn, migration_request_id="", transaction=False):
         """
         Lists all primary datasets if pattern is not provided.
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/MigrationBlocks/FindMigrateableBlocks. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/MigrationBlocks/FindMigrateableBlocks. Expects db connection from upper layer.", self.logger.exception)
 
         binds = { "migration_request_id" : migration_request_id }
 	cursors = self.dbi.processData(self.sql, binds, conn, transaction, returnCursor=True)

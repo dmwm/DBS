@@ -15,8 +15,9 @@ class ListStats(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
+        self.logger = logger
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
-	self.sql = """SELECT count(*) AS FILE_COUNT, 
+        self.sql = """SELECT count(*) AS FILE_COUNT, 
 			SUM(FILE_SIZE) AS BLOCK_SIZE,
 			f.BLOCK_ID AS BLOCK_ID
 			FROM %sFILES f 
@@ -28,7 +29,7 @@ class ListStats(DBFormatter):
         returns id for a given block = /primds/procds/tier#block
         """	
 	if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/Block/ListStats.  Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/Block/ListStats.  Expects db connection from upper layer.", self.logger.exception)
         binds = {"block_id": block_id}
         result = self.dbi.processData(self.sql, binds, conn, transaction)
         plist = self.formatDict(result)

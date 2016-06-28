@@ -12,8 +12,6 @@ class Insert(DBFormatter):
         self.sql = """INSERT INTO %sBLOCK_SITES ( BLOCK_SITE_ID, SITE_ID, BLOCK_ID) VALUES (:blocksiteid, (SELECT SITE_ID FROM SITES WHERE SITE_NAME=:sitename), :blockid)""" % (self.owner)
 
     def execute( self, conn, block_site_id="", block_id="", site_name="", transaction=False ):
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/BlockSite/Insert. Expects db connection from upper layer.")
             
 	binds={}
 	binds['blocksiteid']=block_site_id

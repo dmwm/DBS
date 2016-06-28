@@ -47,7 +47,7 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
                 release_version="", pset_hash="", app_name="", output_module_label="",
                 run_num=-1, origin_site_name="", lumi_list=[], validFileOnly=0, transaction=False):
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/List. Expects db connection from upper layer.")
+            dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/File/List. Expects db connection from upper layer.", self.logger.exception)
         sql = self.sql_cond
         binds = {}
         sql_sel = self.sql_sel
@@ -79,6 +79,8 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
 	    dbsExceptionHandler("dbsException-invalid-input", "invalid value for validFileOnly.", self.logger.exception)
 		
         if block_name:
+            if isinstance(block_name, list):
+                dbsExceptionHandler('dbsException-invalid-input', 'Input block_name is a list instead of string.', self.logger.exception)
             sql += " AND B.BLOCK_NAME = :block_name"
             binds.update({"block_name":block_name})
         if logical_file_name:
@@ -92,6 +94,8 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
 		sql += " AND F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
                 lfn_generator = "{ds_generator}".format(ds_generator=ds_generator)
         if dataset:
+            if isinstance(dataset, list):
+                dbsExceptionHandler('dbsException-invalid-input', 'Input dataset is a list instead of string.', self.logger.exception)
             sql += " AND D.DATASET = :dataset"
             binds.update({"dataset":dataset})
         if release_version:

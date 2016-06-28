@@ -16,6 +16,7 @@ class GetID(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.logger = logger
         self.sql = \
 """
 SELECT BH.BRANCH_HASH_ID, BH.HASH
@@ -27,7 +28,7 @@ FROM %sBRANCH_HASHES BH
         returns id for a given branch hash
         """
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/BranchHashe/GetID. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/BranchHashe/GetID. Expects db connection from upper layer.", self.logger.exception)
             
         sql = self.sql
         sql += "WHERE BH.HASH = :branch_hash"

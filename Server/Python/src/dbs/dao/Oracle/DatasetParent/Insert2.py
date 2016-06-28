@@ -24,7 +24,7 @@ class Insert2(DBFormatter):
 
     def execute( self, conn, binds, transaction=False ):
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DatasetParent/Insert2. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/DatasetParent/Insert2. Expects db connection from upper layer.", self.logger.exception)
         
         bind = {}
         bindlist=[]
@@ -36,6 +36,6 @@ class Insert2(DBFormatter):
                 bindlist.append(bind)
             self.dbi.processData(self.sql, bindlist, conn, transaction)
         else:
-            dbsExceptionHandler('dbsException-invalid-input2', "Dataset id and parent lfn are required for DatasetParent insert dao.")
+            dbsExceptionHandler('dbsException-invalid-input2', "Dataset id and parent lfn are required for DatasetParent insert dao.", self.logger.exception)
 
 

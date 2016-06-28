@@ -25,9 +25,6 @@ FROM %sPRIMARY_DS_TYPES PT
         """
         returns id for a give primdstype
         """
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/PrimaryDSType/GetID. Expects db connection from upper layer.")
-
         sql = self.sql
         sql += "WHERE PT.PRIMARY_DS_TYPE = :primdstype" 
         binds = {"primdstype":name}

@@ -28,9 +28,8 @@ class BriefList(DBFormatter):
             release_version="", pset_hash="", app_name="", output_module_label="",
 	    run_num=-1, origin_site_name="", lumi_list=[], validFileOnly=0, transaction=False):
         if not conn:
-            dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/File/BriefList. Expects db connection from upper layer.")
-	#import pdb
-	#pdb.set_trace()
+            dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/File/BriefList. Expects db connection from upper layer.",
+                                self.logger.exception)
         binds = {}
 	run_generator = ''
 	lfn_generator = ''
@@ -63,6 +62,8 @@ class BriefList(DBFormatter):
                 else:
 		    pass
         if block_name:
+            if isinstance(block_name, list):
+                dbsExceptionHandler('dbsException-invalid-input', 'Input block_name is a list instead of string.', self.logger.exception)
             joinsql += " JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID " % (self.owner)
             wheresql += " AND B.BLOCK_NAME = :block_name "
             binds.update({"block_name":block_name})
@@ -74,6 +75,8 @@ class BriefList(DBFormatter):
                 pass
 
         if dataset: 
+            if isinstance(dataset, list):
+                dbsExceptionHandler('dbsException-invalid-input', 'Input dataset is a list instead of string.', self.logger.exception)
 	    joinsql += """ JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID """ % (self.owner)
             wheresql += " AND D.DATASET = :dataset "
             binds.update({"dataset":dataset})
@@ -135,7 +138,7 @@ class BriefList(DBFormatter):
 		    for r in parseRunRange(run_num):
 			if isinstance(r, run_tuple):
 			    if r[0] == r[1]:
-				dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+				dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.",  self.logger.exception)
 			    if not lumi_list:
 				if wheresql_run_range_ct >0 :
 				    wheresql_run_range += " or "
@@ -144,9 +147,9 @@ class BriefList(DBFormatter):
 				binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
 				wheresql_run_range_ct += 1  
 			    else:
-                                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.")		
+                                dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.", self.logger.exception)		
 			else:
-			    dbsExceptionHandler('dbsException-invalid-input', "Invalid run_num. if run_num input as a string, it has to be converted into a int/long or in format of 'run_min-run_max'. ")
+			    dbsExceptionHandler('dbsException-invalid-input', "Invalid run_num. if run_num input as a string, it has to be converted into a int/long or in format of 'run_min-run_max'. ", self.logger.exception)
                 elif type(run_num) is list and len(run_num)==1:
                     try:
                         run_num = long(run_num[0])
@@ -156,7 +159,7 @@ class BriefList(DBFormatter):
                         for r in parseRunRange(run_num):
                             if isinstance(r, run_tuple):
                                 if r[0] == r[1]:
-                                    dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.")
+                                    dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.", self.logger.exception)
                                 if not lumi_list:
 				    if wheresql_run_range_ct >0 :
 					wheresql_run_range += " or "
@@ -212,6 +215,7 @@ class BriefList(DBFormatter):
 	    self.logger.error( "lfn_generator:  %s" %lfn_generator)
 	    self.logger.error( "lumi_generator: %s " %lumi_generator)		
             dbsExceptionHandler('dbsException-invalid-input2', message="cannot supply more than one list (lfn, run_num or lumi) at one query.  ",
+                                 logger=self.logger.exception,
                                  serverError="dao/File/list cannot have more than one list (lfn, run_num or lumi) as input pareamters")
             # only one with and generators should be named differently for run and lfn. 
             #sql = run_generator + lfn_generator + sql_sel + sql

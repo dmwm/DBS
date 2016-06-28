@@ -17,7 +17,8 @@ class List(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
+        self.logger = logger
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else "" 
         self.sql = \
 """
 SELECT PD.DATASET parent_dataset, 
@@ -31,7 +32,7 @@ JOIN %sDATASETS D ON  D.DATASET_ID = DP.THIS_DATASET_ID
     def execute(self, conn, dataset, transaction=False):
         """ dataset is required parameter"""
         if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/DatasetParent/List. Expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/DatasetParent/List. Expects db connection from upper layer.", self.logger.exception)
             
         sql = self.sql
         sql += "WHERE D.DATASET = :dataset"

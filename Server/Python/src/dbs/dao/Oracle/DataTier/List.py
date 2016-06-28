@@ -32,10 +32,6 @@ FROM %sDATA_TIERS DT
             ret=cache.get("DATA_TIERS")
             if not ret==None:
                 return ret
-            
-	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "dbs/dao/Oracle/DataTier/List expects db connection from upper layer.")
-
         sql = self.sql
 	binds={}
 	if data_tier_name:

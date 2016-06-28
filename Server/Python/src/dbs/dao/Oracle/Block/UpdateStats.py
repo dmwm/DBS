@@ -15,7 +15,8 @@ class UpdateStats(DBFormatter):
         Add schema owner and sql.
         """
         DBFormatter.__init__(self, logger, dbi)
-	self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.logger = logger
+        self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
         self.sql = """UPDATE %sBLOCKS SET FILE_COUNT=:file_count, BLOCK_SIZE=:block_size where BLOCK_ID=:block_id""" %  self.owner 
         
     def execute(self, conn, blockStats, transaction = False):
@@ -23,5 +24,5 @@ class UpdateStats(DBFormatter):
         for a given block_id
         """	
 	if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "dbs/dao/Oracle/Block/UpdateStatus expects db connection from upper layer.")
+	    dbsExceptionHandler("dbsException-failed-connect2host", "dbs/dao/Oracle/Block/UpdateStatus expects db connection from upper layer.", self.logger.exception)
         result = self.dbi.processData(self.sql, blockStats, conn, transaction)

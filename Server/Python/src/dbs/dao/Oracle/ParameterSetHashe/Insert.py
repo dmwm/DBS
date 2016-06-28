@@ -13,8 +13,5 @@ class Insert(DBFormatter):
         self.sql = """INSERT INTO %sPARAMETER_SET_HASHES ( PARAMETER_SET_HASH_ID, PSET_HASH, PSET_NAME) VALUES (:parameter_set_hash_id, :pset_hash, :name)""" % (self.owner)
 
     def execute( self, conn, psetHashObj, transaction=False ):
-        if not conn:
-	    dbsExceptionHandler("dbsException-db-conn-failed", "Oracle/ParameterSetHashe/Insert. Expects db connection from upper layer.")
-
         result = self.dbi.processData(self.sql, psetHashObj, conn, transaction)
 	
