@@ -28,7 +28,7 @@ LAST_MODIFICATION_DATE = :ltime where BLOCK_NAME = :block_name""" %  self.owner
         """	
         if not conn:
             dbsExceptionHandler("dbsException-failed-connect2host",
-                                "Oracle/Block/UpdateStatus. Expects db connection from upper layer.", self.logger = logger)
+                                "Oracle/Block/UpdateStatus. Expects db connection from upper layer.", self.logger.exception)
         binds = {"block_name": block_name ,"open_for_writing": open_for_writing , 'ltime': ltime,
                  'myuser': dbsUtils().getCreateBy()}
         self.dbi.processData(self.sql, binds, conn, transaction)
