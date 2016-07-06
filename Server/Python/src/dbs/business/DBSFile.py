@@ -88,7 +88,7 @@ class DBSFile:
                 validFileOnly=validFileOnly):
                 if item['num_file']==0 and item['num_block']==0 \
                         and item['num_event']==0 and item['file_size']==0:
-                    yield {}    
+                    pass
                 else:
                     yield item
     def listFileParents(self, logical_file_name="", block_id=0, block_name=""):

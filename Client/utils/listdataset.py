@@ -19,6 +19,10 @@ print(dbs3api.listDatasetArray(detail=0, dataset='/unittest_web_primary_ds_name_
 print("\n")
 print(dbs3api.listDatasetArray(detail=1, dataset='/unittest_web_primary_ds_name_34661/Acq_Era_34661-unittest_web_dataset-v4664/GEN-SIM-RAW'))
 print("\n")
+print(dbs3api.listDatasets(detail=1))
 print("\n")
+print(dbs3api.listDatasets(detail=1, dataset_access_type='*'))
+print("\n")
+
 #print dbs3api.listDatasetArray(dataset_id=9542504)
 print("All Done")

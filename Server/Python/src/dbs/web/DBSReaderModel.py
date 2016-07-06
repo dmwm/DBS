@@ -808,6 +808,20 @@ class DBSReaderModel(RESTModel):
         * If lumi_list is provided run only run_num=single-run-number is allowed
 	* When lfn list is present, no run or lumi list is allowed.
 
+        *There are five dataset access types: VALID, INVALID, PRODUCTION, DEPRECATED and DELETED. 
+        * One file status: IS_FILE_VALID: 1 or 0.
+        * When a dataset is INVALID/ DEPRECATED/ DELETED, DBS will consider all the files under it is invalid not matter what value is_file_valid has. 
+          In general, when the dataset is in one of INVALID/ DEPRECATED/ DELETED, is_file_valid should all marked as 0, but some old DBS2 data was not.
+        * When Dataset is VALID/PRODUCTION, by default is_file_valid is all 1. But if individual file is invalid, then the file's is_file_valid is set to 0.
+        * DBS use this logical in its APIs that have validFileOnly variable.
+  
+        *There are five dataset access types: VALID, INVALID, PRODUCTION, DEPRECATED and DELETED. 
+        * One file status: IS_FILE_VALID: 1 or 0.
+        * When a dataset is INVALID/ DEPRECATED/ DELETED, DBS will consider all the files under it is invalid not matter what value is_file_valid has. 
+          In general, when the dataset is in one of INVALID/ DEPRECATED/ DELETED, is_file_valid should all marked as 0, but some old DBS2 data was not.
+        * When Dataset is VALID/PRODUCTION, by default is_file_valid is all 1. But if individual file is invalid, then the file's is_file_valid is set to 0.
+        * DBS use this logical in its APIs that have validFileOnly variable.
+
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
         :param dataset: dataset
