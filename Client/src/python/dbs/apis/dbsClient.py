@@ -247,22 +247,6 @@ class DbsApi(object):
         except AttributeError:
             return None
 
-    @split_calls
-    def testDoc(self, **kwargs):
-        """
-        test document.
-
-        """
-        pass
-
-    def testDoc1(self, **kwargs):
-        """
-        test document1.
-
-        """
-        pass
-
-
     def blockDump(self,**kwargs):
         """
         API the list all information related with the block_name
@@ -328,6 +312,7 @@ class DbsApi(object):
     def insertBulkBlock(self, blockDump):
         """
         API to insert a bulk block
+
         :param blockDump: Output of the block dump command, example can be found in https://svnweb.cern.ch/trac/CMSDMWM/browser/DBS/trunk/Client/tests/dbsclient_t/unittests/blockdump.dict
         :type blockDump: dict
 
@@ -440,6 +425,7 @@ class DbsApi(object):
     def listApiDocumentation(self):
         """
         API to retrieve the auto-generated documentation page from server
+        
         """
         return self.__callServer(content="text/html")
 
@@ -503,7 +489,7 @@ class DbsApi(object):
         :type block_name: str
         :returns: List of dictionaries containing following keys (block_name)
         :rtype: list of dicts
-
+       
         """
         validParameters = ['block_name']
 
@@ -808,6 +794,22 @@ class DbsApi(object):
 
         return self.__callServer("datatypes", params=kwargs)
 
+    def listFileChildren_doc(self, **kwargs):
+        """
+        API to list file children. One of the parameters in mandatory.
+
+        :param logical_file_name: logical_file_name of file
+        :type logical_file_name: str, list
+        :param block_name: block_name
+        :type block_name: str
+        :param block_id: block_id
+        :type block_id: str, int
+        :returns: List of dictionaries containing the following keys (child_logical_file_name, logical_file_name)
+        :rtype: List of dicts
+
+        """
+        pass
+
     @split_calls
     def listFileChildren(self, **kwargs):
         """
@@ -881,6 +883,21 @@ class DbsApi(object):
 
         return self.__callServer("filelumis", data=kwargs, callmethod="POST")
 
+    def listFileParents_doc(self, **kwargs):
+        """
+        API to list file parents
+
+        :param logical_file_name: logical_file_name of file (Required)
+        :type logical_file_name: str
+        :param block_id: ID of the a block, whose files should be listed
+        :type block_id: int, str
+        :param block_name: Name of the block, whose files should be listed
+        :type block_name: int, str
+        :returns: List of dictionaries containing the following keys (parent_logical_file_name, logical_file_name)
+        :rtype: list of dicts
+
+        """
+        pass
 
     @split_calls
     def listFileParents(self, **kwargs):
@@ -909,6 +926,7 @@ class DbsApi(object):
     def listFiles_doc(self, **kwargs):
         """
         listFiles(**kwargs)
+
         API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset, non-wildcarded block_name is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
 
@@ -917,10 +935,17 @@ class DbsApi(object):
             - [[a,b], [c, d],]
         * lumi_list can be either a list of lumi section numbers as [a1, a2, a3,] or a list of lumi section range as [[a,b], [c, d],]. Thay cannot be mixed.
         * If lumi_list is provided run only run_num=single-run-number is allowed
-        * When lfn list is present, no run or lumi list is allowed.
-        
+        * When lfn list is present, no run or lumi list is allowed.  
         * There are five dataset access types: VALID, INVALID, PRODUCTION, DEPRECATED and DELETED.
         * One file status: IS_FILE_VALID: 1 or 0.
+        * There are five dataset access types: VALID, INVALID, PRODUCTION, DEPRECATED and DELETED.
+        * One file status: IS_FILE_VALID: 1 or 0.
+        * When a dataset is INVALID/ DEPRECATED/ DELETED, DBS will consider all the files under it is invalid not matter what value is_file_valid has. 
+          In general, when the dataset is in one of INVALID/ DEPRECATED/ DELETED, is_file_valid should all marked as 0, but some old DBS2 data was not.
+        * When Dataset is VALID/PRODUCTION, by default is_file_valid is all 1. But if individual file is invalid, then the file's is_file_valid is set to 0.
+        * DBS use this logical in its APIs that have validFileOnly variable.
+
+
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
         :param dataset: dataset
@@ -947,13 +972,7 @@ class DbsApi(object):
         :type validFileOnly: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
-        .. note::
-        * There are five dataset access types: VALID, INVALID, PRODUCTION, DEPRECATED and DELETED.
-        * One file status: IS_FILE_VALID: 1 or 0.
-        * When a dataset is INVALID/ DEPRECATED/ DELETED, DBS will consider all the files under it is invalid not matter what value is_file_valid has. 
-          In general, when the dataset is in one of INVALID/ DEPRECATED/ DELETED, is_file_valid should all marked as 0, but some old DBS2 data was not.
-        * When Dataset is VALID/PRODUCTION, by default is_file_valid is all 1. But if individual file is invalid, then the file's is_file_valid is set to 0.
-        * DBS use this logical in its APIs that have validFileOnly variable.
+        
         """
         pass
 
@@ -973,6 +992,12 @@ class DbsApi(object):
         
         * There are five dataset access types: VALID, INVALID, PRODUCTION, DEPRECATED and DELETED.
         * One file status: IS_FILE_VALID: 1 or 0.
+        * There are five dataset access types: VALID, INVALID, PRODUCTION, DEPRECATED and DELETED.
+        * One file status: IS_FILE_VALID: 1 or 0.
+        * When a dataset is INVALID/ DEPRECATED/ DELETED, DBS will consider all the files under it is invalid not matter what value is_file_valid has. In general, when the dataset is in one of INVALID/ DEPRECATED/ DELETED, is_file_valid should all marked as 0, but some old DBS2 data was not.
+        * When Dataset is VALID/PRODUCTION, by default is_file_valid is all 1. But if individual file is invalid, then the file's is_file_valid is set to 0.
+        * DBS use this logical in its APIs that have validFileOnly variable.
+
         :param logical_file_name: logical_file_name of the file
         :type logical_file_name: str
         :param dataset: dataset
@@ -999,13 +1024,6 @@ class DbsApi(object):
         :type validFileOnly: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
-
-        .. note::
-        * There are five dataset access types: VALID, INVALID, PRODUCTION, DEPRECATED and DELETED.
-        * One file status: IS_FILE_VALID: 1 or 0.
-        * When a dataset is INVALID/ DEPRECATED/ DELETED, DBS will consider all the files under it is invalid not matter what value is_file_valid has. In general, when the dataset is in one of INVALID/ DEPRECATED/ DELETED, is_file_valid should all marked as 0, but some old DBS2 data was not.
-        * When Dataset is VALID/PRODUCTION, by default is_file_valid is all 1. But if individual file is invalid, then the file's is_file_valid is set to 0.
-        * DBS use this logical in its APIs that have validFileOnly variable.
 
         """
         validParameters = ['dataset', 'block_name', 'logical_file_name',
@@ -1200,8 +1218,11 @@ class DbsApi(object):
         return self.__callServer("filesummaries", params=kwargs)
 
     def listOutputConfigs(self, **kwargs):
+
         """
+
         API to list OutputConfigs in DBS.
+
         * You can use any combination of these parameters in this API
         * All parameters are optional, if you do not provide any parameter, all configs will be listed from DBS
 
