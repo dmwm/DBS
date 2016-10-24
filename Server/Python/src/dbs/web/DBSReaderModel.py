@@ -290,7 +290,7 @@ class DBSReaderModel(RESTModel):
         * You can use ANY combination of these parameters in this API
         * In absence of parameters, all valid datasets known to the DBS instance will be returned
 
-        :param dataset:  Full dataset (path) of the dataset
+        :param dataset:  Full dataset (path) of the dataset. No wildcards in dataset. If a full datset is unkown, should use primary, process dataset or datatier to search.
         :type dataset: str
         :param parent_dataset: Full dataset (path) of the dataset
         :type parent_dataset: str
@@ -369,6 +369,8 @@ class DBSReaderModel(RESTModel):
         #create_by and last_modified_by have be full spelled, no wildcard will allowed.
         #We got them from request head so they can be either HN account name or DN.
         #This is depended on how an user's account is set up.
+        #
+        #dataset name with leading /% will not supported.        
         try:
             dataset_id = int(dataset_id)
         except:
