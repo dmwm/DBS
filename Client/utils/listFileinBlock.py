@@ -35,5 +35,5 @@ list_f = json_f['result']
 time_count={}
 time_count["block"] = thisBlock
 time_count["number_of_files"] =  len(list_f)
-time_count["retrive_time"] = end_time - start_time
+time_count["retrieve_time"] = end_time - start_time
 print(time_count)
