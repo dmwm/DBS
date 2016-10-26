@@ -370,7 +370,11 @@ class DBSReaderModel(RESTModel):
         #We got them from request head so they can be either HN account name or DN.
         #This is depended on how an user's account is set up.
         #
-        #dataset name with leading /% will not supported.        
+        # In the next release we will require dataset has no wildcard in it. 
+        # DBS will reject wildcard search with dataset name with listDatasets call. 
+        # One should seperate the dataset into primary , process and datatier if any wildcard.
+        # YG Oct 26, 2016
+        dataset name with leading /% will not supported.        
         try:
             dataset_id = int(dataset_id)
         except:
