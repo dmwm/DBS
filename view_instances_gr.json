@@ -1,0 +1,6 @@
+{ 
+"default": { "DBSReader": ["dev/global"]}, 
+"prod":    { "DBSReader": ["prod/global"]}, 
+"preprod": { "DBSReader": ["int/global"]}, 
+"dev":     { "DBSReader": ["dev/global"]} 
+}
