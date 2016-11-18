@@ -1,0 +1,6 @@
+{ 
+    "default": { "DBSReader": ["dev/phys01", "dev/phys02"], "DBSWriter": ["dev/phys01", "dev/phys02"]}, 
+    "prod":    { "DBSReader": ["prod/phys01", "prod/phys02", "prod/test"], "DBSWriter" : ["prod/test"]}, 
+    "preprod": { "DBSReader": ["int/phys01", "int/phys02"], "DBSWriter" : ["int/phys01", "int/phys02"]}, 
+    "dev":     { "DBSReader": ["dev/phys01", "dev/phys02"], "DBSWriter" : ["dev/phys01", "dev/phys02"]} 
+}

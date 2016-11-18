@@ -1,0 +1,6 @@
+{ 
+"default": { "DBSWriter": ["dev/phys03"]}, 
+"prod":    { "DBSWriter": ["prod/phys03"]}, 
+"preprod": { "DBSWriter": ["int/phys03"]}, 
+"dev":     { "DBSWriter": ["dev/phys03"]} 
+}
