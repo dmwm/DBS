@@ -554,7 +554,24 @@ class DbsApi(object):
 
         return self.__callServer("blocks", params=kwargs)
 
-    @split_calls
+    def listBlockSummaries_doc(self, **kwargs):
+        """
+        API that returns summary information like total size and total number of events in a dataset or a list of blocks
+
+        :param block_name: list block summaries for block_name(s)
+        :type block_name: str, list
+        :param dataset: list block summaries for all blocks in dataset
+        :type dataset: str
+        :param detail: list block summary by block names if detail=True, default=False
+        :type detail: str, bool
+        :returns: list of dicts containing total block_sizes, file_counts and event_counts of dataset or blocks provided
+
+        """
+        pass 
+
+
+
+  split_calls
     def listBlockSummaries(self, **kwargs):
         """
         API that returns summary information like total size and total number of events in a dataset or a list of blocks
