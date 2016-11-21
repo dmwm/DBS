@@ -571,7 +571,7 @@ class DbsApi(object):
 
 
 
-  split_calls
+    @split_calls
     def listBlockSummaries(self, **kwargs):
         """
         API that returns summary information like total size and total number of events in a dataset or a list of blocks
