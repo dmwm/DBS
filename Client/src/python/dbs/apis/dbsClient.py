@@ -684,7 +684,7 @@ class DbsApi(object):
                            'release_version', 'pset_hash', 'app_name',
                            'output_module_label', 'processing_version', 'acquisition_era_name',
                            'run_num', 'physics_group_name', 'logical_file_name',
-                           'primary_ds_name', 'primary_ds_type', 'data_tier_name',
+                           'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                            'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                            'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate',
                            'detail', 'dataset_id']

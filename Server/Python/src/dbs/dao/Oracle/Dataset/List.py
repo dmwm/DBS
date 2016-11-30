@@ -163,9 +163,8 @@ class List(DBFormatter):
                wheresql += " AND P.PRIMARY_DS_NAME %s :primary_ds_name " % op
                binds.update(primary_ds_name = primary_ds_name)
             if processed_ds_name and processed_ds_name != "%":
-                joinsql += " JOIN %sPROCESSED_DATASETS PR ON PR.PROCESSED_DS_ID = D.PROCESSED_DS_ID " % (self.owner)
                 op = ("=", "like")["%" in processed_ds_name ]
-                wheresql += " AND PR.PROCESSED_DS_NAME %s :processed_ds_name " % op
+                wheresql += " AND PD.PROCESSED_DS_NAME %s :processed_ds_name " % op
                 binds.update(processed_ds_name = processed_ds_name)
             if data_tier_name and data_tier_name != "%":
                op = ("=", "like")["%" in data_tier_name ]
