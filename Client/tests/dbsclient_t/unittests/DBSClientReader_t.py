@@ -42,7 +42,7 @@ class DBSClientReader_t(unittest.TestCase):
 
     def __init__(self, methodName='runTest'):
         super(DBSClientReader_t, self).__init__(methodName)
-        url = os.environ['DBS_WRITER_URL']
+        url = os.environ['DBS_READER_URL']
         proxy = os.environ.get('SOCKS5_PROXY')
         self.api = DbsApi(url=url, proxy=proxy)
 
@@ -50,6 +50,9 @@ class DBSClientReader_t(unittest.TestCase):
         """setup all necessary parameters"""
         infofile = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "info.dict"), "r")
         self.testparams = importCode(infofile, "testparams", 0).info
+        dataset=self.testparams['dataset']
+        processed_ds_name = dataset.split('/')[2] 
+        self.testparams['processed_ds_name'] = processed_ds_name
 
     def test000a(self):
         """test00 unittestDBSClientReader_t.requestTimingInfo"""
@@ -93,6 +96,7 @@ class DBSClientReader_t(unittest.TestCase):
         res = self.api.listDatasets(dataset=self.testparams['dataset'], detail=1)
         self.api.listDatasets(dataset_id=res[0]["dataset_id"], dataset_access_type='*') 
 
+    @checkException400
     def test007(self):
         """test07 unittestDBSClientReader_t.listDatasets: """
         self.api.listDatasets(dataset=self.testparams['dataset']+"*")
@@ -140,6 +144,54 @@ class DBSClientReader_t(unittest.TestCase):
     def test014c(self):
         """test14c unittestDBSCLientReader_t.listDatasets: using run and detail=True"""
         self.api.listDatasets(dataset=self.testparams['dataset'], run_num=self.testparams['runs'], detail=True)
+    
+    def test014d(self):
+        """test14d unittestDBSCLientReader_t.listDatasets: using primary_ds_name and detail=True"""
+        self.api.listDatasets(primary_ds_name=self.testparams['primary_ds_name']+"*", detail=True)
+
+    def test014e(self):
+        """test14e unittestDBSCLientReader_t.listDatasets: using primary_ds_name and detail=True"""
+        self.api.listDatasets(primary_ds_name=self.testparams['primary_ds_name'], detail=True)
+
+    def test014f(self):
+        """test14f unittestDBSCLientReader_t.listDatasets: using primary_ds_name """
+        self.api.listDatasets(primary_ds_name=self.testparams['primary_ds_name']+"*")
+
+    def test014g(self):
+        """test14g unittestDBSCLientReader_t.listDatasets: using primary_ds_name """
+        self.api.listDatasets(primary_ds_name=self.testparams['primary_ds_name'])
+
+    def test014h(self):
+        """test14h unittestDBSCLientReader_t.listDatasets: using processed_ds_name """
+        self.api.listDatasets(processed_ds_name=self.testparams['processed_ds_name']+"*")
+
+    def test014i(self):
+        """test14i unittestDBSCLientReader_t.listDatasets: using processed_ds_name """
+        self.api.listDatasets(processed_ds_name=self.testparams['processed_ds_name'])
+
+    def test014j(self):
+        """test14j unittestDBSCLientReader_t.listDatasets: using processed_ds_name, detail=True """
+        self.api.listDatasets(processed_ds_name=self.testparams['processed_ds_name']+"*",detail=True)
+
+    def test014k(self):
+        """test14k unittestDBSCLientReader_t.listDatasets: using processed_ds_name, detail=True """
+        self.api.listDatasets(processed_ds_name=self.testparams['processed_ds_name'], detail=True)
+
+    def test014l(self):
+        """test14l unittestDBSCLientReader_t.listDatasets: using data_tier_name, detail=True """
+        self.api.listDatasets(data_tier_name=self.testparams['tier']+"*",detail=True)
+
+    def test014m(self):
+        """test14m unittestDBSCLientReader_t.listDatasets: using data_tier_name, detail=True """
+        self.api.listDatasets(data_tier_name=self.testparams['tier'], detail=True)
+
+    def test014n(self):
+        """test14n unittestDBSCLientReader_t.listDatasets: using data_tier_name """
+        self.api.listDatasets(data_tier_name=self.testparams['tier']+"*")
+
+    def test014o(self):
+        """test14o unittestDBSCLientReader_t.listDatasets: using data_tier_name """
+        self.api.listDatasets(data_tier_name=self.testparams['tier'])
 
     def test015(self):
         """test15 unittestDBSClientReader_t.listOutputModules: basic test"""
