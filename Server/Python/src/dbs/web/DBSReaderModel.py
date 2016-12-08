@@ -290,7 +290,7 @@ class DBSReaderModel(RESTModel):
         * You can use ANY combination of these parameters in this API
         * In absence of parameters, all valid datasets known to the DBS instance will be returned
 
-        :param dataset:  Full dataset (path) of the dataset. No wildcards in dataset. If a full datset is unkown, should use primary, process dataset or datatier to search.
+        :param dataset:  Full dataset (path) of the dataset.
         :type dataset: str
         :param parent_dataset: Full dataset (path) of the dataset
         :type parent_dataset: str
@@ -380,7 +380,7 @@ class DBSReaderModel(RESTModel):
         if(dataset and dataset.find("/%/%/%")!=-1):
             dataset=''
         elif dataset.find('%') != -1 :
-            junk, primary_ds_name, processed_ds_name, data_tier_name = dataset.split('/', dataset)
+            junk, primary_ds_name, processed_ds_name, data_tier_name = dataset.split('/')
             dataset = ''
 
         try:
