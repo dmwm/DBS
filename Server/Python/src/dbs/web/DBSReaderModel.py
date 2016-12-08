@@ -374,7 +374,12 @@ class DBSReaderModel(RESTModel):
         # DBS will reject wildcard search with dataset name with listDatasets call. 
         # One should seperate the dataset into primary , process and datatier if any wildcard.
         # YG Oct 26, 2016
-        if dataset.find('%') != -1 :
+        # Some of users were overwhiled by the API change. So we split the wildcarded dataset in the server instead of by the client.
+        # YG Dec. 9 2016
+
+        if(dataset and dataset.find("/%/%/%")!=-1):
+            dataset=''
+        elif dataset.find('%') != -1 :
             junk, primary_ds_name, processed_ds_name, data_tier_name = dataset.split('/', dataset)
             dataset = ''
 
