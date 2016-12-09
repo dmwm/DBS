@@ -96,10 +96,19 @@ class DBSClientReader_t(unittest.TestCase):
         res = self.api.listDatasets(dataset=self.testparams['dataset'], detail=1)
         self.api.listDatasets(dataset_id=res[0]["dataset_id"], dataset_access_type='*') 
 
-    @checkException400
     def test007(self):
         """test07 unittestDBSClientReader_t.listDatasets: """
         self.api.listDatasets(dataset=self.testparams['dataset']+"*")
+
+    def test007a(self):
+        """test07a unittestDBSClientReader_t.listDatasets: """
+        self.api.listDatasets(dataset="/*/*/*")
+
+    def test007b(self):
+        """test07b unittestDBSClientReader_t.listDatasets: """
+        junk, prds,pds,dt=self.testparams['dataset'].split('/')
+        dataset = "/*"+prds+"/"+pds+"/"+dt
+        self.api.listDatasets(dataset=dataset)
 
     def test008(self):
         """test08 unittestDBSClientReader_t.listDatasets: """
