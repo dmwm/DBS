@@ -290,7 +290,7 @@ class DBSReaderModel(RESTModel):
         * You can use ANY combination of these parameters in this API
         * In absence of parameters, all valid datasets known to the DBS instance will be returned
 
-        :param dataset:  Full dataset (path) of the dataset. No wildcards in dataset. If a full datset is unkown, should use primary, process dataset or datatier to search.
+        :param dataset:  Full dataset (path) of the dataset.
         :type dataset: str
         :param parent_dataset: Full dataset (path) of the dataset
         :type parent_dataset: str
@@ -350,7 +350,7 @@ class DBSReaderModel(RESTModel):
         :rtype: list of dicts
 
         """
-        #dataset = dataset.replace("*", "%")
+        dataset = dataset.replace("*", "%")
         parent_dataset = parent_dataset.replace("*", "%")
         release_version = release_version.replace("*", "%")
         pset_hash = pset_hash.replace("*", "%")
@@ -374,9 +374,15 @@ class DBSReaderModel(RESTModel):
         # DBS will reject wildcard search with dataset name with listDatasets call. 
         # One should seperate the dataset into primary , process and datatier if any wildcard.
         # YG Oct 26, 2016
-        if dataset.find('*') != -1 or dataset.find('%') != -1 :
-             dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input for dataset that does not take wildcards",
-                                  self.logger.exception, 'dataset cannot have wild card.')
+        # Some of users were overwhiled by the API change. So we split the wildcarded dataset in the server instead of by the client.
+        # YG Dec. 9 2016
+
+        if(dataset and dataset.find("/%/%/%")!=-1):
+            dataset=''
+        elif dataset.find('%') != -1 :
+            junk, primary_ds_name, processed_ds_name, data_tier_name = dataset.split('/')
+            dataset = ''
+
         try:
             dataset_id = int(dataset_id)
         except:

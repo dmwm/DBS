@@ -133,8 +133,7 @@ class DBSDataset:
             dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasets API requires \
                 fullly qualified logical_file_name. NO wildcard is allowed in logical_file_name.')
         if(dataset and dataset.find("/%/%/%")!=-1):
-                    dbsExceptionHandler('dbsException-invalid-input', 'DBSDataset/listDatasets API requires \
-                                    fullly qualified dataset. NO wildcard(current /*/*/*) is allowed in dataset.')
+            dataset=''
 	with self.dbi.connection() as conn:
             dao = (self.datasetbrieflist, self.datasetlist)[detail]
             if dataset_access_type: dataset_access_type = dataset_access_type.upper()
