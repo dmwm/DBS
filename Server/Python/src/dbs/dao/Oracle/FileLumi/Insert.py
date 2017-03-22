@@ -12,8 +12,8 @@ class Insert(DBFormatter):
         self.sql = \
 """
 insert into %sfile_lumis 
-(run_num, lumi_section_num, file_id) 
-values (:run_num, :lumi_section_num, :file_id)
+(run_num, lumi_section_num, file_id, event_count) 
+values (:run_num, :lumi_section_num, :file_id, :event_count)
 """ % (self.owner)
 
     def execute( self, conn, daoinput, transaction = False ):
