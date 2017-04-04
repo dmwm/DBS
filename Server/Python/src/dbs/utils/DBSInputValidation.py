@@ -218,7 +218,7 @@ acceptedInputKeys = {
              'detail', 'run_num', 'release_version', 'pset_hash', 'app_name', 'output_module_label',\
              'origin_site_name', 'lumi_list'],
     ################
-    'file_lumi_list':['lumi_section_num', 'run_num'],
+    'file_lumi_list':['lumi_section_num', 'run_num', 'event_count'],
     ################
     'migration_rqst':['migration_url', 'migration_input', 'migration_rqst_id']
     ################
