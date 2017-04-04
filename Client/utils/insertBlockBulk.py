@@ -8,12 +8,17 @@ import cjson
 import pprint
 import ast 
 from dbs.apis.dbsClient import *
+"""
+export DBS_WRITER_URL="https://dbs3-test1.cern.ch/dbs/dev/global/DBSWriter"
+
+"""
 url=os.environ['DBS_WRITER_URL']
 # API Object    
 dbs3api = DbsApi(url=url)
-
+input = sys.argv[1]
+print(input)
 try:
-    infofile=open("blockdump.dict", "r")
+    infofile=open(input, "r")
     indata = infofile.read()
     id=indata.find("=")
     d = indata[(id+1):]
