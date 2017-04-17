@@ -24,7 +24,7 @@ class List(DBFormatter):
         self.logger = logger
         self.sql = \
 """
-SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM 
+SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, FL.EVENT_COUNT as EVENT_COUNT
 """
 
     def execute(self, conn, logical_file_name='', block_name='', run_num=-1, validFileOnly=0, migration=False):
@@ -126,19 +126,34 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM
         cursors = self.dbi.processData(sql, binds, conn, transaction=False, returnCursor=True)
         result=[]
 	file_run_lumi={}
+        event_ct=False
         for i in cursors:
             result.extend(self.formatCursor(i))
         #for migration, we need flat format to load the data into another DB.
+        #self.logger.error(result) 
         if migration:
             #YG 09/2015. 
 	    for item in result:
 		yield item
 	else:
+            if result and result[0]['event_count']: 
+                event_ct = True
 	    for i in result:
 		r = i['run_num']
 		f = i['logical_file_name']
-		file_run_lumi.setdefault((f, r), []).append(i['lumi_section_num'])
+                if event_ct:
+                    file_run_lumi.setdefault((f, r), []).append([i['lumi_section_num'], i['event_count']])
+                else:
+                    file_run_lumi.setdefault((f, r), []).append(i['lumi_section_num'])
 	    for k, v in file_run_lumi.iteritems():
-		yield {'logical_file_name':k[0], 'run_num':k[1], 'lumi_section_num':v}
+                if event_ct:
+                    lumi=[]
+                    event=[]
+                    for le in v:
+                        lumi.append(le[0])
+                        event.append(le[1])
+                    yield {'logical_file_name':k[0], 'run_num':k[1], 'lumi_section_num':lumi, 'event_count':event}
+                else:
+                    yield {'logical_file_name':k[0], 'run_num':k[1], 'lumi_section_num':v}
         del file_run_lumi
         del result

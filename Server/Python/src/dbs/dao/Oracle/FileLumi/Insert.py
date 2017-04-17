@@ -16,6 +16,23 @@ insert into %sfile_lumis
 values (:run_num, :lumi_section_num, :file_id, :event_count)
 """ % (self.owner)
 
-    def execute( self, conn, daoinput, transaction = False ):
-        self.dbi.processData(self.sql, daoinput, conn, transaction)
 
+        self.sql1 = \
+"""
+insert into %sfile_lumis 
+(run_num, lumi_section_num, file_id) 
+values (:run_num, :lumi_section_num, :file_id)
+""" % (self.owner)
+
+    def execute( self, conn, daoinput, transaction = False ):
+        eventC = False
+        if isinstance(daoinput,list):
+            if "event_count" in daoinput[0]:
+                eventC = True
+        else:
+            if "event_count" in daoinput:
+                eventC = Ture
+        if eventC:
+            self.dbi.processData(self.sql, daoinput, conn, transaction)
+        else:
+            self.dbi.processData(self.sql1, daoinput, conn, transaction)

@@ -98,6 +98,7 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test007(self):
         """test07 unittestDBSClientReader_t.listDatasets: """
+        print(self.testparams['dataset']+"*")
         self.api.listDatasets(dataset=self.testparams['dataset']+"*")
 
     def test007a(self):

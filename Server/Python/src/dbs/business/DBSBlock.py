@@ -65,6 +65,10 @@ class DBSBlock:
             #in order to reduce the number of dao objects, we will not write
             #a special migration one. However, we will have to remove the
             #extras
+            #block1 is a generator. When it is empty, it will skip the for loop above. why? 
+            #we cannot test on b1 to decide if the generator is empty or not.
+            #so have to do below:
+            if not block: return {}
             dataset1 = self.datasetlist.execute(conn,
                       dataset=block["dataset"], dataset_access_type="")
 	    dataset = []

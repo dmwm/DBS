@@ -109,7 +109,6 @@ class DBSReaderModel_t(unittest.TestCase):
         """test003b: web.DBSReaderModel.listDatasets: detail"""
         api.list('datasets', detail=True)
 
-    @checkException400
     def test003c(self):
         """test003c: web.DBSReaderModel.listDatasets: basic test"""
         api.list('datasets', dataset='/*')

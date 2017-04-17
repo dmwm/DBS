@@ -128,5 +128,8 @@ class DBSMigrateModel(RESTModel):
         except dbsException as he:
             dbsExceptionHandler(he.eCode, he.message, self.logger.exception, he.message)
         except Exception as e:
-            dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, str(e))
+            if e.code == 400:
+                dbsExceptionHandler('dbsException-invalid-input2', str(e), self.logger.exception, str(e))    
+            else:
+                dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, str(e))
 

@@ -377,7 +377,7 @@ class DBSReaderModel(RESTModel):
         # Some of users were overwhiled by the API change. So we split the wildcarded dataset in the server instead of by the client.
         # YG Dec. 9 2016
 
-        if(dataset and dataset.find("/%/%/%")!=-1):
+        if(dataset and (dataset.find("/%/%/%")!=-1 or dataset.find("/%")!=-1 or dataset.find("/%/%")!=-1) ):
             dataset=''
         elif dataset.find('%') != -1 :
             junk, primary_ds_name, processed_ds_name, data_tier_name = dataset.split('/')
