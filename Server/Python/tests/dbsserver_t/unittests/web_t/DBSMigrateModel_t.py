@@ -39,10 +39,9 @@ class DBSMigrateModel_t(unittest.TestCase):
         cls._independent_child_data_provider = create_child_data_provider(cls._independent_data_provider)
         config = os.environ['DBS_TEST_CONFIG']
         service = os.environ.get("DBS_TEST_SERVICE", "DBSMigrate")
+        #Use one specific database cms_dbs3_local3@int2r for migration unittests when migration_test=True
         cls._migrate_api = DBSRestApi(config, service, migration_test=True)
         cls._migration_url = 'https://%s/dbs/dev/global/DBSWriter' % (socket.getfqdn())
-        #Don't remove the commented line below until I have a better way to accommodate the development environment.
-        #cls._migration_url = 'http://%s:8787/dbs/dev/global/DBSWriter' % (socket.getfqdn())
         cls._writer_api = DBSRestApi(config, 'DBSWriter')
 
     def setUp(self):
@@ -50,32 +49,33 @@ class DBSMigrateModel_t(unittest.TestCase):
 
     @expectedFailure
     def test_01_migration_removal(self):
-        """test01: Clean-up old migration requests. Test to remove migration requests between different DBS instances"""
+        """test01: Clean-up old migration requests. Test to remove migration requests between different DBS instances\n"""
         for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
             data = {'migration_rqst_id': status['migration_request_id']}
-            if status['migration_status'] in (0, 3) and status['create_by'] == os.getlogin():
+            if status['migration_status'] in (0, 3, 9) and status['create_by'] == os.getlogin():
                 self._migrate_api.insert('remove', data)
             else:
                 self.assertRaises(Exception, self._migrate_api.insert, 'remove', data)
+
     def test_02_migration_request(self):
-        """test02: Negative test to request a migration between different DBS instances before injecting data"""
+        """test02: Negative test to request a migration between different DBS instances before injecting data.
+           This is a negative test because the block was not inserted into the source DB.\n"""
         for block_name in (block['block']['block_name'] for block in self._child_data_provider.block_dump()):
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : block_name}
             self.assertRaises(Exception, self._migrate_api.insert, 'submit', toMigrate)
 
     def test_03_insert_data_to_migrate(self):
-        """test03: Insert data to migrate into source DBS instance"""
+        """test03: Insert data to migrate into source DBS instance. This is has to be done for the next several tests.\n"""
         for block in chain(self._data_provider.block_dump(),
                            self._independent_data_provider.block_dump(),
                            self._parent_data_provider.block_dump(),
                            self._child_data_provider.block_dump(),
                            self._independent_child_data_provider.block_dump()):
-
             self._writer_api.insert('bulkblocks', block)
 
     def test_04_migration_request(self):
-        """test04: Test to request a migration between different DBS instances by block"""
+        """test04: Test to request a migration between different DBS instances by block.\n"""
         for block_name in (block['block']['block_name'] for block in self._child_data_provider.block_dump()):
             toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : block_name}
@@ -84,7 +84,7 @@ class DBSMigrateModel_t(unittest.TestCase):
             self._saved_data.setdefault('migration_inputs', []).append(block_name)
 
     def test_05_migration_request(self):
-        """test05: Test to request a migration between different DBS instances by dataset"""
+        """test05: Test to request a migration between different DBS instances by dataset.\n"""
         datasets = set((block['dataset']['dataset']
                         for block in chain(self._child_data_provider.block_dump(),
                                            self._independent_child_data_provider.block_dump())))
@@ -95,7 +95,7 @@ class DBSMigrateModel_t(unittest.TestCase):
             self._saved_data.setdefault('migration_rqst_ids', []).append(result['migration_details']['migration_request_id'])
 
     def test_06_migration_status(self):
-        """test06: Test to check the status of an ongoing migration between different DBS instances by id"""
+        """test06: Test to check the status of an ongoing migration between different DBS instances by id. \n"""
         status = self._migrate_api.list('status')
         self.assertTrue(isinstance(status, list))
 
@@ -104,26 +104,26 @@ class DBSMigrateModel_t(unittest.TestCase):
             self.assertEqual(len(status), 1)
 
     def test_07_migration_status(self):
-        """test07: Test to check the status of an ongoing migration between different DBS instances by block"""
+        """test07: Test to check the status of an ongoing migration between different DBS instances by block. \n"""
         for migration_input in self._saved_data['migration_inputs']:
             status = self._migrate_api.list('status', block_name=migration_input)
             self.assertEqual(len(status), 1)
 
     def test_08_migration_status(self):
-        """test08: Test to check the status of an ongoing migration between different DBS instances by dataset"""
+        """test08: Test to check the status of an ongoing migration between different DBS instances by dataset. \n"""
         datasets = set((block_name.split('#', 1)[0] for block_name in self._saved_data['migration_inputs']))
         for dataset in datasets:
             status = self._migrate_api.list('status', dataset=dataset)
             self.assertTrue(len(status)>=1)
 
     def test_09_migration_removal(self):
-        """test09: Test to remove a pending migration request between different DBS instances"""
+        "test09: Test to remove a pending migration request between different DBS instances. \n"
         for migration_rqst_id in self._saved_data['migration_rqst_ids']:
             data = {'migration_rqst_id': migration_rqst_id}
             self._migrate_api.insert('remove', data)
 
     def test_99_save_data_to_disk(self):
-        """test99: Save data to disk to re-use data for migration server unittests"""
+        """test99: Save data to disk to re-use data for migration server unittests. \n"""
         self._data_provider.save('migration_unittest_data.pkl')
         self._independent_data_provider.save('migration_unittest_independent_data.pkl')
         self._parent_data_provider.save('migration_unittest_parent_data.pkl')

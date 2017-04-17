@@ -292,6 +292,9 @@ class DBSMigrate:
             tran = conn.begin()
             self.mgrremove.execute(conn, migration_rqst)
             tran.commit()
+        except dbsException as he:
+            if conn: conn.close()
+            raise
         except Exception as ex:
             if conn: conn.close()
             raise

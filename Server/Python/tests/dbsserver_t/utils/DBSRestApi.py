@@ -64,10 +64,10 @@ class DBSRestApi:
 
         if self.migration_test:
             #Use one specific database cms_dbs3_dev_phys02@int2r for migration unittests
-            from DBSSecrets import dbs3_dp2_i2
+            from DBSSecrets import dbs3_l3_i2
             config.DBS.section_('database')
-            config.DBS.database.connectUrl = dbs3_dp2_i2['connectUrl']['writer']
-            config.DBS.database.dbowner = dbs3_dp2_i2['databaseOwner']
+            config.DBS.database.connectUrl = dbs3_l3_i2['connectUrl']['writer']
+            config.DBS.database.dbowner = dbs3_l3_i2['databaseOwner']
             config.DBS.database.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }
             version = getattr(dbsconfig.database.instances, dbinstance).version
             config.DBS.database.version = version if version else '3.99.98'

@@ -11,18 +11,19 @@ print("\n")
 
 datasetlst = ['/StreamExpressCosmics/Tier0_Test_SUPERBUNNIES_vocms001-SiStripPCLHistos-Express-v5/ALCARECO', '/Commissioning/Tier0_Test_SUPERBUNNIES_vocms001-HcalCalIsoTrk-PromptReco-v5/ALCARECO']
 #
+print(dbs3api.listDatasets(dataset='/unittest_web_primary_ds_name_52666/acq_era_52666-v2671/GEN-SIM-RAW*'))
+
 #print dbs3api.listDatasetArray(detail=0,dataset=datasetlst)
 print("\n")
 #print dbs3api.listDatasetArray(detail=1,dataset=datasetlst)
 print("\n")
-print(dbs3api.listDatasetArray(detail=0, dataset='/unittest_web_primary_ds_name_34661/Acq_Era_34661-unittest_web_dataset-v4664/GEN-SIM-RAW'))
+#print(dbs3api.listDatasetArray(detail=0, dataset='/unittest_web_primary_ds_name_34661/Acq_Era_34661-unittest_web_dataset-v4664/GEN-SIM-RAW'))
 print("\n")
-print(dbs3api.listDatasetArray(detail=1, dataset='/unittest_web_primary_ds_name_34661/Acq_Era_34661-unittest_web_dataset-v4664/GEN-SIM-RAW'))
+#print(dbs3api.listDatasetArray(detail=1, dataset='/unittest_web_primary_ds_name_34661/Acq_Era_34661-unittest_web_dataset-v4664/GEN-SIM-RAW'))
 print("\n")
-print(dbs3api.listDatasets(detail=1))
+#print(dbs3api.listDatasets(detail=1))
 print("\n")
-print(dbs3api.listDatasets(detail=1, dataset_access_type='*'))
+#print(dbs3api.listDatasets(detail=1, dataset_access_type='*'))
 print("\n")
-
 #print dbs3api.listDatasetArray(dataset_id=9542504)
 print("All Done")

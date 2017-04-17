@@ -33,7 +33,7 @@ except ImportError:
     MigrationServer = imp.load_source('DBSMigrationServer', input_source)
     MigrationTask = MigrationServer.MigrationTask
 
-from DBSSecrets import dbs3_dp2_i2
+from DBSSecrets import dbs3_l3_i2
 
 def remove_non_comparable_keys(values, non_comparable_keys):
     for value in values:
@@ -85,14 +85,12 @@ class DBSMigrationServer_t(unittest.case.TestCase):
         # Always use the writer account of dbs3_dp2_i2. No matter it is a DBSMigrate, DBSWriter or DBSReader.
         cls._migrate_api = DBSRestApi(config, service, migration_test=True)
         cls._migration_url = 'https://%s/dbs/dev/global/DBSWriter' % (socket.getfqdn())
-        #Please don't remove below commented line, until I have a better way to run the test on the development setting.
-        #cls._migration_url = 'http://%s:8787/dbs/dev/global/DBSWriter' % (socket.getfqdn())
         cls._migration_reader_api = DBSRestApi(config, 'DBSReader', migration_test=True)
         #using DBSWriter instead of DBSReader to avoid db mismatching in DBSConfig.
         cls._reader_api = DBSRestApi(config, 'DBSWriter')
         cls._writer_api = DBSRestApi(config, 'DBSWriter')
-        dbconfig = {'dbowner' : dbs3_dp2_i2['databaseOwner'],
-                    'connectUrl' : dbs3_dp2_i2['connectUrl']['writer']}
+        dbconfig = {'dbowner' : dbs3_l3_i2['databaseOwner'],
+                    'connectUrl' : dbs3_l3_i2['connectUrl']['writer']}
         cls._migration_task = MigrationTask(dbconfig)
 
     def setUp(self):
@@ -116,16 +114,16 @@ class DBSMigrationServer_t(unittest.case.TestCase):
 
     @expectedFailure
     def test_01_migration_removal(self):
-        """test01: Clean-up old migration requests. Test to remove migration requests between different DBS instances"""
+        """test01: Clean-up old migration requests. Test to remove migration requests between different DBS instances\n"""
         for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
             data = {'migration_rqst_id': status['migration_request_id']}
-            if status['migration_status'] in (0, 3) and status['create_by'] == os.getlogin():
+            if status['migration_status'] in (3,0,9) and status['create_by'] == os.getlogin():
                 self._migrate_api.insert('remove', data)
             else:
                 self.assertRaises(Exception, self._migrate_api.insert, 'remove', data)
 
     def test_02_insert_migration_requests(self):
-        """test02: Test to submit a migration request(no data copied) between different DBS instances by block"""
+        """test02: Test to submit a migration request(no data copied) between different DBS instances by block\n"""
         for block_data_provider in (self._data_provider,):
             block_data = block_data_provider.block_dump()[0]['block']['block_name']
             toMigrate = {'migration_url' : self._migration_url,
@@ -136,7 +134,7 @@ class DBSMigrationServer_t(unittest.case.TestCase):
             self._migrate_api.insert('submit', toMigrate)
 
     def test_03_handle_migration_requests(self):
-        """test03: Test to handle migration requests (actually copy data) between different DBS instances by block"""
+        """test03: Test to handle migration requests (actually copy data) between different DBS instances by block\n"""
         for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
             if status['migration_status']==0:
                 self._migration_task.getResource()
@@ -152,32 +150,33 @@ class DBSMigrationServer_t(unittest.case.TestCase):
                 self._migration_task.cleanup()
     
     def test_04_insert_migration_requests(self):
-        """test04: Test to submit a migration request (No data copied) between different DBS instances by dataset"""
+        """test04: Test to submit a migration request (No data copied) between different DBS instances by dataset\n"""
+        nds = 0
         datasets = set((block['dataset']['dataset']
                         for block in chain(self._child_data_provider.block_dump(),
                                            self._independent_child_data_provider.block_dump())))
         for dataset in datasets:
-            toMigrate = {'migration_url' : self._migration_url,
+            if nds == 0:
+                toMigrate = {'migration_url' : self._migration_url,
                          'migration_input' : dataset}
 
-            try:
-                self._migrate_api.insert('submit', toMigrate)
-            except Exception as ex:
-                if "already in destination" in str(ex):
-                    pass
+                try:
+                    self._migrate_api.insert('submit', toMigrate)
+                    nds = nds + 1
+                except Exception as ex:
+                    if "already in destination" in str(ex):
+                        pass
+
     def test_05_handle_migration_requests(self):
-        """test05: Test to handle migration requests (actually copy data) between different DBS instances by dataset"""
+        """test05: Test to handle migration requests (actually copy data) between different DBS instances by dataset\n"""
         for status in sorted(self._migrate_api.list('status'), key=lambda status: status['migration_request_id']):
             if status['migration_status']==0:
+                migration_request_id = status['migration_request_id']
                 self._migration_task.getResource()
-                ###wait 5 seconds to ensure that status is changed
-                time.sleep(5)
-                new_status = self._migrate_api.list('status', status['migration_request_id'])[0]
+                new_status = self._migrate_api.list('status', migration_request_id)[0]
                 self.assertEqual(new_status['migration_status'], 1)#1 means requests is processed
                 self._migration_task.insertBlock()
-                ###wait 25 seconds to ensure that status is changed
-                time.sleep(25)
-                new_status = self._migrate_api.list('status', status['migration_request_id'])[0]
+                new_status = self._migrate_api.list('status', migration_request_id)[0]
                 self.assertEqual(new_status['migration_status'], 2)#2 means requests is successfully done
                 self._migration_task.cleanup()
     def test_06_block_migration_validation(self):
