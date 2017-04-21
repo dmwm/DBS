@@ -28,8 +28,13 @@ primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
 childprocdataset = '%s-unittest_web_child_dataset-v%s' % (acquisition_era_name, processing_version)
 tier = 'GEN-SIM-RAW'
+tier2 = 'RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
+dataset2="/%s/%s/%s" % (primary_ds_name, procdataset, tier2)
 child_dataset="/%s/%s/%s" % (primary_ds_name, childprocdataset, tier)
+print("dataset =  ", dataset)
+print("dataset2 = ", dataset2)
+print("child_dataset = ", child_dataset)
 app_name='cmsRun'
 output_module_label='Merged-%s' %uid
 global_tag='my_tag-%s'%uid
@@ -37,6 +42,7 @@ pset_hash='76e303993a1c2f842159dbfeeed9a0dd'
 release_version='CMSSW_1_2_%s' % uid
 site="cmssrm-%s.fnal.gov" %uid
 block="%s#%s" % (dataset, uid)
+block2="%s#%s" % (dataset2, uid)
 child_block="%s#%s" % (child_dataset, uid)
 run_num=uid
 flist=[]
@@ -219,6 +225,21 @@ class DBSWriterModel_t(unittest.TestCase):
             }
         api.insert('datasets', childdata)
 
+    def test05a2(self):
+        """test05a2: web.DBSWriterModel.insertDataset(Dataset is construct by DBSDatset.): basic test\n"""
+        data = {
+            'physics_group_name': 'Tracker', 'dataset': dataset2,
+            'dataset_access_type': 'VALID', 'processed_ds_name': procdataset, 'primary_ds_name': primary_ds_name,
+            'output_configs': [
+                {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                 'output_module_label': output_module_label, 'global_tag': global_tag},
+                ],
+            'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier2,
+            'prep_id':prep_id,
+            'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name
+            }
+        api.insert('datasets', data)
+
     def test05b(self):
         """test05b: web.DBSWriterModel.insertDataset: duplicate insert should be ignored"""
         data = {
@@ -343,6 +364,13 @@ class DBSWriterModel_t(unittest.TestCase):
         data = {'block_name': child_block, 'origin_site_name': site }
         api.insert('blocks', data)
 
+    def test06a2(self):
+        """test06a: web.DBSWriterModel.insertBlock: basic test"""
+        data = {'block_name': block2,
+                'origin_site_name': site }
+
+        api.insert('blocks', data)
+
     def test06b(self):
         """test06b: web.DBSWriterModel.insertBlock: duplicate insert should not raise exception"""
         data = {'block_name': block,
@@ -388,6 +416,37 @@ class DBSWriterModel_t(unittest.TestCase):
                 'event_count': u'1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
+                #'is_file_valid': 1
+                }
+            flist.append(f)
+        data={"files":flist}
+        api.insert('files', data)
+
+    def test07a2(self):
+        """test07a2: web.DBSWriterModel.insertFiles with events per lumi : basic test\n"""
+        data={}
+        flist=[]
+        
+        for i in range(10):
+            f={
+                'adler32': '', 'file_type': 'EDM',
+                'file_output_config_list':
+                [
+                    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                     'output_module_label': output_module_label, 'global_tag': global_tag},
+                    ],
+                'dataset': dataset2,
+                'file_size': u'2012211901', 'auto_cross_section': 0.0,
+                'check_sum': u'1504266448',
+                'file_lumi_list': [
+                    {'lumi_section_num': u'27414', 'run_num': uid+1, 'event_count': 10},
+                    {'lumi_section_num': u'26422', 'run_num': uid+1, 'event_count': 20},
+                    {'lumi_section_num': u'29838', 'run_num': uid+1, 'event_count': 30}
+                    ],
+                'file_parent_list': [ ],
+                'event_count': u'60',
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uid+1, i),
+                'block_name': block2,
                 #'is_file_valid': 1
                 }
             flist.append(f)
@@ -865,6 +924,105 @@ class DBSWriterModel_t(unittest.TestCase):
                 }
 
         api.insert('bulkblocks', data)
+
+    def test12b2(self):
+        """test12b2: web.DBSWriterModel.insertBulkBlock with events per lumi: basic test\n"""
+        uniq_id = int(time.time()) + 1
+
+        bulk_primary_ds_name = 'unittest_web_primary_ds_name_%s' % (uniq_id)
+        bulk_procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
+
+        bulk_dataset = '/%s/%s/%s' % (bulk_primary_ds_name,
+                                      bulk_procdataset,
+                                      tier2)
+        bulk_block="%s#%s" % (bulk_dataset, uniq_id)
+        print('dataset = ' , bulk_dataset)
+        print('block = ',  bulk_block)
+        dataset_dict = {u'dataset': bulk_dataset,
+                        u'physics_group_name': 'Tracker',
+                        u'dataset_access_type': 'VALID', u'processed_ds_name': bulk_procdataset,
+                        u'xtcrosssection': 123, u'data_tier_name': tier,
+                        u'prep_id':prep_id}
+
+        block_dict = data = {u'block_name': bulk_block,
+                             u'origin_site_name': site}
+
+        processing_dict = {u'processing_version': processing_version,
+                           u'description':'this-is-a-test'}
+
+        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+
+        primary_dict = {u'primary_ds_name':bulk_primary_ds_name,
+                        u'primary_ds_type':primary_ds_type}
+
+        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
+                              u'app_name': app_name, u'output_module_label': output_module_label,
+                              u'global_tag':global_tag}
+        fileList = []
+        fileConfigList = []
+
+        for i in range(20,30):
+            uniq_id = int(time.time())*1000
+            f={
+                u'md5': 'abc', u'file_type': 'EDM',
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
+                u'check_sum': '1504266448',
+                u'file_lumi_list': [
+                    {u'lumi_section_num': '27', u'run_num': '11', u'event_count': '100' },
+                    {u'lumi_section_num': '28', u'run_num': '11', u'event_count': '111'},
+                    {u'lumi_section_num': '29', u'run_num': '11', u'event_count': '222'}
+                    ],
+                u'event_count': u'1619',
+                u'logical_file_name': "/store/mc/Fall09/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                }
+            fileList.append(f)
+
+        for i in range(40,42):
+            uniq_id = int(time.time())*10000
+            f={
+                u'file_type': 'EDM',
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
+                u'adler32': 'abc123',
+                u'file_lumi_list': [
+                    {u'lumi_section_num': '270', u'run_num': '12', u'event_count': '300'},
+                    {u'lumi_section_num': '280', u'run_num': '12', u'event_count': '301'},
+                    {u'lumi_section_num': '290', u'run_num': '12', u'event_count': '302'}
+                    ],
+                u'event_count': u'1619',
+                u'logical_file_name': "/store/mc/Fall/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                }
+            fileList.append(f)
+        for i in range(50,52):
+            uniq_id = int(time.time())*1000
+            f={
+                u'adler32': 'abc1234', u'file_type': 'EDM',
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
+                u'check_sum': '1504266448',
+                u'file_lumi_list': [
+                    {u'lumi_section_num': '27414', u'run_num': '13', u'event_count': '400'},
+                    {u'lumi_section_num': '26422', u'run_num': '13', u'event_count': '401'},
+                    {u'lumi_section_num': '29838', u'run_num': '13', u'event_count': '402'}
+                    ],
+                u'event_count': u'1619',
+                u'logical_file_name': "/store/mc/Fall15/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                }
+            fileList.append(f)
+
+            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
+                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            fileConfigList.append(file_output_dict)
+
+        data = {'file_conf_list': fileConfigList,
+                'dataset_conf_list': [output_module_dict],
+                'processing_era': processing_dict,
+                'files': fileList,
+                'dataset': dataset_dict,
+                'primds': primary_dict,
+                'acquisition_era': acquisition_dict,
+                'block': block_dict,
+                }
+        api.insert('bulkblocks', data)
+
 
 
     @checkException("check_sum")

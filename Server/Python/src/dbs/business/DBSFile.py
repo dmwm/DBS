@@ -391,6 +391,8 @@ class DBSFile:
                                 "run_num" : fl["run_num"],
                                 "lumi_section_num" : fl["lumi_section_num"]
                             }
+                            if "event_count" in fl:
+                                fldao["event_count"] = fl["event_count"]
                             fldao["file_id"] = filein["file_id"]
                             flumis2insert.append(fldao)
 

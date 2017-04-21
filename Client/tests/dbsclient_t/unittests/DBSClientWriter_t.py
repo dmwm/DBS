@@ -32,6 +32,8 @@ site="cmssrm.fnal.gov"
 block="%s#%s" % (dataset, uid)
 parent_dataset="/%s/%s/%s" % (primary_ds_name, parent_procdataset, tier)
 parent_block="%s#%s" % (parent_dataset, uid)
+print("parent_block = ", parent_block)
+print("block = ", block)
 flist=[]
 
 outDict={
@@ -191,30 +193,30 @@ class DBSClientWriter_t(unittest.TestCase):
                 'file_size': u'2012211901', 'auto_cross_section': 0.0,
                 'check_sum': u'1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'97'},
-                    {'lumi_section_num': u'26422', 'run_num': u'97'},
-                    {'lumi_section_num': u'29838', 'run_num': u'97'},
-                    {'lumi_section_num': u'248', 'run_num': u'97'},
-                    {'lumi_section_num': u'250', 'run_num': u'97'},
-                    {'lumi_section_num': u'300', 'run_num': u'97'},
-                    {'lumi_section_num': u'534', 'run_num': u'97'},
-                    {'lumi_section_num': u'546', 'run_num': u'97'},
-                    {'lumi_section_num': u'638', 'run_num': u'97'},
-                    {'lumi_section_num': u'650', 'run_num': u'97'},
-                    {'lumi_section_num': u'794', 'run_num': u'97'},
-                    {'lumi_section_num': u'1313', 'run_num': u'97'},
-                    {'lumi_section_num': u'1327', 'run_num': u'97'},
-                    {'lumi_section_num': u'1339', 'run_num': u'97'},
-                    {'lumi_section_num': u'1353', 'run_num': u'97'},
-                    {'lumi_section_num': u'1428', 'run_num': u'97'},
-                    {'lumi_section_num': u'1496', 'run_num': u'97'},
-                    {'lumi_section_num': u'1537', 'run_num': u'97'},
-                    {'lumi_section_num': u'1652', 'run_num': u'97'},
-                    {'lumi_section_num': u'1664', 'run_num': u'97'},
-                    {'lumi_section_num': u'1743', 'run_num': u'97'},
-                    {'lumi_section_num': u'1755', 'run_num': u'97'},
-                    {'lumi_section_num': u'1860', 'run_num': u'97'},
-                    {'lumi_section_num': u'1872', 'run_num': u'97'}
+                    {'lumi_section_num': u'27414', 'run_num': u'97', 'event_count': u'66'},
+                    {'lumi_section_num': u'26422', 'run_num': u'97', 'event_count': u'67'},
+                    {'lumi_section_num': u'29838', 'run_num': u'97', 'event_count': u'68'},
+                    {'lumi_section_num': u'248', 'run_num': u'97',   'event_count': u'69'},
+                    {'lumi_section_num': u'250', 'run_num': u'97', 'event_count': u'70'},
+                    {'lumi_section_num': u'300', 'run_num': u'97', 'event_count': u'71'},
+                    {'lumi_section_num': u'534', 'run_num': u'97', 'event_count': u'72'},
+                    {'lumi_section_num': u'546', 'run_num': u'97', 'event_count': u'73'},
+                    {'lumi_section_num': u'638', 'run_num': u'97', 'event_count': u'74'},
+                    {'lumi_section_num': u'650', 'run_num': u'97', 'event_count': u'75'},
+                    {'lumi_section_num': u'794', 'run_num': u'97', 'event_count': u'76'},
+                    {'lumi_section_num': u'1313', 'run_num': u'97', 'event_count': u'77'},
+                    {'lumi_section_num': u'1327', 'run_num': u'97', 'event_count': u'78'},
+                    {'lumi_section_num': u'1339', 'run_num': u'97', 'event_count': u'79'},
+                    {'lumi_section_num': u'1353', 'run_num': u'97', 'event_count': u'80'},
+                    {'lumi_section_num': u'1428', 'run_num': u'97', 'event_count': u'81'},
+                    {'lumi_section_num': u'1496', 'run_num': u'97', 'event_count': u'82'},
+                    {'lumi_section_num': u'1537', 'run_num': u'97', 'event_count': u'83'},
+                    {'lumi_section_num': u'1652', 'run_num': u'97', 'event_count': u'84'},
+                    {'lumi_section_num': u'1664', 'run_num': u'97', 'event_count': u'85'},
+                    {'lumi_section_num': u'1743', 'run_num': u'97', 'event_count': u'86'},
+                    {'lumi_section_num': u'1755', 'run_num': u'97', 'event_count': u'87'},
+                    {'lumi_section_num': u'1860', 'run_num': u'97', 'event_count': u'88'},
+                    {'lumi_section_num': u'1872', 'run_num': u'97', 'event_count': u'89'}
                     ],
                 'file_parent_list': [ ],
                 'event_count': u'1619',
