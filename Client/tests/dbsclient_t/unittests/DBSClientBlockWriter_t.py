@@ -60,8 +60,11 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         for i in range(len(self.testparams['file_conf_list'])):
             self.testparams['file_conf_list'][i]['app_name'] = "%s_%s"%(self.testparams['file_conf_list'][i]['app_name'], self.uid)
             self.testparams['file_conf_list'][i]['lfn'] = self.testparams['file_conf_list'][i]['lfn'].replace('.root', '_%s.root' %(self.uid))
-
+        ct = 1 
         for k in range(len(self.testparams['files'])):
+             for l in self.testparams['files'][k]['file_lumi_list']:
+                 ct +=1
+                 l['event_count'] = ct    
              self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (self.uid))
              self.testparams['files'][k]['adler32'] = '123abc'
 
@@ -76,7 +79,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         #for  k in range(len(self.testparams['file_parent_list'])):
         #    self.testparams['file_parent_list'][k]['logical_file_name'] = "%s_%s" %(self.testparams['file_parent_list'][k]['logical_file_name'],self.uid)
         self.api.insertBulkBlock(blockDump=self.testparams)
-        print("Done inserting parent files")
+        print("\nDone inserting parent files with events per lumi: ", self.testparams['block']['block_name'])
 
     def test1001(self):
         """insert chidren with parentage: the privious inserted files are the parents"""

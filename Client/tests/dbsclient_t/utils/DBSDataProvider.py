@@ -14,6 +14,7 @@ class DBSDataProvider(object):
         #set starting values for the run number and lumi section to avoid duplicated entries in a block
         self._run_num  = random.randint(1, 100)
         self._lumi_sec = random.randint(1, 100)
+        self._event_count = random.randint(1, 100) 
 
         self._files = {}
 
@@ -141,7 +142,7 @@ class DBSDataProvider(object):
             self._run_num += 1
             for _ in range(0, self._num_of_lumis):
                 self._lumi_sec += 1
-                row = dict(run_num=self._run_num, lumi_section_num=self._lumi_sec)
+                row = dict(run_num=self._run_num, lumi_section_num=self._lumi_sec, event_count=self._event_count)
                 output.append(row)
         return output
 
