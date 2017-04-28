@@ -823,7 +823,7 @@ acquisition era, but with different cases.")
             dtId = self.tierid.execute(conn, dataset['data_tier_name'])   
             #When no data tier found, it return tier id -1
             if dtId <= 0:
-                dbsExceptionHandler('dbsException-missing-data', 'Required data tier not found in DBS when insert dataset. Ask your admin adding the tier before insert/migrate the block/dataset.',
+                dbsExceptionHandler('dbsException-missing-data', 'Required data tier %s not found in DBS when insert dataset. Ask your admin adding the tier before insert/migrate the block/dataset.' %dataset['data_tier_name'],
                          self.logger.exception, 'Required data tier not found in DBS when insert dataset. ')
             #7 Deal with dataset access type. A dataset must have a data type
             dataset['dataset_access_type'] = dataset['dataset_access_type'].upper()
