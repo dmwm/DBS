@@ -22,6 +22,7 @@ class SummaryList(DBFormatter):
         """
         DBFormatter.__init__(self, logger, dbi)
         self.owner = "%s." % owner if not owner in ("", "__MYSQL__") else ""
+        self.logger = logger
 
     def execute(self, conn, block_name="", dataset="",  run_num=-1, validFileOnly=0, transaction=False):
         binds = {}
@@ -203,7 +204,8 @@ class SummaryList(DBFormatter):
                 binds.update({"dataset":dataset})
         else:
             return 
-
+        self.logger.exception(sql)
+        self.logger.exception(binds)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         for i in cursors:
             d = self.formatCursor(i)
