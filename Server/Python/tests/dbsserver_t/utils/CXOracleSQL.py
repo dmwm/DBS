@@ -1,5 +1,5 @@
 """Module provides the the class for sql/ tests with cx_Oracle"""
-from __future__ import print_function
+
 
 __revision__ = "$Id: CXOracleSQL.py,v 1.1 2010/01/01 19:54:38 akhukhun Exp $"
 __version__ = "$Revision: 1.1 $"

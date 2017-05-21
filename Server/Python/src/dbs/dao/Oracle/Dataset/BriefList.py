@@ -62,7 +62,7 @@ class BriefList(DBFormatter):
 	    wheresql_dataset_id_list=''
             wheresql_dataset_id_range=''
 	    for id in parseRunRange(dataset_id):
-		if isinstance(id, basestring) or isinstance(id, int) or isinstance(id, long):
+		if isinstance(id, str) or isinstance(id, int) or isinstance(id, int):
 		    dataset_id_list.append(str(id))
                 if isinstance(id, run_tuple):
                     if id[0] == id[1]:
@@ -131,7 +131,7 @@ class BriefList(DBFormatter):
             if prep_id:
                 wheresql += "AND D.prep_id = :prep_id "
                 binds.update(prep_id = prep_id)
-            if dataset and isinstance(dataset, basestring) and dataset != "%":
+            if dataset and isinstance(dataset, str) and dataset != "%":
                 op = ("=", "like")["%" in dataset]
                 wheresql += " AND D.DATASET %s :dataset " % op
                 binds.update(dataset = dataset)
@@ -245,7 +245,7 @@ class BriefList(DBFormatter):
                 wheresql_run_list=''
                 wheresql_run_range=''
                 for r in parseRunRange(run_num):
-                    if isinstance(r, basestring) or isinstance(r, int)  or isinstance(r, long):
+                    if isinstance(r, str) or isinstance(r, int)  or isinstance(r, int):
                         run_list.append(str(r))
                     if isinstance(r, run_tuple):
                         if r[0] == r[1]:

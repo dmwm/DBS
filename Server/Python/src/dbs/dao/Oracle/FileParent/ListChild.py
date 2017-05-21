@@ -35,7 +35,7 @@ class ListChild(DBFormatter):
         sql = ''
 
         if logical_file_name:
-            if isinstance(logical_file_name, basestring):
+            if isinstance(logical_file_name, str):
                 wheresql = "WHERE F.LOGICAL_FILE_NAME = :logical_file_name"
                 binds = {"logical_file_name": logical_file_name}
                 sql = "{sql} {wheresql}".format(sql=self.sql, wheresql=wheresql)

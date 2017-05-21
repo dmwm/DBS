@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 from optparse import OptionParser, OptionGroup
-from SimpleXMLRPCServer import SimpleXMLRPCServer
-import cPickle
+from xmlrpc.server import SimpleXMLRPCServer
+import pickle
 import sqlite3 as sqlite
 import os, signal, sys
 
@@ -131,7 +131,7 @@ class StatsPipeServer(object):
     def handle_request(self):
         while True:
             try:
-                input_data = cPickle.load(self.f)
+                input_data = pickle.load(self.f)
             except EOFError: ### no new data available
                 return
             else:

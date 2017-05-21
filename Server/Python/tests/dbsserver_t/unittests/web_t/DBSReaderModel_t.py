@@ -1,7 +1,7 @@
 """
 web unittests
 """
-from __future__ import absolute_import
+
 import imp
 import os
 import re
@@ -31,7 +31,7 @@ def checkException400(f):
 
 def importCode(code, name, add_to_sys_modules=0):
     module = imp.new_module(name)
-    exec code in module.__dict__
+    exec(code, module.__dict__)
     if add_to_sys_modules:
         sys.modules[name] = module
     return module

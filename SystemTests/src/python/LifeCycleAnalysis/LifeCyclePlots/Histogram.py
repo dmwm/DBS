@@ -1,5 +1,6 @@
-from __future__ import print_function
+
 from ROOT import gStyle, TCanvas, TFile, TH1F, TH2F, THStack, TPaveStats
+import collections
 
 class BasicHisto(object):
     def __init__(self, name, title, fill_fkt, condition, label,
@@ -61,13 +62,13 @@ class BasicHisto(object):
         self._canvas.SetLogy(self._log.get('y', False))
 
         # set additional options
-        for key, value in self._add_options.iteritems():
+        for key, value in self._add_options.items():
             # initialize callable with histogramm to start for-loop
             # to resolve nested calls like GetXaxis().SetLabelSize()
             callable_fkt = self._histogram
 
             for func in key.split('.'):
-                if callable(callable_fkt):# to address nested function calls in ROOT
+                if isinstance(callable_fkt, collections.Callable):# to address nested function calls in ROOT
                     callable_fkt = getattr(callable_fkt(), func)
                 else: #not nested function call directly to histogram itself
                     callable_fkt = getattr(callable_fkt, func)

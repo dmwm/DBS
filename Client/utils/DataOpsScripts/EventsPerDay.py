@@ -6,7 +6,7 @@
  python EventsPerDay.py -d '/*/*Fall13-POST*/GEN-SIM'
                        
 """ 
-from __future__ import print_function
+
 import  sys, time
 from optparse import OptionParser
 from time import gmtime

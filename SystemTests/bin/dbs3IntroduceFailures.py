@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler
 from LifeCycleTests.LifeCycleTools.OptParser import get_command_line_options
 

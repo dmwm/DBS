@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import os
 lines=open("../DDL/create-oracle-schema.sql", "r").readlines()
 tablefound=0

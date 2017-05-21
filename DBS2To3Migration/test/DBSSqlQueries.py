@@ -1,7 +1,7 @@
 """
 DBS SQL QUERIES for unittests to validate the DBS2 to DBS3 migration
 """
-from __future__ import print_function
+
 from WMCore.Database.DBFactory import DBFactory
 from WMCore.Database.DBFormatter import DBFormatter
 

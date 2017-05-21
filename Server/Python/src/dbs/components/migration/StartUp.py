@@ -50,8 +50,8 @@ if __name__ == '__main__':
     options = get_command_line_options(__name__, sys.argv)
     migration_config = configure(options.config)
 
-    for instance in migration_config['database'].keys():
-        for thread in xrange(migration_config['database'][instance]['threads']):
+    for instance in list(migration_config['database'].keys()):
+        for thread in range(migration_config['database'][instance]['threads']):
             DBSMigrationServer(MigrationTask(migration_config['database'][instance]), duration = 5)
 
     root = MigrationWebMonitoring()

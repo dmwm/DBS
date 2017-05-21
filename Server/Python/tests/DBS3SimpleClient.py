@@ -2,28 +2,28 @@
 """
 Very simple dbs3 client:
 """
-from __future__ import print_function
+
 
 __revision__ = "$Id: DBS3SimpleClient.py,v 1.8 2009/11/29 11:37:54 akhukhun Exp $"
 __version__ = "$Revision: 1.8 $"
 
 import sys
 import cjson
-import urllib, urllib2
+import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse
 
 class DBS3Client:
     def __init__(self, baseurl):
         self.baseurl = baseurl
         self.header =  {"Accept": "application/json"}
-        self.opener =  urllib2.build_opener()
+        self.opener =  urllib.request.build_opener()
         
     def get(self, apiurl, params = {}):
         "method for GET verb"
         url = self.baseurl + apiurl
         if not params == {}:
-            url = "?".join((url, urllib.urlencode(params, doseq=True)))
+            url = "?".join((url, urllib.parse.urlencode(params, doseq=True)))
         #req = urllib2.Request(url = url, headers = self.header)
-        req = urllib2.Request(url = url)
+        req = urllib.request.Request(url = url)
         data = self.opener.open(req)
         #ddata = cjson.decode(data.read())
         #return ddata
@@ -37,7 +37,7 @@ class DBS3Client:
         header = self.header
         header['Content-Type'] = 'application/json'
         endata = cjson.encode(indata)
-        req = urllib2.Request(url = url, data = endata, headers = header)
+        req = urllib.request.Request(url = url, data = endata, headers = header)
         req.get_method = lambda: 'POST'
         self.opener.open(req)
 

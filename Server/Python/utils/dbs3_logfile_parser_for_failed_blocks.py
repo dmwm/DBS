@@ -6,7 +6,7 @@ grep -o -P \"(?<=Block name:\s)\S+$\" dbs-20130521.log | uniq  -d
 
 Not yet working since log files ar not consecutive at the moment
 """
-from __future__ import print_function
+
 from optparse import OptionParser
 
 import re

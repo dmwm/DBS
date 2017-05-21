@@ -128,7 +128,7 @@ class DBSWriterModel(DBSReaderModel):
                             % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(acquisition_era_name=basestring, end_date=(int, basestring))
+    @inputChecks(acquisition_era_name=str, end_date=(int, str))
     def updateAcqEraEndDate(self, acquisition_era_name ="", end_date=0):
         """
         API to update the end_date of an acquisition era
@@ -365,7 +365,7 @@ class DBSWriterModel(DBSReaderModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('logical_file_name')
-    @inputChecks(logical_file_name=(basestring, list), is_file_valid=(int, basestring), lost=(int, basestring, bool ), dataset=basestring)
+    @inputChecks(logical_file_name=(str, list), is_file_valid=(int, str), lost=(int, str, bool ), dataset=str)
     def updateFile(self, logical_file_name=[], is_file_valid=1, lost=0, dataset=''):
         """
         API to update file status
@@ -401,7 +401,7 @@ class DBSWriterModel(DBSReaderModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(dataset=basestring, dataset_access_type=basestring)
+    @inputChecks(dataset=str, dataset_access_type=str)
     def updateDataset(self, dataset="", is_dataset_valid=-1, dataset_access_type=""):
         """
         API to update dataset type
@@ -426,7 +426,7 @@ class DBSWriterModel(DBSReaderModel):
             sError = "DBSWriterModel\updateDataset. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(block_name=basestring, open_for_writing=(int, basestring), origin_site_name=basestring)
+    @inputChecks(block_name=str, open_for_writing=(int, str), origin_site_name=str)
     def updateBlock(self, block_name="", open_for_writing=-1, origin_site_name=""):
         """
         API to update block status

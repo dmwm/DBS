@@ -40,8 +40,8 @@ source_encoding = 'utf-8'
 master_doc = 'index'
 
 # General information about the project.
-project = u'CMS Data Bookkeeping Service'
-copyright = u'2011, Yuyi Guo, Manuel Giffels'
+project = 'CMS Data Bookkeeping Service'
+copyright = '2011, Yuyi Guo, Manuel Giffels'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -178,8 +178,8 @@ latex_paper_size = 'a4'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'DBS.tex', u'DBS Documentation',
-   u'Yuyi Guo, Manuel Giffels', 'manual'),
+  ('index', 'DBS.tex', 'DBS Documentation',
+   'Yuyi Guo, Manuel Giffels', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

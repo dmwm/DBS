@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 from LifeCycleTests.LifeCycleTools.APIFactory import create_api
 from LifeCycleTests.LifeCycleTools.PayloadHandler import PayloadHandler, increase_interval
 from LifeCycleTests.LifeCycleTools.Timing import TimingStat
@@ -46,8 +46,8 @@ timer.update_stats({'server_request_timing' : float(request_processing_time)/100
 timer.stat_to_server()
 
 #remove T0TEST datasets, since they are not analysed by users
-datasets = map(lambda x: x['dataset'], datasets)
-datasets = filter(lambda x: x.find('T0TEST')==-1, datasets)
+datasets = [x['dataset'] for x in datasets]
+datasets = [x for x in datasets if x.find('T0TEST')==-1]
 
 #re-arrange the order of datasets, to have a more realistic chaotic use
 shuffle(datasets)

@@ -36,12 +36,12 @@ def inputChecks(**_params_):
         log = clog.error_log
         @wraps(_func_)
         def wrapped(*args, **kw):
-            arg_names = _func_.func_code.co_varnames[:_func_.func_code.co_argcount]
+            arg_names = _func_.__code__.co_varnames[:_func_.__code__.co_argcount]
             ka = {}
             ka.update(list(zip(arg_names, args)))
             ka.update(kw)
             #print ka
-            for name, value in ka.iteritems():
+            for name, value in ka.items():
                 #In fact the framework removes all the input variables that is not in the args list of _addMethod.
                 #So DBS list API will never see these variables. For example, if one has
                 #http://hostname/cms_dbs/DBS/datatiers?name=abc, the API will get a request to list all the datatiers because
@@ -56,7 +56,7 @@ def inputChecks(**_params_):
                                             logger=log.error, serverError=serverlog)
                     else:
                         try:
-                            if isinstance(value, basestring):
+                            if isinstance(value, str):
                                 try:
                                     value = str(value)
                                 except:
@@ -174,7 +174,7 @@ acceptedInputDataTypes = {
     ################
     list:['dataset', 'run_num', 'logical_file_name', 'dataset_id', 'lumi_list'],
     ################
-    long:['lumi_section_num', 'run_num', 'xtcrosssection', 'auto_cross_section', 'dataset_id', 'lumi_list'],
+    int:['lumi_section_num', 'run_num', 'xtcrosssection', 'auto_cross_section', 'dataset_id', 'lumi_list'],
     ################
     float:['xtcrosssection', 'auto_cross_section']
 }
@@ -248,7 +248,7 @@ validationFunctionWildcard = {
 def validateJSONInputNoCopy(input_key,input_data, read=False):
     log = clog.error_log
     if isinstance(input_data, dict):
-        for key in input_data.keys():
+        for key in list(input_data.keys()):
             if key not in acceptedInputKeys[input_key]:
                 dbsExceptionHandler('dbsException-invalid-input2', message="Invalid Input Key %s..." %key[:10],\
                                     logger=log.error, serverError="%s is not a valid input key for %s"%(key, input_key))
@@ -259,7 +259,7 @@ def validateJSONInputNoCopy(input_key,input_data, read=False):
         for x in input_data:
             l.append(validateJSONInputNoCopy(input_key, x, read=read))
         input_data = l
-    elif isinstance(input_data, basestring):
+    elif isinstance(input_data, str):
         if input_key not in acceptedInputDataTypes[str]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type str for key-value %s... %s..." \
                 %(input_key[:10], input_data[:10]), logger=log.error,\
@@ -270,8 +270,8 @@ def validateJSONInputNoCopy(input_key,input_data, read=False):
         if input_key not in acceptedInputDataTypes[int]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type int for key-value %s..,  %s"\
             %(input_key[:10], input_data), logger=log.error, serverError="Input data %s is not a valid input type for key %s"%(input_data, input_key))
-    elif isinstance(input_data, long):
-        if input_key not in acceptedInputDataTypes[long]:
+    elif isinstance(input_data, int):
+        if input_key not in acceptedInputDataTypes[int]:
             dbsExceptionHandler('dbsException-invalid-input2', message="Invalid input data type long for key-value %s... %s" \
             %(input_key[:10], input_data), logger=log.error, serverError="Input data %s is not a valid date type for key %s"%(input_data, input_key))
     elif isinstance(input_data, float):

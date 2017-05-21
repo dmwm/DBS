@@ -1,9 +1,9 @@
 """
 Class to provide data for unit- and integration tests
 """
-from itertools import izip
+
 from collections import defaultdict
-import cPickle as pickle
+import pickle as pickle
 import getpass
 import os.path
 import uuid
@@ -29,7 +29,7 @@ def strip_volatile_fields(data):
     if isinstance(data, list):
         return [strip_volatile_fields(entry) for entry in data]
 
-    for key in data.keys():
+    for key in list(data.keys()):
         if key in volatile_fields:
             del data[key]
 
@@ -91,7 +91,7 @@ class DBSTransientData(object):
         generated_data = []
 
         for list_entry in template_data:
-            for entry, value in list_entry.iteritems():
+            for entry, value in list_entry.items():
                 if isinstance(value, str):
                     if value.find("@unique_id@") != -1:
                         list_entry[entry] = list_entry[entry].replace("@unique_id@", self.unixtime)
@@ -224,13 +224,13 @@ def create_child_data_provider(parent_data_provider):
     parent_block_dump = parent_data_provider.block_dump()
     child_block_dump = child_data_provider.block_dump()
 
-    for parent_block, child_block in izip(parent_block_dump, child_block_dump):
+    for parent_block, child_block in zip(parent_block_dump, child_block_dump):
         parent_logical_file_names = (this_file['logical_file_name'] for this_file in parent_block['files'])
         child_logical_file_names = (this_file['logical_file_name'] for this_file in child_block['files'])
 
         file_parent_list = []
 
-        for parent_logical_file_name, child_logical_file_name in izip(parent_logical_file_names,
+        for parent_logical_file_name, child_logical_file_name in zip(parent_logical_file_names,
                                                                       child_logical_file_names):
             file_parent_list.append(dict(parent_logical_file_name=parent_logical_file_name,
                                          logical_file_name=child_logical_file_name))
@@ -309,7 +309,7 @@ class DBSBlockDataProvider(object):
         if not (hasattr(self, '_files') and block_name in self._files):
             self._files[block_name] = []
             num_of_created_blocks = len(self._files)
-            for i in xrange((num_of_created_blocks-1) * self._num_of_files,
+            for i in range((num_of_created_blocks-1) * self._num_of_files,
                             num_of_created_blocks * self._num_of_files):
                 logical_file_name = self._generate_file_name(i)
                 self._files[block_name].append({'check_sum' : self._generate_cksum(),
@@ -389,7 +389,7 @@ class DBSBlockDataProvider(object):
     def _generate_file_lumi_list(self):
         "generate file lumi list for a given file, if not already available"
         output = []
-        for _ in xrange(0, self._num_of_runs):
+        for _ in range(0, self._num_of_runs):
             self._run_num += 1
             for _ in range(0, self._num_of_lumis):
                 self._lumi_sec += 1
@@ -425,7 +425,7 @@ class DBSBlockDataProvider(object):
         "return list of blocks"
         if not hasattr(self, '_blocks'):
             self._blocks = []
-            for i in xrange(self._num_of_blocks):
+            for i in range(self._num_of_blocks):
                 self._blocks.append(self._generate_block_name())
         return self._blocks
 

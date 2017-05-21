@@ -1,7 +1,7 @@
 """
 web unittests package.
 """
-from __future__ import print_function
+
 
 __all__ = ['DBSWriterModel_t', 'DBSReaderModel_t']
 

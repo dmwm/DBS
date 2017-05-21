@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import logging
 from WMCore.Database.DBFactory import DBFactory
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
@@ -64,21 +64,21 @@ class Test:
                         'output_configs' : [  {'app_name': 'Repacker', 'release_version': 'CMSSW_2_1_7',  'pset_hash': 'NO_PSET_HASH'}  ] 
 		}
 
-	binput = {'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': u'/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW', 
-		    'dataset_type': 'PRODUCTION', 'processed_ds_name': u'Summer08_IDEAL_V9_v1', 'primary_ds_name': u'QCD_BCtoMu_Pt20', 
-		    'output_configs': [{'release_version': u'CMSSW_2_1_7', 'pset_hash': u'NO_PSET_HASH', 'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
-		    {'release_version': u'CMSSW_2_1_7', 'pset_hash': u'76e303993a1c2f842159dbfeeed9a0dd', 'app_name': u'cmsRun', 'output_module_label': u'output'}], 
-		    'global_tag': u'', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': 'GEN-SIM-RAW',
+	binput = {'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': '/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW', 
+		    'dataset_type': 'PRODUCTION', 'processed_ds_name': 'Summer08_IDEAL_V9_v1', 'primary_ds_name': 'QCD_BCtoMu_Pt20', 
+		    'output_configs': [{'release_version': 'CMSSW_2_1_7', 'pset_hash': 'NO_PSET_HASH', 'app_name': 'cmsRun', 'output_module_label': 'Merged'}, 
+		    {'release_version': 'CMSSW_2_1_7', 'pset_hash': '76e303993a1c2f842159dbfeeed9a0dd', 'app_name': 'cmsRun', 'output_module_label': 'output'}], 
+		    'global_tag': '', 'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': 'GEN-SIM-RAW',
 		    'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
 		    #'processing_version': '1',  'acquisition_era_name': u'',
 		}
-	binput = {'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': u'/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-DIGI-RAW', 
-		    'dataset_type': 'PRODUCTION', 'processed_ds_name': u'Summer09-STARTUP31X_V3-v1', 'primary_ds_name': u'TkCosmics38T', 
-		    'data_tier_name': 'GEN-SIM-DIGI-RAW', 'global_tag': u'STARTUP31X_V3::All', 'xtcrosssection': 123, 'primary_ds_type': 'test', 
+	binput = {'is_dataset_valid': 1, 'physics_group_name': 'Tracker', 'dataset': '/TkCosmics38T/Summer09-STARTUP31X_V3-v1/GEN-SIM-DIGI-RAW', 
+		    'dataset_type': 'PRODUCTION', 'processed_ds_name': 'Summer09-STARTUP31X_V3-v1', 'primary_ds_name': 'TkCosmics38T', 
+		    'data_tier_name': 'GEN-SIM-DIGI-RAW', 'global_tag': 'STARTUP31X_V3::All', 'xtcrosssection': 123, 'primary_ds_type': 'test', 
 		    'output_configs': [
-			    {'release_version': u'CMSSW_3_1_2', 'pset_hash': u'4847ed25a7e108a7b1e704a26f345aa8', 'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
-			    {'release_version': u'CMSSW_3_1_2', 'pset_hash': u'NO_PSET_HASH', 'app_name': u'cmsRun', 'output_module_label': u'Merged'}, 
-			    {'release_version': u'CMSSW_3_1_2', 'pset_hash': u'4847ed25a7e108a7b1e704a26f345aa8', 'app_name': u'cmsRun', 'output_module_label': u'output'}
+			    {'release_version': 'CMSSW_3_1_2', 'pset_hash': '4847ed25a7e108a7b1e704a26f345aa8', 'app_name': 'cmsRun', 'output_module_label': 'Merged'}, 
+			    {'release_version': 'CMSSW_3_1_2', 'pset_hash': 'NO_PSET_HASH', 'app_name': 'cmsRun', 'output_module_label': 'Merged'}, 
+			    {'release_version': 'CMSSW_3_1_2', 'pset_hash': '4847ed25a7e108a7b1e704a26f345aa8', 'app_name': 'cmsRun', 'output_module_label': 'output'}
 			],
 		    'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
 		}
@@ -111,10 +111,10 @@ class Test:
 		"""
 		
 		bo = DBSBlock(self.logger, self.dbi, self.owner)
-		binput = {'block_name': u'/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW#f930d82a-f72b-4f9e-8351-8a3cb0c43b79', 'file_count': u'100', 
-			    'origin_site': u'cmssrm.fnal.gov', 'last_modification_date': u'1263231733', 
-			    'create_by': u'/DC=org/DC=doegrids/OU=People/CN=Ajit Kumar Mohapatra 867118', 'block_size': u'228054411650', 
-			    'open_for_writing': 1, 'last_modified_by': u'anzar@cmssrv49.fnal.gov', 'creation_date': u'1228050132'}
+		binput = {'block_name': '/QCD_BCtoMu_Pt20/Summer08_IDEAL_V9_v1/GEN-SIM-RAW#f930d82a-f72b-4f9e-8351-8a3cb0c43b79', 'file_count': '100', 
+			    'origin_site': 'cmssrm.fnal.gov', 'last_modification_date': '1263231733', 
+			    'create_by': '/DC=org/DC=doegrids/OU=People/CN=Ajit Kumar Mohapatra 867118', 'block_size': '228054411650', 
+			    'open_for_writing': 1, 'last_modified_by': 'anzar@cmssrv49.fnal.gov', 'creation_date': '1228050132'}
 		bo.insertBlock(binput)
 
     def testFiles(self):
@@ -125,13 +125,13 @@ class Test:
 		bo = DBSFile(self.logger, self.dbi, self.owner)
     
 		binput = [
-		{'adler32': u'NOTSET', 'file_type': 'EDM', 'file_output_config_list': [{'release_version': 'CMSSW_1_2_3', 'pset_hash': '76e303993a1c2f842159dbfeeed9a0dd', 'app_name': 
+		{'adler32': 'NOTSET', 'file_type': 'EDM', 'file_output_config_list': [{'release_version': 'CMSSW_1_2_3', 'pset_hash': '76e303993a1c2f842159dbfeeed9a0dd', 'app_name': 
 		'cmsRun', 'output_module_label': 'Merged'}], 'dataset': '/unittest_web_primary_ds_name_684/unittest_web_dataset_684/GEN-SIM-RAW', 
-		'file_size': u'2012211901', 'auto_cross_section': 0.0, 'check_sum': u'1504266448', 
-		'file_lumi_list': [{'lumi_section_num': u'27414', 'run_num': u'1'}, 
-				    {'lumi_section_num': u'26422', 'run_num': u'1'}, 
-				    {'lumi_section_num': u'29838', 'run_num': u'1'}], 
-				    'file_parent_list': [], 'event_count': u'1619', 'logical_file_name': 
+		'file_size': '2012211901', 'auto_cross_section': 0.0, 'check_sum': '1504266448', 
+		'file_lumi_list': [{'lumi_section_num': '27414', 'run_num': '1'}, 
+				    {'lumi_section_num': '26422', 'run_num': '1'}, 
+				    {'lumi_section_num': '29838', 'run_num': '1'}], 
+				    'file_parent_list': [], 'event_count': '1619', 'logical_file_name': 
 					'/store/mc/parent_684/0.root', 
 		'block': '/unittest_web_primary_ds_name_684/unittest_web_dataset_684/GEN-SIM-RAW#684',
 		'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",

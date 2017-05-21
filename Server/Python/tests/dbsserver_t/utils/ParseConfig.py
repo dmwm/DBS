@@ -1,5 +1,5 @@
 """Used to parse the config file and get reader and writer instances informations from it"""
-from __future__ import print_function
+
 
 import sys
 from WMCore.Configuration import loadConfigurationFile

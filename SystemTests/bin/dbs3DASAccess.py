@@ -8,7 +8,7 @@ from LifeCycleTests.LifeCycleTools.StatsClient import StatsPipeClient
 import os
 import sys
 import tempfile
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 options = get_command_line_options(__name__, sys.argv)
 
@@ -27,11 +27,11 @@ stat_client = StatsPipeClient(named_pipe)
 das_queries = payload_handler.payload['workflow']['DASQueries']
 
 for das_query in das_queries:
-    api_call_name = das_query.keys()[0]
+    api_call_name = list(das_query.keys())[0]
     api_call = getattr(api, api_call_name)
     query = das_query[api_call_name]
 
-    encoded_query = urllib.urlencode(query, doseq=True)
+    encoded_query = urllib.parse.urlencode(query, doseq=True)
 
     timing = {'stats':{'query' : encoded_query, 'api' : api_call_name}}
 

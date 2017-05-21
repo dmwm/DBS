@@ -33,7 +33,7 @@ data_file = os.path.join(os.getenv('DBS3_LIFECYCLE_ROOT'), 'data', data_file)
 with open(data_file, 'r') as f:
     queries = json.load(f)
 
-events = ['DASAccess' for _ in xrange(num_of_repetitions)]
+events = ['DASAccess' for _ in range(num_of_repetitions)]
 for chunk in split_list(queries, num_of_threads):
     p = payload_handler.clone_payload()
     p['workflow']['DASQueries'] = chunk
