@@ -1009,6 +1009,8 @@ class DbsApi(object):
         :type detail: bool
         :param validFileOnly: 0 or 1.  default=0. Return only valid files if set to 1. 
         :type validFileOnly: int
+        :param sumOverLumi: default=0, counting with event_count/file; when = 1, using event_count/lumi when run_num is given; No list inputs are allowed whtn sumOverLumi=1.
+        :type sumOverLumi: int 
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
         
@@ -1061,6 +1063,8 @@ class DbsApi(object):
         :type detail: bool
         :param validFileOnly: 0 or 1.  default=0. Return only valid files if set to 1. 
         :type validFileOnly: int
+        :param sumOverLumi: default=0, counting with event_count/file; when = 1, using event_count/lumi when run_num is given.
+        :type sumOverLumi: int 
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
 
@@ -1068,7 +1072,7 @@ class DbsApi(object):
         validParameters = ['dataset', 'block_name', 'logical_file_name',
                           'release_version', 'pset_hash', 'app_name',
                           'output_module_label', 'run_num',
-                          'origin_site_name', 'lumi_list', 'detail', 'validFileOnly']
+                          'origin_site_name', 'lumi_list', 'detail', 'validFileOnly', 'sumOverLumi']
 
         requiredParameters = {'multiple': validParameters}
 
@@ -1120,6 +1124,8 @@ class DbsApi(object):
         :type detail: bool
         :param validFileOnly: 0 or 1.  default=0. Return only valid files if set to 1. 
         :type validFileOnly: int
+        :param sumOverLumi: 0 or 1.  default=0. When sumOverLumi = 1 and run_num is given , it will count the event by lumi; No list inputs are allowed whtn sumOverLumi=1. 
+        :type sumOverLumi: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
 
@@ -1127,7 +1133,7 @@ class DbsApi(object):
         validParameters = ['dataset', 'block_name', 'logical_file_name',
                           'release_version', 'pset_hash', 'app_name',
                           'output_module_label', 'run_num',
-                          'origin_site_name', 'lumi_list', 'detail', 'validFileOnly']
+                          'origin_site_name', 'lumi_list', 'detail', 'validFileOnly', 'sumOverLumi']
 
         requiredParameters = {'multiple': ['dataset', 'block_name', 'logical_file_name']}
 
@@ -1229,7 +1235,9 @@ class DbsApi(object):
                 The total number of events in those files;
                 The total number of lumis for that run_number. Note that in general this is different from the total 
                 number of lumis in those files, since lumis are filtered by the run_number they belong to, while events 
-                are only counted as total per file;
+                are only counted as total per file before run 3. Howvere, when sumOverLumi=1, events will count by lumi when run_num
+                is given while event_count/lumi is filled. If sumOverLumi=1, but event_count/lumi is not filled for any of the lumis in the block or
+                dataset, then the API will return NULL for num_event. 
                 The total num blocks that have the run_num;
  
         Either block_name or dataset name is required. No wild-cards are allowed
@@ -1243,11 +1251,13 @@ class DbsApi(object):
         :type run_num: int, str, list
         :param validFileOnly: default=0 all files included. if 1, only valid file counted.
         :type validFileOnly: int 
+        :param sumOverLumi: default=0, counting with event_count/file; when = 1, using event_count/lumi when run_num is given.
+        :type sumOverLumi: int 
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
         """
-        validParameters = ['block_name', 'dataset', 'run_num', 'validFileOnly']
+        validParameters = ['block_name', 'dataset', 'run_num', 'validFileOnly', 'sumOverLumi']
 
         requiredParameters = {'standalone': ['block_name', 'dataset']}
 

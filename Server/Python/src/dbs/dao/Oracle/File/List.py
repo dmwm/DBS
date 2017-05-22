@@ -23,7 +23,7 @@ class List(DBFormatter):
 	#all listFile APIs should return the same data structure defined by self.sql
         self.sql_sel = \
 """
-SELECT F.FILE_ID, F.LOGICAL_FILE_NAME, F.IS_FILE_VALID,
+ SELECT F.FILE_ID, F.LOGICAL_FILE_NAME, F.IS_FILE_VALID,
         F.DATASET_ID, D.DATASET,
         F.BLOCK_ID, B.BLOCK_NAME,
         F.FILE_TYPE_ID, FT.FILE_TYPE,
@@ -35,7 +35,7 @@ SELECT F.FILE_ID, F.LOGICAL_FILE_NAME, F.IS_FILE_VALID,
 """
         self.sql_cond = \
 """
-FROM %sFILES F
+ FROM %sFILES F
 JOIN %sFILE_DATA_TYPES FT ON  FT.FILE_TYPE_ID = F.FILE_TYPE_ID
 JOIN %sDATASETS D ON  D.DATASET_ID = F.DATASET_ID
 JOIN %sBLOCKS B ON B.BLOCK_ID = F.BLOCK_ID
@@ -45,7 +45,7 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
 
     def execute(self, conn, dataset="", block_name="", logical_file_name="",
                 release_version="", pset_hash="", app_name="", output_module_label="",
-                run_num=-1, origin_site_name="", lumi_list=[], validFileOnly=0, transaction=False):
+                run_num=-1, origin_site_name="", lumi_list=[], validFileOnly=0, sumOverLumi=0, transaction=False):
         if not conn:
             dbsExceptionHandler("dbsException-failed-connect2host", "Oracle/File/List. Expects db connection from upper layer.", self.logger.exception)
         sql = self.sql_cond
@@ -54,6 +54,7 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
         run_generator = ''
 	lfn_generator = ''
 	lumi_generator = ''
+        sql_lumi = ''
 	#import pdb
 	#pdb.set_trace()
         if run_num != -1 :
@@ -208,6 +209,7 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
                 dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.",
 					self.logger.exception)         
             sql += " AND FL.LUMI_SECTION_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
+            sql_lumi = " FL.LUMI_SECTION_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
             #Do I need to convert lumi_list to be a str list? YG 10/03/13
             #Yes, you do. YG
             lumi_list = map(str, lumi_list)
@@ -223,10 +225,53 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
 	    # only one with and generators should be named differently for run and lfn.	
 	    #sql = run_generator + lfn_generator + lumi_generator  + sql_sel + sql
 	else:
-	    sql = run_generator + lfn_generator + lumi_generator  + sql_sel + sql
-	self.logger.debug("SQL: " + sql)    	
-	self.logger.debug(" binds: %s " %binds)
-        cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
+            if run_num != -1 and int(sumOverLumi) == 1:                
+                sql_sel = sql_sel.replace('F.EVENT_COUNT,', '')
+                sql = \
+                 'with myfiles as ( ' + sql_sel + sql + """) select mf.* , 
+                            (case 
+                                when badi.file_id = mc.file_id and badi.run_num=mc.run_num and badi.bid is null then null 
+                                else  mc.event_count 
+                             end) as event_count 
+                     from myfiles mf,   
+                          EVENT_COUNT_WITH_LUMI, 
+                          ( 
+                            select distinct fl.file_id, fl.run_num, null as bid 
+                            from %sfile_lumis fl  
+                            join myfiles my2 on my2.file_id=fl.file_id and my2.run_num=fl.run_num 
+                            where fl.event_count is null 
+                         )badi 
+                    where mf.file_id= mc.file_id and mf.run_num=mc.run_num  
+
+                    """%self.owner
+                if not lumi_list:
+                    ent_ct = """
+                            (select sum(fl.event_count) as event_count, fl.file_id, fl.run_num 
+                            from %sfile_lumis fl 
+                            join myfiles mf on mf.file_id=fl.file_id and mf.run_num=fl.run_num 
+                            group by fl.file_id, fl.run_num) mc 
+                        """%self.owner
+                    sql = sql.replace('EVENT_COUNT_WITH_LUMI', ent_ct)
+                else:
+                    ent_ct = lumi_generator  + """ 
+                            (select sum(fl.event_count) as event_count, fl.file_id, fl.run_num 
+                            from %sfile_lumis fl 
+                            join myfiles mf on mf.file_id=fl.file_id and mf.run_num=fl.run_num 
+                            where sql_lumi  
+                            group by fl.file_id, fl.run_num) mc 
+                        """%self.owner
+                    sql = sql.replace('EVENT_COUNT_WITH_LUMI', ent_ct)
+            else:
+                sql = run_generator + lfn_generator + lumi_generator  + sql_sel + sql
+	self.logger.error("SQL: " + sql)
+        self.logger.error("***********************")     	
+	self.logger.error(binds)
+        try:
+            self.logger.error("******before cursor**********")   
+            cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
+            self.logger.error("******after cursor**********")  
+        except Exception as e :
+            self.logger.error(str(e))
         for i in cursors:
             d = self.formatCursor(i)
             if isinstance(d, list) or isinstance(d, GeneratorType):
