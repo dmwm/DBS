@@ -1,7 +1,7 @@
 """
 DBS 3 Post-Deployment Tests for Operators of CMSWEB (These tests are read only!)
 """
-from __future__ import print_function
+
 import json
 import os
 import re
@@ -207,7 +207,7 @@ class PostDeploymentTests(unittest.case.TestCase):
         self.assertFalse(False in result)
 
     def test_list_block_children(self):
-        expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_\
+        expected_data = [{'block_name': '/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_\
 CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
 
         blockchildren = sorted(self.api.listBlockChildren(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_\
@@ -227,9 +227,9 @@ ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=l
         self.assertTrue(result)
 
     def test_list_block_parents(self):
-        expected_data = [{u'parent_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_\
+        expected_data = [{'parent_block_name': '/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_\
 TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81',
-                          u'this_block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_\
+                          'this_block_name': '/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_\
 TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
 
         blockparents = self.api.listBlockParents(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
@@ -259,7 +259,7 @@ DEPLOYMENT_TEST-v4711/RAW"), key=lambda k: k["block_name"])
 
         fp.close()
 
-        expected_data = [{u'block_name': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-\
+        expected_data = [{'block_name': '/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-\
 v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81'}]
 
         blocks = self.api.listBlocks(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_\
@@ -284,7 +284,7 @@ DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379
         self.assertTrue(result)
 
     def test_list_block_summaries(self):
-        expected_data = [{u'num_file': 10, u'num_event': 553964, u'file_size': 25350778463}]
+        expected_data = [{'num_file': 10, 'num_event': 553964, 'file_size': 25350778463}]
 
         summaries = self.api.listBlockSummaries(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
@@ -354,9 +354,9 @@ v4711/RAW", create_by=create_by, last_modified_by=last_modified_by, dataset_acce
         fp.close()
 
     def test_list_dataset_children(self):
-        expected_data = [{u'child_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_\
+        expected_data = [{'child_dataset': '/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_\
 CHILD-v4711/RECO',
-                          u'dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711\
+                          'dataset': '/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711\
 /RAW'}]
 
         children = stripChangingParameters(self.api.listDatasetChildren(dataset="/DBS3DeploymentTestPrimary/DBS3_\
@@ -376,9 +376,9 @@ DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW"))
         self.assertTrue(result)
 
     def test_list_dataset_parents(self):
-        expected_data = [{u'this_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_\
+        expected_data = [{'this_dataset': '/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_\
 CHILD-v4711/RECO',
-                          u'parent_dataset': u'/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST\
+                          'parent_dataset': '/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST\
 -v4711/RAW'}]
 
         parents = stripChangingParameters(
@@ -443,9 +443,9 @@ TEST_CHILD-v4711/RECO"))
         self.assertFalse(False in result)
 
     def test_list_file_children(self):
-        expected_data = [{u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+        expected_data = [{'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
 
         children = self.api.listFileChildren(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_\
@@ -453,45 +453,45 @@ TEST_ERA-DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-
 
         self.assertEqual(expected_data, children)
 
-        expected_data = [{u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+        expected_data = [{'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'},
-                         {u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                         {'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_1.root'},
-                         {u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                         {'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_2.root'},
-                         {u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                         {'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_3.root'},
-                         {u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                         {'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_4.root'},
-                         {u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                         {'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_5.root'},
-                         {u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                         {'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_6.root'},
-                         {u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                         {'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_7.root'},
-                         {u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                         {'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_8.root'},
-                         {u'child_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                         {'child_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_9.root'}]
 
         children = self.api.listFileChildren(logical_file_name=["/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_\
@@ -546,8 +546,8 @@ DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lambda k: 
 
         fp.close()
 
-        expected_data = [{u'lumi_section_num': [24022, 24122, 24222], u'run_num': 43,
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+        expected_data = [{'lumi_section_num': [24022, 24122, 24222], 'run_num': 43,
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
 
         lumis = sorted(self.api.listFileLumis(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_\
@@ -582,9 +582,9 @@ DEPLOYMENT_TEST_CHILD-v4711/RECO#8c0cf576-cf55-4379-8c47-dee34ee68c81"), key=lam
 
         fp.close()
 
-        expected_data = [{u'parent_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+        expected_data = [{'parent_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_0.root'}]
 
         parents = self.api.listFileParents(logical_file_name="/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_\
@@ -592,15 +592,15 @@ ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf57
 
         self.assertEqual(expected_data, parents)
 
-        expected_data = [{u'parent_logical_file_name': [u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+        expected_data = [{'parent_logical_file_name': ['/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST-v4711/RAW/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_%s.root' % i],
-                          u'logical_file_name': u'/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
+                          'logical_file_name': '/store/mc/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-\
 DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-dee34ee68c81_%s.root' % j}
-                         for i, j in zip(xrange(10), xrange(10))]
+                         for i, j in zip(range(10), range(10))]
 
         parents = sorted(self.api.listFileParents(logical_file_name=["/store/mc/DBS3DeploymentTestPrimary/DBS3_\
 DEPLOYMENT_TEST_ERA-DBS3_DEPLOYMENT_TEST_CHILD-v4711/RECO/DBS3_DEPLOYMENT_TEST/123456789/8c0cf576-cf55-4379-8c47-\
-dee34ee68c81_%s.root" % i for i in xrange(10)]), key=lambda k: k["parent_logical_file_name"])
+dee34ee68c81_%s.root" % i for i in range(10)]), key=lambda k: k["parent_logical_file_name"])
 
         self.assertEqual(expected_data, parents)
 
@@ -655,8 +655,8 @@ dee34ee68c81_0.root",
         self.assertTrue(result)
 
     def test_list_file_summaries(self):
-        expected_data = [{u'num_block': 1, u'num_file': 10, u'num_event': 553964, u'num_lumi': 30,
-                          u'file_size': 25350778463}]
+        expected_data = [{'num_block': 1, 'num_file': 10, 'num_event': 553964, 'num_lumi': 30,
+                          'file_size': 25350778463}]
 
         summaries = self.api.listFileSummaries(block_name="/DBS3DeploymentTestPrimary/DBS3_DEPLOYMENT_TEST_ERA-DBS3_\
 DEPLOYMENT_TEST-v4711/RAW#8c0cf576-cf55-4379-8c47-dee34ee68c81")
@@ -747,7 +747,7 @@ DEPLOYMENT_TEST-v4711/RAW")
 
         fp.close()
 
-        expected_data = [{u'release_version': [u'CMSSW_1_2_3']}]
+        expected_data = [{'release_version': ['CMSSW_1_2_3']}]
         versions = self.api.listReleaseVersions(release_version="CMSSW_1_2_3")
 
         self.assertEqual(expected_data, versions)

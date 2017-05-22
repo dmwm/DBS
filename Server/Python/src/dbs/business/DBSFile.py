@@ -3,7 +3,7 @@
 """
 This module provides business object class to interact with File.
 """
-from __future__ import print_function
+
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
@@ -108,7 +108,7 @@ class DBSFile:
                 k = i['this_logical_file_name']
                 v = i['parent_logical_file_name']
                 d.setdefault(k, []).append(v)
-            for k, v in d.iteritems():
+            for k, v in d.items():
                 yield {'logical_file_name':k, 'parent_logical_file_name': v}
             del d    
 
@@ -132,7 +132,7 @@ class DBSFile:
                     d[k].append(v)
                 else:
                     d[k] = [v]
-            for k, v in d.iteritems():
+            for k, v in d.items():
                 r = {'logical_file_name':k, 'child_logical_file_name': v}
                 result.append(r)
             return result
@@ -206,7 +206,7 @@ class DBSFile:
             if run_num==-1:
                 dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number, \
                         use run_num=123", self.logger.exception)
-            elif isinstance(run_num, basestring):
+            elif isinstance(run_num, str):
                 try:
                     run_num = int(run_num)
                 except:
@@ -477,7 +477,7 @@ class DBSFile:
                 if not qInserts:
                     blkParams = self.blkstats.execute(conn, block_id,
                                                       transaction=tran)
-                    blkParams['block_size'] = long(blkParams['block_size'])
+                    blkParams['block_size'] = int(blkParams['block_size'])
                     self.blkstatsin.execute(conn, blkParams, transaction=tran)
 
             # All good ?

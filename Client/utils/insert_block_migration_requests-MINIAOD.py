@@ -28,7 +28,7 @@ for b in migration_input:
     m  = dict(migration_url=migration_url, migration_input=b)
     print (m)
     try:
-        print (api.submitMigration(m))
+        print((api.submitMigration(m)))
     except Exception as e:
 	print (e)
         pass 

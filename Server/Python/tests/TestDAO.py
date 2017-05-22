@@ -2,7 +2,7 @@
 As the number of tests increase we will probably repackage these tests
 to separate package/modules for each DAO object
 """
-from __future__ import print_function
+
 
 __revision__ = "$Id: TestDAO.py,v 1.5 2009/11/29 11:37:55 akhukhun Exp $"
 __version__ = "$Revision: 1.5 $"

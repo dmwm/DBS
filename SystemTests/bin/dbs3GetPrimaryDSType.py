@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 from LifeCycleTools.APIFactory import create_api
 from LifeCycleTools.PayloadHandler import PayloadHandler
 from LifeCycleTools.Timing import TimingStat

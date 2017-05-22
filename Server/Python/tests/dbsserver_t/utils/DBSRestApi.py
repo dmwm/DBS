@@ -2,7 +2,7 @@
 This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
-from __future__ import print_function
+
 import json
 import os, logging
 import getpass

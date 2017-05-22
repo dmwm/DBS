@@ -130,11 +130,11 @@ class BriefList(DBFormatter):
             wheresql_run_range=''
 	    wheresql_run_range_ct = 0	
             try:
-                run_num = long(run_num)
+                run_num = int(run_num)
                 wheresql += " and FL.RUN_NUM = :run_num "
                 binds.update({"run_num":run_num})
             except:
-		if isinstance(run_num, basestring):
+		if isinstance(run_num, str):
 		    for r in parseRunRange(run_num):
 			if isinstance(r, run_tuple):
 			    if r[0] == r[1]:
@@ -152,7 +152,7 @@ class BriefList(DBFormatter):
 			    dbsExceptionHandler('dbsException-invalid-input', "Invalid run_num. if run_num input as a string, it has to be converted into a int/long or in format of 'run_min-run_max'. ", self.logger.exception)
                 elif type(run_num) is list and len(run_num)==1:
                     try:
-                        run_num = long(run_num[0])
+                        run_num = int(run_num[0])
 			wheresql += " and FL.RUN_NUM = :run_num "
 			binds.update({"run_num":run_num})
                     except:
@@ -173,7 +173,7 @@ class BriefList(DBFormatter):
                                 dbsExceptionHandler('dbsException-invalid-input', "run_num as a list must be a number or a range str, such as ['10'], [10] or ['1-10']", self.logger.exception)
                 else:
                     for r in parseRunRange(run_num):
-                        if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):
+                        if isinstance(r, str) or isinstance(r, int) or isinstance(r, int):
                             run_list.append(str(r))
                         if isinstance(r, run_tuple):
                             if r[0] == r[1]:
@@ -205,7 +205,7 @@ class BriefList(DBFormatter):
             wheresql += " AND FL.LUMI_SECTION_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
             #Do I need to convert lumi_list to be a str list? YG 10/03/13
             #Yes, you do. YG
-            lumi_list = map(str, lumi_list)
+            lumi_list = list(map(str, lumi_list))
             lumi_generator, lumi_binds = create_token_generator(lumi_list)
             binds.update(lumi_binds)
             #binds["run_num"]=run_list[0]

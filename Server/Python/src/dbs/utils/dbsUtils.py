@@ -39,7 +39,7 @@ class dbsUtils:
 	   [a1, a2, a3] """
 	errmessage = "lumi intervals must be of one of the two following formats: '[[a,b], [c,d], ...],' or [a1, a2, a3 ...] "
 
-        if isinstance(lumi_list, basestring):
+        if isinstance(lumi_list, str):
             try:
                 lumi_list = cjson.decode(lumi_list)
             except:
@@ -58,7 +58,7 @@ class dbsUtils:
             for lumiinterval in lumi_list:
                 if not isinstance(lumiinterval, list) or len(lumiinterval) != 2:
                     dbsExceptionHandler("dbsException-invalid-input2", "invalid lumi input", None, errmessage)
-                resultext(range(lumiinterval[0], lumiinterval[1]+1))
+                resultext(list(range(lumiinterval[0], lumiinterval[1]+1)))
             result = list(set(result)) #removes the dublicates, no need to sort
             return result
         

@@ -1,5 +1,5 @@
 """This module provides all basic tests for the server"""
-from __future__ import print_function
+
 
 __revision__ = "$Id: TestStress.py,v 1.3 2009/11/29 11:37:54 akhukhun Exp $"
 __version__ = "$Revision: 1.3 $"

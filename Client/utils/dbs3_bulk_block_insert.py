@@ -2,7 +2,7 @@
 """
 Script to insert bulk blocks into DBS 3
 """
-from __future__ import print_function
+
 from optparse import OptionParser
 from ast import literal_eval
 import glob

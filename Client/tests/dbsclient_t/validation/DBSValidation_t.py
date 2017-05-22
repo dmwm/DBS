@@ -2,7 +2,7 @@
 DBS3 Validation tests
 These tests write and then immediately reads back the data from DBS3 and validate
 """
-from __future__ import print_function
+
 from random import choice
 import os
 import re
@@ -36,7 +36,7 @@ flist = []
 def remove_non_comparable_keys(values, non_comparable_keys):
     for value in values:
         if isinstance(value, dict):
-            keys = set(value.iterkeys())
+            keys = set(value.keys())
             intersection = keys.intersection(set(non_comparable_keys))
             for entry in intersection:
                 del value[entry]
@@ -203,17 +203,17 @@ class DBSValidation_t(unittest.TestCase):
         pflist=[]
         for i in range(10):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 'dataset': dataset_parent,
-                'file_size': u'201221191', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
-                'event_count': u'1619',
+                'file_size': '201221191', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" %(uid, i),
                 'block_name': block_parent,
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'1'},
-                    {'lumi_section_num': u'29838', 'run_num': u'1'}
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ]
                 }
             pflist.append(f)
@@ -221,22 +221,22 @@ class DBSValidation_t(unittest.TestCase):
         #### This next block of test will now actually insert the files in the "test 'block' in this module, using the upper files as parent
         for i in range(10):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list':
                 [
                     {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                      'output_module_label': output_module_label, 'global_tag': global_tag},
                     ],
                 'dataset': dataset,
-                'file_size': u'201221191', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '201221191', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'1'},
-                    {'lumi_section_num': u'29838', 'run_num': u'1'}
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" %(uid, i)} ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
                 #'is_file_valid': 1
@@ -259,11 +259,11 @@ class DBSValidation_t(unittest.TestCase):
         flParentList=self.api.listFileParents(logical_file_name=logical_file_name)
         self.assertEqual(len(flParentList), 1)
         self.assertEqual(flParentList[0]['parent_logical_file_name'][0], "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" %(uid, 0))
-        logical_file_names = ["/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i) for i in xrange(10)]
+        logical_file_names = ["/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i) for i in range(10)]
         flParentList=self.api.listFileParents(logical_file_name=logical_file_names)
         self.assertEqual(len(flParentList), 10)
-        self.assertEqual(sorted((flParentList[i]['parent_logical_file_name'][0] for i in xrange(10))),
-                         sorted(("/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" % (uid, i)) for i in xrange(10)))
+        self.assertEqual(sorted((flParentList[i]['parent_logical_file_name'][0] for i in range(10))),
+                         sorted(("/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/parent_%i.root" % (uid, i)) for i in range(10)))
         # Get the dataset parent -- due to fact that files had parents, dataset parentage is also inserted
         dsParentList=self.api.listDatasetParents(dataset=dataset)
         self.assertEqual(len(dsParentList), 1)
@@ -312,7 +312,7 @@ class DBSValidation_t(unittest.TestCase):
         block_dump = self.api.blockDump(block_name=input_block_dump['block']['block_name'])
         def check(input, output):
             if isinstance(input, dict):
-                for key, value in input.iteritems():
+                for key, value in input.items():
                     if key == "processing_era":
                         print("------input value----")
                         print(value)
@@ -372,7 +372,7 @@ class DBSValidation_t(unittest.TestCase):
             non_comparable_keys = ('block_id', 'dataset_id', 'last_modification_date',
                                    'parent_file_id', 'primary_ds_id')
             if isinstance(input, dict):
-                for key, value in input.iteritems():
+                for key, value in input.items():
                     if key in non_comparable_keys:
                         continue ###do not compare id's
                     if key in ('processing_era',): ###do compare create_by, creation_date for re-used entries
@@ -433,7 +433,7 @@ class DBSValidation_t(unittest.TestCase):
             non_comparable_keys = ('block_id', 'dataset_id', 'last_modification_date',
                                    'parent_file_id', 'primary_ds_id')
             if isinstance(input, dict):
-                for key, value in input.iteritems():
+                for key, value in input.items():
                     if key in non_comparable_keys:
                         continue ###do not compare id's
                     if key in ('processing_era',): ###do compare create_by, creation_date for re-used entries

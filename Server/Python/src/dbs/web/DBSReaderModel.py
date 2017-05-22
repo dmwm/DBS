@@ -1,4 +1,4 @@
-from __future__ import with_statement
+
 #!/usr/bin/env python
 #pylint: disable=C0103
 """
@@ -56,7 +56,7 @@ def authInsert(user, role, group, site):
     """
     if not role:
         return True
-    for k, v in user['roles'].iteritems():
+    for k, v in user['roles'].items():
         for g in v['group']:
             if k in role.get(g, '').split(':'):
                 return True
@@ -205,7 +205,7 @@ class DBSReaderModel(RESTModel):
             doc = self.methods['GET'][call]['call'].__doc__
             return dict(params=params, doc=doc)
         else:
-            return self.methods['GET'].keys()
+            return list(self.methods['GET'].keys())
 
     def getServerInfo(self):
         """
@@ -218,7 +218,7 @@ class DBSReaderModel(RESTModel):
         """
         return dict(dbs_version=self.version, dbs_instance=self.instance)
 
-    @inputChecks(primary_ds_name=basestring, primary_ds_type=basestring)
+    @inputChecks(primary_ds_name=str, primary_ds_type=str)
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
         API to list primary datasets
@@ -244,7 +244,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc() )
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(primary_ds_type=basestring, dataset=basestring)
+    @inputChecks(primary_ds_type=str, dataset=str)
     def listPrimaryDsTypes(self, primary_ds_type="", dataset=""):
         """
         API to list primary dataset types
@@ -271,13 +271,13 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('run_num')
-    @inputChecks( dataset=basestring, parent_dataset=basestring, release_version=basestring, pset_hash=basestring,
-                 app_name=basestring, output_module_label=basestring, global_tag=basestring, processing_version=(int, basestring), acquisition_era_name=basestring,
-                 run_num=(long, int, basestring, list), physics_group_name=basestring, logical_file_name=basestring, primary_ds_name=basestring,
-                 primary_ds_type=basestring, processed_ds_name=basestring, data_tier_name=basestring, dataset_access_type=basestring, prep_id=basestring,
-                 create_by=(basestring), last_modified_by=(basestring), min_cdate=(int, basestring), max_cdate=(int, basestring),
-                 min_ldate=(int, basestring), max_ldate=(int, basestring), cdate=(int, basestring), ldate=(int, basestring), detail=(bool, basestring),
-                 dataset_id=(int, long, basestring))
+    @inputChecks( dataset=str, parent_dataset=str, release_version=str, pset_hash=str,
+                 app_name=str, output_module_label=str, global_tag=str, processing_version=(int, str), acquisition_era_name=str,
+                 run_num=(int, int, str, list), physics_group_name=str, logical_file_name=str, primary_ds_name=str,
+                 primary_ds_type=str, processed_ds_name=str, data_tier_name=str, dataset_access_type=str, prep_id=str,
+                 create_by=(str), last_modified_by=(str), min_cdate=(int, str), max_cdate=(int, str),
+                 min_ldate=(int, str), max_ldate=(int, str), cdate=(int, str), ldate=(int, str), detail=(bool, str),
+                 dataset_id=(int, int, str))
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="", global_tag="",
         processing_version=0, acquisition_era_name="", run_num=-1,
@@ -393,7 +393,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler("dbsException-invalid-input2", "Invalid Input for create_by or last_modified_by.\
             No wildcard allowed.",  self.logger.exception, 'No wildcards allowed for create_by or last_modified_by')
         try:
-            if isinstance(min_cdate, basestring) and ('*' in min_cdate or '%' in min_cdate):
+            if isinstance(min_cdate, str) and ('*' in min_cdate or '%' in min_cdate):
                 min_cdate = 0
             else:
                 try:
@@ -401,7 +401,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for min_cdate")
             
-            if isinstance(max_cdate, basestring) and ('*' in max_cdate or '%' in max_cdate):
+            if isinstance(max_cdate, str) and ('*' in max_cdate or '%' in max_cdate):
                 max_cdate = 0
             else:
                 try:
@@ -409,7 +409,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_cdate")
             
-            if isinstance(min_ldate, basestring) and ('*' in min_ldate or '%' in min_ldate):
+            if isinstance(min_ldate, str) and ('*' in min_ldate or '%' in min_ldate):
                 min_ldate = 0
             else:
                 try:
@@ -417,7 +417,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for min_ldate")
             
-            if isinstance(max_ldate, basestring) and ('*' in max_ldate or '%' in max_ldate):
+            if isinstance(max_ldate, str) and ('*' in max_ldate or '%' in max_ldate):
                 max_ldate = 0
             else:
                 try:
@@ -425,7 +425,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_ldate")
             
-            if isinstance(cdate, basestring) and ('*' in cdate or '%' in cdate):
+            if isinstance(cdate, str) and ('*' in cdate or '%' in cdate):
                 cdate = 0
             else:
                 try:
@@ -433,7 +433,7 @@ class DBSReaderModel(RESTModel):
                 except:
                     dbsExceptionHandler("dbsException-invalid-input", "invalid input for cdate")
             
-            if isinstance(ldate, basestring) and ('*' in ldate or '%' in ldate):
+            if isinstance(ldate, str) and ('*' in ldate or '%' in ldate):
                 ldate = 0
             else:
                 try:
@@ -486,8 +486,8 @@ class DBSReaderModel(RESTModel):
                 #the API can be finished in 300 second. 
                 # YG Nov-05-2015
                 max_array_size = 1000
-                if ( 'dataset' in data.keys() and isinstance(data['dataset'], list) and len(data['dataset'])>max_array_size)\
-                    or ('dataset_id' in data.keys() and isinstance(data['dataset_id'], list) and len(data['dataset_id'])>max_array_size):
+                if ( 'dataset' in list(data.keys()) and isinstance(data['dataset'], list) and len(data['dataset'])>max_array_size)\
+                    or ('dataset_id' in list(data.keys()) and isinstance(data['dataset_id'], list) and len(data['dataset_id'])>max_array_size):
                     dbsExceptionHandler("dbsException-invalid-input",
                                         "The Max list length supported in listDatasetArray is %s." %max_array_size, self.logger.exception)    
                 ret = self.dbsDataset.listDatasetArray(data)
@@ -504,7 +504,7 @@ class DBSReaderModel(RESTModel):
         for item in ret:
                     yield item
 
-    @inputChecks(data_tier_name=basestring)
+    @inputChecks(data_tier_name=str)
     def listDataTiers(self, data_tier_name=""):
         """
         API to list data tiers known to DBS.
@@ -536,9 +536,9 @@ class DBSReaderModel(RESTModel):
                 conn.close()
 
     @transformInputType('run_num')
-    @inputChecks(dataset=basestring, block_name=basestring, data_tier_name=basestring, origin_site_name=basestring, logical_file_name=basestring,
-                 run_num=(long, int, basestring, list), min_cdate=(int, basestring), max_cdate=(int, basestring), min_ldate=(int, basestring),
-                 max_ldate=(int, basestring), cdate=(int, basestring),  ldate=(int, basestring), open_for_writing=(int, basestring), detail=(basestring, bool))
+    @inputChecks(dataset=str, block_name=str, data_tier_name=str, origin_site_name=str, logical_file_name=str,
+                 run_num=(int, int, str, list), min_cdate=(int, str), max_cdate=(int, str), min_ldate=(int, str),
+                 max_ldate=(int, str), cdate=(int, str),  ldate=(int, str), open_for_writing=(int, str), detail=(str, bool))
     def listBlocks(self, dataset="", block_name="", data_tier_name="", origin_site_name="",
                    logical_file_name="",run_num=-1, min_cdate='0', max_cdate='0',
                    min_ldate='0', max_ldate='0', cdate='0',  ldate='0', open_for_writing=-1, detail=False):
@@ -585,7 +585,7 @@ class DBSReaderModel(RESTModel):
         logical_file_name = logical_file_name.replace("*", "%")
         origin_site_name = origin_site_name.replace("*", "%")
         #
-	if isinstance(min_cdate, basestring) and ('*' in min_cdate or '%' in min_cdate):
+	if isinstance(min_cdate, str) and ('*' in min_cdate or '%' in min_cdate):
             min_cdate = 0
         else:
             try:
@@ -593,7 +593,7 @@ class DBSReaderModel(RESTModel):
             except:
                 dbsExceptionHandler("dbsException-invalid-input", "invalid input for min_cdate")
         #
-        if isinstance(max_cdate, basestring) and ('*' in max_cdate or '%' in max_cdate):
+        if isinstance(max_cdate, str) and ('*' in max_cdate or '%' in max_cdate):
             max_cdate = 0
         else:
             try:
@@ -601,7 +601,7 @@ class DBSReaderModel(RESTModel):
             except:
                 dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_cdate")
         #
-        if isinstance(min_ldate, basestring) and ('*' in min_ldate or '%' in min_ldate):
+        if isinstance(min_ldate, str) and ('*' in min_ldate or '%' in min_ldate):
             min_ldate = 0
         else:
             try:
@@ -609,7 +609,7 @@ class DBSReaderModel(RESTModel):
             except:
                 dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_cdate")
         #
-	if isinstance(max_ldate, basestring) and ('*' in max_ldate or '%' in max_ldate):
+	if isinstance(max_ldate, str) and ('*' in max_ldate or '%' in max_ldate):
             max_ldate = 0
         else:
             try:
@@ -617,7 +617,7 @@ class DBSReaderModel(RESTModel):
             except:
                 dbsExceptionHandler("dbsException-invalid-input", "invalid input for max_ldate")
         #
-        if isinstance(cdate, basestring) and ('*' in cdate or '%' in cdate):
+        if isinstance(cdate, str) and ('*' in cdate or '%' in cdate):
             cdate = 0
         else:
             try:
@@ -625,7 +625,7 @@ class DBSReaderModel(RESTModel):
             except:
                 dbsExceptionHandler("dbsException-invalid-input", "invalid input for cdate")
         #
-        if isinstance(cdate, basestring) and ('*' in ldate or '%' in ldate):
+        if isinstance(cdate, str) and ('*' in ldate or '%' in ldate):
             ldate = 0
         else:
             try:
@@ -649,7 +649,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(origin_site_name=basestring, dataset=basestring, block_name=basestring)
+    @inputChecks(origin_site_name=str, dataset=str, block_name=str)
     def listBlockOrigin(self, origin_site_name="",  dataset="", block_name=""):
         """
         API to list blocks first generated in origin_site_name.
@@ -675,7 +675,7 @@ class DBSReaderModel(RESTModel):
                                 self.logger.exception, sError)
 
 
-    @inputChecks(block_name=basestring)
+    @inputChecks(block_name=str)
     def listBlockParents(self, block_name=""):
         """
         API to list block parents.
@@ -712,7 +712,7 @@ class DBSReaderModel(RESTModel):
             #the API can be finished in 300 second. 
             # YG Nov-05-2015
             max_array_size = 1000
-            if ( 'block_names' in data.keys() and isinstance(data['block_names'], list) and len(data['block_names'])>max_array_size):
+            if ( 'block_names' in list(data.keys()) and isinstance(data['block_names'], list) and len(data['block_names'])>max_array_size):
                     dbsExceptionHandler("dbsException-invalid-input",
                                         "The Max list length supported in listBlocksParents is %s." %max_array_size, self.logger.exception)
             return self.dbsBlock.listBlockParents(data["block_name"])
@@ -730,7 +730,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(block_name=basestring)
+    @inputChecks(block_name=str)
     def listBlockChildren(self, block_name=""):
         """
         API to list block children.
@@ -751,7 +751,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('block_name')
-    @inputChecks(block_name=(basestring, list), dataset=basestring, detail=(bool, basestring))
+    @inputChecks(block_name=(str, list), dataset=str, detail=(bool, str))
     def listBlockSummaries(self, block_name="", dataset="", detail=False):
         """
         API that returns summary information like total size and total number of events in a dataset or a list of blocks
@@ -771,7 +771,7 @@ class DBSReaderModel(RESTModel):
                                 self.logger.exception,
                                 "Dataset or block_names must be specified at a time.")
 
-        if block_name and isinstance(block_name, basestring):
+        if block_name and isinstance(block_name, str):
             try:
                 block_name = [str(block_name)]
             except:
@@ -805,9 +805,9 @@ class DBSReaderModel(RESTModel):
                     yield item
 
     @transformInputType( 'run_num')
-    @inputChecks(dataset =basestring, block_name=basestring, logical_file_name =(basestring), release_version=basestring, pset_hash=basestring, app_name=basestring,\
-                 output_module_label=basestring, run_num=(long, int, basestring, list), origin_site_name=basestring,
-                 lumi_list=(basestring, list), detail=(basestring, bool), validFileOnly=(basestring, int))
+    @inputChecks(dataset =str, block_name=str, logical_file_name =(str), release_version=str, pset_hash=str, app_name=str,\
+                 output_module_label=str, run_num=(int, int, str, list), origin_site_name=str,
+                 lumi_list=(str, list), detail=(str, bool), validFileOnly=(str, int))
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "",
         release_version="", pset_hash="", app_name="", output_module_label="",
         run_num=-1, origin_site_name="", lumi_list="", detail=False, validFileOnly=0):
@@ -953,7 +953,7 @@ class DBSReaderModel(RESTModel):
                 data = validateJSONInputNoCopy("files", data, True)
                 if 'lumi_list' in data and data['lumi_list']:
                     data['lumi_list'] = self.dbsUtils2.decodeLumiIntervals(data['lumi_list'])	
-                    if 'run_num' not in data.keys() or not data['run_num'] or data['run_num'] ==-1 :
+                    if 'run_num' not in list(data.keys()) or not data['run_num'] or data['run_num'] ==-1 :
                         dbsExceptionHandler("dbsException-invalid-input", 
                                             "When lumi_list is given, require a single run_num.", self.logger.exception)
                 #check if run_num =1 w/o lfn 
@@ -970,9 +970,9 @@ class DBSReaderModel(RESTModel):
                 #the API can be finished in 300 second. See github issues #465 for tests' results.
                 # YG May-20-2015
                 max_array_size = 1000
-                if ( 'run_num' in data.keys() and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
-                    or ('lumi_list' in data.keys() and isinstance(data['lumi_list'], list) and len(data['lumi_list'])>max_array_size)\
-                    or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
+                if ( 'run_num' in list(data.keys()) and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
+                    or ('lumi_list' in list(data.keys()) and isinstance(data['lumi_list'], list) and len(data['lumi_list'])>max_array_size)\
+                    or ('logical_file_name' in list(data.keys()) and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
                     dbsExceptionHandler("dbsException-invalid-input", 
                                         "The Max list length supported in listFileArray is %s." %max_array_size, self.logger.exception)
             #    
@@ -991,7 +991,7 @@ class DBSReaderModel(RESTModel):
             yield item
 
     @transformInputType('run_num')
-    @inputChecks(block_name=basestring, dataset=basestring, run_num=(long, int, basestring, list), validFileOnly=(int, basestring))
+    @inputChecks(block_name=str, dataset=str, run_num=(int, int, str, list), validFileOnly=(int, str))
     def listFileSummaries(self, block_name='', dataset='', run_num=-1, validFileOnly=0):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. 
@@ -1032,7 +1032,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', ex.message, self.logger.exception, sError)
 
-    @inputChecks(dataset=basestring)
+    @inputChecks(dataset=str)
     def listDatasetParents(self, dataset=''):
         """
         API to list A datasets parents in DBS.
@@ -1052,7 +1052,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(dataset=basestring)
+    @inputChecks(dataset=str)
     def listDatasetChildren(self, dataset):
         """
         API to list A datasets children in DBS.
@@ -1072,8 +1072,8 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(dataset=basestring, logical_file_name=basestring, release_version=basestring, pset_hash=basestring, app_name=basestring,\
-                 output_module_label=basestring, block_id=(int, basestring), global_tag=basestring)
+    @inputChecks(dataset=str, logical_file_name=str, release_version=str, pset_hash=str, app_name=str,\
+                 output_module_label=str, block_id=(int, str), global_tag=str)
     def listOutputConfigs(self, dataset="", logical_file_name="",
                           release_version="", pset_hash="", app_name="",
                           output_module_label="", block_id=0, global_tag=''):
@@ -1119,7 +1119,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('logical_file_name')
-    @inputChecks(logical_file_name=(basestring, list), block_id=(int, basestring), block_name=basestring)
+    @inputChecks(logical_file_name=(str, list), block_id=(int, str), block_name=str)
     def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
         """
         API to list file parents
@@ -1148,7 +1148,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', ex.message,  self.logger.exception, sError)
 
     @transformInputType('logical_file_name')
-    @inputChecks(logical_file_name=(basestring, list), block_name=(basestring), block_id=(basestring, int))
+    @inputChecks(logical_file_name=(str, list), block_name=(str), block_id=(str, int))
     def listFileChildren(self, logical_file_name='', block_name='', block_id=0):
         """
         API to list file children. One of the parameters in mandatory.
@@ -1179,7 +1179,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @transformInputType('run_num')
-    @inputChecks(logical_file_name=(basestring, list), block_name=basestring, run_num=(long, int, basestring, list), validFileOnly=(int, basestring))
+    @inputChecks(logical_file_name=(str, list), block_name=str, run_num=(int, int, str, list), validFileOnly=(int, str))
     def listFileLumis(self, logical_file_name="", block_name="", run_num=-1, validFileOnly=0):
         """
         API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support in this API
@@ -1236,15 +1236,15 @@ class DBSReaderModel(RESTModel):
             #the API can be finished in 300 second. 
             # YG Nov-05-2015
             max_array_size = 1000 
-            if ( 'run_num' in data.keys() and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
-            or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
+            if ( 'run_num' in list(data.keys()) and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
+            or ('logical_file_name' in list(data.keys()) and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
                 dbsExceptionHandler("dbsException-invalid-input",
                                         "The Max list length supported in listLumiArray is %s." %max_array_size, self.logger.exception)
  
-            if 'run_num' in data.keys() and not isinstance(data['run_num'], list) and (data['run_num']==1 or data['run_num']=="1"):
+            if 'run_num' in list(data.keys()) and not isinstance(data['run_num'], list) and (data['run_num']==1 or data['run_num']=="1"):
                 dbsExceptionHandler('dbsException-invalid-input1', 'run_num cannot be 1 in filelumiarray API.',
 			self.logger.exception, 'run_num cannot be 1 in listFileLumiArray API.')
-            if 'run_num' in data.keys() and isinstance(data['run_num'], list) and (1 in data['run_num'] or "1" in data['run_num']):
+            if 'run_num' in list(data.keys()) and isinstance(data['run_num'], list) and (1 in data['run_num'] or "1" in data['run_num']):
                 dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.', 
 			self.logger.exception, 'run_num cannot be 1 in listFilelumiArray API.')
 	    result = self.dbsFile.listFileLumis(input_body=data)
@@ -1263,7 +1263,7 @@ class DBSReaderModel(RESTModel):
 
 
     @transformInputType('run_num')
-    @inputChecks(run_num=(long, int, basestring, list), logical_file_name=basestring, block_name=basestring, dataset=basestring)
+    @inputChecks(run_num=(int, int, str, list), logical_file_name=str, block_name=str, dataset=str)
     def listRuns(self, run_num=-1, logical_file_name="", block_name="", dataset=""):
         """
         API to list all runs in DBS. At least one parameter is mandatory.
@@ -1298,7 +1298,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(datatype=basestring, dataset=basestring)
+    @inputChecks(datatype=str, dataset=str)
     def listDataTypes(self, datatype="", dataset=""):
         """
         API to list data types known to dbs (when no parameter supplied).
@@ -1320,7 +1320,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(block_name=basestring)
+    @inputChecks(block_name=str)
     def dumpBlock(self, block_name):
         """
         API the list all information related with the block_name
@@ -1340,7 +1340,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', ex.message, self.logger.exception, sError)
 
-    @inputChecks(acquisition_era_name=basestring)
+    @inputChecks(acquisition_era_name=str)
     def listAcquisitionEras(self, acquisition_era_name=''):
         """
         API to list all Acquisition Eras in DBS.
@@ -1360,7 +1360,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listAcquisitionEras. %s\n. Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(acquisition_era_name=basestring)
+    @inputChecks(acquisition_era_name=str)
     def listAcquisitionEras_CI(self, acquisition_era_name=''):
         """
         API to list ALL Acquisition Eras (case insensitive) in DBS.
@@ -1381,7 +1381,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'],
                                 self.logger.exception, sError)
 
-    @inputChecks(processing_version=(basestring, int))
+    @inputChecks(processing_version=(str, int))
     def listProcessingEras(self, processing_version=0):
         """
         API to list all Processing Eras in DBS.
@@ -1402,7 +1402,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(release_version=basestring, dataset=basestring, logical_file_name=basestring)
+    @inputChecks(release_version=str, dataset=str, logical_file_name=str)
     def listReleaseVersions(self, release_version='', dataset='', logical_file_name=''):
         """
         API to list all release versions in DBS
@@ -1428,7 +1428,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(dataset_access_type=basestring)
+    @inputChecks(dataset_access_type=str)
     def listDatasetAccessTypes(self, dataset_access_type=''):
         """
         API to list dataset access types.
@@ -1450,7 +1450,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(physics_group_name=basestring)
+    @inputChecks(physics_group_name=str)
     def listPhysicsGroups(self, physics_group_name=''):
         """
         API to list all physics groups.
@@ -1472,7 +1472,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @inputChecks(dataset=basestring, run_num=(basestring, int, long))
+    @inputChecks(dataset=str, run_num=(str, int, int))
     def listRunSummaries(self, dataset="", run_num=-1):
         """
         API to list run summaries, like the maximal lumisection in a run.

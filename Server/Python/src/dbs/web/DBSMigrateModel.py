@@ -34,7 +34,7 @@ def authInsert(user, role, group, site):
     Authorization function for general insert  
     """
     if not role: return True
-    for k, v in user['roles'].iteritems():
+    for k, v in user['roles'].items():
         for g in v['group']:
             if k in role.get(g, '').split(':'):
                 return True
@@ -92,7 +92,7 @@ class DBSMigrateModel(RESTModel):
 	    else:	
 		dbsExceptionHandler('dbsException-server-error',  str(ex), self.logger.exception, sError)
     
-    @inputChecks(migration_rqst_id=(long, int, basestring), block_name=basestring, dataset=basestring, user=basestring)
+    @inputChecks(migration_rqst_id=(int, int, str), block_name=str, dataset=str, user=str)
     def status(self, migration_rqst_id="", block_name="", dataset="", user=""):
         """
         Interface to query status of a migration request

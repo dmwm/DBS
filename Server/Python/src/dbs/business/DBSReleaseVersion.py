@@ -41,7 +41,7 @@ class DBSReleaseVersion:
             if plist:
                 t = []
                 for i in plist:
-                    for k, v in i.iteritems():
+                    for k, v in i.items():
                         t.append(v)
                 result[0]['release_version'] = t
             return result

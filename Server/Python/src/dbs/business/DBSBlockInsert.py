@@ -260,7 +260,7 @@ class DBSBlockInsert :
                 key = (fc['app_name'] + ':' + fc['release_version'] + ':' +
                        fc['pset_hash'] + ':' +
                        fc['output_module_label'] + ':' + fc['global_tag'])
-                if not key in (self.datasetCache['conf']).keys():
+                if not key in list((self.datasetCache['conf']).keys()):
                     #we expect the config is inserted when the dataset is in.
                     if tran:tran.rollback()
                     if conn:conn.close()

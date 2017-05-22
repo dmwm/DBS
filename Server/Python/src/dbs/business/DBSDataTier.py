@@ -26,7 +26,7 @@ class DBSDataTier:
         """
         List data tier(s)
         """
-        if not isinstance(data_tier_name, basestring) :
+        if not isinstance(data_tier_name, str) :
             dbsExceptionHandler('dbsException-invalid-input',
                                 'data_tier_name given is not valid : %s' % data_tier_name)
         else:

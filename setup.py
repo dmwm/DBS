@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import sys, os, os.path, re, shutil, string
 from distutils.core import setup, Command
 from distutils.command.build import build

@@ -190,7 +190,7 @@ class DBSBlock:
             msg = " DBSBlock/listBlockParents. Block_name must be provided as a string or a list. \
                 No wildcards allowed in block_name/s."
             dbsExceptionHandler('dbsException-invalid-input', msg)
-        elif isinstance(block_name, basestring):
+        elif isinstance(block_name, str):
             try:
                 block_name = str(block_name)
                 if '%' in block_name or '*' in block_name:
