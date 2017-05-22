@@ -359,7 +359,6 @@ class DBSValidation_t(unittest.TestCase):
         print(toMigrate)
         print("----------migration_request -----------")
         print(migration_request)
-
         ###check migration status for max. 300s (should be enough time to migrate the dataset)
         with Timeout(300):
             while True:

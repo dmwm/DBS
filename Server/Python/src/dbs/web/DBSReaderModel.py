@@ -115,12 +115,12 @@ class DBSReaderModel(RESTModel):
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num',
-                        'origin_site_name', 'lumi_list', 'detail', 'validFileOnly'], secured=True,
+                        'origin_site_name', 'lumi_list', 'detail', 'validFileOnly', 'sumOverLumi'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('POST', 'fileArray', self.listFileArray, secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name', 'dataset',
-                        'run_num', 'validFileOnly'], secured=True,
+                        'run_num', 'validFileOnly', 'sumOverLumi'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
         self._addMethod('GET', 'datasetparents', self.listDatasetParents, args=['dataset'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert})
@@ -377,11 +377,17 @@ class DBSReaderModel(RESTModel):
         # Some of users were overwhiled by the API change. So we split the wildcarded dataset in the server instead of by the client.
         # YG Dec. 9 2016
 
-        if(dataset and (dataset.find("/%/%/%")!=-1 or dataset.find("/%")!=-1 or dataset.find("/%/%")!=-1) ):
+        if( dataset and ( dataset == "/%/%/%" or dataset== "/%" or dataset == "/%/%" ) ):
             dataset=''
-        elif dataset.find('%') != -1 :
+        elif( dataset and ( dataset.find('%') != -1 ) ) :
             junk, primary_ds_name, processed_ds_name, data_tier_name = dataset.split('/')
             dataset = ''
+        if ( primary_ds_name == '%' ):
+            primary_ds_name = ''
+        if( processed_ds_name == '%' ):
+            processed_ds_name = ''
+        if ( data_tier_name == '%' ):
+            data_tier_name = ''
 
         try:
             dataset_id = int(dataset_id)
@@ -807,10 +813,11 @@ class DBSReaderModel(RESTModel):
     @transformInputType( 'run_num')
     @inputChecks(dataset =basestring, block_name=basestring, logical_file_name =(basestring), release_version=basestring, pset_hash=basestring, app_name=basestring,\
                  output_module_label=basestring, run_num=(long, int, basestring, list), origin_site_name=basestring,
-                 lumi_list=(basestring, list), detail=(basestring, bool), validFileOnly=(basestring, int))
+                 lumi_list=(basestring, list), detail=(basestring, bool), validFileOnly=(basestring, int), 
+                 sumOverLumi=(basestring, int))
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "",
         release_version="", pset_hash="", app_name="", output_module_label="",
-        run_num=-1, origin_site_name="", lumi_list="", detail=False, validFileOnly=0):
+        run_num=-1, origin_site_name="", lumi_list="", detail=False, validFileOnly=0, sumOverLumi=0):
         """
         API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset or non-wildcarded block_name is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
@@ -860,6 +867,8 @@ class DBSReaderModel(RESTModel):
         :type detail: bool
         :param validFileOnly: default=0 return all the files. when =1, only return files with is_file_valid=1 or dataset_access_type=PRODUCTION or VALID
         :type validFileOnly: int
+        :param sumOverLumi: default=0 event_count is the event_count/file.  When sumOverLumi=1 and run_num is specified, the event_count is sum of the event_count/lumi for that run; When sumOverLumi = 1, no other input can be a list, for example no run_num list, lumi list or lfn list.
+        :type sumOverLumi: int
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
 
@@ -874,6 +883,8 @@ class DBSReaderModel(RESTModel):
         if lumi_list:
             if run_num ==-1 or not run_num :
                 dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.", self.logger.exception)
+            elif sumOverLumi == 1:
+                 dbsExceptionHandler("dbsException-invalid-input", "lumi_list and sumOverLumi=1 cannot be set at the same time becaue nesting of WITH clause within WITH clause not supported yet by Oracle. ", self.logger.exception)
             else:
                 try:
                     lumi_list = self.dbsUtils2.decodeLumiIntervals(lumi_list)
@@ -886,12 +897,14 @@ class DBSReaderModel(RESTModel):
             else:
                 if 1 in run_num or '1' in run_num :
                  dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
-
+        if int(sumOverLumi) == 1 and (isinstance(run_num, list) or isinstance(logical_file_name, list)):
+            dbsExceptionHandler("dbsException-invalid-input", "When sumOverLumi=1, no lfn list or run_num list allowed  becaue nesting of WITH clause within WITH clause not supported yet by Oracle. ", self.logger.exception)
         detail = detail in (True, 1, "True", "1", 'true')
         output_module_label = output_module_label.replace("*", "%")
         try:
             result =  self.dbsFile.listFiles(dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
-                                        output_module_label, run_num, origin_site_name, lumi_list, detail, validFileOnly)
+                                        output_module_label, run_num, origin_site_name, lumi_list, detail, 
+                                        validFileOnly, sumOverLumi)
     	    for item in result:
 		yield item	
 	except HTTPError as he:
@@ -908,7 +921,7 @@ class DBSReaderModel(RESTModel):
         API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset, 
 	non-wildcarded block_name or non-wildcarded lfn list is required.
         The combination of a non-wildcarded dataset or block_name with an wildcarded logical_file_name is supported.
-
+        
         * For lumi_list the following two json formats are supported:
             - [a1, a2, a3,]
             - [[a,b], [c, d],]
@@ -941,6 +954,8 @@ class DBSReaderModel(RESTModel):
         :type detail: bool
         :param validFileOnly: default=0 return all the files. when =1, only return files with is_file_valid=1 or dataset_access_type=PRODUCTION or VALID
         :type validFileOnly: int
+        :param sumOverLumi: default=0 event_count is the event_count/file, when=1 and run_num is specified, the event_count is sum of the event_count/lumi for that run; When sumOverLumi = 1, no other input can be a list, for example no run_num list, lumi list or lfn list.
+        :type sumOverLumi: int 
         :returns: List of dictionaries containing the following keys (logical_file_name). If detail parameter is true, the dictionaries contain the following keys (check_sum, branch_hash_id, adler32, block_id, event_count, file_type, create_by, logical_file_name, creation_date, last_modified_by, dataset, block_name, file_id, file_size, last_modification_date, dataset_id, file_type_id, auto_cross_section, md5, is_file_valid)
         :rtype: list of dicts
 
@@ -951,7 +966,16 @@ class DBSReaderModel(RESTModel):
             if body:
                 data = cjson.decode(body)
                 data = validateJSONInputNoCopy("files", data, True)
+                if 'sumOverLumi' in data and data['sumOverLumi'] ==1:
+                    if ('logical_file_name' in data and isinstance(data['logical_file_name'], list)) \
+                       or ('run_num' in data and isinstance(data['run_num'], list)):
+                        dbsExceptionHandler("dbsException-invalid-input",
+                                            "When sumOverLumi=1, no input can be a list becaue nesting of WITH clause within WITH clause not supported yet by Oracle. ", self.logger.exception)
+    
                 if 'lumi_list' in data and data['lumi_list']:
+                    if 'sumOverLumi' in data and data['sumOverLumi'] ==1:
+                        dbsExceptionHandler("dbsException-invalid-input", 
+                                            "When lumi_list is given, sumOverLumi must set to 0 becaue nesting of WITH clause within WITH clause not supported yet by Oracle.", self.logger.exception)
                     data['lumi_list'] = self.dbsUtils2.decodeLumiIntervals(data['lumi_list'])	
                     if 'run_num' not in data.keys() or not data['run_num'] or data['run_num'] ==-1 :
                         dbsExceptionHandler("dbsException-invalid-input", 
@@ -975,7 +999,7 @@ class DBSReaderModel(RESTModel):
                     or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
                     dbsExceptionHandler("dbsException-invalid-input", 
                                         "The Max list length supported in listFileArray is %s." %max_array_size, self.logger.exception)
-            #    
+            #   
                 ret =  self.dbsFile.listFiles(input_body=data)
         except cjson.DecodeError as De:
             dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
@@ -991,8 +1015,8 @@ class DBSReaderModel(RESTModel):
             yield item
 
     @transformInputType('run_num')
-    @inputChecks(block_name=basestring, dataset=basestring, run_num=(long, int, basestring, list), validFileOnly=(int, basestring))
-    def listFileSummaries(self, block_name='', dataset='', run_num=-1, validFileOnly=0):
+    @inputChecks(block_name=basestring, dataset=basestring, run_num=(long, int, basestring, list), validFileOnly=(int, basestring), sumOverLumi=(int, basestring))
+    def listFileSummaries(self, block_name='', dataset='', run_num=-1, validFileOnly=0, sumOverLumi=0):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. 
         If the optional run_num, output are:
@@ -1001,7 +1025,9 @@ class DBSReaderModel(RESTModel):
                 * The total number of events in those files;
                 * The total number of lumis for that run_number. Note that in general this is different from the total 
                 number of lumis in those files, since lumis are filtered by the run_number they belong to, while events 
-                are only counted as total per file;
+                are only counted as total per file in the data before  run 3. Howvere, when sumOverLumi=1, events will count by lumi when run_num
+                is given while event_count/lumi is filled. If sumOverLumi=1, but event_count/lumi is not filled for any of the lumis in the block or
+                dataset, then the API will return NULL for num_event. 
                 * The total num blocks that have the run_num;
         Either block_name or dataset name is required. No wild-cards are allowed
 
@@ -1011,6 +1037,10 @@ class DBSReaderModel(RESTModel):
         :type dataset: str
         :param run_num: Run number (Optional). Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...]. run_num=1 is for MC data and caused almost full table scan. So run_num=1 will cause an input error.  
         :type run_num: int, str, list
+        :param validFileOnly: default = 0. when = 1, only dataset_access_type = valid or production and is_file_valid=1 counted.
+        :type validFileOnly: int
+        :param sumOverLumi: default = 0. when = 1 count event_num by event_count/lumi.
+        :type sumOverLumi: int  
         :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
@@ -1018,7 +1048,7 @@ class DBSReaderModel(RESTModel):
         if run_num == 1 or run_num =="1":
             dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ", self.logger.exception)
         try:
-            r = self.dbsFile.listFileSummary(block_name, dataset, run_num, validFileOnly=validFileOnly)
+            r = self.dbsFile.listFileSummary(block_name, dataset, run_num, validFileOnly=validFileOnly, sumOverLumi=sumOverLumi)
 	    for item in r:
 		yield item	
 	except HTTPError as he:

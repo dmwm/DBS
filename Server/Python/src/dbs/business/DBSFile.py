@@ -72,7 +72,7 @@ class DBSFile:
             for item in  self.filelumilist.execute(conn, logical_file_name, block_name, run_num, validFileOnly=validFileOnly):
                 yield item
 
-    def listFileSummary(self, block_name="", dataset="", run_num=-1, validFileOnly=0):
+    def listFileSummary(self, block_name="", dataset="", run_num=-1, validFileOnly=0, sumOverLumi=0):
         """
         required parameter: full block_name or dataset name. No wildcards allowed. run_num is optional.
         """
@@ -85,7 +85,7 @@ class DBSFile:
         #
         with self.dbi.connection() as conn:
             for item in self.filesummarylist.execute(conn, block_name, dataset, run_num,
-                validFileOnly=validFileOnly):
+                validFileOnly=validFileOnly, sumOverLumi=sumOverLumi):
                 if item['num_file']==0 and item['num_block']==0 \
                         and item['num_event']==0 and item['file_size']==0:
                     pass
@@ -166,7 +166,7 @@ class DBSFile:
     def listFiles(self, dataset="", block_name="", logical_file_name="",
                   release_version="", pset_hash="", app_name="",
                   output_module_label="",  run_num=-1,
-                  origin_site_name="", lumi_list=[], detail=False, validFileOnly=0, input_body=-1):
+                  origin_site_name="", lumi_list=[], detail=False, validFileOnly=0, sumOverLumi=0, input_body=-1):
         """
         One of below parameter groups must be present:
         non-patterned dataset, non-patterned block, non-patterned dataset with lfn,  non-patterned block with lfn,
@@ -178,6 +178,7 @@ class DBSFile:
                 logical_file_name = input_body.get("logical_file_name", "")
                 run_num = input_body.get("run_num", -1)
                 validFileOnly = input_body.get("validFileOnly", 0)
+                sumOverLumi = input_body.get("sumOverLumi", 0)  
 		detail = input_body.get("detail", False)
                 block_name = input_body.get("block_name", "")
 		dataset = input_body.get("dataset", "") 
@@ -224,11 +225,11 @@ class DBSFile:
                         use run_num=123", self.logger.exception)
 	else:
             pass
-
         with self.dbi.connection() as conn:
+            self.logger.error("**************listFiles brefore call dao********************")
             dao = (self.filebrieflist, self.filelist)[detail]
             for item in dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
-                            output_module_label, run_num, origin_site_name, lumi_list, validFileOnly):
+                            output_module_label, run_num, origin_site_name, lumi_list, validFileOnly, sumOverLumi):
 
                 yield item      # we need to yield while connection is open
     def insertFile(self, businput, qInserts=False):
