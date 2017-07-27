@@ -1,4 +1,4 @@
-from __future__ import print_function
+from __future__ import print_function, division
 from dbs.exceptions.dbsClientException import dbsClientException
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from RestClient.RestApi import RestApi
