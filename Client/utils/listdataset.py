@@ -1,7 +1,8 @@
 from __future__ import print_function
 #DBS-3 imports
 from dbs.apis.dbsClient import *
-url="https://cmsweb.cern.ch/dbs/prod/global/DBSReader/"
+url="https://cmsweb-testbed.cern.ch/dbs/int/global/DBSReader/"
+#url="https://cmsweb.cern.ch/dbs/prod/global/DBSReader/"
 #url="https://dbs3-test1.cern.ch/dbs/dev/global/DBSReader/"
 # API Object    
 dbs3api = DbsApi(url=url)
@@ -13,9 +14,22 @@ datasetlst = ['/StreamExpressCosmics/Tier0_Test_SUPERBUNNIES_vocms001-SiStripPCL
 #
 #print(dbs3api.listDatasets(dataset='/unittest_web_primary_ds_name_52666/acq_era_52666-v2671/GEN-SIM-RAW*'))
 
+print("\n")
+print("data_tier_name=RAW, processed_ds_name=*Run2016*")
 print(dbs3api.listDatasets(data_tier_name='RAW', processed_ds_name='*Run2016*'))
 
+print("\n")
+print("dataset='/*/*Run2016*/RAW'")
 print(dbs3api.listDatasets(dataset='/*/*Run2016*/RAW'))
+
+print("\n")
+print("data_tier_name=RAW, processed_ds_name=*Run2016*")
+print(dbs3api.listDatasets(detail=1, data_tier_name='RAW', processed_ds_name='*Run2016*'))
+
+print("\n")
+print("dataset='/*/*Run2016*/RAW'")
+print(dbs3api.listDatasets(detail=1, dataset='/*/*Run2016*/RAW'))
+
 #print dbs3api.listDatasetArray(detail=0,dataset=datasetlst)
 print("\n")
 #print dbs3api.listDatasetArray(detail=1,dataset=datasetlst)
