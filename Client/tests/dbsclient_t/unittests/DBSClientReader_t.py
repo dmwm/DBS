@@ -299,8 +299,17 @@ class DBSClientReader_t(unittest.TestCase):
         """test32b unittestDBSClientReader_t.listFiles: basic test"""
         self.api.listFiles(dataset=self.testparams['dataset'], validFileOnly=0)
 
+    def test032c(self):
+        """test32c unittestDBSClientReader_t.listFiles: basic test"""
+        self.api.listFiles(dataset=self.testparams['dataset'], validFileOnly=1, detail=1, sumOverLumi=1)
+
+    def test032d(self):
+        """test32d unittestDBSClientReader_t.listFiles: basic test"""
+        self.api.listFiles(dataset=self.testparams['dataset'], validFileOnly=1, detail=1, sumOverLumi=1,
+        run_num=self.testparams['runs'][0])
+
     def test033a(self):
-        """test33 unittestDBSClientReader_t.listFiles: basic test"""
+        """test33a unittestDBSClientReader_t.listFiles: basic test"""
         self.api.listFiles(block_name=self.testparams['block'])
 
     def test033b(self):
@@ -364,6 +373,27 @@ class DBSClientReader_t(unittest.TestCase):
         """test033o unittestDBSClientReader_t.listFiles: block, lumi_list and run_num"""
         self.api.listFiles(block_name=self.testparams['block'], run_num=[self.testparams['runs'][0]], lumi_list=[1, 2, 3, 4, 5, 6])
 
+    @checkException400
+    def test033p(self):
+        """test033p unittestDBSClientReader_t.listFiles: block, sumOverlumi, detail, lumi_list and run_num"""
+        self.api.listFiles(block_name=self.testparams['block'], sumOverLumi=1, detail=1, run_num=[self.testparams['runs'][0]], lumi_list=[1, 2, 3, 4, 5, 6])
+
+    @checkException400
+    def test033q(self):
+        """test033q unittestDBSClientReader_t.listFiles: block, sumOverLumi, detail and run_num"""
+        self.api.listFiles(block_name=self.testparams['block'], sumOverLumi=1, 
+        run_num=[self.testparams['runs'][0]], detail=1)
+
+    def test033r(self):
+        """test033r unittestDBSClientReader_t.listFiles: block, sumOverLumi, detail and run_num"""
+        self.api.listFiles(block_name=self.testparams['block'], sumOverLumi=1, 
+        run_num='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]), detail=1)
+
+    def test033s(self):
+        """test033s unittestDBSClientReader_t.listFiles: block, sumOverLumi, detail and run_num"""
+        self.api.listFiles(block_name=self.testparams['block'], sumOverLumi=1, validFileOnly=1,
+        run_num='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]), detail=1)
+    
     def test034a(self):
         """test34a unittestDBSClientReader_t.listFiles: basic test"""
         self.api.listFiles(logical_file_name=self.testparams['files'][0])
@@ -414,8 +444,24 @@ class DBSClientReader_t(unittest.TestCase):
 		lumi_list=[ [1, 20], [30, 40], [50, 60] ], detail=1, validFileOnly=1 )
 
     def test034l(self):
-        """test040i unittestDBSClientReader_t.listFiles: lfn, lumi_list and run_num"""
+        """test034l unittestDBSClientReader_t.listFiles: lfn, lumi_list and run_num"""
         self.api.listFiles(logical_file_name=self.testparams['files'][0], run_num=[self.testparams['runs'][0]], lumi_list=[1, 2, 3, 4, 5, 6])
+
+    @checkException400
+    def test034m(self):
+        """test034m unittestDBSClientReader_t.listFiles: lfn, sumOverLumi, lumi_list and run_num"""
+        self.api.listFiles(logical_file_name=self.testparams['files'][0], run_num=[self.testparams['runs'][0]], lumi_list=[1, 2, 3, 4, 5, 6], detail=1, sumOverLumi=1)
+
+    @checkException400
+    def test034n(self):
+        """test034n unittestDBSClientReader_t.listFiles: lfn, sumOverLumi and run_num"""
+        self.api.listFiles(logical_file_name=self.testparams['files'][0], run_num=[self.testparams['runs'][0]],
+            detail=1, sumOverLumi=1)
+
+    def test034o(self):
+        """test034o unittestDBSClientReader_t.listFiles: lfn, sumOverLumi and run_num"""
+        self.api.listFiles(logical_file_name=self.testparams['files'][0], 
+            run_num='%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]), detail=1, sumOverLumi=1)
 
     def test035a(self):
         """test35a unittestDBSClientReader_t.listFiles: basic test"""
@@ -556,6 +602,16 @@ class DBSClientReader_t(unittest.TestCase):
         """test03200b unittestDBSClientReader_t.listFileArray: basic test"""
         self.api.listFileArray(dataset=self.testparams['dataset'], validFileOnly=0)
 
+    def test03200c(self):
+        """test03200c unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(dataset=self.testparams['dataset'], validFileOnly=0, 
+        detail=1, sumOverLumi=1)
+
+    def test03200d(self):
+        """test03200d unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(dataset=self.testparams['dataset'], validFileOnly=1, 
+        detail=1, sumOverLumi=1)
+
     def test03300a(self):
         """test03300 unittestDBSClientReader_t.listFileArray: basic test"""
         self.api.listFileArray(block_name=self.testparams['block'])
@@ -621,6 +677,36 @@ class DBSClientReader_t(unittest.TestCase):
         """test03300o unittestDBSClientReader_t.listFileArray: block, lumi_list and run_num"""
         self.api.listFileArray(block_name=self.testparams['block'], run_num=[self.testparams['runs'][0]], lumi_list=[1, 2, 3, 4, 5, 6])
 
+    @checkException400
+    def test03300p(self):
+        """test03300p unittestDBSClientReader_t.listFileArray: block, sumOverLumi, lumi_list and run_num"""
+        self.api.listFileArray(block_name=self.testparams['block'], 
+        run_num=[self.testparams['runs'][0]], lumi_list=[1, 2, 3, 4, 5, 6], sumOverLumi=1)
+
+    @checkException400
+    def test03300q(self):
+        """test03300q unittestDBSClientReader_t.listFileArray: block, sumOverLumi, lumi_list and run_num"""
+        self.api.listFileArray(block_name=self.testparams['block'], run_num=[self.testparams['runs'][0]], 
+        lumi_list=[1, 2, 3, 4, 5, 6], sumOverLumi=1, detail=1)
+
+    @checkException400
+    def test03300r(self):
+        """test03300r unittestDBSClientReader_t.listFileArray: block, sumOverLumi, lumi_list and run_num"""
+        self.api.listFileArray(block_name=self.testparams['block'], run_num=[self.testparams['runs'][0]], 
+        sumOverLumi=1, detail=1)
+
+    @checkException400
+    def test03300s(self):
+        """test03300s unittestDBSClientReader_t.listFileArray: block, sumOverLumi, lumi_list and run_num"""
+        self.api.listFileArray(block_name=self.testparams['block'], run_num=[self.testparams['runs'][0]],
+        sumOverLumi=1)
+
+    def test03300t(self):
+        """test03300t unittestDBSClientReader_t.listFileArray: block, sumOverLumi, lumi_list and run_num"""
+        self.api.listFileArray(block_name=self.testparams['block'], 
+        run_num='%s-%s'%(self.testparams['runs'][0], self.testparams['runs'][1]),
+        sumOverLumi=1, detail=1)
+
     def test03400a(self):
         """test03400a unittestDBSClientReader_t.listFileArray: basic test"""
         self.api.listFileArray(logical_file_name=self.testparams['files'][0])
@@ -673,6 +759,22 @@ class DBSClientReader_t(unittest.TestCase):
     def test03400l(self):
         """test03400l unittestDBSClientReader_t.listFileArray: lfn, lumi_list and run_num"""
         self.api.listFileArray(logical_file_name=self.testparams['files'][0], run_num=[self.testparams['runs'][0]], lumi_list=[1, 2, 3, 4, 5, 6])
+
+    def test03400m(self):
+        """test03400m unittestDBSClientReader_t.listFileArray: lfn, sumOverLumi=1, lumi_list and run_num"""
+        self.api.listFileArray(logical_file_name=self.testparams['files'][0], 
+        run_num=self.testparams['runs'][0], lumi_list=[1, 2, 3, 4, 5, 6])
+
+    @checkException400
+    def test03400n(self):
+        """test03400n unittestDBSClientReader_t.listFileArray: lfn, sumOverLumi, detail and run_num"""
+        self.api.listFileArray(logical_file_name=self.testparams['files'][0], 
+        run_num=[self.testparams['runs'][0]], sumOverLumi=1, detail=1)
+
+    def test03400m(self):
+        """test03400m unittestDBSClientReader_t.listFileArray: lfn, sumOverLumi, detail and run_num"""
+        self.api.listFileArray(logical_file_name=self.testparams['files'][0],
+        run_num='%s-%s'%(self.testparams['runs'][0], self.testparams['runs'][1]), sumOverLumi=1, detail=1)
 
     def test03500a(self):
         """test03500a unittestDBSClientReader_t.listFileArray: basic test"""
@@ -815,11 +917,17 @@ class DBSClientReader_t(unittest.TestCase):
     def test06300b(self):
         """test06300b unittestDBSClientReader_t.listFileArray: Mixed run_num range and list of run_nums """
         self.api.listFileArray(logical_file_name=self.testparams['files'][0],
-                           run_num=['%s-%s' % (self.testparams['runs'][0], self.testparams['runs'][2]), 100, 10000, '50-100'] )
+                           run_num=['%s-%s' % (self.testparams['runs'][0], 
+                           self.testparams['runs'][2]), 100, 10000, '50-100'] )
     
-    def test06900(self):
-        """test06900 unittestDBSClientReader_t.listFileArray with original site: basic"""
+    def test06900a(self):
+        """test06900a unittestDBSClientReader_t.listFileArray with original site: basic"""
         self.api.listFileArray(origin_site_name=self.testparams['site'], dataset=self.testparams['dataset'])
+
+    def test06900b(self):
+        """test06900b unittestDBSClientReader_t.listFileArray with original site: basic"""
+        self.api.listFileArray(origin_site_name=self.testparams['site'], dataset=self.testparams['dataset'],
+        detail=1, sumOverLumi=1)
 
     def test07000(self):
         """test07000 unittestDBSClientReader_t.listFile with original site: basic"""
@@ -847,6 +955,10 @@ class DBSClientReader_t(unittest.TestCase):
         """test34h unittestDBSClientReader_t.listFileArray: basic test"""
         self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
                                self.testparams['files'][2], self.testparams['files'][3]], detail=1, run_num=1)
+    def test034i(self):
+        """test34i unittestDBSClientReader_t.listFileArray: basic test"""
+        self.api.listFileArray(logical_file_name=[self.testparams['files'][0], self.testparams['files'][1],
+                               self.testparams['files'][2], self.testparams['files'][3]], detail=1, sumOverLumi=1)
     @checkException400
     def test034i(self):
         """test34i unittestDBSClientReader_t.listFileArray: basic test"""
@@ -1019,6 +1131,11 @@ class DBSClientReader_t(unittest.TestCase):
         """test46i unittestDBSClientReader_t.listFileSummaries: basic test"""
         self.api.listFileSummaries(dataset=self.testparams['dataset'], run_num=self.testparams['runs'][0], validFileOnly=1)
 
+    def test046i1(self):
+        """test46i1 unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileSummaries(dataset=self.testparams['dataset'], run_num=self.testparams['runs'][0], 
+        validFileOnly=1, sumOverLumi=1)
+
     def test046j(self):
         """test46j unittestDBSClientReader_t.listFileSummaries: basic test"""
         self.api.listFileSummaries(block_name=self.testparams['block'])
@@ -1030,6 +1147,19 @@ class DBSClientReader_t(unittest.TestCase):
     def test046l(self):
         """test46l unittestDBSClientReader_t.listFileSummaries: basic test"""
         self.api.listFileSummaries(block_name=self.testparams['block'], run_num=self.testparams['runs'][0], validFileOnly=1)
+
+    def test046m(self):
+        """test46m unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileSummaries(dataset=self.testparams['dataset'], validFileOnly=1, sumOverLumi=1)
+
+    def test046n(self):
+        """test46n unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileSummaries(block_name=self.testparams['block'], sumOverLumi=1)
+
+    def test046o(self):
+        """test46o unittestDBSClientReader_t.listFileSummaries: basic test"""
+        self.api.listFileSummaries(block_name=self.testparams['block'], run_num=self.testparams['runs'][0], 
+        validFileOnly=1, sumOverLumi=1)
 
     def test047(self):
         """test47 unittestDBSClientReader_t.listRuns : basic test"""
