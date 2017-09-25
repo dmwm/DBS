@@ -886,7 +886,7 @@ class DbsApi(object):
         :type run_num: int,str,list
 	:param validFileOnly: default value is 0 (optional), when set to 1, only valid files counted.
 	:type validFileOnly: int, str
-        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run)
+        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run, event_count)
         :rtype: list of dicts
 
         """

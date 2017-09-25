@@ -1221,7 +1221,7 @@ class DBSReaderModel(RESTModel):
         :param run_num: List lumi sections for a given run number (Optional). Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...]. run_num=1 is for MC data and caused almost full table scan. So run_num=1
                         will cause an input error.
         :type run_num: int, str, or list
-        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num)
+        :returns: List of dictionaries containing the following keys (lumi_section_num, logical_file_name, run_num, event_count)
         :rtype: list of dicts
         :param validFileOnly: optional valid file flag. Default = 0 (include all files)
         :type: validFileOnly: int, or str
