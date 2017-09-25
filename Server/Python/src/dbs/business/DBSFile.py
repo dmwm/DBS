@@ -226,7 +226,6 @@ class DBSFile:
 	else:
             pass
         with self.dbi.connection() as conn:
-            self.logger.error("**************listFiles brefore call dao********************")
             dao = (self.filebrieflist, self.filelist)[detail]
             for item in dao.execute(conn, dataset, block_name, logical_file_name, release_version, pset_hash, app_name,
                             output_module_label, run_num, origin_site_name, lumi_list, validFileOnly, sumOverLumi):

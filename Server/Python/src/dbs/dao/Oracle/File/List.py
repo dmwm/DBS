@@ -263,13 +263,13 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
                     sql = sql.replace('EVENT_COUNT_WITH_LUMI', ent_ct)
             else:
                 sql = run_generator + lfn_generator + lumi_generator  + sql_sel + sql
-	self.logger.error("SQL: " + sql)
-        self.logger.error("***********************")     	
-	self.logger.error(binds)
+	self.logger.debug("SQL: " + sql)
+        self.logger.debug("***********************")     	
+	self.logger.debug(binds)
         try:
-            self.logger.error("******before cursor**********")   
+            self.logger.debug("******before cursor**********")   
             cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-            self.logger.error("******after cursor**********")  
+            self.logger.debug("******after cursor**********")  
         except Exception as e :
             self.logger.error(str(e))
         for i in cursors:

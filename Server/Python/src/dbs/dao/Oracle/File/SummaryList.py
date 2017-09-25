@@ -69,7 +69,7 @@ class SummaryList(DBFormatter):
                 whererun = wheresql_run_list
             elif wheresql_run_range:
                 whererun = wheresql_run_range
-        self.logger.exception('sumOverLumi=%s' %sumOverLumi)
+        self.logger.debug('sumOverLumi=%s' %sumOverLumi)
         if block_name:
             if run_num != -1:
                 if int(sumOverLumi) == 0:
@@ -293,8 +293,8 @@ class SummaryList(DBFormatter):
                 binds.update({"dataset":dataset})
         else:
             return 
-        self.logger.exception(sql)
-        self.logger.exception(binds)
+        self.logger.debug(sql)
+        self.logger.debug(binds)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         for i in cursors:
             d = self.formatCursor(i)
