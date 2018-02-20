@@ -100,7 +100,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
     def test1002(self):
         """insert duplicated block"""
         self.assertRaises(HTTPError, self.api.insertBulkBlock, blockDump=self.testparams)
-
+    
     def test2000(self):
         """test2000 web.DBSClientWriter.insertBlockBulk with mixed event_count/lumi: basic test\n"""
         
@@ -128,7 +128,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
 
         self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace('14144', str(self.uid+10))
         print("\ninserting block with mixed events per lumi: ", self.testparams['block']['block_name'])
-        self.assertRaises(dbsClientException, self.api.insertBulkBlock(blockDump=self.testparams))
+        self.assertRaises(dbsClientException, self.api.insertBulkBlock, blockDump=self.testparams)
 
     def test3000(self):
         """test3000 web.DBSClientWriter.insertBlockBulk without event per lumi: basic test\n"""
