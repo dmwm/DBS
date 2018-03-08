@@ -3,7 +3,7 @@ from __future__ import print_function
 import time
 import pprint
 from dbs.apis.dbsClient import *
-url="https://dbs3-test1.cern.ch/dbs/dev/global/DBSReader/"
+url="https://dbs3-test2.cern.ch/dbs/dev/global/DBSReader/"
 # API Object    
 dbs3api = DbsApi(url=url)
 pp = pprint.PrettyPrinter(indent=4)
