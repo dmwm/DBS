@@ -1,7 +1,7 @@
 #DBS-3 imports
 from dbs.apis.dbsClient import *
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
-#url="https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter"
+#url="https://cmsweb.cern.ch:8443/dbs/prod/phys03/DBSWriter"
 url="https://dbs3-testbed.cern.ch/dbs/dev/global/DBSWriter"
 # API Object    
 dbs3api = DbsApi(url=url)

@@ -12,7 +12,7 @@ import time
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url': os.environ.get("DBS_MIGRATE_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSMigrate/")}
+config = {'url': os.environ.get("DBS_MIGRATE_URL", "https://cmsweb.cern.ch:8443/dbs/int/global/DBSMigrate/")}
 
 api = create_api('DbsApi', config=config)
 
@@ -28,7 +28,7 @@ initial = payload_handler.payload['workflow']['dataset']
 
 migration_timing = {'migration_stats': {'data': str(initial)}}
 
-migration_url = os.environ.get("DBS_READER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSReader/")
+migration_url = os.environ.get("DBS_READER_URL", "https://cmsweb.cern.ch:8443/dbs/int/global/DBSReader/")
 
 with TimingStat(migration_timing, stat_client, stats_name="migration_stats") as migration_timer:
     request_timing = {'stats': {'api': 'submit', 'query': str(initial)}}

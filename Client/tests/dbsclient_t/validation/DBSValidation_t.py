@@ -53,7 +53,7 @@ class DBSValidation_t(unittest.TestCase):
 
         migration_url = os.environ['DBS_MIGRATE_URL']
         self.migration_api = DbsApi(url=migration_url, proxy=proxy)
-	self.source_url='https://cmsweb.cern.ch/dbs/prod/global/DBSReader'
+	self.source_url='https://cmsweb.cern.ch:8443/dbs/prod/global/DBSReader'
         self.cmsweb_api = DbsApi(url=self.source_url, proxy=proxy)
 
     def setUp(self):
