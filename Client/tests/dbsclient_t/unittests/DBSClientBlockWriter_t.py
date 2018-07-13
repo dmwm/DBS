@@ -61,11 +61,11 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         for i in range(len(self.testparams['file_conf_list'])):
             self.testparams['file_conf_list'][i]['app_name'] = "%s_%s"%(self.testparams['file_conf_list'][i]['app_name'], self.uid)
             self.testparams['file_conf_list'][i]['lfn'] = self.testparams['file_conf_list'][i]['lfn'].replace('.root', '_%s.root' %(self.uid))
-        ct = 1 
+        ct = 1
         for k in range(len(self.testparams['files'])):
              for l in self.testparams['files'][k]['file_lumi_list']:
                  ct +=1
-                 l['event_count'] = ct    
+                 l['event_count'] = ct
              self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (self.uid))
              self.testparams['files'][k]['adler32'] = '123abc'
 
@@ -100,10 +100,10 @@ class DBSClientBlockWriter_t(unittest.TestCase):
     def test1002(self):
         """insert duplicated block"""
         self.assertRaises(HTTPError, self.api.insertBulkBlock, blockDump=self.testparams)
-    
+
     def test2000(self):
         """test2000 web.DBSClientWriter.insertBlockBulk with mixed event_count/lumi: basic test\n"""
-        
+
         infofile=open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'blockdump.dict'), "r")
         self.testparams=importCode(infofile, "testparams", 0).blockDump
         self.uid = uuid.uuid4().time_mid
@@ -114,7 +114,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
             self.testparams['file_conf_list'][i]['lfn'] = self.testparams['file_conf_list'][i]['lfn'].replace('.root', '_%s.root' %(self.uid+10))
         ct = 1
         for k in range(len(self.testparams['files'])):
-             
+
              for l in self.testparams['files'][k]['file_lumi_list']:
                  ct +=1
                  if ct%2 == 0:
@@ -152,8 +152,6 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace('14144', str(self.uid+10))
         print("\ninserting block without events per lumi: ", self.testparams['block']['block_name'])
         self.api.insertBulkBlock(blockDump=self.testparams)
-
-
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientBlockWriter_t)

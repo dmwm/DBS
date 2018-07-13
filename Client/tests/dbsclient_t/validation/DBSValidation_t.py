@@ -31,6 +31,9 @@ release_version = 'CMSSW_1_2_3%s' % uid
 site = "cmssrm.fnal.gov"
 block = "%s#%s" % (dataset, uid)
 
+stepchain_dataset = "/%s_stepchain/%s/%s" % (primary_ds_name, procdataset, tier)
+parent_stepchain_dataset="/%s_stepchain/%s/%s" % (primary_ds_name, procdataset_parent, tier)
+
 flist = []
 
 def remove_non_comparable_keys(values, non_comparable_keys):

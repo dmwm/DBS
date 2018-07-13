@@ -7,7 +7,10 @@ import sys
 import time
 import uuid
 import unittest
+import copy
 from dbs.apis.dbsClient import *
+from dbs.exceptions.dbsClientException import dbsClientException
+from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from ctypes import *
 
 uid = uuid.uuid4().time_mid
@@ -21,7 +24,8 @@ procdataset = '%s-v%s' % (acquisition_era_name, processing_version)
 parent_procdataset = '%s-pstr-v%s' % (acquisition_era_name, processing_version)
 tier = 'GEN-SIM-RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
-dataset2="/%s_2/%s/%s" % (primary_ds_name, procdataset, tier)
+primary_ds_name2 = "%s_2" % primary_ds_name
+dataset2="/%s/%s/%s" % (primary_ds_name2, procdataset, tier)
 app_name='cmsRun'
 output_module_label='Merged'
 global_tag='my-cms-gtag_%s' % uid
@@ -34,7 +38,16 @@ parent_dataset="/%s/%s/%s" % (primary_ds_name, parent_procdataset, tier)
 parent_block="%s#%s" % (parent_dataset, uid)
 print("parent_block = ", parent_block)
 print("block = ", block)
+step_primary_ds_name = "%s_stepchain" % primary_ds_name
+stepchain_dataset = "/%s/%s/%s" % (step_primary_ds_name, procdataset, tier)
+stepchain_block="%s#%s" % (stepchain_dataset, uid)
+parent_stepchain_dataset="/%s/%s/%s" % (step_primary_ds_name, parent_procdataset, tier)
+parent_stepchain_block="%s#%s" % (parent_stepchain_dataset, uid)
+print("parent_stepchain_block = ", parent_block)
+print("stepchain_block = ", block)
 flist=[]
+stepchain_files = []
+parent_stepchain_files = []
 
 outDict={
 "primary_ds_name": primary_ds_name,
@@ -55,6 +68,13 @@ outDict={
 "runs": [97, 98, 99],
 "acquisition_era": acquisition_era_name,
 "processing_version": processing_version,
+"step_primary_ds_name": step_primary_ds_name,
+"stepchain_dataset": stepchain_dataset,
+"stepchain_block": stepchain_block,
+"parent_stepchain_dataset": parent_stepchain_dataset,
+"parent_stepchain_block": parent_stepchain_block,
+"stepchain_files": stepchain_files,
+"parent_stepchain_files": parent_stepchain_files
 }
 
 class DBSClientWriter_t(unittest.TestCase):
@@ -115,7 +135,6 @@ class DBSClientWriter_t(unittest.TestCase):
             'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "testuer",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
-
         self.api.insertDataset(datasetObj=data)
         # insert away the parent dataset as well
 
@@ -145,14 +164,16 @@ class DBSClientWriter_t(unittest.TestCase):
             'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
-
         self.api.insertDataset(datasetObj=data)
 
     def test11(self):
         """test11: web.DBSClientWriter.insertDataset: no output_configs, should be fine insert!"""
+        data = {'primary_ds_name': primary_ds_name2,
+                'primary_ds_type': 'test'}
+        self.api.insertPrimaryDataset(primaryDSObj=data)
         data = {
             'dataset': dataset2,
-            'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name,
+            'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name2,
             'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
             'creation_date': 1234, 'create_by': 'testuser', "last_modification_date": 1234, "last_modified_by"
@@ -302,6 +323,142 @@ class DBSClientWriter_t(unittest.TestCase):
     def test22(self):
         """test22 web.DBSClientWriter.updateBlockSiteName: should be able to update origin_site_name"""
         self.api.updateBlockSiteName(block_name=block, origin_site_name=site)
+
+    def test23(self):
+        """test23 web.DBSClientWriter.insertFiles: insert parent and child files for later use : basic test"""
+
+        data = {'dataset_conf_list': [],  # List of dataset configurations
+                'file_conf_list': [],  # List of files, the configuration for each
+                'files': [],  # List of file objects
+                'block': {},  # Dict of block info
+                'processing_era': {},  # Dict of processing era info
+                'acquisition_era': {},  # Dict of acquisition era information
+                'primds': {},  # Dict of primary dataset info
+                'dataset': {},  # Dict of processed dataset info
+                #'file_parent_list': [],  # List of file parents
+                'dataset_parent_list': [], # List of dataset parents
+                }
+                #'close_settings': {}}  # Dict of info about block close settings
+
+        algo = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                 'output_module_label': output_module_label, 'global_tag': global_tag}
+        data['dataset_conf_list'] = [algo]
+
+        data['primds']['primary_ds_name'] = step_primary_ds_name
+        data['primds']['primary_ds_type'] = "test"
+        data['primds']['create_by'] = "WMAgent"
+        data['primds']['creation_date'] = int(time.time())
+
+        # Do the processed
+        data['dataset']['physics_group_name'] = 'Tracker'
+        data['dataset']['processed_ds_name'] = procdataset
+        data['dataset']['data_tier_name'] = tier
+        data['dataset']['dataset_access_type'] = 'PRODUCTION'
+        data['dataset']['dataset'] = stepchain_dataset
+        data['dataset']['prep_id'] = "TestPrepID"
+        # Add misc meta data.
+        data['dataset']['create_by'] = "WMAgent"
+        data['dataset']['last_modified_by'] = "WMAgent"
+        data['dataset']['creation_date'] = int(time.time())
+        data['dataset']['last_modification_date'] = int(time.time())
+        data["processing_era"]["processing_version"] = processing_version
+        data["processing_era"]["create_by"] = "WMAgent"
+
+        data['acquisition_era']['acquisition_era_name'] = acquisition_era_name
+        data['acquisition_era']['start_date'] = 123456789
+        data['dataset_parent_list'] = [parent_stepchain_dataset]
+
+        data['block']['block_name'] = stepchain_block
+        data['block']['origin_site_name'] = site
+        fCount = 5
+        data['block']['file_count'] = fCount
+        data['block']['block_size'] = 20122119010
+
+
+        parent_data = copy.deepcopy(data)
+        parent_data['dataset']['dataset'] = parent_stepchain_dataset
+        parent_data['block']['block_name'] = parent_stepchain_block
+        parent_data['dataset_parent_list'] = []
+        parent_data['primds']['primary_ds_name'] = step_primary_ds_name
+
+        pflist=[]
+        cflist=[]
+        for i in range(fCount):
+            f={
+                'adler32': u'NOTSET', 'file_type': 'EDM',
+                #'file_output_config_list':
+                #[
+                #    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                #     'output_module_label': output_module_label,'global_tag':global_tag },
+                #    ],
+                'file_size': u'2012211901', 'auto_cross_section': 0.0,
+                'check_sum': u'1504266448',
+                'file_lumi_list': [
+                    {'lumi_section_num': 27414+i, 'run_num': 98, 'event_count': 66},
+                    {'lumi_section_num': 26422+i, 'run_num': 98, 'event_count': 67},
+                    {'lumi_section_num': 29838+i, 'run_num': 98, 'event_count': 68},
+                    ],
+                'event_count': u'201',
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/StepChain_/p%s/%i.root" %(uid, i),
+                #'is_file_valid': 1
+                }
+
+            pflist.append(f)
+            pFileAlgo = algo.copy()
+            pFileAlgo['lfn'] = f['logical_file_name']
+            parent_data['file_conf_list'].append(pFileAlgo)
+            parent_stepchain_files.append(f['logical_file_name'])
+            cf = f.copy()
+            cf.update({'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM/StepChain_/%s/%i.root" % (uid, i)})
+            cflist.append(cf)
+            cFileAlgo = algo.copy()
+            cFileAlgo['lfn'] = cf['logical_file_name']
+            stepchain_files.append(cf['logical_file_name'])
+            data['file_conf_list'].append(cFileAlgo)
+
+        parent_data["files"] = pflist
+        data["files"] = cflist
+
+        self.api.insertBulkBlock(blockDump=parent_data)
+        print("parent dataset: %s", parent_data['dataset']['dataset'])
+        print("parent block: %s", parent_data['block']['block_name'])
+        print("parent files: ", len(parent_data["files"]))
+
+        self.api.insertBulkBlock(blockDump=data)
+        print("child dataset: %s", data['dataset']['dataset'])
+        print("child block %s", data['block']['block_name'])
+        print("child files: ", len(data["files"]))
+
+    def test24(self):
+        """test24 web.DBSClientWriter.insertFileParents: integration test validating the results"""
+        result = self.api.listFileParentsByLumi(block_name=stepchain_block)
+        print(result)
+        child_parent_ids = result[0]["child_parent_id_list"]
+        self.api.insertFileParents({"block_name": stepchain_block, "child_parent_id_list": child_parent_ids})
+        file_name_pair = self.api.listFileParents(block_name=stepchain_block)
+        parentIDs = set()
+        for cpPair in child_parent_ids:
+            parentIDs.add(cpPair[1])
+
+        result2 = self.api.listFileParentsByLumi(block_name=stepchain_block)
+
+        #compair the call whether there listFileParentsByLumi returns the same result after the insert
+        self.assertEqual(result, result2)
+
+        oParentIDs = set()
+        # compare child parent pair.
+        for fInfo in file_name_pair:
+            oParentIDs.add(fInfo["parent_file_id"])
+            index = stepchain_files.index(fInfo['this_logical_file_name'])
+            self.assertEqual(parent_stepchain_files[index], fInfo['parent_logical_file_name'])
+
+        self.assertEqual(len(child_parent_ids), len(file_name_pair))
+        self.assertEqual(parentIDs, oParentIDs)
+
+    def test25(self):
+        """test25 web.DBSClientWriter.insertFileParents: negtive test"""
+        with self.assertRaises(HTTPError):
+            self.api.insertFileParents(fileParentObj={"block_name": stepchain_block})
 
     def test208(self):
         """test208 generating the output file for reader test"""

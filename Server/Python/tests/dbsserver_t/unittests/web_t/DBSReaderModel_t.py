@@ -1076,6 +1076,11 @@ class DBSReaderModel_t(unittest.TestCase):
         """test010d: web.DBSReaderModel.listFileParents: basic lfn list test"""
         api.list('fileparents', logical_file_name=testparams['parent_files'])
 
+    def test010d1(self):
+        """test010d: web.DBSReaderModel.listFileParents: basic lfn list test POST call"""
+        data = {"block_name": testparams['stepchain_block']}
+        api.insert('fileparentsbylumi', data)
+
     @checkException400
     def test010e(self):
         """test010e: web.DBSReaderModel.listFileLumis: basic test """

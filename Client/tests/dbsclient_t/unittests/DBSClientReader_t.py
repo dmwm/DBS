@@ -1482,6 +1482,26 @@ class DBSClientReader_t(unittest.TestCase):
         self.assertTrue('dbs_version' in version)
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
 
+    def test108(self):
+        """test108 unittestDBSClientReader_t.listFileParentsByLumi: basic test using lumi section info"""
+        self.api.listFileParentsByLumi(block_name=self.testparams['stepchain_block'], logical_file_name=None)
+
+    def test109(self):
+        """test109 unittestDBSClientReader_t.listFileParentsByLumi: basic test using lumi section info"""
+        self.api.listFileParentsByLumi(block_name=self.testparams['stepchain_block'],
+                                       logical_file_name=self.testparams['stepchain_files'])
+
+    def test110(self):
+        """test109 unittestDBSClientReader_t.listFileParents: basic test for arguments"""
+        try:
+            self.api.listFileParentsByLumi(block_name=None, child_lfn_list=self.testparams['stepchain_files'])
+            self.fail("Exception was expected and was not raised.")
+        except Exception as e:
+            if 'Invalid input' not in str(e):
+                self.fail("Wrong exception was raised.")
+            else:
+                pass
+
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
     unittest.TextTestRunner(verbosity=2).run(SUITE)
