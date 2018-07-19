@@ -67,6 +67,8 @@ class DBSWriterModel(DBSReaderModel):
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
         self._addMethod('POST', 'bulkblocks', self.insertBulkBlock, secured=True,
                          security_params={'role':self.security_params, 'authzfunc':authInsert})
+        self._addMethod('POST', 'fileparents', self.insertFileParents, secured=True,
+                         security_params={'role':self.security_params, 'authzfunc':authInsert})
 
     def insertPrimaryDataset(self):
         """
@@ -260,6 +262,9 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
+            if ('file_parent_list' in indata.keys() and 'dataset_parent_list' in indata.keys()): 
+                dbsExceptionHandler("dbsException-invalid-input2", "insertBulkBlock: datset and file parentages cannot be in the input at the same time",  
+                    self.logger.exception, "insertBulkBlock: datset and file parentages cannot be in the input at the same time.")    
             indata = validateJSONInputNoCopy("blockBulk", indata)
             self.dbsBlockInsert.putBlock(indata)
         except cjson.DecodeError as dc:
@@ -274,6 +279,36 @@ class DBSWriterModel(DBSReaderModel):
                 dbsExceptionHandler("dbsException-invalid-input2", "illegal variable name/number from input",  self.logger.exception, str(ex))
             else:
                 sError = "DBSWriterModel/insertBulkBlock. %s\n. Exception trace: \n %s" \
+                    % (ex, traceback.format_exc())
+                dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
+
+    def insertFileParents(self):
+        """
+        API to insert a fileParents 
+
+        :param block_name: The child block name.
+        :type block_name: string
+        :param child_parent_list: a list of [cid, pid] pair to insert into file_parents table
+        :type child_parenyt_list: list
+
+        """
+        try:
+            body = request.body.read()
+            indata = cjson.decode(body)
+            indata = validateJSONInputNoCopy("file_parent", indata)
+            self.dbsFile.insertFileParents(indata)
+        except cjson.DecodeError as dc:
+            dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insertFileParents input",  self.logger.exception, str(dc))
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.message)
+        except HTTPError as he:
+            raise he
+        except Exception as ex:
+            #illegal variable name/number
+            if str(ex).find("ORA-01036") != -1:
+                dbsExceptionHandler("dbsException-invalid-input2", "illegal variable name/number from input",  self.logger.exception, str(ex))
+            else:
+                sError = "DBSWriterModel/insertFileParents. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
                 dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 

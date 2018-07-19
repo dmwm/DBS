@@ -444,6 +444,39 @@ class DbsApi(object):
         """
         return self.__callServer("processingeras", data=procEraObj, callmethod='POST' )
 
+    def insertFileParents(self, fileParentObj):
+        """
+        API to insert file parentage in DBS. It will also get the block parentage from file's and insert them at the same time.
+        All the child files are from the same block namded by block_name.
+
+        :param fileParentObj: file parent object
+        :type fileParentObj: dict
+        :key block_name: child block name (required)
+        :key child_parent_id_list: a list of [child_file_id, parent_file_id] pairs (required)
+
+        """
+        return self.__callServer("fileparents", data=fileParentObjObj, callmethod='POST' )
+
+    def listFileParentsByLumi(self, **kwargs):
+        """
+        API to list file parents using lumi section info.
+
+        :param block_name: name of block that has files who's parents needs to be found (Required)
+        :type block_name: str
+        :param logical_file_name: if not all the file parentages under the block needed, this lfn list gives the files that needs to find its parents(optional).
+        :type logical_file_name: list of string  
+        :returns: List of dictionaries containing following keys [cid,pid]
+        :rtype: list of dicts
+       
+        """
+        validParameters = ['block_name', 'logical_file_name']
+
+        requiredParameters = {'forced': 'block_name'}
+        checkInputParameter(method="listFileParentsByLumi", parameters=kwargs.keys(), validParameters=validParameters,
+                            requiredParameters=requiredParameters)
+        return self.__callServer("fileparentsbylumi", data=kwargs, callmethod='POST')
+
+
     def listApiDocumentation(self):
         """
         API to retrieve the auto-generated documentation page from server

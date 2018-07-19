@@ -179,7 +179,7 @@ acceptedInputDataTypes = {
     ################
     dict:[],
     ################
-    list:['dataset', 'run_num', 'logical_file_name', 'dataset_id', 'lumi_list'],
+    list:['dataset', 'run_num', 'logical_file_name', 'dataset_id', 'lumi_list', 'child_parent_id_list'],
     ################
     long:['lumi_section_num', 'run_num', 'xtcrosssection', 'auto_cross_section', 'dataset_id', 'lumi_list'],
     ################
@@ -191,13 +191,19 @@ acceptedInputKeys = {
     'dataTier':['data_tier_name'],
     ################
     'blockBulk':['file_conf_list', 'dataset_conf_list', 'block_parent_list', 'physics_group_name', 'processing_era', 'dataset', 'block', \
-                    'acquisition_era', 'primds', 'ds_parent_list', 'files', 'file_parent_list'],
+                    'acquisition_era', 'primds', 'ds_parent_list', 'files', 'file_parent_list', 'dataset_parent_list'],
     ################
     'file_conf_list':['release_version', 'pset_hash', 'pset_name', 'lfn', 'app_name', 'output_module_label', 'global_tag'],
     ################
     'file_output_config_list':['release_version', 'pset_hash', 'pset_name', 'lfn', 'app_name', 'output_module_label', 'global_tag'],
     ################
     'file_parent_list':['file_parent_lfn', 'parent_logical_file_name', 'logical_file_name'],
+    ################
+    'file_parent': ['block_name','child_parent_id_list'],
+    ################
+    'file_parent_lumi':['block_name', 'logical_file_name'],
+    ################
+    'dataset_parent_list':['parent_dataset'],
     ################
     'dataset_conf_list':['release_version', 'pset_hash', 'pset_name', 'app_name', 'output_module_label', 'global_tag'],
     ################
