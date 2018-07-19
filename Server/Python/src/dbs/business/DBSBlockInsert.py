@@ -55,6 +55,7 @@ class DBSBlockInsert :
         self.fpbdlist       = daofactory(classname="FileParentBlock.List")
         self.blkparentin2    = daofactory(classname="BlockParent.Insert2")
         self.dsparentin2     = daofactory(classname="DatasetParent.Insert2")
+        self.dsparentin3     = daofactory(classname="DatasetParent.Insert3")
         self.blkstats       = daofactory(classname="Block.ListStats")
         self.blkstatsin     = daofactory(classname="Block.UpdateStats")
         self.fconfigin      = daofactory(classname=
@@ -160,6 +161,9 @@ class DBSBlockInsert :
                             'Invalid data when insert Blocks. '+ str(ex))
 
         #All Parentage will be deduced from file parentage.
+        #Starting July 9 2018, We will allow to insert dataset parentage w/o file parentage because WMAgent needs to be updated 
+        #in order to provide DBS with file parentage. So we will only put dataset parentage for now, and later there will be a script 
+        # to fill the block and file parentags based on lumi sections.
         blockId = block['block_id']
         fileLumiList = []
         fileConfObjs = []
@@ -167,10 +171,12 @@ class DBSBlockInsert :
         try:
             fileList = blockcontent['files']
             fileConfigList = blockcontent['file_conf_list']
+            fileParentList = []
+            dsParentListInpt = []
             if 'file_parent_list' in blockcontent:
                 fileParentList = blockcontent['file_parent_list']
-            else:
-                fileParentList = []
+            elif 'dataset_parent_list' in blockcontent:
+                dsParentListInpt = blockcontent['dataset_parent_list']
             if not fileList:
                 return
         except KeyError as ex:
@@ -236,23 +242,40 @@ class DBSBlockInsert :
             #At the meantime, we need to build block and dataset parentage.
             #All parentage is deduced from file paretage,
             #10/16/2011
+            #
+            #Starting July 9 2018, we will allow dataset parentage only insert into DBS w/o file or block parentages. 
             nfileparent = len(fileParentList)
             bkParentList = []
             dsParentList = []
-            for k in range(nfileparent):
-                if migration:
-                    fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['this_logical_file_name']]
-                    del fileParentList[k]['this_logical_file_name']
-                    del fileParentList[k]['parent_file_id']
-                else:
-                    fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
-                    del fileParentList[k]['logical_file_name']
-                bkParentage2insert={'this_block_id' : blockId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
-                dsParent2Insert = {'this_dataset_id' : datasetId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
-                if not any(d.get('parent_logical_file_name') == bkParentage2insert['parent_logical_file_name'] for d in bkParentList):
-                    #not exist yet
-                    bkParentList.append(bkParentage2insert)
-                    dsParentList.append(dsParent2Insert)
+            hasFparentage = False
+            hasDSparentage = False
+            if fileParentList:
+                for k in range(nfileparent):
+                    hasFparentage = True
+                    if migration:
+                        fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['this_logical_file_name']]
+                        del fileParentList[k]['this_logical_file_name']
+                        del fileParentList[k]['parent_file_id']
+                    else:
+                        fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
+                        del fileParentList[k]['logical_file_name']
+                    bkParentage2insert={'this_block_id' : blockId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
+                    dsParent2Insert = {'this_dataset_id' : datasetId, 'parent_logical_file_name': fileParentList[k]['parent_logical_file_name']}
+                    if not any(d.get('parent_logical_file_name') == bkParentage2insert['parent_logical_file_name'] for d in bkParentList):
+                        #not exist yet
+                        bkParentList.append(bkParentage2insert)
+                        dsParentList.append(dsParent2Insert)
+            elif dsParentListInpt:
+                # we are not going to migrate dataset parentage only data from production DB to others. 
+                # This need to have the block to be open instead of closed. But WMAgent developer disgreed on keeping the block open.
+                # YG. July 10, 2018 
+                hasDSparentage = True
+                for k in range(len(dsParentListInpt)): 
+                    dsParent2Insert = {'this_dataset_id' : datasetId, 'parent_dataset': dsParentListInpt[k]}
+                    if not any(d.get('parent_dataset') == dsParent2Insert['parent_dataset'] for d in dsParentList):
+                        dsParentList.append(dsParent2Insert)
+            else:
+                pass 
 
             #deal with file config
             for fc in fileConfigList:
@@ -301,7 +324,7 @@ class DBSBlockInsert :
                         'Invalid data when insert file. '+ str(ex))
             try:
                 #insert file parents
-                if fileParentList:
+                if hasFparentage and fileParentList:
                     self.fparentin.execute(conn, fileParentList, tran)
             except exceptions.IntegrityError as ex:
                 if tran:tran.rollback()
@@ -353,7 +376,8 @@ class DBSBlockInsert :
             dsk = len(dsParentList)
             for k in range(lbk):
                 try:
-                    self.blkparentin2.execute(conn, bkParentList[k], transaction=tran)
+                    # We only have block parentage when file prentage presents. 
+                    if hasFparentage: self.blkparentin2.execute(conn, bkParentList[k], transaction=tran)
                 except exceptions.IntegrityError as ex:
                     if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_BP"))\
                          or str(ex).lower().find("duplicate") != -1:
@@ -375,7 +399,12 @@ class DBSBlockInsert :
 
             for k in range(dsk):
                 try:
-                    self.dsparentin2.execute(conn, dsParentList[k], transaction=tran)
+                    if hasFparentage: 
+                        self.dsparentin2.execute(conn, dsParentList[k], transaction=tran)
+                    elif hasDSparentage:
+                        self.dsparentin3.execute(conn, dsParentList[k], transaction=tran)
+                    else:
+                        pass
                 except exceptions.IntegrityError as ex:
                     if (str(ex).find("ORA-00001") != -1 and str(ex).find("PK_DP"))\
                         or str(ex).lower().find("duplicate") != -1:
