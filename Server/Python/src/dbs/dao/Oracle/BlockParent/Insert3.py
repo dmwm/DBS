@@ -7,6 +7,7 @@
 
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
+from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
 
 class Insert3(DBFormatter):
 
@@ -22,7 +23,7 @@ class Insert3(DBFormatter):
                   """.format(owner=self.owner)
 
         self.sql2 =\
-                  """select dinstict block_id as parent_block_id from {owner}files where file_id=:parent_file_id
+                  """select distinct block_id as parent_block_id from {owner}files where file_id=:parent_file_id
                   """.format(owner=self.owner)
 
     def execute( self, conn, daoinput, transaction=False ):
@@ -39,7 +40,7 @@ class Insert3(DBFormatter):
         c_block_name = daoinput["block_name"]
         for b in p_bk_id:
             try:
-                binds = {"block_name":c_block_name, "parent_block_id":b}
+                binds = {"block_name":c_block_name, "parent_block_id":b[0]}
 	        self.dbi.processData(self.sql, binds, conn, transaction)
             except SQLAlchemyIntegrityError as ex:
                 if (str(ex).find("ORA-00001") != -1 and (str(ex).find("PK_BP") != -1 or str(ex).lower().find("duplicate") != -1)):

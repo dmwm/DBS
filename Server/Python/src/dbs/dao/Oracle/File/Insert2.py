@@ -40,8 +40,9 @@ class Insert2(DBFormatter):
         """
 
     def execute(self, conn, daoinput, transaction = False):
-	
-        #print "About to insert file with dataset id"
-        #print binds[0]['dataset_id']
+	print("************************")
+        print(self.sql)
+        print(daoinput)    
+        print("************************")        
         self.dbi.processData(self.sql, daoinput, conn, transaction)
         

@@ -31,15 +31,18 @@ class Insert2(DBFormatter):
         binds = {} 
         bindlist=[]
         
-        if isinstance(daoinput, dict) and block_name in daoinput.key():
+        if isinstance(daoinput, dict) and "block_name" in daoinput.keys():
             binds = {"block_name": daoinput["block_name"]}
             r = self.dbi.processData(self.sql_sel, binds, conn, False)
             bfile = self.format(r)
-            if child_parent_id_list in daoinput.key():
+            bfile_list = []
+            for f in bfile:
+                bfile_list.append(f[0])           
+            if "child_parent_id_list" in daoinput.keys():
                 files = []
                 for i in daoinput["child_parent_id_list"]:
                     files.append(i[0])
-                if set(files)-set(bfile):
+                if set(files)-set(bfile_list):
                     dbsExceptionHandler('dbsException-invalid-input2', "Files required in the same block for FileParent/insert2 dao.", self.logger.exception) 
             else:
                 dbsExceptionHandler('dbsException-invalid-input2', "child_parent_id_list required for FileParent/insert2 dao.", self.logger.exception) 

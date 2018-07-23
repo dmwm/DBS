@@ -455,7 +455,7 @@ class DbsApi(object):
         :key child_parent_id_list: a list of [child_file_id, parent_file_id] pairs (required)
 
         """
-        return self.__callServer("fileparents", data=fileParentObjObj, callmethod='POST' )
+        return self.__callServer("fileparents", data=fileParentObj, callmethod='POST' )
 
     def listFileParentsByLumi(self, **kwargs):
         """
@@ -471,7 +471,7 @@ class DbsApi(object):
         """
         validParameters = ['block_name', 'logical_file_name']
 
-        requiredParameters = {'forced': 'block_name'}
+        requiredParameters = {'forced': ['block_name']}
         checkInputParameter(method="listFileParentsByLumi", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
         return self.__callServer("fileparentsbylumi", data=kwargs, callmethod='POST')
