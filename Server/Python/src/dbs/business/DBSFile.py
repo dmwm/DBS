@@ -104,7 +104,7 @@ class DBSFile:
             dbsExceptionHandler('dbsException-invalid-input', \
                 "Logical_file_name, block_id or block_name is required for fileparents api", self.logger.exception )
         with self.dbi.connection() as conn:
-            for item in self.fileparentlist.execute(conn, logical_file_name, block_id, block_namea):
+            for item in self.fileparentlist.execute(conn, logical_file_name, block_id, block_name):
                 yield item
 
     def listFileParentsByLumi(self, block_name='', logical_file_name=[]):
@@ -518,7 +518,7 @@ class DBSFile:
         Y. Guo 
         July 18, 2018 
         """
-        if "block_name" not in businput.key() or "child_parent_id_list" not in businput.key():
+        if "block_name" not in businput.keys() or "child_parent_id_list" not in businput.keys() or not businput["child_parent_id_list"] or not businput["block_name"]:
             dbsExceptionHandler("dbsException-invalid-input2", "DBSFile/insertFileParents: require child block_name and list of child/parent file id pairs" , self.logger.exception, "DBSFile/insertFileParents: require child block_name and list of child/parent file id pairs")
         tran = None
         conn = None  
@@ -533,7 +533,7 @@ class DBSFile:
             self.blkparentin3.execute(conn, businput, tran)
             if tran:tran.commit()
             if conn:conn.close()
-        except exceptions.IntegrityError as ex:
+        except SQLAlchemyIntegrityError as ex:
                 if tran:tran.rollback()
                 if conn:conn.close()
                 if str(ex).find("ORA-01400") > -1:

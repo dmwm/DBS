@@ -170,7 +170,7 @@ acceptedInputDataTypes = {
          'file_type', 'md5', 'file_size', 'migration_url', 'migration_input', 'file_count', 'block_size', 'start_date', 'end_date',
          'last_modification_date', 'creation_date', 'event_count', 'file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id',
          'open_for_writing', 'detail', 'processing_version', 'xtcrosssection', 'auto_cross_section', 'validFileOnly', 
-         'dataset_id', 'lumi_list', 'sumOverLumi']),
+         'dataset_id', 'lumi_list', 'sumOverLumi', 'dataset_parent_list']),
     ################
     int:set(['file_count', 'block_size', 'start_date', 'end_date', 'last_modification_date', 'creation_date', 'event_count', 
          'file_size', 'lumi_section_num', 'run_num', 'migration_rqst_id', 'open_for_writing', 'detail', 'processing_version',
@@ -179,7 +179,7 @@ acceptedInputDataTypes = {
     ################
     dict:[],
     ################
-    list:['dataset', 'run_num', 'logical_file_name', 'dataset_id', 'lumi_list', 'child_parent_id_list'],
+    list:['dataset', 'run_num', 'logical_file_name', 'dataset_id', 'lumi_list', 'child_parent_id_list', 'dataset_parent_list'],
     ################
     long:['lumi_section_num', 'run_num', 'xtcrosssection', 'auto_cross_section', 'dataset_id', 'lumi_list'],
     ################
@@ -203,7 +203,7 @@ acceptedInputKeys = {
     ################
     'file_parent_lumi':['block_name', 'logical_file_name'],
     ################
-    'dataset_parent_list':['parent_dataset'],
+    #'dataset_parent_list':['parent_dataset'],
     ################
     'dataset_conf_list':['release_version', 'pset_hash', 'pset_name', 'app_name', 'output_module_label', 'global_tag'],
     ################
@@ -249,7 +249,8 @@ validationFunction = {
     'global_tag':globalTag,
     'migration_url':validateUrl,
     'create_by':DBSUser,
-    'last_modified_by':DBSUser
+    'last_modified_by':DBSUser,
+    'dataset_parent_list':dataset
     }
 
 validationFunctionWildcard = {
@@ -268,6 +269,8 @@ def validateJSONInputNoCopy(input_key,input_data, read=False):
             else:
                 input_data[key] = validateJSONInputNoCopy(key, input_data[key], read=read)
     elif isinstance(input_data, list):
+        if input_key == "child_parent_id_list":
+            return input_data 
         l = []
         for x in input_data:
             l.append(validateJSONInputNoCopy(input_key, x, read=read))

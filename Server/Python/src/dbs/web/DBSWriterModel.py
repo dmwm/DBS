@@ -262,8 +262,8 @@ class DBSWriterModel(DBSReaderModel):
         try:
             body = request.body.read()
             indata = cjson.decode(body)
-            if ('file_parent_list' in indata.keys() and 'dataset_parent_list' in indata.keys()): 
-                dbsExceptionHandler("dbsException-invalid-input2", "insertBulkBlock: datset and file parentages cannot be in the input at the same time",  
+            if (indata.get("file_parent_list", []) and indata.get("dataset_parent_list", [])): 
+                dbsExceptionHandler("dbsException-invalid-input2", "insertBulkBlock: dataset and file parentages cannot be in the input at the same time",  
                     self.logger.exception, "insertBulkBlock: datset and file parentages cannot be in the input at the same time.")    
             indata = validateJSONInputNoCopy("blockBulk", indata)
             self.dbsBlockInsert.putBlock(indata)

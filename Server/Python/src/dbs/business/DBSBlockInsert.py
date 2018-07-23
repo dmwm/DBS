@@ -173,9 +173,9 @@ class DBSBlockInsert :
             fileConfigList = blockcontent['file_conf_list']
             fileParentList = []
             dsParentListInpt = []
-            if 'file_parent_list' in blockcontent:
+            if blockcontent.get('file_parent_list', []):
                 fileParentList = blockcontent['file_parent_list']
-            elif 'dataset_parent_list' in blockcontent:
+            elif blockcontent.get('dataset_parent_list', []):
                 dsParentListInpt = blockcontent['dataset_parent_list']
             if not fileList:
                 return
