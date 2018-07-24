@@ -27,6 +27,7 @@ processing_version="%s" %(uid if (uid<9999) else uid%9999)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
 procdataset = '%s-unittest_web_dataset-v%s' % (acquisition_era_name, processing_version)
 childprocdataset = '%s-unittest_web_child_dataset-v%s' % (acquisition_era_name, processing_version)
+parent_procdataset = '%s-unittest_web_parent_dataset-v%s' % (acquisition_era_name, processing_version)
 tier = 'GEN-SIM-RAW'
 tier2 = 'RAW'
 dataset="/%s/%s/%s" % (primary_ds_name, procdataset, tier)
@@ -44,11 +45,19 @@ site="cmssrm-%s.fnal.gov" %uid
 block="%s#%s" % (dataset, uid)
 block2="%s#%s" % (dataset2, uid)
 child_block="%s#%s" % (child_dataset, uid)
+parent_block="%s#%s" % (parent_procdataset, uid)
 run_num=uid
 flist=[]
 primary_ds_type='test'
 prep_id = 'MC_12344'
 child_prep_id = 'MC_3455'
+
+stepchain_dataset = "/%s_stepchain/%s/%s" % (primary_ds_name, procdataset, tier)
+stepchain_block="%s#%s" % (stepchain_dataset, uid)
+parent_stepchain_dataset="/%s_stepchain/%s/%s" % (primary_ds_name, parent_procdataset, tier)
+parent_stepchain_block="%s#%s" % (parent_stepchain_dataset, uid)
+print("parent_stepchain_block = ", parent_block)
+print("stepchain_block = ", block)
 
 outDict={
 "primary_ds_name" : primary_ds_name,
@@ -71,7 +80,13 @@ outDict={
 "processing_version" : processing_version,
 "primary_ds_type" : primary_ds_type,
 "child_prep_id" : child_prep_id,
-"prep_id" : prep_id
+"prep_id" : prep_id,
+"stepchain_dataset": stepchain_dataset,
+"stepchain_block": stepchain_block,
+"parent_stepchain_dataset": parent_stepchain_dataset,
+"parent_stepchain_block": parent_stepchain_block,
+"stepchain_files": [],
+"parent_stepchain_files": []
 }
 
 class checkException(object):
@@ -1088,6 +1103,186 @@ class DBSWriterModel_t(unittest.TestCase):
                 'primds': primary_dict,
                 'acquisition_era': acquisition_dict,
                 'block': block_dict,
+                }
+
+        api.insert('bulkblocks', data)
+
+    def test12d(self):
+        """test12d: web.DBSWriterModel.insertBulkBlock: basic test for inserting child dataset with files"""
+
+        dataset_dict = {u'dataset': parent_stepchain_dataset,
+                        u'physics_group_name': 'Tracker',
+                        u'dataset_access_type': 'VALID', u'processed_ds_name': parent_procdataset,
+                        u'xtcrosssection': 123, u'data_tier_name': tier,
+                        u'prep_id':prep_id}
+
+        block_dict = data = {u'block_name': parent_stepchain_block,
+                             u'origin_site_name': site}
+
+        processing_dict = {u'processing_version': processing_version,
+                           u'description':'this-is-a-test'}
+
+        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+
+        primary_dict = {u'primary_ds_name':primary_ds_name,
+                        u'primary_ds_type':primary_ds_type}
+
+        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
+                              u'app_name': app_name, u'output_module_label': output_module_label,
+                              u'global_tag':global_tag}
+
+        fileList = []
+        fileConfigList = []
+
+        for i in range(2):
+            f={
+                u'file_type': 'EDM',
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
+                u'check_sum': u'1504266448',
+                u'file_lumi_list': [
+                    {u'lumi_section_num': '27414', u'run_num': '1'},
+                    {u'lumi_section_num': '26422', u'run_num': '1'},
+                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                    ],
+                u'event_count': u'1619',
+                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/parent_%s/%i.root" %(uid, i),
+                }
+            fileList.append(f)
+
+            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
+                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            fileConfigList.append(file_output_dict)
+
+        data = {'file_conf_list': fileConfigList,
+                'dataset_conf_list': [output_module_dict],
+                'processing_era': processing_dict,
+                'files': fileList,
+                'dataset': dataset_dict,
+                'primds': primary_dict,
+                'acquisition_era': acquisition_dict,
+                'block': block_dict,
+                'dataset_parent_list': []
+                }
+
+        api.insert('bulkblocks', data)
+
+    def test12e(self):
+        """test12e: web.DBSWriterModel.insertBulkBlock: insert bulk block with parent dataset negative test"""
+
+        dataset_dict = {u'dataset': stepchain_dataset,
+                        u'physics_group_name': 'Tracker',
+                        u'dataset_access_type': 'VALID', u'processed_ds_name': procdataset,
+                        u'xtcrosssection': 123, u'data_tier_name': tier,
+                        u'prep_id':prep_id}
+
+        block_dict = data = {u'block_name': stepchain_block,
+                             u'origin_site_name': site}
+
+        processing_dict = {u'processing_version': processing_version,
+                           u'description':'this-is-a-test'}
+
+        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+
+        primary_dict = {u'primary_ds_name':primary_ds_name,
+                        u'primary_ds_type':primary_ds_type}
+
+        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
+                              u'app_name': app_name, u'output_module_label': output_module_label,
+                              u'global_tag':global_tag}
+
+        fileList = []
+        fileConfigList = []
+
+        for i in range(2):
+            f={
+                u'file_type': 'EDM',
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
+                u'check_sum': u'1504266448',
+                u'file_lumi_list': [
+                    {u'lumi_section_num': '27414', u'run_num': '1'},
+                    {u'lumi_section_num': '26422', u'run_num': '1'},
+                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                    ],
+                u'event_count': u'1619',
+                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/child_%s/%i.root" %(uid, i),
+                }
+            fileList.append(f)
+
+            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
+                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            fileConfigList.append(file_output_dict)
+
+        data = {'file_conf_list': fileConfigList,
+                'dataset_conf_list': [output_module_dict],
+                'processing_era': processing_dict,
+                'files': fileList,
+                'dataset': dataset_dict,
+                'primds': primary_dict,
+                'acquisition_era': acquisition_dict,
+                'block': block_dict,
+                'dataset_parent_list': [parent_stepchain_dataset],
+                'file_parent_list': [{"file_parent_lfn": "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/parent_%s/%i.root" % (
+                                         uid, i)}]
+                }
+
+        with self.assertRaises(Exception):
+            api.insert('bulkblocks', data)
+
+    def test12f(self):
+        """test12f: web.DBSWriterModel.insertBulkBlock: insert bulk block with parent dataset"""
+
+        dataset_dict = {u'dataset': stepchain_dataset,
+                        u'physics_group_name': 'Tracker',
+                        u'dataset_access_type': 'VALID', u'processed_ds_name': procdataset,
+                        u'xtcrosssection': 123, u'data_tier_name': tier,
+                        u'prep_id':prep_id}
+
+        block_dict = data = {u'block_name': stepchain_block,
+                             u'origin_site_name': site}
+
+        processing_dict = {u'processing_version': processing_version,
+                           u'description':'this-is-a-test'}
+
+        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+
+        primary_dict = {u'primary_ds_name':primary_ds_name,
+                        u'primary_ds_type':primary_ds_type}
+
+        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
+                              u'app_name': app_name, u'output_module_label': output_module_label,
+                              u'global_tag':global_tag}
+
+        fileList = []
+        fileConfigList = []
+
+        for i in range(2):
+            f={
+                u'file_type': 'EDM',
+                u'file_size': '2012211901', u'auto_cross_section': 0.0,
+                u'check_sum': u'1504266448',
+                u'file_lumi_list': [
+                    {u'lumi_section_num': '27414', u'run_num': '1'},
+                    {u'lumi_section_num': '26422', u'run_num': '1'},
+                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                    ],
+                u'event_count': u'1619',
+                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/child_%s/%i.root" %(uid, i),
+                }
+            fileList.append(f)
+
+            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
+                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            fileConfigList.append(file_output_dict)
+
+        data = {'file_conf_list': fileConfigList,
+                'dataset_conf_list': [output_module_dict],
+                'processing_era': processing_dict,
+                'files': fileList,
+                'dataset': dataset_dict,
+                'primds': primary_dict,
+                'acquisition_era': acquisition_dict,
+                'block': block_dict,
+                'dataset_parent_list': [parent_stepchain_dataset]
                 }
 
         api.insert('bulkblocks', data)
