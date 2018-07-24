@@ -445,15 +445,24 @@ class DBSClientWriter_t(unittest.TestCase):
         #compair the call whether there listFileParentsByLumi returns the same result after the insert
         self.assertEqual(result, result2)
 
-        oParentIDs = set()
+        print(file_name_pair)
         # compare child parent pair.
+        idPair = []
         for fInfo in file_name_pair:
-            oParentIDs.add(fInfo["parent_file_id"])
-            index = stepchain_files.index(fInfo['this_logical_file_name'])
-            self.assertEqual(parent_stepchain_files[index], fInfo['parent_logical_file_name'])
+            childFile = fInfo['logical_file_name']
+            parentFile = fInfo['parent_logical_file_name'][0]
+            index = stepchain_files.index(childFile)
+            self.assertEqual(parent_stepchain_files[index], parentFile)
+            cfDetail = self.api.listFiles(logical_file_name=childFile, detail=True)[0]
+            ffDetail = self.api.listFiles(logical_file_name=parentFile, detail=True)[0]
+            idPair.append([cfDetail["file_id"], ffDetail["file_id"]])
 
         self.assertEqual(len(child_parent_ids), len(file_name_pair))
-        self.assertEqual(parentIDs, oParentIDs)
+
+        for ids in child_parent_ids:
+            for nids in idPair:
+                if ids[0] == nids[0]:
+                    self.assertEqual(ids[1], nids[1])
 
     def test25(self):
         """test25 web.DBSClientWriter.insertFileParents: negtive test"""
