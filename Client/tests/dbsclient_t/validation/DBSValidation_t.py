@@ -495,11 +495,13 @@ class DBSValidation_t(unittest.TestCase):
             return self._selectRandomDatasetsWithParents(datasets)
 
     def test16(self):
+        """"test16: Test listFileParentsByLumi and compareing listFileParents using real data """
         datasetLists = self.cmsweb_api.listDatasets(min_cdate=1368162000)
         testDataset = self._selectRandomDatasetsWithParents(datasetLists)
-        print("Checking testDataset: ", testDataset)
+        print("Checking test dataset: ", testDataset)
         for block in self.cmsweb_api.listBlocks(dataset=testDataset):
             result1 = self.cmswebtestbed_api.listFileParents(block_name=block["block_name"])
+            print("Checking test block: ", block["block_name"])
             numOfPairs1 = sum([len(cpPair["parent_logical_file_name"]) for cpPair in result1])
             result2 = self.cmswebtestbed_api.listFileParentsByLumi(block_name=block["block_name"])
             numOfPairs2 = len(result2[0]['child_parent_id_list'])
