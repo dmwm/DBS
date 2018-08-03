@@ -8,6 +8,7 @@ import os
 import re
 import unittest
 import uuid
+import random
 
 from dbsclient_t.utils.DBSDataProvider import DBSDataProvider
 from dbsclient_t.utils.timeout import Timeout
@@ -56,8 +57,9 @@ class DBSValidation_t(unittest.TestCase):
 
         migration_url = os.environ['DBS_MIGRATE_URL']
         self.migration_api = DbsApi(url=migration_url, proxy=proxy)
-	self.source_url='https://cmsweb.cern.ch/dbs/prod/global/DBSReader'
+        self.source_url='https://cmsweb.cern.ch/dbs/prod/global/DBSReader'
         self.cmsweb_api = DbsApi(url=self.source_url, proxy=proxy)
+        self.cmswebtestbed_api = DbsApi(url='https://cmsweb-testbed.cern.ch/dbs/int/global/DBSReader', proxy=proxy)
 
     def setUp(self):
         """setup all necessary parameters"""
@@ -481,6 +483,38 @@ class DBSValidation_t(unittest.TestCase):
         version = self.api.serverinfo()
         self.assertTrue('dbs_version' in version)
         self.assertFalse(re.compile(reg_ex).match(version['dbs_version']) is None)
+
+    def _selectRandomDatasetsWithParents(self, datasets):
+        """helper function to select random dataset"""
+        datasetToCheck = random.choice(datasets)
+        dataset = datasetToCheck['dataset']
+        parents = self.cmsweb_api.listDatasetParents(dataset=dataset)
+        if parents:
+            return dataset
+        else:
+            return self._selectRandomDatasetsWithParents(datasets)
+
+    def test16(self):
+        datasetLists = self.cmsweb_api.listDatasets(min_cdate=1368162000)
+        testDataset = self._selectRandomDatasetsWithParents(datasetLists)
+        print("Checking testDataset: ", testDataset)
+        for block in self.cmsweb_api.listBlocks(dataset=testDataset):
+            result1 = self.cmswebtestbed_api.listFileParents(block_name=block["block_name"])
+            numOfPairs1 = sum([len(cpPair["parent_logical_file_name"]) for cpPair in result1])
+            result2 = self.cmswebtestbed_api.listFileParentsByLumi(block_name=block["block_name"])
+            numOfPairs2 = len(result2[0]['child_parent_id_list'])
+            self.assertEqual(numOfPairs1, numOfPairs2)
+
+            idPairs1 = set()
+            for cpPair in result1:
+                cf = self.cmsweb_api.listFiles(logical_file_name=cpPair["logical_file_name"], detail=True)[0]
+                for pfLFN in cpPair["parent_logical_file_name"]:
+                    pf = self.cmsweb_api.listFiles(logical_file_name=pfLFN, detail=True)[0]
+                    idPairs1.add((cf["file_id"], pf["file_id"]))
+
+            idPairs2 = set([tuple(x) for x in result2[0]['child_parent_id_list']])
+            self.assertEqual(idPairs1, idPairs2)
+            
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSValidation_t)
