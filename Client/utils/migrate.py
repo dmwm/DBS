@@ -2,7 +2,7 @@ from __future__ import print_function
 #!/usr/bin/env python
 from dbs.apis.dbsClient import DbsApi
 
-src_url="https://cmsweb-testbed.cern.ch/dbs/int/global/DBSReader"
+src_url="https://cmsweb-testbed.cern.ch:8443/dbs/int/global/DBSReader"
 dst_url="https://dbs3-test1.cern.ch/dbs/dev/global/DBSMigrate"
 api = DbsApi(url=dst_url)
 

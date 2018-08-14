@@ -18,12 +18,12 @@ def main():
 	usage="%prog <options>"
 
 	parser = OptionParser(usage=usage)
-	parser.add_option("-u", "--url", dest="url", help="DBS Instance url. default is https://cmsweb.cern.ch/dbs/prod/global/DBSReader", metavar="<url>")
+	parser.add_option("-u", "--url", dest="url", help="DBS Instance url. default is https://cmsweb.cern.ch:8443/dbs/prod/global/DBSReader", metavar="<url>")
 	parser.add_option("-l", "--length", dest="length", help="Number of days for calculate the accumated events. It is Optional, default is 30 days.", metavar="<length>")
 	parser.add_option("-d", "--dataset", dest="dataset", help="The dataset name for cacluate the events. Can be optional if datatier is used.", metavar="<dataset>")
 	parser.add_option("-t", "--datatier", dest="datatier", help="The datatier name for cacluate the events. Can be optional if dataset is used. In this version datatier is not supported yet.", metavar="<data_tier_name>")
 	parser.add_option("-a", "--access_type", dest="ds_access_type", help="Dataset access types: VALID, PRODUCTION or ALL(VALID+PRODUCTION). Default is ALL", metavar="<dataset_access_type>")
-	parser.set_defaults(url="https://cmsweb.cern.ch/dbs/prod/global/DBSReader")
+	parser.set_defaults(url="https://cmsweb.cern.ch:8443/dbs/prod/global/DBSReader")
 	parser.set_defaults(length=30)
 	parser.set_defaults(ds_access_type="ALL")
 

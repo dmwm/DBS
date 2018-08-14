@@ -1,6 +1,6 @@
 from __future__ import print_function
 from dbs.apis.dbsClient import *
-url="https://cmsweb.cern.ch/dbs/prod/global/DBSReader/"
+url="https://cmsweb.cern.ch:8443/dbs/prod/global/DBSReader/"
 #url="https://dbs3-test1.cern.ch/dbs/dev/global/DBSReader/"
 dbs3api = DbsApi(url=url)
 

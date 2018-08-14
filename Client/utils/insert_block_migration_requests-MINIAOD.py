@@ -12,8 +12,8 @@ in (select  DATASET_ID from CMS_DBS3_PROD_GLOBAL_OWNER.DATASETS DS
 
 """
 
-migration_url = "https://cmsweb.cern.ch/dbs/prod/global/DBSReader/"
-input_url = "https://cmsweb-testbed.cern.ch/dbs/int/phys03/DBSMigrate/"
+migration_url = "https://cmsweb.cern.ch:8443/dbs/prod/global/DBSReader/"
+input_url = "https://cmsweb-testbed.cern.ch:8443/dbs/int/phys03/DBSMigrate/"
 
 api= DbsApi(url=input_url)
 migration_input = [

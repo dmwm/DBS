@@ -111,7 +111,7 @@ def split_calls(func):
     """
     def wrapper(*args, **kwargs):
         #The size limit is 8190 bytes minus url and api to call
-        #For example (https://cmsweb-testbed.cern.ch/dbs/prod/global/filechildren), so 192 bytes should be safe.
+        #For example (https://cmsweb-testbed.cern.ch:8443/dbs/prod/global/filechildren), so 192 bytes should be safe.
         size_limit = 8000
         encoded_url = urllib.urlencode(kwargs)
         if len(encoded_url) > size_limit:
