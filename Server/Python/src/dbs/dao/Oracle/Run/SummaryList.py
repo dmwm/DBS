@@ -30,5 +30,5 @@ class SummaryList(DBFormatter):
 
         result = []
         for cursor in cursors:
-            result.extend(self.formatCursor(cursor))
+            result.extend(self.formatCursor(cursor, size=100))
         return result

@@ -141,7 +141,7 @@ FROM %sBLOCKS B JOIN %sDATASETS DS ON DS.DATASET_ID = B.DATASET_ID
 	self.logger.debug ( "binds=%s" %binds )
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         for i in cursors:
-            d = self.formatCursor(i)
+            d = self.formatCursor(i, size=100)
             if isinstance(d, list) or isinstance(d, GeneratorType):
                 for elem in d:
                     yield elem

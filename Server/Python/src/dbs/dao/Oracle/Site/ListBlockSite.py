@@ -31,7 +31,7 @@ class ListBlockSite(DBFormatter):
 	cursors = self.dbi.processData(sql, binds, conn, transaction=trans, returnCursor=True)
 	result = []
         for c in cursors:
-            result.extend(self.formatCursor(c))
+            result.extend(self.formatCursor(c, size=100))
 	return result
 
 

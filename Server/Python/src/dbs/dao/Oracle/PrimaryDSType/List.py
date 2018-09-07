@@ -56,13 +56,7 @@ FROM %sPRIMARY_DS_TYPES PDT
 	    dbsExceptionHandler('dbsException-invalid-input', "DAO Primary_DS_TYPE List accepts no input, or\
             dataset,primary_ds_type as input.", self.logger.exception)
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        """
-        if len(cursors) == 0 :
-            return []
-        else:
-            return self.formatCursor(cursors[0]) 
-        """
         result = []
         for c in cursors:
-            result.extend(self.formatCursor(c))
+            result.extend(self.formatCursor(c, size=100))
         return result

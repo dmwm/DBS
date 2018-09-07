@@ -273,7 +273,7 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
         except Exception as e :
             self.logger.error(str(e))
         for i in cursors:
-            d = self.formatCursor(i)
+            d = self.formatCursor(i, size=100)
             if isinstance(d, list) or isinstance(d, GeneratorType):
                 for elem in d:
                     yield elem

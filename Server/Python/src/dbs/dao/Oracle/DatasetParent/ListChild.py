@@ -37,7 +37,7 @@ JOIN %sDATASETS D ON  D.DATASET_ID = DC.PARENT_DATASET_ID
 	#assert len(cursors) == 1, "Dataset parent does not exist"
         result = []
         for c in cursors:
-            result.extend(self.formatCursor(c))
+            result.extend(self.formatCursor(c, size=100))
         return result
         conn.close()
         return result

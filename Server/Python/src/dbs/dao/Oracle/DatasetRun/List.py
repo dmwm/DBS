@@ -81,6 +81,6 @@ class List(DBFormatter):
         #self.logger.debug(sql)
 	cursors = self.dbi.processData(sql, binds, conn, transaction=trans, returnCursor=True)
         result=[]
-        for i in range(len(cursors)):
-            result.extend(self.formatCursor(cursors[i]))
+        for c in cursors:
+            result.extend(self.formatCursor(c, size=100))
         return result
