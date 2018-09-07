@@ -137,11 +137,11 @@ def split_calls(func):
 
 class DbsApi(object):
     #added CAINFO and userAgent (see github issue #431 & #432)
-    def __init__(self, url="", proxy=None, key=None, cert=None, verifypeer=True, debug=0, ca_info=None, userAgent=""):
+    def __init__(self, url="", proxy=None, key=None, cert=None, verifypeer=True, debug=0, ca_info=None, userAgent="", port=8443):
         """
         DbsApi Constructor
 
-        :param url: server URL.
+        :param url: server URL without port
         :type url: str
         :param proxy: socks5 proxy format=(socks5://username:password@host:port)
         :type proxy: str
@@ -149,12 +149,17 @@ class DbsApi(object):
         :type key: str
         :param cert: full path to the certificate to use
         :type cert: str
+        :param port: server port
+        :type port int 
 
         .. note::
            By default the DbsApi is trying to lookup the private key and the certificate in the common locations
 
         """
-        self.url = url
+        if url.find(":", 6) == -1:
+            self.url = url.replace(".cern.ch/dbs/", ".cern.ch:" + str(port) + "/dbs/", 1)
+        else:
+            self.url = url
         self.proxy = proxy
         self.key = key
         self.cert = cert

@@ -40,10 +40,5 @@ class List(DBFormatter):
         else: 
             msg = "Oracle/BlockParent/List. Block_name must be provided either as a string or as a list."
             dbsExceptionHandler('dbsException-invalid-input', msg, self.logger.exception)
-	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
-        result = []
-        for i in cursors:
-            d = self.formatCursor(i)
-            if d:
-                result += d
-        return result
+	result = self.dbi.processData(sql, binds, conn, transaction)
+        return self.formatDict(result)

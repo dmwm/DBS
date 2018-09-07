@@ -57,5 +57,7 @@ class ListChild(DBFormatter):
             dbsExceptionHandler('dbsException-invalid-input', "Logical_file_names is required for listChild dao.", self.logger.exception)
 
         cursors = self.dbi.processData(sql, binds, conn, transaction=transaction, returnCursor=True)
-        result = self.formatCursor(cursors[0])
+        result = []
+        for c in cursors:
+            result.extend(self.formatCursor(c, size=100))
         return result

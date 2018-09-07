@@ -128,7 +128,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, 
 	file_run_lumi={}
         event_ct=False
         for i in cursors:
-            result.extend(self.formatCursor(i))
+            result.extend(self.formatCursor(i, size=100))
         #for migration, we need flat format to load the data into another DB.
         #self.logger.error(result) 
         if migration:

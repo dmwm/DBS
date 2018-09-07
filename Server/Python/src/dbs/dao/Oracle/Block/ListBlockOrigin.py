@@ -59,5 +59,5 @@ JOIN {owner}DATASETS DS ON DS.DATASET_ID = B.DATASET_ID """.format(owner=self.ow
         cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []
         for cursor in cursors:
-            result.extend(self.formatCursor(cursor))
+            result.extend(self.formatCursor(cursor, size=100))
         return result
