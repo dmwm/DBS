@@ -11,7 +11,7 @@ except:
         # Prior to 2.6 requires simplejson
         import simplejson as json
 
-#url="https://cmsweb.cern.ch/dbs/prod/global/DBSReader/"
+#url="https://cmsweb.cern.ch:8443/dbs/prod/global/DBSReader/"
 url="https://dbs3-test1.cern.ch/dbs/dev/global/DBSReader/"
 if len(sys.argv) < 1:
     print("Usage: python %s <block>" %sys.argv[0])

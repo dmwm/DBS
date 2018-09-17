@@ -40,9 +40,9 @@ class Insert2(DBFormatter):
         """
 
     def execute(self, conn, daoinput, transaction = False):
-	print("************************")
-        print(self.sql)
-        print(daoinput)    
-        print("************************")        
+	#print("************************")
+        #print(self.sql)
+        #print(daoinput)    
+        #print("************************")        
         self.dbi.processData(self.sql, daoinput, conn, transaction)
         

@@ -33,5 +33,5 @@ class List(DBFormatter):
 	cursors = self.dbi.processData(self.sql, binds, conn, transaction, returnCursor=True)
         result = []
         for c in cursors:
-            result.extend(self.formatCursor(c))
+            result.extend(self.formatCursor(c, size=100))
         return result

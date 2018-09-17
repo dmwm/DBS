@@ -33,5 +33,7 @@ class FindMigrateableBlocks(DBFormatter):
 
         binds = { "migration_request_id" : migration_request_id }
 	cursors = self.dbi.processData(self.sql, binds, conn, transaction, returnCursor=True)
-        result = self.formatCursor(cursors[0])
+        result = []
+        for c in cursors:
+            result.extend(self.formatCursor(c, size=100))
         return result

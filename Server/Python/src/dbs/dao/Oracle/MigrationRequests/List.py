@@ -71,5 +71,5 @@ FROM %sMIGRATION_REQUESTS MR
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         result = []
         for c in cursors:
-            result.extend(self.formatCursor(c))
+            result.extend(self.formatCursor(c, size=100))
         return result

@@ -31,7 +31,7 @@ class DASMapping(object):
     def _create_das_mapping(self):
         """
         das_map = {'lookup' : [{params : {'param1' : 'required', 'param2' : 'optional', 'param3' : 'default_value' ...},
-                                url : 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader/acquisitioneras/',
+                                url : 'https://cmsweb.cern.ch:8443/dbs/prod/global/DBSReader/acquisitioneras/',
                                 das_map : {'das_param1' : dbs_param1, ...}
                                 }]
                                 }

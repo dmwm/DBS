@@ -12,7 +12,7 @@ import time
 
 options = get_command_line_options(__name__, sys.argv)
 
-config = {'url':os.environ.get("DBS_WRITER_URL", "https://cmsweb.cern.ch/dbs/int/global/DBSWriter/")}
+config = {'url':os.environ.get("DBS_WRITER_URL", "https://cmsweb.cern.ch:8443/dbs/int/global/DBSWriter/")}
 
 api = create_api('DbsApi', config=config)
 

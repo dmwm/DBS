@@ -7,7 +7,7 @@ from dbs.apis.dbsClient import *
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
 #url for tunneling through lxplus 
 #url="https://localhost:1443/dbs/DBSWriter"
-#url="https://cmsweb-testbed.cern.ch/dbs/prod/global/DBSWriter"
+#url="https://cmsweb-testbed.cern.ch:8443/dbs/prod/global/DBSWriter"
 url2="https://dbs3-test1.cern.ch/dbs/int/global/DBSWriter"
 url1="https://dbs3-test1.cern.ch/dbs/int/global/DBSReader"
 migrateURL="https://dbs3-test1.cern.ch/int/global/DBSMigrate"
@@ -62,7 +62,7 @@ if ds:
     print("block " , inputBK , " already in DB.")
     sys.exit()
 else: 
-    data = {'migration_input': inputBK, 'migration_url': 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader'}
+    data = {'migration_input': inputBK, 'migration_url': 'https://cmsweb.cern.ch:8443/dbs/prod/global/DBSReader'}
     result = migrateApi.submitMigration(data)
     print(result)
     status = migrateApi.statusMigration(block_name=inputBK)

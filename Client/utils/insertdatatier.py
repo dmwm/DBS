@@ -4,7 +4,7 @@ from dbs.apis.dbsClient import *
 #url="http://cmssrv18.fnal.gov:8585/dbs3"
 #url for tunneling through lxplus 
 #url="https://localhost:1443/dbs/DBSWriter"
-#url="https://cmsweb-testbed.cern.ch/dbs/prod/global/DBSWriter"
+#url="https://cmsweb-testbed.cern.ch:8443/dbs/prod/global/DBSWriter"
 url2="https://dbs3-test1.cern.ch/dbs/dev/global/DBSWriter"
 url1="https://dbs3-test1.cern.ch/dbs/dev/global/DBSReader"
 # API Object    

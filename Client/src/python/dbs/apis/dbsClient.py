@@ -111,7 +111,7 @@ def split_calls(func):
     """
     def wrapper(*args, **kwargs):
         #The size limit is 8190 bytes minus url and api to call
-        #For example (https://cmsweb-testbed.cern.ch/dbs/prod/global/filechildren), so 192 bytes should be safe.
+        #For example (https://cmsweb-testbed.cern.ch:8443/dbs/prod/global/filechildren), so 192 bytes should be safe.
         size_limit = 8000
         encoded_url = urllib.urlencode(kwargs)
         if len(encoded_url) > size_limit:
@@ -137,11 +137,11 @@ def split_calls(func):
 
 class DbsApi(object):
     #added CAINFO and userAgent (see github issue #431 & #432)
-    def __init__(self, url="", proxy=None, key=None, cert=None, verifypeer=True, debug=0, ca_info=None, userAgent=""):
+    def __init__(self, url="", proxy=None, key=None, cert=None, verifypeer=True, debug=0, ca_info=None, userAgent="", port=8443):
         """
         DbsApi Constructor
 
-        :param url: server URL.
+        :param url: server URL without port
         :type url: str
         :param proxy: socks5 proxy format=(socks5://username:password@host:port)
         :type proxy: str
@@ -149,12 +149,17 @@ class DbsApi(object):
         :type key: str
         :param cert: full path to the certificate to use
         :type cert: str
+        :param port: server port
+        :type port int 
 
         .. note::
            By default the DbsApi is trying to lookup the private key and the certificate in the common locations
 
         """
-        self.url = url
+        if url.find(":", 6) == -1:
+            self.url = url.replace(".cern.ch/dbs/", ".cern.ch:" + str(port) + "/dbs/", 1)
+        else:
+            self.url = url
         self.proxy = proxy
         self.key = key
         self.cert = cert
