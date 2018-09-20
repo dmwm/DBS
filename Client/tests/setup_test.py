@@ -133,8 +133,8 @@ class TestCommand(Command):
 
         TestSuite = unittest.TestSuite()
 
-        db_instances = {'https://cmsweb-testbed.cern.ch:8443': 'int/global',
-                        'https://cmsweb.cern.ch:8443': 'prod/test'}
+        db_instances = {'https://cmsweb-testbed.cern.ch': 'int/global',
+                        'https://cmsweb.cern.ch': 'prod/test'}
 
         ###set environment
         os.environ['DBS_READER_URL'] = ("%s/dbs/%s/DBSReader") % (self.host, db_instances.get(self.host, 'dev/global'))
