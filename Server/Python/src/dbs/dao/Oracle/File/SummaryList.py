@@ -33,6 +33,7 @@ class SummaryList(DBFormatter):
         wheresql_isFileValid = ''
 	join_valid_ds1 = ''
 	join_valid_ds2 = ''
+        join_bk_fl = ''
         sql = ''
         #
 	if int(validFileOnly) == 1 :
@@ -42,6 +43,8 @@ class SummaryList(DBFormatter):
                              """% ((self.owner,)*2)  
             join_valid_ds2 = """ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_TYPE_ID      
                              """% ((self.owner,)*1)
+            join_bk_fl     = """ join %sfiles f on f.block_id = b.block_id 
+                             """ % ((self.owner,)*1)
         #
         if run_num != -1:
             #
@@ -165,7 +168,10 @@ class SummaryList(DBFormatter):
                      where b.BLOCK_NAME=:block_name {wheresql_isFileValid}
                     ) as file_size,
 
-                    (select count(block_id) from {owner}blocks where block_name=:block_name
+                    (select nvl(count(distinct b.block_id),0) from {owner}blocks b
+                     {join_bk_fl}
+                     {join_valid_ds1}
+                     where b.block_name=:block_name {wheresql_isFileValid}
                     ) as num_block,
 
                    (select count(*) from (select distinct l.lumi_section_num, l.run_num from {owner}files f
@@ -174,8 +180,8 @@ class SummaryList(DBFormatter):
                     where b.BLOCK_NAME=:block_name {wheresql_isFileValid})
                    ) as num_lumi
                    from dual
-                    """ .format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds1=join_valid_ds1 )
-                binds.update({"block_name":block_name})
+                    """ .format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds1=join_valid_ds1, join_bk_fl=join_bk_fl)
+                binds.update({"block_name":block_name}) 
 
         elif dataset:
             if run_num != -1:
@@ -278,23 +284,24 @@ class SummaryList(DBFormatter):
                      where d.dataset=:dataset {wheresql_isFileValid}
                     ) as file_size,
 
-                    (select count(b.block_id) from {owner}blocks b
+                    (select count(distinct b.block_id) from {owner}blocks b
                      join {owner}datasets d on d.dataset_id = b.dataset_id {join_valid_ds2}
-                     where d.dataset=:dataset
+                     {join_bk_fl}
+                     where d.dataset=:dataset {wheresql_isFileValid}
                     ) as num_block,
 
-                   (select count(*) from (select distinct l.lumi_section_num, l.run_num from {owner}files f
-                    join {owner}file_lumis l on l.file_id=f.file_id
+                   (select count(*) from (select distinct l.lumi_section_num, l.run_num from {owner}file_lumis l
+                    join {owner}files f on f.file_id=l.file_id
                     join {owner}datasets d on d.DATASET_ID = f.dataset_id {join_valid_ds2}
                     where d.dataset=:dataset {wheresql_isFileValid})
                    ) as num_lumi
                     from dual
-                    """.format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds2=join_valid_ds2)
+                    """.format(owner=self.owner, wheresql_isFileValid=wheresql_isFileValid, join_valid_ds2=join_valid_ds2, join_bk_fl=join_bk_fl)
                 binds.update({"dataset":dataset})
         else:
             return 
-        self.logger.debug(sql)
-        self.logger.debug(binds)
+        #self.logger.error(sql)
+        #self.logger.error(binds)
 	cursors = self.dbi.processData(sql, binds, conn, transaction, returnCursor=True)
         for i in cursors:
             d = self.formatCursor(i, size=100)
