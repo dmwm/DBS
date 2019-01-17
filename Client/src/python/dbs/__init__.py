@@ -1,6 +1,7 @@
 #!/usr/bin/env python
+"""
+The additional instruction and examples on how to use DBS Client can be found at https://twiki.cern.ch/twiki/bin/viewauth/CMS/DBS3APIInstructions.
 
-__version__ = "$Revision: 1.1 $"
-__revision__ = "$Id: __init__.py,v 1.1 2009/11/04 22:35:00 afaq Exp $"
+"""
 __all__ = []
 

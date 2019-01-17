@@ -36,7 +36,7 @@ def inputChecks(**_params_):
         log = clog.error_log
         @wraps(_func_)
         def wrapped(*args, **kw):
-            arg_names = _func_.func_code.co_varnames[:_func_.func_code.co_argcount]
+            arg_names = _func_.__code__.co_varnames[:_func_.__code__.co_argcount]
             ka = {}
             ka.update(list(zip(arg_names, args)))
             ka.update(kw)
