@@ -596,11 +596,12 @@ class DBSBlockInsert :
         # Else, we need to do the work
         #Start a new transaction
         tran = conn.begin()
+        primary_ds_name = ''
         try:
             #1. Deal with primary dataset. Most primary datasets are
             #pre-installed in db
             primds = blockcontent["primds"]
-
+            primary_ds_name = primds["primary_ds_name"]
             primds["primary_ds_id"] = self.primdsid.execute(conn,
                                       primds["primary_ds_name"], transaction=tran)
             if primds["primary_ds_id"] <= 0:
@@ -862,6 +863,14 @@ acquisition era, but with different cases.")
             if tran:tran.rollback()
             if conn:conn.close()
             raise
+        #Before we insert the dataset, we need to make sure dataset=/primary_dataset_name/processed_dataset_name/data_tier 
+        d2 = dataset['dataset'].rsplit('/')
+        if (d2[1] != primary_ds_name or d2[2] != dataset["processed_ds_name"] or d2[3] != dataset['data_tier_name']):
+            if tran:tran.rollback()
+            if conn:conn.close()
+            dbsExceptionHandler('dbsException-invalid-input2', 
+                                'dataset=/primary_dataset_name/processed_dataset_name/data_tier is not matched.',
+                                self.logger.exception, 'dataset=/primary_dataset_name/processed_dataset_name/data_tier is not matched.')      
         try:
             #self.logger.debug("*** Trying to insert the dataset***")
             dataset['dataset_id'] = self.insertDatasetWOannex(dataset = dataset,

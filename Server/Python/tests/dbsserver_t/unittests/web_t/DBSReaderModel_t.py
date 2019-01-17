@@ -115,6 +115,8 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test003d(self):
         """test003d: web.DBSReaderModel.listDatasets: basic test"""
+        #import pdb
+        #pdb.set_trace() 
         api.list('datasets', run_num=str(testparams['run_num']))
 
     def test003e(self):

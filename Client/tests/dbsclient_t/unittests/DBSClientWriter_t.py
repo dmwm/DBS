@@ -380,7 +380,7 @@ class DBSClientWriter_t(unittest.TestCase):
         parent_data['block']['block_name'] = parent_stepchain_block
         parent_data['dataset_parent_list'] = []
         parent_data['primds']['primary_ds_name'] = step_primary_ds_name
-
+        parent_data['dataset']['processed_ds_name'] = parent_procdataset
         pflist=[]
         cflist=[]
         for i in range(fCount):
@@ -419,15 +419,18 @@ class DBSClientWriter_t(unittest.TestCase):
         parent_data["files"] = pflist
         data["files"] = cflist
 
-        self.api.insertBulkBlock(blockDump=parent_data)
-        print("parent dataset: %s", parent_data['dataset']['dataset'])
+        #self.api.insertBulkBlock(blockDump=parent_data)
+        print("parent dataset: %s", parent_data['dataset']['dataset'], parent_data['primds']['primary_ds_name'] ,parent_data['dataset']['processed_ds_name'] ,parent_data['dataset']['data_tier_name'])
         print("parent block: %s", parent_data['block']['block_name'])
         print("parent files: ", len(parent_data["files"]))
-
-        self.api.insertBulkBlock(blockDump=data)
-        print("child dataset: %s", data['dataset']['dataset'])
+        print("child dataset: %s", data['dataset']['dataset'],data['primds']['primary_ds_name'] , data['dataset']['processed_ds_name'] ,data['dataset']['data_tier_name'] )
         print("child block %s", data['block']['block_name'])
         print("child files: ", len(data["files"]))
+        self.api.insertBulkBlock(blockDump=parent_data)
+        self.api.insertBulkBlock(blockDump=data)
+        #print("child dataset: %s", data['dataset']['dataset'])
+        #print("child block %s", data['block']['block_name'])
+        #print("child files: ", len(data["files"]))
 
     def test24(self):
         """test24 web.DBSClientWriter.insertFileParents: integration test validating the results"""

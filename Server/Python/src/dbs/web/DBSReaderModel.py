@@ -17,6 +17,7 @@ from cherrypy import request, tools, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
 from dbs.utils.dbsUtils import jsonstreamer
 from dbs.utils.dbsUtils import dbsUtils
+from dbs.utils.DBSTransformInputType import parseRunRange
 from dbs.business.DBSDoNothing import DBSDoNothing
 from dbs.business.DBSPrimaryDataset import DBSPrimaryDataset
 from dbs.business.DBSDataset import DBSDataset
@@ -310,7 +311,7 @@ class DBSReaderModel(RESTModel):
         :type processing_version: str
         :param acquisition_era_name: Acquisition Era
         :type acquisition_era_name: str
-        :param run_num: Specify a specific run number or range. Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...].
+        :param run_num: Specify a specific run number or range. Possible format are: run_num, 'run_min-run_max' or ['run_min-run_max', run1, run2, ...]. run_num=1 is not allowed.
         :type run_num: int,list,str
         :param physics_group_name: List only dataset having physics_group_name attribute
         :type physics_group_name: str
@@ -378,6 +379,24 @@ class DBSReaderModel(RESTModel):
         # YG Oct 26, 2016
         # Some of users were overwhiled by the API change. So we split the wildcarded dataset in the server instead of by the client.
         # YG Dec. 9 2016
+        #
+        # run_num=1 caused full table scan and CERN DBS reported some of the queries ran more than 50 hours
+        # We will disbale all the run_num=1 calls in DBS. Run_num=1 will be OK when logical_file_name is given.
+        # YG Jan. 15 2019
+        #
+        if (run_num != -1 and logical_file_name ==''):
+            for r in parseRunRange(run_num):
+                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
+                    if r == 1:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
+                elif isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.", 
+                          self.logger.exception)
+                    elif r[0] <= 1 <= r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)     
 
         if( dataset and ( dataset == "/%/%/%" or dataset== "/%" or dataset == "/%/%" ) ):
             dataset=''
@@ -588,6 +607,24 @@ class DBSReaderModel(RESTModel):
         :rtype: list of dicts
 
         """
+        # run_num=1 caused full table scan and CERN DBS reported some of the queries ran more than 50 hours
+        # We will disbale all the run_num=1 calls in DBS. Run_num=1 will be OK while logical_file_name is given.
+        # YG Jan. 15 2019
+        # 
+        if (run_num != -1 and logical_file_name ==''):
+            for r in parseRunRange(run_num):
+                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
+                    if r == 1:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
+                elif isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",
+                          self.logger.exception)
+                    elif r[0] <= 1 <= r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input2", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
+        
         dataset = dataset.replace("*", "%")
         block_name = block_name.replace("*", "%")
         logical_file_name = logical_file_name.replace("*", "%")
@@ -882,6 +919,24 @@ class DBSReaderModel(RESTModel):
         block_name = block_name.replace("*", "%")
         origin_site_name = origin_site_name.replace("*", "%")
         dataset = dataset.replace("*", "%")
+        #
+        # run_num=1 caused full table scan and CERN DBS reported some of the queries ran more than 50 hours
+        # We will disbale all the run_num=1 calls in DBS. Run_num=1 will be OK when logical_file_name is given.
+        # YG Jan. 15 2019
+        #
+        if (run_num != -1 and logical_file_name ==''):
+            for r in parseRunRange(run_num):
+                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
+                    if r == 1:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
+                elif isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",
+                          self.logger.exception)
+                    elif r[0] <= 1 <= r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
         if lumi_list:
             if run_num ==-1 or not run_num :
                 dbsExceptionHandler("dbsException-invalid-input", "When lumi_list is given, require a single run_num.", self.logger.exception)
@@ -1047,8 +1102,23 @@ class DBSReaderModel(RESTModel):
         :rtype: list of dicts
 
         """
-        if run_num == 1 or run_num =="1":
-            dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ", self.logger.exception)
+        # run_num=1 caused full table scan and CERN DBS reported some of the queries ran more than 50 hours
+        # We will disbale all the run_num=1 calls in DBS.
+        # YG Jan. 16 2019
+        #
+        if (run_num != -1)  :
+            for r in parseRunRange(run_num):
+                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
+                    if r == 1:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
+                elif isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.",
+                          self.logger.exception)
+                    elif r[0] <= 1 <= r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
         try:
             r = self.dbsFile.listFileSummary(block_name, dataset, run_num, validFileOnly=validFileOnly, sumOverLumi=sumOverLumi)
 	    for item in r:
@@ -1282,8 +1352,21 @@ class DBSReaderModel(RESTModel):
         :type: validFileOnly: int, or str
 
         """
-        if run_num == 1 or run_num =="1":
-            dbsExceptionHandler("dbsException-invalid-input", "invalid input for run_num: run_num=1. ")
+        # run_num=1 caused full table scan and CERN DBS reported some of the queries ran more than 50 hours
+        # We will disbale all the run_num=1 calls in DBS. Run_num=1 will be OK when logical_file_name is given.
+        # YG Jan. 16 2019
+        if (run_num != -1  and logical_file_name ==''):
+            for r in parseRunRange(run_num):
+                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
+                    if r == 1:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
+                elif isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",self.logger.exception)
+                    elif r[0] <= 1 <= r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception) 
         try:
             return self.dbsFile.listFileLumis(logical_file_name, block_name, run_num, validFileOnly )
         except dbsException as de:
@@ -1327,11 +1410,11 @@ class DBSReaderModel(RESTModel):
                                         "The Max list length supported in listLumiArray is %s." %max_array_size, self.logger.exception)
  
             if 'run_num' in data.keys() and not isinstance(data['run_num'], list) and (data['run_num']==1 or data['run_num']=="1"):
-                dbsExceptionHandler('dbsException-invalid-input1', 'run_num cannot be 1 in filelumiarray API.',
-			self.logger.exception, 'run_num cannot be 1 in listFileLumiArray API.')
+                dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.',
+			self.logger.exception)
             if 'run_num' in data.keys() and isinstance(data['run_num'], list) and (1 in data['run_num'] or "1" in data['run_num']):
                 dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.', 
-			self.logger.exception, 'run_num cannot be 1 in listFilelumiArray API.')
+			self.logger.exception)
 	    result = self.dbsFile.listFileLumis(input_body=data)
 	    for r in result:
 	    	yield r
@@ -1363,11 +1446,26 @@ class DBSReaderModel(RESTModel):
         :type run_num: int, string or list
 
         """
+        # run_num=1 caused full table scan and CERN DBS reported some of the queries ran more than 50 hours
+        # We will disbale all the run_num=1 calls in DBS. Run_num=1 will be OK when logical_file_name is given.
+        # YG Jan. 16 2019
+        if (run_num != -1  and logical_file_name ==''):
+            for r in parseRunRange(run_num):
+                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
+                    if r == 1:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
+                elif isinstance(r, run_tuple):
+                    if r[0] == r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",
+                          self.logger.exception)
+                    elif r[0] <= 1 <= r[1]:
+                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                                self.logger.exception)
         if run_num==-1 and not logical_file_name and not dataset and not block_name:
-                dbsExceptionHandler("dbsException-invalid-input2",
-                                    dbsExceptionCode["dbsException-invalid-input2"],
-                                    self.logger.exception,
-                                    "run_num, logical_file_name, block_name or dataset parameter is mandatory")
+                dbsExceptionHandler("dbsException-invalid-input",
+                                    "run_num, logical_file_name, block_name or dataset parameter is mandatory",
+                                    self.logger.exception)
         try:
             if logical_file_name:
                 logical_file_name = logical_file_name.replace("*", "%")
@@ -1569,17 +1667,20 @@ class DBSReaderModel(RESTModel):
         :rtype: list containing a dictionary with key max_lumi
         """
         if run_num==-1:
-            dbsExceptionHandler("dbsException-invalid-input2",
-                                dbsExceptionCode["dbsException-invalid-input2"],
-                                self.logger.exception,
-                                "The run_num parameter is mandatory")
+            dbsExceptionHandler("dbsException-invalid-input",
+                                "The run_num parameter is mandatory",
+                                self.logger.exception)
 
         if re.search('[*,%]', dataset):
-            dbsExceptionHandler("dbsException-invalid-input2",
-                                dbsExceptionCode["dbsException-invalid-input2"],
-                                self.logger.exception,
-                                "No wildcards are allowed in dataset")
-
+            dbsExceptionHandler("dbsException-invalid-input",
+                                "No wildcards are allowed in dataset",
+                                self.logger.exception)
+        # run_num=1 caused full table scan and CERN DBS reported some of the queries ran more than 50 hours
+        # We will disbale all the run_num=1 calls in DBS. Run_num=1 will be OK when dataset is given in this API.
+        # YG Jan. 16 2019
+        if ((run_num == -1 or run_num == '-1') and dataset==''):
+            dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input when no dataset is present.", 
+                                 self.logger.exception)
         conn = None
         try:
             conn = self.dbi.connection()
