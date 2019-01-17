@@ -6,6 +6,7 @@ child_lfn_list is empty for the current use case. We keep it there just for the 
 
 Y Guo July 13, 2018 
 """
+from __future__ import print_function
 from types import GeneratorType
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler

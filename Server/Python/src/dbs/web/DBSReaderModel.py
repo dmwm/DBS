@@ -387,7 +387,7 @@ class DBSReaderModel(RESTModel):
         if (run_num != -1 and logical_file_name ==''):
             for r in parseRunRange(run_num):
                 if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
-                    if r == 1:
+                    if r == 1 or r == '1':
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception)
                 elif isinstance(r, run_tuple):
@@ -614,7 +614,7 @@ class DBSReaderModel(RESTModel):
         if (run_num != -1 and logical_file_name ==''):
             for r in parseRunRange(run_num):
                 if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
-                    if r == 1:
+                    if r == 1 or r == '1':
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception)
                 elif isinstance(r, run_tuple):
@@ -927,7 +927,7 @@ class DBSReaderModel(RESTModel):
         if (run_num != -1 and logical_file_name ==''):
             for r in parseRunRange(run_num):
                 if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
-                    if r == 1:
+                    if r == 1 or r == '1':
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception)
                 elif isinstance(r, run_tuple):
@@ -1109,7 +1109,7 @@ class DBSReaderModel(RESTModel):
         if (run_num != -1)  :
             for r in parseRunRange(run_num):
                 if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
-                    if r == 1:
+                    if r == 1 or r == '1':
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception)
                 elif isinstance(r, run_tuple):
@@ -1358,7 +1358,7 @@ class DBSReaderModel(RESTModel):
         if (run_num != -1  and logical_file_name ==''):
             for r in parseRunRange(run_num):
                 if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
-                    if r == 1:
+                    if r == 1 or r == '1':
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception)
                 elif isinstance(r, run_tuple):
@@ -1452,7 +1452,7 @@ class DBSReaderModel(RESTModel):
         if (run_num != -1  and logical_file_name ==''):
             for r in parseRunRange(run_num):
                 if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
-                    if r == 1:
+                    if r == 1 or r == '1':
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception)
                 elif isinstance(r, run_tuple):
