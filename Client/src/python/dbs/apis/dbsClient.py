@@ -1291,7 +1291,7 @@ class DbsApi(object):
         :type validFileOnly: int 
         :param sumOverLumi: default=0, counting with event_count/file; when = 1, using event_count/lumi when run_num is given.
         :type sumOverLumi: int 
-        :returns: List of dictionaries containing the following keys (num_files, num_lumi, num_block, num_event, file_size)
+        :returns: List of dictionaries containing the following keys (num_file, num_lumi, num_block, num_event, file_size)
         :rtype: list of dicts
 
         """

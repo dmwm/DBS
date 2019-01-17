@@ -956,7 +956,7 @@ class DBSWriterModel_t(unittest.TestCase):
         dataset_dict = {u'dataset': bulk_dataset,
                         u'physics_group_name': 'Tracker',
                         u'dataset_access_type': 'VALID', u'processed_ds_name': bulk_procdataset,
-                        u'xtcrosssection': 123, u'data_tier_name': tier,
+                        u'xtcrosssection': 123, u'data_tier_name': tier2,
                         u'prep_id':prep_id}
 
         block_dict = data = {u'block_name': bulk_block,
@@ -1124,7 +1124,7 @@ class DBSWriterModel_t(unittest.TestCase):
 
         acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
 
-        primary_dict = {u'primary_ds_name':primary_ds_name,
+        primary_dict = {u'primary_ds_name':primary_ds_name + "_stepchain",
                         u'primary_ds_type':primary_ds_type}
 
         output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
@@ -1245,7 +1245,7 @@ class DBSWriterModel_t(unittest.TestCase):
 
         acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
 
-        primary_dict = {u'primary_ds_name':primary_ds_name,
+        primary_dict = {u'primary_ds_name':primary_ds_name + "_stepchain",
                         u'primary_ds_type':primary_ds_type}
 
         output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,

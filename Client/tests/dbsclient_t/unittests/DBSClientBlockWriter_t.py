@@ -69,15 +69,13 @@ class DBSClientBlockWriter_t(unittest.TestCase):
              self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (self.uid))
              self.testparams['files'][k]['adler32'] = '123abc'
 
-        self.testparams['primds']['primary_ds_name'] ='%s_%s' %(self.testparams['primds']['primary_ds_name'], self.uid)
-
+        self.testparams['primds']['primary_ds_name'] = (self.testparams['primds']['primary_ds_name']).replace("14144", str(self.uid))
         self.testparams['dataset']['dataset'] = (self.testparams['dataset']['dataset']).replace("14144", str(self.uid))
 
         self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace("14144", str(self.uid))
         #We hard coded the parent_logical_fil_name in the dict file for testing on lum db. It may not
         #fit to ask dbs. One have to change it before run the test for other dbs.
         #for  k in range(len(self.testparams['file_parent_list'])):
-        #    self.testparams['file_parent_list'][k]['logical_file_name'] = "%s_%s" %(self.testparams['file_parent_list'][k]['logical_file_name'],self.uid)
         self.api.insertBulkBlock(blockDump=self.testparams)
         print("\nDone inserting parent block with events per lumi: ", self.testparams['block']['block_name'])
 
@@ -88,10 +86,9 @@ class DBSClientBlockWriter_t(unittest.TestCase):
             self.testparams['file_parent_list'].append({'logical_file_name': self.testparams['files'][k]['logical_file_name'].replace('.root', '_child.root'),
                                              'parent_logical_file_name': self.testparams['files'][k]['logical_file_name']})
             self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_child.root')
-        self.testparams['dataset']['dataset'] = '%s-%s' %(self.testparams['dataset']['dataset'], 'CHD')
-	#print self.testparams['dataset']['dataset']
+        self.testparams['dataset']['dataset'] = (self.testparams['dataset']['dataset']).replace(str(self.uid), str(self.uid)+'CHD')
+        self.testparams['primds']['primary_ds_name'] = (self.testparams['primds']['primary_ds_name']).replace(str(self.uid), str(self.uid)+'CHD')
         self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace("#", "#00")
-	#print self.testparams['block']['block_name']
         for i in range(len(self.testparams['file_conf_list'])):
             self.testparams['file_conf_list'][i]['lfn'] =  self.testparams['file_conf_list'][i]['lfn'].replace('.root', '_child.root')
         self.api.insertBulkBlock(blockDump=self.testparams)
@@ -122,14 +119,14 @@ class DBSClientBlockWriter_t(unittest.TestCase):
              self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (self.uid+10))
              self.testparams['files'][k]['adler32'] = '123abc'
 
-        self.testparams['primds']['primary_ds_name'] ='%s_%s' %(self.testparams['primds']['primary_ds_name'], self.uid+10)
+        self.testparams['primds']['primary_ds_name'] =(self.testparams['primds']['primary_ds_name']).replace('14144', str(self.uid+10))
 
         self.testparams['dataset']['dataset'] = (self.testparams['dataset']['dataset']).replace('14144', str(self.uid+10))
 
         self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace('14144', str(self.uid+10))
         print("\ninserting block with mixed events per lumi: ", self.testparams['block']['block_name'])
         self.assertRaises(dbsClientException, self.api.insertBulkBlock, blockDump=self.testparams)
-
+       
     def test3000(self):
         """test3000 web.DBSClientWriter.insertBlockBulk without event per lumi: basic test\n"""
 
@@ -145,8 +142,7 @@ class DBSClientBlockWriter_t(unittest.TestCase):
         for k in range(len(self.testparams['files'])):
              self.testparams['files'][k]['logical_file_name'] = self.testparams['files'][k]['logical_file_name'].replace('.root', '_%s.root' % (self.uid+10))
              self.testparams['files'][k]['adler32'] = '123abc'
-        self.testparams['primds']['primary_ds_name'] ='%s_%s' %(self.testparams['primds']['primary_ds_name'], self.uid+10)
-
+        self.testparams['primds']['primary_ds_name'] =(self.testparams['primds']['primary_ds_name']).replace('14144', str(self.uid+10))
         self.testparams['dataset']['dataset'] = (self.testparams['dataset']['dataset']).replace('14144', str(self.uid+10))
 
         self.testparams['block']['block_name'] = self.testparams['block']['block_name'].replace('14144', str(self.uid+10))
