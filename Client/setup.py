@@ -6,11 +6,11 @@ import os
 import sys
 from setuptools import setup
 
-# version of pycurl-client, should match current DBS release tag
+# version of dbs-client, should match current DBS release tag
 package_version = "3.7.8"
 
 # Requirements file for pip dependencies
-requirements = "requirements.pycurl_client.txt"
+requirements = "requirements.txt"
 
 
 def parse_requirements(requirements_file):
@@ -27,18 +27,15 @@ def parse_requirements(requirements_file):
         sys.exit(1)
 
 
-setup(name="pycurl-client",
+setup(name="dbs-client",
       version=package_version,
       maintainer="CMS DWMWM Group",
       maintainer_email="hn-cms-dmDevelopment@cern.ch",
-      packages=['RestClient',
-                'RestClient.AuthHandling',
-                'RestClient.ErrorHandling',
-                'RestClient.ProxyPlugins',
-                'RestClient.RequestHandling'],
-      package_dir={'': 'PycurlClient/src/python/'},
+      packages=['dbs',
+                'dbs.apis',
+                'dbs.exceptions'],
+      package_dir={'': 'src/python/'},
       install_requires=parse_requirements(requirements),
-      data_files=[('pycurl-client', [requirements])],
       url="https://github.com/dmwm/DBS",
       license="Apache License, Version 2.0",
       )

@@ -6,6 +6,7 @@
 pycurl_client=false
 dbs_client=false
 
+BUILDDIR=$PWD
 TOBUILD=$1
 
 case $TOBUILD in
@@ -31,17 +32,17 @@ case $TOBUILD in
       exit 1
 esac
 
-/bin/rm setup.py
-
 if $dbs_client
   then
-  /bin/cp setup_dbs_client.py setup.py
+  /bin/cp LICENSE NOTICE README.md $BUILDDIR/Client
+  cd $BUILDDIR/Client
   python setup.py sdist upload
 fi
 
 if $pycurl_client
   then
-  /bin/cp setup_pycurl_client.py setup.py
+  /bin/cp LICENSE NOTICE README.md $BUILDDIR/PycurlClient
+  cd $BUILDDIR/PycurlClient
   python setup.py sdist upload
 fi
 
