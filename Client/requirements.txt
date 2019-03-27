@@ -1,1 +1,1 @@
-pycurl-client==3.7.8.5
+pycurl-client==3.7.8
