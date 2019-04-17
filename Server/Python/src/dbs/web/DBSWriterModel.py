@@ -42,33 +42,33 @@ class DBSWriterModel(DBSReaderModel):
         self.dbsDataTierInsertDAO = self.daofactory(classname="DataTier.Insert")
 
         self._addMethod('POST', 'primarydatasets', self.insertPrimaryDataset, secured=True,
-                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('POST', 'outputconfigs', self.insertOutputConfig,  secured=True,
-                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('POST', 'acquisitioneras', self.insertAcquisitionEra, secured=True,
-                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('PUT', 'acquisitioneras', self.updateAcqEraEndDate, args=['acquisition_era_name', 'end_date'],
-                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('POST', 'processingeras', self.insertProcessingEra, secured=True,
-                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('POST', 'datasets', self.insertDataset, secured=True,
-                        security_params={'role':self.security_params, 'authzfunc':authInsert})
+                        security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('POST', 'blocks', self.insertBlock, secured=True,
-                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('POST', 'files', self.insertFile, args=['qInserts'], secured=True,
-                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('PUT', 'files', self.updateFile, args=['logical_file_name', 'is_file_valid', 'lost', 'dataset'],
-                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('PUT', 'datasets', self.updateDataset, args=['dataset', 'dataset_access_type'],
-                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('PUT', 'blocks', self.updateBlock, args=['block_name', 'open_for_writing', 'origin_site_name'],
-                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         secured=True, security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('POST', 'datatiers', self.insertDataTier, secured=True,
-                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('POST', 'bulkblocks', self.insertBulkBlock, secured=True,
-                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
         self._addMethod('POST', 'fileparents', self.insertFileParents, secured=True,
-                         security_params={'role':self.security_params, 'authzfunc':authInsert})
+                         security_params={'role':self.security_params, 'authzfunc':authInsert}, dump_request_info=True)
 
     def insertPrimaryDataset(self):
         """
