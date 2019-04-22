@@ -94,87 +94,87 @@ class DBSReaderModel(RESTModel):
         self.dbsRunSummaryListDAO = self.daofactory(classname="Run.SummaryList")
 
         self._addMethod('GET', 'serverinfo', self.getServerInfo, secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'],
-                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'primarydstypes', self.listPrimaryDsTypes, args=['primary_ds_type', 'dataset'],
-                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'datasets', self.listDatasets, args=['dataset', 'parent_dataset', 'release_version',
                                 'pset_hash', 'app_name', 'output_module_label', 'global_tag', 'processing_version',
                                 'acquisition_era_name', 'run_num', 'physics_group_name', 'logical_file_name',
                                 'primary_ds_name', 'primary_ds_type', 'processed_ds_name', 'data_tier_name',
                                 'dataset_access_type', 'prep_id', 'create_by', 'last_modified_by',
                                 'min_cdate', 'max_cdate', 'min_ldate', 'max_ldate', 'cdate', 'ldate', 'detail', 'dataset_id'],
-                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('POST', 'datasetlist', self.listDatasetArray, secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'blocks', self.listBlocks, args=['dataset', 'block_name', 'data_tier_name',
                         'origin_site_name', 'logical_file_name', 'run_num', 'min_cdate', 'max_cdate', 'min_ldate',
                         'max_ldate', 'cdate', 'ldate', 'open_for_writing', 'detail'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'blockorigin', self.listBlockOrigin, args=['origin_site_name', 'dataset', 'block_name'],
-                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'files', self.listFiles, args=['dataset', 'block_name', 'logical_file_name',
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'run_num',
                         'origin_site_name', 'lumi_list', 'detail', 'validFileOnly', 'sumOverLumi'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('POST', 'fileArray', self.listFileArray, secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'filesummaries', self.listFileSummaries, args=['block_name', 'dataset',
                         'run_num', 'validFileOnly', 'sumOverLumi'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'datasetparents', self.listDatasetParents, args=['dataset'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'datasetchildren', self.listDatasetChildren, args=['dataset'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'outputconfigs', self.listOutputConfigs, args=['dataset', 'logical_file_name',
                         'release_version', 'pset_hash', 'app_name', 'output_module_label', 'block_id', 'global_tag'],
-                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'fileparents', self.listFileParents, args=['logical_file_name', 'block_id',
                         'block_name'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('POST', 'fileparentsbylumi', self.listFileParentsByLumi,
-                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name', 'block_name',
                                                                             'block_id'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num', 'validFileOnly'],
-                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
-        self._addMethod('POST', 'filelumis', self.listFileLumiArray, secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
+        self._addMethod('POST', 'filelumis', self.listFileLumiArray, secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'runs', self.listRuns, args=['run_num', 'logical_file_name',
                         'block_name', 'dataset'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'datatypes', self.listDataTypes, args=['datatype', 'dataset'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'datatiers', self.listDataTiers, args=['data_tier_name'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'blockparents', self.listBlockParents, args=['block_name'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('POST', 'blockparents', self.listBlocksParents, secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'blockchildren', self.listBlockChildren, args=['block_name'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'blockdump', self.dumpBlock, args=['block_name'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'blocksummaries', self.listBlockSummaries, args=['block_name', 'dataset', 'detail'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'acquisitioneras', self.listAcquisitionEras, args=['acquisition_era_name'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'acquisitioneras_ci', self.listAcquisitionEras_CI, args=['acquisition_era_name'],
-                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'processingeras', self.listProcessingEras, args=['processing_version'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'releaseversions', self.listReleaseVersions, args=['release_version', 'dataset',
                                                                                   'logical_file_name'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'datasetaccesstypes', self.listDatasetAccessTypes, args=['dataset_access_type'],
-                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'physicsgroups', self.listPhysicsGroups, args=['physics_group_name'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'runsummaries', self.listRunSummaries, args=['dataset', 'run_num'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'help', self.getHelp, args=['call'], secured=True,
-                        security_params={'role': self.security_params, 'authzfunc': authInsert})
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
 
         self.dbsDoNothing = DBSDoNothing(self.logger, self.dbi, dbowner)
         self.dbsPrimaryDataset = DBSPrimaryDataset(self.logger, self.dbi, dbowner)
