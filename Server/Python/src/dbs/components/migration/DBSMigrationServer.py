@@ -115,7 +115,7 @@ class MigrationTask(SequencialTaskBase):
         self.inserted = True
         dbowner = self.db_config.get('dbowner')
         connectUrl = self.db_config.get('connectUrl')
-	print(connectUrl)
+	#print(connectUrl)
         dbFactory = DBFactory(MgrLogger, connectUrl, options={})
         self.dbi = dbFactory.connect()
         self.dbFormatter = DBFormatter(MgrLogger, self.dbi)
