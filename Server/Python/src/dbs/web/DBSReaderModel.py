@@ -64,9 +64,7 @@ def authInsert(user, role, group, site):
                 return True
     return False
 
-def throllting(limit=3, trange=1):
-    thr = UserThrottle(limit=limit)
-    return thr.make_throttled()
+thr = UserThrottle()
 
 class DBSReaderModel(RESTModel):
     """
@@ -76,6 +74,10 @@ class DBSReaderModel(RESTModel):
         """
         All parameters are provided through DBSConfig module
         """
+   
+        #throllting setting
+        thr.limit = config.database.throllting_limit
+
         #Dictionary with reader and writer as keys
         urls = config.database.connectUrl
 
@@ -215,7 +217,7 @@ class DBSReaderModel(RESTModel):
         else:
             return self.methods['GET'].keys()
 
-    @throllting()
+    @thr.make_throttled()
     def getServerInfo(self):
         """
         Method that provides information about DBS Server to the clients
@@ -228,7 +230,7 @@ class DBSReaderModel(RESTModel):
         return dict(dbs_version=self.version, dbs_instance=self.instance)
 
     @inputChecks(primary_ds_name=basestring, primary_ds_type=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listPrimaryDatasets(self, primary_ds_name="", primary_ds_type=""):
         """
         API to list primary datasets
@@ -255,7 +257,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(primary_ds_type=basestring, dataset=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listPrimaryDsTypes(self, primary_ds_type="", dataset=""):
         """
         API to list primary dataset types
@@ -289,7 +291,7 @@ class DBSReaderModel(RESTModel):
                  create_by=(basestring), last_modified_by=(basestring), min_cdate=(int, basestring), max_cdate=(int, basestring),
                  min_ldate=(int, basestring), max_ldate=(int, basestring), cdate=(int, basestring), ldate=(int, basestring), detail=(bool, basestring),
                  dataset_id=(int, long, basestring))
-    @throllting()
+    @thr.make_throttled()
     def listDatasets(self, dataset="", parent_dataset="", is_dataset_valid=1,
         release_version="", pset_hash="", app_name="", output_module_label="", global_tag="",
         processing_version=0, acquisition_era_name="", run_num=-1,
@@ -496,7 +498,7 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listdatasets. %s.\n Exception trace: \n %s" % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
     
-    @throllting()
+    @thr.make_throttled()
     def listDatasetArray(self):
         """
         API to list datasets in DBS. To be called by datasetlist url with post call.
@@ -542,7 +544,7 @@ class DBSReaderModel(RESTModel):
                     yield item
 
     @inputChecks(data_tier_name=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listDataTiers(self, data_tier_name=""):
         """
         API to list data tiers known to DBS.
@@ -577,7 +579,7 @@ class DBSReaderModel(RESTModel):
     @inputChecks(dataset=basestring, block_name=basestring, data_tier_name=basestring, origin_site_name=basestring, logical_file_name=basestring,
                  run_num=(long, int, basestring, list), min_cdate=(int, basestring), max_cdate=(int, basestring), min_ldate=(int, basestring),
                  max_ldate=(int, basestring), cdate=(int, basestring),  ldate=(int, basestring), open_for_writing=(int, basestring), detail=(basestring, bool))
-    @throllting()
+    @thr.make_throttled()
     def listBlocks(self, dataset="", block_name="", data_tier_name="", origin_site_name="",
                    logical_file_name="",run_num=-1, min_cdate='0', max_cdate='0',
                    min_ldate='0', max_ldate='0', cdate='0',  ldate='0', open_for_writing=-1, detail=False):
@@ -707,7 +709,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(origin_site_name=basestring, dataset=basestring, block_name=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listBlockOrigin(self, origin_site_name="",  dataset="", block_name=""):
         """
         API to list blocks first generated in origin_site_name.
@@ -734,7 +736,7 @@ class DBSReaderModel(RESTModel):
 
 
     @inputChecks(block_name=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listBlockParents(self, block_name=""):
         """
         API to list block parents.
@@ -754,7 +756,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error',  dbsExceptionCode['dbsException-server-error'],  self.logger.exception, sError)
 
-    @throllting()
+    @thr.make_throttled()
     def listBlocksParents(self):
         """
         API to list block parents of multiple blocks. To be called by blockparents url with post call.
@@ -790,7 +792,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(block_name=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listBlockChildren(self, block_name=""):
         """
         API to list block children.
@@ -812,7 +814,7 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('block_name')
     @inputChecks(block_name=(basestring, list), dataset=basestring, detail=(bool, basestring))
-    @throllting()
+    @thr.make_throttled()
     def listBlockSummaries(self, block_name="", dataset="", detail=False):
         """
         API that returns summary information like total size and total number of events in a dataset or a list of blocks
@@ -870,7 +872,7 @@ class DBSReaderModel(RESTModel):
                  output_module_label=basestring, run_num=(long, int, basestring, list), origin_site_name=basestring,
                  lumi_list=(basestring, list), detail=(basestring, bool), validFileOnly=(basestring, int), 
                  sumOverLumi=(basestring, int))
-    @throllting()
+    @thr.make_throttled()
     def listFiles(self, dataset = "", block_name = "", logical_file_name = "",
         release_version="", pset_hash="", app_name="", output_module_label="",
         run_num=-1, origin_site_name="", lumi_list="", detail=False, validFileOnly=0, sumOverLumi=0):
@@ -990,7 +992,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', ex.message,
                     self.logger.exception, sError)
 
-    @throllting()
+    @thr.make_throttled()
     def listFileArray(self):
         """
         API to list files in DBS. Either non-wildcarded logical_file_name, non-wildcarded dataset, 
@@ -1091,7 +1093,7 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('run_num')
     @inputChecks(block_name=basestring, dataset=basestring, run_num=(long, int, basestring, list), validFileOnly=(int, basestring), sumOverLumi=(int, basestring))
-    @throllting()
+    @thr.make_throttled()
     def listFileSummaries(self, block_name='', dataset='', run_num=-1, validFileOnly=0, sumOverLumi=0):
         """
         API to list number of files, event counts and number of lumis in a given block or dataset. 
@@ -1154,7 +1156,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', ex.message, self.logger.exception, sError)
 
     @inputChecks(dataset=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listDatasetParents(self, dataset=''):
         """
         API to list A datasets parents in DBS.
@@ -1175,7 +1177,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(dataset=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listDatasetChildren(self, dataset):
         """
         API to list A datasets children in DBS.
@@ -1197,7 +1199,7 @@ class DBSReaderModel(RESTModel):
 
     @inputChecks(dataset=basestring, logical_file_name=basestring, release_version=basestring, pset_hash=basestring, app_name=basestring,\
                  output_module_label=basestring, block_id=(int, basestring), global_tag=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listOutputConfigs(self, dataset="", logical_file_name="",
                           release_version="", pset_hash="", app_name="",
                           output_module_label="", block_id=0, global_tag=''):
@@ -1244,7 +1246,7 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('logical_file_name')
     @inputChecks(logical_file_name=(basestring, list), block_id=(int, basestring), block_name=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listFileParents(self, logical_file_name='', block_id=0, block_name=''):
         """
         API to list file parents
@@ -1272,7 +1274,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', ex.message,  self.logger.exception, sError)
     
-    @throllting()
+    @thr.make_throttled()
     def listFileParentsByLumi(self):
         """
         IMPORTANT: This is ***WMAgent*** sepcial case API. It is not for others.
@@ -1328,7 +1330,7 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('logical_file_name')
     @inputChecks(logical_file_name=(basestring, list), block_name=(basestring), block_id=(basestring, int))
-    @throllting()
+    @thr.make_throttled()
     def listFileChildren(self, logical_file_name='', block_name='', block_id=0):
         """
         API to list file children. One of the parameters in mandatory.
@@ -1360,7 +1362,7 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('run_num')
     @inputChecks(logical_file_name=(basestring, list), block_name=basestring, run_num=(long, int, basestring, list), validFileOnly=(int, basestring))
-    @throllting()
+    @thr.make_throttled()
     def listFileLumis(self, logical_file_name="", block_name="", run_num=-1, validFileOnly=0):
         """
         API to list Lumi for files. Either logical_file_name or block_name is required. No wild card support in this API
@@ -1402,7 +1404,7 @@ class DBSReaderModel(RESTModel):
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
-    @throllting()
+    @thr.make_throttled()
     def listFileLumiArray(self):
         """
 	API to list FileLumis for a given list of LFN. It is used with the POST method of fileLumis call.
@@ -1459,7 +1461,7 @@ class DBSReaderModel(RESTModel):
 
     @transformInputType('run_num')
     @inputChecks(run_num=(long, int, basestring, list), logical_file_name=basestring, block_name=basestring, dataset=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listRuns(self, run_num=-1, logical_file_name="", block_name="", dataset=""):
         """
         API to list all runs in DBS. At least one parameter is mandatory.
@@ -1510,7 +1512,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(datatype=basestring, dataset=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listDataTypes(self, datatype="", dataset=""):
         """
         API to list data types known to dbs (when no parameter supplied).
@@ -1553,7 +1555,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', ex.message, self.logger.exception, sError)
 
     @inputChecks(acquisition_era_name=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listAcquisitionEras(self, acquisition_era_name=''):
         """
         API to list all Acquisition Eras in DBS.
@@ -1574,7 +1576,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(acquisition_era_name=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listAcquisitionEras_CI(self, acquisition_era_name=''):
         """
         API to list ALL Acquisition Eras (case insensitive) in DBS.
@@ -1596,7 +1598,7 @@ class DBSReaderModel(RESTModel):
                                 self.logger.exception, sError)
 
     @inputChecks(processing_version=(basestring, int))
-    @throllting()
+    @thr.make_throttled()
     def listProcessingEras(self, processing_version=0):
         """
         API to list all Processing Eras in DBS.
@@ -1618,7 +1620,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(release_version=basestring, dataset=basestring, logical_file_name=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listReleaseVersions(self, release_version='', dataset='', logical_file_name=''):
         """
         API to list all release versions in DBS
@@ -1645,7 +1647,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(dataset_access_type=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listDatasetAccessTypes(self, dataset_access_type=''):
         """
         API to list dataset access types.
@@ -1668,7 +1670,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(physics_group_name=basestring)
-    @throllting()
+    @thr.make_throttled()
     def listPhysicsGroups(self, physics_group_name=''):
         """
         API to list all physics groups.
@@ -1691,7 +1693,7 @@ class DBSReaderModel(RESTModel):
             dbsExceptionHandler('dbsException-server-error', dbsExceptionCode['dbsException-server-error'], self.logger.exception, sError)
 
     @inputChecks(dataset=basestring, run_num=(basestring, int, long))
-    @throllting()
+    @thr.make_throttled()
     def listRunSummaries(self, dataset="", run_num=-1):
         """
         API to list run summaries, like the maximal lumisection in a run.
