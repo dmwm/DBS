@@ -15,6 +15,7 @@ import traceback
 from cherrypy.lib import profiler
 from cherrypy import request, tools, HTTPError
 from WMCore.WebTools.RESTModel import RESTModel
+from Utils.Throttled import UserThrottle
 from dbs.utils.dbsUtils import jsonstreamer
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.DBSTransformInputType import parseRunRange
@@ -81,6 +82,9 @@ class DBSReaderModel(RESTModel):
         dbowner = config.database.dbowner
 
         RESTModel.__init__(self, config)
+        limit = dbconf.throllting_limit
+        self.trange = dbconf.throllting_trange
+        self.thr = UserThrottle(limit=limit) 
         self.dbsUtils2 = dbsUtils()
         self.version = config.database.version
         self.instance = config.instance
@@ -532,6 +536,7 @@ class DBSReaderModel(RESTModel):
                     yield item
 
     @inputChecks(data_tier_name=basestring)
+    @self.thr.make_throttled()
     def listDataTiers(self, data_tier_name=""):
         """
         API to list data tiers known to DBS.

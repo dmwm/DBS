@@ -125,8 +125,9 @@ class DBSMigrate:
         and returns an ordered list of blocks not already at dst for migration
         """
         ordered_dict = {}
+        srcblks = []
         srcblks = self.getSrcBlocks(url, dataset=inputdataset)
-        if len(srcblks) < 0:
+        if len(srcblks) == 0:
             e = "DBSMigration: No blocks in the required dataset %s found at source %s."%(inputdataset, url)
             dbsExceptionHandler('dbsException-invalid-input2', e, self.logger.exception, e)
         dstblks = self.blocklist.execute(conn, dataset=inputdataset)
