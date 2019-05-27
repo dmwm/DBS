@@ -61,7 +61,7 @@ class RestApi(object):
                                    additional_curl_options=self.add_curl_options)
         return self.execute(http_request)
 
-    def post(self, url, api, params={}, data="", request_headers=None):
+    def post(self, url, api, params=None, data="", request_headers=None):
         "Perform postt HTTP request for given set of parameters"
         if not params:
             params = {}
@@ -72,7 +72,7 @@ class RestApi(object):
                                    additional_curl_options=self.add_curl_options)
         return self.execute(http_request)
 
-    def put(self, url, api, params={}, data="", request_headers=None):
+    def put(self, url, api, params=None, data="", request_headers=None):
         "Perform put HTTP request for given set of parameters"
         if not params:
             params = {}
