@@ -23,10 +23,10 @@ class RestApi(object):
             shared_curl.setopt(pycurl.SH_SHARE, pycurl.LOCK_DATA_SSL_SESSION)
             curl.setopt(pycurl.SHARE, shared_curl)
 
-        if auth:
-            auth.configure_auth(curl)
-        if proxy:
-            proxy.configure_proxy(curl)
+        if self.auth:
+            self.auth.configure_auth(curl)
+        if self.proxy:
+            self.proxy.configure_proxy(curl)
         return curl
 
     def getCurl(self):
@@ -50,29 +50,45 @@ class RestApi(object):
         self.curl_pool.append(curl)
         return res
 
-    def get(self, url, api, params={}, data=None, request_headers={}):
+    def get(self, url, api, params=None, data=None, request_headers=None):
         "Perform get HTTP request for given set of parameters"
+        if not params:
+            params = {}
+        if not request_headers:
+            request_headers = {}
         http_request = HTTPRequest(method='GET', url=url, api=api, params=params,
                                    data=data, request_headers=request_headers,
                                    additional_curl_options=self.add_curl_options)
         return self.execute(http_request)
 
-    def post(self, url, api, params={}, data="", request_headers={}):
+    def post(self, url, api, params={}, data="", request_headers=None):
         "Perform postt HTTP request for given set of parameters"
+        if not params:
+            params = {}
+        if not request_headers:
+            request_headers = {}
         http_request = HTTPRequest(method='POST', url=url, api=api, params=params, data=data,
                                    request_headers=request_headers,
                                    additional_curl_options=self.add_curl_options)
         return self.execute(http_request)
 
-    def put(self, url, api, params={}, data="", request_headers={}):
+    def put(self, url, api, params={}, data="", request_headers=None):
         "Perform put HTTP request for given set of parameters"
+        if not params:
+            params = {}
+        if not request_headers:
+            request_headers = {}
         http_request = HTTPRequest(method='PUT', url=url, api=api, params=params, data=data,
                                    request_headers=request_headers,
                                    additional_curl_options=self.add_curl_options)
         return self.execute(http_request)
 
-    def delete(self, url, api, params={}, data=None, request_headers={}):
+    def delete(self, url, api, params=None, data=None, request_headers=None):
         "Perform delete HTTP request for given set of parameters"
+        if not params:
+            params = {}
+        if not request_headers:
+            request_headers = {}
         http_request = HTTPRequest(method='DELETE', url=url, api=api, params=params, data=data,
                                    request_headers=request_headers,
                                    additional_curl_options=self.add_curl_options)
