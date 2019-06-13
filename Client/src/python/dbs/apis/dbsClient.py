@@ -110,8 +110,10 @@ def split_calls(func):
     limitation of the URI in Apache. By default 8190 bytes
     """
     def wrapper(*args, **kwargs):
-        #The size limit is 8190 bytes minus url and api to call
-        #For example (https://cmsweb-testbed.cern.ch:8443/dbs/prod/global/filechildren), so 192 bytes should be safe.
+        """
+        The size limit is 8190 bytes minus url and api to call
+        For example (https://cmsweb-testbed.cern.ch:8443/dbs/prod/global/filechildren), so 192 bytes should be safe.
+        """
         size_limit = 8000
         encoded_url = urllib.urlencode(kwargs)
         if len(encoded_url) > size_limit:
