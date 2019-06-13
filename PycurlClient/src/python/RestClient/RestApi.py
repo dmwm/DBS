@@ -9,7 +9,7 @@ class RestApi(object):
         self.add_curl_options = additional_curl_options if additional_curl_options else {}
         self.proxy = proxy
         self.auth = auth
-        self.curl_pool(self.newCurl())
+        self.curl_pool.append(self.newCurl())
 
     def newCurl(self):
         "Create new curl object, sets its options and returns it back to the caller"
