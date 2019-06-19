@@ -1,9 +1,14 @@
+# system modules
+import random
+
+# DBS modules
 from RestClient.RequestHandling.HTTPRequest import HTTPRequest
 
+# pycurl modules
 import pycurl
 
 class RestApi(object):
-    def __init__(self, auth=None, proxy=None, additional_curl_options=None, use_shared_handle=False):
+    def __init__(self, auth=None, proxy=None, additional_curl_options=None, use_shared_handle=False, curl_pool_size=0):
         self.curl_pool = []
         self.use_shared_handle = use_shared_handle
         self.add_curl_options = additional_curl_options if additional_curl_options else {}
@@ -32,8 +37,8 @@ class RestApi(object):
     def getCurl(self):
         "Fetch one curl object form the pool or create a new one"
         if len(self.curl_pool):
-            curl = self.curl_pool[-1]
-            self.curl_pool = self.curl_pool[:-1]
+            idx = random.randint(0, len(self.curl_pool)-1)
+            curl = self.curl_pool[idx]
         else:
             curl = self.newCurl()
         return curl
@@ -47,7 +52,11 @@ class RestApi(object):
         "Execute given http_request with available curl instance"
         curl = self.getCurl()
         res = http_request(curl)
-        self.curl_pool.append(curl)
+        if self.curl_pool_size:
+            if len(self.curl_pool) < self.curl_pool_size:
+                self.curl_pool.append(curl)
+        else:
+            self.curl_pool.append(curl)
         return res
 
     def get(self, url, api, params=None, data=None, request_headers=None):
