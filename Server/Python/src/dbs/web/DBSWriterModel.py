@@ -43,6 +43,7 @@ class DBSWriterModel(DBSReaderModel):
         self.nats = None
         if hasattr(config, 'use_nats') and config.use_nats:
             self.nats = NATSManager(config.nats_server, topics=config.nats_topics, default_topic='cms.dbs')
+            print("DBS NATS: %s" % self.nats)
 
         DBSReaderModel.__init__(self, config)
 
