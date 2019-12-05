@@ -254,8 +254,9 @@ class DBSWriterModel(DBSReaderModel):
                 try:
                     doc = {'dataset':dataset, 'dataset_type': dataset_access_type}
                     self.nats.publish(doc)
-                except:
-                    pass
+                except Exception as exp:
+                    err = 'insertDataset NATS error, %s, trace:\n%s' % (str(exp), traceback.format_exc())
+                    self.logger.warning(err)
         except cjson.DecodeError as dc:
             dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert dataset input",  self.logger.exception, str(dc)) 
         except dbsException as de:
@@ -413,8 +414,9 @@ class DBSWriterModel(DBSReaderModel):
                 try:
                     doc = {'dataset':f['dataset'], 'evts': tot_evts, 'size': tot_size}
                     self.nats.publish(doc)
-                except:
-                    pass
+                except Exception as exp:
+                    err = 'insertFile NATS error, %s, trace:\n%s' % (str(exp), traceback.format_exc())
+                    self.logger.warning(err)
         except cjson.DecodeError as dc:
             dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert File input",  self.logger.exception, str(dc))
         except dbsException as de:
@@ -482,8 +484,9 @@ class DBSWriterModel(DBSReaderModel):
                     try:
                         doc = {'dataset':dataset, 'dataset_type': dataset_access_type}
                         self.nats.publish(doc)
-                    except:
-                        pass
+                    except Exception as exp:
+                        err = 'updateDataset NATS error, %s, trace:\n%s' % (str(exp), traceback.format_exc())
+                        self.logger.warning(err)
             else:
                 dbsExceptionHandler("dbsException-invalid-input", "DBSWriterModel/updateDataset. dataset_access_type is required.")
         except dbsException as de:
