@@ -42,7 +42,11 @@ class DBSWriterModel(DBSReaderModel):
         # initialize NATS if requested
         self.nats = None
         if hasattr(config, 'use_nats') and config.use_nats:
-            self.nats = NATSManager(config.nats_server, topics=config.nats_topics, default_topic='cms.dbs')
+            topic = 'cms.dbs'
+            topics = config.nats_topics
+            if not topics:
+                topics = ['%s.topic' % topic]
+            self.nats = NATSManager(config.nats_server, topics=topics, default_topic=topic)
             print("DBS NATS: %s" % self.nats)
 
         DBSReaderModel.__init__(self, config)
