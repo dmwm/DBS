@@ -257,6 +257,8 @@ class DBSWriterModel(DBSReaderModel):
             # send message to NATS if it is configured
             if self.nats:
                 try:
+                    dataset = indata.get('dataset')
+                    dataset_access_type = indata.get('dataset_access_type')
                     doc = {'dataset':dataset, 'dataset_type': dataset_access_type}
                     self.nats.publish(doc)
                 except Exception as exp:
@@ -289,6 +291,18 @@ class DBSWriterModel(DBSReaderModel):
                     self.logger.exception, "insertBulkBlock: datset and file parentages cannot be in the input at the same time.")    
             indata = validateJSONInputNoCopy("blockBulk", indata)
             self.dbsBlockInsert.putBlock(indata)
+            # send message to NATS if it is configured
+            if self.nats:
+                try:
+                    ddata = indata.get('dataset')
+                    if isinstance(ddata, dict) and 'dataset' in ddata:
+                        dataset = ddata.get('dataset')
+                        dataset_access_type = ddata.get('dataset_access_type')
+                        doc = {'dataset':dataset, 'dataset_type': dataset_access_type}
+                        self.nats.publish(doc)
+                except Exception as exp:
+                    err = 'insertDataset NATS error, %s, trace:\n%s' % (str(exp), traceback.format_exc())
+                    self.logger.warning(err)
         except cjson.DecodeError as dc:
             dbsExceptionHandler("dbsException-invalid-input2", "Wrong format/data from insert BulkBlock input",  self.logger.exception, str(dc))
         except dbsException as de:
