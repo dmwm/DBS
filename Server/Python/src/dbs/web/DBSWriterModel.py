@@ -47,7 +47,8 @@ class DBSWriterModel(DBSReaderModel):
             if not topics:
                 topics = ['%s.topic' % topic]
             self.nats = NATSManager(config.nats_server, topics=topics, default_topic=topic)
-            print("DBS NATS: %s" % self.nats)
+            msg = "DBS NATS: %s" % self.nats
+            self.logger.info(msg)
 
         DBSReaderModel.__init__(self, config)
 
