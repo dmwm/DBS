@@ -163,7 +163,7 @@ class OptionParser():
         self.parser.add_argument("--format", action="store",
             dest="format", default="", help="Output file")
         self.parser.add_argument("--times", action="store",
-            dest="times", default="", help="How many times to run a test")
+            dest="times", default="1", help="How many times to run a test, default 1")
         self.parser.add_argument("--use_gc", action="store_true",
             dest="use_gc", default=False, help="Use gc.collect() after each test")
         self.parser.add_argument("--dump", action="store_true",
