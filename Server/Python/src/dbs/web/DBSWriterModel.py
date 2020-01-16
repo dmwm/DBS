@@ -15,6 +15,7 @@ from dbs.utils.dbsException import dbsException, dbsExceptionCode
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from dbs.utils.DBSInputValidation import *
 from dbs.utils.DBSTransformInputType import transformInputType
+from dbs.utils.parsers import parseFileObject
 
 import traceback
 
@@ -81,8 +82,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try :
-            body = request.body.read()
-            indata = cjson.decode(body)
+            indata = parseFileObject(request.body, method='cjson')
             indata = validateJSONInputNoCopy("primds", indata)
             indata.update({"creation_date": dbsUtils().getTime(), "create_by": dbsUtils().getCreateBy() })
             self.dbsPrimaryDataset.insertPrimaryDataset(indata)
@@ -113,8 +113,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
-            indata = cjson.decode(body)
+            indata = parseFileObject(request.body, method='cjson')
             indata = validateJSONInputNoCopy("dataset_conf_list", indata)
             indata.update({"creation_date": dbsUtils().getTime(),
                            "create_by" : dbsUtils().getCreateBy()})
@@ -164,8 +163,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
-            indata = cjson.decode(body)
+            indata = parseFileObject(request.body, method='cjson')
             indata = validateJSONInputNoCopy("acquisition_era", indata)
             indata.update({"start_date": indata.get("start_date", dbsUtils().getTime()),\
                            "creation_date": indata.get("creation_date", dbsUtils().getTime()), \
@@ -193,8 +191,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
-            indata = cjson.decode(body)
+            indata = parseFileObject(request.body, method='cjson')
             indata = validateJSONInputNoCopy('processing_era', indata)
             indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
                            "create_by" : dbsUtils().getCreateBy() })
@@ -230,8 +227,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
-            indata = cjson.decode(body)
+            indata = parseFileObject(request.body, method='cjson')
             indata = validateJSONInputNoCopy('dataset', indata)
             indata.update({"creation_date": dbsUtils().getTime(),
                             "last_modification_date" : dbsUtils().getTime(),
@@ -260,8 +256,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
-            indata = cjson.decode(body)
+            indata = parseFileObject(request.body, method='cjson')
             if (indata.get("file_parent_list", []) and indata.get("dataset_parent_list", [])): 
                 dbsExceptionHandler("dbsException-invalid-input2", "insertBulkBlock: dataset and file parentages cannot be in the input at the same time",  
                     self.logger.exception, "insertBulkBlock: datset and file parentages cannot be in the input at the same time.")    
@@ -293,8 +288,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
-            indata = cjson.decode(body)
+            indata = parseFileObject(request.body, method='cjson')
             indata = validateJSONInputNoCopy("file_parent", indata)
             self.dbsFile.insertFileParents(indata)
         except cjson.DecodeError as dc:
@@ -326,8 +320,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
-            indata = cjson.decode(body)
+            indata = parseFileObject(request.body, method='cjson')
             indata = validateJSONInputNoCopy("block", indata)
             self.dbsBlock.insertBlock(indata)
         except cjson.DecodeError as dc:
@@ -366,8 +359,7 @@ class DBSWriterModel(DBSReaderModel):
         """
         if qInserts in (False, 'False'): qInserts=False
         try:
-            body = request.body.read()
-            indata = cjson.decode(body)["files"]
+            indata = parseFileObject(request.body, method='cjson')
             if not isinstance(indata, (list, dict)):
                 dbsExceptionHandler("dbsException-invalid-input", "Invalid Input DataType", self.logger.exception, \
                                       "insertFile expects input as list or dirc")
@@ -501,8 +493,7 @@ class DBSWriterModel(DBSReaderModel):
             conn = self.dbi.connection()
             tran = conn.begin()
 
-            body = request.body.read()
-            indata = cjson.decode(body)
+            indata = parseFileObject(request.body, method='cjson')
 
             indata = validateJSONInputNoCopy("dataTier", indata)
 
