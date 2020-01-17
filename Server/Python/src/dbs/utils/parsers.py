@@ -120,19 +120,39 @@ def size_format(uinput):
             return "%3.1f%s" % (num, xxx)
         num /= base
 
-def convert2json_stream(fname, oname=None):
+def convert2json_stream(fobj, oname=None):
     """
     Helper function to convert given file from JSON to json_stream format.
-    User may provide optiona oname (output file name) attribute to specify
+    User may provide optional oname (output file name) attribute to specify
     where output should be written
     """
+    jstr = ''
+    if isinstance(fobj, dict):
+        for chunk in json_stream_encoder(fobj):
+            jstr += chunk + '\n'
+    elif hasattr(fobj, 'read'):
+        for chunk in json_stream_encoder(json.load(open(fobj))):
+            jstr += chunk + '\n'
     if oname:
         with open(oname, 'w') as ostream:
-            for chunk in json_stream_encoder(json.load(open(fname))):
-                ostream.write(chunk+'\n')
-    else:
-        for chunk in json_stream_encoder(json.load(open(fname))):
-            print(chunk)
+            ostream.write(jstr)
+    return jstr
+
+def convert2yaml(fobj, oname=None):
+    """
+    Helper function to convert given file from JSON to yaml format.
+    User may provide optional oname (output file name) attribute to specify
+    where output should be written. Code is based on python yaml module, see
+    https://github.com/yaml/pyyaml
+    """
+    if isinstance(fobj, dict):
+        indata = fobj
+    elif hasattr(fobj, 'read'):
+        indata = json.load(fobj)
+    if oname:
+        with open(oname, 'w') as ostream:
+            ostream.write(yaml.dump(indata, Dumper=yaml.CDumper))
+    return yaml.dump(indata, Dumper=yaml.CDumper)
 
 def test(fname, jformat, times, use_gc=False, dump=False):
     import gc
