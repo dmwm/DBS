@@ -8,13 +8,14 @@ from RestClient.RequestHandling.HTTPRequest import HTTPRequest
 import pycurl
 
 class RestApi(object):
-    def __init__(self, auth=None, proxy=None, additional_curl_options=None, use_shared_handle=False, curl_pool_size=0):
+    def __init__(self, auth=None, proxy=None, additional_curl_options=None, use_shared_handle=False, curl_pool_size=10):
         self.curl_pool = []
         self.use_shared_handle = use_shared_handle
         self.add_curl_options = additional_curl_options if additional_curl_options else {}
         self.proxy = proxy
         self.auth = auth
         self.curl_pool.append(self.newCurl())
+        self.curl_pool_size = curl_pool_size
 
     def newCurl(self):
         "Create new curl object, sets its options and returns it back to the caller"
