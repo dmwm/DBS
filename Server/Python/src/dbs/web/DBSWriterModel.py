@@ -425,8 +425,12 @@ class DBSWriterModel(DBSReaderModel):
                      "file_assoc_list":f.get("assoc_list", []),
                      "file_output_config_list":f.get("file_output_config_list", [])})
                 businput.append(f)
-                tot_evts += f.get('event_count', 0)
-                tot_size += f.get('file_size', 0)
+                ecount = f.get('event_count', 0)
+                if ecount && ecount != None and str(ecount) != "None":
+                    tot_evts += int(ecount)
+                fsize = f.get('file_size', 0)
+                if fsize && fsize != None and str(fsize) != "None":
+                    tot_size += float(fsize)
             self.dbsFile.insertFile(businput, qInserts)
             # send message to NATS if it is configured
             if self.nats and tot_evts and tot_size:
