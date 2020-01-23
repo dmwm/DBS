@@ -68,6 +68,7 @@ class DBSRestApi:
             config.DBS.section_('database')
             config.DBS.database.connectUrl = dbs3_l3_i2['connectUrl']['writer']
             config.DBS.database.dbowner = dbs3_l3_i2['databaseOwner']
+            config.DBS.database.throllting_limit = 15
             config.DBS.database.engineParameters = { 'pool_size' : 15, 'max_overflow' : 10, 'pool_timeout' : 200 }
             version = getattr(dbsconfig.database.instances, dbinstance).version
             config.DBS.database.version = version if version else '3.99.98'
@@ -81,6 +82,7 @@ class DBSRestApi:
             config.DBS.section_('database')
             config.DBS.database.connectUrl = dbconfig.connectUrl
             config.DBS.database.dbowner = dbconfig.dbowner
+            config.DBS.database.throllting_limit = dbconfig.throllting_limit
             config.DBS.database.engineParameters = dbconfig.engineParameters
             config.DBS.database.version = dbconfig.version if dbconfig.version else '3.99.98'
             #config.DBS.database.instance = dbconfig.instance
