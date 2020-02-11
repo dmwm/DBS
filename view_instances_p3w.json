@@ -1,6 +1,8 @@
 { 
 "default": { "DBSWriter": ["dev/phys03"]}, 
 "prod":    { "DBSWriter": ["prod/phys03"]}, 
+"k8s":     { "DBSWriter": ["int/phys03"]},
+"k8s-dev": { "DBSWriter": ["dev/phys03"]},
 "preprod": { "DBSWriter": ["int/phys03"]}, 
 "dev":     { "DBSWriter": ["dev/phys03"]} 
 }

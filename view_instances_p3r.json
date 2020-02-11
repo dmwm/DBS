@@ -1,6 +1,8 @@
 { 
 "default": { "DBSReader": ["dev/phys03"]}, 
 "prod":    { "DBSReader": ["prod/phys03"]}, 
+"k8s":     { "DBSReader": ["int/phys03"]},
+"k8s-dev": { "DBSReader": ["dev/phys03"]},
 "preprod": { "DBSReader": ["int/phys03"]}, 
 "dev":     { "DBSReader": ["dev/phys03"]} 
 }
