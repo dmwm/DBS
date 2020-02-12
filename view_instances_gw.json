@@ -1,6 +1,8 @@
 { 
 "default": { "DBSWriter": ["dev/global"]}, 
 "prod":    { "DBSWriter": ["prod/global"]}, 
+"k8s":     { "DBSWriter": ["int/global"]},
+"k8s-dev": { "DBSWriter": ["dev/global"]},
 "preprod": { "DBSWriter": ["int/global"]}, 
 "dev":     { "DBSWriter": ["dev/global"]} 
 }

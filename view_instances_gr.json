@@ -1,6 +1,8 @@
 { 
 "default": { "DBSReader": ["dev/global"]}, 
 "prod":    { "DBSReader": ["prod/global"]}, 
+"k8s":     { "DBSReader": ["int/global"]},
+"k8s-dev": { "DBSReader": ["dev/global"]},
 "preprod": { "DBSReader": ["int/global"]}, 
 "dev":     { "DBSReader": ["dev/global"]} 
 }
