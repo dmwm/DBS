@@ -39,6 +39,8 @@ class DBSWriterModel(DBSReaderModel):
         if isinstance(urls, type({})):
             config.database.connectUrl = urls['writer']
 
+        DBSReaderModel.__init__(self, config)
+
         # initialize NATS if requested
         self.nats = None
         if hasattr(config, 'use_nats') and config.use_nats:
@@ -49,8 +51,6 @@ class DBSWriterModel(DBSReaderModel):
             self.nats = NATSManager(config.nats_server, topics=topics, default_topic=topic)
             msg = "DBS NATS: %s" % self.nats
             self.logger.info(msg)
-
-        DBSReaderModel.__init__(self, config)
 
         self.sequenceManagerDAO = self.daofactory(classname="SequenceManager")
         self.dbsDataTierInsertDAO = self.daofactory(classname="DataTier.Insert")
