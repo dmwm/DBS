@@ -41,6 +41,9 @@ class DBSWriterModel(DBSReaderModel):
 
         DBSReaderModel.__init__(self, config)
 
+        # set proper logger name
+        self.logger.name = __name__
+
         # initialize NATS if requested
         self.nats = None
         if hasattr(config, 'use_nats') and config.use_nats:

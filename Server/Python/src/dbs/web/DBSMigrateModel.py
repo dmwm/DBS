@@ -53,6 +53,10 @@ class DBSMigrateModel(RESTModel):
         dbowner = config.database.dbowner
 
         RESTModel.__init__(self, config)
+
+        # set proper logger name
+        self.logger.name = __name__
+
         self.methods = {'GET':{}, 'PUT':{}, 'POST':{}, 'DELETE':{}}
         self.security_params = config.security.params
        

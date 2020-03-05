@@ -88,6 +88,10 @@ class DBSReaderModel(RESTModel):
         dbowner = config.database.dbowner
 
         RESTModel.__init__(self, config)
+
+        # set proper logger name
+        self.logger.name = __name__
+
         self.dbsUtils2 = dbsUtils()
         self.version = config.database.version
         self.instance = config.instance
