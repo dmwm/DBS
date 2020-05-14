@@ -134,6 +134,7 @@ class TestCommand(Command):
         TestSuite = unittest.TestSuite()
 
         db_instances = {'https://cmsweb-testbed.cern.ch': 'int/global',
+                        'https://cmsweb-k8s-testbed.cern.ch': 'int/global',
                         'https://cmsweb.cern.ch': 'prod/test'}
 
         ###set environment

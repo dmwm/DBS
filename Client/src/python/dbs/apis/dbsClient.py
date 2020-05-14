@@ -176,12 +176,14 @@ class DbsApi(object):
 
         :param method: REST API to call, e.g. 'datasets, blocks, files, ...'.
         :type method: str
-        :param params: Parameters to the API call, e.g. {'dataset':'/PrimaryDS/ProcessedDS/TIER'}.
+        :param params: Parameters to the GET API call, e.g. {'dataset':'/PrimaryDS/ProcessedDS/TIER'}.
         :type params: dict
         :param callmethod: The HTTP method used, by default it is HTTP-GET, possible values are GET, POST and PUT.
         :type callmethod: str
         :param content: The type of content the server is expected to return. DBS3 only supports application/json
         :type content: str
+        :param data: Parameters to POST API call
+        :type data: dict
 
         """
         UserID = os.environ['USER']+'@'+socket.gethostname()
@@ -463,6 +465,42 @@ class DbsApi(object):
 
         """
         return self.__callServer("fileparents", data=fileParentObj, callmethod='POST' )
+
+    def listParentDSTrio(self, **kwargs):
+        """
+        API to list file parent dataset's trio (run, lumi and file) for the given block.
+
+        :param block_name: name of block who's parents dataset's trio needs to be found (Required)
+        :type block_name: str
+        :returns: List of dictionaries containing following keys return: [{f1: [{r1:(l1, l2, ...)}, {r2:(l20, l21, ...)}, ...]} ..., {fn: [{r10:(l1, l2, ...)}, {r20:(l20, l21, ...)}, ...]}] 
+        :rtype: list of dicts
+       
+        """
+        validParameters = ['dataset']
+
+        requiredParameters = {'forced': ['dataset']}
+        checkInputParameter(method="listParentDSTrio", parameters=kwargs.keys(), validParameters=validParameters,
+                            requiredParameters=requiredParameters)
+        return self.__callServer("parentDSTrio", params=kwargs, callmethod='GET')
+
+    def listBlockTrio(self, **kwargs):
+        """
+        API to list the block's trio (run, lumi and file).
+
+        :param block_name: name of the block whose trio needed to be found (Required)
+        :type block_name: str
+        :param logical_file_name: if not all the file under the block needed, this lfn list gives the files that needs to find their trio (optional).
+        :type logical_file_name: list of string  
+        :returns: List of dictionaries containing following return: [{f1: [{r1:(l1, l2, ...)}, {r2:(l20, l21, ...)}, ...]} ..., {fn: [{r10:(l1, l2, ...)}, {r20:(l20, l21, ...)}, ...]}]  
+        :rtype: list of dicts
+       
+        """
+        validParameters = ['block_name']
+
+        requiredParameters = {'forced': ['block_name']}
+        checkInputParameter(method="listBlockTrio", parameters=kwargs.keys(), validParameters=validParameters,
+                            requiredParameters=requiredParameters)
+        return self.__callServer("BlockTrio", params=kwargs, callmethod='GET')
 
     def listFileParentsByLumi(self, **kwargs):
         """

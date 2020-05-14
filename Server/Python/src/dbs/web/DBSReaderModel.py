@@ -103,7 +103,8 @@ class DBSReaderModel(RESTModel):
         self.dbsDataTierListDAO = self.daofactory(classname="DataTier.List")
         self.dbsBlockSummaryListDAO = self.daofactory(classname="Block.SummaryList")
         self.dbsRunSummaryListDAO = self.daofactory(classname="Run.SummaryList")
-
+        self.ParentDSFileLumiIdsDAO = self.daofactory(classname="FileParent.ListParentDatasetFileLumiIds")
+        self.BKFileLumiIdsDAO = self.daofactory(classname="FileParent.ListBlockFileLumiIds")
         self._addMethod('GET', 'serverinfo', self.getServerInfo, secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'primarydatasets', self.listPrimaryDatasets, args=['primary_ds_name', 'primary_ds_type'],
@@ -146,8 +147,11 @@ class DBSReaderModel(RESTModel):
                         security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('POST', 'fileparentsbylumi', self.listFileParentsByLumi,
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
-        self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name', 'block_name',
-                                                                            'block_id'], secured=True,
+        self._addMethod('GET', 'BlockTrio', self.listBlockTrio, args=['block_name'],
+                        secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
+        self._addMethod('GET', 'parentDSTrio', self.listParentDSTrio, args=['dataset'], secured=True,
+                        security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
+        self._addMethod('GET', 'filechildren', self.listFileChildren, args=['logical_file_name', 'block_name', 'block_id'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'filelumis', self.listFileLumis, args=['logical_file_name', 'block_name', 'run_num', 'validFileOnly'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
@@ -943,7 +947,7 @@ class DBSReaderModel(RESTModel):
         origin_site_name = origin_site_name.replace("*", "%")
         dataset = dataset.replace("*", "%")
         #
-        # run_num=1 caused full table scan and CERN DBS reported some of the queries ran more than 50 hours
+        # run_num=1 caused full table scan and CERN DBA reported some of the queries ran more than 50 hours
         # We will disbale all the run_num=1 calls in DBS. Run_num=1 will be OK when logical_file_name is given.
         # YG Jan. 15 2019
         #
@@ -951,14 +955,14 @@ class DBSReaderModel(RESTModel):
             for r in parseRunRange(run_num):
                 if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
                     if r == 1 or r == '1':
-                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                        dbsExceptionHandler("dbsException-invalid-input", "While Run_num=1, LFN is required.",
                                 self.logger.exception)
                 elif isinstance(r, run_tuple):
                     if r[0] == r[1]:
                         dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",
                           self.logger.exception)
                     elif r[0] <= 1 <= r[1]:
-                        dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
+                        dbsExceptionHandler("dbsException-invalid-input", "While Run_num includes 1, LFN is required.",
                                 self.logger.exception)
         if lumi_list:
             if run_num ==-1 or not run_num :
@@ -973,10 +977,10 @@ class DBSReaderModel(RESTModel):
         else:
             if not isinstance(run_num, list):
                 if run_num ==1 or run_num == '1':
-                    dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
+                    dbsExceptionHandler("dbsException-invalid-input", "While run_num=1, lumi and LFN are required.", self.logger.exception)
             else:
                 if 1 in run_num or '1' in run_num :
-                 dbsExceptionHandler("dbsException-invalid-input", "files API does not supprt run_num=1 when no lumi.", self.logger.exception)
+                 dbsExceptionHandler("dbsException-invalid-input", "While run_num includes 1, lumi and LFN are required. ", self.logger.exception)
         if int(sumOverLumi) == 1 and (isinstance(run_num, list) or isinstance(logical_file_name, list)):
             dbsExceptionHandler("dbsException-invalid-input", "When sumOverLumi=1, no lfn list or run_num list allowed  becaue nesting of WITH clause within WITH clause not supported yet by Oracle. ", self.logger.exception)
         detail = detail in (True, 1, "True", "1", 'true')
@@ -1066,11 +1070,11 @@ class DBSReaderModel(RESTModel):
                     if isinstance(data['run_num'], list):
                         if 1 in data['run_num'] or '1' in data['run_num']:
                             raise dbsExceptionHandler("dbsException-invalid-input",
-                                  'files API does not supprt run_num=1 without logical_file_name.', self.logger.exception)
+                                  'While run_num=1, LFN is required.', self.logger.exception)
                         else:
                             if data['run_num'] == 1 or data['run_num'] == '1':
                                 raise dbsExceptionHandler("dbsException-invalid-input",
-                                   'files API does not supprt run_num=1 without logical_file_name.', self.logger.exception)                
+                                   'While run_num=1, LFN is required.', self.logger.exception)                
                 #Because CMSWEB has a 300 seconds responding time. We have to limit the array siz to make sure that
                 #the API can be finished in 300 second. See github issues #465 for tests' results.
                 # YG May-20-2015
@@ -1277,7 +1281,71 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listFileParents. %s\n. Exception trace: \n %s" \
                     % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', ex.message,  self.logger.exception, sError)
-    
+   
+    @inputChecks(dataset=basestring)
+    @thr.make_throttled()
+    def listParentDSTrio(self, dataset=''):
+        """
+        API to list the parent block's trios. This is a API for WMAgent only.
+
+        :param dataset: Name of the child dataset, whose parent dataset's trio (run, lumi and file) should be listed.
+        :type dataset: str
+        :returns: List of dicts containing the following key-value pairs:{file_id: [[run_num,  lumi] ... [run_num_n, lumin_n]]}
+        :rtype: list of dicts
+
+        """
+        if not dataset:
+            dbsExceptionHandler('dbsException-invalid-input', \
+                "Child dataset is required for DBSReaderModel/listParentDSTrio", self.logger.exception )
+        try:
+            #import time
+            #t1=time.time()
+            with self.dbi.connection() as conn:
+                r  = self.ParentDSFileLumiIdsDAO.execute(conn, dataset)
+                for item in r:
+                    yield item
+            #print("Server time is: %.4f" %(time.time()-t1))
+        except HTTPError as he:
+            raise he
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+        except Exception as ex:
+            sError = "DBSReaderModel/listParentDSTrio. %s\n. Exception trace: \n %s" \
+                    % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', ex.message,  self.logger.exception, sError)
+
+    @inputChecks(block_name=basestring)
+    @thr.make_throttled()
+    def listBlockTrio(self, block_name=''):
+        """
+        IMPORTANT: This is ***WMAgent*** sepcial case API. It is not for others.
+
+        API to list the trios (run, lumi, file) for a given block with or w/o a list of LFN. 
+        
+        :param block_name: the block name 
+        :type  block_name: str
+        :returns: List of dicts containing the following key-value pairs:{file_id: [[run_num,  lumi] ... [run_num_n, lumin_n]]}
+        :rtype: list of dicts
+        
+        """
+        if not block_name:
+            dbsExceptionHandler('dbsException-invalid-input', \
+                "block_name is required for DBSReaderModel/listBlockTrio", self.logger.exception )
+        try:
+            with self.dbi.connection() as conn:
+                r  = self.BKFileLumiIdsDAO.execute(conn, block_name)
+                for item in r:
+                    yield item
+        except dbsException as de:
+            dbsExceptionHandler(de.eCode, de.message, self.logger.exception, de.serverError)
+        except HTTPError as he:
+            raise he
+        except Exception as ex:
+            sError = "DBSReaderModel/listBlockTrio. %s \n Exception trace: \n %s" \
+            % (ex, traceback.format_exc())
+            dbsExceptionHandler('dbsException-server-error', ex.message, self.logger.exception, sError)
+
+ 
     @thr.make_throttled()
     def listFileParentsByLumi(self):
         """
@@ -1328,9 +1396,6 @@ class DBSReaderModel(RESTModel):
             sError = "DBSReaderModel/listFileParentsByLumi. %s \n Exception trace: \n %s" \
             % (ex, traceback.format_exc())
             dbsExceptionHandler('dbsException-server-error', ex.message, self.logger.exception, sError)
-
-
-
 
     @transformInputType('logical_file_name')
     @inputChecks(logical_file_name=(basestring, list), block_name=(basestring), block_id=(basestring, int))
