@@ -1083,6 +1083,14 @@ class DBSReaderModel_t(unittest.TestCase):
         data = {"block_name": testparams['stepchain_block']}
         api.insert('fileparentsbylumi', data)
 
+    def test010e(self):
+        """test010e: web.DBSReaderModel.listBlockTrio: basic Block Trio list test"""
+        api.list('BlockTrio', block__name=testparams['stepchain_block'])
+
+    def test010f(self):
+        """test010f: web.DBSReaderModel.listParentDSTrio: basic parent DS Trio list test"""
+        api.list('parentDSTrio', dataset=testparams['stepchain_block'].split('#')[0])
+
     @checkException400
     def test010e(self):
         """test010e: web.DBSReaderModel.listFileLumis: basic test """

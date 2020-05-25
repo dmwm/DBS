@@ -500,7 +500,7 @@ class DbsApi(object):
         requiredParameters = {'forced': ['block_name']}
         checkInputParameter(method="listBlockTrio", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
-        return self.__callServer("BlockTrio", params=kwargs, callmethod='GET')
+        return self.__callServer("blockTrio", params=kwargs, callmethod='GET')
 
     def listFileParentsByLumi(self, **kwargs):
         """

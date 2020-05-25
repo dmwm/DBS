@@ -147,7 +147,7 @@ class DBSReaderModel(RESTModel):
                         security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('POST', 'fileparentsbylumi', self.listFileParentsByLumi,
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
-        self._addMethod('GET', 'BlockTrio', self.listBlockTrio, args=['block_name'],
+        self._addMethod('GET', 'blockTrio', self.listBlockTrio, args=['block_name'],
                         secured=True, security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
         self._addMethod('GET', 'parentDSTrio', self.listParentDSTrio, args=['dataset'], secured=True,
                         security_params={'role': self.security_params, 'authzfunc': authInsert}, dump_request_info=True)
