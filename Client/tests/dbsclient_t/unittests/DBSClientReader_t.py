@@ -1501,6 +1501,14 @@ class DBSClientReader_t(unittest.TestCase):
                 self.fail("Wrong exception was raised.")
             else:
                 pass
+ 
+    def test111(self):
+        """test111 unittestDBSClientReader_t.listParentDSTrio: basic test using child dataset"""
+        self.api.listParentDSTrio(dataset=self.testparams['stepchain_block'].split('#')[0])
+   
+    def test112(self):
+        """test112 unittestDBSClientReader_t.listBlockTrio: basic test using block"""
+        self.api.listBlockTrio(block_name=self.testparams['stepchain_block'])
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSClientReader_t)
