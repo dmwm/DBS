@@ -778,7 +778,6 @@ DEPLOYMENT_TEST-v4711/RAW",
         expected_data = sorted(json.load(fp))
 
         help_page = sorted(self.api.help())
-
         self.assertEqual(expected_data, help_page)
 
         fp.close()

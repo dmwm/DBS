@@ -17,6 +17,8 @@ from dbs.apis.dbsClient import *
 
 uid = uuid.uuid4().time_mid
 print("****uid=%s******" % uid)
+print ('DBS write URL %s'%os.environ['DBS_WRITER_URL'])
+print ('DBS migration url: %s'%os.environ['DBS_MIGRATE_URL'])
 acquisition_era_name = "Acq_Era_%s" % uid
 processing_version = (uid if (uid < 9999) else uid % 9999)
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
@@ -54,7 +56,6 @@ class DBSValidation_t(unittest.TestCase):
         url = os.environ['DBS_WRITER_URL']
         proxy = os.environ.get('SOCKS5_PROXY')
         self.api = DbsApi(url=url, proxy=proxy)
-
         migration_url = os.environ['DBS_MIGRATE_URL']
         self.migration_api = DbsApi(url=migration_url, proxy=proxy)
 	self.source_url='https://cmsweb.cern.ch:8443/dbs/prod/global/DBSReader'
