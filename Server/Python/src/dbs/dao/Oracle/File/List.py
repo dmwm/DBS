@@ -139,8 +139,8 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
                                 if wheresql_run_range_ct >0 :
                                     wheresql_run_range += " or "
                                 wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
-                                binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
-                                binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+                                binds.update({"minrun%s"%wheresql_run_range_ct :int(r[0])})
+                                binds.update({"maxrun%s"%wheresql_run_range_ct :int(r[1])})
                                 wheresql_run_range_ct += 1
                             else:
                                 dbsExceptionHandler('dbsException-invalid-input', 
@@ -163,8 +163,8 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
 				    if wheresql_run_range_ct >0 :
                                         wheresql_run_range += " or "
 				    wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
-                                    binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
-                                    binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+                                    binds.update({"minrun%s"%wheresql_run_range_ct :int(r[0])})
+                                    binds.update({"maxrun%s"%wheresql_run_range_ct :int(r[1])})
                                     wheresql_run_range_ct += 1	
                                 else:
                                     dbsExceptionHandler('dbsException-invalid-input', 
@@ -185,8 +185,8 @@ JOIN %sDATASET_ACCESS_TYPES DT ON  DT.DATASET_ACCESS_TYPE_ID = D.DATASET_ACCESS_
 				if wheresql_run_range_ct >0 :
 				    wheresql_run_range += " or "
                                 wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
-				binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
-				binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+				binds.update({"minrun%s"%wheresql_run_range_ct :int(r[0])})
+				binds.update({"maxrun%s"%wheresql_run_range_ct :int(r[1])})
 				wheresql_run_range_ct += 1
 			    else:
                                 dbsExceptionHandler('dbsException-invalid-input', 

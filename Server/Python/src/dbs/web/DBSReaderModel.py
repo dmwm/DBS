@@ -413,7 +413,7 @@ class DBSReaderModel(RESTModel):
                     if r[0] == r[1]:
                         dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.", 
                           self.logger.exception)
-                    elif r[0] <= 1 <= r[1]:
+                    elif int(r[0]) <= 1 <= int(r[1]):
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception)     
 
@@ -643,7 +643,7 @@ class DBSReaderModel(RESTModel):
                     if r[0] == r[1]:
                         dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",
                           self.logger.exception)
-                    elif r[0] <= 1 <= r[1]:
+                    elif int(r[0]) <= 1 <= int(r[1]):
                         dbsExceptionHandler("dbsException-invalid-input2", "Run_num=1 is not a valid input.",
                                 self.logger.exception)
         
@@ -961,7 +961,7 @@ class DBSReaderModel(RESTModel):
                     if r[0] == r[1]:
                         dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",
                           self.logger.exception)
-                    elif r[0] <= 1 <= r[1]:
+                    elif int(r[0]) <= 1 <= int(r[1]):
                         dbsExceptionHandler("dbsException-invalid-input", "While Run_num includes 1, LFN is required.",
                                 self.logger.exception)
         if lumi_list:
@@ -1062,26 +1062,30 @@ class DBSReaderModel(RESTModel):
                         dbsExceptionHandler("dbsException-invalid-input", 
                                             "When lumi_list is given, sumOverLumi must set to 0 becaue nesting of WITH clause within WITH clause not supported yet by Oracle.", self.logger.exception)
                     data['lumi_list'] = self.dbsUtils2.decodeLumiIntervals(data['lumi_list'])	
-                    if 'run_num' not in data.keys() or not data['run_num'] or data['run_num'] ==-1 :
+                    if 'run_num' not in data or not data['run_num'] or data['run_num'] ==-1 :
                         dbsExceptionHandler("dbsException-invalid-input", 
                                             "When lumi_list is given, require a single run_num.", self.logger.exception)
                 #check if run_num =1 w/o lfn 
+                # YG Nov-4-2020
                 if ('logical_file_name' not in data or not data['logical_file_name']) and 'run_num' in data:
-                    if isinstance(data['run_num'], list):
-                        if 1 in data['run_num'] or '1' in data['run_num']:
-                            raise dbsExceptionHandler("dbsException-invalid-input",
-                                  'While run_num=1, LFN is required.', self.logger.exception)
-                        else:
-                            if data['run_num'] == 1 or data['run_num'] == '1':
-                                raise dbsExceptionHandler("dbsException-invalid-input",
-                                   'While run_num=1, LFN is required.', self.logger.exception)                
+                    for r in parseRunRange(data['run_num']):
+                        if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
+                            if r == 1 or r == '1': 
+                                dbsExceptionHandler("dbsException-invalid-input", "run_num cannot be 1 w/o lfn.",
+                                    self.logger.exception)
+                        elif isinstance(r, run_tuple):
+                            if r[0] == r[1]:
+                                dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",self.logger.exception)
+                            elif int(r[0]) <= 1 <= int(r[1]):
+                                dbsExceptionHandler("dbsException-invalid-input", "run_num cannot be 1 w/o lfn.",
+                                       self.logger.exception)           
                 #Because CMSWEB has a 300 seconds responding time. We have to limit the array siz to make sure that
                 #the API can be finished in 300 second. See github issues #465 for tests' results.
                 # YG May-20-2015
                 max_array_size = 1000
-                if ( 'run_num' in data.keys() and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
-                    or ('lumi_list' in data.keys() and isinstance(data['lumi_list'], list) and len(data['lumi_list'])>max_array_size)\
-                    or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
+                if ( 'run_num' in data and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
+                    or ('lumi_list' in data and isinstance(data['lumi_list'], list) and len(data['lumi_list'])>max_array_size)\
+                    or ('logical_file_name' in data and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
                     dbsExceptionHandler("dbsException-invalid-input", 
                                         "The Max list length supported in listFileArray is %s." %max_array_size, self.logger.exception)
             #   
@@ -1145,7 +1149,7 @@ class DBSReaderModel(RESTModel):
                     if r[0] == r[1]:
                         dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.",
                           self.logger.exception)
-                    elif r[0] <= 1 <= r[1]:
+                    elif int(r[0]) <= 1 <= int(r[1]):
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception)
         try:
@@ -1461,7 +1465,7 @@ class DBSReaderModel(RESTModel):
                 elif isinstance(r, run_tuple):
                     if r[0] == r[1]:
                         dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",self.logger.exception)
-                    elif r[0] <= 1 <= r[1]:
+                    elif int(r[0]) <= 1 <= int(r[1]):
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception) 
         try:
@@ -1502,20 +1506,28 @@ class DBSReaderModel(RESTModel):
             #the API can be finished in 300 second. 
             # YG Nov-05-2015
             max_array_size = 1000 
-            if ( 'run_num' in data.keys() and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
-            or ('logical_file_name' in data.keys() and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
+            if ( 'run_num' in data and isinstance(data['run_num'], list) and len(data['run_num'])>max_array_size)\
+            or ('logical_file_name' in data and isinstance(data['logical_file_name'], list) and len(data['logical_file_name'])>max_array_size):
                 dbsExceptionHandler("dbsException-invalid-input",
                                         "The Max list length supported in listLumiArray is %s." %max_array_size, self.logger.exception)
- 
-            if 'run_num' in data.keys() and not isinstance(data['run_num'], list) and (data['run_num']==1 or data['run_num']=="1"):
-                dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.',
-			self.logger.exception)
-            if 'run_num' in data.keys() and isinstance(data['run_num'], list) and (1 in data['run_num'] or "1" in data['run_num']):
-                dbsExceptionHandler('dbsException-invalid-input', 'run_num cannot be 1 in filelumiarray API.', 
-			self.logger.exception)
+
+            # Check for run_num=1 
+            # YG Nov-4-2020
+            if ('run_num' in data):
+                for r in parseRunRange(data['run_num']):
+                    if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
+                        if r == 1 or r == '1': 
+                            dbsExceptionHandler("dbsException-invalid-input", "run_num cannot be 1 in filelumiarray API.",
+                                self.logger.exception)
+                    elif isinstance(r, run_tuple):
+                        if r[0] == r[1]:
+                            dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",self.logger.exception)
+                        elif int(r[0]) <= 1 <= int(r[1]):
+                            dbsExceptionHandler("dbsException-invalid-input", "run_num cannot be 1 in filelumiarray API.",
+                                self.logger.exception) 
 	    result = self.dbsFile.listFileLumis(input_body=data)
 	    for r in result:
-	    	yield r
+	        yield r
 	except cjson.DecodeError as De:
 	    dbsExceptionHandler('dbsException-invalid-input2', "Invalid input", self.logger.exception, str(De))
         except dbsException as de:
@@ -1558,7 +1570,7 @@ class DBSReaderModel(RESTModel):
                     if r[0] == r[1]:
                         dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",
                           self.logger.exception)
-                    elif r[0] <= 1 <= r[1]:
+                    elif int(r[0]) <= 1 <= int(r[1]):
                         dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input.",
                                 self.logger.exception)
         if run_num==-1 and not logical_file_name and not dataset and not block_name:
@@ -1785,7 +1797,7 @@ class DBSReaderModel(RESTModel):
         # run_num=1 caused full table scan and CERN DBS reported some of the queries ran more than 50 hours
         # We will disbale all the run_num=1 calls in DBS. Run_num=1 will be OK when dataset is given in this API.
         # YG Jan. 16 2019
-        if ((run_num == -1 or run_num == '-1') and dataset==''):
+        if ((run_num == 1 or run_num == '1') and dataset==''):
             dbsExceptionHandler("dbsException-invalid-input", "Run_num=1 is not a valid input when no dataset is present.", 
                                  self.logger.exception)
         conn = None

@@ -68,8 +68,8 @@ class BriefList(DBFormatter):
                     if id[0] == id[1]:
 		        dbsExceptionHandler('dbsException-invalid-input', "DBS dataset_id range must be apart at least by 1.", self.logger.exception)
 		    wheresql_dataset_id_range = " D.DATASET_ID between :minid and :maxid " 
-                    binds.update({"minid":id[0]})
-                    binds.update({"maxid":id[1]})
+                    binds.update({"minid":int(id[0])})
+                    binds.update({"maxid":int(id[1])})
 	    if dataset_id_list:
 		ds_generator, binds2 = create_token_generator(dataset_id_list)
 		binds.update(binds2)
@@ -251,8 +251,8 @@ class BriefList(DBFormatter):
                         if r[0] == r[1]:
                             dbsExceptionHandler('dbsException-invalid-input', "DBS run range must be apart at least by 1.", self.logger.exception)
                         wheresql_run_range = " FLLU.RUN_NUM between :minrun and :maxrun "
-                        binds.update({"minrun":r[0]})
-                        binds.update({"maxrun":r[1]})
+                        binds.update({"minrun":int(r[0])})
+                        binds.update({"maxrun":int(r[1])})
                 # 
                 if run_list:
                     wheresql_run_list = " FLLU.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "

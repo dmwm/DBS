@@ -117,8 +117,8 @@ class BriefList(DBFormatter):
                     if r[0] == r[1]:
                         dbsExceptionHandler('dbsException-invalid-input', "DBS run_num range must be apart at least by 1.", self.logger.exception)
                     wheresql_run_range = " FLM.RUN_NUM between :minrun and :maxrun "
-                    binds.update({"minrun":r[0]})
-                    binds.update({"maxrun":r[1]})
+                    binds.update({"minrun":int(r[0])})
+                    binds.update({"maxrun":int(r[1])})
             #
             if run_list:
                 wheresql_run_list = " FLM.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
