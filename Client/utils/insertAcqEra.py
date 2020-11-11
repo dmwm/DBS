@@ -7,7 +7,7 @@ url=os.environ['DBS_WRITER_URL']
 # API Object    
 dbs3api = DbsApi(url=url)
 
-for j in range(100, 105):
+for j in range(100, 101):
     acq_era={'acquisition_era_name': 'YuYi_GUO%s' %(j), 'description': 'testing_insert_era2',
          'start_date':1234567890}
 

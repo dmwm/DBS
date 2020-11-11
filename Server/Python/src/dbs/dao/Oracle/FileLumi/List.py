@@ -98,8 +98,8 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, 
                         dbsExceptionHandler('dbsException-invalid-input2', "DBS run range must be apart at least by 1.",
 			self.logger.exception, "DBS run range must be apart at least by 1.")
                     wheresql_run_range = " FL.RUN_NUM between :minrun and :maxrun "
-                    binds.update({"minrun":r[0]})
-                    binds.update({"maxrun":r[1]})
+                    binds.update({"minrun":int(r[0])})
+                    binds.update({"maxrun":int(r[1])})
             #
             if run_list:
 		if len(run_list) == 1:

@@ -143,8 +143,8 @@ class BriefList(DBFormatter):
 				if wheresql_run_range_ct >0 :
 				    wheresql_run_range += " or "
 				wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
-				binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
-				binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+				binds.update({"minrun%s"%wheresql_run_range_ct :int(r[0])})
+				binds.update({"maxrun%s"%wheresql_run_range_ct :int(r[1])})
 				wheresql_run_range_ct += 1  
 			    else:
                                 dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.", self.logger.exception)		
@@ -164,8 +164,8 @@ class BriefList(DBFormatter):
 				    if wheresql_run_range_ct >0 :
 					wheresql_run_range += " or "
 				    wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2)
-				    binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
-				    binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+				    binds.update({"minrun%s"%wheresql_run_range_ct :int(r[0])})
+				    binds.update({"maxrun%s"%wheresql_run_range_ct :int(r[1])})
 				    wheresql_run_range_ct += 1 
                                 else:
                                     dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.", self.logger.exception)
@@ -182,8 +182,8 @@ class BriefList(DBFormatter):
 				if wheresql_run_range_ct >0 :
 					wheresql_run_range += " or "
                                 wheresql_run_range += " FL.RUN_NUM between :minrun%s and :maxrun%s " %((wheresql_run_range_ct,)*2) 
-                                binds.update({"minrun%s"%wheresql_run_range_ct :r[0]})
-                                binds.update({"maxrun%s"%wheresql_run_range_ct :r[1]})
+                                binds.update({"minrun%s"%wheresql_run_range_ct :int(r[0])})
+                                binds.update({"maxrun%s"%wheresql_run_range_ct :int(r[1])})
 				wheresql_run_range_ct += 1
                             else:
                                 dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.", self.logger.exception)	
