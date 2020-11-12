@@ -1516,14 +1516,14 @@ class DBSReaderModel(RESTModel):
             if ('run_num' in data):
                 for r in parseRunRange(data['run_num']):
                     if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):    
-                        if r == 1 or r == '1': 
-                            dbsExceptionHandler("dbsException-invalid-input", "run_num cannot be 1 in filelumiarray API.",
+                        if (r == 1 or r == '1') and ('logical_file_name' not in data or not data['logical_file_name']): 
+                            dbsExceptionHandler("dbsException-invalid-input", "run_num cannot be 1 w/o lfn in filelumiarray API.",
                                 self.logger.exception)
                     elif isinstance(r, run_tuple):
                         if r[0] == r[1]:
                             dbsExceptionHandler("dbsException-invalid-input", "DBS run range must be apart at least by 1.",self.logger.exception)
-                        elif int(r[0]) <= 1 <= int(r[1]):
-                            dbsExceptionHandler("dbsException-invalid-input", "run_num cannot be 1 in filelumiarray API.",
+                        elif (int(r[0]) <= 1 <= int(r[1])) and ('logical_file_name' not in data or not data['logical_file_name']):
+                            dbsExceptionHandler("dbsException-invalid-input", "run_num cannot be 1 w/o lfn in filelumiarray API.",
                                 self.logger.exception) 
 	    result = self.dbsFile.listFileLumis(input_body=data)
 	    for r in result:

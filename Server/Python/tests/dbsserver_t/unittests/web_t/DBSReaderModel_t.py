@@ -536,22 +536,27 @@ class DBSReaderModel_t(unittest.TestCase):
     def test007a(self):
         """test007a: web.DBSReaderModel.listFiles: basic negative test"""
         api.list('files', dataset='/*')
-
+    
+    @checkException400
     def test007b(self):
         """test007b: web.DBSReaderModel.listFiles: basic test"""
         api.list('files', dataset=testparams['dataset'], run_num='1-%s' % (testparams['run_num']))
+    
+    def test007b0(self):
+        """test007b: web.DBSReaderModel.listFiles: basic test"""
+        api.list('files', dataset=testparams['dataset'], run_num='2-%s' % (testparams['run_num']))
 
     def test007b1(self):
         """test007b1: web.DBSReaderModel.listFiles: basic test"""
-        api.list('files', dataset=testparams['dataset'], run_num='1-%s' % (testparams['run_num']), detail=True)
+        api.list('files', dataset=testparams['dataset'], run_num='2-%s' % (testparams['run_num']), detail=True)
 
     def test007b2(self):
         """test007b2: web.DBSReaderModel.listFiles: basic test"""
-        api.list('files', dataset=testparams['dataset'], run_num=['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] )
+        api.list('files', dataset=testparams['dataset'], run_num=['2-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] )
 
     def test007b3(self):
         """test007b3: web.DBSReaderModel.listFiles: basic test"""
-        api.list('files', dataset=testparams['dataset'], run_num=['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'], detail=True)
+        api.list('files', dataset=testparams['dataset'], run_num=['2-%s' % (testparams['run_num']), 100, 200, 300, '500-600'], detail=True)
 
     def test007c1(self):
         """test007c1: web.DBSReaderModel.listFiles: basic test"""
@@ -808,12 +813,12 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test007k20(self):
         """test007k20: web.DBSReaderModel.listFileArray: basic test"""
-        data = {'dataset':testparams['dataset'], 'run_num': ['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] }
+        data = {'dataset':testparams['dataset'], 'run_num': ['2-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] }
 	api.insert('fileArray', data)
 
-    def test007k17(self):
-        """test007k17: web.DBSReaderModel.listFileArray: basic test"""
-        data = {'dataset':testparams['dataset'], 'run_num' : ['1-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] , 'detail':True}
+    def test007k21(self):
+        """test007k21: web.DBSReaderModel.listFileArray: basic test"""
+        data = {'dataset':testparams['dataset'], 'run_num' : ['2-%s' % (testparams['run_num']), 100, 200, 300, '500-600'] , 'detail':True}
 	api.insert('fileArray', data)
 
     def test007ka1(self):
@@ -1185,6 +1190,8 @@ class DBSReaderModel_t(unittest.TestCase):
         """test010lw: web.DBSReaderModel.listFileLumiArray: basic test """
         lfn1 = testparams['files'][1]
         lfn2 = testparams['files'][2]
+        print ("******* test010w() ******")
+        print (lfn1, lfn2)
         data={"logical_file_name": [lfn1, lfn2], "run_num":'1-%s' %testparams['run_num'], "validFileOnly" :0}
         api.insert('filelumis', data)
 
@@ -1302,7 +1309,7 @@ class DBSReaderModel_t(unittest.TestCase):
 
     def test013a(self):
         """test013a: web.DBSReaderModel.listRuns: basic"""
-        api.list('runs', run_num='0-%s' % (testparams['run_num']))
+        api.list('runs', run_num='2-%s' % (testparams['run_num']))
 
     def test013b(self):
         """test013b: web.DBSReaderModel.listRuns: basic"""
