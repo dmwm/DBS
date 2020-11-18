@@ -157,14 +157,21 @@ class TestCommand(Command):
             TestSuite.addTests(create_test_suite(validation_tests, 'DBSValidation_t.py', base_dir))
 
         if self.deployment:
+            os.environ['DBS_READER_URL'] = ("%s/dbs/%s/DBSReader") % (self.host, db_instances.get(self.host, 'dev/global'))
+            os.environ['DBS_WRITER_URL'] = ("%s/dbs/%s/DBSWriter") % (self.host, db_instances.get(self.host, 'dev/global'))
+            os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/%s/DBSMigrate") % (self.host, db_instances.get(self.host, 'dev/global'))
+            TestSuite.addTests(create_deployment_test_suite(self.insert))
+            """
             for instance in get_db_instances(url=self.host):
-                ###set environment
+                ###set environmen
+                print("url=%s"%self.host)
+                print("DBS instance for deployment test: %s" %instance)
                 os.environ['DBS_READER_URL'] = ("%s/dbs/%s/DBSReader") % (self.host, instance)
                 os.environ['DBS_WRITER_URL'] = ("%s/dbs/%s/DBSWriter") % (self.host, instance)
                 os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/%s/DBSMigrate") % (self.host, instance)
                 
                 TestSuite.addTests(create_deployment_test_suite(self.insert))
-
+            """
         unittest.TextTestRunner(verbosity=2).run(TestSuite)
 
 setup(name = 'dbs',
