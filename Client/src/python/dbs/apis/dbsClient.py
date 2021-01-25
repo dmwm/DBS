@@ -7,6 +7,7 @@ from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
 
 import cjson
 import os
+import time
 import socket
 import sys
 import urllib
@@ -166,9 +167,17 @@ class DbsApi(object):
         self.key = key
         self.cert = cert
         self.userAgent = userAgent
+        self.ca_info = ca_info
+        self.verifypeer = verifypeer
+        self.host = socket.gethostname()
 
         self.rest_api = RestApi(auth=X509Auth(ssl_cert=cert, ssl_key=key, ssl_verifypeer=verifypeer, ca_info=ca_info),
                                 proxy=Socks5Proxy(proxy_url=self.proxy) if self.proxy else None)
+
+    def get_rest_api(self):
+        auth = X509Auth(ssl_cert=self.cert, ssl_key=self.key, ssl_verifypeer=self.verifypeer, ca_info=self.ca_info)
+        proxy = Socks5Proxy(proxy_url=self.proxy) if self.proxy else None
+        return RestApi(auth=auth, proxy=proxy)
 
     def __callServer(self, method="", params={}, data={}, callmethod='GET', content='application/json'):
         """
@@ -184,14 +193,15 @@ class DbsApi(object):
         :type content: str
 
         """
-        UserID = os.environ['USER']+'@'+socket.gethostname()
+        time0 = time.time()
+        UserID = os.environ['USER']+'@'+self.host
         try:
             UserAgent = "DBSClient/"+os.environ['DBS3_CLIENT_VERSION']+"/"+ self.userAgent
         except:
             UserAgent = "DBSClient/Unknown"+"/"+ self.userAgent
         request_headers =  {"Content-Type": content, "Accept": content, "UserID": UserID, "User-Agent":UserAgent }
 
-        method_func = getattr(self.rest_api, callmethod.lower())
+        method_func = getattr(self.get_rest_api(), callmethod.lower())
 
         data = cjson.encode(data)
 
@@ -206,7 +216,7 @@ class DbsApi(object):
         try:
             json_ret=cjson.decode(self.http_response.body)
         except cjson.DecodeError:
-            print("The server output is not a valid json, most probably you have a typo in the url.\n%s.\n" % self.url, file=sys.stderr)
+            print("The server output is not a valid json, most probably you have a typo in the url.\n%s,  http response body: %s, cjson decode error %s.\n" % (self.url, self.http_response.body, cjson.DecodeError), file=sys.stderr)
             raise dbsClientException("Invalid url", "Possible urls are %s" %self.http_response.body)
 
         return json_ret
