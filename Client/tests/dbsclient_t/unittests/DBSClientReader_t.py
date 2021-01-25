@@ -45,14 +45,21 @@ class DBSClientReader_t(unittest.TestCase):
         url = os.environ['DBS_READER_URL']
         proxy = os.environ.get('SOCKS5_PROXY')
         self.api = DbsApi(url=url, proxy=proxy)
+        fname = os.path.join(os.path.dirname(os.path.abspath(__file__)), "info.dict")
+        self.info_params = None
+        with open(fname, "r") as infofile:
+            self.info_params = importCode(infofile, "testparams", 0).info
 
     def setUp(self):
         """setup all necessary parameters"""
-        infofile = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "info.dict"), "r")
-        self.testparams = importCode(infofile, "testparams", 0).info
+        self.testparams = copy.deepcopy(self.info_params)
         dataset=self.testparams['dataset']
         processed_ds_name = dataset.split('/')[2] 
         self.testparams['processed_ds_name'] = processed_ds_name
+
+    def tierDown(self):
+        """tier down all stuff form unit test"""
+        self.testparams = None
 
     def test000a(self):
         """test00 unittestDBSClientReader_t.requestTimingInfo"""
