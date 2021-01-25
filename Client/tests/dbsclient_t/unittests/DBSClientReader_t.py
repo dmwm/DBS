@@ -6,6 +6,7 @@ import imp
 import os
 import re
 import sys
+import copy
 import unittest
 from functools import wraps
 
