@@ -139,13 +139,22 @@ class TestCommand(Command):
                         'https://cmsweb.cern.ch': 'prod/test'}
 
         ###set environment
-        os.environ['DBS_READER_URL'] = ("%s/dbs/%s/DBSReader") % (self.host, db_instances.get(self.host, 'dev/global'))
-        os.environ['DBS_WRITER_URL'] = ("%s/dbs/%s/DBSWriter") % (self.host, db_instances.get(self.host, 'dev/global'))
-        os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/%s/DBSMigrate") % (self.host,
-                                                                    db_instances.get(self.host, 'dev/global'))
+        if self.host.find("dbs2go") != -1:
+            os.environ['DBS_READER_URL'] = self.host
+            os.environ['DBS_WRITER_URL'] = self.host
+            os.environ['DBS_MIGRATE_URL'] = self.host
+        else:
+            os.environ['DBS_READER_URL'] = ("%s/dbs/%s/DBSReader") % (self.host, db_instances.get(self.host, 'dev/global'))
+            os.environ['DBS_WRITER_URL'] = ("%s/dbs/%s/DBSWriter") % (self.host, db_instances.get(self.host, 'dev/global'))
+            os.environ['DBS_MIGRATE_URL'] = ("%s/dbs/%s/DBSMigrate") % (self.host,
+                                                                        db_instances.get(self.host, 'dev/global'))
 
         if self.cmsweb_testbed:
             self.unitall, self.validation, self.deployment = (True, True, True)
+
+        # VK, temporary comment out deployment for dbs2go
+        if self.host.find("dbs2go") != -1:
+            self.deployment = False
 
         if self.unit in ('ClientWriter', 'ClientReader', 'ClientBlockWriter'):
             TestSuite.addTests(create_test_suite(unit_tests, 'DBS%s_t.py' % self.unit, base_dir))
