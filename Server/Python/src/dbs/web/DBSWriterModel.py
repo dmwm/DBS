@@ -18,9 +18,42 @@ from dbs.utils.DBSTransformInputType import transformInputType
 
 import traceback
 
+# import for gzip decompression utility
+import gzip
+try:
+    import cStringIO as StringIO
+except ImportError: # python3
+    import io
+except:
+    import StringIO
 # CMSMonitoring modules
 from CMSMonitoring.NATS import NATSManager
 
+
+def decompress(body):
+    "Decompress the request body"
+    if  sys.version.startswith('3.'):
+        zbuf = io.BytesIO()
+    else:
+        zbuf = StringIO.StringIO()
+    zbuf.write(body)
+    zbuf.seek(0)
+    zfile = gzip.GzipFile(mode='rb', fileobj=zbuf)
+    data = zfile.read()
+    zfile.close()
+    return data
+
+def read_body():
+    """
+    Provides uniform way to read either plain payload body
+    or gzipped one
+    """
+	raw = request.body.read(int(cherrypy.request.headers['Content-Length']))
+	if request.headers['Content-Encoding'] == 'gzip':
+		raw = decompress(raw)
+		return raw
+	body = request.body.read()
+    return body
 
 class DBSWriterModel(DBSReaderModel):
     """
@@ -98,7 +131,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try :
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("primds", indata)
             indata.update({"creation_date": dbsUtils().getTime(), "create_by": dbsUtils().getCreateBy() })
@@ -130,7 +163,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("dataset_conf_list", indata)
             indata.update({"creation_date": dbsUtils().getTime(),
@@ -181,7 +214,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("acquisition_era", indata)
             indata.update({"start_date": indata.get("start_date", dbsUtils().getTime()),\
@@ -210,7 +243,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy('processing_era', indata)
             indata.update({"creation_date": indata.get("creation_date", dbsUtils().getTime()), \
@@ -247,7 +280,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy('dataset', indata)
             indata.update({"creation_date": dbsUtils().getTime(),
@@ -287,7 +320,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)
             if (indata.get("file_parent_list", []) and indata.get("dataset_parent_list", [])): 
                 dbsExceptionHandler("dbsException-invalid-input2", "insertBulkBlock: dataset and file parentages cannot be in the input at the same time",  
@@ -332,7 +365,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("file_parent", indata)
             self.dbsFile.insertFileParents(indata)
@@ -365,7 +398,7 @@ class DBSWriterModel(DBSReaderModel):
 
         """
         try:
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)
             indata = validateJSONInputNoCopy("block", indata)
             self.dbsBlock.insertBlock(indata)
@@ -405,7 +438,7 @@ class DBSWriterModel(DBSReaderModel):
         """
         if qInserts in (False, 'False'): qInserts=False
         try:
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)["files"]
             if not isinstance(indata, (list, dict)):
                 dbsExceptionHandler("dbsException-invalid-input", "Invalid Input DataType", self.logger.exception, \
@@ -563,7 +596,7 @@ class DBSWriterModel(DBSReaderModel):
             conn = self.dbi.connection()
             tran = conn.begin()
 
-            body = request.body.read()
+            body = read_body()
             indata = cjson.decode(body)
 
             indata = validateJSONInputNoCopy("dataTier", indata)
