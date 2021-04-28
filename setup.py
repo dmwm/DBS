@@ -265,7 +265,8 @@ class BuildCommand(Command):
     cmd.force = self.force
     cmd.ensure_finalized()
     cmd.run()
-    self.generate_docs()
+    # Stop calling generate_docs temporary
+    # self.generate_docs()
     self.distribution.have_run[command] = 1
 
 class InstallCommand(install):
