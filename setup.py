@@ -203,7 +203,7 @@ def define_the_build(self, dist, system_name, run_make = True, patch_x = ''):
   binsrc = sum((glob("%s" % x) for x in system.get('bin', [])), [])
 
   # Specify what to install.
-  py_version = (string.split(sys.version))[0]
+  py_version = sys.version.split()[0]
   pylibdir = '%slib/python%s/site-packages' % (patch_x, py_version[0:3])
   dist.py_modules = system.get('pythonmods', [])
   dist.packages = system.get('pythonpkg', [])
