@@ -5,7 +5,13 @@ from RestClient.RestApi import RestApi
 from RestClient.AuthHandling.X509Auth import X509Auth
 from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
 
-import cjson
+try:
+    import cjson
+except ImportError:
+    # Assuming we are running under python3 environment
+    # NO cjson is available for python3 and we are  about to rely on the
+    # automatic fallback mechanism to use pycurl.
+    pass
 import os
 import socket
 import sys
@@ -714,7 +720,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listBlockOrigin", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
-	return self.__callServer('blockorigin', params=kwargs)
+        return self.__callServer('blockorigin', params=kwargs)
 
     def listDatasets(self, **kwargs):
         """
@@ -830,7 +836,7 @@ class DbsApi(object):
 
         """
         validParameters = ['dataset', 'dataset_access_type', 'detail', 'dataset_id']
-	requiredParameters = {'multiple': ['dataset', 'dataset_id']}
+        requiredParameters = {'multiple': ['dataset', 'dataset_id']}
 
         checkInputParameter(method="listDatasetArray", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
@@ -993,7 +999,7 @@ class DbsApi(object):
 
         """
         validParameters = ['logical_file_name', 'run_num', 'validFileOnly']
-	requiredParameters = {'forced': ['logical_file_name']}
+        requiredParameters = {'forced': ['logical_file_name']}
 
         checkInputParameter(method="listFileLumiArray", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
@@ -1445,9 +1451,9 @@ class DbsApi(object):
         """
         validParameters = ['processing_version']
         
-	checkInputParameter(method="listProcessingEras", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listProcessingEras", parameters=kwargs.keys(), validParameters=validParameters)
         
-	return self.__callServer("processingeras", params=kwargs)
+        return self.__callServer("processingeras", params=kwargs)
 
     def listReleaseVersions(self, **kwargs):
         """

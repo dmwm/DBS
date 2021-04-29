@@ -1,9 +1,14 @@
 """
 DBS Client Exception class
 """
-import exceptions
+try:
+    from exceptions import Exception
+except ImportError:
+    # Assuming we are running under python3 environment:
+    pass
 
-class dbsClientException(exceptions.Exception):
+
+class dbsClientException(Exception):
 
     def __init__(self, reason, message):
         Exception.__init__(self)
