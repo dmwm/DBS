@@ -12,6 +12,8 @@ except ImportError:
     # NO cjson is available for python3 and we are  about to rely on the
     # automatic fallback mechanism to use pycurl.
     pass
+
+from  utils import jsonwrapper
 import os
 import socket
 import sys
@@ -201,7 +203,7 @@ class DbsApi(object):
 
         method_func = getattr(self.rest_api, callmethod.lower())
 
-        data = cjson.encode(data)
+        data = jsonwrapper.encode(data)
 
         try:
             self.http_response = method_func(self.url, method, params, data, request_headers)
@@ -212,8 +214,8 @@ class DbsApi(object):
             return self.http_response.body
 
         try:
-            json_ret=cjson.decode(self.http_response.body)
-        except cjson.DecodeError:
+            json_ret=jsonwrapper.decode(self.http_response.body)
+        except jsonwrapper.DecodeError:
             print("The server output is not a valid json, most probably you have a typo in the url.\n%s.\n" % self.url, file=sys.stderr)
             raise dbsClientException("Invalid url", "Possible urls are %s" %self.http_response.body)
 
@@ -228,7 +230,7 @@ class DbsApi(object):
         data = http_error.body
         try:
             if isinstance(data, str):
-                data = cjson.decode(data)
+                data = jsonwrapper.decode(data)
         except:
             raise http_error
 
