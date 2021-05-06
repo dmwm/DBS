@@ -1,7 +1,12 @@
 try:
     from cStringIO import StringIO
 except ImportError:
-    import StringIO
+    try:
+        import StringIO
+    except ImportError:
+        # Assuming we are running under python3 environment:
+        from io import StringIO
+
 
 class HTTPResponse(object):
     def __init__(self):
