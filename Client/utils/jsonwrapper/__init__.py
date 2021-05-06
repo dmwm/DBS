@@ -55,20 +55,12 @@ except ImportError:
 MODULE = None
 
 try:
-    import yajl
-    MODULE = "yajl"
+    import cjson
+    MODULE = "cjson"
 except ImportError:
-    try:
-        import cjson
-        MODULE = "cjson"
-    except ImportError:
-        try:
-            import ujson
-            MODULE = "ujson"
-        except ImportError:
-            # use default JSON module
-            import json
-            MODULE = "json"
+    # use default JSON module
+    import json
+    MODULE = "json"
 
 
 class EncodeError(Exception):
@@ -78,17 +70,17 @@ class EncodeError(Exception):
         self.message = message
 
     def __str__(self):
-        return repr(self.name': '+self.message)
+        return repr(self.name + ': ' + self.message)
 
 
 class DecodeError(Exception):
-    def __init__(self):
-        Exception.__init__(self, message)
+    def __init__(self, message):
+        Exception.__init__(self)
         self.name = str(self.__class__.__name__)
         self.message = message
 
     def __str__(self):
-        return repr(self.name': '+self.message)
+        return repr(self.name + ': ' + self.message)
 
 
 def encode(source):
@@ -113,14 +105,6 @@ def loads(idict, **kwargs):
         return json.loads(idict, **kwargs)
     elif MODULE == 'cjson':
         return cjson.decode(idict)
-    elif MODULE == 'ujson':
-        return ujson.decode(idict)
-    elif MODULE == 'yajl':
-        try: # yajl.loads("123") will fail
-            res = yajl.loads(idict)
-        except: # fall back into default python JSON
-            res = json.loads(idict, **kwargs)
-        return res
     else:
         raise Exception("Not support JSON module: %s" % MODULE)
 
@@ -136,10 +120,6 @@ def load(source):
     elif MODULE == 'cjson':
         data = source.read()
         return cjson.decode(data)
-    elif MODULE == 'ujson':
-        return ujson.load(source)
-    elif MODULE == 'yajl':
-        return yajl.load(source)
     else:
         raise Exception("Not support JSON module: %s" % MODULE)
 
@@ -152,10 +132,6 @@ def dumps(idict, **kwargs):
         return json.dumps(idict, **kwargs)
     elif MODULE == 'cjson':
         return cjson.encode(idict)
-    elif MODULE == 'ujson':
-        return ujson.dumps(idict)
-    elif MODULE == 'yajl':
-        return yajl.dumps(idict)
     else:
         raise Exception("JSON module %s is not supported" % MODULE)
 
@@ -171,10 +147,6 @@ def dump(doc, source):
     elif MODULE == 'cjson':
         stj = cjson.encode(doc)
         return source.write(stj)
-    if  MODULE == 'ujson':
-        return ujson.dump(doc, source)
-    elif MODULE == 'yajl':
-        return yajl.dump(doc, source)
     else:
         raise Exception("JSON module %s is not supported" % MODULE)
 
@@ -194,10 +166,6 @@ class JSONEncoder(object):
         """Decode JSON method"""
         if  self.module == 'cjson':
             return cjson.encode(idict)
-        elif self.module == 'ujson':
-            return ujson.encode(idict)
-        elif self.module == 'yajl':
-            return yajl.Encoder().encode(idict)
         return self.encoder.encode(idict)
 
     def iterencode(self, idict):
@@ -220,10 +188,6 @@ class JSONDecoder(object):
         """Decode JSON method"""
         if  MODULE == 'cjson':
             return cjson.decode(istring)
-        elif MODULE == 'ujson':
-            return ujson.decode(istring)
-        elif MODULE == 'yajl':
-            return yajl.Decoder().decode(istring)
         return self.decoder.decode(istring)
 
     def raw_decode(self, istring):
