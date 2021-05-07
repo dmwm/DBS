@@ -3,7 +3,7 @@
 """
 This module provides business object class to interact with File.
 """
-from __future__ import print_function
+
 from WMCore.DAOFactory import DAOFactory
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 from sqlalchemy.exc import IntegrityError as SQLAlchemyIntegrityError
@@ -111,7 +111,7 @@ class DBSFile:
                 k = i['this_logical_file_name']
                 v = i['parent_logical_file_name']
                 d.setdefault(k, []).append(v)
-            for k, v in d.iteritems():
+            for k, v in d.items():
                 yield {'logical_file_name':k, 'parent_logical_file_name': v}
             del d     
 
@@ -148,7 +148,7 @@ class DBSFile:
                     d[k].append(v)
                 else:
                     d[k] = [v]
-            for k, v in d.iteritems():
+            for k, v in d.items():
                 r = {'logical_file_name':k, 'child_logical_file_name': v}
                 result.append(r)
             return result
@@ -223,7 +223,7 @@ class DBSFile:
             if run_num==-1:
                 dbsExceptionHandler('dbsException-invalid-input', "Lumi list must accompany A single run number, \
                         use run_num=123", self.logger.exception)
-            elif isinstance(run_num, basestring):
+            elif isinstance(run_num, str):
                 try:
                     run_num = int(run_num)
                 except:
@@ -493,7 +493,7 @@ class DBSFile:
                 if not qInserts:
                     blkParams = self.blkstats.execute(conn, block_id,
                                                       transaction=tran)
-                    blkParams['block_size'] = long(blkParams['block_size'])
+                    blkParams['block_size'] = int(blkParams['block_size'])
                     self.blkstatsin.execute(conn, blkParams, transaction=tran)
 
             # All good ?
@@ -526,7 +526,7 @@ class DBSFile:
         Y. Guo 
         July 18, 2018 
         """
-        if "block_name" not in businput.keys() or "child_parent_id_list" not in businput.keys() or not businput["child_parent_id_list"] or not businput["block_name"]:
+        if "block_name" not in list(businput.keys()) or "child_parent_id_list" not in list(businput.keys()) or not businput["child_parent_id_list"] or not businput["block_name"]:
             dbsExceptionHandler("dbsException-invalid-input2", "DBSFile/insertFileParents: require child block_name and list of child/parent file id pairs" , self.logger.exception, "DBSFile/insertFileParents: require child block_name and list of child/parent file id pairs")
         tran = None
         conn = None  

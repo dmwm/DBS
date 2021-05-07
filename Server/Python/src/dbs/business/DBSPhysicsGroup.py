@@ -24,7 +24,7 @@ class DBSPhysicsGroup:
         """
         Returns all physics groups if physics group names are not passed.
         """
-        if not isinstance(physics_group_name, basestring):
+        if not isinstance(physics_group_name, str):
             dbsExceptionHandler('dbsException-invalid-input',
                 'physics group name given is not valid : %s' %
                  physics_group_name)

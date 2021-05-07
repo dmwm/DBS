@@ -1,4 +1,4 @@
-import cPickle as pickle
+import pickle as pickle
 import random
 import uuid
 
@@ -70,7 +70,7 @@ class DBSDataProvider(object):
     def files(self, block_name):
         if not (hasattr(self, '_files') and block_name in self._files):
             self._files[block_name] = []
-            for i in xrange(self._num_of_files):
+            for i in range(self._num_of_files):
                 logical_file_name = self._generate_file_name(i)
                 self._files[block_name].append({'check_sum' : self._generate_cksum(),
                                                 'file_size' : self._generate_file_size(),
@@ -138,7 +138,7 @@ class DBSDataProvider(object):
     def _generate_file_lumi_list(self):
         "generate file lumi list for a given file, if not already available"
         output = []
-        for _ in xrange(0, self._num_of_runs):
+        for _ in range(0, self._num_of_runs):
             self._run_num += 1
             for _ in range(0, self._num_of_lumis):
                 self._lumi_sec += 1
@@ -174,7 +174,7 @@ class DBSDataProvider(object):
         "return list of blocks"
         if not hasattr(self, '_blocks'):
             self._blocks = []
-            for i in xrange(self._num_of_blocks):
+            for i in range(self._num_of_blocks):
                 self._blocks.append(self._generate_block_name())
         return self._blocks
 

@@ -25,15 +25,15 @@ class DBSBlock_t(unittest.TestCase):
         bo = DBSBlock(self.logger, dbi, dbowner)
 
         result = bo.listBlocks(dataset='NoSuchDataset%')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
         result = bo.listBlocks(block_name='NoSuchBlock%')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
         result = bo.listBlocks(dataset = '/%', origin_site_name='%')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSBlock_t)

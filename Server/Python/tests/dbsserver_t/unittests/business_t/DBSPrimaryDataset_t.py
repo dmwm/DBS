@@ -41,7 +41,7 @@ class DBSPrimaryDataset_t(unittest.TestCase):
         bo.listPrimaryDatasets()
         bo.listPrimaryDatasets(primary_ds_name='%')
         result = bo.listPrimaryDatasets("ThisDoesNotExist")
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
 
     def test03(self):
@@ -52,7 +52,7 @@ class DBSPrimaryDataset_t(unittest.TestCase):
         bo = DBSPrimaryDataset(self.logger, dbi, dbowner)
 
         result = bo.listPrimaryDatasets(primary_ds_name=self.primary_ds_name)
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]["primary_ds_name"], self.primary_ds_name)
         

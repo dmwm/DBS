@@ -31,14 +31,14 @@ class Insert2(DBFormatter):
         binds = {} 
         bindlist=[]
         
-        if isinstance(daoinput, dict) and "block_name" in daoinput.keys():
+        if isinstance(daoinput, dict) and "block_name" in list(daoinput.keys()):
             binds = {"block_name": daoinput["block_name"]}
             r = self.dbi.processData(self.sql_sel, binds, conn, False)
             bfile = self.format(r)
             bfile_list = []
             for f in bfile:
                 bfile_list.append(f[0])           
-            if "child_parent_id_list" in daoinput.keys():
+            if "child_parent_id_list" in list(daoinput.keys()):
                 files = []
                 for i in daoinput["child_parent_id_list"]:
                     files.append(i[0])

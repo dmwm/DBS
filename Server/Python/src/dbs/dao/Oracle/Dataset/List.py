@@ -64,7 +64,7 @@ class List(DBFormatter):
         basesql=self.basesql
         binds = {}
         wheresql = "WHERE D.IS_DATASET_VALID = :is_dataset_valid " 
-        if dataset and type(dataset) is list:  # for the POST method
+        if dataset and isinstance(dataset, list):  # for the POST method
             ds_generator, binds2 = create_token_generator(dataset)
 	    binds.update(binds2)	
             wheresql += " AND D.DATASET in (SELECT TOKEN FROM TOKEN_GENERATOR)"
@@ -77,13 +77,13 @@ class List(DBFormatter):
             else:
                 binds['is_dataset_valid'] = is_dataset_valid
             sql =generatedsql + 'SELECT' + basesql + wheresql
-        elif type(dataset_id) is not int:  #for the POST method
+        elif not isinstance(dataset_id, int):  #for the POST method
 	    #we treat the datset_id is the same way as run_num. It can be id1-id2, id or [id1,2,3 ...]
             dataset_id_list = []
             wheresql_dataset_id_list=''
             wheresql_dataset_id_range=''
             for id in parseRunRange(dataset_id):
-                if isinstance(id, basestring) or isinstance(id, int) or isinstance(id, long):
+                if isinstance(id, str) or isinstance(id, int) or isinstance(id, int):
                     dataset_id_list.append(str(id))
                 if isinstance(id, run_tuple):
                     if id[0] == id[1]:
@@ -266,7 +266,7 @@ class List(DBFormatter):
                 wheresql_run_list=''
                 wheresql_run_range=''
                 for r in parseRunRange(run_num):
-                    if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long):
+                    if isinstance(r, str) or isinstance(r, int) or isinstance(r, int):
                         run_list.append(str(r))
                     if isinstance(r, run_tuple):
                         if r[0] == r[1]:

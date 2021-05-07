@@ -25,19 +25,19 @@ class DBSFile_t(unittest.TestCase):
         bo = DBSFile(self.logger, dbi, dbowner)
 
         result = bo.listFiles('NoSuchFile')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
         result = bo.listFiles(dataset='NoSuchDataset')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
         result = bo.listFiles(block_name='NoSuchBlock')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
         result = bo.listFiles(logical_file_name='NoSuchLFN')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
 if __name__ == "__main__":

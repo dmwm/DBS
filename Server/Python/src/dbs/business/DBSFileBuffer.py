@@ -180,7 +180,7 @@ class DBSFileBuffer:
                 # Update block parameters, file_count, block_size
                 blkParams = self.blkstats.execute(conn, block_id,
                                                   transaction=tran)
-                blkParams['block_size'] = long(blkParams['block_size'])
+                blkParams['block_size'] = int(blkParams['block_size'])
                 self.blkstatsin.execute(conn, blkParams, transaction=tran)
 
             # Delete the just inserted files

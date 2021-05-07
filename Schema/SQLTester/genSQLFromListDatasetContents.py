@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-from __future__ import print_function
+
 import sys
 from DBSAPI.dbsApi import DbsApi
 from DBSAPI.dbsException import *

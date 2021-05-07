@@ -4,7 +4,7 @@ This module provides the IDs of File, lumi and run for a give block.
 
 Y Guo May 1, 2020
 """
-from __future__ import print_function
+
 from types import GeneratorType
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler

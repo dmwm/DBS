@@ -29,7 +29,7 @@ class DBSDataset_t(unittest.TestCase):
         bo.listDatasets()
         bo.listDatasets(dataset='%')
         result = bo.listDatasets("ThisDoesNotExist")
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
     
     def test03(self):
@@ -46,7 +46,7 @@ class DBSDataset_t(unittest.TestCase):
         bo.listDatasets(app_name='%')
         bo.listDatasets(output_module_label='%')
         result = bo.listDatasets("ThisDoesNotExist")
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
 if __name__ == "__main__":

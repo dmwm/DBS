@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-from __future__ import print_function
+
 import sys
 import time
 #DBS-2 imports
@@ -207,17 +207,17 @@ class migrateDBS2TODBS3:
 					    last=i
 					end_time=time.time()
 					block_time['TimeSpent']=end_time-start_time
-					block_time['block_weight']=long(len(self.files))
-					block_time['file_count']=long(len(self.files))
+					block_time['block_weight']=int(len(self.files))
+					block_time['file_count']=int(len(self.files))
 					block_time['file_lumi_section_count']=0
 					block_time['file_parent_count']=0
 					for file in self.files:
 						if 'file_lumi_list' in file:
-							block_time['block_weight']+=long(len(file['file_lumi_list']))
-							block_time['file_lumi_section_count']+=long(len(file['file_lumi_list']))
+							block_time['block_weight']+=int(len(file['file_lumi_list']))
+							block_time['file_lumi_section_count']+=int(len(file['file_lumi_list']))
 						if 'file_parent_list' in file:
-							block_time['block_weight']+=long(len(file['file_parent_list']))
-							block_time['file_parent_count']+=long(len(file['file_parent_list']))
+							block_time['block_weight']+=int(len(file['file_parent_list']))
+							block_time['file_parent_count']+=int(len(file['file_parent_list']))
 					#print "fin"
 				except Exception as ex:
 					print(ex)

@@ -33,9 +33,9 @@ class List(DBFormatter):
 
         sql = self.sql
         
-	if isinstance(block_name, basestring):
+	if isinstance(block_name, str):
 	    binds = {'block_name' :block_name}
-        elif type(block_name) is list:
+        elif isinstance(block_name, list):
             binds = [{'block_name':x} for x in block_name]
         else: 
             msg = "Oracle/BlockParent/List. Block_name must be provided either as a string or as a list."

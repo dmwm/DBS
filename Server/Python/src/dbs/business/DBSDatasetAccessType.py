@@ -25,7 +25,7 @@ class DBSDatasetAccessType:
         """
         List dataset access types
         """
-        if isinstance(dataset_access_type, basestring):
+        if isinstance(dataset_access_type, str):
             try:
                 dataset_access_type = str(dataset_access_type)
             except:    
@@ -39,7 +39,7 @@ class DBSDatasetAccessType:
             if plist:
                 t = []
                 for i in plist:
-                    for k, v in i.iteritems():
+                    for k, v in i.items():
                         t.append(v)
                 result[0]['dataset_access_type'] = t
             return result

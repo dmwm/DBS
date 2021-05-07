@@ -32,7 +32,7 @@ class List_t(unittest.TestCase):
     def test01(self):
         """dao.Oracle.BlockParent.List: Basic"""
         result = self.dao.execute(self.conn, block_name=self.data[0]['this_block_name'])
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(strip_volatile_fields(result), self.data)
 
 if __name__ == "__main__":

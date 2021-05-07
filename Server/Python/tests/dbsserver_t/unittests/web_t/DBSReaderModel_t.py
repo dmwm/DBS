@@ -1,7 +1,7 @@
 """
 web unittests
 """
-from __future__ import absolute_import
+
 import imp
 import os
 import re
@@ -1191,7 +1191,7 @@ class DBSReaderModel_t(unittest.TestCase):
         lfn1 = testparams['files'][1]
         lfn2 = testparams['files'][2]
         print ("******* test010w() ******")
-        print (lfn1, lfn2)
+        print((lfn1, lfn2))
         data={"logical_file_name": [lfn1, lfn2], "run_num":'1-%s' %testparams['run_num'], "validFileOnly" :0}
         api.insert('filelumis', data)
 

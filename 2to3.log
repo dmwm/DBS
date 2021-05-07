@@ -1,0 +1,1657 @@
+WARNING: --write-unchanged-files/-W implies -w.
+RefactoringTool: No changes to ./setup.py
+RefactoringTool: No changes to ./Client/setup.py
+RefactoringTool: No changes to ./Client/src/python/dbs/__init__.py
+RefactoringTool: No changes to ./Client/src/python/dbs/apis/__init__.py
+RefactoringTool: No changes to ./Client/src/python/dbs/apis/dbsClient.py
+RefactoringTool: No changes to ./Client/src/python/dbs/exceptions/__init__.py
+RefactoringTool: No changes to ./Client/src/python/dbs/exceptions/dbsClientException.py
+RefactoringTool: No changes to ./Client/tests/setup_test.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/__init__.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/deployment/DBSDeployment_t.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/deployment/__init__.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/unittests/DBSClientBlockWriter_t.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/unittests/DBSClientReader_t.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/unittests/DBSClientWriter_t.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/unittests/__init__.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/utils/DBSDataProvider.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/utils/__init__.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/utils/timeout.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/validation/DBSValidation_t.py
+RefactoringTool: No changes to ./Client/tests/dbsclient_t/validation/__init__.py
+RefactoringTool: No changes to ./Client/tests/profiling_t/DBSProfiling_t.py
+RefactoringTool: No changes to ./Client/utils/compareInstance.py
+RefactoringTool: No changes to ./Client/utils/dbs2Todbs3DatasetMigrate.py
+RefactoringTool: No changes to ./Client/utils/dbs3_block_dump_comparison.py
+RefactoringTool: No changes to ./Client/utils/dbs3_bulk_block_insert.py
+RefactoringTool: No changes to ./Client/utils/dbs3_bulk_block_insert2.py
+RefactoringTool: No changes to ./Client/utils/getserverinfo.py
+RefactoringTool: No changes to ./Client/utils/insertAcqEra.py
+RefactoringTool: No changes to ./Client/utils/insertBlockBulk.py
+RefactoringTool: No changes to ./Client/utils/insert_block_migration_requests-MINIAOD.py
+RefactoringTool: No changes to ./Client/utils/insertblock.py
+RefactoringTool: No changes to ./Client/utils/insertdataset.py
+RefactoringTool: No changes to ./Client/utils/insertdatatier.py
+RefactoringTool: No changes to ./Client/utils/insertfile.py
+RefactoringTool: No changes to ./Client/utils/insertprimary.py
+RefactoringTool: No changes to ./Client/utils/insertprocessingVersion.py
+RefactoringTool: No changes to ./Client/utils/listBlockSummaries.py
+RefactoringTool: No changes to ./Client/utils/listBlockTrio.py
+RefactoringTool: No changes to ./Client/utils/listFileArray.py
+RefactoringTool: No changes to ./Client/utils/listFileLumis.py
+RefactoringTool: No changes to ./Client/utils/listFileParentsByLumi.py
+RefactoringTool: No changes to ./Client/utils/listFileSummaries.py
+RefactoringTool: No changes to ./Client/utils/listFileTests.py
+RefactoringTool: No changes to ./Client/utils/listFileinBlock.py
+RefactoringTool: No changes to ./Client/utils/listParentDSTrio.py
+RefactoringTool: No changes to ./Client/utils/listblock.py
+RefactoringTool: No changes to ./Client/utils/listblockchildren.py
+RefactoringTool: No changes to ./Client/utils/listblockparents.py
+RefactoringTool: No changes to ./Client/utils/listdataset.py
+RefactoringTool: No changes to ./Client/utils/listdatasetchildren.py
+RefactoringTool: No changes to ./Client/utils/listdatasetparents.py
+RefactoringTool: No changes to ./Client/utils/listdatatier.py
+RefactoringTool: No changes to ./Client/utils/listfile.py
+RefactoringTool: No changes to ./Client/utils/listfilechildren.py
+RefactoringTool: No changes to ./Client/utils/listfileparents.py
+RefactoringTool: No changes to ./Client/utils/listfiles.py
+RefactoringTool: No changes to ./Client/utils/listprimary.py
+RefactoringTool: No changes to ./Client/utils/listsites.py
+RefactoringTool: No changes to ./Client/utils/migrate.py
+RefactoringTool: No changes to ./Client/utils/readTestLogs.py
+RefactoringTool: No changes to ./Client/utils/run_test.py
+RefactoringTool: No changes to ./Client/utils/updateDatasetType.py
+RefactoringTool: No changes to ./Client/utils/updateFileStatus.py
+RefactoringTool: No changes to ./Client/utils/updateblock.py
+RefactoringTool: No changes to ./Client/utils/DataOpsScripts/DBS3SetDatasetStatus.py
+RefactoringTool: No changes to ./Client/utils/DataOpsScripts/DBS3SetFileStatus.py
+RefactoringTool: No changes to ./Client/utils/DataOpsScripts/EventsPerDay.py
+RefactoringTool: No changes to ./Client/utils/UserScripts/DBS3ListRunLumiInfo.py
+RefactoringTool: No changes to ./DBS2To3Migration/SQL/recreateSequence.py
+RefactoringTool: No changes to ./DBS2To3Migration/test/DBSSqlQueries.py
+RefactoringTool: No changes to ./DBS2To3Migration/test/ValidateDualDBSWriting.py
+RefactoringTool: No changes to ./DBS2To3Migration/test/ValidateMigration_t.py
+RefactoringTool: No changes to ./DBS2To3Migration/test/ValidateOriginSiteName_t.py
+RefactoringTool: No changes to ./PycurlClient/setup.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/RestApi.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/__init__.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/AuthHandling/BasicAuth.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/AuthHandling/X509Auth.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/AuthHandling/__init__.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/ErrorHandling/RestClientExceptions.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/ErrorHandling/__init__.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/ProxyPlugins/Socks5Proxy.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/ProxyPlugins/__init__.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/RequestHandling/HTTPRequest.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/RequestHandling/HTTPResponse.py
+RefactoringTool: No changes to ./PycurlClient/src/python/RestClient/RequestHandling/__init__.py
+RefactoringTool: No changes to ./Schema/DDL/generate-schema-deployable.py
+RefactoringTool: No changes to ./Schema/SQLTester/genSQLFromListDatasetContents.py
+RefactoringTool: No changes to ./Schema/Scripts/generate_dao.py
+RefactoringTool: No changes to ./Schema/Scripts/generate_dataobjs.py
+RefactoringTool: No changes to ./Schema/Scripts/generate_trigs.py
+RefactoringTool: No changes to ./Schema/Scripts/process_sql.py
+RefactoringTool: No changes to ./Schema/Scripts/process_sql_4sqlexplorer.py
+RefactoringTool: No changes to ./Server/Python/control/DBSConfig.py
+RefactoringTool: No changes to ./Server/Python/control/default_config_multiple_service.py
+RefactoringTool: No changes to ./Server/Python/control/default_config_single_server.py
+RefactoringTool: No changes to ./Server/Python/control/default_config_single_server_reader_writer.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSAcquisitionEra.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/business/DBSBlock.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSBlockInsert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSDataTier.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSDataType.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSDataset.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSDatasetAccessType.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSDoNothing.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSFile.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSFileBuffer.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/business/DBSMigrate.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSOutputConfig.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSPhysicsGroup.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSPrimaryDataset.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSProcessingEra.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSReleaseVersion.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSRun.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/DBSSite.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/business/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/components/__init__.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/components/migration/DBSMigrationServer.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/components/migration/DefaultConfig.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/components/migration/StartUp.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/components/migration/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/SequenceManager.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/dbsListPrimaryDatasetTypes.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/dbsListPrimaryDatasets.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/AcquisitionEra/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/AcquisitionEra/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/AcquisitionEra/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/AcquisitionEra/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ApplicationExecutable/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ApplicationExecutable/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ApplicationExecutable/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/AssociatedFile/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/AssociatedFile/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Block/BriefList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Block/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Block/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Block/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Block/ListStats.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Block/UpdateStats.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Block/UpdateStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Block/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BlockParent/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BlockParent/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BlockParent/ListChild.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BlockParent/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BlockSite/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BlockSite/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BlockStorageElement/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BlockStorageElement/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BranchHashe/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BranchHashe/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/BranchHashe/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/DBSStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/Update.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DataTier/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DataTier/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DataTier/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DataTier/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Dataset/BriefList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Dataset/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Dataset/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Dataset/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Dataset/UpdateStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Dataset/UpdateType.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Dataset/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetOutputMod_config/GetDSConfigs.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetOutputMod_config/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetOutputMod_config/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetParent/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetParent/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetParent/ListChild.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetParent/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetRun/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetRun/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetRun/ListBlockRuns.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetRun/ListDSRuns.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetRun/ListFileRuns.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetRun/UpdateStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetRun/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetType/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetType/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DatasetType/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DbsVersion/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/DbsVersion/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/File/BriefList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/File/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/File/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/File/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/File/MgrtList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/File/UpdateStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/File/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileBuffer/DeleteDuplicates.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileBuffer/DeleteFiles.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileBuffer/FindDuplicates.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileBuffer/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileBuffer/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileBuffer/ListBlocks.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileBuffer/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileLumi/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileLumi/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileLumi/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileOutputMod_config/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileOutputMod_config/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileParent/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileParent/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileParent/ListChild.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileParent/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileParentBlock/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileParentBlock/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileType/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileType/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/FileType/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/FindMigrateableBlocks.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/Update.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/FindPendingRequest.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/ListOldest.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/Update.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/UpdateRequestStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/GetIDForBlockInsert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ParameterSetHashe/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ParameterSetHashe/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ParameterSetHashe/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PhysicsGroup/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PhysicsGroup/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PhysicsGroup/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PrimaryDSType/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PrimaryDSType/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PrimaryDSType/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PrimaryDSType/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PrimaryDataset/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PrimaryDataset/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PrimaryDataset/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/PrimaryDataset/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ProcessedDataset/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ProcessedDataset/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ProcessedDataset/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ProcessingEra/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ProcessingEra/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ProcessingEra/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ProcessingEra/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ReleaseVersion/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ReleaseVersion/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/ReleaseVersion/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Service/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Service/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Service/Update.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Service/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Site/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Site/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Site/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Site/ListBlockSite.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/Site/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/StorageElement/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/StorageElement/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/StorageElement/ListBlockSE.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/MySQL/StorageElement/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/SequenceManager.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/List_CI.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/UpdateEndDate.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ApplicationExecutable/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ApplicationExecutable/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ApplicationExecutable/__init__.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/dao/Oracle/AssociatedFile/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/AssociatedFile/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/BriefList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/ListBlockOrigin.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/ListStats.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/SummaryList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/UpdateSiteName.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/UpdateStats.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/UpdateStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Block/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BlockParent/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BlockParent/Insert2.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BlockParent/Insert3.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/dao/Oracle/BlockParent/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BlockParent/ListChild.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BlockParent/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BlockSite/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BlockSite/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BranchHashe/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BranchHashe/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/BranchHashe/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DataTier/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DataTier/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DataTier/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DataTier/__init__.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/dao/Oracle/Dataset/BriefList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Dataset/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Dataset/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Dataset/Insert2.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/dao/Oracle/Dataset/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Dataset/UpdateStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Dataset/UpdateType.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Dataset/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetOutputMod_config/GetDSConfigs.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetOutputMod_config/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetOutputMod_config/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetParent/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetParent/Insert2.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetParent/Insert3.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetParent/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetParent/ListChild.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetParent/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetRun/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetRun/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetRun/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetType/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetType/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetType/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DatasetType/__init__.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/dao/Oracle/DbsVersion/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DbsVersion/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DoNothing/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/DoNothing/__init__.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/dao/Oracle/File/BriefList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/File/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/File/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/File/Insert2.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/dao/Oracle/File/List.py
+--- ./Server/Python/src/dbs/business/DBSBlock.py	(original)
++++ ./Server/Python/src/dbs/business/DBSBlock.py	(refactored)
+@@ -199,7 +199,7 @@
+             except:
+                 dbsExceptionHandler("dbsException-invalid-input", "DBSBlock/listBlockParents. Block_name must be \
+                 provided as a string or a list. No wildcards allowed in block_name/s .")
+-        elif type(block_name) is list:
++        elif isinstance(block_name, list):
+             for b in block_name:
+                 if '%' in b or '*' in b:
+                     dbsExceptionHandler("dbsException-invalid-input", "DBSReaderModel/listBlocksParents: \
+--- ./Server/Python/src/dbs/business/DBSMigrate.py	(original)
++++ ./Server/Python/src/dbs/business/DBSMigrate.py	(refactored)
+@@ -351,8 +351,7 @@
+             self.mgrin.execute(conn, request, tran)
+             # INSERT the ordered_list
+             totalQueued = 0
+-	    k = ordered_list.keys()
+-	    k.sort()
++	    k = sorted(ordered_list.keys())
+ 	    k.reverse()	
+ 	    self.logger.debug("****************** ordered_list keys **********")
+             self.logger.debug(k)
+--- ./Server/Python/src/dbs/components/migration/DBSMigrationServer.py	(original)
++++ ./Server/Python/src/dbs/components/migration/DBSMigrationServer.py	(refactored)
+@@ -30,7 +30,7 @@
+         self.stopFlag = False
+         self.taskFunc = func
+         self.duration = duration
+-        if type(func) == type(lambda :None):
++        if isinstance(func, type(lambda :None)):
+             name = func.__name__
+         else:
+             name = func.__class__.__name__
+@@ -222,7 +222,7 @@
+             except Exception as ex:
+                 self.inserted = False
+                 #handle dbsException
+-                if type(ex) == dbsException:
++                if isinstance(ex, dbsException):
+                     MgrLogger.error( time.asctime(time.gmtime()) + ex.message + ex.serverError )
+                 MgrLogger.error(time.asctime(time.gmtime()) + str(ex))
+                 #if try_count==3, the sql will actually set the status=9 (terminally failed) instead of 3
+--- ./Server/Python/src/dbs/dao/Oracle/AssociatedFile/Insert.py	(original)
++++ ./Server/Python/src/dbs/dao/Oracle/AssociatedFile/Insert.py	(refactored)
+@@ -14,14 +14,14 @@
+ 
+     def getBinds_delme( self, associated_filesObj ):
+         binds = {}
+-        if type(associated_filesObj) == type ('object'):
++        if isinstance(associated_filesObj, type ('object')):
+             binds = {
+                 'assocatedfileid': associated_filesObj['assocatedfileid'],
+                 'thisfileid': associated_filesObj['thisfileid'],
+                 'assocatedfile': associated_filesObj['assocatedfile'],
+             }
+ 
+-        elif type(associated_filesObj) == type([]):
++        elif isinstance(associated_filesObj, type([])):
+             binds = []
+             for item in associated_filesObj:
+                 binds.append({
+--- ./Server/Python/src/dbs/dao/Oracle/BlockParent/List.py	(original)
++++ ./Server/Python/src/dbs/dao/Oracle/BlockParent/List.py	(refactored)
+@@ -35,7 +35,7 @@
+         
+ 	if isinstance(block_name, basestring):
+ 	    binds = {'block_name' :block_name}
+-        elif type(block_name) is list:
++        elif isinstance(block_name, list):
+             binds = [{'block_name':x} for x in block_name]
+         else: 
+             msg = "Oracle/BlockParent/List. Block_name must be provided either as a string or as a list."
+--- ./Server/Python/src/dbs/dao/Oracle/Dataset/BriefList.py	(original)
++++ ./Server/Python/src/dbs/dao/Oracle/Dataset/BriefList.py	(refactored)
+@@ -42,7 +42,7 @@
+         generatedsql = ''
+         binds = {}
+ 	wheresql = 'WHERE D.IS_DATASET_VALID=:is_dataset_valid '
+-        if dataset and type(dataset) is list:  # for the POST method
++        if dataset and isinstance(dataset, list):  # for the POST method
+             #wheresql += " AND D.DATASET=:dataset "
+             ds_generator, binds2 = create_token_generator(dataset)
+ 	    binds.update(binds2)
+@@ -56,7 +56,7 @@
+                 binds['is_dataset_valid'] = is_dataset_valid
+             else:
+                 binds['is_dataset_valid'] = is_dataset_valid
+-        elif dataset_id is not None and type(dataset_id) is not int:  # for the POST method
++        elif dataset_id is not None and not isinstance(dataset_id, int):  # for the POST method
+ 	    #we treat the datset_id is the same way as run_num. It can be id1-id2, id or [id1,2,3 ...]
+ 	    dataset_id_list = []
+ 	    wheresql_dataset_id_list=''
+--- ./Server/Python/src/dbs/dao/Oracle/Dataset/List.py	(original)
++++ ./Server/Python/src/dbs/dao/Oracle/Dataset/List.py	(refactored)
+@@ -64,7 +64,7 @@
+         basesql=self.basesql
+         binds = {}
+         wheresql = "WHERE D.IS_DATASET_VALID = :is_dataset_valid " 
+-        if dataset and type(dataset) is list:  # for the POST method
++        if dataset and isinstance(dataset, list):  # for the POST method
+             ds_generator, binds2 = create_token_generator(dataset)
+ 	    binds.update(binds2)	
+             wheresql += " AND D.DATASET in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+@@ -77,7 +77,7 @@
+             else:
+                 binds['is_dataset_valid'] = is_dataset_valid
+             sql =generatedsql + 'SELECT' + basesql + wheresql
+-        elif type(dataset_id) is not int:  #for the POST method
++        elif not isinstance(dataset_id, int):  #for the POST method
+ 	    #we treat the datset_id is the same way as run_num. It can be id1-id2, id or [id1,2,3 ...]
+             dataset_id_list = []
+             wheresql_dataset_id_list=''
+--- ./Server/Python/src/dbs/dao/Oracle/DbsVersion/Insert.py	(original)
++++ ./Server/Python/src/dbs/dao/Oracle/DbsVersion/Insert.py	(refactored)
+@@ -14,7 +14,7 @@
+ 
+     def getBinds_delme( self, dbs_versionsObj ):
+             binds = {}
+-            if type(dbs_versionsObj) == type ('object'):
++            if isinstance(dbs_versionsObj, type ('object')):
+             	binds = {
+ 			'dbsversionid': dbs_versionsObj['dbsversionid'],
+ 			'schemaversion': dbs_versionsObj['schemaversion'],
+@@ -25,7 +25,7 @@
+ 			'lastmodificationdate': dbs_versionsObj['lastmodificationdate'],
+                  }
+ 
+-            elif type(dbs_versionsObj) == type([]):
++            elif isinstance(dbs_versionsObj, type([])):
+                binds = []
+                for item in dbs_versionsObj:
+                    binds.append({
+--- ./Server/Python/src/dbs/dao/Oracle/File/BriefList.py	(original)
++++ ./Server/Python/src/dbs/dao/Oracle/File/BriefList.py	(refactored)
+@@ -45,11 +45,11 @@
+ 	else:
+ 	    dbsExceptionHandler("dbsException-invalid-input", "invalid value for validFileOnly.", self.logger.exception)	
+         if logical_file_name:
+-	    if type(logical_file_name) is not list: #for GET call
++	    if not isinstance(logical_file_name, list): #for GET call
+ 		op = ("=", "like")["%" in logical_file_name] 
+ 		wheresql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name " %op
+ 		binds.update({"logical_file_name":logical_file_name})
+-	    elif type(logical_file_name) is list:  #for POST call
++	    elif isinstance(logical_file_name, list):  #for POST call
+ 		lfn_generator, binds2 = create_token_generator(logical_file_name)
+ 		binds.update(binds2)
+ 		wheresql += " AND F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+@@ -150,7 +150,7 @@
+                                 dbsExceptionHandler('dbsException-invalid-input', "When lumi_list is given, only one run is allowed.", self.logger.exception)		
+ 			else:
+ 			    dbsExceptionHandler('dbsException-invalid-input', "Invalid run_num. if run_num input as a string, it has to be converted into a int/long or in format of 'run_min-run_max'. ", self.logger.exception)
+-                elif type(run_num) is list and len(run_num)==1:
++                elif isinstance(run_num, list) and len(run_num)==1:
+                     try:
+                         run_num = long(run_num[0])
+ 			wheresql += " and FL.RUN_NUM = :run_num "
+--- ./Server/Python/src/dbs/dao/Oracle/File/List.py	(original)
++++ ./Server/Python/src/dbs/dao/Oracle/File/List.py	(refactored)
+@@ -85,11 +85,11 @@
+             sql += " AND B.BLOCK_NAME = :block_name"
+             binds.update({"block_name":block_name})RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/File/MgrtList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/File/SummaryList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/File/UpdateStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/File/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileBuffer/DeleteDuplicates.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileBuffer/DeleteFiles.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileBuffer/FindDuplicates.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileBuffer/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileBuffer/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileBuffer/ListBlocks.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileBuffer/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileLumi/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileLumi/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileLumi/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileOutputMod_config/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileOutputMod_config/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParent/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParent/Insert2.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParent/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParent/ListBlockFileLumiIds.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParent/ListChild.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParent/ListFileParentageByLumi.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParent/ListParentDatasetFileLumiIds.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParent/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParentBlock/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileParentBlock/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileType/GetID.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/dao/Oracle/FileType/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/FileType/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/InsertTable/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/InsertTable/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/FindMigrateableBlocks.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/List.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/Update.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/FindPendingRequest.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/ListOldest.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/Remove.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/Update.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/UpdateRequestStatus.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/GetIDForBlockInsert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ParameterSetHashe/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ParameterSetHashe/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ParameterSetHashe/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PhysicsGroup/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PhysicsGroup/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PhysicsGroup/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PhysicsGroup/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PrimaryDSType/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PrimaryDSType/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PrimaryDSType/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PrimaryDSType/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/Insert2.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ProcessedDataset/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ProcessedDataset/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ProcessedDataset/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ProcessingEra/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ProcessingEra/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ProcessingEra/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ProcessingEra/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ReleaseVersion/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ReleaseVersion/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ReleaseVersion/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/ReleaseVersion/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Run/SummaryList.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Run/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Service/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Service/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Service/Update.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Service/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Site/GetID.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Site/Insert.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Site/List.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Site/ListBlockSite.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/dao/Oracle/Site/__init__.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/utils/DBSDaoTools.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/utils/DBSInputValidation.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/utils/DBSTransformInputType.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/utils/RestClientPool.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/utils/__init__.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/utils/dbsException.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/utils/dbsExceptionDef.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/utils/dbsExceptionHandler.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/utils/dbsHTTPSAuthHandler.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/utils/dbsUtils.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/utils/docstring_parser.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/web/DBSMigrateModel.py
+RefactoringTool: Refactored ./Server/Python/src/dbs/web/DBSReaderModel.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/web/DBSServicesRegistry.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/web/DBSWriterModel.py
+RefactoringTool: No changes to ./Server/Python/src/dbs/web/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/DBS3SimpleClient.py
+RefactoringTool: No changes to ./Server/Python/tests/SimpleBizlogicTest.py
+RefactoringTool: No changes to ./Server/Python/tests/SimpleDAOTest.py
+RefactoringTool: No changes to ./Server/Python/tests/TestBusiness.py
+RefactoringTool: No changes to ./Server/Python/tests/TestDAO.py
+RefactoringTool: No changes to ./Server/Python/tests/TestInsertTime.py
+RefactoringTool: No changes to ./Server/Python/tests/TestListTime.py
+RefactoringTool: No changes to ./Server/Python/tests/TestServer.py
+RefactoringTool: No changes to ./Server/Python/tests/TestStress.py
+RefactoringTool: Refactored ./Server/Python/tests/setup_test.py
+RefactoringTool: No changes to ./Server/Python/tests/dao/Dataset/testInsert.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/performance/BusinessList.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/performance/CXOracleList.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/performance/DBSRestProfile.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/performance/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/__init__.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSBlock_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSDatasetParent_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSDataset_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFileLumi_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFileParent_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFile_t.py
+
+         if logical_file_name:
+-	    if type(logical_file_name) is not list:
++	    if not isinstance(logical_file_name, list):
+ 		op = ("=", "like")["%" in logical_file_name]
+ 		sql += " AND F.LOGICAL_FILE_NAME %s :logical_file_name" % op
+ 		binds.update({"logical_file_name":logical_file_name})
+-	    if type(logical_file_name) is list:
++	    if isinstance(logical_file_name, list):
+ 		ds_generator, binds2 = create_token_generator(logical_file_name)
+ 		binds.update(binds2)
+ 		sql += " AND F.LOGICAL_FILE_NAME in (SELECT TOKEN FROM TOKEN_GENERATOR)"
+@@ -148,7 +148,7 @@
+                         else:
+                             dbsExceptionHandler('dbsException-invalid-input', 
+ 			    "Invalid run_num. if run_num input as a string, it has to be converted into a int/long or in format of 'run_min-run_max'. ", self.logger.exception)
+-		elif type(run_num) is list and len(run_num)==1:
++		elif isinstance(run_num, list) and len(run_num)==1:
+ 		    try:
+ 			run_num = long(run_num[0])
+ 			sql += " and FL.RUN_NUM = :run_num "
+--- ./Server/Python/src/dbs/dao/Oracle/FileType/Insert.py	(original)
++++ ./Server/Python/src/dbs/dao/Oracle/FileType/Insert.py	(refactored)
+@@ -17,13 +17,13 @@
+ 
+     def getBinds_delme( self, file_typesObj ):
+             binds = {}
+-            if type(file_typesObj) == type ('object'):
++            if isinstance(file_typesObj, type ('object')):
+             	binds = {
+ 			'filetypeid': file_typesObj['filetypeid'],
+ 			'filetype': file_typesObj['filetype'],
+                  }
+ 
+-            elif type(file_typesObj) == type([]):
++            elif isinstance(file_typesObj, type([])):
+                binds = []
+                for item in file_typesObj:
+                    binds.append({
+--- ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/Update.py	(original)
++++ ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/Update.py	(refactored)
+@@ -56,7 +56,7 @@
+             sql3 = sql + "and MIGRATION_REQUEST_ID =:migration_request_id"
+             result = self.dbi.processData(sql3, daoinput, conn, transaction)
+         elif 'migration_block_id' in daoinput:
+-            if type(daoinput['migration_block_id']) is not list:
++            if not isinstance(daoinput['migration_block_id'], list):
+                 sql2 = sql+ " and MIGRATION_BLOCK_ID =:migration_block_id"
+                 result = self.dbi.processData(sql2, daoinput, conn, transaction)
+             else:
+--- ./Server/Python/src/dbs/utils/DBSDaoTools.py	(original)
++++ ./Server/Python/src/dbs/utils/DBSDaoTools.py	(refactored)
+@@ -8,7 +8,7 @@
+     ###ORA-01460: unimplemented or unreasonable conversion requested will thrown if list is larger
+     oracle_limit = 4000
+     grp_list = []
+-    if type(input_list[0]) == int :
++    if isinstance(input_list[0], int) :
+         input_str = ','.join(map(str, input_list))
+     else:
+         input_str = ','.join(input_list) 
+--- ./Server/Python/src/dbs/utils/DBSInputValidation.py	(original)
++++ ./Server/Python/src/dbs/utils/DBSInputValidation.py	(refactored)
+@@ -106,7 +106,7 @@
+                                     DBSUser(value)
+                                 else:
+                                     searchstr(value)
+-                            elif type(value) == list:
++                            elif isinstance(value, list):
+                                 if name == 'logical_file_name':
+                                     for f in value:
+                                         if '*' in f:
+--- ./Server/Python/src/dbs/web/DBSReaderModel.py	(original)
++++ ./Server/Python/src/dbs/web/DBSReaderModel.py	(refactored)
+@@ -82,7 +82,7 @@
+         urls = config.database.connectUrl
+ 
+         #instantiate the page with the writer_config
+-        if type(urls)==type({}):
++        if isinstance(urls, type({})):
+             config.database.connectUrl = urls['reader']
+ 
+         dbowner = config.database.dbowner
+--- ./Server/Python/tests/setup_test.py	(original)
++++ ./Server/Python/tests/setup_test.py	(refactored)
+@@ -159,8 +159,7 @@
+               TestSuite = unittest.TestSuite()
+               module_names = get_test_names(dao_tests, '[!.#]*_t.py', base_dir)
+               #some tests need to be executed in a specific order, since they depend on each other
+-              module_names = [(test_priority_dao.get(name, 0), name) for name in module_names]
+-              module_names.sort()
++              module_names = sorted([(test_priority_dao.get(name, 0), name) for name in module_names])
+               module_names = [name for prio, name in module_names]
+ 
+               loadedTests = unittest.TestLoader().loadTestsFromNames(module_names)
+--- ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSBlock_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSBlock_t.py	(refactored)
+@@ -25,15 +25,15 @@
+         bo = DBSBlock(self.logger, dbi, dbowner)
+ 
+         result = bo.listBlocks(dataset='NoSuchDataset%')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+         result = bo.listBlocks(block_name='NoSuchBlock%')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+         result = bo.listBlocks(dataset = '/%', origin_site_name='%')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         
+ if __name__ == "__main__":
+     SUITE = unittest.TestLoader().loadTestsFromTestCase(DBSBlock_t)
+--- ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSDatasetParent_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSDatasetParent_t.py	(refactored)
+@@ -27,7 +27,7 @@
+         bo = DBSDataset(self.logger, dbi, dbowner)
+ 
+         result = bo.listDatasetParents(dataset='%')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+ if __name__ == "__main__":
+--- ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSDataset_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSDataset_t.py	(refactored)
+@@ -29,7 +29,7 @@
+         bo.listDatasets()
+         bo.listDatasets(dataset='%')
+         result = bo.listDatasets("ThisDoesNotExist")
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+     
+     def test03(self):
+@@ -46,7 +46,7 @@
+         bo.listDatasets(app_name='%')
+         bo.listDatasets(output_module_label='%')
+         result = bo.listDatasets("ThisDoesNotExist")
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+ if __name__ == "__main__":
+--- ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFileLumi_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFileLumi_t.py	(refactored)
+@@ -28,7 +28,7 @@
+ 
+         bo.listFileLumis(logical_file_name='foo')
+         result = bo.listFileLumis(block_name='foo')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+ if __name__ == "__main__":
+--- ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFileParent_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFileParent_t.py	(refactored)
+@@ -27,7 +27,7 @@
+         bo = DBSFile(self.logger, dbi, dbowner)
+ 
+         result = bo.listFileParents(logical_file_name='%')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+ if __name__ == "__main__":
+--- ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFile_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFile_t.py	(refactored)
+@@ -25,19 +25,19 @@
+         bo = DBSFile(self.logger, dbi, dbowner)
+ 
+         result = bo.listFiles('NoSuchFile')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSOutputConfig_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSPrimaryDataset_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/business_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/components_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/components_t/migration_t/DBSMigrationServer_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/components_t/migration_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/AcquisitionEra_t/Insert_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/AcquisitionEra_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/AcquisitionEra_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/BlockParent_t/Insert_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/BlockParent_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/BlockParent_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Block_t/Insert_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Block_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Block_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DataTier_t/Insert_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DataTier_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DataTier_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DatasetParent_t/Insert_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DatasetParent_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DatasetParent_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Dataset_t/Insert_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Dataset_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Dataset_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileLumi_t/Insert_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileLumi_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileLumi_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileParent_t/Insert_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileParent_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileParent_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/File_t/Insert_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/File_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/File_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/OutputModuleConfig_t/Insert_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/OutputModuleConfig_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/OutputModuleConfig_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PhysicsGroup_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PhysicsGroup_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDSType_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDSType_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDataset_t/Insert_t.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDataset_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDataset_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/ProcessingEra_t/Insert_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/ProcessingEra_t/List_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/ProcessingEra_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/web_t/DBSMigrateModel_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/web_t/DBSReaderModel_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/web_t/DBSWriterModel_t.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/web_t/__init__.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/unittests/web_t/listprofiling.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/utils/CXOracleSQL.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/utils/CreateTestData.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/utils/DBSDataProvider.py
+RefactoringTool: Refactored ./Server/Python/tests/dbsserver_t/utils/DBSRestApi.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/utils/DaoConfig.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/utils/ParseConfig.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/utils/TestTools.py
+RefactoringTool: No changes to ./Server/Python/tests/dbsserver_t/utils/__init__.py
+RefactoringTool: No changes to ./Server/Python/utils/das_logfile_analyser.py
+RefactoringTool: No changes to ./Server/Python/utils/das_logfile_parser.py
+RefactoringTool: No changes to ./Server/Python/utils/dbs2_logfile_analyser.py
+RefactoringTool: No changes to ./Server/Python/utils/dbs2_logfile_parser.py
+RefactoringTool: No changes to ./Server/Python/utils/dbs3_bulk_block_input_validation.py
+RefactoringTool: No changes to ./Server/Python/utils/dbs3_logfile_analyser.py
+RefactoringTool: No changes to ./Server/Python/utils/dbs3_logfile_parser.py
+RefactoringTool: No changes to ./Server/Python/utils/dbs3_logfile_parser_for_failed_blocks.py
+RefactoringTool: No changes to ./SystemTests/bin/LifeCyclePlots.py
+RefactoringTool: No changes to ./SystemTests/bin/StatsServer.py
+RefactoringTool: No changes to ./SystemTests/bin/das_logfile_analyser.py
+RefactoringTool: No changes to ./SystemTests/bin/das_logfile_parser.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs2_logfile_parser.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3BulkInsert.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3Crab3Workflow.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3CrabWorkflow.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3DASAccess.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3DASGetQueries.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3GetBlocks.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3GetDatasets.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3GetFileLumis.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3GetFileParents.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3GetFiles.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3GetPrimaryDSType.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3IntroduceFailures.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3MigrationService.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3WriterStressTest.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3_logfile_parser.py
+RefactoringTool: No changes to ./SystemTests/bin/dbs3dasComparision.py
+RefactoringTool: No changes to ./SystemTests/bin/getFakeData.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleAnalysis/__init__.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/HistoManager.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/Histogram.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/LifeCyclePlotManager.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/SqliteDAO.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/WebView.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/__init__.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleTests/__init__.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/APIFactory.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/ConfigurationFactory.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/OptParser.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/PayloadHandler.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/Stats2Sqlite.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/StatsClient.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/Timing.py
+RefactoringTool: No changes to ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/__init__.py
+RefactoringTool: No changes to ./doc/generate_modules.py
+RefactoringTool: No changes to ./doc/dbs/conf.py
+RefactoringTool: Files that were modified:
+RefactoringTool: ./setup.py
+RefactoringTool: ./Client/setup.py
+RefactoringTool: ./Client/src/python/dbs/__init__.py
+RefactoringTool: ./Client/src/python/dbs/apis/__init__.py
+RefactoringTool: ./Client/src/python/dbs/apis/dbsClient.py
+RefactoringTool: ./Client/src/python/dbs/exceptions/__init__.py
+RefactoringTool: ./Client/src/python/dbs/exceptions/dbsClientException.py
+RefactoringTool: ./Client/tests/setup_test.py
+RefactoringTool: ./Client/tests/dbsclient_t/__init__.py
+RefactoringTool: ./Client/tests/dbsclient_t/deployment/DBSDeployment_t.py
+RefactoringTool: ./Client/tests/dbsclient_t/deployment/__init__.py
+RefactoringTool: ./Client/tests/dbsclient_t/unittests/DBSClientBlockWriter_t.py
+RefactoringTool: ./Client/tests/dbsclient_t/unittests/DBSClientReader_t.py
+RefactoringTool: ./Client/tests/dbsclient_t/unittests/DBSClientWriter_t.py
+RefactoringTool: ./Client/tests/dbsclient_t/unittests/__init__.py
+RefactoringTool: ./Client/tests/dbsclient_t/utils/DBSDataProvider.py
+RefactoringTool: ./Client/tests/dbsclient_t/utils/__init__.py
+RefactoringTool: ./Client/tests/dbsclient_t/utils/timeout.py
+RefactoringTool: ./Client/tests/dbsclient_t/validation/DBSValidation_t.py
+RefactoringTool: ./Client/tests/dbsclient_t/validation/__init__.py
+RefactoringTool: ./Client/tests/profiling_t/DBSProfiling_t.py
+RefactoringTool: ./Client/utils/compareInstance.py
+RefactoringTool: ./Client/utils/dbs2Todbs3DatasetMigrate.py
+RefactoringTool: ./Client/utils/dbs3_block_dump_comparison.py
+RefactoringTool: ./Client/utils/dbs3_bulk_block_insert.py
+RefactoringTool: ./Client/utils/dbs3_bulk_block_insert2.py
+RefactoringTool: ./Client/utils/getserverinfo.py
+RefactoringTool: ./Client/utils/insertAcqEra.py
+RefactoringTool: ./Client/utils/insertBlockBulk.py
+RefactoringTool: ./Client/utils/insert_block_migration_requests-MINIAOD.py
+RefactoringTool: ./Client/utils/insertblock.py
+RefactoringTool: ./Client/utils/insertdataset.py
+RefactoringTool: ./Client/utils/insertdatatier.py
+RefactoringTool: ./Client/utils/insertfile.py
+RefactoringTool: ./Client/utils/insertprimary.py
+RefactoringTool: ./Client/utils/insertprocessingVersion.py
+RefactoringTool: ./Client/utils/listBlockSummaries.py
+RefactoringTool: ./Client/utils/listBlockTrio.py
+RefactoringTool: ./Client/utils/listFileArray.py
+RefactoringTool: ./Client/utils/listFileLumis.py
+RefactoringTool: ./Client/utils/listFileParentsByLumi.py
+RefactoringTool: ./Client/utils/listFileSummaries.py
+RefactoringTool: ./Client/utils/listFileTests.py
+RefactoringTool: ./Client/utils/listFileinBlock.py
+RefactoringTool: ./Client/utils/listParentDSTrio.py
+RefactoringTool: ./Client/utils/listblock.py
+RefactoringTool: ./Client/utils/listblockchildren.py
+RefactoringTool: ./Client/utils/listblockparents.py
+RefactoringTool: ./Client/utils/listdataset.py
+RefactoringTool: ./Client/utils/listdatasetchildren.py
+RefactoringTool: ./Client/utils/listdatasetparents.py
+RefactoringTool: ./Client/utils/listdatatier.py
+RefactoringTool: ./Client/utils/listfile.py
+RefactoringTool: ./Client/utils/listfilechildren.py
+RefactoringTool: ./Client/utils/listfileparents.py
+RefactoringTool: ./Client/utils/listfiles.py
+RefactoringTool: ./Client/utils/listprimary.py
+RefactoringTool: ./Client/utils/listsites.py
+RefactoringTool: ./Client/utils/migrate.py
+RefactoringTool: ./Client/utils/readTestLogs.py
+RefactoringTool: ./Client/utils/run_test.py
+RefactoringTool: ./Client/utils/updateDatasetType.py
+RefactoringTool: ./Client/utils/updateFileStatus.py
+RefactoringTool: ./Client/utils/updateblock.py
+RefactoringTool: ./Client/utils/DataOpsScripts/DBS3SetDatasetStatus.py
+RefactoringTool: ./Client/utils/DataOpsScripts/DBS3SetFileStatus.py
+RefactoringTool: ./Client/utils/DataOpsScripts/EventsPerDay.py
+RefactoringTool: ./Client/utils/UserScripts/DBS3ListRunLumiInfo.py
+RefactoringTool: ./DBS2To3Migration/SQL/recreateSequence.py
+RefactoringTool: ./DBS2To3Migration/test/DBSSqlQueries.py
+RefactoringTool: ./DBS2To3Migration/test/ValidateDualDBSWriting.py
+RefactoringTool: ./DBS2To3Migration/test/ValidateMigration_t.py
+RefactoringTool: ./DBS2To3Migration/test/ValidateOriginSiteName_t.py
+RefactoringTool: ./PycurlClient/setup.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/RestApi.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/__init__.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/AuthHandling/BasicAuth.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/AuthHandling/X509Auth.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/AuthHandling/__init__.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/ErrorHandling/RestClientExceptions.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/ErrorHandling/__init__.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/ProxyPlugins/Socks5Proxy.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/ProxyPlugins/__init__.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/RequestHandling/HTTPRequest.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/RequestHandling/HTTPResponse.py
+RefactoringTool: ./PycurlClient/src/python/RestClient/RequestHandling/__init__.py
+RefactoringTool: ./Schema/DDL/generate-schema-deployable.py
+RefactoringTool: ./Schema/SQLTester/genSQLFromListDatasetContents.py
+RefactoringTool: ./Schema/Scripts/generate_dao.py
+RefactoringTool: ./Schema/Scripts/generate_dataobjs.py
+RefactoringTool: ./Schema/Scripts/generate_trigs.py
+RefactoringTool: ./Schema/Scripts/process_sql.py
+RefactoringTool: ./Schema/Scripts/process_sql_4sqlexplorer.py
+RefactoringTool: ./Server/Python/control/DBSConfig.py
+RefactoringTool: ./Server/Python/control/default_config_multiple_service.py
+RefactoringTool: ./Server/Python/control/default_config_single_server.py
+RefactoringTool: ./Server/Python/control/default_config_single_server_reader_writer.py
+RefactoringTool: ./Server/Python/src/dbs/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSAcquisitionEra.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSBlock.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSBlockInsert.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSDataTier.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSDataType.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSDataset.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSDatasetAccessType.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSDoNothing.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSFile.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSFileBuffer.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSMigrate.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSOutputConfig.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSPhysicsGroup.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSPrimaryDataset.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSProcessingEra.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSReleaseVersion.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSRun.py
+RefactoringTool: ./Server/Python/src/dbs/business/DBSSite.py
+RefactoringTool: ./Server/Python/src/dbs/business/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/components/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/components/migration/DBSMigrationServer.py
+RefactoringTool: ./Server/Python/src/dbs/components/migration/DefaultConfig.py
+RefactoringTool: ./Server/Python/src/dbs/components/migration/StartUp.py
+RefactoringTool: ./Server/Python/src/dbs/components/migration/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/SequenceManager.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/dbsListPrimaryDatasetTypes.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/dbsListPrimaryDatasets.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/AcquisitionEra/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/AcquisitionEra/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/AcquisitionEra/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/AcquisitionEra/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ApplicationExecutable/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ApplicationExecutable/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ApplicationExecutable/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/AssociatedFile/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/AssociatedFile/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Block/BriefList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Block/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Block/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Block/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Block/ListStats.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Block/UpdateStats.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Block/UpdateStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Block/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BlockParent/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BlockParent/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BlockParent/ListChild.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BlockParent/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BlockSite/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BlockSite/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BlockStorageElement/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BlockStorageElement/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BranchHashe/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BranchHashe/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/BranchHashe/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/DBSStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/Update.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ComponentStatus/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DataTier/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DataTier/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DataTier/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DataTier/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Dataset/BriefList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Dataset/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Dataset/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Dataset/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Dataset/UpdateStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Dataset/UpdateType.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Dataset/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetOutputMod_config/GetDSConfigs.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetOutputMod_config/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetOutputMod_config/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetParent/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetParent/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetParent/ListChild.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetParent/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetRun/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetRun/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetRun/ListBlockRuns.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetRun/ListDSRuns.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetRun/ListFileRuns.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetRun/UpdateStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetRun/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetType/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetType/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DatasetType/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DbsVersion/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/DbsVersion/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/File/BriefList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/File/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/File/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/File/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/File/MgrtList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/File/UpdateStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/File/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileBuffer/DeleteDuplicates.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileBuffer/DeleteFiles.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileBuffer/FindDuplicates.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileBuffer/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileBuffer/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileBuffer/ListBlocks.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileBuffer/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileLumi/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileLumi/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileLumi/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileOutputMod_config/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileOutputMod_config/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileParent/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileParent/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileParent/ListChild.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileParent/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileParentBlock/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileParentBlock/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileType/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileType/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/FileType/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/FindMigrateableBlocks.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/Update.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationBlock/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/FindPendingRequest.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/ListOldest.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/Update.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/UpdateRequestStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/MigrationRequests/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/GetIDForBlockInsert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/OutputModuleConfig/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ParameterSetHashe/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ParameterSetHashe/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ParameterSetHashe/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PhysicsGroup/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PhysicsGroup/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PhysicsGroup/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PrimaryDSType/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PrimaryDSType/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PrimaryDSType/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PrimaryDSType/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PrimaryDataset/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PrimaryDataset/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PrimaryDataset/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/PrimaryDataset/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ProcessedDataset/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ProcessedDataset/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ProcessedDataset/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ProcessingEra/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ProcessingEra/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ProcessingEra/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ProcessingEra/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ReleaseVersion/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ReleaseVersion/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/ReleaseVersion/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Service/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Service/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Service/Update.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Service/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Site/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Site/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Site/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Site/ListBlockSite.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/Site/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/StorageElement/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/StorageElement/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/StorageElement/ListBlockSE.py
+RefactoringTool: ./Server/Python/src/dbs/dao/MySQL/StorageElement/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/SequenceManager.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/List_CI.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/UpdateEndDate.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/AcquisitionEra/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ApplicationExecutable/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ApplicationExecutable/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ApplicationExecutable/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/AssociatedFile/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/AssociatedFile/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/BriefList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/ListBlockOrigin.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/ListStats.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/SummaryList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/UpdateSiteName.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/UpdateStats.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/UpdateStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Block/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BlockParent/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BlockParent/Insert2.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BlockParent/Insert3.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BlockParent/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BlockParent/ListChild.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BlockParent/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BlockSite/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BlockSite/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BranchHashe/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BranchHashe/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/BranchHashe/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DataTier/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DataTier/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DataTier/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DataTier/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Dataset/BriefList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Dataset/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Dataset/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Dataset/Insert2.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Dataset/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Dataset/UpdateStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Dataset/UpdateType.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Dataset/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetOutputMod_config/GetDSConfigs.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetOutputMod_config/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetOutputMod_config/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetParent/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetParent/Insert2.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetParent/Insert3.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetParent/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetParent/ListChild.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetParent/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetRun/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetRun/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetRun/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetType/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetType/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetType/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DatasetType/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DbsVersion/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DbsVersion/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DoNothing/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/DoNothing/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/File/BriefList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/File/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/File/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/File/Insert2.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/File/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/File/MgrtList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/File/SummaryList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/File/UpdateStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/File/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileBuffer/DeleteDuplicates.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileBuffer/DeleteFiles.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileBuffer/FindDuplicates.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileBuffer/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileBuffer/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileBuffer/ListBlocks.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileBuffer/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileLumi/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileLumi/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileLumi/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileOutputMod_config/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileOutputMod_config/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParent/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParent/Insert2.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParent/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParent/ListBlockFileLumiIds.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParent/ListChild.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParent/ListFileParentageByLumi.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParent/ListParentDatasetFileLumiIds.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParent/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParentBlock/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileParentBlock/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileType/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileType/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/FileType/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/InsertTable/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/InsertTable/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/FindMigrateableBlocks.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/Update.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationBlock/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/FindPendingRequest.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/ListOldest.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/Remove.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/Update.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/UpdateRequestStatus.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/MigrationRequests/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/GetIDForBlockInsert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/OutputModuleConfig/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ParameterSetHashe/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ParameterSetHashe/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ParameterSetHashe/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PhysicsGroup/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PhysicsGroup/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PhysicsGroup/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PhysicsGroup/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PrimaryDSType/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PrimaryDSType/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PrimaryDSType/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PrimaryDSType/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/Insert2.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/PrimaryDataset/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ProcessedDataset/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ProcessedDataset/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ProcessedDataset/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ProcessingEra/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ProcessingEra/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ProcessingEra/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ProcessingEra/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ReleaseVersion/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ReleaseVersion/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ReleaseVersion/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/ReleaseVersion/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Run/SummaryList.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Run/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Service/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Service/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Service/Update.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Service/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Site/GetID.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Site/Insert.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Site/List.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Site/ListBlockSite.py
+RefactoringTool: ./Server/Python/src/dbs/dao/Oracle/Site/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/utils/DBSDaoTools.py
+RefactoringTool: ./Server/Python/src/dbs/utils/DBSInputValidation.py
+RefactoringTool: ./Server/Python/src/dbs/utils/DBSTransformInputType.py
+RefactoringTool: ./Server/Python/src/dbs/utils/RestClientPool.py
+RefactoringTool: ./Server/Python/src/dbs/utils/__init__.py
+RefactoringTool: ./Server/Python/src/dbs/utils/dbsException.py
+RefactoringTool: ./Server/Python/src/dbs/utils/dbsExceptionDef.py
+RefactoringTool: ./Server/Python/src/dbs/utils/dbsExceptionHandler.py
+RefactoringTool: ./Server/Python/src/dbs/utils/dbsHTTPSAuthHandler.py
+RefactoringTool: ./Server/Python/src/dbs/utils/dbsUtils.py
+RefactoringTool: ./Server/Python/src/dbs/utils/docstring_parser.py
+RefactoringTool: ./Server/Python/src/dbs/web/DBSMigrateModel.py
+RefactoringTool: ./Server/Python/src/dbs/web/DBSReaderModel.py
+RefactoringTool: ./Server/Python/src/dbs/web/DBSServicesRegistry.py
+RefactoringTool: ./Server/Python/src/dbs/web/DBSWriterModel.py
+RefactoringTool: ./Server/Python/src/dbs/web/__init__.py
+RefactoringTool: ./Server/Python/tests/DBS3SimpleClient.py
+RefactoringTool: ./Server/Python/tests/SimpleBizlogicTest.py
+RefactoringTool: ./Server/Python/tests/SimpleDAOTest.py
+RefactoringTool: ./Server/Python/tests/TestBusiness.py
+RefactoringTool: ./Server/Python/tests/TestDAO.py
+RefactoringTool: ./Server/Python/tests/TestInsertTime.py
+RefactoringTool: ./Server/Python/tests/TestListTime.py
+RefactoringTool: ./Server/Python/tests/TestServer.py
+RefactoringTool: ./Server/Python/tests/TestStress.py
+RefactoringTool: ./Server/Python/tests/setup_test.py
+RefactoringTool: ./Server/Python/tests/dao/Dataset/testInsert.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/performance/BusinessList.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/performance/CXOracleList.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/performance/DBSRestProfile.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/performance/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSBlock_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSDatasetParent_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSDataset_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFileLumi_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFileParent_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSFile_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSOutputConfig_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSPrimaryDataset_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/business_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/components_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/components_t/migration_t/DBSMigrationServer_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/components_t/migration_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/AcquisitionEra_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/AcquisitionEra_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/AcquisitionEra_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/BlockParent_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/BlockParent_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/BlockParent_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Block_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Block_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Block_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DataTier_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DataTier_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DataTier_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DatasetParent_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DatasetParent_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DatasetParent_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Dataset_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Dataset_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Dataset_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileLumi_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileLumi_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileLumi_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileParent_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileParent_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileParent_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/File_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/File_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/File_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/OutputModuleConfig_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/OutputModuleConfig_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/OutputModuleConfig_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PhysicsGroup_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PhysicsGroup_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDSType_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDSType_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDataset_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDataset_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDataset_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/ProcessingEra_t/Insert_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/ProcessingEra_t/List_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/ProcessingEra_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/web_t/DBSMigrateModel_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/web_t/DBSReaderModel_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/web_t/DBSWriterModel_t.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/web_t/__init__.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/unittests/web_t/listprofiling.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/utils/CXOracleSQL.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/utils/CreateTestData.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/utils/DBSDataProvider.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/utils/DBSRestApi.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/utils/DaoConfig.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/utils/ParseConfig.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/utils/TestTools.py
+RefactoringTool: ./Server/Python/tests/dbsserver_t/utils/__init__.py
+RefactoringTool: ./Server/Python/utils/das_logfile_analyser.py
+RefactoringTool: ./Server/Python/utils/das_logfile_parser.py
+RefactoringTool: ./Server/Python/utils/dbs2_logfile_analyser.py
+RefactoringTool: ./Server/Python/utils/dbs2_logfile_parser.py
+RefactoringTool: ./Server/Python/utils/dbs3_bulk_block_input_validation.py
+RefactoringTool: ./Server/Python/utils/dbs3_logfile_analyser.py
+RefactoringTool: ./Server/Python/utils/dbs3_logfile_parser.py
+RefactoringTool: ./Server/Python/utils/dbs3_logfile_parser_for_failed_blocks.py
+RefactoringTool: ./SystemTests/bin/LifeCyclePlots.py
+RefactoringTool: ./SystemTests/bin/StatsServer.py
+RefactoringTool: ./SystemTests/bin/das_logfile_analyser.py
+RefactoringTool: ./SystemTests/bin/das_logfile_parser.py
+RefactoringTool: ./SystemTests/bin/dbs2_logfile_parser.py
+RefactoringTool: ./SystemTests/bin/dbs3BulkInsert.py
+RefactoringTool: ./SystemTests/bin/dbs3Crab3Workflow.py
+RefactoringTool: ./SystemTests/bin/dbs3CrabWorkflow.py
+RefactoringTool: ./SystemTests/bin/dbs3DASAccess.py
+RefactoringTool: ./SystemTests/bin/dbs3DASGetQueries.py
+RefactoringTool: ./SystemTests/bin/dbs3GetBlocks.py
+RefactoringTool: ./SystemTests/bin/dbs3GetDatasets.py
+RefactoringTool: ./SystemTests/bin/dbs3GetFileLumis.py
+RefactoringTool: ./SystemTests/bin/dbs3GetFileParents.py
+RefactoringTool: ./SystemTests/bin/dbs3GetFiles.py
+RefactoringTool: ./SystemTests/bin/dbs3GetPrimaryDSType.py
+RefactoringTool: ./SystemTests/bin/dbs3IntroduceFailures.py
+RefactoringTool: ./SystemTests/bin/dbs3MigrationService.py
+RefactoringTool: ./SystemTests/bin/dbs3WriterStressTest.py
+RefactoringTool: ./SystemTests/bin/dbs3_logfile_parser.py
+RefactoringTool: ./SystemTests/bin/dbs3dasComparision.py
+RefactoringTool: ./SystemTests/bin/getFakeData.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleAnalysis/__init__.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/HistoManager.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/Histogram.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/LifeCyclePlotManager.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/SqliteDAO.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/WebView.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleAnalysis/LifeCyclePlots/__init__.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleTests/__init__.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/APIFactory.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/ConfigurationFactory.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/OptParser.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/PayloadHandler.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/Stats2Sqlite.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/StatsClient.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/Timing.py
+RefactoringTool: ./SystemTests/src/python/LifeCycleTests/LifeCycleTools/__init__.py
+RefactoringTool: ./doc/generate_modules.py
+RefactoringTool: ./doc/dbs/conf.py
+
+         self.assertEqual(len(result), 0)
+         
+         result = bo.listFiles(dataset='NoSuchDataset')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+         result = bo.listFiles(block_name='NoSuchBlock')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+         result = bo.listFiles(logical_file_name='NoSuchLFN')
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+ if __name__ == "__main__":
+--- ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSPrimaryDataset_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/business_t/DBSPrimaryDataset_t.py	(refactored)
+@@ -41,7 +41,7 @@
+         bo.listPrimaryDatasets()
+         bo.listPrimaryDatasets(primary_ds_name='%')
+         result = bo.listPrimaryDatasets("ThisDoesNotExist")
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+ 
+     def test03(self):
+@@ -52,7 +52,7 @@
+         bo = DBSPrimaryDataset(self.logger, dbi, dbowner)
+ 
+         result = bo.listPrimaryDatasets(primary_ds_name=self.primary_ds_name)
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 1)
+         self.assertEqual(result[0]["primary_ds_name"], self.primary_ds_name)
+         
+--- ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/BlockParent_t/List_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/BlockParent_t/List_t.py	(refactored)
+@@ -32,7 +32,7 @@
+     def test01(self):
+         """dao.Oracle.BlockParent.List: Basic"""
+         result = self.dao.execute(self.conn, block_name=self.data[0]['this_block_name'])
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(strip_volatile_fields(result), self.data)
+ 
+ if __name__ == "__main__":
+--- ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Block_t/List_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Block_t/List_t.py	(refactored)
+@@ -50,7 +50,7 @@
+         result = []
+ 	for item in r:
+ 	    result.append(item)
+-        self.assertTrue(type(r) == GeneratorType)
++        self.assertTrue(isinstance(r, GeneratorType))
+         self.assertNotEqual(len(result), 0)
+ 
+ 
+--- ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DataTier_t/List_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DataTier_t/List_t.py	(refactored)
+@@ -38,7 +38,7 @@
+     def test03(self):
+         """dao.Oracle.DataTier.List: Basic"""
+         result = self.dao.execute(self.conn, "ThisDoesNotExist")
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+ 
+ if __name__ == "__main__":
+--- ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DatasetParent_t/List_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/DatasetParent_t/List_t.py	(refactored)
+@@ -32,7 +32,7 @@
+     def test01(self):
+         """dao.Oracle.DatasetParent.List: Basic"""
+         result = self.dao.execute(self.conn, dataset=self.data[0]['this_dataset'])
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(strip_volatile_fields(result), self.data)
+ 
+ if __name__ == "__main__":
+--- ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Dataset_t/List_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/Dataset_t/List_t.py	(refactored)
+@@ -33,7 +33,7 @@
+     def test01(self):
+         """dao.Oracle.Dataset.List: Basic"""
+         result = self.dao.execute(self.conn)
+-        self.assertTrue(type(result) == GeneratorType)
++        self.assertTrue(isinstance(result, GeneratorType))
+                 
+     def test02(self):
+         """dao.Oracle.Dataset.List: Basic"""
+@@ -46,7 +46,7 @@
+     def test03(self):
+         """dao.Oracle.Dataset.List: Basic"""
+         result = self.dao.execute(self.conn, "ThisDoesNotExist")
+-        self.assertTrue(type(result) == GeneratorType)
++        self.assertTrue(isinstance(result, GeneratorType))
+ 	l = []
+         for item in result:
+             l = append(item)  	
+--- ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileLumi_t/List_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileLumi_t/List_t.py	(refactored)
+@@ -40,7 +40,7 @@
+         """dao.Oracle.FileLumi.List: Basic"""
+         result = self.dao.execute(self.conn, logical_file_name=self.lumi_data[0]['logical_file_name'])
+ 
+-        self.assertTrue(type(result) == GeneratorType)
++        self.assertTrue(isinstance(result, GeneratorType))
+ 	l = []
+ 	for i in result:
+ 	    l.append(i)
+@@ -49,7 +49,7 @@
+     def test02(self):
+         """dao.Oracle.FileLumi.List: Basic"""
+         result = self.dao.execute(self.conn, block_name=self.block_data[0]['block_name'])
+-        self.assertTrue(type(result) == GeneratorType)
++        self.assertTrue(isinstance(result, GeneratorType))
+ 	l =[]
+ 	for i in result:
+ 	    l.append(i)
+--- ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileParent_t/List_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/FileParent_t/List_t.py	(refactored)
+@@ -29,7 +29,7 @@
+     def test01(self):
+         """dao.Oracle.FileParent.List: Basic"""
+         result = self.dao.execute(self.conn, logical_file_name=self.data[0]['this_logical_file_name'])
+-        self.assertTrue(type(result) == GeneratorType)
++        self.assertTrue(isinstance(result, GeneratorType))
+ 	l = []
+ 	for item in result:
+ 	    l.append(item)
+--- ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDataset_t/List_t.py	(original)
++++ ./Server/Python/tests/dbsserver_t/unittests/dao_t/Oracle_t/PrimaryDataset_t/List_t.py	(refactored)
+@@ -42,7 +42,7 @@
+     def test03(self):
+         """dao.Oracle.PrimaryDataset.List: Basic"""
+         result = self.dao.execute(self.conn, "ThisDoesNotExist")
+-        self.assertTrue(type(result) == list)
++        self.assertTrue(isinstance(result, list))
+         self.assertEqual(len(result), 0)
+         
+ if __name__ == "__main__":
+--- ./Server/Python/tests/dbsserver_t/utils/DBSRestApi.py	(original)
++++ ./Server/Python/tests/dbsserver_t/utils/DBSRestApi.py	(refactored)
+@@ -134,9 +134,9 @@
+         return self.parseForException(ret)
+ 
+     def parseForException(self, data):
+-        if type(data)==type("abc"):
++        if isinstance(data, type("abc")):
+             data=json.loads(data)
+-        if type(data) == type({}) and 'exception' in data:
++        if isinstance(data, type({})) and 'exception' in data:
+             raise Exception("DBS Server raised an exception: HTTPError %s :" %data['exception'] + (data['message']))
+         return data
+ 

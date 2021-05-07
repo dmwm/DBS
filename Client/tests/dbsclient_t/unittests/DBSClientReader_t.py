@@ -1,7 +1,7 @@
 """
 web unittests
 """
-from __future__ import print_function
+
 import imp
 import os
 import re
@@ -1012,12 +1012,12 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test043a(self):
         """test043a unittestDBSClientReader_t.listFileParents with list of logical_file_name"""
-        file_list = [self.testparams['files'][0] for i in xrange(200)]
+        file_list = [self.testparams['files'][0] for i in range(200)]
         self.api.listFileParents(logical_file_name=file_list)
 
     def test043b(self):
         """test043b unittestDBSClientReader_t.listFileParents with non splitable parameter"""
-        file_list = [self.testparams['files'][0] for i in xrange(200)]
+        file_list = [self.testparams['files'][0] for i in range(200)]
         self.assertRaises(dbsClientException, self.api.listFileParents, logical_file_names=file_list)
 
     def test044(self):
@@ -1065,27 +1065,27 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test046a1(self):
         """test046a1 unittestDBSClientReader_t.listFileLumiArray with list of logical_file_name"""
-        file_list = [self.testparams['files'][i] for i in xrange(5)]
+        file_list = [self.testparams['files'][i] for i in range(5)]
         self.api.listFileLumiArray(logical_file_name=file_list, validFileOnly=0)
 
     def test046a2(self):
         """test046a2 unittestDBSClientReader_t.listFileLumiArray with list of logical_file_name"""
-        file_list = [self.testparams['files'][i] for i in xrange(5)]
+        file_list = [self.testparams['files'][i] for i in range(5)]
         self.api.listFileLumiArray(logical_file_name=file_list, validFileOnly=1)
 
     def test046a3(self):
         """ test046a3 unittestDBSClientReader_t.listFileLumiArray with list of logical_file_name"""
-        file_list = [self.testparams['files'][i] for i in xrange(5)]
+        file_list = [self.testparams['files'][i] for i in range(5)]
         self.api.listFileLumiArray(logical_file_name=file_list, run_num=[self.testparams['runs'][0]], validFileOnly=0)
 
     def test046a4(self):
         """ test046a4:  unittestDBSClientReader_t.listFileLumiArray with list of logical_file_name"""
-        file_list = [self.testparams['files'][i] for i in xrange(5)]
+        file_list = [self.testparams['files'][i] for i in range(5)]
         self.api.listFileLumiArray(logical_file_name=file_list, run_num=self.testparams['runs'][0], validFileOnly=1)
 
     def test046aa4(self):
         """ test046aa4:  unittestDBSClientReader_t.listFileLumiArray with list of logical_file_name"""
-        file_list = [self.testparams['files'][i] for i in xrange(5)]
+        file_list = [self.testparams['files'][i] for i in range(5)]
 	try:
             self.api.listFileLumiArray(logical_file_name=file_list, run_num=[self.testparams['runs'][0], self.testparams['runs'][1]],  validFileOnly=1)
 	except:
@@ -1282,12 +1282,12 @@ class DBSClientReader_t(unittest.TestCase):
 
     def test076a(self):
         """test76a unittestDBSClientReader_t.listFileChildren with list of logical_file_name"""
-        file_list = [self.testparams['parent_files'][0] for i in xrange(200)]
+        file_list = [self.testparams['parent_files'][0] for i in range(200)]
         self.api.listFileChildren(logical_file_name=file_list)
 
     def test076b(self):
         """test76b unittestDBSClientReader_t.listFileChildren with non splitable parameter"""
-        file_list = [self.testparams['parent_files'][0] for i in xrange(200)]
+        file_list = [self.testparams['parent_files'][0] for i in range(200)]
         self.assertRaises(dbsClientException, self.api.listFileChildren, logical_file_names=file_list)
 
     def test076c(self):

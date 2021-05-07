@@ -91,7 +91,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, 
             wheresql_run_list=''
             wheresql_run_range=''
             for r in parseRunRange(run_num):
-                if isinstance(r, basestring) or isinstance(r, int) or isinstance(r, long) or isinstance(r, str):
+                if isinstance(r, str) or isinstance(r, int) or isinstance(r, int) or isinstance(r, str):
                     run_list.append(str(r))
                 if isinstance(r, run_tuple):
                     if r[0] == r[1]:
@@ -104,7 +104,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, 
             if run_list:
 		if len(run_list) == 1:
 		    wheresql_run_list = " fl.RUN_NUM = :single_run "
-		    binds.update({"single_run": long(run_list[0])})
+		    binds.update({"single_run": int(run_list[0])})
 
 		else:
 		    wheresql_run_list = " fl.RUN_NUM in (SELECT TOKEN FROM TOKEN_GENERATOR) "
@@ -145,7 +145,7 @@ SELECT DISTINCT FL.RUN_NUM as RUN_NUM, FL.LUMI_SECTION_NUM as LUMI_SECTION_NUM, 
                     file_run_lumi.setdefault((f, r), []).append([i['lumi_section_num'], i['event_count']])
                 else:
                     file_run_lumi.setdefault((f, r), []).append(i['lumi_section_num'])
-	    for k, v in file_run_lumi.iteritems():
+	    for k, v in file_run_lumi.items():
                 if event_ct:
                     lumi=[]
                     event=[]

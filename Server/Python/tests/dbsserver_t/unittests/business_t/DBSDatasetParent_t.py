@@ -27,7 +27,7 @@ class DBSDatasetParent_t(unittest.TestCase):
         bo = DBSDataset(self.logger, dbi, dbowner)
 
         result = bo.listDatasetParents(dataset='%')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 """
 This module provides dataset migration business object class.
 """
-from __future__ import print_function
+
 
 __revision__ = "$Id: DBSMigrate.py,v 1.17 2010/09/14 14:53:54 yuyi Exp $"
 __version__ = "$Revision: 1.17 $"
@@ -16,8 +16,8 @@ import cjson
 import json
 import os
 import socket
-import urllib2
-import urlparse
+import urllib.request, urllib.error, urllib.parse
+import urllib.parse
 
 from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
@@ -33,7 +33,7 @@ def pprint(a):
 def remove_duplicated_items(ordered_dict):
     unique_block_list = set()
 
-    for key, value in reversed(ordered_dict.items()):
+    for key, value in reversed(list(ordered_dict.items())):
         for entry in list(value):#copy the list since value is modified during iteration
             if entry not in unique_block_list:
                 unique_block_list.add(entry)
@@ -276,8 +276,8 @@ class DBSMigrate:
                     if tmp_ordered_dict != {}:
                         #ordered_dict[order_counter+1] = []
                         #ordered_dict.update(tmp_ordered_dict)
-                        for i in tmp_ordered_dict.keys():
-                                if i in ordered_dict.keys():
+                        for i in list(tmp_ordered_dict.keys()):
+                                if i in list(ordered_dict.keys()):
                                     ordered_dict[i] += tmp_ordered_dict[i]
                                 else:
                                     ordered_dict[i] = tmp_ordered_dict[i]
@@ -351,8 +351,7 @@ class DBSMigrate:
             self.mgrin.execute(conn, request, tran)
             # INSERT the ordered_list
             totalQueued = 0
-	    k = ordered_list.keys()
-	    k.sort()
+	    k = sorted(ordered_list.keys())
 	    k.reverse()	
 	    self.logger.debug("****************** ordered_list keys **********")
             self.logger.debug(k)
@@ -530,7 +529,7 @@ class DBSMigrate:
 
     def callDBSService(self, resturl, method='', params={}, data={}):
         try:
-            spliturl = urlparse.urlparse(resturl)
+            spliturl = urllib.parse.urlparse(resturl)
             callType = spliturl[0]
             if callType != 'http' and callType != 'https':
                 raise ValueError("unknown URL type: %s" % callType)
@@ -543,9 +542,9 @@ class DBSMigrate:
             restapi = self.rest_client_pool.get_rest_client()
             httpresponse = restapi.get(resturl, method, params, data, request_headers)
             return httpresponse.body
-        except urllib2.HTTPError as httperror:
+        except urllib.error.HTTPError as httperror:
             raise httperror
-        except urllib2.URLError as urlerror:
+        except urllib.error.URLError as urlerror:
             raise urlerror
         except HTTPError as DBShttp_error:
             raise DBShttp_error

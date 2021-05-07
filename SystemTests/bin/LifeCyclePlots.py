@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.6
-from __future__ import print_function
+
 from ROOT import gROOT, TFile
 from LifeCycleAnalysis.LifeCyclePlots.LifeCyclePlotManager import LifeCyclePlotManager
 from LifeCycleAnalysis.LifeCyclePlots.SqliteDAO import SqliteDAO
@@ -62,9 +62,8 @@ if __name__ == "__main__":
     list_of_errors = sqlite_dao.get_unique_column_list('Failures', 'Value')
 
     ### plot reader or/and writer tests
-    reader_tests = filter(lambda x: x.startswith('list') or x.startswith('status'), list_of_apis)
-    writer_tests = filter(lambda x: x.startswith('insert') or x.startswith('update') or x.startswith('submit'),
-                          list_of_apis)
+    reader_tests = [x for x in list_of_apis if x.startswith('list') or x.startswith('status')]
+    writer_tests = [x for x in list_of_apis if x.startswith('insert') or x.startswith('update') or x.startswith('submit')]
     migration_tests = sqlite_dao.table_exists(table='MigrationStatistics')
 
     statistic_categories = list()

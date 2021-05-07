@@ -2,7 +2,7 @@
 This module provides a stand-alone client for DBS server
 Also DBSRestApi will be used in various stand-alone tests
 """
-from __future__ import print_function
+
 import json
 import os, logging
 import getpass
@@ -134,9 +134,9 @@ class DBSRestApi:
         return self.parseForException(ret)
 
     def parseForException(self, data):
-        if type(data)==type("abc"):
+        if isinstance(data, type("abc")):
             data=json.loads(data)
-        if type(data) == type({}) and 'exception' in data:
+        if isinstance(data, type({})) and 'exception' in data:
             raise Exception("DBS Server raised an exception: HTTPError %s :" %data['exception'] + (data['message']))
         return data
 

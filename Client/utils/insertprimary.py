@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #DBS-3 imports
-from __future__ import print_function
+
 from dbs.apis.dbsClient import *
 #url="http://cmssrv48.fnal.gov:8989/DBSServlet"
 #url="http://cmssrv18.fnal.gov:8585/dbs3"

@@ -40,7 +40,7 @@ class List_t(unittest.TestCase):
         """dao.Oracle.FileLumi.List: Basic"""
         result = self.dao.execute(self.conn, logical_file_name=self.lumi_data[0]['logical_file_name'])
 
-        self.assertTrue(type(result) == GeneratorType)
+        self.assertTrue(isinstance(result, GeneratorType))
 	l = []
 	for i in result:
 	    l.append(i)
@@ -49,7 +49,7 @@ class List_t(unittest.TestCase):
     def test02(self):
         """dao.Oracle.FileLumi.List: Basic"""
         result = self.dao.execute(self.conn, block_name=self.block_data[0]['block_name'])
-        self.assertTrue(type(result) == GeneratorType)
+        self.assertTrue(isinstance(result, GeneratorType))
 	l =[]
 	for i in result:
 	    l.append(i)

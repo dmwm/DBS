@@ -1,11 +1,11 @@
 import os
-import cPickle
+import pickle
 import uuid
 
 persistent_data = {'physics_group':
              [{'physics_group_name': 'Bphys'}, {'physics_group_name': 'Btag'}, {'physics_group_name': 'Diffraction'}, {'physics_group_name': 'EWK'}, {'physics_group_name': 'Egamma'}, {'physics_group_name': 'HeavyIon'}, {'physics_group_name': 'Higgs'}, {'physics_group_name': 'Individual'}, {'physics_group_name': 'JetMet'}, {'physics_group_name': 'Muons'}, {'physics_group_name': 'OnSel'}, {'physics_group_name': 'PFlowTau'}, {'physics_group_name': 'PhysVal'}, {'physics_group_name': 'QCD'}, {'physics_group_name': 'RelVal'}, {'physics_group_name': 'SUSYBSM'}, {'physics_group_name': 'Top'}, {'physics_group_name': 'Tracker'}],
              'primary_ds_type':
-             [{u'data_type': 'mc'}, {u'data_type': 'data'}, {u'data_type': 'test'}]
+             [{'data_type': 'mc'}, {'data_type': 'data'}, {'data_type': 'test'}]
             }
 
 acquisition_era_name = "DBS3UNITTESTACQERA_@unique_id@"
@@ -183,10 +183,10 @@ transient_data = {'acquisition_era':
              }
 
 f = file(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../data/template_transient_test_data.pkl'), "w")
-cPickle.dump(transient_data, f)
+pickle.dump(transient_data, f)
 f.close()
 
 f = file(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../data/persistent_test_data.pkl'), "w")
-cPickle.dump(persistent_data, f)
+pickle.dump(persistent_data, f)
 f.close()
 

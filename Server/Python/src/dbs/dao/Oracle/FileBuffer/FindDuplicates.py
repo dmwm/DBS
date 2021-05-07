@@ -2,7 +2,7 @@
 """
 This module provides FileBuffer.FindDuplicates data access object.
 """
-from __future__ import print_function
+
 from WMCore.Database.DBFormatter import DBFormatter
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 

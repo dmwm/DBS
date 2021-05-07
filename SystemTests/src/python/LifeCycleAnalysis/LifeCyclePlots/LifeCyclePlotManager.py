@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from LifeCycleAnalysis.LifeCyclePlots.HistoManager import HistoManager
 from LifeCycleAnalysis.LifeCyclePlots.Histogram import Histo1D, Histo2D
 
@@ -23,7 +23,7 @@ class StatisticPlots(object):
         self._list_of_apis = list_of_apis
         # api as keys and numbers as value, to fill 0,1,2,3,4 bins in APIAccessCounter histogramm and
         # to set bin label later accordingly
-        self._enumerated_dict_of_apis = dict(list(zip(self._list_of_apis, xrange(len(self._list_of_apis)))))
+        self._enumerated_dict_of_apis = dict(list(zip(self._list_of_apis, range(len(self._list_of_apis)))))
         self._starttime = starttime
         self._endtime = endtime
         self._test_type = test_type
@@ -264,14 +264,13 @@ class LifeCyclePlotManager(object):
     _supported_categories = ['reader_stats', 'writer_stats', 'failures', 'migration_stats']
 
     def __init__(self, categories, list_of_apis, list_of_errors, starttime, endtime):
-        plot_creator = {'reader_stats': StatisticPlots(filter(lambda x: x.startswith('list') or x.startswith('status'),
-                                                              list_of_apis),
+        plot_creator = {'reader_stats': StatisticPlots([x for x in list_of_apis if x.startswith('list') or x.startswith('status')],
                                                         starttime=starttime,
                                                         endtime=endtime,
                                                         test_type='reader_stats'),
-                        'writer_stats': StatisticPlots(filter(lambda x: x.startswith('insert')
+                        'writer_stats': StatisticPlots([x for x in list_of_apis if x.startswith('insert')
                                                                         or x.startswith('update')
-                                                                        or x.startswith('submit'), list_of_apis),
+                                                                        or x.startswith('submit')],
                                                         starttime=starttime,
                                                         endtime=endtime,
                                                         test_type='writer_stats'),
@@ -290,7 +289,7 @@ class LifeCyclePlotManager(object):
     @property
     def histo_names(self):
         histo_names = list()
-        for histo_manager in self._histo_managers.itervalues():
+        for histo_manager in self._histo_managers.values():
             histo_names.extend(histo_manager.histo_names)
         return histo_names
 
@@ -316,11 +315,11 @@ class LifeCyclePlotManager(object):
         self._histo_managers[category].update_histos(data)
 
     def draw_histos(self):
-        for histo_manager in self._histo_managers.itervalues():
+        for histo_manager in self._histo_managers.values():
             histo_manager.draw_histos()
 
     def save_histos_as(self, output_directory, format="png"):
-        for histo_manager in self._histo_managers.itervalues():
+        for histo_manager in self._histo_managers.values():
             histo_manager.save_histos_as(output_directory, format)
 
     def add_stacked_histos(self, categories=['reader_stats', 'writer_stats']):
@@ -330,7 +329,7 @@ class LifeCyclePlotManager(object):
             if category not in self._supported_categories:
                 raise NameError('Category %s is not supported by %s' % (category, self.__class__.__name__))
 
-            stripped_histo_names = map(lambda x: x.replace(category, ''), self._histo_managers[category].histo_names)
+            stripped_histo_names = [x.replace(category, '') for x in self._histo_managers[category].histo_names]
 
             if duplicated_histo_names:
                 duplicated_histo_names.intersection_update(stripped_histo_names)

@@ -14,14 +14,14 @@ class Insert(DBFormatter):
 
     def getBinds_delme( self, associated_filesObj ):
         binds = {}
-        if type(associated_filesObj) == type ('object'):
+        if isinstance(associated_filesObj, type ('object')):
             binds = {
                 'assocatedfileid': associated_filesObj['assocatedfileid'],
                 'thisfileid': associated_filesObj['thisfileid'],
                 'assocatedfile': associated_filesObj['assocatedfile'],
             }
 
-        elif type(associated_filesObj) == type([]):
+        elif isinstance(associated_filesObj, type([])):
             binds = []
             for item in associated_filesObj:
                 binds.append({

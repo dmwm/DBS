@@ -29,7 +29,7 @@ class List_t(unittest.TestCase):
     def test01(self):
         """dao.Oracle.FileParent.List: Basic"""
         result = self.dao.execute(self.conn, logical_file_name=self.data[0]['this_logical_file_name'])
-        self.assertTrue(type(result) == GeneratorType)
+        self.assertTrue(isinstance(result, GeneratorType))
 	l = []
 	for item in result:
 	    l.append(item)

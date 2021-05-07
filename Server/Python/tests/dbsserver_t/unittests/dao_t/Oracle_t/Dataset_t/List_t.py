@@ -33,7 +33,7 @@ class List_t(unittest.TestCase):
     def test01(self):
         """dao.Oracle.Dataset.List: Basic"""
         result = self.dao.execute(self.conn)
-        self.assertTrue(type(result) == GeneratorType)
+        self.assertTrue(isinstance(result, GeneratorType))
                 
     def test02(self):
         """dao.Oracle.Dataset.List: Basic"""
@@ -46,7 +46,7 @@ class List_t(unittest.TestCase):
     def test03(self):
         """dao.Oracle.Dataset.List: Basic"""
         result = self.dao.execute(self.conn, "ThisDoesNotExist")
-        self.assertTrue(type(result) == GeneratorType)
+        self.assertTrue(isinstance(result, GeneratorType))
 	l = []
         for item in result:
             l = append(item)  	

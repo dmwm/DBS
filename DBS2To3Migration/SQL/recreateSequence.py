@@ -85,7 +85,7 @@ def generator():
     logger = logging.getLogger()
     dbapi = DBApi(logger, connectUrlDBS3, ownerDBS3)
     results = dbapi.getTrig()
-    for t, s in results.iteritems():
+    for t, s in results.items():
         #print '\n **********'
         #print t, s
         primary = dbapi.getPrimaryKey(t)

@@ -1,7 +1,7 @@
 """
 web unittests
 """
-from __future__ import print_function
+
 
 __revision__ = "$Id: DBSWriterModel_t.py,v 1.27 2010/08/24 19:48:44 yuyi Exp $"
 __version__ = "$Revision: 1.27 $"
@@ -420,15 +420,15 @@ class DBSWriterModel_t(unittest.TestCase):
                      'output_module_label': output_module_label, 'global_tag': global_tag},
                     ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': uid},
-                    {'lumi_section_num': u'26422', 'run_num': uid},
-                    {'lumi_section_num': u'29838', 'run_num': uid}
+                    {'lumi_section_num': '27414', 'run_num': uid},
+                    {'lumi_section_num': '26422', 'run_num': uid},
+                    {'lumi_section_num': '29838', 'run_num': uid}
                     ],
                 'file_parent_list': [ ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 #'is_file_valid': 1
@@ -451,15 +451,15 @@ class DBSWriterModel_t(unittest.TestCase):
                      'output_module_label': output_module_label, 'global_tag': global_tag},
                     ],
                 'dataset': dataset2,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': uid+1, 'event_count': 10},
-                    {'lumi_section_num': u'26422', 'run_num': uid+1, 'event_count': 20},
-                    {'lumi_section_num': u'29838', 'run_num': uid+1, 'event_count': 30}
+                    {'lumi_section_num': '27414', 'run_num': uid+1, 'event_count': 10},
+                    {'lumi_section_num': '26422', 'run_num': uid+1, 'event_count': 20},
+                    {'lumi_section_num': '29838', 'run_num': uid+1, 'event_count': 30}
                     ],
                 'file_parent_list': [ ],
-                'event_count': u'60',
+                'event_count': '60',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uid+1, i),
                 'block_name': block2,
                 #'is_file_valid': 1
@@ -481,15 +481,15 @@ class DBSWriterModel_t(unittest.TestCase):
                      'output_module_label': output_module_label, 'global_tag': global_tag},
                     ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'1'},
-                    {'lumi_section_num': u'29838', 'run_num': u'1'}
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
                 'file_parent_list': [ ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 #'is_file_valid': 1
@@ -506,22 +506,22 @@ class DBSWriterModel_t(unittest.TestCase):
 
         for i in range(10):
             f={
-                'adler32': u'NOSET', 'file_type': 'EDM',
+                'adler32': 'NOSET', 'file_type': 'EDM',
                 'file_output_config_list':
                 [
                     {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                      'output_module_label': output_module_label, 'global_tag': global_tag},
                     ],
                 'dataset': child_dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'1'},
-                    {'lumi_section_num': u'29838', 'run_num': u'1'}
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
                 'file_parent_list': [{"file_parent_lfn": "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i)}],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL-child/%s/%i.root" %(uid, i),
                 'block_name': child_block
                 #'is_file_valid': 1
@@ -546,15 +546,15 @@ class DBSWriterModel_t(unittest.TestCase):
                      'output_module_label': output_module_label, 'global_tag': global_tag},
                     ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'1'},
-                    {'lumi_section_num': u'29838', 'run_num': u'1'}
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
                 'file_parent_list': [ ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'block_name': block,
                 #'is_file_valid': 1
                 }
@@ -577,15 +577,15 @@ class DBSWriterModel_t(unittest.TestCase):
                      'output_module_label': output_module_label, 'global_tag': global_tag},
                     ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'1'},
-                    {'lumi_section_num': u'29838', 'run_num': u'1'}
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
                 'file_parent_list': [ ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 #'is_file_valid': 1
                 }
@@ -607,15 +607,15 @@ class DBSWriterModel_t(unittest.TestCase):
                     {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                      'output_module_label': output_module_label, 'global_tag': global_tag},
                     ],
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'1'},
-                    {'lumi_section_num': u'29838', 'run_num': u'1'}
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
                 'file_parent_list': [ ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block,
                 #'is_file_valid': 1
@@ -814,15 +814,15 @@ class DBSWriterModel_t(unittest.TestCase):
             f={
                 'adler32': '', 'file_type': 'EDM',
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'1'},
-                    {'lumi_section_num': u'26422', 'run_num': u'1'},
-                    {'lumi_section_num': u'29838', 'run_num': u'1'}
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
                 'file_parent_list': [ ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 }
             fileList.append(f)
@@ -853,26 +853,26 @@ class DBSWriterModel_t(unittest.TestCase):
                                       tier)
         bulk_block="%s#%s" % (dataset, uniq_id)
 
-        dataset_dict = {u'dataset': bulk_dataset,
-                        u'physics_group_name': 'Tracker',
-                        u'dataset_access_type': 'VALID', u'processed_ds_name': bulk_procdataset,
-                        u'xtcrosssection': 123, u'data_tier_name': tier,
-                        u'prep_id':prep_id}
+        dataset_dict = {'dataset': bulk_dataset,
+                        'physics_group_name': 'Tracker',
+                        'dataset_access_type': 'VALID', 'processed_ds_name': bulk_procdataset,
+                        'xtcrosssection': 123, 'data_tier_name': tier,
+                        'prep_id':prep_id}
 
-        block_dict = data = {u'block_name': bulk_block,
-                             u'origin_site_name': site}
+        block_dict = data = {'block_name': bulk_block,
+                             'origin_site_name': site}
 
-        processing_dict = {u'processing_version': processing_version,
-                           u'description':'this-is-a-test'}
+        processing_dict = {'processing_version': processing_version,
+                           'description':'this-is-a-test'}
 
-        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+        acquisition_dict = {'acquisition_era_name': acquisition_era_name, 'start_date':1234567890}
 
-        primary_dict = {u'primary_ds_name':bulk_primary_ds_name,
-                        u'primary_ds_type':primary_ds_type}
+        primary_dict = {'primary_ds_name':bulk_primary_ds_name,
+                        'primary_ds_type':primary_ds_type}
 
-        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
-                              u'app_name': app_name, u'output_module_label': output_module_label,
-                              u'global_tag':global_tag}
+        output_module_dict = {'release_version': release_version, 'pset_hash': pset_hash,
+                              'app_name': app_name, 'output_module_label': output_module_label,
+                              'global_tag':global_tag}
 
         fileList = []
         fileConfigList = []
@@ -880,52 +880,52 @@ class DBSWriterModel_t(unittest.TestCase):
         for i in range(10):
 	    uniq_id = int(time.time())*1000
             f={
-                u'md5': 'abc', u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'check_sum': '1504266448',
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '27414', u'run_num': '1'},
-                    {u'lumi_section_num': '26422', u'run_num': '1'},
-                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                'md5': 'abc', 'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
+                'file_lumi_list': [
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall09/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall09/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
 
         for i in range(2):
 	    uniq_id = int(time.time())*1000	
             f={
-                u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'adler32': 'abc123',
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '27414', u'run_num': '1'},
-                    {u'lumi_section_num': '26422', u'run_num': '1'},
-                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'adler32': 'abc123',
+                'file_lumi_list': [
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
         for i in range(2):
 	    uniq_id = int(time.time())*1000	
             f={
-                u'adler32': 'abc1234', u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'check_sum': '1504266448',
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '27414', u'run_num': '1'},
-                    {u'lumi_section_num': '26422', u'run_num': '1'},
-                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                'adler32': 'abc1234', 'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
+                'file_lumi_list': [
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall15/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall15/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
 
-            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
-                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            file_output_dict = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                                'output_module_label': output_module_label, 'global_tag': global_tag, 'lfn':f["logical_file_name"]}
             fileConfigList.append(file_output_dict)
 
         data = {'file_conf_list': fileConfigList,
@@ -953,78 +953,78 @@ class DBSWriterModel_t(unittest.TestCase):
         bulk_block="%s#%s" % (bulk_dataset, uniq_id)
         print('dataset = ' , bulk_dataset)
         print('block = ',  bulk_block)
-        dataset_dict = {u'dataset': bulk_dataset,
-                        u'physics_group_name': 'Tracker',
-                        u'dataset_access_type': 'VALID', u'processed_ds_name': bulk_procdataset,
-                        u'xtcrosssection': 123, u'data_tier_name': tier2,
-                        u'prep_id':prep_id}
+        dataset_dict = {'dataset': bulk_dataset,
+                        'physics_group_name': 'Tracker',
+                        'dataset_access_type': 'VALID', 'processed_ds_name': bulk_procdataset,
+                        'xtcrosssection': 123, 'data_tier_name': tier2,
+                        'prep_id':prep_id}
 
-        block_dict = data = {u'block_name': bulk_block,
-                             u'origin_site_name': site}
+        block_dict = data = {'block_name': bulk_block,
+                             'origin_site_name': site}
 
-        processing_dict = {u'processing_version': processing_version,
-                           u'description':'this-is-a-test'}
+        processing_dict = {'processing_version': processing_version,
+                           'description':'this-is-a-test'}
 
-        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+        acquisition_dict = {'acquisition_era_name': acquisition_era_name, 'start_date':1234567890}
 
-        primary_dict = {u'primary_ds_name':bulk_primary_ds_name,
-                        u'primary_ds_type':primary_ds_type}
+        primary_dict = {'primary_ds_name':bulk_primary_ds_name,
+                        'primary_ds_type':primary_ds_type}
 
-        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
-                              u'app_name': app_name, u'output_module_label': output_module_label,
-                              u'global_tag':global_tag}
+        output_module_dict = {'release_version': release_version, 'pset_hash': pset_hash,
+                              'app_name': app_name, 'output_module_label': output_module_label,
+                              'global_tag':global_tag}
         fileList = []
         fileConfigList = []
 
         for i in range(20,30):
             uniq_id = int(time.time())*1000
             f={
-                u'md5': 'abc', u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'check_sum': '1504266448',
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '27', u'run_num': '11', u'event_count': '100' },
-                    {u'lumi_section_num': '28', u'run_num': '11', u'event_count': '111'},
-                    {u'lumi_section_num': '29', u'run_num': '11', u'event_count': '222'}
+                'md5': 'abc', 'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
+                'file_lumi_list': [
+                    {'lumi_section_num': '27', 'run_num': '11', 'event_count': '100' },
+                    {'lumi_section_num': '28', 'run_num': '11', 'event_count': '111'},
+                    {'lumi_section_num': '29', 'run_num': '11', 'event_count': '222'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall09/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall09/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
 
         for i in range(40,42):
             uniq_id = int(time.time())*10000
             f={
-                u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'adler32': 'abc123',
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '270', u'run_num': '12', u'event_count': '300'},
-                    {u'lumi_section_num': '280', u'run_num': '12', u'event_count': '301'},
-                    {u'lumi_section_num': '290', u'run_num': '12', u'event_count': '302'}
+                'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'adler32': 'abc123',
+                'file_lumi_list': [
+                    {'lumi_section_num': '270', 'run_num': '12', 'event_count': '300'},
+                    {'lumi_section_num': '280', 'run_num': '12', 'event_count': '301'},
+                    {'lumi_section_num': '290', 'run_num': '12', 'event_count': '302'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
         for i in range(50,52):
             uniq_id = int(time.time())*1000
             f={
-                u'adler32': 'abc1234', u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'check_sum': '1504266448',
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '27414', u'run_num': '13', u'event_count': '400'},
-                    {u'lumi_section_num': '26422', u'run_num': '13', u'event_count': '401'},
-                    {u'lumi_section_num': '29838', u'run_num': '13', u'event_count': '402'}
+                'adler32': 'abc1234', 'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
+                'file_lumi_list': [
+                    {'lumi_section_num': '27414', 'run_num': '13', 'event_count': '400'},
+                    {'lumi_section_num': '26422', 'run_num': '13', 'event_count': '401'},
+                    {'lumi_section_num': '29838', 'run_num': '13', 'event_count': '402'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall15/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall15/BBJets250to500-madgraph/RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
 
-            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
-                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            file_output_dict = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                                'output_module_label': output_module_label, 'global_tag': global_tag, 'lfn':f["logical_file_name"]}
             fileConfigList.append(file_output_dict)
 
         data = {'file_conf_list': fileConfigList,
@@ -1053,46 +1053,46 @@ class DBSWriterModel_t(unittest.TestCase):
                                       tier)
         bulk_block="%s#%s" % (dataset, uniq_id)
 
-        dataset_dict = {u'dataset': bulk_dataset,
-                        u'physics_group_name': 'Tracker',
-                        u'dataset_access_type': 'VALID', u'processed_ds_name': bulk_procdataset,
-                        u'xtcrosssection': 123, u'data_tier_name': tier,
-                        u'prep_id':prep_id}
+        dataset_dict = {'dataset': bulk_dataset,
+                        'physics_group_name': 'Tracker',
+                        'dataset_access_type': 'VALID', 'processed_ds_name': bulk_procdataset,
+                        'xtcrosssection': 123, 'data_tier_name': tier,
+                        'prep_id':prep_id}
 
-        block_dict = data = {u'block_name': bulk_block,
-                             u'origin_site_name': site}
+        block_dict = data = {'block_name': bulk_block,
+                             'origin_site_name': site}
 
-        processing_dict = {u'processing_version': processing_version,
-                           u'description':'this-is-a-test'}
+        processing_dict = {'processing_version': processing_version,
+                           'description':'this-is-a-test'}
 
-        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+        acquisition_dict = {'acquisition_era_name': acquisition_era_name, 'start_date':1234567890}
 
-        primary_dict = {u'primary_ds_name':bulk_primary_ds_name,
-                        u'primary_ds_type':primary_ds_type}
+        primary_dict = {'primary_ds_name':bulk_primary_ds_name,
+                        'primary_ds_type':primary_ds_type}
 
-        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
-                              u'app_name': app_name, u'output_module_label': output_module_label,
-                              u'global_tag':global_tag}
+        output_module_dict = {'release_version': release_version, 'pset_hash': pset_hash,
+                              'app_name': app_name, 'output_module_label': output_module_label,
+                              'global_tag':global_tag}
 
         fileList = []
         fileConfigList = []
 
         for i in range(2):
             f={
-                u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '27414', u'run_num': '1'},
-                    {u'lumi_section_num': '26422', u'run_num': '1'},
-                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'file_lumi_list': [
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uniq_id, i),
                 }
             fileList.append(f)
 
-            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
-                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            file_output_dict = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                                'output_module_label': output_module_label, 'global_tag': global_tag, 'lfn':f["logical_file_name"]}
             fileConfigList.append(file_output_dict)
 
         data = {'file_conf_list': fileConfigList,
@@ -1110,47 +1110,47 @@ class DBSWriterModel_t(unittest.TestCase):
     def test12d(self):
         """test12d: web.DBSWriterModel.insertBulkBlock: basic test for inserting child dataset with files"""
 
-        dataset_dict = {u'dataset': parent_stepchain_dataset,
-                        u'physics_group_name': 'Tracker',
-                        u'dataset_access_type': 'VALID', u'processed_ds_name': parent_procdataset,
-                        u'xtcrosssection': 123, u'data_tier_name': tier,
-                        u'prep_id':prep_id}
+        dataset_dict = {'dataset': parent_stepchain_dataset,
+                        'physics_group_name': 'Tracker',
+                        'dataset_access_type': 'VALID', 'processed_ds_name': parent_procdataset,
+                        'xtcrosssection': 123, 'data_tier_name': tier,
+                        'prep_id':prep_id}
 
-        block_dict = data = {u'block_name': parent_stepchain_block,
-                             u'origin_site_name': site}
+        block_dict = data = {'block_name': parent_stepchain_block,
+                             'origin_site_name': site}
 
-        processing_dict = {u'processing_version': processing_version,
-                           u'description':'this-is-a-test'}
+        processing_dict = {'processing_version': processing_version,
+                           'description':'this-is-a-test'}
 
-        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+        acquisition_dict = {'acquisition_era_name': acquisition_era_name, 'start_date':1234567890}
 
-        primary_dict = {u'primary_ds_name':primary_ds_name + "_stepchain",
-                        u'primary_ds_type':primary_ds_type}
+        primary_dict = {'primary_ds_name':primary_ds_name + "_stepchain",
+                        'primary_ds_type':primary_ds_type}
 
-        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
-                              u'app_name': app_name, u'output_module_label': output_module_label,
-                              u'global_tag':global_tag}
+        output_module_dict = {'release_version': release_version, 'pset_hash': pset_hash,
+                              'app_name': app_name, 'output_module_label': output_module_label,
+                              'global_tag':global_tag}
 
         fileList = []
         fileConfigList = []
 
         for i in range(2):
             f={
-                u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'check_sum': u'1504266448',
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '27414', u'run_num': '1'},
-                    {u'lumi_section_num': '26422', u'run_num': '1'},
-                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
+                'file_lumi_list': [
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/parent_%s/%i.root" %(uid, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/parent_%s/%i.root" %(uid, i),
                 }
             fileList.append(f)
 
-            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
-                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            file_output_dict = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                                'output_module_label': output_module_label, 'global_tag': global_tag, 'lfn':f["logical_file_name"]}
             fileConfigList.append(file_output_dict)
 
         data = {'file_conf_list': fileConfigList,
@@ -1169,47 +1169,47 @@ class DBSWriterModel_t(unittest.TestCase):
     def test12e(self):
         """test12e: web.DBSWriterModel.insertBulkBlock: insert bulk block with parent dataset negative test"""
 
-        dataset_dict = {u'dataset': stepchain_dataset,
-                        u'physics_group_name': 'Tracker',
-                        u'dataset_access_type': 'VALID', u'processed_ds_name': procdataset,
-                        u'xtcrosssection': 123, u'data_tier_name': tier,
-                        u'prep_id':prep_id}
+        dataset_dict = {'dataset': stepchain_dataset,
+                        'physics_group_name': 'Tracker',
+                        'dataset_access_type': 'VALID', 'processed_ds_name': procdataset,
+                        'xtcrosssection': 123, 'data_tier_name': tier,
+                        'prep_id':prep_id}
 
-        block_dict = data = {u'block_name': stepchain_block,
-                             u'origin_site_name': site}
+        block_dict = data = {'block_name': stepchain_block,
+                             'origin_site_name': site}
 
-        processing_dict = {u'processing_version': processing_version,
-                           u'description':'this-is-a-test'}
+        processing_dict = {'processing_version': processing_version,
+                           'description':'this-is-a-test'}
 
-        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+        acquisition_dict = {'acquisition_era_name': acquisition_era_name, 'start_date':1234567890}
 
-        primary_dict = {u'primary_ds_name':primary_ds_name,
-                        u'primary_ds_type':primary_ds_type}
+        primary_dict = {'primary_ds_name':primary_ds_name,
+                        'primary_ds_type':primary_ds_type}
 
-        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
-                              u'app_name': app_name, u'output_module_label': output_module_label,
-                              u'global_tag':global_tag}
+        output_module_dict = {'release_version': release_version, 'pset_hash': pset_hash,
+                              'app_name': app_name, 'output_module_label': output_module_label,
+                              'global_tag':global_tag}
 
         fileList = []
         fileConfigList = []
 
         for i in range(2):
             f={
-                u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'check_sum': u'1504266448',
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '27414', u'run_num': '1'},
-                    {u'lumi_section_num': '26422', u'run_num': '1'},
-                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
+                'file_lumi_list': [
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/child_%s/%i.root" %(uid, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/child_%s/%i.root" %(uid, i),
                 }
             fileList.append(f)
 
-            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
-                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            file_output_dict = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                                'output_module_label': output_module_label, 'global_tag': global_tag, 'lfn':f["logical_file_name"]}
             fileConfigList.append(file_output_dict)
 
         data = {'file_conf_list': fileConfigList,
@@ -1231,47 +1231,47 @@ class DBSWriterModel_t(unittest.TestCase):
     def test12f(self):
         """test12f: web.DBSWriterModel.insertBulkBlock: insert bulk block with parent dataset"""
 
-        dataset_dict = {u'dataset': stepchain_dataset,
-                        u'physics_group_name': 'Tracker',
-                        u'dataset_access_type': 'VALID', u'processed_ds_name': procdataset,
-                        u'xtcrosssection': 123, u'data_tier_name': tier,
-                        u'prep_id':prep_id}
+        dataset_dict = {'dataset': stepchain_dataset,
+                        'physics_group_name': 'Tracker',
+                        'dataset_access_type': 'VALID', 'processed_ds_name': procdataset,
+                        'xtcrosssection': 123, 'data_tier_name': tier,
+                        'prep_id':prep_id}
 
-        block_dict = data = {u'block_name': stepchain_block,
-                             u'origin_site_name': site}
+        block_dict = data = {'block_name': stepchain_block,
+                             'origin_site_name': site}
 
-        processing_dict = {u'processing_version': processing_version,
-                           u'description':'this-is-a-test'}
+        processing_dict = {'processing_version': processing_version,
+                           'description':'this-is-a-test'}
 
-        acquisition_dict = {u'acquisition_era_name': acquisition_era_name, u'start_date':1234567890}
+        acquisition_dict = {'acquisition_era_name': acquisition_era_name, 'start_date':1234567890}
 
-        primary_dict = {u'primary_ds_name':primary_ds_name + "_stepchain",
-                        u'primary_ds_type':primary_ds_type}
+        primary_dict = {'primary_ds_name':primary_ds_name + "_stepchain",
+                        'primary_ds_type':primary_ds_type}
 
-        output_module_dict = {u'release_version': release_version, u'pset_hash': pset_hash,
-                              u'app_name': app_name, u'output_module_label': output_module_label,
-                              u'global_tag':global_tag}
+        output_module_dict = {'release_version': release_version, 'pset_hash': pset_hash,
+                              'app_name': app_name, 'output_module_label': output_module_label,
+                              'global_tag':global_tag}
 
         fileList = []
         fileConfigList = []
 
         for i in range(2):
             f={
-                u'file_type': 'EDM',
-                u'file_size': '2012211901', u'auto_cross_section': 0.0,
-                u'check_sum': u'1504266448',
-                u'file_lumi_list': [
-                    {u'lumi_section_num': '27414', u'run_num': '1'},
-                    {u'lumi_section_num': '26422', u'run_num': '1'},
-                    {u'lumi_section_num': '29838', u'run_num': '1'}
+                'file_type': 'EDM',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
+                'file_lumi_list': [
+                    {'lumi_section_num': '27414', 'run_num': '1'},
+                    {'lumi_section_num': '26422', 'run_num': '1'},
+                    {'lumi_section_num': '29838', 'run_num': '1'}
                     ],
-                u'event_count': u'1619',
-                u'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/child_%s/%i.root" %(uid, i),
+                'event_count': '1619',
+                'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/child_%s/%i.root" %(uid, i),
                 }
             fileList.append(f)
 
-            file_output_dict = {u'release_version': release_version, u'pset_hash': pset_hash, u'app_name': app_name,
-                                u'output_module_label': output_module_label, u'global_tag': global_tag, u'lfn':f["logical_file_name"]}
+            file_output_dict = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
+                                'output_module_label': output_module_label, 'global_tag': global_tag, 'lfn':f["logical_file_name"]}
             fileConfigList.append(file_output_dict)
 
         data = {'file_conf_list': fileConfigList,

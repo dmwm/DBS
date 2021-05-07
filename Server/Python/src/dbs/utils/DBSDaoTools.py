@@ -8,7 +8,7 @@ def create_token_generator(input_list):
     ###ORA-01460: unimplemented or unreasonable conversion requested will thrown if list is larger
     oracle_limit = 4000
     grp_list = []
-    if type(input_list[0]) == int :
+    if isinstance(input_list[0], int) :
         input_str = ','.join(map(str, input_list))
     else:
         input_str = ','.join(input_list) 

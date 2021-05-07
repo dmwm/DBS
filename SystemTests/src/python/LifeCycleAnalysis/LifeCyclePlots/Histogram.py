@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from ROOT import gStyle, TCanvas, TFile, TH1F, TH2F, THStack, TPaveStats
 
 class BasicHisto(object):
@@ -61,7 +61,7 @@ class BasicHisto(object):
         self._canvas.SetLogy(self._log.get('y', False))
 
         # set additional options
-        for key, value in self._add_options.iteritems():
+        for key, value in self._add_options.items():
             # initialize callable with histogramm to start for-loop
             # to resolve nested calls like GetXaxis().SetLabelSize()
             callable_fkt = self._histogram

@@ -2,7 +2,7 @@
 """
 DBS 3 Migration Service unittests
 """
-from __future__ import print_function
+
 from dbsserver_t.utils.DBSRestApi import DBSRestApi
 from dbsserver_t.utils.DBSDataProvider import DBSBlockDataProvider, create_child_data_provider
 from dbsserver_t.utils.TestTools import expectedFailure
@@ -38,7 +38,7 @@ from DBSSecrets import dbs3_l3_i2
 def remove_non_comparable_keys(values, non_comparable_keys):
     for value in values:
         if isinstance(value, dict):
-            keys = set(value.iterkeys())
+            keys = set(value.keys())
             intersection = keys.intersection(set(non_comparable_keys))
             for entry in intersection:
                 del value[entry]
@@ -185,7 +185,7 @@ class DBSMigrationServer_t(unittest.case.TestCase):
             non_comparable_keys = ('block_id', 'dataset_id', 'last_modification_date',
                                    'parent_file_id', 'primary_ds_id', 'description')
             if isinstance(input, dict):
-                for key, value in input.iteritems():
+                for key, value in input.items():
                     if key in non_comparable_keys:
                         continue ###do not compare id's
                     self.assertTrue(key in output)

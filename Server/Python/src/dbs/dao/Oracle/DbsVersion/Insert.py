@@ -14,7 +14,7 @@ class Insert(DBFormatter):
 
     def getBinds_delme( self, dbs_versionsObj ):
             binds = {}
-            if type(dbs_versionsObj) == type ('object'):
+            if isinstance(dbs_versionsObj, type ('object')):
             	binds = {
 			'dbsversionid': dbs_versionsObj['dbsversionid'],
 			'schemaversion': dbs_versionsObj['schemaversion'],
@@ -25,7 +25,7 @@ class Insert(DBFormatter):
 			'lastmodificationdate': dbs_versionsObj['lastmodificationdate'],
                  }
 
-            elif type(dbs_versionsObj) == type([]):
+            elif isinstance(dbs_versionsObj, type([])):
                binds = []
                for item in dbs_versionsObj:
                    binds.append({

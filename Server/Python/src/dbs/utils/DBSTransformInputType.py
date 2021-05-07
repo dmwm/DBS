@@ -33,7 +33,7 @@ def parseRunRange(run_range):
         for item in run_range:
             for new_item in parseRunRange(item):
                 yield new_item
-    elif isinstance(run_range, basestring):
+    elif isinstance(run_range, str):
         try:
             min_run, max_run = run_range.split('-', 1)
         except ValueError:
@@ -43,7 +43,7 @@ def parseRunRange(run_range):
                 yield run_range
             else:
                 yield run_tuple(min_run, max_run)
-    elif isinstance(run_range, (int, long)):
+    elif isinstance(run_range, int):
         yield run_range
     else:
         dbsExceptionHandler('dbsException-invalid-input2', "Invalid input: run/run_range or dataset_id.",

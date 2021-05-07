@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from dbs.apis.dbsClient import DbsApi
 from DataProvider.core.dbs_provider import DBSDataProvider
 from DataProvider.core.phedex_provider import PhedexDataProvider

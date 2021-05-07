@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import subprocess
 #
 #subprocess.call("python2.6 test.py", shell=True)
@@ -34,7 +34,7 @@ while wait == 1:
 			wait = 1
 """
 		
-for item in procs.keys():
+for item in list(procs.keys()):
 	stdout_value = procs[item].communicate()[0]
 	print(stdout_value)
 

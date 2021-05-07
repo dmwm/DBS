@@ -1,7 +1,7 @@
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    import StringIO
+    import io
 
 class HTTPResponse(object):
     def __init__(self):

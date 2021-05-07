@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import time
 import cherrypy
 import threading
@@ -30,7 +30,7 @@ class DBSMigrationServer(threading.Thread):
         self.stopFlag = False
         self.taskFunc = func
         self.duration = duration
-        if type(func) == type(lambda :None):
+        if isinstance(func, type(lambda :None)):
             name = func.__name__
         else:
             name = func.__class__.__name__
@@ -222,7 +222,7 @@ class MigrationTask(SequencialTaskBase):
             except Exception as ex:
                 self.inserted = False
                 #handle dbsException
-                if type(ex) == dbsException:
+                if isinstance(ex, dbsException):
                     MgrLogger.error( time.asctime(time.gmtime()) + ex.message + ex.serverError )
                 MgrLogger.error(time.asctime(time.gmtime()) + str(ex))
                 #if try_count==3, the sql will actually set the status=9 (terminally failed) instead of 3

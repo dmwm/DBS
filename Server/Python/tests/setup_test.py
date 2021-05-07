@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import sys, os
 import fnmatch
 from glob import glob
@@ -159,8 +159,7 @@ class TestCommand(Command):
               TestSuite = unittest.TestSuite()
               module_names = get_test_names(dao_tests, '[!.#]*_t.py', base_dir)
               #some tests need to be executed in a specific order, since they depend on each other
-              module_names = [(test_priority_dao.get(name, 0), name) for name in module_names]
-              module_names.sort()
+              module_names = sorted([(test_priority_dao.get(name, 0), name) for name in module_names])
               module_names = [name for prio, name in module_names]
 
               loadedTests = unittest.TestLoader().loadTestsFromNames(module_names)

@@ -27,7 +27,7 @@ class DBSFileParent_t(unittest.TestCase):
         bo = DBSFile(self.logger, dbi, dbowner)
 
         result = bo.listFileParents(logical_file_name='%')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
 if __name__ == "__main__":

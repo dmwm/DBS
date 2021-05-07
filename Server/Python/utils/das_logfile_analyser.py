@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from optparse import OptionParser
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import yaml
 import json, os, re, sys
 import pprint
@@ -69,7 +69,7 @@ class DASMapping(object):
             ###Needs translation using das3dbs_param_map
             das2dbs_param_map = api_call['das2dbs_param_map']
             das2dbs_key_changer = lambda key, map=das2dbs_param_map: map[key] if key in map else key
-            das_param_keys = set(map(das2dbs_key_changer, das_params.keys()))
+            das_param_keys = set(map(das2dbs_key_changer, list(das_params.keys())))
 
             api_params = set(api_call['params'].keys())
 
@@ -82,7 +82,7 @@ class DASMapping(object):
 
         dbs_params = {}
 
-        for param in matching_api['params'].keys():
+        for param in list(matching_api['params'].keys()):
             try:
                 dbs_params[param] = das_params[param]
             except KeyError as ke:
@@ -91,7 +91,7 @@ class DASMapping(object):
                 if matching_api['params'][param] != 'optional':
                     dbs_params[param] = matching_api['params'][param]
 
-        dbs_url = urlparse.urlparse(matching_api['url'])
+        dbs_url = urllib.parse.urlparse(matching_api['url'])
         path = dbs_url.path
         api_pattern = re.compile(r'^/dbs/\S+/\S+/DBSReader/(?P<api>\S+)/.*')
         match_obj = api_pattern.match(path)
@@ -164,8 +164,8 @@ if __name__ == '__main__':
             match_obj = request_pattern.match(request)
             request = match_obj.groupdict()
             uri = request['uri']
-            parsed_uri = urlparse.urlparse(uri)
-            parsed_query_string = urlparse.parse_qs(parsed_uri.query)
+            parsed_uri = urllib.parse.urlparse(uri)
+            parsed_query_string = urllib.parse.parse_qs(parsed_uri.query)
             lookup, das_params = extract_das_parameters(parsed_query_string['input'][0])
             dbs_api, dbs_params = das_mapping.create_dbs_query(lookup, das_params)
             if dbs_api:

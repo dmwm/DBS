@@ -42,7 +42,7 @@ class List_t(unittest.TestCase):
     def test03(self):
         """dao.Oracle.PrimaryDataset.List: Basic"""
         result = self.dao.execute(self.conn, "ThisDoesNotExist")
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
 if __name__ == "__main__":

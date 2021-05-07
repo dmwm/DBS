@@ -28,7 +28,7 @@ class DBSFileLumi_t(unittest.TestCase):
 
         bo.listFileLumis(logical_file_name='foo')
         result = bo.listFileLumis(block_name='foo')
-        self.assertTrue(type(result) == list)
+        self.assertTrue(isinstance(result, list))
         self.assertEqual(len(result), 0)
         
 if __name__ == "__main__":

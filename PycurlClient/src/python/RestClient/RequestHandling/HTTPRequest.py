@@ -2,12 +2,12 @@ from RestClient.RequestHandling.HTTPResponse import HTTPResponse
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 
 import pycurl
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    import StringIO
+    import io
 
 class HTTPRequest(object):
     supported_methods = {'GET'    : {pycurl.HTTPGET : True},
@@ -28,7 +28,7 @@ class HTTPRequest(object):
         if not params:
             self._curl_options[pycurl.URL] = ("%s/%s") % (url, api)
         else:
-            self._curl_options[pycurl.URL] = ("%s/%s?%s") % (url, api, urllib.urlencode(params))
+            self._curl_options[pycurl.URL] = ("%s/%s?%s") % (url, api, urllib.parse.urlencode(params))
 
         if method == 'POST':
             self._curl_options[pycurl.POSTFIELDS] = data
@@ -44,10 +44,10 @@ class HTTPRequest(object):
             ### set content-length header to ensure performant cherrypy reads
             request_headers['Content-Length'] = str(content_length)
 
-        self._curl_options[pycurl.HTTPHEADER] = ["%s: %s" % (key, value) for key, value in request_headers.iteritems()]
+        self._curl_options[pycurl.HTTPHEADER] = ["%s: %s" % (key, value) for key, value in request_headers.items()]
 
     def __call__(self, curl_object):
-        for key, value in self._curl_options.iteritems():
+        for key, value in self._curl_options.items():
             curl_object.setopt(key, value)
 
         http_response  = HTTPResponse()

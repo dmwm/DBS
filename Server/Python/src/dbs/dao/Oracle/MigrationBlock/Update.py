@@ -56,7 +56,7 @@ class Update(DBFormatter):
             sql3 = sql + "and MIGRATION_REQUEST_ID =:migration_request_id"
             result = self.dbi.processData(sql3, daoinput, conn, transaction)
         elif 'migration_block_id' in daoinput:
-            if type(daoinput['migration_block_id']) is not list:
+            if not isinstance(daoinput['migration_block_id'], list):
                 sql2 = sql+ " and MIGRATION_BLOCK_ID =:migration_block_id"
                 result = self.dbi.processData(sql2, daoinput, conn, transaction)
             else:

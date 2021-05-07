@@ -50,7 +50,7 @@ class List_t(unittest.TestCase):
         result = []
 	for item in r:
 	    result.append(item)
-        self.assertTrue(type(r) == GeneratorType)
+        self.assertTrue(isinstance(r, GeneratorType))
         self.assertNotEqual(len(result), 0)
 
 

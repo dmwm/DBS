@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-import xmlrpclib
-import cPickle
+import xmlrpc.client
+import pickle
 
 class StatsXMLRPCClient(object):
     def __init__(self, host="localhost", port=9876):
-        self.stats_server = xmlrpclib.ServerProxy('http://%s:%s' % (host, port))
+        self.stats_server = xmlrpc.client.ServerProxy('http://%s:%s' % (host, port))
 
     def send(self, stats):
         self.stats_server.add_stats(stats)
@@ -19,7 +19,7 @@ class StatsPipeClient(object):
     def __send(self, stats):
         try:
             self.f = open(self.named_pipe, 'wb')
-            cPickle.dump(stats, self.f, cPickle.HIGHEST_PROTOCOL)
+            pickle.dump(stats, self.f, pickle.HIGHEST_PROTOCOL)
             self.f.close()
         except IOError as xxx_todo_changeme:
             self._ex = xxx_todo_changeme
@@ -34,7 +34,7 @@ class StatsPipeClient(object):
 
     def send(self, stats):
         #if there is a broken pipe, try to send data again (Try five times)
-        for _ in xrange(5):
+        for _ in range(5):
             if self.__send(stats):
                 return
         raise self._ex

@@ -1,7 +1,7 @@
 """
 Unittests to validate the DBS2 to DBS3 migration
 """
-from __future__ import print_function
+
 
 import logging
 import unittest
@@ -63,7 +63,7 @@ def listComparision(resultsDBS2, resultsDBS3):
             return False
 
 def diffKeys(resultDBS2, resultDBS3):
-    for i in resultDBS3.keys():
+    for i in list(resultDBS3.keys()):
         if i in resultDBS2:
             if resultDBS3[i] == resultDBS2[i]:
                 pass

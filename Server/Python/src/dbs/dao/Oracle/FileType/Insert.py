@@ -17,13 +17,13 @@ class Insert(DBFormatter):
 
     def getBinds_delme( self, file_typesObj ):
             binds = {}
-            if type(file_typesObj) == type ('object'):
+            if isinstance(file_typesObj, type ('object')):
             	binds = {
 			'filetypeid': file_typesObj['filetypeid'],
 			'filetype': file_typesObj['filetype'],
                  }
 
-            elif type(file_typesObj) == type([]):
+            elif isinstance(file_typesObj, type([])):
                binds = []
                for item in file_typesObj:
                    binds.append({

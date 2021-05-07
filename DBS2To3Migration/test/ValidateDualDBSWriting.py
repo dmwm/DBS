@@ -2,7 +2,7 @@
 """
 This scripts is used to check WMAgent data injected into DBS2 and DBS3 simutanously
 """
-from __future__ import print_function
+
 from optparse import OptionParser
 from string import Template
 import pprint, logging, os, sys, unittest
