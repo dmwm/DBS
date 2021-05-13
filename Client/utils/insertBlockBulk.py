@@ -4,7 +4,6 @@ from __future__ import print_function
 ## a block into DBS3.
 ##
 import os, sys, imp
-import cjson
 import pprint
 import ast 
 from dbs.apis.dbsClient import *
