@@ -1,8 +1,8 @@
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
     try:
-        import StringIO
+        import io
     except ImportError:
         # Assuming we are running under python3 environment:
         from io import StringIO

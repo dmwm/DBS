@@ -1,7 +1,7 @@
 """
 client writer unittests
 """
-from __future__ import print_function
+
 import os, sys, imp
 import time
 import uuid

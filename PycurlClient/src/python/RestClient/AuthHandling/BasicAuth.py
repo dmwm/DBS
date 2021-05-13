@@ -9,7 +9,7 @@ class BasicAuth(object):
         self._password = password
 
         if sys.stdin.isatty() and not self._username:
-            self._username = raw_input('User:')
+            self._username = input('User:')
 
         if sys.stdin.isatty() and not self._password:
             self._password = getpass("Password:")
