@@ -4,14 +4,7 @@ from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 import pycurl
 import urllib.request, urllib.parse, urllib.error
 
-try:
-    from io import StringIO
-except ImportError:
-    try:
-        import io
-    except ImportError:
-        # Assuming we are running under python3 environment:
-        from io import StringIO
+from io import BytesIO
 
 
 class HTTPRequest(object):
@@ -42,7 +35,7 @@ class HTTPRequest(object):
             ### pycurl will automatically set content-length header using strlen()
 
         elif method == 'PUT':
-            data_fp = StringIO(data)
+            data_fp = BytesIO(data)
             content_length = len(data)
             self._curl_options[pycurl.READFUNCTION] = data_fp.read
             self._curl_options[pycurl.INFILESIZE] = content_length
