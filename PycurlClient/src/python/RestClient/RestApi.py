@@ -1,5 +1,4 @@
 from RestClient.RequestHandling.HTTPRequest import HTTPRequest
-import pdb
 import pycurl
 
 
@@ -29,7 +28,6 @@ class RestApi(object):
         self._curl.close()
 
     def get(self, url, api, params={}, data=None, request_headers={}):
-        # pdb.set_trace()
         http_request = HTTPRequest(method='GET', url=url, api=api, params=params,
                                    data=data, request_headers=request_headers,
                                    additional_curl_options=self._additional_curl_options)
