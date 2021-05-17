@@ -1,15 +1,14 @@
-from __future__ import print_function
 from dbs.exceptions.dbsClientException import dbsClientException
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
 from RestClient.RestApi import RestApi
 from RestClient.AuthHandling.X509Auth import X509Auth
 from RestClient.ProxyPlugins.Socks5Proxy import Socks5Proxy
 
-import cjson
+import json
 import os
 import socket
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 def slicedIterator(sourceList, sliceSize):
     """
@@ -94,7 +93,7 @@ def list_parameter_splitting(data, key, size_limit=8000, method='GET'):
     for element in values:
         data[key].append(element)
         if method =='GET':
-            size = len(urllib.urlencode(data))
+            size = len(urllib.parse.urlencode(data))
         else:
             size = len(data)
         if size > size_limit:
@@ -115,9 +114,9 @@ def split_calls(func):
         For example (https://cmsweb-testbed.cern.ch:8443/dbs/prod/global/filechildren), so 192 bytes should be safe.
         """
         size_limit = 8000
-        encoded_url = urllib.urlencode(kwargs)
+        encoded_url = urllib.parse.urlencode(kwargs)
         if len(encoded_url) > size_limit:
-            for key, value in kwargs.iteritems():
+            for key, value in kwargs.items():
                 ###only one (first) list at a time is splitted,
                 ###currently only file lists are supported
                 if key in ('logical_file_name', 'block_name', 'lumi_list', 'run_num') and isinstance(value, list):
@@ -195,7 +194,7 @@ class DbsApi(object):
 
         method_func = getattr(self.rest_api, callmethod.lower())
 
-        data = cjson.encode(data)
+        data = json.dumps(data)
 
         try:
             self.http_response = method_func(self.url, method, params, data, request_headers)
@@ -206,8 +205,8 @@ class DbsApi(object):
             return self.http_response.body
 
         try:
-            json_ret=cjson.decode(self.http_response.body)
-        except cjson.DecodeError:
+            json_ret=json.loads(self.http_response.body)
+        except ValueError as ex:
             print("The server output is not a valid json, most probably you have a typo in the url.\n%s.\n" % self.url, file=sys.stderr)
             raise dbsClientException("Invalid url", "Possible urls are %s" %self.http_response.body)
 
@@ -222,7 +221,7 @@ class DbsApi(object):
         data = http_error.body
         try:
             if isinstance(data, str):
-                data = cjson.decode(data)
+                data = json.loads(data)
         except:
             raise http_error
 
@@ -268,7 +267,7 @@ class DbsApi(object):
 
         requiredParameters = {'forced':validParameters}
 
-        checkInputParameter(method="blockDump", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="blockDump", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("blockdump", params=kwargs)
@@ -286,7 +285,7 @@ class DbsApi(object):
         """
         validParameters = ['call']
 
-        checkInputParameter(method="help", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="help", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("help", params=kwargs)
 
@@ -479,7 +478,7 @@ class DbsApi(object):
         validParameters = ['dataset']
 
         requiredParameters = {'forced': ['dataset']}
-        checkInputParameter(method="listParentDSTrio", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listParentDSTrio", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
         return self.__callServer("parentDSTrio", params=kwargs, callmethod='GET')
 
@@ -498,7 +497,7 @@ class DbsApi(object):
         validParameters = ['block_name']
 
         requiredParameters = {'forced': ['block_name']}
-        checkInputParameter(method="listBlockTrio", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listBlockTrio", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
         return self.__callServer("blockTrio", params=kwargs, callmethod='GET')
 
@@ -517,7 +516,7 @@ class DbsApi(object):
         validParameters = ['block_name', 'logical_file_name']
 
         requiredParameters = {'forced': ['block_name']}
-        checkInputParameter(method="listFileParentsByLumi", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listFileParentsByLumi", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
         return self.__callServer("fileparentsbylumi", data=kwargs, callmethod='POST')
 
@@ -541,7 +540,7 @@ class DbsApi(object):
         """
         validParameters = ['acquisition_era_name']
 
-        checkInputParameter(method="listAcquisitionEras", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listAcquisitionEras", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("acquisitioneras", params=kwargs)
 
@@ -558,7 +557,7 @@ class DbsApi(object):
         """
         validParameters = ['acquisition_era_name']
 
-        checkInputParameter(method="listAcquisitionEras", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listAcquisitionEras", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("acquisitioneras_ci", params=kwargs)
 
@@ -576,7 +575,7 @@ class DbsApi(object):
 
         requiredParameters = {'forced': validParameters}
 
-        checkInputParameter(method="listBlockChildren", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listBlockChildren", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("blockchildren", params=kwargs)
@@ -594,7 +593,7 @@ class DbsApi(object):
         validParameters = ['block_name']
 
         requiredParameters = {'forced': validParameters}
-        checkInputParameter(method="listBlockParents", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listBlockParents", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
         if isinstance(kwargs["block_name"], list):
             return self.__callServer("blockparents", data=kwargs, callmethod='POST')
@@ -646,10 +645,10 @@ class DbsApi(object):
         requiredParameters = {'multiple': ['dataset', 'block_name', 'data_tier_name', 'logical_file_name']}
 
         #set defaults
-        if 'detail' not in kwargs.keys():
+        if 'detail' not in list(kwargs.keys()):
             kwargs['detail'] = False
 
-        checkInputParameter(method="listBlocks", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listBlocks", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("blocks", params=kwargs)
@@ -689,7 +688,7 @@ class DbsApi(object):
 
         requiredParameters = {'standalone': ['block_name', 'dataset']}
 
-        checkInputParameter(method="listBlockSummaries", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listBlockSummaries", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer('blocksummaries', params=kwargs)
@@ -712,9 +711,9 @@ class DbsApi(object):
 
         requiredParameters = {'multiple': ['dataset', 'block_name']}
 
-        checkInputParameter(method="listBlockOrigin", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listBlockOrigin", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
-	return self.__callServer('blockorigin', params=kwargs)
+        return self.__callServer('blockorigin', params=kwargs)
 
     def listDatasets(self, **kwargs):
         """
@@ -790,10 +789,10 @@ class DbsApi(object):
                            'detail', 'dataset_id']
 
         #set defaults
-        if 'detail' not in kwargs.keys():
+        if 'detail' not in list(kwargs.keys()):
             kwargs['detail'] = False
 
-        checkInputParameter(method="listDatasets", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listDatasets", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("datasets", params=kwargs)
 
@@ -809,7 +808,7 @@ class DbsApi(object):
         """
         validParameters = ['dataset_access_type']
 
-        checkInputParameter(method="listDatasetAccessTypes", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listDatasetAccessTypes", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("datasetaccesstypes", params=kwargs)
 
@@ -830,13 +829,13 @@ class DbsApi(object):
 
         """
         validParameters = ['dataset', 'dataset_access_type', 'detail', 'dataset_id']
-	requiredParameters = {'multiple': ['dataset', 'dataset_id']}
+        requiredParameters = {'multiple': ['dataset', 'dataset_id']}
 
-        checkInputParameter(method="listDatasetArray", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listDatasetArray", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         #set defaults
-        if 'detail' not in kwargs.keys():
+        if 'detail' not in list(kwargs.keys()):
             kwargs['detail'] = False
 
         return self.__callServer("datasetlist", data=kwargs, callmethod='POST')
@@ -854,7 +853,7 @@ class DbsApi(object):
         validParameters = ['dataset']
         requiredParameters = {'forced': validParameters}
 
-        checkInputParameter(method="listDatasetChildren", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listDatasetChildren", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("datasetchildren", params=kwargs)
@@ -872,7 +871,7 @@ class DbsApi(object):
         validParameters = ['dataset']
         requiredParameters = {'forced': validParameters}
 
-        checkInputParameter(method="listDatasetParents", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listDatasetParents", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("datasetparents", params=kwargs)
@@ -889,7 +888,7 @@ class DbsApi(object):
         """
         validParameters = ['data_tier_name']
 
-        checkInputParameter(method="listDataTiers", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listDataTiers", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("datatiers", params=kwargs)
 
@@ -907,7 +906,7 @@ class DbsApi(object):
         """
         validParameters = ['datatype', 'dataset']
 
-        checkInputParameter(method="listDataTypes", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listDataTypes", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("datatypes", params=kwargs)
 
@@ -946,7 +945,7 @@ class DbsApi(object):
 
         requiredParameters = {'standalone': validParameters}
 
-        checkInputParameter(method="listFileChildren", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listFileChildren", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("filechildren", params=kwargs)
@@ -972,7 +971,7 @@ class DbsApi(object):
 
         requiredParameters = {'standalone': ['logical_file_name', 'block_name']}
 
-        checkInputParameter(method="listFileLumis", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listFileLumis", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("filelumis", params=kwargs)
@@ -993,9 +992,9 @@ class DbsApi(object):
 
         """
         validParameters = ['logical_file_name', 'run_num', 'validFileOnly']
-	requiredParameters = {'forced': ['logical_file_name']}
+        requiredParameters = {'forced': ['logical_file_name']}
 
-        checkInputParameter(method="listFileLumiArray", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listFileLumiArray", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("filelumis", data=kwargs, callmethod="POST")
@@ -1035,7 +1034,7 @@ class DbsApi(object):
 
         requiredParameters = {'standalone': validParameters}
 
-        checkInputParameter(method="listFileParents", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listFileParents", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("fileparents", params=kwargs)
@@ -1155,10 +1154,10 @@ class DbsApi(object):
         requiredParameters = {'multiple': validParameters}
 
         #set defaults
-        if 'detail' not in kwargs.keys():
+        if 'detail' not in list(kwargs.keys()):
             kwargs['detail'] = False
 
-        checkInputParameter(method="listFiles", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listFiles", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("files", params=kwargs)
@@ -1216,10 +1215,10 @@ class DbsApi(object):
         requiredParameters = {'multiple': ['dataset', 'block_name', 'logical_file_name']}
 
         #set defaults
-        if 'detail' not in kwargs.keys():
+        if 'detail' not in list(kwargs.keys()):
             kwargs['detail'] = False
 
-        checkInputParameter(method="listFileArray", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listFileArray", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
         # In order to protect DB and make sure the query can be return in 300 seconds, we limit the length of 
         # logical file names, lumi and run num to 1000. These number may be adjusted later if 
@@ -1227,18 +1226,18 @@ class DbsApi(object):
 
         # CMS has all MC data with run_num=1. It almost is a full table scan if run_num=1 without lfn. So we will request lfn
         # to be present when run_num=1. YG Jan 14, 2016
-        if 'logical_file_name' in kwargs.keys() and isinstance(kwargs['logical_file_name'], list)\
+        if 'logical_file_name' in list(kwargs.keys()) and isinstance(kwargs['logical_file_name'], list)\
             and len(kwargs['logical_file_name']) > 1:
-            if 'run_num' in kwargs.keys() and isinstance(kwargs['run_num'],list) and len(kwargs['run_num']) > 1 :
+            if 'run_num' in list(kwargs.keys()) and isinstance(kwargs['run_num'],list) and len(kwargs['run_num']) > 1 :
                 raise dbsClientException('Invalid input', 'files API does not supprt two lists: run_num and lfn. ')
-            elif 'lumi_list' in kwargs.keys() and kwargs['lumi_list'] and len(kwargs['lumi_list']) > 1 :
+            elif 'lumi_list' in list(kwargs.keys()) and kwargs['lumi_list'] and len(kwargs['lumi_list']) > 1 :
                 raise dbsClientException('Invalid input', 'files API does not supprt two lists: lumi_lis and lfn. ')
                 
-        elif 'lumi_list' in kwargs.keys() and kwargs['lumi_list']:
-            if 'run_num' not in kwargs.keys() or not kwargs['run_num'] or kwargs['run_num'] ==-1 :
+        elif 'lumi_list' in list(kwargs.keys()) and kwargs['lumi_list']:
+            if 'run_num' not in list(kwargs.keys()) or not kwargs['run_num'] or kwargs['run_num'] ==-1 :
                 raise dbsClientException('Invalid input', 'When Lumi section is present, a single run is required. ')
         else:
-            if 'run_num' in kwargs.keys():
+            if 'run_num' in list(kwargs.keys()):
                 if isinstance(kwargs['run_num'], list):
                     if 1 in kwargs['run_num'] or '1' in kwargs['run_num']:
                         raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 when no lumi.')
@@ -1247,7 +1246,7 @@ class DbsApi(object):
                         raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 when no lumi.')
 
         #check if no lfn is given, but run_num=1 is used for searching
-        if ('logical_file_name' not in kwargs.keys() or not kwargs['logical_file_name']) and 'run_num' in kwargs.keys():
+        if ('logical_file_name' not in list(kwargs.keys()) or not kwargs['logical_file_name']) and 'run_num' in list(kwargs.keys()):
             if isinstance(kwargs['run_num'], list):
                 if 1 in kwargs['run_num'] or '1' in kwargs['run_num']:
                     raise dbsClientException('Invalid input', 'files API does not supprt run_num=1 without logical_file_name.')
@@ -1260,7 +1259,7 @@ class DbsApi(object):
         total_lumi_len = 0
         split_lumi_list = []
         max_list_len = 1000 #this number is defined in DBS server
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             if key == 'lumi_list' and isinstance(kwargs['lumi_list'], list)\
                 and kwargs['lumi_list'] and isinstance(kwargs['lumi_list'][0], list):
                 lapp = 0
@@ -1303,7 +1302,7 @@ class DbsApi(object):
         #Make sure this changes when we move to 2.7 or 3.0
         #http://stackoverflow.com/questions/11092511/python-list-of-unique-dictionaries
         # YG May-26-2015
-        return dict((v['logical_file_name'], v) for v in results).values()
+        return list(dict((v['logical_file_name'], v) for v in results).values())
 
     def listFileSummaries(self, **kwargs):
         """
@@ -1339,7 +1338,7 @@ class DbsApi(object):
 
         requiredParameters = {'standalone': ['block_name', 'dataset']}
 
-        checkInputParameter(method="listFileSummaries", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listFileSummaries", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("filesummaries", params=kwargs)
@@ -1377,7 +1376,7 @@ class DbsApi(object):
                            'pset_hash', 'app_name', 'output_module_label',
                            'block_id', 'global_tag']
 
-        checkInputParameter(method="listOutputConfigs", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listOutputConfigs", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("outputconfigs", params=kwargs)
 
@@ -1393,7 +1392,7 @@ class DbsApi(object):
         """
         validParameters = ['physics_group_name']
 
-        checkInputParameter(method="listPhysicsGroups", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listPhysicsGroups", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("physicsgroups", params=kwargs)
 
@@ -1411,7 +1410,7 @@ class DbsApi(object):
         """
         validParameters = ['primary_ds_name', 'primary_ds_type']
 
-        checkInputParameter(method="listPrimaryDatasets", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listPrimaryDatasets", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("primarydatasets", params=kwargs)
 
@@ -1429,7 +1428,7 @@ class DbsApi(object):
         """
         validParameters = ['primary_ds_type', 'dataset']
 
-        checkInputParameter(method="listPrimaryDSTypes", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listPrimaryDSTypes", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("primarydstypes", params=kwargs)
 
@@ -1445,9 +1444,9 @@ class DbsApi(object):
         """
         validParameters = ['processing_version']
         
-	checkInputParameter(method="listProcessingEras", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listProcessingEras", parameters=list(kwargs.keys()), validParameters=validParameters)
         
-	return self.__callServer("processingeras", params=kwargs)
+        return self.__callServer("processingeras", params=kwargs)
 
     def listReleaseVersions(self, **kwargs):
         """
@@ -1465,7 +1464,7 @@ class DbsApi(object):
         """
         validParameters = ['dataset', 'release_version', 'logical_file_name']
 
-        checkInputParameter(method="listReleaseVersions", parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method="listReleaseVersions", parameters=list(kwargs.keys()), validParameters=validParameters)
 
         return self.__callServer("releaseversions", params=kwargs)
 
@@ -1488,7 +1487,7 @@ class DbsApi(object):
 
         requiredParameters = {'multiple': validParameters}
 
-        checkInputParameter(method="listRuns", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listRuns", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("runs", params=kwargs)
@@ -1509,7 +1508,7 @@ class DbsApi(object):
 
         requiredParameters = {'forced': ['run_num']}
 
-        checkInputParameter(method="listRunSummaries", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="listRunSummaries", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("runsummaries", params=kwargs)
@@ -1543,7 +1542,7 @@ class DbsApi(object):
         """
         validParameters = ['migration_rqst_id', 'block_name', 'dataset', 'user']
 
-        checkInputParameter(method='statusMigration', parameters=kwargs.keys(), validParameters=validParameters)
+        checkInputParameter(method='statusMigration', parameters=list(kwargs.keys()), validParameters=validParameters)
         
         return self.__callServer("status", params=kwargs)
 
@@ -1585,7 +1584,7 @@ class DbsApi(object):
 
         requiredParameters = {'forced': validParameters}
 
-        checkInputParameter(method="updateAcqEraEndDate", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="updateAcqEraEndDate", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("acquisitioneras", params=kwargs, callmethod='PUT')
@@ -1604,7 +1603,7 @@ class DbsApi(object):
 
         requiredParameters = {'forced': validParameters}
 
-        checkInputParameter(method="updateBlockStatus", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="updateBlockStatus", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("blocks", params=kwargs, callmethod='PUT')
@@ -1623,7 +1622,7 @@ class DbsApi(object):
 
         requiredParameters = {'forced': validParameters}
 
-        checkInputParameter(method="updateBlockSiteName", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="updateBlockSiteName", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("blocks", params=kwargs, callmethod='PUT')
@@ -1642,7 +1641,7 @@ class DbsApi(object):
 
         requiredParameters = {'forced': validParameters}
 
-        checkInputParameter(method="updateDatasetType", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="updateDatasetType", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("datasets", params=kwargs, callmethod='PUT')
@@ -1668,7 +1667,7 @@ class DbsApi(object):
         requiredParameters = {'forced': ['is_file_valid'], 'multiple': ['logical_file_name', 'dataset']}
 
 
-        checkInputParameter(method="updateFileStatus", parameters=kwargs.keys(), validParameters=validParameters,
+        checkInputParameter(method="updateFileStatus", parameters=list(kwargs.keys()), validParameters=validParameters,
                             requiredParameters=requiredParameters)
 
         return self.__callServer("files", params=kwargs, callmethod='PUT')

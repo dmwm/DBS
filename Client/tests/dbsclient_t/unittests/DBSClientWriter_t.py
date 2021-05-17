@@ -1,7 +1,7 @@
 """
 client writer unittests
 """
-from __future__ import print_function
+
 import os
 import sys
 import time
@@ -204,43 +204,43 @@ class DBSClientWriter_t(unittest.TestCase):
         flist=[]
         for i in range(10):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list':
                 [
                     {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                      'output_module_label': output_module_label,'global_tag':global_tag },
                     ],
                 'dataset': parent_dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'97', 'event_count': u'66'},
-                    {'lumi_section_num': u'26422', 'run_num': u'97', 'event_count': u'67'},
-                    {'lumi_section_num': u'29838', 'run_num': u'97', 'event_count': u'68'},
-                    {'lumi_section_num': u'248', 'run_num': u'97',   'event_count': u'69'},
-                    {'lumi_section_num': u'250', 'run_num': u'97', 'event_count': u'70'},
-                    {'lumi_section_num': u'300', 'run_num': u'97', 'event_count': u'71'},
-                    {'lumi_section_num': u'534', 'run_num': u'97', 'event_count': u'72'},
-                    {'lumi_section_num': u'546', 'run_num': u'97', 'event_count': u'73'},
-                    {'lumi_section_num': u'638', 'run_num': u'97', 'event_count': u'74'},
-                    {'lumi_section_num': u'650', 'run_num': u'97', 'event_count': u'75'},
-                    {'lumi_section_num': u'794', 'run_num': u'97', 'event_count': u'76'},
-                    {'lumi_section_num': u'1313', 'run_num': u'97', 'event_count': u'77'},
-                    {'lumi_section_num': u'1327', 'run_num': u'97', 'event_count': u'78'},
-                    {'lumi_section_num': u'1339', 'run_num': u'97', 'event_count': u'79'},
-                    {'lumi_section_num': u'1353', 'run_num': u'97', 'event_count': u'80'},
-                    {'lumi_section_num': u'1428', 'run_num': u'97', 'event_count': u'81'},
-                    {'lumi_section_num': u'1496', 'run_num': u'97', 'event_count': u'82'},
-                    {'lumi_section_num': u'1537', 'run_num': u'97', 'event_count': u'83'},
-                    {'lumi_section_num': u'1652', 'run_num': u'97', 'event_count': u'84'},
-                    {'lumi_section_num': u'1664', 'run_num': u'97', 'event_count': u'85'},
-                    {'lumi_section_num': u'1743', 'run_num': u'97', 'event_count': u'86'},
-                    {'lumi_section_num': u'1755', 'run_num': u'97', 'event_count': u'87'},
-                    {'lumi_section_num': u'1860', 'run_num': u'97', 'event_count': u'88'},
-                    {'lumi_section_num': u'1872', 'run_num': u'97', 'event_count': u'89'}
+                    {'lumi_section_num': '27414', 'run_num': '97', 'event_count': '66'},
+                    {'lumi_section_num': '26422', 'run_num': '97', 'event_count': '67'},
+                    {'lumi_section_num': '29838', 'run_num': '97', 'event_count': '68'},
+                    {'lumi_section_num': '248', 'run_num': '97',   'event_count': '69'},
+                    {'lumi_section_num': '250', 'run_num': '97', 'event_count': '70'},
+                    {'lumi_section_num': '300', 'run_num': '97', 'event_count': '71'},
+                    {'lumi_section_num': '534', 'run_num': '97', 'event_count': '72'},
+                    {'lumi_section_num': '546', 'run_num': '97', 'event_count': '73'},
+                    {'lumi_section_num': '638', 'run_num': '97', 'event_count': '74'},
+                    {'lumi_section_num': '650', 'run_num': '97', 'event_count': '75'},
+                    {'lumi_section_num': '794', 'run_num': '97', 'event_count': '76'},
+                    {'lumi_section_num': '1313', 'run_num': '97', 'event_count': '77'},
+                    {'lumi_section_num': '1327', 'run_num': '97', 'event_count': '78'},
+                    {'lumi_section_num': '1339', 'run_num': '97', 'event_count': '79'},
+                    {'lumi_section_num': '1353', 'run_num': '97', 'event_count': '80'},
+                    {'lumi_section_num': '1428', 'run_num': '97', 'event_count': '81'},
+                    {'lumi_section_num': '1496', 'run_num': '97', 'event_count': '82'},
+                    {'lumi_section_num': '1537', 'run_num': '97', 'event_count': '83'},
+                    {'lumi_section_num': '1652', 'run_num': '97', 'event_count': '84'},
+                    {'lumi_section_num': '1664', 'run_num': '97', 'event_count': '85'},
+                    {'lumi_section_num': '1743', 'run_num': '97', 'event_count': '86'},
+                    {'lumi_section_num': '1755', 'run_num': '97', 'event_count': '87'},
+                    {'lumi_section_num': '1860', 'run_num': '97', 'event_count': '88'},
+                    {'lumi_section_num': '1872', 'run_num': '97', 'event_count': '89'}
                     ],
                 'file_parent_list': [ ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/p%s/%i.root" %(uid, i),
                 'block_name': parent_block
                 #'is_file_valid': 1
@@ -254,22 +254,22 @@ class DBSClientWriter_t(unittest.TestCase):
         flist=[]
         for i in range(10):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list':
                 [
                     {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                      'output_module_label': output_module_label, 'global_tag':global_tag},
                     ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'97'},
-                    {'lumi_section_num': u'26422', 'run_num': u'98'},
-                    {'lumi_section_num': u'29838', 'run_num': u'99'}
+                    {'lumi_section_num': '27414', 'run_num': '97'},
+                    {'lumi_section_num': '26422', 'run_num': '98'},
+                    {'lumi_section_num': '29838', 'run_num': '99'}
                     ],
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/p%s/%i.root" %(uid, i)} ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
                 #'is_file_valid': 1
@@ -283,22 +283,22 @@ class DBSClientWriter_t(unittest.TestCase):
         flist=[]
         for i in range(10):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list':
                 [
                     {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                      'output_module_label': output_module_label, 'global_tag':global_tag},
                     ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'97'},
-                    {'lumi_section_num': u'26422', 'run_num': u'98'},
-                    {'lumi_section_num': u'29838', 'run_num': u'99'}
+                    {'lumi_section_num': '27414', 'run_num': '97'},
+                    {'lumi_section_num': '26422', 'run_num': '98'},
+                    {'lumi_section_num': '29838', 'run_num': '99'}
                     ],
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/p%s/%i.root" %(uid, i)} ],
-                'event_count': u'1619',
+                'event_count': '1619',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
                 #'is_file_valid': 1
@@ -385,20 +385,20 @@ class DBSClientWriter_t(unittest.TestCase):
         cflist=[]
         for i in range(fCount):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 #'file_output_config_list':
                 #[
                 #    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                 #     'output_module_label': output_module_label,'global_tag':global_tag },
                 #    ],
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': '2012211901', 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
                     {'lumi_section_num': 27414+i, 'run_num': 98, 'event_count': 66},
                     {'lumi_section_num': 26422+i, 'run_num': 98, 'event_count': 67},
                     {'lumi_section_num': 29838+i, 'run_num': 98, 'event_count': 68},
                     ],
-                'event_count': u'201',
+                'event_count': '201',
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/StepChain_/p%s/%i.root" %(uid, i),
                 #'is_file_valid': 1
                 }

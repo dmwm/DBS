@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 #DBS-3 imports
 from dbs.apis.dbsClient import *
 import time
@@ -15,7 +15,7 @@ try:
     for i in dbs3api.listParentDSTrio(dataset=dataset):
         #print(i)
         t1 += 1
-        for k, v in i.items():
+        for k, v in list(i.items()):
             t2 += len(v)
     print(t1)
     print(t2)

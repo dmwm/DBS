@@ -1,6 +1,6 @@
 from RestClient.RequestHandling.HTTPRequest import HTTPRequest
-
 import pycurl
+
 
 class RestApi(object):
     def __init__(self, auth=None, proxy=None, additional_curl_options=None, use_shared_handle=False):

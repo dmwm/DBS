@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 #DBS-3 imports
 from dbs.apis.dbsClient import *
 url="https://dbs3-test1.cern.ch/dbs/dev/global/DBSWriter"
