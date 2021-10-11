@@ -35,6 +35,7 @@ class HTTPRequest(object):
             ### pycurl will automatically set content-length header using strlen()
 
         elif method == 'PUT':
+            data = data.encode("utf-8")
             data_fp = BytesIO(data)
             content_length = len(data)
             self._curl_options[pycurl.READFUNCTION] = data_fp.read
