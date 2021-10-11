@@ -1,12 +1,10 @@
-try:
-    from cStringIO import StringIO
-except ImportError:
-    import StringIO
+from io import BytesIO
+
 
 class HTTPResponse(object):
     def __init__(self):
-        self._response_header = StringIO()
-        self._response_body = StringIO()
+        self._response_header = BytesIO()
+        self._response_body = BytesIO()
 
     def __parse_header(self):
         self._header_dict = {}
@@ -29,7 +27,7 @@ class HTTPResponse(object):
 
     @property
     def fp_body(self):
-        """Returns body file pointer equivalent from StringIO.
+        """Returns body file pointer equivalent from BytesIO.
         For example to read data directly using json.load(fp)"""
         self._response_body.seek(0)
         return self._response_body
@@ -48,13 +46,13 @@ class HTTPResponse(object):
 
     @property
     def pycurl_write_function(self):
-        """Returns body write function from StringIO.
+        """Returns body write function from BytesIO.
         To be used as pycurl.WRITEFUNCTION"""
         return self._response_body.write
 
     @property
     def pycurl_header_function(self):
-        """Returns header write function from StringIO.
+        """Returns header write function from BytesIO.
         To be used as pycurl.HEADERFUNCTION"""
         return self._response_header.write
 

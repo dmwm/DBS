@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 from dbs.apis.dbsClient import DbsApi
 """
 This is a test for migration server to migrate mutiple blocks at the same time and these blocks share 

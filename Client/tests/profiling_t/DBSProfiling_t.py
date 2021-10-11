@@ -1,7 +1,7 @@
 """
 DBS 3 Profiling Tests to check performance of the input validation
 """
-import cjson
+import json
 import os, time
 import unittest
 from dbs.apis.dbsClient import *
@@ -9,7 +9,7 @@ from dbs.exceptions.dbsClientException import dbsClientException
 
 def generateUniqInput(input_file):
     f = file(input_file)
-    input_json = cjson.decode(f.read())
+    input_json = json.load(f.read())
     f.close()
     
     unixtime = str(time.time())

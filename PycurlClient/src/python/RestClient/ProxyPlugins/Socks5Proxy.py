@@ -1,4 +1,5 @@
-from urlparse import urlparse
+from urllib.parse import urlparse
+
 
 class Socks5Proxy(object):
     """Socks5 Proxy Plugin for pycurl
