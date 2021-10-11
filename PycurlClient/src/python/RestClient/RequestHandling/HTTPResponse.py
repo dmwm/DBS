@@ -13,7 +13,7 @@ class HTTPResponse(object):
         headers = self._response_header.getvalue()
         if isinstance(headers, bytes):
             headers = headers.decode("utf-8")
-        for header in headers.split('\r\n')::
+        for header in headers.split('\r\n'):
             if header.startswith('HTTP'):
                 #self._version, self._code, self._msg = header.split(' ', 2)
                 initial_header = header.split(' ', 2)
