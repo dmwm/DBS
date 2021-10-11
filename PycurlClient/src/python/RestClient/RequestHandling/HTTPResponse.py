@@ -10,7 +10,10 @@ class HTTPResponse(object):
 
     def __parse_header(self):
         self._header_dict = {}
-        for header in self._response_header.getvalue().split('\r\n'):
+        headers = self._response_header.getvalue()
+        if isinstance(headers, bytes):
+            headers = headers.decode("utf-8")
+        for header in headers.split('\r\n'):
             if header.startswith('HTTP'):
                 #self._version, self._code, self._msg = header.split(' ', 2)
                 initial_header = header.split(' ', 2)
