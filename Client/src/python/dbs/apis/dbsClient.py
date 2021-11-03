@@ -220,8 +220,7 @@ class DbsApi(object):
         """
         data = http_error.body
         try:
-            if isinstance(data, str):
-                data = json.loads(data)
+            data = json.loads(data)
         except:
             raise http_error
 
