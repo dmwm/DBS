@@ -254,8 +254,8 @@ class DBSBlockInsert :
                     hasFparentage = True
                     if migration:
                         fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['this_logical_file_name']]
-                        del fileParentList[k]['this_logical_file_name']
-                        del fileParentList[k]['parent_file_id']
+                        fileParentList[k].pop('this_logical_file_name', None)
+                        fileParentList[k].pop('parent_file_id', None)
                     else:
                         fileParentList[k]['this_file_id'] = logicalFileName[fileParentList[k]['logical_file_name']]
                         del fileParentList[k]['logical_file_name']
