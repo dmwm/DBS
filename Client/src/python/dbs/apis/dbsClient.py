@@ -714,7 +714,7 @@ class DbsApi(object):
 
         checkInputParameter(method="listBlockOrigin", parameters=kwargs.keys(), validParameters=validParameters,
                             requiredParameters=requiredParameters)
-	return self.__callServer('blockorigin', params=kwargs)
+        return self.__callServer('blockorigin', params=kwargs)
 
     def listDatasets(self, **kwargs):
         """
