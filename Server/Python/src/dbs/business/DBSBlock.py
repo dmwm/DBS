@@ -8,6 +8,16 @@ from dbs.utils.dbsUtils import dbsUtils
 from dbs.utils.dbsExceptionHandler import dbsExceptionHandler
 import re
 
+
+def convertByteStr(unicodeStr):
+    """
+    Utilitarian function which converts an unicode string to
+    an 8-bit string.
+    """
+    if isinstance(unicodeStr, basestring):
+        return unicodeStr.encode("ascii")
+    return unicodeStr
+
 class DBSBlock:
     """
     Block business object class
@@ -51,16 +61,17 @@ class DBSBlock:
             msg = "No wildcard is allowed in block_name for dumpBlock API"
             dbsExceptionHandler('dbsException-invalid-input', msg, self.logger.exception)
 
+        block_name = convertByteStr(block_name)
         conn = self.dbi.connection()
         try :
             #block name is unique
             block1 = self.blocklist.execute(conn, block_name=block_name)
             block = []
             for b1 in block1:
-		if not b1:
-		    return {}
-		else:
-		    block = b1
+                if not b1:
+                    return {}
+                else:
+                    block = b1
             #a block only has one dataset and one primary dataset
             #in order to reduce the number of dao objects, we will not write
             #a special migration one. However, we will have to remove the
@@ -69,18 +80,18 @@ class DBSBlock:
             #we cannot test on b1 to decide if the generator is empty or not.
             #so have to do below:
             if not block: return {}
-            dataset1 = self.datasetlist.execute(conn,
-                      dataset=block["dataset"], dataset_access_type="")
-	    dataset = []
+            dataset1 = self.datasetlist.execute(conn, dataset=convertByteStr(block["dataset"]),
+                                                dataset_access_type="")
+            dataset = []
             for d in dataset1:
-		if d:
-		    dataset = d
-		    dconfig_list = self.outputCoflist.execute(conn, dataset=dataset['dataset'])
+                if d:
+                    dataset = d
+                    dconfig_list = self.outputCoflist.execute(conn, dataset=convertByteStr(dataset['dataset']))
                 else: return {}
             #get block parentage
-            bparent = self.blockparentlist.execute(conn, block['block_name'])
+            bparent = self.blockparentlist.execute(conn, convertByteStr(block['block_name']))
             #get dataset parentage
-            dsparent = self.dsparentlist.execute(conn, dataset['dataset'])
+            dsparent = self.dsparentlist.execute(conn, convertByteStr(dataset['dataset']))
             for p in dsparent:
                 del p['parent_dataset_id']
                 if 'dataset'in p:
@@ -92,35 +103,36 @@ class DBSBlock:
 
             fparent_list = self.fplist.execute(conn,
                                                block_id=block['block_id'])
-	    fparent_list2 = [] 	
-	    for fp in fparent_list:
-		fparent_list2.append(fp)	
-	    #print "---YG file Parent List--"
-	    #print fparent_list2	
+            fparent_list2 = []
+            for fp in fparent_list:
+                fparent_list2.append(fp)
+            #print "---YG file Parent List--"
+            #print fparent_list2
             fconfig_list = self.outputCoflist.execute(conn,
                                                 block_id=block['block_id'])
             acqEra = {}
             prsEra = {}
             if dataset["acquisition_era_name"] not in ( "", None):
                 acqEra = self.aelist.execute(conn,
-                        acquisitionEra=dataset["acquisition_era_name"])[0]
+                        acquisitionEra=convertByteStr(dataset["acquisition_era_name"]))[0]
             if dataset["processing_version"] not in ("", None):
                 prsEra = self.pelist.execute(conn,
-                        processingV=dataset["processing_version"])[0]
+                        processingV=convertByteStr(dataset["processing_version"]))[0]
             primds = self.primdslist.execute(conn,
-                        primary_ds_name=dataset["primary_ds_name"])[0]
+                        primary_ds_name=convertByteStr(dataset["primary_ds_name"]))[0]
             del dataset["primary_ds_name"], dataset['primary_ds_type']
             files = self.filelist.execute(conn, block_name=block_name)
             for f in files:
                 #There are a trade off between json sorting and db query.
                 #We keep lumi sec in a file, but the file parentage seperate
                 #from file
-		file_lumi_list = []
-                for item in self.fllist.execute(conn, logical_file_name=f['logical_file_name'], migration=True):
-		    file_lumi_list.append(item)
-		#print "---YG file lumi list---"	
-		f.update(file_lumi_list = file_lumi_list)
-		del file_lumi_list #YG 09/2015
+                file_lumi_list = []
+                for item in self.fllist.execute(conn, logical_file_name=convertByteStr(f['logical_file_name']),
+                                                migration=True):
+                    file_lumi_list.append(item)
+                #print "---YG file lumi list---"
+                f.update(file_lumi_list = file_lumi_list)
+                del file_lumi_list #YG 09/2015
                 del f['branch_hash_id']
             del dataset["acquisition_era_name"], dataset["processing_version"]
             del block["dataset"]
