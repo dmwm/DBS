@@ -8,6 +8,7 @@ import time
 import uuid
 import unittest
 import copy
+import json
 from dbs.apis.dbsClient import *
 from dbs.exceptions.dbsClientException import dbsClientException
 from RestClient.ErrorHandling.RestClientExceptions import HTTPError
@@ -18,7 +19,7 @@ print("****uid=%s******" %uid)
 
 print(os.environ['DBS_WRITER_URL'])
 primary_ds_name = 'unittest_web_primary_ds_name_%s' % uid
-processing_version="%s" %(uid if (uid<9999) else uid%9999)
+processing_version= uid if (uid<9999) else uid%9999
 acquisition_era_name="acq_era_%s" %uid
 procdataset = '%s-v%s' % (acquisition_era_name, processing_version)
 parent_procdataset = '%s-pstr-v%s' % (acquisition_era_name, processing_version)
@@ -76,6 +77,8 @@ outDict={
 "stepchain_files": stepchain_files,
 "parent_stepchain_files": parent_stepchain_files
 }
+sys.stdout.flush()
+sys.stderr.flush()
 
 class DBSClientWriter_t(unittest.TestCase):
 
@@ -84,42 +87,90 @@ class DBSClientWriter_t(unittest.TestCase):
         url=os.environ['DBS_WRITER_URL']
         proxy=os.environ.get('SOCKS5_PROXY')
         self.api = DbsApi(url=url, proxy=proxy)
+        url=os.environ['DBS_READER_URL']
+        self.reader = DbsApi(url=url, proxy=proxy)
 
     def setUp(self):
         """setup all necessary parameters"""
+        dout = os.environ.get("DBS_DATA_OUTPUT")
+        self.ostream = None
+        if dout:
+            self.ostream = open(dout, 'w')
+
+    def tierDown(self):
+        "close output stream"
+        if self.ostream:
+            self.ostream.close()
 
     def test01(self):
         """test01: web.DBSClientWriter.insertPrimaryDataset: basic test"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'test'}
+        if self.ostream:
+            self.ostream.write("test01 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
+
         self.api.insertPrimaryDataset(primaryDSObj=data)
 
     def test02(self):
         """test02: web.DBSClientWriter.insertPrimaryDataset: duplicate should not riase an exception"""
         data = {'primary_ds_name':primary_ds_name,
                 'primary_ds_type':'test'}
+        if self.ostream:
+            self.ostream.write("test02 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertPrimaryDataset(primaryDSObj=data)
 
     def test04(self):
         """test04: web.DBSClientWriter.insertOutputModule: basic test"""
         data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                 'output_module_label': output_module_label, 'global_tag':global_tag}
+        if self.ostream:
+            self.ostream.write("test04 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertOutputConfig(outputConfigObj=data)
 
     def test05(self):
         """test05: web.DBSClientWriter.insertOutputModule: re-insertion should not raise any errors"""
         data = {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                 'output_module_label': output_module_label, 'global_tag':global_tag, 'pset_name':pset_name}
+        if self.ostream:
+            self.ostream.write("test05 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertOutputConfig(outputConfigObj=data)
 
     def test06(self):
         """test06: web.DBSWriterModel.insertAcquisitionEra: Basic test """
         data={'acquisition_era_name': acquisition_era_name}
+        if self.ostream:
+            self.ostream.write("test06 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertAcquisitionEra(data)
 
     def test07(self):
         """test07: web.DBSWriterModel.insertProcessingEra: Basic test """
         data={'processing_version': processing_version, 'description':'this_is_a_test'}
+        if self.ostream:
+            self.ostream.write("test07 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertProcessingEra(data)
 
     def test08(self):
@@ -132,9 +183,15 @@ class DBSClientWriter_t(unittest.TestCase):
                  'output_module_label': output_module_label, 'global_tag':global_tag}
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "testuer",
+            'creation_date': 1631392778, 'create_by': 'anzar', "last_modification_date": 1631392778, "last_modified_by": "testuer",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
+        if self.ostream:
+            self.ostream.write("test08 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertDataset(datasetObj=data)
         # insert away the parent dataset as well
 
@@ -146,9 +203,15 @@ class DBSClientWriter_t(unittest.TestCase):
                  'output_module_label': output_module_label, 'global_tag':global_tag}
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "testuser",
+            'creation_date': 1631392778, 'create_by': 'anzar', "last_modification_date": 1631392778, "last_modified_by": "testuser",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
+        if self.ostream:
+            self.ostream.write("test08 parent data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(parentdata))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertDataset(datasetObj=parentdata)
 
     def test09(self):
@@ -161,9 +224,15 @@ class DBSClientWriter_t(unittest.TestCase):
                  'output_module_label': output_module_label, 'global_tag':global_tag},
                 ],
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date': 1234, 'create_by': 'anzar', "last_modification_date": 1234, "last_modified_by": "anzar",
+            'creation_date': 1631392778, 'create_by': 'anzar', "last_modification_date": 1631392778, "last_modified_by": "anzar",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
+        if self.ostream:
+            self.ostream.write("test09 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertDataset(datasetObj=data)
 
     def test11(self):
@@ -176,10 +245,16 @@ class DBSClientWriter_t(unittest.TestCase):
             'physics_group_name': 'Tracker', 'primary_ds_name': primary_ds_name2,
             'dataset_access_type': 'PRODUCTION', 'processed_ds_name': procdataset,
             'xtcrosssection': 123, 'primary_ds_type': 'test', 'data_tier_name': tier,
-            'creation_date': 1234, 'create_by': 'testuser', "last_modification_date": 1234, "last_modified_by"
+            'creation_date': 1631392778, 'create_by': 'testuser', "last_modification_date": 1631392778, "last_modified_by"
             : "testuser",
             'processing_version': processing_version,  'acquisition_era_name': acquisition_era_name,
             }
+        if self.ostream:
+            self.ostream.write("test11 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertDataset(datasetObj=data)
 
     def test14(self):
@@ -190,6 +265,12 @@ class DBSClientWriter_t(unittest.TestCase):
         self.api.insertBlock(blockObj=data)
         # insert the parent block as well
         data = {'block_name': parent_block, 'origin_site_name': site }
+        if self.ostream:
+            self.ostream.write("test14 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertBlock(blockObj=data)
 
     def test15(self):
@@ -197,6 +278,12 @@ class DBSClientWriter_t(unittest.TestCase):
         data = {'block_name': block,
                 'origin_site_name': site }
 
+        if self.ostream:
+            self.ostream.write("test15 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertBlock(blockObj=data)
 
     def test16(self):
@@ -204,48 +291,54 @@ class DBSClientWriter_t(unittest.TestCase):
         flist=[]
         for i in range(10):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list':
                 [
                     {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                      'output_module_label': output_module_label,'global_tag':global_tag },
                     ],
                 'dataset': parent_dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': 2012211901, 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'97', 'event_count': u'66'},
-                    {'lumi_section_num': u'26422', 'run_num': u'97', 'event_count': u'67'},
-                    {'lumi_section_num': u'29838', 'run_num': u'97', 'event_count': u'68'},
-                    {'lumi_section_num': u'248', 'run_num': u'97',   'event_count': u'69'},
-                    {'lumi_section_num': u'250', 'run_num': u'97', 'event_count': u'70'},
-                    {'lumi_section_num': u'300', 'run_num': u'97', 'event_count': u'71'},
-                    {'lumi_section_num': u'534', 'run_num': u'97', 'event_count': u'72'},
-                    {'lumi_section_num': u'546', 'run_num': u'97', 'event_count': u'73'},
-                    {'lumi_section_num': u'638', 'run_num': u'97', 'event_count': u'74'},
-                    {'lumi_section_num': u'650', 'run_num': u'97', 'event_count': u'75'},
-                    {'lumi_section_num': u'794', 'run_num': u'97', 'event_count': u'76'},
-                    {'lumi_section_num': u'1313', 'run_num': u'97', 'event_count': u'77'},
-                    {'lumi_section_num': u'1327', 'run_num': u'97', 'event_count': u'78'},
-                    {'lumi_section_num': u'1339', 'run_num': u'97', 'event_count': u'79'},
-                    {'lumi_section_num': u'1353', 'run_num': u'97', 'event_count': u'80'},
-                    {'lumi_section_num': u'1428', 'run_num': u'97', 'event_count': u'81'},
-                    {'lumi_section_num': u'1496', 'run_num': u'97', 'event_count': u'82'},
-                    {'lumi_section_num': u'1537', 'run_num': u'97', 'event_count': u'83'},
-                    {'lumi_section_num': u'1652', 'run_num': u'97', 'event_count': u'84'},
-                    {'lumi_section_num': u'1664', 'run_num': u'97', 'event_count': u'85'},
-                    {'lumi_section_num': u'1743', 'run_num': u'97', 'event_count': u'86'},
-                    {'lumi_section_num': u'1755', 'run_num': u'97', 'event_count': u'87'},
-                    {'lumi_section_num': u'1860', 'run_num': u'97', 'event_count': u'88'},
-                    {'lumi_section_num': u'1872', 'run_num': u'97', 'event_count': u'89'}
+                    {'lumi_section_num': 27414, 'run_num': 97, 'event_count': 66},
+                    {'lumi_section_num': 226422,'run_num': 97, 'event_count': 67},
+                    {'lumi_section_num': 229838,'run_num': 97, 'event_count': 68},
+                    {'lumi_section_num': 2248,  'run_num': 97, 'event_count': 69},
+                    {'lumi_section_num': 2250,  'run_num': 97, 'event_count': 70},
+                    {'lumi_section_num': 2300,  'run_num': 97, 'event_count': 71},
+                    {'lumi_section_num': 2534,  'run_num': 97, 'event_count': 72},
+                    {'lumi_section_num': 2546,  'run_num': 97, 'event_count': 73},
+                    {'lumi_section_num': 2638,  'run_num': 97, 'event_count': 74},
+                    {'lumi_section_num': 2650,  'run_num': 97, 'event_count': 75},
+                    {'lumi_section_num': 2794,  'run_num': 97, 'event_count': 76},
+                    {'lumi_section_num': 21313, 'run_num': 97, 'event_count': 77},
+                    {'lumi_section_num': 21327, 'run_num': 97, 'event_count': 78},
+                    {'lumi_section_num': 21339, 'run_num': 97, 'event_count': 79},
+                    {'lumi_section_num': 21353, 'run_num': 97, 'event_count': 80},
+                    {'lumi_section_num': 21428, 'run_num': 97, 'event_count': 81},
+                    {'lumi_section_num': 21496, 'run_num': 97, 'event_count': 82},
+                    {'lumi_section_num': 21537, 'run_num': 97, 'event_count': 83},
+                    {'lumi_section_num': 21652, 'run_num': 97, 'event_count': 84},
+                    {'lumi_section_num': 21664, 'run_num': 97, 'event_count': 85},
+                    {'lumi_section_num': 21743, 'run_num': 97, 'event_count': 86},
+                    {'lumi_section_num': 21755, 'run_num': 97, 'event_count': 87},
+                    {'lumi_section_num': 21860, 'run_num': 97, 'event_count': 88},
+                    {'lumi_section_num': 21872, 'run_num': 97, 'event_count': 89}
                     ],
                 'file_parent_list': [ ],
-                'event_count': u'1619',
+                'event_count': 1619,
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/p%s/%i.root" %(uid, i),
                 'block_name': parent_block
                 #'is_file_valid': 1
                 }
             flist.append(f)
+        if self.ostream:
+            self.ostream.write("test16 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps({"files":flist}))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertFiles(filesList={"files":flist})
 
     def test17(self):
@@ -254,28 +347,34 @@ class DBSClientWriter_t(unittest.TestCase):
         flist=[]
         for i in range(10):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list':
                 [
                     {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                      'output_module_label': output_module_label, 'global_tag':global_tag},
                     ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': 2012211901, 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'97'},
-                    {'lumi_section_num': u'26422', 'run_num': u'98'},
-                    {'lumi_section_num': u'29838', 'run_num': u'99'}
+                    {'lumi_section_num': 27414, 'run_num': 97},
+                    {'lumi_section_num': 26422, 'run_num': 98},
+                    {'lumi_section_num': 29838, 'run_num': 99}
                     ],
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/p%s/%i.root" %(uid, i)} ],
-                'event_count': u'1619',
+                'event_count': 1619,
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
                 #'is_file_valid': 1
                 }
             flist.append(f)
             outDict['parent_files'].append(f['file_parent_list'][0]['file_parent_lfn'])
+        if self.ostream:
+            self.ostream.write("test17 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps({"files":flist}))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertFiles(filesList={"files":flist})
 
     def test18(self):
@@ -283,28 +382,34 @@ class DBSClientWriter_t(unittest.TestCase):
         flist=[]
         for i in range(10):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 'file_output_config_list':
                 [
                     {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                      'output_module_label': output_module_label, 'global_tag':global_tag},
                     ],
                 'dataset': dataset,
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': 2012211901, 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
-                    {'lumi_section_num': u'27414', 'run_num': u'97'},
-                    {'lumi_section_num': u'26422', 'run_num': u'98'},
-                    {'lumi_section_num': u'29838', 'run_num': u'99'}
+                    {'lumi_section_num': 27414, 'run_num': 97},
+                    {'lumi_section_num': 26422, 'run_num': 98},
+                    {'lumi_section_num': 29838, 'run_num': 99}
                     ],
                 'file_parent_list': [ {"file_parent_lfn" : "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/p%s/%i.root" %(uid, i)} ],
-                'event_count': u'1619',
+                'event_count': 1619,
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/IDEAL_/%s/%i.root" %(uid, i),
                 'block_name': block
                 #'is_file_valid': 1
                 }
             flist.append(f)
             outDict['files'].append(f['logical_file_name'])
+        if self.ostream:
+            self.ostream.write("test18 data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps({"files":flist}))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertFiles(filesList={"files":flist})
 
     def test19(self):
@@ -385,20 +490,20 @@ class DBSClientWriter_t(unittest.TestCase):
         cflist=[]
         for i in range(fCount):
             f={
-                'adler32': u'NOTSET', 'file_type': 'EDM',
+                'adler32': 'NOTSET', 'file_type': 'EDM',
                 #'file_output_config_list':
                 #[
                 #    {'release_version': release_version, 'pset_hash': pset_hash, 'app_name': app_name,
                 #     'output_module_label': output_module_label,'global_tag':global_tag },
                 #    ],
-                'file_size': u'2012211901', 'auto_cross_section': 0.0,
-                'check_sum': u'1504266448',
+                'file_size': 2012211901, 'auto_cross_section': 0.0,
+                'check_sum': '1504266448',
                 'file_lumi_list': [
                     {'lumi_section_num': 27414+i, 'run_num': 98, 'event_count': 66},
                     {'lumi_section_num': 26422+i, 'run_num': 98, 'event_count': 67},
                     {'lumi_section_num': 29838+i, 'run_num': 98, 'event_count': 68},
                     ],
-                'event_count': u'201',
+                'event_count': 201,
                 'logical_file_name': "/store/mc/Fall08/BBJets250to500-madgraph/GEN-SIM-RAW/StepChain_/p%s/%i.root" %(uid, i),
                 #'is_file_valid': 1
                 }
@@ -426,7 +531,19 @@ class DBSClientWriter_t(unittest.TestCase):
         print("child dataset: %s", data['dataset']['dataset'],data['primds']['primary_ds_name'] , data['dataset']['processed_ds_name'] ,data['dataset']['data_tier_name'] )
         print("child block %s", data['block']['block_name'])
         print("child files: ", len(data["files"]))
+        if self.ostream:
+            self.ostream.write("test23 parent_data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(parent_data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertBulkBlock(blockDump=parent_data)
+        if self.ostream:
+            self.ostream.write("test23 blockDump data")
+            self.ostream.write("\n")
+            self.ostream.write(json.dumps(data))
+            self.ostream.write("\n")
+            self.ostream.flush()
         self.api.insertBulkBlock(blockDump=data)
         #print("child dataset: %s", data['dataset']['dataset'])
         #print("child block %s", data['block']['block_name'])
@@ -434,30 +551,82 @@ class DBSClientWriter_t(unittest.TestCase):
 
     def test24(self):
         """test24 web.DBSClientWriter.insertFileParents: integration test validating the results"""
-        result = self.api.listFileParentsByLumi(block_name=stepchain_block)
+#        result = self.api.listFileParentsByLumi(block_name=stepchain_block)
+        result = self.reader.listFileParentsByLumi(block_name=stepchain_block)
+        sys.stdout.flush()
+        sys.stderr.flush()
+        print("### test24")
         print(result)
-        child_parent_ids = result[0]["child_parent_id_list"]
+        sys.stdout.flush()
+        sys.stderr.flush()
+        res0 = result[0]
+        if "child_parent_id_list" in res0:
+            # dbs python output
+            # [{'child_parent_id_list': [[653387361, 653387321], ...]}]
+            child_parent_ids = result[0]["child_parent_id_list"]
+        elif "pid" in res0:
+            # dbs2go output
+            # [{'pid': 653385717, 'cid': 653385917}, ...]
+            child_parent_ids = []
+            for row in result:
+                child_parent_ids.append([row['cid'], row['pid']])
+            result = child_parent_ids
+        sys.stdout.flush()
+        sys.stderr.flush()
+        print("child_parent_ids")
+        print(child_parent_ids)
+        sys.stdout.flush()
+        sys.stderr.flush()
+
         self.api.insertFileParents({"block_name": stepchain_block, "child_parent_id_list": child_parent_ids})
-        file_name_pair = self.api.listFileParents(block_name=stepchain_block)
+#        file_name_pair = self.api.listFileParents(block_name=stepchain_block)
+        file_name_pair = self.reader.listFileParents(block_name=stepchain_block)
         parentIDs = set()
         for cpPair in child_parent_ids:
             parentIDs.add(cpPair[1])
 
-        result2 = self.api.listFileParentsByLumi(block_name=stepchain_block)
+#        result2 = self.api.listFileParentsByLumi(block_name=stepchain_block)
+        result2 = self.reader.listFileParentsByLumi(block_name=stepchain_block)
+        # in case of dbs2go output we'll convert back to expected data-format
+        if "pid" in result2[0]:
+            child_parent_ids = []
+            for row in result2:
+                child_parent_ids.append([row['cid'], row['pid']])
+            result2 = child_parent_ids
+
+        sys.stdout.flush()
+        sys.stderr.flush()
+        print("listFIleParentsByLumi")
+        print(result2)
+        sys.stdout.flush()
+        sys.stderr.flush()
 
         #compair the call whether there listFileParentsByLumi returns the same result after the insert
         self.assertEqual(result, result2)
 
+        sys.stdout.flush()
+        sys.stderr.flush()
+        print("file_name_pair")
         print(file_name_pair)
+        sys.stdout.flush()
+        sys.stderr.flush()
         # compare child parent pair.
         idPair = []
         for fInfo in file_name_pair:
-            childFile = fInfo['logical_file_name']
-            parentFile = fInfo['parent_logical_file_name'][0]
+            if isinstance(fInfo['parent_logical_file_name'], str):
+                # dbs2go
+                childFile = fInfo['logical_file_name']
+                parentFile = fInfo['parent_logical_file_name']
+            else:
+                # DBS python
+                childFile = fInfo['logical_file_name']
+                parentFile = fInfo['parent_logical_file_name'][0]
             index = stepchain_files.index(childFile)
             self.assertEqual(parent_stepchain_files[index], parentFile)
-            cfDetail = self.api.listFiles(logical_file_name=childFile, detail=True)[0]
-            ffDetail = self.api.listFiles(logical_file_name=parentFile, detail=True)[0]
+#            cfDetail = self.api.listFiles(logical_file_name=childFile, detail=True)[0]
+            cfDetail = self.reader.listFiles(logical_file_name=childFile, detail=True)[0]
+#            ffDetail = self.api.listFiles(logical_file_name=parentFile, detail=True)[0]
+            ffDetail = self.reader.listFiles(logical_file_name=parentFile, detail=True)[0]
             idPair.append([cfDetail["file_id"], ffDetail["file_id"]])
 
         self.assertEqual(len(child_parent_ids), len(file_name_pair))
